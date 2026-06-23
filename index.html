@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pokémon Champions Speed calculator with English and Mandarin search."
+    />
+    <title>PokéCal — Speed</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">PokéCal // Competitive analysis</p>
+        <h1>Build for the speed tier.</h1>
+        <p class="intro">
+          Search in English, Traditional Chinese, or Simplified Chinese. Base
+          stats come from Pokémon Showdown.
+        </p>
+      </header>
+
+      <section class="calculator" aria-label="Speed calculator">
+        <div class="search-panel">
+          <label for="pokemon-search">Pokémon / 寶可夢 / 宝可梦</label>
+          <div class="search-wrap">
+            <input
+              id="pokemon-search"
+              type="search"
+              autocomplete="off"
+              placeholder="Pikachu / 皮卡丘"
+            />
+            <div id="search-results" class="search-results" hidden></div>
+          </div>
+
+          <article class="pokemon-card">
+            <div>
+              <p id="selected-alias" class="alias">—</p>
+              <h2 id="selected-name">Loading…</h2>
+            </div>
+            <div class="base-stat-total">
+              <span>BST</span>
+              <strong id="base-stat-total">—</strong>
+            </div>
+          </article>
+          <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
+        </div>
+
+        <div class="controls-panel">
+          <label id="form-field" class="form-field" hidden>
+            Calculator form
+            <select id="form"></select>
+          </label>
+
+          <div class="field">
+            <div class="field-heading">
+              <label for="sp">Speed SP</label>
+              <output id="sp-output" for="sp">0</output>
+            </div>
+            <input id="sp" type="range" min="0" max="32" value="0" />
+            <p>0–32 per stat under Pokémon Champions rules.</p>
+          </div>
+
+          <div class="control-grid">
+            <label>
+              Nature
+              <select id="nature">
+                <option value="negative">Speed-lowering ×0.9</option>
+                <option value="neutral" selected>Neutral ×1.0</option>
+                <option value="positive">Speed-raising ×1.1</option>
+              </select>
+            </label>
+
+            <label>
+              Speed stage
+              <select id="stage">
+                <option value="-6">−6</option>
+                <option value="-5">−5</option>
+                <option value="-4">−4</option>
+                <option value="-3">−3</option>
+                <option value="-2">−2</option>
+                <option value="-1">−1</option>
+                <option value="0" selected>0</option>
+                <option value="1">+1</option>
+                <option value="2">+2</option>
+                <option value="3">+3</option>
+                <option value="4">+4</option>
+                <option value="5">+5</option>
+                <option value="6">+6</option>
+              </select>
+            </label>
+
+            <label>
+              Item / ability
+              <select id="speed-multiplier">
+                <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                <option value="1" selected>None ×1.0</option>
+                <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                <option value="2">Swift Swim or equivalent ×2.0</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>Field and status</legend>
+            <label><input id="tailwind" type="checkbox" /> Tailwind ×2</label>
+            <label><input id="paralyzed" type="checkbox" /> Paralysis ×0.5</label>
+            <label><input id="trick-room" type="checkbox" /> Trick Room</label>
+          </fieldset>
+        </div>
+
+        <div class="result-panel" aria-live="polite">
+          <div>
+            <span>Trained Speed</span>
+            <strong id="trained-speed">—</strong>
+            <small>After SP and nature</small>
+          </div>
+          <div class="final-result">
+            <span>Final Speed</span>
+            <strong id="final-speed">—</strong>
+            <small>After battle modifiers</small>
+          </div>
+          <p id="order-note"></p>
+        </div>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span>Level 50 · 31 IV · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "pokecal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "sync-data": "node scripts/sync-pokemon-data.mjs",
+    "start": "node scripts/serve.mjs"
+  }
+}
