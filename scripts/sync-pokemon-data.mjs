@@ -12,7 +12,7 @@ const [showdownSource, speciesNamesCsv] = await Promise.all([
 ]);
 
 const pokedex = parseShowdownPokedex(showdownSource);
-const aliasesByNumber = parseMandarinNames(speciesNamesCsv);
+const aliasesByNumber = parseTraditionalChineseNames(speciesNamesCsv);
 const pokemon = Object.entries(pokedex)
   .filter(([, entry]) => Number.isInteger(entry.num) && entry.num > 0 && entry.baseStats?.spe)
   .map(([id, entry]) => ({
@@ -45,7 +45,7 @@ function parseShowdownPokedex(source) {
   return pokedex;
 }
 
-function parseMandarinNames(csv) {
+function parseTraditionalChineseNames(csv) {
   const names = new Map();
 
   for (const line of csv.split(/\r?\n/).slice(1)) {
@@ -53,7 +53,7 @@ function parseMandarinNames(csv) {
     const [numberText, languageText, name] = parseCsvLine(line);
     const number = Number(numberText);
     const language = Number(languageText);
-    if (!Number.isInteger(number) || ![4, 12].includes(language) || !name) continue;
+    if (!Number.isInteger(number) || language !== 4 || !name) continue;
 
     const aliases = names.get(number) ?? [];
     if (!aliases.includes(name)) aliases.push(name);

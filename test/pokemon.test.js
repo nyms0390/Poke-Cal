@@ -16,28 +16,28 @@ const pokemon = [
     name: "Charizard",
     baseSpecies: "Charizard",
     baseSpeed: 100,
-    aliases: ["噴火龍", "喷火龙"],
+    aliases: ["噴火龍"],
   },
   {
     id: "charizardmegax",
     name: "Charizard-Mega-X",
     baseSpecies: "Charizard",
     baseSpeed: 100,
-    aliases: ["噴火龍", "喷火龙"],
+    aliases: ["噴火龍"],
   },
   {
     id: "charizardmegay",
     name: "Charizard-Mega-Y",
     baseSpecies: "Charizard",
     baseSpeed: 100,
-    aliases: ["噴火龍", "喷火龙"],
+    aliases: ["噴火龍"],
   },
   {
     id: "charizardgmax",
     name: "Charizard-Gmax",
     baseSpecies: "Charizard",
     baseSpeed: 100,
-    aliases: ["噴火龍", "喷火龙"],
+    aliases: ["噴火龍"],
   },
 ];
 
@@ -48,13 +48,6 @@ test("searches Pokémon by normalized English name", () => {
 test("searches forms by Traditional Chinese base-species name", () => {
   assert.deepEqual(
     searchPokemon(pokemon, "噴火龍").map(({ id }) => id),
-    ["charizard", "charizardgmax", "charizardmegax", "charizardmegay"],
-  );
-});
-
-test("searches forms by Simplified Chinese base-species name", () => {
-  assert.deepEqual(
-    searchPokemon(pokemon, "喷火龙").map(({ id }) => id),
     ["charizard", "charizardgmax", "charizardmegax", "charizardmegay"],
   );
 });

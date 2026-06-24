@@ -4,7 +4,7 @@ A focused Pokémon Champions Speed calculator.
 
 ## Features
 
-- Search by English, Traditional Chinese, or Simplified Chinese species name.
+- Search by English or Traditional Chinese species name.
 - Base Speed and forms sourced from Pokémon Showdown.
 - Level 50 Champions SP calculation with positive, neutral, and negative natures.
 - Speed stages, Tailwind, paralysis, common item/ability multipliers, and Trick Room.
@@ -22,5 +22,5 @@ npm start
 Then open <http://127.0.0.1:4173>.
 
 `sync-data` downloads Pokémon Showdown's generated Pokédex and PokeAPI's
-Traditional/Simplified Chinese species-name localization CSV. Pokémon Showdown
-remains the source of base stats and forms; PokeAPI only supplies search aliases.
+Traditional Chinese species-name localization CSV. Pokémon Showdown remains the
+source of base stats and forms; PokeAPI only supplies search aliases.
