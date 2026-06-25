@@ -312,19 +312,20 @@ function renderMoveRow(move) {
   const row = document.createElement("tr");
   row.append(
     moveNameCell(move),
-    textCell(move.type || "—"),
-    textCell(move.category || "—"),
-    textCell(formatMovePower(move.basePower), "numeric-cell"),
-    textCell(formatMoveAccuracy(move.accuracy), "numeric-cell"),
-    textCell(String(move.pp ?? "—"), "numeric-cell"),
-    textCell(formatMovePriority(move.priority), "numeric-cell"),
-    textCell(moveEffect(move), "effect-cell"),
+    textCell(move.type || "—", "", "Type"),
+    textCell(move.category || "—", "", "Category"),
+    textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
+    textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", "Acc."),
+    textCell(String(move.pp ?? "—"), "numeric-cell", "PP"),
+    textCell(formatMovePriority(move.priority), "numeric-cell", "Pri."),
+    textCell(moveEffect(move), "effect-cell", "Effect"),
   );
   return row;
 }
 
 function moveNameCell(move) {
   const cell = document.createElement("td");
+  cell.dataset.label = "Move";
   const name = document.createElement("strong");
   name.textContent = move.name;
   const id = document.createElement("small");
@@ -333,9 +334,10 @@ function moveNameCell(move) {
   return cell;
 }
 
-function textCell(text, className = "") {
+function textCell(text, className = "", label = "") {
   const cell = document.createElement("td");
   if (className) cell.className = className;
+  if (label) cell.dataset.label = label;
   cell.textContent = text;
   return cell;
 }

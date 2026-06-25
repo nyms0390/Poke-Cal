@@ -682,6 +682,72 @@ footer {
     flex-direction: column;
   }
 
+  .move-table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .move-table,
+  .move-table tbody,
+  .move-table tr,
+  .move-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .move-table {
+    min-width: 0;
+  }
+
+  .move-table thead {
+    display: none;
+  }
+
+  .move-table tr {
+    margin-bottom: 12px;
+    border: 1px solid #2b3859;
+    border-radius: 4px;
+    background: #0b1124;
+  }
+
+  .move-table td {
+    display: grid;
+    grid-template-columns: minmax(72px, 0.34fr) 1fr;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-bottom: 1px solid #202d4a;
+  }
+
+  .move-table td::before {
+    color: #9eacce;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    content: attr(data-label);
+  }
+
+  .move-table td:first-child {
+    grid-template-columns: 1fr;
+    padding-top: 14px;
+  }
+
+  .move-table td:first-child::before {
+    display: none;
+  }
+
+  .move-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .move-table td small,
+  .effect-cell {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   #order-note {
     grid-column: 1;
   }
