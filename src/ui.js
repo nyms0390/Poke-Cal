@@ -37,6 +37,11 @@ export function moveNameCell(move) {
   const id = document.createElement("small");
   id.textContent = move.id;
 
+  const details = document.createElement("span");
+  details.className = "move-name-details";
+  if (move.type) details.append(typeBadge(move.type));
+  details.append(id);
+
   const priority = Number(move.priority ?? 0);
   if (priority !== 0) {
     const badge = document.createElement("span");
@@ -46,8 +51,32 @@ export function moveNameCell(move) {
     cell.append(badge);
   }
 
-  cell.append(name, id);
+  cell.append(name, details);
   return cell;
+}
+
+export function typeBadge(type) {
+  const badge = document.createElement("span");
+  badge.className = `type-badge ${typeClassName(type)}`;
+  badge.textContent = type || "Unknown";
+  return badge;
+}
+
+export function typeClassName(type) {
+  const normalized = String(type || "unknown")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return `type-${normalized || "unknown"}`;
+}
+
+export function damagePercentColor(minPercent, maxPercent = minPercent) {
+  const min = Number(minPercent);
+  const max = Number(maxPercent);
+  const average = Number.isFinite(min) && Number.isFinite(max) ? (min + max) / 2 : 0;
+  const clamped = Math.max(0, Math.min(100, average));
+  const hue = Math.round((clamped / 100) * 120);
+  return `hsl(${hue} 72% 56%)`;
 }
 
 export function textCell(text, className = "", label = "") {
@@ -57,4 +86,3 @@ export function textCell(text, className = "", label = "") {
   cell.textContent = text;
   return cell;
 }
-

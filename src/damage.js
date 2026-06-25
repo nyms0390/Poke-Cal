@@ -1,5 +1,6 @@
 const STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
+const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 
 export const NATURES = {
   Hardy: {},
@@ -140,6 +141,7 @@ export function calculateDamage({
   move,
   attackerState,
   defenderState,
+  battleFormat = "doubles",
   critical = false,
   burned = false,
 }) {
@@ -198,6 +200,9 @@ export function calculateDamage({
   const criticalModifier = critical ? 1.5 : 1;
   const burnModifier =
     burned && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
+  const spreadModifier =
+    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
+  if (spreadModifier !== 1) notes.push("Doubles spread move");
 
   const rolls = DAMAGE_ROLLS.map((roll) => {
     let damage = baseDamage;
@@ -206,6 +211,7 @@ export function calculateDamage({
     damage = Math.floor(damage * stab);
     damage = Math.floor(damage * typeMultiplier);
     damage = Math.floor(damage * burnModifier);
+    damage = Math.floor(damage * spreadModifier);
     damage = Math.floor(damage * damageModifier);
     return Math.max(1, damage);
   });
@@ -296,5 +302,5 @@ function normalizeId(value) {
 }
 
 function percent(value, total) {
-  return Number(((value / total) * 100).toFixed(1));
+  return Math.floor((value * 1000) / total) / 10;
 }

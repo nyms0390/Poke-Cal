@@ -14,12 +14,13 @@ import {
 import { loadPokemonData } from "./data.js";
 import { megaFamily, searchPokemon } from "./pokemon.js";
 import { totalBaseStats } from "./stats.js";
-import { moveNameCell, optionElement, textCell, updateSelectOptions } from "./ui.js";
+import { moveNameCell, optionElement, textCell, typeBadge, updateSelectOptions } from "./ui.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
   results: document.querySelector("#search-results"),
   selectedName: document.querySelector("#selected-name"),
+  selectedTypes: document.querySelector("#selected-types"),
   selectedAlias: document.querySelector("#selected-alias"),
   baseStats: document.querySelector("#base-stats"),
   baseStatTotal: document.querySelector("#base-stat-total"),
@@ -168,6 +169,7 @@ function selectForm(entry) {
   selectedPokemon = entry;
   elements.search.value = entry.baseSpecies;
   elements.selectedName.textContent = entry.name;
+  elements.selectedTypes.replaceChildren(...(entry.types ?? []).map(typeBadge));
   elements.selectedAlias.textContent = entry.aliases.join(" · ") || entry.baseSpecies;
   elements.baseStatTotal.textContent = totalBaseStats(entry.baseStats);
   elements.form.value = entry.id;
@@ -350,7 +352,7 @@ function renderMoveList() {
   if (moves.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 8;
+    cell.colSpan = 7;
     cell.className = "empty-moves";
     cell.textContent = "No moves match the current filters.";
     row.append(cell);
@@ -366,7 +368,6 @@ function renderMoveRow(move) {
   row.append(
     moveNameCell(move),
     textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
-    textCell(move.type || "—", "", "Type"),
     textCell(move.category || "—", "", "Category"),
     textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", "Acc."),
@@ -375,4 +376,3 @@ function renderMoveRow(move) {
   );
   return row;
 }
-

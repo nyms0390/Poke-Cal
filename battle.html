@@ -141,43 +141,27 @@
 
         <fieldset class="damage-field">
           <legend>Battle conditions</legend>
+          <label>
+            Format
+            <select id="battle-format">
+              <option value="doubles" selected>Doubles</option>
+              <option value="singles">Singles</option>
+            </select>
+          </label>
           <label><input id="trick-room" type="checkbox" /> Trick Room</label>
           <label><input id="damage-critical" type="checkbox" /> Critical hit</label>
         </fieldset>
-
-        <section class="result-panel battle-result" aria-live="polite">
-          <div>
-            <span>Move order</span>
-            <strong id="move-order">—</strong>
-            <small>Compares the first selected move from each side.</small>
-          </div>
-        </section>
 
         <section class="catalog-panel" aria-label="Damage ranges">
           <div class="panel-heading">
             <span>Move damage</span>
             <strong id="damage-count">—</strong>
           </div>
-          <div class="move-table-wrap">
-            <table class="move-table damage-table">
-              <thead>
-                <tr>
-                  <th scope="col">Move</th>
-                  <th scope="col">Side</th>
-                  <th scope="col">Usage</th>
-                  <th scope="col">Top</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Power</th>
-                  <th scope="col">Damage</th>
-                  <th scope="col">Percent</th>
-                  <th scope="col">KO</th>
-                  <th scope="col">Notes</th>
-                </tr>
-              </thead>
-              <tbody id="damage-list"></tbody>
-            </table>
-          </div>
+          <div id="damage-list" class="damage-results"></div>
+          <section class="damage-result-summary" aria-label="Battle summary">
+            <p id="move-order">—</p>
+            <p id="speed-summary">—</p>
+          </section>
         </section>
       </section>
 
@@ -189,4 +173,3 @@
     <script type="module" src="./src/battle-page.js"></script>
   </body>
 </html>
-

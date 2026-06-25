@@ -1,5 +1,5 @@
 import {
-  formatMovePower,
+  formatMovePriority,
   formatUsagePercent,
   mergeUsage,
   resolvePokemonItems,
@@ -12,7 +12,7 @@ import { compareMoveOrder, finalSpeed } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
 import { calculateDamage, calculateStat, koSummary, NATURES } from "./damage.js";
 import { parseUsageSpread, usageDefaultsForPokemon } from "./usage-defaults.js";
-import { moveNameCell, optionElement, STAT_LABELS, textCell } from "./ui.js";
+import { damagePercentColor, optionElement, STAT_LABELS, typeBadge } from "./ui.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -43,8 +43,10 @@ const elements = {
   attackerBurned: document.querySelector("#attacker-burned"),
   defenderBurned: document.querySelector("#defender-burned"),
   trickRoom: document.querySelector("#trick-room"),
+  battleFormat: document.querySelector("#battle-format"),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
+  speedSummary: document.querySelector("#speed-summary"),
   attackerFinalSpeed: document.querySelector("#attacker-final-speed"),
   defenderFinalSpeed: document.querySelector("#defender-final-speed"),
   damageCount: document.querySelector("#damage-count"),
@@ -106,6 +108,7 @@ for (const control of [
   elements.attackerBurned,
   elements.defenderBurned,
   elements.trickRoom,
+  elements.battleFormat,
   elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
@@ -191,7 +194,6 @@ function seedDamageSide(side, entry) {
     stages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
     ability: defaults.ability,
     item: defaults.item,
-    topMoveIds: new Set(defaults.moves.slice(0, 4).map(({ id }) => normalizeDamageId(id))),
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeDamageId(defaults.moves[index]?.id)),
     speedMultiplier: Number(elements[`${side}SpeedMultiplier`]?.value ?? 1),
     tailwind: elements[`${side}Tailwind`]?.checked ?? false,
@@ -355,13 +357,89 @@ function renderDamage() {
   elements.attackerFinalSpeed.textContent = String(finalSpeed(attacker));
   elements.defenderFinalSpeed.textContent = String(finalSpeed(defender));
   renderMoveOrder();
+  elements.speedSummary.textContent =
+    `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
+    `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
 
-  const rows = [
-    ...selectedDamageMoves("attacker").map((move) => renderDamageRow(move, "attacker", "defender")),
-    ...selectedDamageMoves("defender").map((move) => renderDamageRow(move, "defender", "attacker")),
-  ];
+  const attackerRows = selectedDamageMoves("attacker").map((move, index) =>
+    renderDamageCard(move, "attacker", "defender", index === 0),
+  );
+  const defenderRows = selectedDamageMoves("defender").map((move, index) =>
+    renderDamageCard(move, "defender", "attacker", index === 0),
+  );
+  const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = `${rows.length} moves`;
-  elements.damageList.replaceChildren(...rows);
+  elements.damageList.replaceChildren(
+    damageColumn("Attacker moves", attackerRows),
+    damageColumn("Defender moves", defenderRows),
+  );
+}
+
+function damageColumn(title, cards) {
+  const column = document.createElement("section");
+  column.className = "damage-result-column";
+  column.setAttribute("aria-label", title);
+
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  column.append(heading, ...cards);
+  return column;
+}
+
+function renderDamageCard(move, sourceSide, targetSide, selected) {
+  const source = damageState[sourceSide];
+  const target = damageState[targetSide];
+  const result = calculateDamage({
+    attacker: source.pokemon,
+    defender: target.pokemon,
+    move,
+    attackerState: source,
+    defenderState: target,
+    battleFormat: elements.battleFormat.value,
+    critical: elements.damageCritical.checked,
+    burned: source.burned,
+  });
+
+  const card = document.createElement("article");
+  card.className = `damage-result-card${selected ? " selected" : ""}`;
+
+  const heading = document.createElement("div");
+  heading.className = "damage-result-heading";
+
+  const name = document.createElement("strong");
+  name.textContent = move.name;
+
+  const percent = document.createElement("span");
+  percent.className = "damage-percent";
+  percent.textContent = damagePercentText(result);
+  const percentColor = result.supported
+    ? damagePercentColor(result.minPercent, result.maxPercent)
+    : damagePercentColor(0);
+  percent.style.setProperty("--damage-percent-color", percentColor);
+  heading.append(name, percent);
+
+  const meta = document.createElement("div");
+  meta.className = "damage-result-meta";
+  if (move.type) meta.append(typeBadge(move.type));
+
+  const priority = Number(move.priority ?? 0);
+  if (priority !== 0) {
+    const priorityBadge = document.createElement("span");
+    priorityBadge.className = `move-priority-badge inline ${priority > 0 ? "positive" : "negative"}`;
+    priorityBadge.textContent = formatMovePriority(priority);
+    meta.append(priorityBadge);
+  }
+
+  const ko = document.createElement("span");
+  ko.className = "damage-ko";
+  ko.textContent = result.supported ? koSummary(result) : "No direct damage";
+  card.append(heading, meta, ko);
+  return card;
+}
+
+function damagePercentText(result) {
+  if (!result.supported) return "0% - 0%";
+  return `${result.minPercent}% - ${result.maxPercent}%`;
 }
 
 function renderMoveOrder() {
@@ -396,55 +474,6 @@ function damageMovesForSide(side) {
   return sortByUsage(mergeUsage(resolvePokemonMoves(state.pokemon, moveLookup), usage?.moves));
 }
 
-function renderDamageRow(move, sourceSide, targetSide) {
-  const source = damageState[sourceSide];
-  const target = damageState[targetSide];
-  const result = calculateDamage({
-    attacker: source.pokemon,
-    defender: target.pokemon,
-    move,
-    attackerState: source,
-    defenderState: target,
-    critical: elements.damageCritical.checked,
-    burned: source.burned,
-  });
-  const row = document.createElement("tr");
-  const topMarker = source.topMoveIds.has(normalizeDamageId(move.id)) ? "Top" : "—";
-  const sideLabel = sourceSide === "attacker" ? "Attacker" : "Defender";
-
-  if (!result.supported) {
-    row.append(
-      moveNameCell(move),
-      textCell(sideLabel, "numeric-cell", "Side"),
-      textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
-      textCell(topMarker, "numeric-cell", "Top"),
-      textCell(move.type || "—", "", "Type"),
-      textCell(move.category || "—", "", "Category"),
-      textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
-      textCell("—", "numeric-cell", "Damage"),
-      textCell("—", "numeric-cell", "Percent"),
-      textCell("—", "numeric-cell", "KO"),
-      textCell(result.reason, "effect-cell", "Notes"),
-    );
-    return row;
-  }
-
-  row.append(
-    moveNameCell(move),
-    textCell(sideLabel, "numeric-cell", "Side"),
-    textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
-    textCell(topMarker, "numeric-cell", "Top"),
-    textCell(move.type || "—", "", "Type"),
-    textCell(move.category || "—", "", "Category"),
-    textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
-    textCell(`${result.minDamage}-${result.maxDamage}`, "numeric-cell", "Damage"),
-    textCell(`${result.minPercent}-${result.maxPercent}%`, "numeric-cell", "Percent"),
-    textCell(koSummary(result), "numeric-cell", "KO"),
-    textCell(damageNotes(result), "effect-cell", "Notes"),
-  );
-  return row;
-}
-
 function sideSummary(state) {
   const hp = calculateStat({
     base: state.pokemon.baseStats.hp,
@@ -453,12 +482,6 @@ function sideSummary(state) {
     nature: state.nature,
   });
   return `${state.pokemon.name} · ${state.nature} · HP ${hp}`;
-}
-
-function damageNotes(result) {
-  const notes = [...result.notes];
-  if (result.typeMultiplier !== 1) notes.unshift(`Type ×${result.typeMultiplier}`);
-  return notes.length > 0 ? notes.join(" · ") : "Core modifiers only";
 }
 
 function clampInteger(value, minimum, maximum) {
@@ -470,4 +493,3 @@ function clampInteger(value, minimum, maximum) {
 function normalizeDamageId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
-

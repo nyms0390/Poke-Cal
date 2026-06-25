@@ -58,7 +58,7 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
   assert.equal(result.supported, true);
   assert.equal(result.typeMultiplier, 2);
   assert.deepEqual([result.minDamage, result.maxDamage], [86, 104]);
-  assert.deepEqual([result.minPercent, result.maxPercent], [72.3, 87.4]);
+  assert.deepEqual([result.minPercent, result.maxPercent], [72.2, 87.3]);
   assert.equal(result.rolls.length, 16);
 
   const immune = calculateDamage({
@@ -96,6 +96,63 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
   });
   assert.equal(burned.maxDamage < normal.maxDamage, true);
   assert.equal(critical.maxDamage > normal.maxDamage, true);
+});
+
+test("truncates damage percentages like Pikalytics Champions calculator", () => {
+  const incineroar = {
+    id: "incineroar",
+    name: "Incineroar",
+    types: ["Fire", "Dark"],
+    baseStats: { hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60 },
+  };
+  const spread = {
+    nature: "Careful",
+    sp: { hp: 32, atk: 0, def: 14, spa: 0, spd: 20, spe: 0 },
+    stages: { atk: 0, def: 0, spa: 0, spd: 0 },
+    ability: null,
+    item: null,
+  };
+  const result = calculateDamage({
+    attacker: incineroar,
+    defender: incineroar,
+    move: { id: "flareblitz", name: "Flare Blitz", type: "Fire", category: "Physical", basePower: 120 },
+    attackerState: { ...spread, stages: { ...spread.stages, atk: -1 } },
+    defenderState: spread,
+  });
+
+  assert.deepEqual([result.minDamage, result.maxDamage], [25, 30]);
+  assert.deepEqual([result.minPercent, result.maxPercent], [12.3, 14.8]);
+});
+
+test("defaults to doubles spread-move damage", () => {
+  const spreadThunderbolt = {
+    id: "spreadthunderbolt",
+    name: "Spread Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+    target: "allAdjacentFoes",
+  };
+  const doubles = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: spreadThunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const singles = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: spreadThunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+
+  assert.deepEqual([doubles.minDamage, doubles.maxDamage], [64, 78]);
+  assert.deepEqual([doubles.minPercent, doubles.maxPercent], [53.7, 65.5]);
+  assert.deepEqual([singles.minDamage, singles.maxDamage], [86, 104]);
+  assert.equal(doubles.notes.includes("Doubles spread move"), true);
 });
 
 test("applies curated item and ability modifiers", () => {
