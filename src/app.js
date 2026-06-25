@@ -70,6 +70,7 @@ const elements = {
   defenderAbility: document.querySelector("#defender-ability"),
   attackerItem: document.querySelector("#attacker-item"),
   defenderItem: document.querySelector("#defender-item"),
+  attackerMovePicks: document.querySelector("#attacker-move-picks"),
   attackerSpInputs: document.querySelector("#attacker-sp-inputs"),
   defenderSpInputs: document.querySelector("#defender-sp-inputs"),
   attackerStageInputs: document.querySelector("#attacker-stage-inputs"),
@@ -572,7 +573,8 @@ function seedDamageSide(side, entry) {
     stages: { atk: 0, def: 0, spa: 0, spd: 0 },
     ability: defaults.ability,
     item: defaults.item,
-    topMoveIds: new Set(defaults.moves.map(({ id }) => normalizeDamageId(id))),
+    topMoveIds: new Set(defaults.moves.slice(0, 4).map(({ id }) => normalizeDamageId(id))),
+    selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeDamageId(defaults.moves[index]?.id)),
     burned: side === "attacker" ? elements.attackerBurned.checked : false,
   };
 
@@ -616,6 +618,7 @@ function renderSideSelects(side, usage, defaults) {
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
   itemSelect.value = damageState[side].item?.id ?? "";
+  if (side === "attacker") renderDamageMovePickers();
 }
 
 function syncSideInputs(side) {
@@ -666,6 +669,11 @@ function handleDamageControl(event) {
     event.target.value = damageState[side][kind === "stage" ? "stages" : "sp"][stat];
   }
 
+  if (event.target.dataset.kind === "damage-move") {
+    const index = Number(event.target.dataset.index);
+    damageState.attacker.selectedMoveIds[index] = normalizeDamageId(event.target.value);
+  }
+
   if (id === "attacker-burned" && damageState.attacker) {
     damageState.attacker.burned = elements.attackerBurned.checked;
   }
@@ -681,6 +689,34 @@ function selectedOptionEntry(select, lookup) {
   };
 }
 
+function renderDamageMovePickers() {
+  const attacker = damageState.attacker;
+  if (!attacker?.pokemon) return;
+  const moves = attackerDamageMoves();
+
+  elements.attackerMovePicks.replaceChildren(
+    ...[0, 1, 2, 3].map((index) => {
+      const label = document.createElement("label");
+      label.textContent = `Move ${index + 1}`;
+      const select = document.createElement("select");
+      select.dataset.kind = "damage-move";
+      select.dataset.index = String(index);
+      select.replaceChildren(
+        ...moves.map((move) =>
+          optionElement(
+            move.id,
+            `${move.name} · ${formatUsagePercent(move.usagePercent)} · ${move.type ?? "—"}`,
+          ),
+        ),
+      );
+      select.value = attacker.selectedMoveIds[index] ?? moves[index]?.id ?? "";
+      select.addEventListener("input", handleDamageControl);
+      label.append(select);
+      return label;
+    }),
+  );
+}
+
 function renderDamage() {
   const attacker = damageState.attacker;
   const defender = damageState.defender;
@@ -694,12 +730,19 @@ function renderDamage() {
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
 
+  const movesById = new Map(attackerDamageMoves().map((move) => [normalizeDamageId(move.id), move]));
+  const selectedMoves = attacker.selectedMoveIds
+    .map((id) => movesById.get(normalizeDamageId(id)))
+    .filter(Boolean);
+  elements.damageCount.textContent = `${selectedMoves.length} moves`;
+  elements.damageList.replaceChildren(...selectedMoves.map((move) => renderDamageRow(move)));
+}
+
+function attackerDamageMoves() {
+  const attacker = damageState.attacker;
+  if (!attacker?.pokemon) return [];
   const usage = usageForPokemon(usageStats, attacker.pokemon);
-  const attackerMoves = sortByUsage(
-    mergeUsage(resolvePokemonMoves(attacker.pokemon, moveLookup), usage?.moves),
-  );
-  elements.damageCount.textContent = String(attackerMoves.length);
-  elements.damageList.replaceChildren(...attackerMoves.map((move) => renderDamageRow(move)));
+  return sortByUsage(mergeUsage(resolvePokemonMoves(attacker.pokemon, moveLookup), usage?.moves));
 }
 
 function renderDamageRow(move) {
