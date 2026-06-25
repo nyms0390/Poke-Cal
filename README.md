@@ -1,15 +1,16 @@
 # PokéCal
 
-A compact competitive Pokémon toolkit for looking up forms, stats, abilities,
-items, learnsets, Showdown usage trends, and Champions-style Speed tiers.
+A compact competitive Pokémon toolkit for quick Pokémon lookup, Showdown usage
+trends, and two-Pokémon battle calculations.
 
 ## Features
 
 - Search by English or Traditional Chinese species name.
-- Browse base stats, forms, abilities, learnsets, moves, and items sourced from Pokémon Showdown.
-- Showdown usage rates for the default Champions-style Showdown format.
-- Level 50 Champions SP calculation with positive, neutral, and negative natures.
-- Speed stages, Tailwind, paralysis, common item/ability multipliers, and Trick Room.
+- Browse base stats, forms, abilities, common spreads, moves, and items sourced from Pokémon Showdown.
+- Review Showdown usage rates and common play-style summaries for the default Champions-style Showdown format.
+- Open `battle.html` to configure two Pokémon, moves, SP, natures, stages, abilities, items, and status.
+- Compare move order from priority, Speed, Tailwind, paralysis, common item/ability multipliers, and Trick Room.
+- Calculate damage ranges and percentages for selected moves on both sides.
 
 ## Run
 
@@ -21,7 +22,8 @@ npm test
 npm start
 ```
 
-Then open <http://127.0.0.1:4173>.
+Then open <http://127.0.0.1:4173> for lookup or
+<http://127.0.0.1:4173/battle.html> for the battle calculator.
 
 ## Data Sources
 

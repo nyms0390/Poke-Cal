@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Competitive Pokémon lookup with Showdown usage data and Champions-style Speed tiers."
+      content="Quick competitive Pokémon lookup with Showdown usage data, stats, forms, and common play style."
     />
-    <title>PokéCal — Competitive Toolkit</title>
+    <title>PokéCal — Pokémon Lookup</title>
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <main>
       <header>
-        <p class="eyebrow">PokéCal // Competitive analysis</p>
-        <h1>Build from stats, usage, and speed tiers.</h1>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a class="active" href="./index.html">Lookup</a>
+          <a href="./battle.html">Battle Calculator</a>
+        </nav>
+        <p class="eyebrow">PokéCal // Quick lookup</p>
+        <h1>Check a Pokémon at a glance.</h1>
         <p class="intro">
-          Search in English or Traditional Chinese, compare forms, review
-          Showdown usage, and calculate Champions-style Speed.
+          Search in English or Traditional Chinese, compare forms, and review
+          Smogon / Showdown usage data for common abilities, items, spreads, and moves.
         </p>
       </header>
 
-      <section class="calculator" aria-label="Pokémon tools">
+      <section class="calculator lookup-tool" aria-label="Pokémon lookup">
         <div class="search-panel">
           <label for="pokemon-search">Pokémon / 寶可夢</label>
           <div class="search-wrap">
@@ -47,43 +51,29 @@
           <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
         </div>
 
-        <nav class="tabs" aria-label="Tool pages">
-          <button
-            id="moves-tab"
-            class="tab-button active"
-            type="button"
-            aria-controls="moves-page"
-            aria-selected="true"
-          >
-            Moves / Abilities
-          </button>
-          <button
-            id="speed-tab"
-            class="tab-button"
-            type="button"
-            aria-controls="speed-page"
-            aria-selected="false"
-          >
-            Speed
-          </button>
-          <button
-            id="damage-tab"
-            class="tab-button"
-            type="button"
-            aria-controls="damage-page"
-            aria-selected="false"
-          >
-            Damage
-          </button>
-        </nav>
-
         <label id="form-field" class="form-field" hidden>
           Form
           <select id="form"></select>
         </label>
 
-        <div id="moves-page" class="tool-page">
-          <p id="usage-source" class="usage-source">Showdown usage loading…</p>
+        <div class="tool-page">
+          <p id="usage-source" class="usage-source">Showdown usage data loading…</p>
+
+          <section class="catalog-panel" aria-label="Common play style">
+            <div class="panel-heading">
+              <span>Common play style</span>
+              <strong>Showdown</strong>
+            </div>
+            <p id="playstyle-summary" class="playstyle-summary">Loading usage profile…</p>
+          </section>
+
+          <section class="catalog-panel" aria-label="Common spreads">
+            <div class="panel-heading">
+              <span>Common spreads</span>
+              <strong id="spread-count">—</strong>
+            </div>
+            <div id="spread-list" class="spread-list"></div>
+          </section>
 
           <section class="catalog-panel" aria-label="Abilities">
             <div class="panel-heading">
@@ -137,7 +127,6 @@
                     <th scope="col">Power</th>
                     <th scope="col">Acc.</th>
                     <th scope="col">PP</th>
-                    <th scope="col">Pri.</th>
                     <th scope="col">Effect</th>
                   </tr>
                 </thead>
@@ -146,195 +135,14 @@
             </div>
           </section>
         </div>
-
-        <div id="speed-page" class="tool-page" hidden>
-          <div class="controls-panel">
-            <div class="field">
-              <div class="field-heading">
-                <label for="sp">Speed SP</label>
-                <output id="sp-output" for="sp">0</output>
-              </div>
-              <input id="sp" type="range" min="0" max="32" value="0" />
-              <p>0–32 per stat under Pokémon Champions rules.</p>
-            </div>
-
-            <div class="control-grid">
-              <label>
-                Nature
-                <select id="nature">
-                  <option value="negative">Speed-lowering ×0.9</option>
-                  <option value="neutral" selected>Neutral ×1.0</option>
-                  <option value="positive">Speed-raising ×1.1</option>
-                </select>
-              </label>
-
-              <label>
-                Speed stage
-                <select id="stage">
-                  <option value="-6">−6</option>
-                  <option value="-5">−5</option>
-                  <option value="-4">−4</option>
-                  <option value="-3">−3</option>
-                  <option value="-2">−2</option>
-                  <option value="-1">−1</option>
-                  <option value="0" selected>0</option>
-                  <option value="1">+1</option>
-                  <option value="2">+2</option>
-                  <option value="3">+3</option>
-                  <option value="4">+4</option>
-                  <option value="5">+5</option>
-                  <option value="6">+6</option>
-                </select>
-              </label>
-
-              <label>
-                Item / ability
-                <select id="speed-multiplier">
-                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                  <option value="1" selected>None ×1.0</option>
-                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                  <option value="2">Swift Swim or equivalent ×2.0</option>
-                </select>
-              </label>
-            </div>
-
-            <fieldset>
-              <legend>Field and status</legend>
-              <label><input id="tailwind" type="checkbox" /> Tailwind ×2</label>
-              <label><input id="paralyzed" type="checkbox" /> Paralysis ×0.5</label>
-              <label><input id="trick-room" type="checkbox" /> Trick Room</label>
-            </fieldset>
-          </div>
-
-          <div class="result-panel" aria-live="polite">
-            <div>
-              <span>Trained Speed</span>
-              <strong id="trained-speed">—</strong>
-              <small>After SP and nature</small>
-            </div>
-            <div class="final-result">
-              <span>Final Speed</span>
-              <strong id="final-speed">—</strong>
-              <small>After battle modifiers</small>
-            </div>
-            <p id="order-note"></p>
-          </div>
-        </div>
-
-        <div id="damage-page" class="tool-page" hidden>
-          <p id="damage-source" class="usage-source">Damage usage defaults loading…</p>
-
-          <div class="damage-controls">
-            <section class="damage-side" aria-label="Attacker">
-              <div class="panel-heading">
-                <span>Attacker</span>
-                <strong id="attacker-summary">—</strong>
-              </div>
-
-              <label>
-                Pokémon
-                <select id="attacker-pokemon"></select>
-              </label>
-              <label>
-                Spread
-                <select id="attacker-spread"></select>
-              </label>
-              <label>
-                Nature
-                <select id="attacker-nature"></select>
-              </label>
-              <div class="damage-picks">
-                <label>
-                  Ability
-                  <select id="attacker-ability"></select>
-                </label>
-                <label>
-                  Item
-                  <select id="attacker-item"></select>
-                </label>
-              </div>
-              <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
-
-              <div id="attacker-sp-inputs" class="stat-inputs" aria-label="Attacker SP"></div>
-              <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
-              <label class="inline-toggle"><input id="attacker-burned" type="checkbox" /> Burned</label>
-            </section>
-
-            <section class="damage-side" aria-label="Defender">
-              <div class="panel-heading">
-                <span>Defender</span>
-                <strong id="defender-summary">—</strong>
-              </div>
-
-              <label>
-                Pokémon
-                <select id="defender-pokemon"></select>
-              </label>
-              <label>
-                Spread
-                <select id="defender-spread"></select>
-              </label>
-              <label>
-                Nature
-                <select id="defender-nature"></select>
-              </label>
-              <div class="damage-picks">
-                <label>
-                  Ability
-                  <select id="defender-ability"></select>
-                </label>
-                <label>
-                  Item
-                  <select id="defender-item"></select>
-                </label>
-              </div>
-
-              <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
-              <div id="defender-sp-inputs" class="stat-inputs" aria-label="Defender SP"></div>
-              <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
-              <label class="inline-toggle"><input id="defender-burned" type="checkbox" /> Burned</label>
-            </section>
-          </div>
-
-          <fieldset class="damage-field">
-            <legend>Damage options</legend>
-            <label><input id="damage-critical" type="checkbox" /> Critical hit</label>
-          </fieldset>
-
-          <section class="catalog-panel" aria-label="Damage ranges">
-            <div class="panel-heading">
-              <span>Move damage</span>
-              <strong id="damage-count">—</strong>
-            </div>
-            <div class="move-table-wrap">
-              <table class="move-table damage-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Move</th>
-                    <th scope="col">Side</th>
-                    <th scope="col">Usage</th>
-                    <th scope="col">Top</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Power</th>
-                    <th scope="col">Damage</th>
-                    <th scope="col">Percent</th>
-                    <th scope="col">KO</th>
-                    <th scope="col">Notes</th>
-                  </tr>
-                </thead>
-                <tbody id="damage-list"></tbody>
-              </table>
-            </div>
-          </section>
-        </div>
       </section>
 
       <footer>
         <span id="status">Loading Pokémon data…</span>
-        <span>Level 50 · 31 IV · 1 SP = 8 EV</span>
+        <span>Showdown usage data · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>
     <script type="module" src="./src/app.js"></script>
   </body>
 </html>
+

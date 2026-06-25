@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Two-Pokémon battle calculator with move order, Speed conditions, and damage ranges."
+    />
+    <title>PokéCal — Battle Calculator</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a class="active" href="./battle.html">Battle Calculator</a>
+        </nav>
+        <p class="eyebrow">PokéCal // Battle calculator</p>
+        <h1>Compare two Pokémon in battle.</h1>
+        <p class="intro">
+          Set both sides, choose moves, apply battle conditions, and compare
+          move order with damage ranges.
+        </p>
+      </header>
+
+      <section class="calculator battle-tool" aria-label="Battle calculator">
+        <p id="damage-source" class="usage-source">Damage usage defaults loading…</p>
+
+        <div class="damage-controls">
+          <section class="damage-side" aria-label="Attacker">
+            <div class="panel-heading">
+              <span>Attacker</span>
+              <strong id="attacker-summary">—</strong>
+            </div>
+
+            <label>
+              Pokémon
+              <select id="attacker-pokemon"></select>
+            </label>
+            <label>
+              Spread
+              <select id="attacker-spread"></select>
+            </label>
+            <label>
+              Nature
+              <select id="attacker-nature"></select>
+            </label>
+            <div class="damage-picks">
+              <label>
+                Ability
+                <select id="attacker-ability"></select>
+              </label>
+              <label>
+                Item
+                <select id="attacker-item"></select>
+              </label>
+            </div>
+            <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
+
+            <div class="damage-picks">
+              <label>
+                Speed modifier
+                <select id="attacker-speed-multiplier">
+                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                  <option value="1" selected>None ×1.0</option>
+                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                  <option value="2">Swift Swim or equivalent ×2.0</option>
+                </select>
+              </label>
+              <div class="speed-readout">
+                <span>Final Speed</span>
+                <strong id="attacker-final-speed">—</strong>
+              </div>
+            </div>
+
+            <div id="attacker-sp-inputs" class="stat-inputs" aria-label="Attacker SP"></div>
+            <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
+            <div class="inline-toggles">
+              <label class="inline-toggle"><input id="attacker-tailwind" type="checkbox" /> Tailwind</label>
+              <label class="inline-toggle"><input id="attacker-paralyzed" type="checkbox" /> Paralyzed</label>
+              <label class="inline-toggle"><input id="attacker-burned" type="checkbox" /> Burned</label>
+            </div>
+          </section>
+
+          <section class="damage-side" aria-label="Defender">
+            <div class="panel-heading">
+              <span>Defender</span>
+              <strong id="defender-summary">—</strong>
+            </div>
+
+            <label>
+              Pokémon
+              <select id="defender-pokemon"></select>
+            </label>
+            <label>
+              Spread
+              <select id="defender-spread"></select>
+            </label>
+            <label>
+              Nature
+              <select id="defender-nature"></select>
+            </label>
+            <div class="damage-picks">
+              <label>
+                Ability
+                <select id="defender-ability"></select>
+              </label>
+              <label>
+                Item
+                <select id="defender-item"></select>
+              </label>
+            </div>
+
+            <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
+            <div class="damage-picks">
+              <label>
+                Speed modifier
+                <select id="defender-speed-multiplier">
+                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                  <option value="1" selected>None ×1.0</option>
+                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                  <option value="2">Swift Swim or equivalent ×2.0</option>
+                </select>
+              </label>
+              <div class="speed-readout">
+                <span>Final Speed</span>
+                <strong id="defender-final-speed">—</strong>
+              </div>
+            </div>
+            <div id="defender-sp-inputs" class="stat-inputs" aria-label="Defender SP"></div>
+            <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
+            <div class="inline-toggles">
+              <label class="inline-toggle"><input id="defender-tailwind" type="checkbox" /> Tailwind</label>
+              <label class="inline-toggle"><input id="defender-paralyzed" type="checkbox" /> Paralyzed</label>
+              <label class="inline-toggle"><input id="defender-burned" type="checkbox" /> Burned</label>
+            </div>
+          </section>
+        </div>
+
+        <fieldset class="damage-field">
+          <legend>Battle conditions</legend>
+          <label><input id="trick-room" type="checkbox" /> Trick Room</label>
+          <label><input id="damage-critical" type="checkbox" /> Critical hit</label>
+        </fieldset>
+
+        <section class="result-panel battle-result" aria-live="polite">
+          <div>
+            <span>Move order</span>
+            <strong id="move-order">—</strong>
+            <small>Compares the first selected move from each side.</small>
+          </div>
+        </section>
+
+        <section class="catalog-panel" aria-label="Damage ranges">
+          <div class="panel-heading">
+            <span>Move damage</span>
+            <strong id="damage-count">—</strong>
+          </div>
+          <div class="move-table-wrap">
+            <table class="move-table damage-table">
+              <thead>
+                <tr>
+                  <th scope="col">Move</th>
+                  <th scope="col">Side</th>
+                  <th scope="col">Usage</th>
+                  <th scope="col">Top</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Power</th>
+                  <th scope="col">Damage</th>
+                  <th scope="col">Percent</th>
+                  <th scope="col">KO</th>
+                  <th scope="col">Notes</th>
+                </tr>
+              </thead>
+              <tbody id="damage-list"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span>Showdown usage defaults · Level 50 · 31 IV · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/battle-page.js"></script>
+  </body>
+</html>
+
