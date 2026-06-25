@@ -21,7 +21,7 @@
         </p>
       </header>
 
-      <section class="calculator" aria-label="Speed calculator">
+      <section class="calculator" aria-label="Pokémon tools">
         <div class="search-panel">
           <label for="pokemon-search">Pokémon / 寶可夢</label>
           <div class="search-wrap">
@@ -47,81 +47,158 @@
           <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
         </div>
 
-        <div class="controls-panel">
-          <label id="form-field" class="form-field" hidden>
-            Calculator form
-            <select id="form"></select>
-          </label>
+        <nav class="tabs" aria-label="Tool pages">
+          <button
+            id="moves-tab"
+            class="tab-button active"
+            type="button"
+            aria-controls="moves-page"
+            aria-selected="true"
+          >
+            Moves / Abilities
+          </button>
+          <button
+            id="speed-tab"
+            class="tab-button"
+            type="button"
+            aria-controls="speed-page"
+            aria-selected="false"
+          >
+            Speed
+          </button>
+        </nav>
 
-          <div class="field">
-            <div class="field-heading">
-              <label for="sp">Speed SP</label>
-              <output id="sp-output" for="sp">0</output>
+        <label id="form-field" class="form-field" hidden>
+          Form
+          <select id="form"></select>
+        </label>
+
+        <div id="moves-page" class="tool-page">
+          <section class="catalog-panel" aria-label="Abilities">
+            <div class="panel-heading">
+              <span>Abilities</span>
+              <strong id="ability-count">—</strong>
             </div>
-            <input id="sp" type="range" min="0" max="32" value="0" />
-            <p>0–32 per stat under Pokémon Champions rules.</p>
-          </div>
+            <div id="ability-list" class="ability-list"></div>
+          </section>
 
-          <div class="control-grid">
-            <label>
-              Nature
-              <select id="nature">
-                <option value="negative">Speed-lowering ×0.9</option>
-                <option value="neutral" selected>Neutral ×1.0</option>
-                <option value="positive">Speed-raising ×1.1</option>
-              </select>
-            </label>
+          <section class="catalog-panel" aria-label="Move set">
+            <div class="panel-heading">
+              <span>Move set</span>
+              <strong id="move-count">—</strong>
+            </div>
 
-            <label>
-              Speed stage
-              <select id="stage">
-                <option value="-6">−6</option>
-                <option value="-5">−5</option>
-                <option value="-4">−4</option>
-                <option value="-3">−3</option>
-                <option value="-2">−2</option>
-                <option value="-1">−1</option>
-                <option value="0" selected>0</option>
-                <option value="1">+1</option>
-                <option value="2">+2</option>
-                <option value="3">+3</option>
-                <option value="4">+4</option>
-                <option value="5">+5</option>
-                <option value="6">+6</option>
-              </select>
-            </label>
+            <div class="move-filters">
+              <label>
+                Search moves
+                <input id="move-search" type="search" autocomplete="off" placeholder="Thunderbolt" />
+              </label>
+              <label>
+                Type
+                <select id="move-type">
+                  <option value="">All types</option>
+                </select>
+              </label>
+              <label>
+                Category
+                <select id="move-category">
+                  <option value="">All categories</option>
+                </select>
+              </label>
+            </div>
 
-            <label>
-              Item / ability
-              <select id="speed-multiplier">
-                <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                <option value="1" selected>None ×1.0</option>
-                <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                <option value="2">Swift Swim or equivalent ×2.0</option>
-              </select>
-            </label>
-          </div>
-
-          <fieldset>
-            <legend>Field and status</legend>
-            <label><input id="tailwind" type="checkbox" /> Tailwind ×2</label>
-            <label><input id="paralyzed" type="checkbox" /> Paralysis ×0.5</label>
-            <label><input id="trick-room" type="checkbox" /> Trick Room</label>
-          </fieldset>
+            <div class="move-table-wrap">
+              <table class="move-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Move</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Power</th>
+                    <th scope="col">Acc.</th>
+                    <th scope="col">PP</th>
+                    <th scope="col">Pri.</th>
+                    <th scope="col">Effect</th>
+                  </tr>
+                </thead>
+                <tbody id="move-list"></tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
-        <div class="result-panel" aria-live="polite">
-          <div>
-            <span>Trained Speed</span>
-            <strong id="trained-speed">—</strong>
-            <small>After SP and nature</small>
+        <div id="speed-page" class="tool-page" hidden>
+          <div class="controls-panel">
+            <div class="field">
+              <div class="field-heading">
+                <label for="sp">Speed SP</label>
+                <output id="sp-output" for="sp">0</output>
+              </div>
+              <input id="sp" type="range" min="0" max="32" value="0" />
+              <p>0–32 per stat under Pokémon Champions rules.</p>
+            </div>
+
+            <div class="control-grid">
+              <label>
+                Nature
+                <select id="nature">
+                  <option value="negative">Speed-lowering ×0.9</option>
+                  <option value="neutral" selected>Neutral ×1.0</option>
+                  <option value="positive">Speed-raising ×1.1</option>
+                </select>
+              </label>
+
+              <label>
+                Speed stage
+                <select id="stage">
+                  <option value="-6">−6</option>
+                  <option value="-5">−5</option>
+                  <option value="-4">−4</option>
+                  <option value="-3">−3</option>
+                  <option value="-2">−2</option>
+                  <option value="-1">−1</option>
+                  <option value="0" selected>0</option>
+                  <option value="1">+1</option>
+                  <option value="2">+2</option>
+                  <option value="3">+3</option>
+                  <option value="4">+4</option>
+                  <option value="5">+5</option>
+                  <option value="6">+6</option>
+                </select>
+              </label>
+
+              <label>
+                Item / ability
+                <select id="speed-multiplier">
+                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                  <option value="1" selected>None ×1.0</option>
+                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                  <option value="2">Swift Swim or equivalent ×2.0</option>
+                </select>
+              </label>
+            </div>
+
+            <fieldset>
+              <legend>Field and status</legend>
+              <label><input id="tailwind" type="checkbox" /> Tailwind ×2</label>
+              <label><input id="paralyzed" type="checkbox" /> Paralysis ×0.5</label>
+              <label><input id="trick-room" type="checkbox" /> Trick Room</label>
+            </fieldset>
           </div>
-          <div class="final-result">
-            <span>Final Speed</span>
-            <strong id="final-speed">—</strong>
-            <small>After battle modifiers</small>
+
+          <div class="result-panel" aria-live="polite">
+            <div>
+              <span>Trained Speed</span>
+              <strong id="trained-speed">—</strong>
+              <small>After SP and nature</small>
+            </div>
+            <div class="final-result">
+              <span>Final Speed</span>
+              <strong id="final-speed">—</strong>
+              <small>After battle modifiers</small>
+            </div>
+            <p id="order-note"></p>
           </div>
-          <p id="order-note"></p>
         </div>
       </section>
 
