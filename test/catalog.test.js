@@ -3,15 +3,21 @@ import assert from "node:assert/strict";
 
 import {
   buildAbilityLookup,
+  buildItemLookup,
   buildMoveLookup,
   filterMoves,
+  formatUsagePercent,
   formatMoveAccuracy,
   formatMovePower,
   formatMovePriority,
+  mergeUsage,
   moveEffect,
   normalizeId,
   resolvePokemonAbilities,
+  resolvePokemonItems,
   resolvePokemonMoves,
+  sortByUsage,
+  usageForPokemon,
 } from "../src/catalog.js";
 
 test("normalizes Showdown-style identifiers", () => {
@@ -68,6 +74,91 @@ test("resolves moves by learnset id with safe fallbacks", () => {
       name: "unknownmove",
     },
   ]);
+});
+
+test("resolves items and merges usage by normalized id", () => {
+  const lookup = buildItemLookup([
+    {
+      id: "lightball",
+      name: "Light Ball",
+      shortDesc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+    },
+  ]);
+
+  assert.deepEqual(
+    resolvePokemonItems(
+      {
+        items: [
+          { id: "lightball", name: "Light Ball", usagePercent: 88.2 },
+          { id: "choicescarf", name: "Choice Scarf", usagePercent: 6.4 },
+        ],
+      },
+      lookup,
+    ),
+    [
+      {
+        id: "lightball",
+        name: "Light Ball",
+        shortDesc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+        usagePercent: 88.2,
+      },
+      {
+        id: "choicescarf",
+        name: "Choice Scarf",
+        usagePercent: 6.4,
+      },
+    ],
+  );
+});
+
+test("merges usage into catalog entries without dropping missing entries", () => {
+  const entries = [
+    { id: "static", name: "Static" },
+    { id: "lightningrod", name: "Lightning Rod" },
+  ];
+  const usageEntries = [{ id: "static", name: "Static", usagePercent: 72.5 }];
+
+  assert.deepEqual(mergeUsage(entries, usageEntries), [
+    { id: "static", name: "Static", usagePercent: 72.5 },
+    { id: "lightningrod", name: "Lightning Rod" },
+  ]);
+});
+
+test("sorts used entries before unused entries and formats usage", () => {
+  assert.deepEqual(
+    sortByUsage([
+      { id: "quickattack", usagePercent: 44.1 },
+      { id: "thunderbolt", usagePercent: 91.4 },
+      { id: "agility" },
+    ]).map(({ id }) => id),
+    ["thunderbolt", "quickattack", "agility"],
+  );
+  assert.equal(formatUsagePercent(88.234), "88.2%");
+  assert.equal(formatUsagePercent(undefined), "—");
+});
+
+test("selects exact form usage before base species usage", () => {
+  const usageStats = {
+    pokemon: {
+      charizard: { usagePercent: 11 },
+      charizardmegax: { usagePercent: 22 },
+    },
+  };
+
+  assert.equal(
+    usageForPokemon(usageStats, {
+      id: "charizardmegax",
+      baseSpecies: "Charizard",
+    }).usagePercent,
+    22,
+  );
+  assert.equal(
+    usageForPokemon(usageStats, {
+      id: "charizardmegay",
+      baseSpecies: "Charizard",
+    }).usagePercent,
+    11,
+  );
 });
 
 test("filters moves by query, type, and category", () => {

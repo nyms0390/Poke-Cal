@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { downloadEverything } from "../scripts/sync-pokemon-data.mjs";
+import { downloadEverything, latestStatsMonth } from "../scripts/sync-pokemon-data.mjs";
 
 const fixtures = new Map([
   [
@@ -95,6 +95,28 @@ const fixtures = new Map([
       "25,4,皮卡丘,鼠寶可夢",
     ].join("\n"),
   ],
+  [
+    "stats/",
+    [
+      '<a href="2026-04/">2026-04/</a>',
+      '<a href="2026-05/">2026-05/</a>',
+    ].join("\n"),
+  ],
+  [
+    "gen9championsbssregma-0.json",
+    JSON.stringify({
+      data: {
+        Pikachu: {
+          "Raw count": 200,
+          usage: 0.125,
+          Abilities: { Static: 145 },
+          Items: { "Light Ball": 176.4 },
+          Moves: { Thunderbolt: 182.8 },
+          Spreads: { "Timid:0/0/0/252/4/252": 126.4 },
+        },
+      },
+    }),
+  ],
 ]);
 
 test("downloads Pokémon, item, ability, and move catalogs from source files", async () => {
@@ -122,4 +144,19 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
   assert.equal(data.moves[0].basePower, 90);
   assert.equal(data.items[0].shortDesc.includes("Pikachu"), true);
   assert.equal("onModifyAtk" in data.items[0], false);
+  assert.deepEqual(data["usage-stats"].pokemon.pikachu.items, [
+    { id: "lightball", name: "Light Ball", usagePercent: 88.2 },
+  ]);
+  assert.equal(data["usage-stats"].month, "2026-05");
+});
+
+test("discovers the latest Smogon stats month from the directory index", () => {
+  assert.equal(
+    latestStatsMonth(`
+      <a href="2026-02/">2026-02/</a>
+      <a href="2026-05/">2026-05/</a>
+      <a href="2026-04/">2026-04/</a>
+    `),
+    "2026-05",
+  );
 });

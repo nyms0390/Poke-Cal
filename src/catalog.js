@@ -21,6 +21,15 @@ export function buildMoveLookup(moves) {
   return lookup;
 }
 
+export function buildItemLookup(items) {
+  const lookup = new Map();
+  for (const item of items) {
+    lookup.set(normalizeId(item.id), item);
+    lookup.set(normalizeId(item.name), item);
+  }
+  return lookup;
+}
+
 export function resolvePokemonAbilities(entry, lookup) {
   return (entry?.abilities ?? []).map((name) => {
     const ability = lookup.get(normalizeId(name));
@@ -33,6 +42,41 @@ export function resolvePokemonMoves(entry, lookup) {
     const move = lookup.get(normalizeId(id));
     return move ?? { id: normalizeId(id), name: id };
   });
+}
+
+export function resolvePokemonItems(usage, lookup) {
+  return (usage?.items ?? []).map((usageItem) => {
+    const item = lookup.get(normalizeId(usageItem.id)) ?? lookup.get(normalizeId(usageItem.name));
+    return {
+      ...(item ?? { id: normalizeId(usageItem.id), name: usageItem.name }),
+      usagePercent: usageItem.usagePercent,
+    };
+  });
+}
+
+export function mergeUsage(entries, usageEntries = []) {
+  const usageById = new Map(usageEntries.map((entry) => [normalizeId(entry.id), entry]));
+  return entries.map((entry) => {
+    const usage = usageById.get(normalizeId(entry.id)) ?? usageById.get(normalizeId(entry.name));
+    return usage ? { ...entry, usagePercent: usage.usagePercent } : entry;
+  });
+}
+
+export function sortByUsage(entries) {
+  return [...entries].sort((a, b) => {
+    const aUsage = Number.isFinite(a.usagePercent) ? a.usagePercent : -1;
+    const bUsage = Number.isFinite(b.usagePercent) ? b.usagePercent : -1;
+    return bUsage - aUsage || a.name.localeCompare(b.name);
+  });
+}
+
+export function usageForPokemon(usageStats, entry) {
+  if (!usageStats?.pokemon || !entry) return null;
+  return (
+    usageStats.pokemon[normalizeId(entry.id)] ??
+    usageStats.pokemon[normalizeId(entry.baseSpecies)] ??
+    null
+  );
 }
 
 export function filterMoves(moves, { query = "", type = "", category = "" } = {}) {
@@ -59,6 +103,10 @@ export function formatMoveAccuracy(accuracy) {
 export function formatMovePriority(priority) {
   const value = Number(priority ?? 0);
   return value > 0 ? `+${value}` : String(value);
+}
+
+export function formatUsagePercent(usagePercent) {
+  return Number.isFinite(usagePercent) ? `${usagePercent.toFixed(1)}%` : "—";
 }
 
 export function moveEffect(move) {

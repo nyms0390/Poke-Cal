@@ -1,13 +1,19 @@
 import {
   buildAbilityLookup,
+  buildItemLookup,
   buildMoveLookup,
   filterMoves,
   formatMoveAccuracy,
   formatMovePower,
   formatMovePriority,
+  formatUsagePercent,
+  mergeUsage,
   moveEffect,
+  resolvePokemonItems,
   resolvePokemonAbilities,
   resolvePokemonMoves,
+  sortByUsage,
+  usageForPokemon,
 } from "./catalog.js";
 import { megaFamily, searchPokemon } from "./pokemon.js";
 import { calculateSpeed } from "./speed.js";
@@ -26,8 +32,11 @@ const elements = {
   speedPage: document.querySelector("#speed-page"),
   formField: document.querySelector("#form-field"),
   form: document.querySelector("#form"),
+  usageSource: document.querySelector("#usage-source"),
   abilityCount: document.querySelector("#ability-count"),
   abilityList: document.querySelector("#ability-list"),
+  itemCount: document.querySelector("#item-count"),
+  itemList: document.querySelector("#item-list"),
   moveCount: document.querySelector("#move-count"),
   moveSearch: document.querySelector("#move-search"),
   moveType: document.querySelector("#move-type"),
@@ -49,7 +58,9 @@ const elements = {
 
 let pokemon = [];
 let abilityLookup = new Map();
+let itemLookup = new Map();
 let moveLookup = new Map();
+let usageStats = null;
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
@@ -58,30 +69,47 @@ initialize();
 
 async function initialize() {
   try {
-    const [pokemonResponse, abilitiesResponse, movesResponse] = await Promise.all([
+    const [pokemonResponse, abilitiesResponse, movesResponse, itemsResponse, usageData] =
+      await Promise.all([
       fetch("./public/pokemon.json"),
       fetch("./public/abilities.json"),
       fetch("./public/moves.json"),
+      fetch("./public/items.json"),
+      loadOptionalJson("./public/usage-stats.json"),
     ]);
-    for (const response of [pokemonResponse, abilitiesResponse, movesResponse]) {
+    for (const response of [pokemonResponse, abilitiesResponse, movesResponse, itemsResponse]) {
       if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
     }
 
-    const [pokemonData, abilityData, moveData] = await Promise.all([
+    const [pokemonData, abilityData, moveData, itemData] = await Promise.all([
       pokemonResponse.json(),
       abilitiesResponse.json(),
       movesResponse.json(),
+      itemsResponse.json(),
     ]);
     pokemon = pokemonData;
     abilityLookup = buildAbilityLookup(abilityData);
+    itemLookup = buildItemLookup(itemData);
     moveLookup = buildMoveLookup(moveData);
+    usageStats = usageData;
     elements.status.textContent =
       `${pokemon.length} Pokémon/forms, ${abilityData.length} abilities, ` +
-      `${moveData.length} moves loaded`;
+      `${moveData.length} moves loaded` +
+      (usageStats ? "" : " · No Showdown usage data loaded");
     selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0]);
   } catch (error) {
     elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
     console.error(error);
+  }
+}
+
+async function loadOptionalJson(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
   }
 }
 
@@ -224,11 +252,31 @@ function selectForm(entry) {
 }
 
 function renderCatalog() {
-  const abilities = resolvePokemonAbilities(selectedPokemon, abilityLookup);
-  selectedMoves = resolvePokemonMoves(selectedPokemon, moveLookup);
+  const usage = usageForPokemon(usageStats, selectedPokemon);
+  renderUsageSource(usage);
+
+  const abilities = mergeUsage(
+    resolvePokemonAbilities(selectedPokemon, abilityLookup),
+    usage?.abilities,
+  );
+  selectedMoves = sortByUsage(
+    mergeUsage(resolvePokemonMoves(selectedPokemon, moveLookup), usage?.moves),
+  );
   renderAbilities(abilities);
+  renderItems(resolvePokemonItems(usage, itemLookup));
   renderMoveFilterOptions();
   renderMoveList();
+}
+
+function renderUsageSource(usage) {
+  if (!usageStats) {
+    elements.usageSource.textContent = "No Showdown usage data loaded.";
+  } else if (!usage) {
+    elements.usageSource.textContent =
+      `Showdown usage · ${usageStats.format} · ${usageStats.month} · no data for this Pokémon`;
+  } else {
+    elements.usageSource.textContent = `Showdown usage · ${usageStats.format} · ${usageStats.month}`;
+  }
 }
 
 function renderAbilities(abilities) {
@@ -251,8 +299,46 @@ function renderAbilities(abilities) {
         heading.append(rating);
       }
 
+      const usage = document.createElement("span");
+      usage.textContent = formatUsagePercent(ability.usagePercent);
+      heading.append(usage);
+
       const description = document.createElement("p");
       description.textContent = ability.shortDesc || ability.desc || "—";
+
+      card.append(heading, description);
+      return card;
+    }),
+  );
+}
+
+function renderItems(items) {
+  elements.itemCount.textContent = String(items.length);
+
+  if (items.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty-catalog";
+    empty.textContent = "No item usage is available for this Pokémon.";
+    elements.itemList.replaceChildren(empty);
+    return;
+  }
+
+  elements.itemList.replaceChildren(
+    ...items.map((item) => {
+      const card = document.createElement("article");
+      card.className = "item-card";
+
+      const heading = document.createElement("div");
+      heading.className = "item-heading";
+
+      const name = document.createElement("strong");
+      name.textContent = item.name;
+      const usage = document.createElement("span");
+      usage.textContent = formatUsagePercent(item.usagePercent);
+      heading.append(name, usage);
+
+      const description = document.createElement("p");
+      description.textContent = item.shortDesc || item.desc || "—";
 
       card.append(heading, description);
       return card;
@@ -297,7 +383,7 @@ function renderMoveList() {
   if (moves.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 8;
+    cell.colSpan = 9;
     cell.className = "empty-moves";
     cell.textContent = "No moves match the current filters.";
     row.append(cell);
@@ -312,6 +398,7 @@ function renderMoveRow(move) {
   const row = document.createElement("tr");
   row.append(
     moveNameCell(move),
+    textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
     textCell(move.type || "—", "", "Type"),
     textCell(move.category || "—", "", "Category"),
     textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),

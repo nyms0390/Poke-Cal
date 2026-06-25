@@ -74,12 +74,22 @@
         </label>
 
         <div id="moves-page" class="tool-page">
+          <p id="usage-source" class="usage-source">Showdown usage loading…</p>
+
           <section class="catalog-panel" aria-label="Abilities">
             <div class="panel-heading">
               <span>Abilities</span>
               <strong id="ability-count">—</strong>
             </div>
             <div id="ability-list" class="ability-list"></div>
+          </section>
+
+          <section class="catalog-panel" aria-label="Items">
+            <div class="panel-heading">
+              <span>Items</span>
+              <strong id="item-count">—</strong>
+            </div>
+            <div id="item-list" class="item-list"></div>
           </section>
 
           <section class="catalog-panel" aria-label="Move set">
@@ -112,6 +122,7 @@
                 <thead>
                   <tr>
                     <th scope="col">Move</th>
+                    <th scope="col">Usage</th>
                     <th scope="col">Type</th>
                     <th scope="col">Category</th>
                     <th scope="col">Power</th>

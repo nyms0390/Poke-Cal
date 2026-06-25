@@ -399,6 +399,17 @@ select:focus {
   background: var(--line);
 }
 
+.usage-source {
+  margin: 0;
+  padding: 14px clamp(24px, 4vw, 42px);
+  background: #0e1730;
+  color: #8fa0c2;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .catalog-panel {
   padding: clamp(24px, 4vw, 42px);
   background:
@@ -419,39 +430,47 @@ select:focus {
   font-size: 1.05rem;
 }
 
-.ability-list {
+.ability-list,
+.item-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 12px;
 }
 
-.ability-card {
+.ability-card,
+.item-card {
   padding: 18px;
   border: 1px solid #293758;
   border-radius: 4px;
   background: linear-gradient(145deg, #101831, #0b1125);
 }
 
-.ability-heading {
+.ability-heading,
+.item-heading {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.ability-heading strong {
+.ability-heading strong,
+.item-heading strong {
   font-size: 1.04rem;
 }
 
-.ability-heading span {
+.ability-heading span,
+.item-heading span {
   color: var(--magenta);
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
 }
 
-.ability-card p {
+.ability-card p,
+.item-card p,
+.empty-catalog {
   margin: 0;
   color: #a9b8d6;
   font-size: 0.92rem;
@@ -483,7 +502,7 @@ select:focus {
 
 .move-table {
   width: 100%;
-  min-width: 920px;
+  min-width: 980px;
   border-collapse: collapse;
 }
 

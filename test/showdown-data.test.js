@@ -5,6 +5,7 @@ import {
   extractAbilities,
   extractCatalogEntries,
   extractLearnsetMoves,
+  normalizeChaosUsageStats,
   parseShowdownExport,
   stripTypeAssertions,
 } from "../src/showdown-data.js";
@@ -64,6 +65,55 @@ test("extracts serializable catalog metadata", () => {
       rating: 2,
     },
   ]);
+});
+
+test("normalizes Smogon chaos usage stats", () => {
+  const usage = normalizeChaosUsageStats(
+    {
+      data: {
+        Pikachu: {
+          "Raw count": 200,
+          usage: 0.125,
+          Abilities: {
+            Static: 145,
+            "Lightning Rod": 55,
+          },
+          Items: {
+            "Light Ball": 176.4,
+          },
+          Moves: {
+            Thunderbolt: 182.8,
+            "Quick Attack": 88.2,
+          },
+          Spreads: {
+            "Timid:0/0/0/252/4/252": 126.4,
+          },
+        },
+      },
+    },
+    { month: "2026-05", format: "gen9championsbssregma-0" },
+  );
+
+  assert.deepEqual(usage, {
+    source: "Smogon / Pokémon Showdown",
+    month: "2026-05",
+    format: "gen9championsbssregma-0",
+    pokemon: {
+      pikachu: {
+        usagePercent: 12.5,
+        abilities: [
+          { id: "static", name: "Static", usagePercent: 72.5 },
+          { id: "lightningrod", name: "Lightning Rod", usagePercent: 27.5 },
+        ],
+        items: [{ id: "lightball", name: "Light Ball", usagePercent: 88.2 }],
+        moves: [
+          { id: "thunderbolt", name: "Thunderbolt", usagePercent: 91.4 },
+          { id: "quickattack", name: "Quick Attack", usagePercent: 44.1 },
+        ],
+        spreads: [{ name: "Timid:0/0/0/252/4/252", usagePercent: 63.2 }],
+      },
+    },
+  });
 });
 
 test("strips TypeScript assertions without changing string data", () => {
