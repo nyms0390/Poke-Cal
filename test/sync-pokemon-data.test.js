@@ -10,6 +10,7 @@ const fixtures = new Map([
       pikachu: {
         num: 25,
         name: "Pikachu",
+        types: ["Electric"],
         baseStats: { hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90 },
         abilities: { 0: "Static", H: "Lightning Rod" },
       },
@@ -133,6 +134,7 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
       id: "pikachu",
       name: "Pikachu",
       baseSpecies: "Pikachu",
+      types: ["Electric"],
       baseStats: { hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90 },
       baseSpeed: 90,
       abilities: ["Lightning Rod", "Static"],

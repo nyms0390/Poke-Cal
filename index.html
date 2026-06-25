@@ -66,6 +66,15 @@
           >
             Speed
           </button>
+          <button
+            id="damage-tab"
+            class="tab-button"
+            type="button"
+            aria-controls="damage-page"
+            aria-selected="false"
+          >
+            Damage
+          </button>
         </nav>
 
         <label id="form-field" class="form-field" hidden>
@@ -210,6 +219,110 @@
             </div>
             <p id="order-note"></p>
           </div>
+        </div>
+
+        <div id="damage-page" class="tool-page" hidden>
+          <p id="damage-source" class="usage-source">Damage usage defaults loading…</p>
+
+          <div class="damage-controls">
+            <section class="damage-side" aria-label="Attacker">
+              <div class="panel-heading">
+                <span>Attacker</span>
+                <strong id="attacker-summary">—</strong>
+              </div>
+
+              <label>
+                Pokémon
+                <select id="attacker-pokemon"></select>
+              </label>
+              <label>
+                Spread
+                <select id="attacker-spread"></select>
+              </label>
+              <label>
+                Nature
+                <select id="attacker-nature"></select>
+              </label>
+              <div class="damage-picks">
+                <label>
+                  Ability
+                  <select id="attacker-ability"></select>
+                </label>
+                <label>
+                  Item
+                  <select id="attacker-item"></select>
+                </label>
+              </div>
+
+              <div id="attacker-sp-inputs" class="stat-inputs" aria-label="Attacker SP"></div>
+              <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
+              <label class="inline-toggle"><input id="attacker-burned" type="checkbox" /> Burned</label>
+            </section>
+
+            <section class="damage-side" aria-label="Defender">
+              <div class="panel-heading">
+                <span>Defender</span>
+                <strong id="defender-summary">—</strong>
+              </div>
+
+              <label>
+                Pokémon
+                <select id="defender-pokemon"></select>
+              </label>
+              <label>
+                Spread
+                <select id="defender-spread"></select>
+              </label>
+              <label>
+                Nature
+                <select id="defender-nature"></select>
+              </label>
+              <div class="damage-picks">
+                <label>
+                  Ability
+                  <select id="defender-ability"></select>
+                </label>
+                <label>
+                  Item
+                  <select id="defender-item"></select>
+                </label>
+              </div>
+
+              <div id="defender-sp-inputs" class="stat-inputs" aria-label="Defender SP"></div>
+              <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
+            </section>
+          </div>
+
+          <fieldset class="damage-field">
+            <legend>Damage options</legend>
+            <label><input id="damage-critical" type="checkbox" /> Critical hit</label>
+          </fieldset>
+
+          <section class="catalog-panel" aria-label="Damage ranges">
+            <div class="panel-heading">
+              <span>Move damage</span>
+              <strong id="damage-count">—</strong>
+            </div>
+            <div class="move-table-wrap">
+              <table class="move-table damage-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Move</th>
+                    <th scope="col">Usage</th>
+                    <th scope="col">Top</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Power</th>
+                    <th scope="col">Damage</th>
+                    <th scope="col">Percent</th>
+                    <th scope="col">KO</th>
+                    <th scope="col">Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="damage-list"></tbody>
+              </table>
+            </div>
+          </section>
         </div>
       </section>
 

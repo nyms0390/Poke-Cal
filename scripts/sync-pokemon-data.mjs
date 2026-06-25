@@ -99,6 +99,7 @@ function buildPokemon(pokedex, learnsets, aliasesByNumber) {
       id,
       name: entry.name,
       baseSpecies: entry.baseSpecies ?? entry.name,
+      types: [...(entry.types ?? [])],
       baseStats: { ...entry.baseStats },
       baseSpeed: entry.baseStats.spe,
       abilities: extractAbilities(entry),

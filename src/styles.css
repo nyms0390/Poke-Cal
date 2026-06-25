@@ -399,6 +399,12 @@ select:focus {
   background: var(--line);
 }
 
+#damage-page {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+}
+
 .usage-source {
   margin: 0;
   padding: 14px clamp(24px, 4vw, 42px);
@@ -491,6 +497,83 @@ select:focus {
 
 #move-search {
   padding: 12px;
+}
+
+.damage-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+}
+
+.damage-side {
+  display: grid;
+  gap: 16px;
+  padding: clamp(24px, 4vw, 42px);
+  background:
+    linear-gradient(180deg, rgb(78 93 160 / 4%), transparent 45%),
+    #080d1c;
+}
+
+.damage-side > label,
+.damage-picks label,
+.stat-inputs label,
+.stage-inputs label {
+  display: grid;
+  gap: 8px;
+}
+
+.damage-picks,
+.stat-inputs,
+.stage-inputs {
+  display: grid;
+  gap: 12px;
+}
+
+.damage-picks {
+  grid-template-columns: 1fr 1fr;
+}
+
+.stat-inputs {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stage-inputs {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-inputs input,
+.stage-inputs input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #334267;
+  border-radius: 4px;
+  outline: none;
+  background: #080d1d;
+  color: #f4f7ff;
+}
+
+.stat-inputs input:focus,
+.stage-inputs input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgb(25 230 255 / 12%);
+}
+
+.inline-toggle {
+  color: #dbe3f7;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.damage-field {
+  margin: 0;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+
+.damage-table {
+  min-width: 1120px;
 }
 
 .move-table-wrap {
