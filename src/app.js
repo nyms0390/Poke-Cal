@@ -71,11 +71,13 @@ const elements = {
   attackerItem: document.querySelector("#attacker-item"),
   defenderItem: document.querySelector("#defender-item"),
   attackerMovePicks: document.querySelector("#attacker-move-picks"),
+  defenderMovePicks: document.querySelector("#defender-move-picks"),
   attackerSpInputs: document.querySelector("#attacker-sp-inputs"),
   defenderSpInputs: document.querySelector("#defender-sp-inputs"),
   attackerStageInputs: document.querySelector("#attacker-stage-inputs"),
   defenderStageInputs: document.querySelector("#defender-stage-inputs"),
   attackerBurned: document.querySelector("#attacker-burned"),
+  defenderBurned: document.querySelector("#defender-burned"),
   damageCritical: document.querySelector("#damage-critical"),
   damageCount: document.querySelector("#damage-count"),
   damageList: document.querySelector("#damage-list"),
@@ -202,6 +204,7 @@ for (const control of [
   elements.attackerItem,
   elements.defenderItem,
   elements.attackerBurned,
+  elements.defenderBurned,
   elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
@@ -575,7 +578,7 @@ function seedDamageSide(side, entry) {
     item: defaults.item,
     topMoveIds: new Set(defaults.moves.slice(0, 4).map(({ id }) => normalizeDamageId(id))),
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeDamageId(defaults.moves[index]?.id)),
-    burned: side === "attacker" ? elements.attackerBurned.checked : false,
+    burned: elements[`${side}Burned`]?.checked ?? false,
   };
 
   elements[`${side}Pokemon`].value = entry.id;
@@ -618,7 +621,7 @@ function renderSideSelects(side, usage, defaults) {
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
   itemSelect.value = damageState[side].item?.id ?? "";
-  if (side === "attacker") renderDamageMovePickers();
+  renderDamageMovePickers(side);
 }
 
 function syncSideInputs(side) {
@@ -670,12 +673,14 @@ function handleDamageControl(event) {
   }
 
   if (event.target.dataset.kind === "damage-move") {
+    const { side } = event.target.dataset;
     const index = Number(event.target.dataset.index);
-    damageState.attacker.selectedMoveIds[index] = normalizeDamageId(event.target.value);
+    damageState[side].selectedMoveIds[index] = normalizeDamageId(event.target.value);
   }
 
-  if (id === "attacker-burned" && damageState.attacker) {
-    damageState.attacker.burned = elements.attackerBurned.checked;
+  if ((id === "attacker-burned" || id === "defender-burned") && damageState[id.split("-")[0]]) {
+    const side = id.split("-")[0];
+    damageState[side].burned = elements[`${side}Burned`].checked;
   }
 
   renderDamage();
@@ -689,17 +694,18 @@ function selectedOptionEntry(select, lookup) {
   };
 }
 
-function renderDamageMovePickers() {
-  const attacker = damageState.attacker;
-  if (!attacker?.pokemon) return;
-  const moves = attackerDamageMoves();
+function renderDamageMovePickers(side) {
+  const state = damageState[side];
+  if (!state?.pokemon) return;
+  const moves = damageMovesForSide(side);
 
-  elements.attackerMovePicks.replaceChildren(
+  elements[`${side}MovePicks`].replaceChildren(
     ...[0, 1, 2, 3].map((index) => {
       const label = document.createElement("label");
       label.textContent = `Move ${index + 1}`;
       const select = document.createElement("select");
       select.dataset.kind = "damage-move";
+      select.dataset.side = side;
       select.dataset.index = String(index);
       select.replaceChildren(
         ...moves.map((move) =>
@@ -709,7 +715,7 @@ function renderDamageMovePickers() {
           ),
         ),
       );
-      select.value = attacker.selectedMoveIds[index] ?? moves[index]?.id ?? "";
+      select.value = state.selectedMoveIds[index] ?? moves[index]?.id ?? "";
       select.addEventListener("input", handleDamageControl);
       label.append(select);
       return label;
@@ -730,37 +736,48 @@ function renderDamage() {
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
 
-  const movesById = new Map(attackerDamageMoves().map((move) => [normalizeDamageId(move.id), move]));
-  const selectedMoves = attacker.selectedMoveIds
+  const rows = [
+    ...selectedDamageMoves("attacker").map((move) => renderDamageRow(move, "attacker", "defender")),
+    ...selectedDamageMoves("defender").map((move) => renderDamageRow(move, "defender", "attacker")),
+  ];
+  elements.damageCount.textContent = `${rows.length} moves`;
+  elements.damageList.replaceChildren(...rows);
+}
+
+function selectedDamageMoves(side) {
+  const movesById = new Map(damageMovesForSide(side).map((move) => [normalizeDamageId(move.id), move]));
+  return damageState[side].selectedMoveIds
     .map((id) => movesById.get(normalizeDamageId(id)))
     .filter(Boolean);
-  elements.damageCount.textContent = `${selectedMoves.length} moves`;
-  elements.damageList.replaceChildren(...selectedMoves.map((move) => renderDamageRow(move)));
 }
 
-function attackerDamageMoves() {
-  const attacker = damageState.attacker;
-  if (!attacker?.pokemon) return [];
-  const usage = usageForPokemon(usageStats, attacker.pokemon);
-  return sortByUsage(mergeUsage(resolvePokemonMoves(attacker.pokemon, moveLookup), usage?.moves));
+function damageMovesForSide(side) {
+  const state = damageState[side];
+  if (!state?.pokemon) return [];
+  const usage = usageForPokemon(usageStats, state.pokemon);
+  return sortByUsage(mergeUsage(resolvePokemonMoves(state.pokemon, moveLookup), usage?.moves));
 }
 
-function renderDamageRow(move) {
+function renderDamageRow(move, sourceSide, targetSide) {
+  const source = damageState[sourceSide];
+  const target = damageState[targetSide];
   const result = calculateDamage({
-    attacker: damageState.attacker.pokemon,
-    defender: damageState.defender.pokemon,
+    attacker: source.pokemon,
+    defender: target.pokemon,
     move,
-    attackerState: damageState.attacker,
-    defenderState: damageState.defender,
+    attackerState: source,
+    defenderState: target,
     critical: elements.damageCritical.checked,
-    burned: damageState.attacker.burned,
+    burned: source.burned,
   });
   const row = document.createElement("tr");
-  const topMarker = damageState.attacker.topMoveIds.has(normalizeDamageId(move.id)) ? "Top" : "—";
+  const topMarker = source.topMoveIds.has(normalizeDamageId(move.id)) ? "Top" : "—";
+  const sideLabel = sourceSide === "attacker" ? "Attacker" : "Defender";
 
   if (!result.supported) {
     row.append(
       moveNameCell(move),
+      textCell(sideLabel, "numeric-cell", "Side"),
       textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
       textCell(topMarker, "numeric-cell", "Top"),
       textCell(move.type || "—", "", "Type"),
@@ -776,6 +793,7 @@ function renderDamageRow(move) {
 
   row.append(
     moveNameCell(move),
+    textCell(sideLabel, "numeric-cell", "Side"),
     textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
     textCell(topMarker, "numeric-cell", "Top"),
     textCell(move.type || "—", "", "Type"),
