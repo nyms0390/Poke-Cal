@@ -1,9 +1,13 @@
 # Battle Mechanics Checklist
 
-Internal checklist for mechanics that still need named implementation before the
-battle calculator can treat them as fully correct. This list was audited against
-the current selectable local surface: Pokemon learnset moves, Pokemon abilities,
-and Showdown usage items.
+Internal checklist for mechanics that still need named damage-range
+implementation before the battle calculator can treat them as fully correct.
+This list was audited against the current selectable local surface: Pokemon
+learnset moves, Pokemon abilities, and Showdown usage items.
+
+Entries that only affect accuracy, move order, action validity, post-damage
+side effects, recovery, form switching, or persistent follow-up state are skipped
+unless they also change the displayed damage range.
 
 Currently implemented named effects:
 
@@ -34,34 +38,20 @@ Currently implemented named effects:
 - [ ] Metal Burst
 - [ ] Mirror Coat
 - [ ] Nature's Madness
-- [ ] Night Shade
+- [x] Night Shade
 - [ ] Psywave
 - [x] Ruination
 - [ ] Salt Cure
-- [ ] Seismic Toss
+- [x] Seismic Toss
 - [ ] Sonic Boom
 - [x] Super Fang
-
-### OHKO and miss/crash/faint side effects
-
-- [ ] Axe Kick
-- [ ] Fissure
-- [ ] Guillotine
-- [ ] High Jump Kick
-- [ ] Horn Drill
-- [ ] Jump Kick
-- [ ] Mind Blown
-- [ ] Misty Explosion
-- [ ] Sheer Cold
-- [ ] Steel Beam
-- [ ] Supercell Slam
 
 ### Alternate attacking or defending stat rules
 
 - [x] Body Press
 - [ ] Chip Away
 - [x] Darkest Lariat
-- [ ] Foul Play
+- [x] Foul Play
 - [ ] Photon Geyser
 - [x] Psyshock
 - [x] Psystrike
@@ -166,100 +156,40 @@ Currently implemented named effects:
 
 ### Dynamic move type, user type, or item-derived type/power
 
-- [ ] Belch
-- [ ] Bug Bite
-- [ ] Burn Up
-- [ ] Double Shock
 - [ ] Hidden Power
-- [ ] Incinerate
-- [ ] Ivy Cudgel
-- [ ] Judgment
-- [ ] Multi-Attack
-- [ ] Natural Gift
-- [ ] Pluck
-- [ ] Raging Bull
-- [ ] Revelation Dance
-- [ ] Techno Blast
+- [x] Ivy Cudgel
+- [x] Judgment
+- [x] Multi-Attack
+- [x] Natural Gift
+- [x] Raging Bull
+- [x] Revelation Dance
+- [x] Techno Blast
 - [ ] Tera Blast
-- [ ] Terrain Pulse
-- [ ] Weather Ball
+- [x] Terrain Pulse
+- [x] Weather Ball
 
 ### Weather, terrain, field, or two-turn context
 
-- [ ] Bleakwind Storm
-- [ ] Blizzard
-- [ ] Circle Throw
-- [ ] Dig
-- [ ] Dive
-- [ ] Dragon Tail
-- [ ] Electro Shot
 - [ ] Expanding Force
 - [ ] Fire Pledge
-- [ ] Grassy Glide
 - [ ] Grav Apple
-- [ ] Hurricane
 - [ ] Hydro Steam
-- [ ] Ice Spinner
 - [ ] Psyblade
-- [ ] Psychic Noise
 - [ ] Rising Voltage
-- [ ] Sandsear Storm
-- [ ] Secret Power
 - [ ] Solar Beam
 - [ ] Solar Blade
-- [ ] Steel Roller
-- [ ] Thunder
 - [ ] Water Pledge
-- [ ] Wildbolt Storm
 
-### Type chart, immunity, protection, or ability override rules
+### Type chart, immunity, or ability override rules
 
-- [ ] Brick Break
 - [ ] Collision Course
-- [ ] Core Enforcer
 - [ ] Electro Drift
 - [ ] Freeze-Dry
 - [ ] Future Sight
 - [ ] Moongeist Beam
-- [ ] Psychic Fangs
 - [ ] Smack Down
 - [ ] Sunsteel Strike
-- [ ] Synchronoise
 - [ ] Thousand Arrows
-
-### Stat-stage or status side effects for follow-up calculation state
-
-- [ ] Aurora Beam
-- [ ] Beak Blast
-- [ ] Bitter Malice
-- [ ] Breaking Swipe
-- [ ] Ceaseless Edge
-- [ ] Chilling Water
-- [ ] Dire Claw
-- [ ] Dream Eater
-- [ ] Lunge
-- [ ] Matcha Gotcha
-- [ ] Outrage
-- [ ] Petal Dance
-- [ ] Play Rough
-- [ ] Raging Fury
-- [ ] Relic Song
-- [ ] Scald
-- [ ] Scorching Sands
-- [ ] Snore
-- [ ] Sparkly Swirl
-- [ ] Springtide Storm
-- [ ] Steam Eruption
-- [ ] Stone Axe
-- [ ] Thrash
-- [ ] Trop Kick
-- [ ] Uproar
-
-### Priority and move-order exceptions
-
-- [ ] Sucker Punch
-- [ ] Thunderclap
-- [ ] Upper Hand
 
 ## Items
 
@@ -305,85 +235,11 @@ Currently implemented named effects:
 - [x] Wacan Berry
 - [x] Yache Berry
 
-### Speed, priority, accuracy, survival, and recovery items
-
-- [ ] Bright Powder
-- [x] Choice Scarf
-- [ ] Focus Band
-- [ ] Focus Sash
-- [ ] King's Rock
-- [ ] Lum Berry
-- [ ] Quick Claw
-- [ ] Shell Bell
-
-### Mega/form-changing stones
-
-- [ ] Abomasite
-- [ ] Absolite
-- [ ] Aerodactylite
-- [ ] Aggronite
-- [ ] Alakazite
-- [ ] Altarianite
-- [ ] Ampharosite
-- [ ] Audinite
-- [ ] Banettite
-- [ ] Beedrillite
-- [ ] Blastoisinite
-- [ ] Cameruptite
-- [ ] Chandelurite
-- [ ] Charizardite X
-- [ ] Charizardite Y
-- [ ] Chesnaughtite
-- [ ] Chimechite
-- [ ] Clefablite
-- [ ] Crabominite
-- [ ] Delphoxite
-- [ ] Dragoninite
-- [ ] Drampanite
-- [ ] Emboarite
-- [ ] Excadrite
-- [ ] Feraligite
-- [ ] Floettite
-- [ ] Froslassite
-- [ ] Galladite
-- [ ] Garchompite
-- [ ] Gardevoirite
-- [ ] Gengarite
-- [ ] Glalitite
-- [ ] Glimmoranite
-- [ ] Golurkite
-- [ ] Greninjite
-- [ ] Gyaradosite
-- [ ] Hawluchanite
-- [ ] Heracronite
-- [ ] Houndoominite
-- [ ] Kangaskhanite
-- [ ] Lopunnite
-- [ ] Lucarionite
-- [ ] Manectite
-- [ ] Medichamite
-- [ ] Meganiumite
-- [ ] Meowsticite
-- [ ] Pidgeotite
-- [ ] Pinsirite
-- [ ] Sablenite
-- [ ] Scizorite
-- [ ] Scovillainite
-- [ ] Sharpedonite
-- [ ] Skarmorite
-- [ ] Slowbronite
-- [ ] Starminite
-- [ ] Steelixite
-- [ ] Tyranitarite
-- [ ] Venusaurite
-- [ ] Victreebelite
-
 ## Abilities
 
 ### Weather and terrain setters, suppressors, and abusers
 
 - [ ] Air Lock
-- [ ] Chlorophyll
 - [ ] Cloud Nine
 - [ ] Drizzle
 - [ ] Drought
@@ -403,14 +259,10 @@ Currently implemented named effects:
 - [ ] Psychic Surge
 - [ ] Quark Drive
 - [ ] Sand Force
-- [ ] Sand Rush
 - [ ] Sand Spit
 - [ ] Sand Stream
-- [ ] Slush Rush
 - [ ] Snow Warning
 - [ ] Solar Power
-- [ ] Surge Surfer
-- [ ] Swift Swim
 - [ ] Teraform Zero
 
 ### Type-changing, type-boosting, and move-family power abilities
@@ -471,6 +323,7 @@ Currently implemented named effects:
 - [ ] Sword of Ruin
 - [ ] Tablets of Ruin
 - [ ] Thick Fat
+- [ ] Unaware
 - [ ] Vessel of Ruin
 
 ### Damage reduction, amplification, critical-hit, and survival rules
@@ -488,25 +341,6 @@ Currently implemented named effects:
 - [ ] Tera Shell
 - [x] Tinted Lens
 
-### Speed, priority, and move-order abilities
-
-- [ ] Battle Bond
-- [ ] Cotton Down
-- [ ] Dazzling
-- [ ] Gale Wings
-- [ ] Motor Drive
-- [ ] Mycelium Might
-- [ ] Queenly Majesty
-- [ ] Quick Draw
-- [ ] Quick Feet
-- [ ] Speed Boost
-- [ ] Stall
-- [ ] Steam Engine
-- [ ] Triage
-- [ ] Unaware
-- [ ] Unburden
-- [ ] Weak Armor
-
 ### Immunity, redirection, type-chart, and ability-suppression rules
 
 - [ ] Lightning Rod
@@ -514,6 +348,7 @@ Currently implemented named effects:
 - [ ] Magnet Pull
 - [ ] Mind's Eye
 - [ ] Mold Breaker
+- [ ] Motor Drive
 - [ ] Neutralizing Gas
 - [ ] Overcoat
 - [ ] Propeller Tail
@@ -528,19 +363,9 @@ Currently implemented named effects:
 - [ ] Well-Baked Body
 - [ ] Wonder Guard
 
-### Form, copied ability, and persistent state changes
+### Hit-count rules
 
-- [ ] Hunger Switch
-- [ ] Stance Change
-
-### Stat-stage or status-triggered follow-up state
-
-- [ ] Moxie
-- [ ] Serene Grace
 - [ ] Skill Link
-- [ ] Soul-Heart
-- [ ] Stamina
-- [ ] Stench
 
 ### Review bucket: may need calculator support or explicit out-of-scope handling
 

@@ -187,6 +187,29 @@ test("supports numeric fixed-damage moves and type immunities", () => {
     category: "Special",
     basePower: 0,
   };
+  const naturesMadness = {
+    id: "naturesmadness",
+    name: "Nature's Madness",
+    type: "Fairy",
+    category: "Special",
+    basePower: 0,
+  };
+  const nightShade = {
+    id: "nightshade",
+    name: "Night Shade",
+    type: "Ghost",
+    category: "Special",
+    basePower: 0,
+    damage: "level",
+  };
+  const seismicToss = {
+    id: "seismictoss",
+    name: "Seismic Toss",
+    type: "Fighting",
+    category: "Physical",
+    basePower: 0,
+    damage: "level",
+  };
 
   const dragonRageResult = calculateDamage({
     attacker: pikachu,
@@ -228,6 +251,35 @@ test("supports numeric fixed-damage moves and type immunities", () => {
   });
   assert.deepEqual([ruinationResult.minDamage, ruinationResult.maxDamage], [59, 59]);
 
+  const naturesMadnessResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: naturesMadness,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([naturesMadnessResult.minDamage, naturesMadnessResult.maxDamage], [59, 59]);
+  assert.deepEqual([naturesMadnessResult.minPercent, naturesMadnessResult.maxPercent], [49.5, 49.5]);
+
+  const nightShadeResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: nightShade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([nightShadeResult.minDamage, nightShadeResult.maxDamage], [50, 50]);
+  assert.deepEqual([nightShadeResult.minPercent, nightShadeResult.maxPercent], [42, 42]);
+
+  const seismicTossResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: seismicToss,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([seismicTossResult.minDamage, seismicTossResult.maxDamage], [50, 50]);
+
   const immune = calculateDamage({
     attacker: pikachu,
     defender: { ...squirtle, types: ["Ghost"] },
@@ -236,6 +288,15 @@ test("supports numeric fixed-damage moves and type immunities", () => {
     defenderState: neutralState,
   });
   assert.deepEqual([immune.minDamage, immune.maxDamage, immune.minPercent], [0, 0, 0]);
+
+  const normalImmuneToNightShade = calculateDamage({
+    attacker: pikachu,
+    defender: { ...squirtle, types: ["Normal"] },
+    move: nightShade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([normalImmuneToNightShade.minDamage, normalImmuneToNightShade.maxDamage], [0, 0]);
 });
 
 test("applies curated item and ability modifiers", () => {
@@ -318,6 +379,310 @@ test("applies type-boosting held items only to matching move types", () => {
   assert.equal(metalCoat.maxDamage > noItem.maxDamage, true);
   assert.equal(nonMatching.notes.includes("Metal Coat"), false);
   assert.deepEqual([nonMatching.minDamage, nonMatching.maxDamage], [normalNoItem.minDamage, normalNoItem.maxDamage]);
+});
+
+test("uses held Plate, Memory, and Drive metadata for move type changes", () => {
+  const dragonUser = {
+    id: "dragonuser",
+    name: "Dragonuser",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const fairyUser = {
+    id: "fairyuser",
+    name: "Fairyuser",
+    types: ["Fairy"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const waterUser = {
+    id: "wateruser",
+    name: "Wateruser",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const dragonTarget = {
+    id: "dragontarget",
+    name: "Dragontarget",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const darkTarget = {
+    id: "darktarget",
+    name: "Darktarget",
+    types: ["Dark"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const fireTarget = {
+    id: "firetarget",
+    name: "Firetarget",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const judgment = {
+    id: "judgment",
+    name: "Judgment",
+    type: "Normal",
+    category: "Special",
+    basePower: 100,
+  };
+  const multiAttack = {
+    id: "multiattack",
+    name: "Multi-Attack",
+    type: "Normal",
+    category: "Physical",
+    basePower: 120,
+  };
+  const technoBlast = {
+    id: "technoblast",
+    name: "Techno Blast",
+    type: "Normal",
+    category: "Special",
+    basePower: 120,
+  };
+
+  const normalJudgment = calculateDamage({
+    attacker: dragonUser,
+    defender: dragonTarget,
+    move: judgment,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const dracoPlateJudgment = calculateDamage({
+    attacker: dragonUser,
+    defender: dragonTarget,
+    move: judgment,
+    attackerState: { ...neutralState, item: { id: "dracoplate", name: "Draco Plate", onPlate: "Dragon" } },
+    defenderState: neutralState,
+  });
+  const fairyMemoryMultiAttack = calculateDamage({
+    attacker: fairyUser,
+    defender: darkTarget,
+    move: multiAttack,
+    attackerState: { ...neutralState, item: { id: "fairymemory", name: "Fairy Memory", onMemory: "Fairy" } },
+    defenderState: neutralState,
+  });
+  const douseDriveTechnoBlast = calculateDamage({
+    attacker: waterUser,
+    defender: fireTarget,
+    move: technoBlast,
+    attackerState: { ...neutralState, item: { id: "dousedrive", name: "Douse Drive", onDrive: "Water" } },
+    defenderState: neutralState,
+  });
+
+  assert.equal(normalJudgment.typeMultiplier, 1);
+  assert.equal(dracoPlateJudgment.typeMultiplier, 2);
+  assert.equal(dracoPlateJudgment.notes.includes("Judgment is Dragon type"), true);
+  assert.equal(dracoPlateJudgment.notes.includes("Draco Plate"), true);
+  assert.equal(dracoPlateJudgment.maxDamage > normalJudgment.maxDamage, true);
+  assert.equal(fairyMemoryMultiAttack.typeMultiplier, 2);
+  assert.equal(fairyMemoryMultiAttack.notes.includes("Multi-Attack is Fairy type"), true);
+  assert.equal(douseDriveTechnoBlast.typeMultiplier, 2);
+  assert.equal(douseDriveTechnoBlast.notes.includes("Techno Blast is Water type"), true);
+});
+
+test("uses user form, primary type, and Berry metadata for dynamic move type and power", () => {
+  const fireDancer = {
+    id: "firedancer",
+    name: "Firedancer",
+    types: ["Fire", "Flying"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const taurosAqua = {
+    id: "taurospaldeaaqua",
+    name: "Tauros-Paldea-Aqua",
+    types: ["Fighting", "Water"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const berryUser = {
+    id: "berryuser",
+    name: "Berryuser",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const grassTarget = {
+    id: "grasstarget",
+    name: "Grasstarget",
+    types: ["Grass"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const fireTarget = {
+    id: "firetarget",
+    name: "Firetarget",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const revelationDance = {
+    id: "revelationdance",
+    name: "Revelation Dance",
+    type: "Normal",
+    category: "Special",
+    basePower: 90,
+  };
+  const ragingBull = {
+    id: "ragingbull",
+    name: "Raging Bull",
+    type: "Normal",
+    category: "Physical",
+    basePower: 90,
+  };
+  const naturalGift = {
+    id: "naturalgift",
+    name: "Natural Gift",
+    type: "Normal",
+    category: "Physical",
+    basePower: 0,
+  };
+
+  const dance = calculateDamage({
+    attacker: fireDancer,
+    defender: grassTarget,
+    move: revelationDance,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const bull = calculateDamage({
+    attacker: taurosAqua,
+    defender: fireTarget,
+    move: ragingBull,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const gift = calculateDamage({
+    attacker: berryUser,
+    defender: grassTarget,
+    move: naturalGift,
+    attackerState: {
+      ...neutralState,
+      item: { id: "aguavberry", name: "Aguav Berry", isBerry: true, naturalGift: { basePower: 80, type: "Dragon" } },
+    },
+    defenderState: neutralState,
+  });
+
+  assert.equal(dance.typeMultiplier, 2);
+  assert.equal(dance.notes.includes("Revelation Dance is Fire type"), true);
+  assert.equal(bull.typeMultiplier, 2);
+  assert.equal(bull.notes.includes("Raging Bull is Water type"), true);
+  assert.equal(gift.supported, true);
+  assert.equal(gift.typeMultiplier, 1);
+  assert.equal(gift.notes.includes("Natural Gift is Dragon type"), true);
+  assert.equal(gift.notes.includes("Natural Gift power 80"), true);
+});
+
+test("uses form, weather, and terrain context for dynamic move type and power", () => {
+  const ogerponHearthflame = {
+    id: "ogerponhearthflame",
+    name: "Ogerpon-Hearthflame",
+    types: ["Grass", "Fire"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const weatherUser = {
+    id: "weatheruser",
+    name: "Weatheruser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const pulseUser = {
+    id: "pulseuser",
+    name: "Pulseuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const steelTarget = {
+    id: "steeltarget",
+    name: "Steeltarget",
+    types: ["Steel"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const fireTarget = {
+    id: "firetarget",
+    name: "Firetarget",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const waterTarget = {
+    id: "watertarget",
+    name: "Watertarget",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const ivyCudgel = {
+    id: "ivycudgel",
+    name: "Ivy Cudgel",
+    type: "Grass",
+    category: "Physical",
+    basePower: 100,
+  };
+  const weatherBall = {
+    id: "weatherball",
+    name: "Weather Ball",
+    type: "Normal",
+    category: "Special",
+    basePower: 50,
+  };
+  const terrainPulse = {
+    id: "terrainpulse",
+    name: "Terrain Pulse",
+    type: "Normal",
+    category: "Special",
+    basePower: 50,
+  };
+
+  const grassCudgel = calculateDamage({
+    attacker: { ...ogerponHearthflame, id: "ogerpon" },
+    defender: steelTarget,
+    move: ivyCudgel,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const fireCudgel = calculateDamage({
+    attacker: ogerponHearthflame,
+    defender: steelTarget,
+    move: ivyCudgel,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const normalWeatherBall = calculateDamage({
+    attacker: weatherUser,
+    defender: fireTarget,
+    move: weatherBall,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const rainWeatherBall = calculateDamage({
+    attacker: weatherUser,
+    defender: fireTarget,
+    move: weatherBall,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    weather: "RainDance",
+  });
+  const normalTerrainPulse = calculateDamage({
+    attacker: pulseUser,
+    defender: waterTarget,
+    move: terrainPulse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const electricTerrainPulse = calculateDamage({
+    attacker: pulseUser,
+    defender: waterTarget,
+    move: terrainPulse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    terrain: "Electric Terrain",
+  });
+
+  assert.equal(fireCudgel.typeMultiplier, 2);
+  assert.equal(fireCudgel.notes.includes("Ivy Cudgel is Fire type"), true);
+  assert.equal(fireCudgel.maxDamage > grassCudgel.maxDamage, true);
+  assert.equal(rainWeatherBall.typeMultiplier, 2);
+  assert.equal(rainWeatherBall.notes.includes("Weather Ball is Water type"), true);
+  assert.equal(rainWeatherBall.notes.includes("Weather Ball power 100"), true);
+  assert.equal(rainWeatherBall.maxDamage > normalWeatherBall.maxDamage, true);
+  assert.equal(electricTerrainPulse.typeMultiplier, 2);
+  assert.equal(electricTerrainPulse.notes.includes("Terrain Pulse is Electric type"), true);
+  assert.equal(electricTerrainPulse.notes.includes("Terrain Pulse power 100"), true);
+  assert.equal(electricTerrainPulse.maxDamage > normalTerrainPulse.maxDamage, true);
 });
 
 test("applies resist berries to matching super-effective damage", () => {
@@ -919,6 +1284,102 @@ test("uses Defense and Defense stages for Psyshock-style special damage", () => 
   assert.deepEqual([spDefenseBoosted.minDamage, spDefenseBoosted.maxDamage], [106, 126]);
 });
 
+test("uses the target Attack stat and stages for Foul Play damage", () => {
+  const trickmon = {
+    id: "trickmon",
+    name: "Trickmon",
+    types: ["Dark"],
+    baseStats: { hp: 80, atk: 20, def: 70, spa: 90, spd: 70, spe: 50 },
+  };
+  const targetmon = {
+    id: "targetmon",
+    name: "Targetmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 130, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const foulPlay = {
+    id: "foulplay",
+    name: "Foul Play",
+    type: "Dark",
+    category: "Physical",
+    basePower: 95,
+    overrideOffensivePokemon: "target",
+  };
+
+  const neutral = calculateDamage({
+    attacker: trickmon,
+    defender: targetmon,
+    move: foulPlay,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const defenderAttackBoosted = calculateDamage({
+    attacker: trickmon,
+    defender: targetmon,
+    move: foulPlay,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, atk: 2 } },
+  });
+  const attackerAttackBoosted = calculateDamage({
+    attacker: trickmon,
+    defender: targetmon,
+    move: foulPlay,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, atk: 6 } },
+    defenderState: neutralState,
+  });
+
+  assert.equal(neutral.supported, true);
+  assert.deepEqual([neutral.minDamage, neutral.maxDamage], [81, 96]);
+  assert.deepEqual([defenderAttackBoosted.minDamage, defenderAttackBoosted.maxDamage], [160, 190]);
+  assert.deepEqual([attackerAttackBoosted.minDamage, attackerAttackBoosted.maxDamage], [81, 96]);
+});
+
+test("uses the stronger offensive side for Photon Geyser damage", () => {
+  const physicalAttacker = {
+    id: "physicalattacker",
+    name: "Physicalattacker",
+    types: ["Psychic"],
+    baseStats: { hp: 80, atk: 140, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const specialAttacker = {
+    id: "specialattacker",
+    name: "Specialattacker",
+    types: ["Psychic"],
+    baseStats: { hp: 80, atk: 40, def: 80, spa: 140, spd: 80, spe: 50 },
+  };
+  const mixedWall = {
+    id: "mixedwall",
+    name: "Mixedwall",
+    types: ["Fighting"],
+    baseStats: { hp: 80, atk: 80, def: 40, spa: 80, spd: 200, spe: 50 },
+  };
+  const photonGeyser = {
+    id: "photongeyser",
+    name: "Photon Geyser",
+    type: "Psychic",
+    category: "Special",
+    basePower: 100,
+  };
+
+  const physicalResult = calculateDamage({
+    attacker: physicalAttacker,
+    defender: mixedWall,
+    move: photonGeyser,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const specialResult = calculateDamage({
+    attacker: specialAttacker,
+    defender: mixedWall,
+    move: photonGeyser,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual([physicalResult.minDamage, physicalResult.maxDamage], [302, 356]);
+  assert.deepEqual([specialResult.minDamage, specialResult.maxDamage], [84, 102]);
+});
+
 test("ignores defender Defense stages for ignoreDefensive physical moves", () => {
   const swordmon = {
     id: "swordmon",
@@ -1012,7 +1473,7 @@ test("classifies unsupported moves and summarizes KOs", () => {
   assert.equal(unsupportedMoveReason({ id: "bodypress", category: "Physical", basePower: 80 }), "");
   assert.equal(unsupportedMoveReason({ id: "psyshock", category: "Special", basePower: 80 }), "");
   assert.equal(unsupportedMoveReason({ id: "dragonrage", category: "Special", basePower: 0, damage: 40 }), "");
-  assert.match(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), /Fixed/);
+  assert.equal(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), "");
   assert.equal(koSummary({ minDamage: 100, maxDamage: 100, defenderHp: 100 }), "Guaranteed 1HKO");
   assert.equal(koSummary({ minDamage: 45, maxDamage: 60, defenderHp: 100 }), "Possible 2HKO");
 });
