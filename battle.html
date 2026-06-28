@@ -35,10 +35,19 @@
               <strong id="attacker-summary">—</strong>
             </div>
 
-            <label>
-              Pokémon
-              <select id="attacker-pokemon"></select>
-            </label>
+            <label class="pokemon-search-label" for="attacker-pokemon-search">Pokémon</label>
+            <div class="pokemon-combobox">
+              <input id="attacker-pokemon" type="hidden" />
+              <input
+                id="attacker-pokemon-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="attacker-pokemon-results"
+                aria-expanded="false"
+              />
+              <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
             <label>
               Spread
               <select id="attacker-spread"></select>
@@ -90,10 +99,19 @@
               <strong id="defender-summary">—</strong>
             </div>
 
-            <label>
-              Pokémon
-              <select id="defender-pokemon"></select>
-            </label>
+            <label class="pokemon-search-label" for="defender-pokemon-search">Pokémon</label>
+            <div class="pokemon-combobox">
+              <input id="defender-pokemon" type="hidden" />
+              <input
+                id="defender-pokemon-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="defender-pokemon-results"
+                aria-expanded="false"
+              />
+              <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
             <label>
               Spread
               <select id="defender-spread"></select>

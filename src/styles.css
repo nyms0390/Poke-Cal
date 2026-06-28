@@ -160,6 +160,7 @@ h1 {
 
 #pokemon-search,
 #move-search,
+.pokemon-combobox input[type="search"],
 select {
   width: 100%;
   border: 1px solid #334267;
@@ -177,6 +178,7 @@ select {
 
 #pokemon-search:focus,
 #move-search:focus,
+.pokemon-combobox input[type="search"]:focus,
 select:focus {
   border-color: var(--cyan);
   box-shadow:
@@ -229,6 +231,24 @@ select:focus {
   grid-row: 1 / 3;
   align-self: center;
   color: var(--cyan);
+}
+
+.pokemon-search-label {
+  display: block;
+  margin-bottom: -8px;
+}
+
+.pokemon-combobox {
+  position: relative;
+}
+
+.pokemon-combobox input[type="search"] {
+  padding: 12px;
+}
+
+.pokemon-search-results {
+  z-index: 5;
+  max-height: 260px;
 }
 
 .pokemon-card {

@@ -11,6 +11,7 @@ import {
 import { compareMoveOrder } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
 import { calculateDamage, calculateStat, formatDamageResult, koSummary, NATURES } from "./damage.js";
+import { searchPokemon } from "./pokemon.js";
 import { finalSpeed } from "./speed.js";
 import { parseUsageSpread, usageDefaultsForPokemon } from "./usage-defaults.js";
 import { damagePercentColor, optionElement, STAT_LABELS, typeBadge } from "./ui.js";
@@ -21,6 +22,10 @@ const elements = {
   defenderSummary: document.querySelector("#defender-summary"),
   attackerPokemon: document.querySelector("#attacker-pokemon"),
   defenderPokemon: document.querySelector("#defender-pokemon"),
+  attackerPokemonSearch: document.querySelector("#attacker-pokemon-search"),
+  defenderPokemonSearch: document.querySelector("#defender-pokemon-search"),
+  attackerPokemonResults: document.querySelector("#attacker-pokemon-results"),
+  defenderPokemonResults: document.querySelector("#defender-pokemon-results"),
   attackerSpread: document.querySelector("#attacker-spread"),
   defenderSpread: document.querySelector("#defender-spread"),
   attackerNature: document.querySelector("#attacker-nature"),
@@ -90,8 +95,6 @@ async function initialize() {
 }
 
 for (const control of [
-  elements.attackerPokemon,
-  elements.defenderPokemon,
   elements.attackerSpread,
   elements.defenderSpread,
   elements.attackerNature,
@@ -115,11 +118,24 @@ for (const control of [
   control.addEventListener("input", handleDamageControl);
 }
 
-function renderDamageShell() {
-  const options = pokemon.map((entry) => optionElement(entry.id, entry.name));
-  elements.attackerPokemon.replaceChildren(...options.map((option) => option.cloneNode(true)));
-  elements.defenderPokemon.replaceChildren(...options.map((option) => option.cloneNode(true)));
+for (const side of ["attacker", "defender"]) {
+  const input = elements[`${side}PokemonSearch`];
+  input.addEventListener("input", () => renderPokemonSearchResults(side));
+  input.addEventListener("focus", () => renderPokemonSearchResults(side));
+  input.addEventListener("keydown", (event) => handlePokemonSearchKeydown(event, side));
+}
 
+document.addEventListener("click", (event) => {
+  for (const side of ["attacker", "defender"]) {
+    const input = elements[`${side}PokemonSearch`];
+    const results = elements[`${side}PokemonResults`];
+    if (!input.contains(event.target) && !results.contains(event.target)) {
+      hidePokemonSearchResults(side);
+    }
+  }
+});
+
+function renderDamageShell() {
   const natureOptions = Object.keys(NATURES).map((nature) => optionElement(nature, nature));
   elements.attackerNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
   elements.defenderNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
@@ -134,6 +150,61 @@ function renderDamageShell() {
       pokemon.find(({ id }) => id !== "pikachu") ??
       pokemon[0],
   );
+}
+
+function renderPokemonSearchResults(side) {
+  const input = elements[`${side}PokemonSearch`];
+  const results = elements[`${side}PokemonResults`];
+  const matches = searchPokemon(pokemon, input.value, {
+    abilityLookup,
+    moveLookup,
+    usageStats,
+    limit: 8,
+  });
+
+  results.replaceChildren(
+    ...matches.map((entry) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "search-result";
+      button.innerHTML = `
+        <span>${entry.name}</span>
+        <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
+        <strong>${entry.baseSpeed}</strong>
+      `;
+      button.addEventListener("pointerdown", (event) => event.preventDefault());
+      button.addEventListener("click", () => seedDamageSide(side, entry));
+      return button;
+    }),
+  );
+  const isOpen = matches.length > 0;
+  results.hidden = !isOpen;
+  input.setAttribute("aria-expanded", String(isOpen));
+}
+
+function handlePokemonSearchKeydown(event, side) {
+  const results = elements[`${side}PokemonResults`];
+  if (event.key === "Escape") {
+    hidePokemonSearchResults(side);
+    return;
+  }
+  if (event.key !== "Enter") return;
+
+  const [firstResult] = searchPokemon(pokemon, elements[`${side}PokemonSearch`].value, {
+    abilityLookup,
+    moveLookup,
+    usageStats,
+    limit: 1,
+  });
+  if (!firstResult) return;
+  event.preventDefault();
+  results.hidden = true;
+  seedDamageSide(side, firstResult);
+}
+
+function hidePokemonSearchResults(side) {
+  elements[`${side}PokemonResults`].hidden = true;
+  elements[`${side}PokemonSearch`].setAttribute("aria-expanded", "false");
 }
 
 function renderSideInputs(side) {
@@ -203,6 +274,8 @@ function seedDamageSide(side, entry) {
   };
 
   elements[`${side}Pokemon`].value = entry.id;
+  elements[`${side}PokemonSearch`].value = entry.name;
+  hidePokemonSearchResults(side);
   renderSideSelects(side, usage, defaults);
   syncSideInputs(side);
   renderDamage();
@@ -259,12 +332,6 @@ function syncSideInputs(side) {
 
 function handleDamageControl(event) {
   const id = event.target.id;
-  if (id === "attacker-pokemon" || id === "defender-pokemon") {
-    const side = id.startsWith("attacker") ? "attacker" : "defender";
-    seedDamageSide(side, pokemon.find((entry) => entry.id === event.target.value));
-    return;
-  }
-
   for (const side of ["attacker", "defender"]) {
     const state = damageState[side];
     if (!state) continue;
