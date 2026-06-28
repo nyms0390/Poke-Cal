@@ -25,7 +25,15 @@
     "num": 674,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Abomasnow, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Abomasnow to Mega Evolve.",
+    "desc": "A held item that allows Abomasnow to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/abomasite/",
+      "rank": 99,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0674.webp"
+    }
   },
   {
     "id": "absolite",
@@ -40,7 +48,15 @@
     "num": 677,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol in battle."
+    "shortDesc": "A held item that allows Absol to Mega Evolve into Mega Absol.",
+    "desc": "A held item that allows Absol to Mega Evolve into Mega Absol.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/absolite/",
+      "rank": 124,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0677.webp"
+    }
   },
   {
     "id": "absolitez",
@@ -126,7 +142,15 @@
     "num": 672,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Aerodactyl, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Aerodactyl to Mega Evolve.",
+    "desc": "A held item that allows Aerodactyl to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/aerodactylite/",
+      "rank": 21,
+      "usageCount": 357,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0672.webp"
+    }
   },
   {
     "id": "aggronite",
@@ -141,7 +165,15 @@
     "num": 667,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Aggron, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Aggron to Mega Evolve.",
+    "desc": "A held item that allows Aggron to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/aggronite/",
+      "rank": 97,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0667.webp"
+    }
   },
   {
     "id": "aguavberry",
@@ -188,7 +220,15 @@
     "num": 679,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Alakazam, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Alakazam to Mega Evolve.",
+    "desc": "A held item that allows Alakazam to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/alakazite/",
+      "rank": 93,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0679.webp"
+    }
   },
   {
     "id": "aloraichiumz",
@@ -218,7 +258,15 @@
     "num": 755,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Altaria, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Altaria to Mega Evolve.",
+    "desc": "A held item that allows Altaria to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/altarianite/",
+      "rank": 109,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0755.webp"
+    }
   },
   {
     "id": "ampharosite",
@@ -233,7 +281,15 @@
     "num": 658,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Ampharos, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Ampharos to Mega Evolve.",
+    "desc": "A held item that allows Ampharos to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/ampharosite/",
+      "rank": 89,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0658.webp"
+    }
   },
   {
     "id": "apicotberry",
@@ -298,7 +354,15 @@
     "num": 757,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Audino, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Audino to Mega Evolve.",
+    "desc": "A held item that allows Audino to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/audinite/",
+      "rank": 125,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0757.webp"
+    }
   },
   {
     "id": "auspiciousarmor",
@@ -322,7 +386,15 @@
     },
     "num": 199,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Steel-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Steel-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Steel-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/babiri-berry/",
+      "rank": 63,
+      "usageCount": 30,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0199.webp"
+    }
   },
   {
     "id": "banettite",
@@ -337,7 +409,15 @@
     "num": 668,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Banette, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Banette to Mega Evolve.",
+    "desc": "A held item that allows Banette to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/banettite/",
+      "rank": 126,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0668.webp"
+    }
   },
   {
     "id": "barbaracite",
@@ -352,7 +432,15 @@
     "num": 2581,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Barbaracle to Mega Evolve.",
+    "desc": "A held item that allows Barbaracle to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/barbaracite/",
+      "rank": 100,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2581.webp"
+    }
   },
   {
     "id": "baxcalibrite",
@@ -391,7 +479,15 @@
     "num": 770,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Beedrill, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Beedrill to Mega Evolve.",
+    "desc": "A held item that allows Beedrill to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/beedrillite/",
+      "rank": 111,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0770.webp"
+    }
   },
   {
     "id": "belueberry",
@@ -485,9 +581,17 @@
     "onTryHealPriority": 1,
     "num": 296,
     "gen": 4,
-    "shortDesc": "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+    "shortDesc": "Boosts the amount of HP restored through HP-absorbing moves by 30%. HP restored by moves such as Ingrain and Strength Sap will also be boosted by 30%.",
     "gen6": {
       "shortDesc": "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed."
+    },
+    "desc": "Boosts the amount of HP restored through HP-absorbing moves by 30%. HP restored by moves such as Ingrain and Strength Sap will also be boosted by 30%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/big-root/",
+      "rank": 64,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0296.webp"
     }
   },
   {
@@ -528,9 +632,17 @@
     "onBasePowerPriority": 15,
     "num": 241,
     "gen": 2,
-    "shortDesc": "Holder's Fighting-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Fighting-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Fighting-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Fighting-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/black-belt/",
+      "rank": 84,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0241.webp"
     }
   },
   {
@@ -543,9 +655,17 @@
     "onBasePowerPriority": 15,
     "num": 240,
     "gen": 2,
-    "shortDesc": "Holder's Dark-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Dark-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Dark-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Dark-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/black-glasses/",
+      "rank": 16,
+      "usageCount": 536,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0240.webp"
     }
   },
   {
@@ -575,7 +695,15 @@
     "num": 661,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Blastoise, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Blastoise to Mega Evolve.",
+    "desc": "A held item that allows Blastoise to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/blastoisinite/",
+      "rank": 52,
+      "usageCount": 56,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0661.webp"
+    }
   },
   {
     "id": "blazikenite",
@@ -590,7 +718,15 @@
     "num": 664,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Blaziken, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Blaziken to Mega Evolve.",
+    "desc": "A held item that allows Blaziken to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/blazikenite/",
+      "rank": 34,
+      "usageCount": 131,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0664.webp"
+    }
   },
   {
     "id": "blueorb",
@@ -665,9 +801,17 @@
     "onModifyAccuracyPriority": -2,
     "num": 213,
     "gen": 2,
-    "shortDesc": "The accuracy of attacks against the holder is 0.9x.",
+    "shortDesc": "Lowers the accuracy of moves used by opponents against the holder by 10%.",
     "gen2": {
       "shortDesc": "An attack against the holder has its accuracy out of 255 lowered by 20."
+    },
+    "desc": "Lowers the accuracy of moves used by opponents against the holder by 10%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/bright-powder/",
+      "rank": 61,
+      "usageCount": 33,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0213.webp"
     }
   },
   {
@@ -755,7 +899,15 @@
     "num": 767,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Camerupt, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Camerupt to Mega Evolve.",
+    "desc": "A held item that allows Camerupt to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/cameruptite/",
+      "rank": 69,
+      "usageCount": 25,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0767.webp"
+    }
   },
   {
     "id": "cellbattery",
@@ -784,7 +936,15 @@
     "num": 2574,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Chandelure, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Chandelure to Mega Evolve.",
+    "desc": "A held item that allows Chandelure to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chandelurite/",
+      "rank": 77,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2574.webp"
+    }
   },
   {
     "id": "charcoal",
@@ -796,9 +956,17 @@
     "onBasePowerPriority": 15,
     "num": 249,
     "gen": 2,
-    "shortDesc": "Holder's Fire-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Fire-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Fire-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Fire-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charcoal/",
+      "rank": 23,
+      "usageCount": 340,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0249.webp"
     }
   },
   {
@@ -814,7 +982,15 @@
     "num": 660,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard X."
+    "shortDesc": "A held item that allows Charizard to Mega Evolve into Mega Charizard X.",
+    "desc": "A held item that allows Charizard to Mega Evolve into Mega Charizard X.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-x/",
+      "rank": 55,
+      "usageCount": 44,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0660.webp"
+    }
   },
   {
     "id": "charizarditey",
@@ -829,7 +1005,15 @@
     "num": 678,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard Y."
+    "shortDesc": "A held item that allows Charizard to Mega Evolve into Mega Charizard Y.",
+    "desc": "A held item that allows Charizard to Mega Evolve into Mega Charizard Y.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-y/",
+      "rank": 7,
+      "usageCount": 1007,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0678.webp"
+    }
   },
   {
     "id": "chartiberry",
@@ -842,7 +1026,15 @@
     },
     "num": 195,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Rock-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Rock-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Rock-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charti-berry/",
+      "rank": 92,
+      "usageCount": 11,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0195.webp"
+    }
   },
   {
     "id": "cheriberry",
@@ -880,7 +1072,15 @@
     "num": 2575,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Chesnaught, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Chesnaught to Mega Evolve.",
+    "desc": "A held item that allows Chesnaught to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chesnaughtite/",
+      "rank": 90,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2575.webp"
+    }
   },
   {
     "id": "chestoberry",
@@ -935,7 +1135,15 @@
     "num": 2637,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Chimecho, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Chimecho to Mega Evolve.",
+    "desc": "A held item that allows Chimecho to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chimechite/",
+      "rank": 106,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2637.webp"
+    }
   },
   {
     "id": "chippedpot",
@@ -971,7 +1179,15 @@
     "isChoice": true,
     "num": 287,
     "gen": 4,
-    "shortDesc": "Holder's Speed is 1.5x, but it can only select the first move it executes."
+    "shortDesc": "Boosts the holder’s Speed stat by 50%. However, once the holder uses a move, it becomes unable to use any other move but that one until it switches out of battle.",
+    "desc": "Boosts the holder’s Speed stat by 50%. However, once the holder uses a move, it becomes unable to use any other move but that one until it switches out of battle.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/choice-scarf/",
+      "rank": 5,
+      "usageCount": 1701,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0287.webp"
+    }
   },
   {
     "id": "choicespecs",
@@ -997,7 +1213,15 @@
     },
     "num": 189,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Fighting-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fighting-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Fighting-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chople-berry/",
+      "rank": 13,
+      "usageCount": 724,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0189.webp"
+    }
   },
   {
     "id": "clawfossil",
@@ -1037,7 +1261,15 @@
     "num": 2559,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Clefable, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Clefable to Mega Evolve.",
+    "desc": "A held item that allows Clefable to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/clefablite/",
+      "rank": 94,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2559.webp"
+    }
   },
   {
     "id": "cloversweet",
@@ -1061,7 +1293,15 @@
     },
     "num": 192,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Flying-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Flying-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Flying-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/coba-berry/",
+      "rank": 25,
+      "usageCount": 265,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0192.webp"
+    }
   },
   {
     "id": "colburberry",
@@ -1074,7 +1314,15 @@
     },
     "num": 198,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Dark-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Dark-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Dark-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/colbur-berry/",
+      "rank": 19,
+      "usageCount": 392,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0198.webp"
+    }
   },
   {
     "id": "cornerstonemask",
@@ -1144,7 +1392,15 @@
     "num": 2644,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Crabominable, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Crabominable to Mega Evolve.",
+    "desc": "A held item that allows Crabominable to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/crabominite/",
+      "rank": 87,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2644.webp"
+    }
   },
   {
     "id": "crackedpot",
@@ -1196,7 +1452,15 @@
     },
     "num": 285,
     "gen": 4,
-    "shortDesc": "Holder's use of Rain Dance lasts 8 turns instead of 5."
+    "shortDesc": "When the holder summons rain with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "desc": "When the holder summons rain with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/damp-rock/",
+      "rank": 42,
+      "usageCount": 106,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0285.webp"
+    }
   },
   {
     "id": "darkgem",
@@ -1328,7 +1592,15 @@
     "num": 2576,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Delphox, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Delphox to Mega Evolve.",
+    "desc": "A held item that allows Delphox to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/delphoxite/",
+      "rank": 24,
+      "usageCount": 332,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2576.webp"
+    }
   },
   {
     "id": "destinyknot",
@@ -1416,7 +1688,15 @@
     "num": 2582,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Dragalge, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Dragalge to Mega Evolve.",
+    "desc": "A held item that allows Dragalge to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragalgite/",
+      "rank": 53,
+      "usageCount": 55,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2582.webp"
+    }
   },
   {
     "id": "dragonfang",
@@ -1428,12 +1708,20 @@
     "onBasePowerPriority": 15,
     "num": 250,
     "gen": 2,
-    "shortDesc": "Holder's Dragon-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Dragon-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Dragon-type attacks have 1.1x power."
     },
     "gen2": {
       "shortDesc": "No competitive use."
+    },
+    "desc": "Boosts the power of the holder’s Dragon-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragon-fang/",
+      "rank": 56,
+      "usageCount": 43,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0250.webp"
     }
   },
   {
@@ -1490,7 +1778,15 @@
     "num": 2562,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Dragonite to Mega Evolve.",
+    "desc": "A held item that allows Dragonite to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragoninite/",
+      "rank": 30,
+      "usageCount": 172,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2562.webp"
+    }
   },
   {
     "id": "dragoniumz",
@@ -1519,7 +1815,15 @@
     "num": 2585,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Drampa, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Drampa to Mega Evolve.",
+    "desc": "A held item that allows Drampa to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/drampanite/",
+      "rank": 85,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2585.webp"
+    }
   },
   {
     "id": "dreadplate",
@@ -1615,7 +1919,15 @@
     "num": 2573,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Eelektross to Mega Evolve.",
+    "desc": "A held item that allows Eelektross to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/eelektrossite/",
+      "rank": 37,
+      "usageCount": 125,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2573.webp"
+    }
   },
   {
     "id": "eeviumz",
@@ -1739,7 +2051,15 @@
     "num": 2569,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Emboar to Mega Evolve.",
+    "desc": "A held item that allows Emboar to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/emboarite/",
+      "rank": 112,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2569.webp"
+    }
   },
   {
     "id": "enigmaberry",
@@ -1783,7 +2103,15 @@
     "num": 2570,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by an Excadrill, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Excadrill to Mega Evolve.",
+    "desc": "A held item that allows Excadrill to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/excadrite/",
+      "rank": 101,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2570.webp"
+    }
   },
   {
     "id": "expertbelt",
@@ -1794,7 +2122,15 @@
     },
     "num": 268,
     "gen": 4,
-    "shortDesc": "Holder's attacks that are super effective against the target do 1.2x damage."
+    "shortDesc": "Boosts the power of the holder’s supereffective moves by 20%.",
+    "desc": "Boosts the power of the holder’s supereffective moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/expert-belt/",
+      "rank": 45,
+      "usageCount": 88,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0268.webp"
+    }
   },
   {
     "id": "fairiumz",
@@ -1820,7 +2156,15 @@
     "onBasePowerPriority": 15,
     "num": 2401,
     "gen": 9,
-    "shortDesc": "Holder's Fairy-type attacks have 1.2x power."
+    "shortDesc": "Boosts the power of the holder’s Fairy-type moves by 20%.",
+    "desc": "Boosts the power of the holder’s Fairy-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/fairy-feather/",
+      "rank": 14,
+      "usageCount": 717,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_2401.webp"
+    }
   },
   {
     "id": "fairygem",
@@ -1859,7 +2203,15 @@
     "num": 2587,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Falinks to Mega Evolve.",
+    "desc": "A held item that allows Falinks to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/falinksite/",
+      "rank": 86,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2587.webp"
+    }
   },
   {
     "id": "fastball",
@@ -1883,7 +2235,15 @@
     "num": 2564,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Feraligatr, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Feraligatr to Mega Evolve.",
+    "desc": "A held item that allows Feraligatr to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/feraligite/",
+      "rank": 110,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2564.webp"
+    }
   },
   {
     "id": "fightinggem",
@@ -2058,7 +2418,15 @@
     "num": 2579,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Eternal Flower Floette to Mega Evolve.",
+    "desc": "A held item that allows Eternal Flower Floette to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/floettite/",
+      "rank": 8,
+      "usageCount": 916,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2579.webp"
+    }
   },
   {
     "id": "flowersweet",
@@ -2122,11 +2490,19 @@
     "onDamagePriority": -40,
     "num": 230,
     "gen": 2,
-    "shortDesc": "Holder has a 10% chance to survive an attack that would KO it with 1 HP.",
+    "shortDesc": "If the holder takes damage from a move that would knock it out, there’s a 10% chance the holder will endure the hit with 1 HP.",
     "gen2": {
       "shortDesc": "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP."
     },
-    "activate": "  [POKEMON] hung on using its Focus Band!"
+    "activate": "  [POKEMON] hung on using its Focus Band!",
+    "desc": "If the holder takes damage from a move that would knock it out, there’s a 10% chance the holder will endure the hit with 1 HP.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/focus-band/",
+      "rank": 107,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0230.webp"
+    }
   },
   {
     "id": "focussash",
@@ -2138,11 +2514,19 @@
     "onDamagePriority": -40,
     "num": 275,
     "gen": 4,
-    "shortDesc": "If holder's HP is full, will survive an attack that would KO it with 1 HP. Single use.",
+    "shortDesc": "If the holder has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. Disappears for the duration of the battle after a single use.",
     "gen4": {
       "shortDesc": "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use."
     },
-    "end": "  [POKEMON] hung on using its Focus Sash!"
+    "end": "  [POKEMON] hung on using its Focus Sash!",
+    "desc": "If the holder has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/focus-sash/",
+      "rank": 1,
+      "usageCount": 3570,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0275.webp"
+    }
   },
   {
     "id": "fossilizedbird",
@@ -2214,7 +2598,15 @@
     "num": 2566,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Froslass, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Froslass to Mega Evolve.",
+    "desc": "A held item that allows Froslass to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/froslassite/",
+      "rank": 27,
+      "usageCount": 243,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2566.webp"
+    }
   },
   {
     "id": "fullincense",
@@ -2264,7 +2656,15 @@
     "num": 756,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Gallade, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Gallade to Mega Evolve.",
+    "desc": "A held item that allows Gallade to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/galladite/",
+      "rank": 127,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0756.webp"
+    }
   },
   {
     "id": "ganlonberry",
@@ -2292,7 +2692,15 @@
     "num": 683,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp."
+    "shortDesc": "A held item that allows Garchomp to Mega Evolve into Mega Garchomp.",
+    "desc": "A held item that allows Garchomp to Mega Evolve into Mega Garchomp.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/garchompite/",
+      "rank": 81,
+      "usageCount": 16,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0683.webp"
+    }
   },
   {
     "id": "garchompitez",
@@ -2322,7 +2730,15 @@
     "num": 657,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Gardevoir, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Gardevoir to Mega Evolve.",
+    "desc": "A held item that allows Gardevoir to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gardevoirite/",
+      "rank": 50,
+      "usageCount": 71,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0657.webp"
+    }
   },
   {
     "id": "gengarite",
@@ -2337,7 +2753,15 @@
     "num": 656,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Gengar, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Gengar to Mega Evolve.",
+    "desc": "A held item that allows Gengar to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gengarite/",
+      "rank": 35,
+      "usageCount": 131,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0656.webp"
+    }
   },
   {
     "id": "ghostgem",
@@ -2408,7 +2832,15 @@
     "num": 2650,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Glimmora, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Glimmora to Mega Evolve.",
+    "desc": "A held item that allows Glimmora to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/glimmoranite/",
+      "rank": 62,
+      "usageCount": 33,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2650.webp"
+    }
   },
   {
     "id": "goldberry",
@@ -2467,7 +2899,15 @@
     "num": 2642,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Golurk, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Golurk to Mega Evolve.",
+    "desc": "A held item that allows Golurk to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/golurkite/",
+      "rank": 68,
+      "usageCount": 26,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2642.webp"
+    }
   },
   {
     "id": "grassgem",
@@ -2547,7 +2987,15 @@
     "num": 2577,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Greninja, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Greninja to Mega Evolve.",
+    "desc": "A held item that allows Greninja to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/greninjite/",
+      "rank": 88,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2577.webp"
+    }
   },
   {
     "id": "grepaberry",
@@ -2659,7 +3107,15 @@
     "num": 676,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Gyarados, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Gyarados to Mega Evolve.",
+    "desc": "A held item that allows Gyarados to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gyaradosite/",
+      "rank": 79,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0676.webp"
+    }
   },
   {
     "id": "habanberry",
@@ -2672,7 +3128,15 @@
     },
     "num": 197,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Dragon-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Dragon-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Dragon-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/haban-berry/",
+      "rank": 58,
+      "usageCount": 37,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0197.webp"
+    }
   },
   {
     "id": "hardstone",
@@ -2684,9 +3148,17 @@
     "onBasePowerPriority": 15,
     "num": 238,
     "gen": 2,
-    "shortDesc": "Holder's Rock-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Rock-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Rock-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Rock-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/hard-stone/",
+      "rank": 113,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0238.webp"
     }
   },
   {
@@ -2702,7 +3174,15 @@
     "num": 2583,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Hawlucha, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Hawlucha to Mega Evolve.",
+    "desc": "A held item that allows Hawlucha to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/hawluchanite/",
+      "rank": 98,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2583.webp"
+    }
   },
   {
     "id": "healball",
@@ -2738,7 +3218,15 @@
     },
     "num": 284,
     "gen": 4,
-    "shortDesc": "Holder's use of Sunny Day lasts 8 turns instead of 5."
+    "shortDesc": "When the holder summons harsh sunlight with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "desc": "When the holder summons harsh sunlight with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/heat-rock/",
+      "rank": 57,
+      "usageCount": 43,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0284.webp"
+    }
   },
   {
     "id": "heatranite",
@@ -2800,7 +3288,15 @@
     "num": 680,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Heracross, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Heracross to Mega Evolve.",
+    "desc": "A held item that allows Heracross to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/heracronite/",
+      "rank": 119,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0680.webp"
+    }
   },
   {
     "id": "hondewberry",
@@ -2829,7 +3325,15 @@
     "num": 666,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Houndoom, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Houndoom to Mega Evolve.",
+    "desc": "A held item that allows Houndoom to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/houndoominite/",
+      "rank": 128,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0666.webp"
+    }
   },
   {
     "id": "iapapaberry",
@@ -2943,9 +3447,17 @@
     },
     "num": 282,
     "gen": 4,
-    "shortDesc": "Holder's use of Snowscape lasts 8 turns instead of 5.",
+    "shortDesc": "When the holder summons snow with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "gen8": {
       "shortDesc": "Holder's use of Hail lasts 8 turns instead of 5."
+    },
+    "desc": "When the holder summons snow with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/icy-rock/",
+      "rank": 120,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0282.webp"
     }
   },
   {
@@ -2983,9 +3495,17 @@
     },
     "num": 278,
     "gen": 4,
-    "shortDesc": "Holder is grounded, Speed halved. If Flying type, takes neutral Ground damage.",
+    "shortDesc": "Halves the holder’s Speed stat. If the holder is off the ground, it will be grounded, meaning it can be affected by Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses.",
     "gen4": {
       "shortDesc": "Holder's Speed is halved and it becomes grounded."
+    },
+    "desc": "Halves the holder’s Speed stat. If the holder is off the ground, it will be grounded, meaning it can be affected by Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/iron-ball/",
+      "rank": 70,
+      "usageCount": 25,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0278.webp"
     }
   },
   {
@@ -3037,7 +3557,15 @@
     "num": 675,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Kangaskhan, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Kangaskhan to Mega Evolve.",
+    "desc": "A held item that allows Kangaskhan to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kangaskhanite/",
+      "rank": 48,
+      "usageCount": 76,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0675.webp"
+    }
   },
   {
     "id": "kasibberry",
@@ -3050,7 +3578,15 @@
     },
     "num": 196,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Ghost-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ghost-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Ghost-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kasib-berry/",
+      "rank": 15,
+      "usageCount": 649,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0196.webp"
+    }
   },
   {
     "id": "kebiaberry",
@@ -3063,7 +3599,15 @@
     },
     "num": 190,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Poison-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Poison-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Poison-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kebia-berry/",
+      "rank": 104,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0190.webp"
+    }
   },
   {
     "id": "keeberry",
@@ -3103,8 +3647,15 @@
     "onModifyMovePriority": -1,
     "num": 221,
     "gen": 2,
-    "desc": "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
-    "shortDesc": "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
+    "desc": "When the holder deals damage with its moves, there is a 10% chance that targets will flinch.",
+    "shortDesc": "When the holder deals damage with its moves, there is a 10% chance that targets will flinch.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kings-rock/",
+      "rank": 78,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0221.webp"
+    }
   },
   {
     "id": "kommoniumz",
@@ -3236,8 +3787,16 @@
     "onResidualSubOrder": 4,
     "num": 234,
     "gen": 2,
-    "shortDesc": "At the end of every turn, holder restores 1/16 of its max HP.",
-    "heal": "  [POKEMON] restored a little HP using its Leftovers!"
+    "shortDesc": "Restores 1/16 of the holder’s max HP at the end of every turn.",
+    "heal": "  [POKEMON] restored a little HP using its Leftovers!",
+    "desc": "Restores 1/16 of the holder’s max HP at the end of every turn.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/leftovers/",
+      "rank": 4,
+      "usageCount": 1844,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0234.webp"
+    }
   },
   {
     "id": "leppaberry",
@@ -3284,8 +3843,16 @@
     },
     "num": 270,
     "gen": 4,
-    "shortDesc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
-    "damage": "  [POKEMON] lost some of its HP!"
+    "shortDesc": "Boosts the power of the holder’s moves by 30%. However, the holder also loses 1/10 of its max HP each time it successfully lands an attack.",
+    "damage": "  [POKEMON] lost some of its HP!",
+    "desc": "Boosts the power of the holder’s moves by 30%. However, the holder also loses 1/10 of its max HP each time it successfully lands an attack.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/life-orb/",
+      "rank": 3,
+      "usageCount": 2698,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0270.webp"
+    }
   },
   {
     "id": "lightball",
@@ -3317,12 +3884,20 @@
     ],
     "num": 236,
     "gen": 2,
-    "shortDesc": "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+    "shortDesc": "When held by a Pikachu, doubles the holder’s Attack and Sp. Atk.",
     "gen4": {
       "shortDesc": "If held by a Pikachu, its attacks have their power doubled."
     },
     "gen3": {
       "shortDesc": "If held by a Pikachu, its Special Attack is doubled."
+    },
+    "desc": "When held by a Pikachu, doubles the holder’s Attack and Sp. Atk.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/light-ball/",
+      "rank": 95,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0236.webp"
     }
   },
   {
@@ -3334,9 +3909,17 @@
     },
     "num": 269,
     "gen": 4,
-    "shortDesc": "Holder's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
+    "shortDesc": "When the holder uses Light Screen, Reflect, or Aurora Veil, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "gen6": {
       "shortDesc": "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
+    },
+    "desc": "When the holder uses Light Screen, Reflect, or Aurora Veil, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/light-clay/",
+      "rank": 6,
+      "usageCount": 1041,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0269.webp"
     }
   },
   {
@@ -3364,7 +3947,15 @@
     "num": 768,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Lopunny, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Lopunny to Mega Evolve.",
+    "desc": "A held item that allows Lopunny to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lopunnite/",
+      "rank": 73,
+      "usageCount": 21,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0768.webp"
+    }
   },
   {
     "id": "loveball",
@@ -3399,7 +3990,15 @@
     "num": 673,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario in battle."
+    "shortDesc": "A held item that allows Lucario to Mega Evolve into Mega Lucario.",
+    "desc": "A held item that allows Lucario to Mega Evolve into Mega Lucario.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lucarionite/",
+      "rank": 91,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0673.webp"
+    }
   },
   {
     "id": "lucarionitez",
@@ -3446,7 +4045,15 @@
     "onAfterSetStatusPriority": -1,
     "num": 157,
     "gen": 3,
-    "shortDesc": "Holder cures itself if it has a non-volatile status or is confused. Single use."
+    "shortDesc": "Cures any status condition or confusion. Disappears for the duration of the battle after a single use.",
+    "desc": "Cures any status condition or confusion. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lum-berry/",
+      "rank": 49,
+      "usageCount": 72,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0157.webp"
+    }
   },
   {
     "id": "luminousmoss",
@@ -3592,9 +4199,17 @@
     "onBasePowerPriority": 15,
     "num": 242,
     "gen": 2,
-    "shortDesc": "Holder's Electric-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Electric-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Electric-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Electric-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/magnet/",
+      "rank": 75,
+      "usageCount": 20,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0242.webp"
     }
   },
   {
@@ -3653,7 +4268,15 @@
     "num": 2580,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Malamar, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Malamar to Mega Evolve.",
+    "desc": "A held item that allows Malamar to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/malamarite/",
+      "rank": 72,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2580.webp"
+    }
   },
   {
     "id": "maliciousarmor",
@@ -3679,7 +4302,15 @@
     "num": 682,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Manectric, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Manectric to Mega Evolve.",
+    "desc": "A held item that allows Manectric to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/manectite/",
+      "rank": 114,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0682.webp"
+    }
   },
   {
     "id": "marangaberry",
@@ -3742,7 +4373,15 @@
     "num": 681,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Mawile, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Mawile to Mega Evolve.",
+    "desc": "A held item that allows Mawile to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mawilite/",
+      "rank": 20,
+      "usageCount": 377,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0681.webp"
+    }
   },
   {
     "id": "meadowplate",
@@ -3768,7 +4407,15 @@
     "num": 665,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Medicham, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Medicham to Mega Evolve.",
+    "desc": "A held item that allows Medicham to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/medichamite/",
+      "rank": 121,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0665.webp"
+    }
   },
   {
     "id": "meganiumite",
@@ -3783,7 +4430,15 @@
     "num": 2563,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Meganium, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Meganium to Mega Evolve.",
+    "desc": "A held item that allows Meganium to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/meganiumite/",
+      "rank": 60,
+      "usageCount": 34,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2563.webp"
+    }
   },
   {
     "id": "mentalherb",
@@ -3794,9 +4449,17 @@
     },
     "num": 219,
     "gen": 3,
-    "shortDesc": "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
+    "shortDesc": "Cures the holder of the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, and Encore statuses. Disappears for the duration of the battle after a single use.",
     "gen4": {
       "shortDesc": "Holder is cured if it is infatuated. Single use."
+    },
+    "desc": "Cures the holder of the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, and Encore statuses. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mental-herb/",
+      "rank": 36,
+      "usageCount": 126,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0219.webp"
     }
   },
   {
@@ -3814,7 +4477,15 @@
     "num": 2643,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Meowstic to Mega Evolve.",
+    "desc": "A held item that allows Meowstic to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/meowsticite/",
+      "rank": 129,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2643.webp"
+    }
   },
   {
     "id": "metagrossite",
@@ -3829,7 +4500,15 @@
     "num": 758,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Metagross, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Metagross to Mega Evolve.",
+    "desc": "A held item that allows Metagross to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metagrossite/",
+      "rank": 10,
+      "usageCount": 809,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0758.webp"
+    }
   },
   {
     "id": "metalalloy",
@@ -3849,11 +4528,18 @@
     "onBasePowerPriority": 15,
     "num": 233,
     "gen": 2,
-    "desc": "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-    "shortDesc": "Holder's Steel-type attacks have 1.2x power.",
+    "desc": "Boosts the power of the holder’s Steel-type moves by 20%.",
+    "shortDesc": "Boosts the power of the holder’s Steel-type moves by 20%.",
     "gen3": {
       "desc": "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
       "shortDesc": "Holder's Steel-type attacks have 1.1x power."
+    },
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metal-coat/",
+      "rank": 44,
+      "usageCount": 99,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0233.webp"
     }
   },
   {
@@ -3887,9 +4573,17 @@
     },
     "num": 277,
     "gen": 4,
-    "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+    "shortDesc": "Boosts the power of a move that is used repeatedly. This boost will be 20% on the second usage, 40% on the third, and so on, up to a maximum boost of 100%. If the streak is broken, the move’s power returns to its usual value.",
     "gen4": {
       "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns."
+    },
+    "desc": "Boosts the power of a move that is used repeatedly. This boost will be 20% on the second usage, 40% on the third, and so on, up to a maximum boost of 100%. If the streak is broken, the move’s power returns to its usual value.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metronome/",
+      "rank": 82,
+      "usageCount": 15,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0277.webp"
     }
   },
   {
@@ -4026,9 +4720,17 @@
     "onBasePowerPriority": 15,
     "num": 239,
     "gen": 2,
-    "shortDesc": "Holder's Grass-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Grass-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Grass-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Grass-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/miracle-seed/",
+      "rank": 71,
+      "usageCount": 25,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0239.webp"
     }
   },
   {
@@ -4091,7 +4793,15 @@
     "onBasePowerPriority": 16,
     "num": 266,
     "gen": 4,
-    "shortDesc": "Holder's physical attacks have 1.1x power."
+    "shortDesc": "Boosts the power of the holder’s physical moves by 10%.",
+    "desc": "Boosts the power of the holder’s physical moves by 10%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/muscle-band/",
+      "rank": 65,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0266.webp"
+    }
   },
   {
     "id": "mysteryberry",
@@ -4121,9 +4831,17 @@
     "onBasePowerPriority": 15,
     "num": 243,
     "gen": 2,
-    "shortDesc": "Holder's Water-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Water-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Water-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Water-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mystic-water/",
+      "rank": 17,
+      "usageCount": 498,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0243.webp"
     }
   },
   {
@@ -4169,9 +4887,17 @@
     "onBasePowerPriority": 15,
     "num": 246,
     "gen": 2,
-    "shortDesc": "Holder's Ice-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Ice-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Ice-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Ice-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/never-melt-ice/",
+      "rank": 47,
+      "usageCount": 80,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0246.webp"
     }
   },
   {
@@ -4224,7 +4950,15 @@
     },
     "num": 184,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Fire-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fire-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Fire-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/occa-berry/",
+      "rank": 28,
+      "usageCount": 198,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0184.webp"
+    }
   },
   {
     "id": "oddincense",
@@ -4311,7 +5045,15 @@
     },
     "num": 185,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Water-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Water-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Water-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/passho-berry/",
+      "rank": 26,
+      "usageCount": 252,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0185.webp"
+    }
   },
   {
     "id": "payapaberry",
@@ -4324,7 +5066,15 @@
     },
     "num": 193,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Psychic-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Psychic-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Psychic-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/payapa-berry/",
+      "rank": 130,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0193.webp"
+    }
   },
   {
     "id": "pechaberry",
@@ -4378,7 +5128,15 @@
     "num": 762,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Pidgeot, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Pidgeot to Mega Evolve.",
+    "desc": "A held item that allows Pidgeot to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/pidgeotite/",
+      "rank": 118,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0762.webp"
+    }
   },
   {
     "id": "pikaniumz",
@@ -4492,9 +5250,17 @@
     "onBasePowerPriority": 15,
     "num": 245,
     "gen": 2,
-    "shortDesc": "Holder's Poison-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Poison-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Poison-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Poison-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/poison-barb/",
+      "rank": 131,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0245.webp"
     }
   },
   {
@@ -4842,7 +5608,15 @@
     "num": 2578,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Pyroar, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Pyroar to Mega Evolve.",
+    "desc": "A held item that allows Pyroar to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/pyroarite/",
+      "rank": 29,
+      "usageCount": 191,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2578.webp"
+    }
   },
   {
     "id": "qualotberry",
@@ -4877,11 +5651,19 @@
     },
     "num": 217,
     "gen": 2,
-    "shortDesc": "Each turn, holder has a 20% chance to move first in its priority bracket.",
+    "shortDesc": "Gives the holder’s moves a 20% chance of going first among moves of the same priority.",
     "gen2": {
       "shortDesc": "Each turn, holder has a ~23.4% chance to move first in its priority bracket."
     },
-    "activate": "  [POKEMON] can act faster than normal, thanks to its Quick Claw!"
+    "activate": "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
+    "desc": "Gives the holder’s moves a 20% chance of going first among moves of the same priority.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/quick-claw/",
+      "rank": 51,
+      "usageCount": 59,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0217.webp"
+    }
   },
   {
     "id": "quickpowder",
@@ -4926,7 +5708,15 @@
     "num": 2635,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle."
+    "shortDesc": "A held item that allows Raichu to Mega Evolve into Mega Raichu X. It has no effect on Alolan Raichu.",
+    "desc": "A held item that allows Raichu to Mega Evolve into Mega Raichu X. It has no effect on Alolan Raichu.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-x/",
+      "rank": 38,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2635.webp"
+    }
   },
   {
     "id": "raichunitey",
@@ -4941,7 +5731,15 @@
     "num": 2636,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle."
+    "shortDesc": "A held item that allows Raichu to Mega Evolve into Mega Raichu Y. It has no effect on Alolan Raichu.",
+    "desc": "A held item that allows Raichu to Mega Evolve into Mega Raichu Y. It has no effect on Alolan Raichu.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-y/",
+      "rank": 18,
+      "usageCount": 418,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2636.webp"
+    }
   },
   {
     "id": "rarebone",
@@ -5076,7 +5874,15 @@
     },
     "num": 187,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Grass-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Grass-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Grass-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/rindo-berry/",
+      "rank": 102,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0187.webp"
+    }
   },
   {
     "id": "ringtarget",
@@ -5208,7 +6014,15 @@
     },
     "num": 686,
     "gen": 6,
-    "shortDesc": "Halves damage taken from a supereffective Fairy-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fairy-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Fairy-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/roseli-berry/",
+      "rank": 22,
+      "usageCount": 355,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0686.webp"
+    }
   },
   {
     "id": "rowapberry",
@@ -5258,7 +6072,15 @@
     "num": 754,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Sableye, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Sableye to Mega Evolve.",
+    "desc": "A held item that allows Sableye to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sablenite/",
+      "rank": 132,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0754.webp"
+    }
   },
   {
     "id": "sachet",
@@ -5346,7 +6168,15 @@
     "num": 753,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Sceptile, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Sceptile to Mega Evolve.",
+    "desc": "A held item that allows Sceptile to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sceptilite/",
+      "rank": 41,
+      "usageCount": 107,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0753.webp"
+    }
   },
   {
     "id": "scizorite",
@@ -5361,7 +6191,15 @@
     "num": 670,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Scizor, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Scizor to Mega Evolve.",
+    "desc": "A held item that allows Scizor to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scizorite/",
+      "rank": 59,
+      "usageCount": 35,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0670.webp"
+    }
   },
   {
     "id": "scolipite",
@@ -5376,7 +6214,15 @@
     "num": 2571,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Scolipede, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Scolipede to Mega Evolve.",
+    "desc": "A held item that allows Scolipede to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scolipite/",
+      "rank": 80,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2571.webp"
+    }
   },
   {
     "id": "scopelens",
@@ -5387,7 +6233,15 @@
     },
     "num": 232,
     "gen": 2,
-    "shortDesc": "Holder's critical hit ratio is raised by 1 stage."
+    "shortDesc": "Gives the holder a 1-stage Critical-Hit Ratio Boost.",
+    "desc": "Gives the holder a 1-stage Critical-Hit Ratio Boost.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scope-lens/",
+      "rank": 83,
+      "usageCount": 15,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0232.webp"
+    }
   },
   {
     "id": "scovillainite",
@@ -5402,7 +6256,15 @@
     "num": 2647,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Scovillain, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Scovillain to Mega Evolve.",
+    "desc": "A held item that allows Scovillain to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scovillainite/",
+      "rank": 39,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2647.webp"
+    }
   },
   {
     "id": "scraftinite",
@@ -5417,7 +6279,15 @@
     "num": 2572,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Scrafty, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Scrafty to Mega Evolve.",
+    "desc": "A held item that allows Scrafty to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scraftinite/",
+      "rank": 40,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2572.webp"
+    }
   },
   {
     "id": "seaincense",
@@ -5445,9 +6315,17 @@
     "onBasePowerPriority": 15,
     "num": 244,
     "gen": 2,
-    "shortDesc": "Holder's Flying-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Flying-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Flying-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Flying-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sharp-beak/",
+      "rank": 43,
+      "usageCount": 104,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0244.webp"
     }
   },
   {
@@ -5463,7 +6341,15 @@
     "num": 759,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Sharpedo, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Sharpedo to Mega Evolve.",
+    "desc": "A held item that allows Sharpedo to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sharpedonite/",
+      "rank": 133,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0759.webp"
+    }
   },
   {
     "id": "shedshell",
@@ -5476,7 +6362,15 @@
     "onMaybeTrapPokemonPriority": -10,
     "num": 295,
     "gen": 4,
-    "shortDesc": "Holder cannot be prevented from choosing to switch out by any effect."
+    "shortDesc": "Enables the holder to ignore any effects that would usually prevent it from switching out of battle and being replaced by another party Pokémon.",
+    "desc": "Enables the holder to ignore any effects that would usually prevent it from switching out of battle and being replaced by another party Pokémon.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shed-shell/",
+      "rank": 134,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0295.webp"
+    }
   },
   {
     "id": "shellbell",
@@ -5488,8 +6382,16 @@
     "onAfterMoveSecondarySelfPriority": -1,
     "num": 253,
     "gen": 3,
-    "shortDesc": "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
-    "heal": "  [POKEMON] restored a little HP using its Shell Bell!"
+    "shortDesc": "When the holder deals damage with its moves, its HP is restored by 1/8 of the damage dealt.",
+    "heal": "  [POKEMON] restored a little HP using its Shell Bell!",
+    "desc": "When the holder deals damage with its moves, its HP is restored by 1/8 of the damage dealt.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shell-bell/",
+      "rank": 105,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0253.webp"
+    }
   },
   {
     "id": "shinystone",
@@ -5528,7 +6430,15 @@
     },
     "num": 191,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Ground-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ground-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Ground-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shuca-berry/",
+      "rank": 46,
+      "usageCount": 83,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0191.webp"
+    }
   },
   {
     "id": "silkscarf",
@@ -5540,9 +6450,17 @@
     "onBasePowerPriority": 15,
     "num": 251,
     "gen": 3,
-    "shortDesc": "Holder's Normal-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Normal-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Normal-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Normal-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/silk-scarf/",
+      "rank": 54,
+      "usageCount": 53,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0251.webp"
     }
   },
   {
@@ -5555,9 +6473,17 @@
     "onBasePowerPriority": 15,
     "num": 222,
     "gen": 2,
-    "shortDesc": "Holder's Bug-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Bug-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Bug-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Bug-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/silver-powder/",
+      "rank": 135,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0222.webp"
     }
   },
   {
@@ -5571,9 +6497,17 @@
     },
     "num": 158,
     "gen": 3,
-    "shortDesc": "Restores 1/4 max HP when at 1/2 max HP or less. Single use.",
+    "shortDesc": "Restores 1/4 of the holder’s max HP when the holder’s HP drops to 1/2 or less of its max. Disappears for the duration of the battle after a single use.",
     "gen3": {
       "shortDesc": "Restores 30 HP when at 1/2 max HP or less. Single use."
+    },
+    "desc": "Restores 1/4 of the holder’s max HP when the holder’s HP drops to 1/2 or less of its max. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sitrus-berry/",
+      "rank": 2,
+      "usageCount": 3259,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0158.webp"
     }
   },
   {
@@ -5589,7 +6523,15 @@
     "num": 2565,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Skarmory, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Skarmory to Mega Evolve.",
+    "desc": "A held item that allows Skarmory to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/skarmorite/",
+      "rank": 108,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2565.webp"
+    }
   },
   {
     "id": "skullfossil",
@@ -5627,10 +6569,15 @@
     "num": 760,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+    "shortDesc": "A held item that allows Slowbro to Mega Evolve. It has no effect on Galarian Slowbro.",
     "champions": {
-      "shortDesc": "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve."
-    }
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/slowbronite/",
+      "rank": 136,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0760.webp"
+    },
+    "desc": "A held item that allows Slowbro to Mega Evolve. It has no effect on Galarian Slowbro."
   },
   {
     "id": "smoothrock",
@@ -5641,7 +6588,15 @@
     },
     "num": 283,
     "gen": 4,
-    "shortDesc": "Holder's use of Sandstorm lasts 8 turns instead of 5."
+    "shortDesc": "When the holder summons a sandstorm with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "desc": "When the holder summons a sandstorm with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/smooth-rock/",
+      "rank": 122,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0283.webp"
+    }
   },
   {
     "id": "snorliumz",
@@ -5682,9 +6637,17 @@
     "onBasePowerPriority": 15,
     "num": 237,
     "gen": 2,
-    "shortDesc": "Holder's Ground-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Ground-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Ground-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Ground-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/soft-sand/",
+      "rank": 66,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0237.webp"
     }
   },
   {
@@ -5732,9 +6695,17 @@
     "onBasePowerPriority": 15,
     "num": 247,
     "gen": 2,
-    "shortDesc": "Holder's Ghost-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Ghost-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Ghost-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Ghost-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/spell-tag/",
+      "rank": 67,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0247.webp"
     }
   },
   {
@@ -5807,7 +6778,15 @@
     "num": 2639,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Staraptor, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Staraptor to Mega Evolve.",
+    "desc": "A held item that allows Staraptor to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/staraptite/",
+      "rank": 12,
+      "usageCount": 755,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2639.webp"
+    }
   },
   {
     "id": "starfberry",
@@ -5835,7 +6814,15 @@
     "num": 2561,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Starmie, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Starmie to Mega Evolve.",
+    "desc": "A held item that allows Starmie to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/starminite/",
+      "rank": 76,
+      "usageCount": 19,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2561.webp"
+    }
   },
   {
     "id": "steelgem",
@@ -5891,7 +6878,15 @@
     "num": 761,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Steelix, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Steelix to Mega Evolve.",
+    "desc": "A held item that allows Steelix to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/steelixite/",
+      "rank": 103,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0761.webp"
+    }
   },
   {
     "id": "stick",
@@ -5981,7 +6976,15 @@
     "num": 752,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Swampert, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Swampert to Mega Evolve.",
+    "desc": "A held item that allows Swampert to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/swampertite/",
+      "rank": 9,
+      "usageCount": 840,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0752.webp"
+    }
   },
   {
     "id": "sweetapple",
@@ -7383,9 +8386,17 @@
     "onBasePowerPriority": 15,
     "num": 248,
     "gen": 2,
-    "shortDesc": "Holder's Psychic-type attacks have 1.2x power.",
+    "shortDesc": "Boosts the power of the holder’s Psychic-type moves by 20%.",
     "gen3": {
       "shortDesc": "Holder's Psychic-type attacks have 1.1x power."
+    },
+    "desc": "Boosts the power of the holder’s Psychic-type moves by 20%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/twisted-spoon/",
+      "rank": 115,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0248.webp"
     }
   },
   {
@@ -7401,7 +8412,15 @@
     "num": 669,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Tyranitar, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Tyranitar to Mega Evolve.",
+    "desc": "A held item that allows Tyranitar to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/tyranitarite/",
+      "rank": 33,
+      "usageCount": 155,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0669.webp"
+    }
   },
   {
     "id": "ultraball",
@@ -7479,7 +8498,15 @@
     "num": 659,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Venusaur, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Venusaur to Mega Evolve.",
+    "desc": "A held item that allows Venusaur to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/venusaurite/",
+      "rank": 32,
+      "usageCount": 160,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0659.webp"
+    }
   },
   {
     "id": "victreebelite",
@@ -7494,7 +8521,15 @@
     "num": 2560,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Victreebel, this item allows it to Mega Evolve in battle."
+    "shortDesc": "A held item that allows Victreebel to Mega Evolve.",
+    "desc": "A held item that allows Victreebel to Mega Evolve.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/victreebelite/",
+      "rank": 116,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2560.webp"
+    }
   },
   {
     "id": "vilevial",
@@ -7524,7 +8559,15 @@
     },
     "num": 186,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Electric-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Electric-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Electric-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wacan-berry/",
+      "rank": 117,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0186.webp"
+    }
   },
   {
     "id": "watergem",
@@ -7676,8 +8719,16 @@
     "onResidualOrder": 29,
     "num": 214,
     "gen": 3,
-    "shortDesc": "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
-    "end": "  [POKEMON] returned its stats to normal using its White Herb!"
+    "shortDesc": "Restores the holder’s stats to their usual value when they are lowered. Disappears for the duration of the battle after a single use.",
+    "end": "  [POKEMON] returned its stats to normal using its White Herb!",
+    "desc": "Restores the holder’s stats to their usual value when they are lowered. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/white-herb/",
+      "rank": 11,
+      "usageCount": 795,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0214.webp"
+    }
   },
   {
     "id": "widelens",
@@ -7689,7 +8740,15 @@
     "onSourceModifyAccuracyPriority": -2,
     "num": 265,
     "gen": 4,
-    "shortDesc": "The accuracy of attacks by the holder is 1.1x."
+    "shortDesc": "Boosts the accuracy of the holder’s moves by 10%.",
+    "desc": "Boosts the accuracy of the holder’s moves by 10%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wide-lens/",
+      "rank": 31,
+      "usageCount": 162,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0265.webp"
+    }
   },
   {
     "id": "wikiberry",
@@ -7720,7 +8779,15 @@
     "onBasePowerPriority": 16,
     "num": 267,
     "gen": 4,
-    "shortDesc": "Holder's special attacks have 1.1x power."
+    "shortDesc": "Boosts the power of the holder’s special moves by 10%.",
+    "desc": "Boosts the power of the holder’s special moves by 10%.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wise-glasses/",
+      "rank": 74,
+      "usageCount": 21,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0267.webp"
+    }
   },
   {
     "id": "yacheberry",
@@ -7733,7 +8800,15 @@
     },
     "num": 188,
     "gen": 4,
-    "shortDesc": "Halves damage taken from a supereffective Ice-type attack. Single use."
+    "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ice-type move. Disappears for the duration of the battle after a single use.",
+    "desc": "Halves the damage taken when the holder is hit with a supereffective Ice-type move. Disappears for the duration of the battle after a single use.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/yache-berry/",
+      "rank": 96,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0188.webp"
+    }
   },
   {
     "id": "zapplate",
@@ -7771,7 +8846,15 @@
     "onSourceModifyAccuracyPriority": -2,
     "num": 276,
     "gen": 4,
-    "shortDesc": "The accuracy of attacks by the holder is 1.2x if it moves after its target."
+    "shortDesc": "Boosts the accuracy of the holder’s moves by 20% when the holder acts after the targets.",
+    "desc": "Boosts the accuracy of the holder’s moves by 20% when the holder acts after the targets.",
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/items/zoom-lens/",
+      "rank": 123,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0276.webp"
+    }
   },
   {
     "id": "zygardite",

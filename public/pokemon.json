@@ -118,7 +118,14 @@
     ],
     "aliases": [
       "暴雪王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/abomasnow/",
+      "rank": 157,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0460_00_0.webp"
+    }
   },
   {
     "id": "abomasnowmega",
@@ -501,7 +508,14 @@
     ],
     "aliases": [
       "阿勃梭魯"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/absol/",
+      "rank": 275,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0359_00_0.webp"
+    }
   },
   {
     "id": "absolmega",
@@ -956,7 +970,14 @@
     ],
     "aliases": [
       "堅盾劍怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aegislash/",
+      "rank": 94,
+      "usageCount": 45,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0681_00_0.webp"
+    }
   },
   {
     "id": "aegislashblade",
@@ -1172,7 +1193,14 @@
     ],
     "aliases": [
       "化石翼龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aerodactyl/",
+      "rank": 24,
+      "usageCount": 654,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0142_00_0.webp"
+    }
   },
   {
     "id": "aerodactylmega",
@@ -1447,7 +1475,14 @@
     ],
     "aliases": [
       "波士可多拉"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aggron/",
+      "rank": 174,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0306_00_0.webp"
+    }
   },
   {
     "id": "aggronmega",
@@ -1871,7 +1906,14 @@
     ],
     "aliases": [
       "胡地"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/alakazam/",
+      "rank": 166,
+      "usageCount": 11,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0065_00_0.webp"
+    }
   },
   {
     "id": "alakazammega",
@@ -2085,7 +2127,14 @@
     ],
     "aliases": [
       "霜奶仙"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/alcremie/",
+      "rank": 215,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0869_00_0.webp"
+    }
   },
   {
     "id": "alcremiegmax",
@@ -2392,7 +2441,14 @@
     ],
     "aliases": [
       "七夕青鳥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/altaria/",
+      "rank": 171,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0334_00_0.webp"
+    }
   },
   {
     "id": "altariamega",
@@ -2958,7 +3014,14 @@
     ],
     "aliases": [
       "電龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ampharos/",
+      "rank": 158,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0181_00_0.webp"
+    }
   },
   {
     "id": "ampharosmega",
@@ -3190,7 +3253,14 @@
     ],
     "aliases": [
       "棄世猴"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/annihilape/",
+      "rank": 44,
+      "usageCount": 210,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0979_00_0.webp"
+    }
   },
   {
     "id": "anorith",
@@ -3371,7 +3441,14 @@
     ],
     "aliases": [
       "豐蜜龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/appletun/",
+      "rank": 246,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0842_00_0.webp"
+    }
   },
   {
     "id": "appletungmax",
@@ -3591,7 +3668,14 @@
     ],
     "aliases": [
       "滴蛛霸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/araquanid/",
+      "rank": 119,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0752_00_0.webp"
+    }
   },
   {
     "id": "araquanidtotem",
@@ -3987,7 +4071,29 @@
     ],
     "aliases": [
       "風速狗"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/arcanine/",
+      "rank": 186,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0059_00_0.webp"
+    }
+  },
+  {
+    "id": "arcaninehisuianform",
+    "name": "Arcanine [Hisuian Form]",
+    "types": [
+      "Fire",
+      "Rock"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/arcanine-hisuian-form/",
+      "rank": 87,
+      "usageCount": 56,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0059_01_0.webp"
+    }
   },
   {
     "id": "arcaninehisui",
@@ -7762,7 +7868,14 @@
     ],
     "aliases": [
       "鋁鋼橋龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/archaludon/",
+      "rank": 12,
+      "usageCount": 920,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_1018_00_0.webp"
+    }
   },
   {
     "id": "archen",
@@ -8296,7 +8409,14 @@
     ],
     "aliases": [
       "阿利多斯"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ariados/",
+      "rank": 256,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0168_00_0.webp"
+    }
   },
   {
     "id": "armaldo",
@@ -8487,7 +8607,14 @@
     ],
     "aliases": [
       "紅蓮鎧騎"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/armarouge/",
+      "rank": 141,
+      "usageCount": 15,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0936_00_0.webp"
+    }
   },
   {
     "id": "aromatisse",
@@ -8581,7 +8708,14 @@
     ],
     "aliases": [
       "芳香精"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aromatisse/",
+      "rank": 203,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0683_00_0.webp"
+    }
   },
   {
     "id": "aron",
@@ -9091,7 +9225,14 @@
     ],
     "aliases": [
       "差不多娃娃"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/audino/",
+      "rank": 239,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0531_00_0.webp"
+    }
   },
   {
     "id": "audinomega",
@@ -9330,7 +9471,14 @@
     ],
     "aliases": [
       "冰雪巨龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aurorus/",
+      "rank": 257,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0699_00_0.webp"
+    }
   },
   {
     "id": "avalugg",
@@ -9431,7 +9579,29 @@
     ],
     "aliases": [
       "冰岩怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/avalugg/",
+      "rank": 261,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0713_00_0.webp"
+    }
+  },
+  {
+    "id": "avalugghisuianform",
+    "name": "Avalugg [Hisuian Form]",
+    "types": [
+      "Ice",
+      "Rock"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/avalugg-hisuian-form/",
+      "rank": 249,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0713_01_0.webp"
+    }
   },
   {
     "id": "avalugghisui",
@@ -9869,7 +10039,14 @@
     ],
     "aliases": [
       "瑪力露麗"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/azumarill/",
+      "rank": 86,
+      "usageCount": 56,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0184_00_0.webp"
+    }
   },
   {
     "id": "azurill",
@@ -10300,7 +10477,14 @@
     ],
     "aliases": [
       "詛咒娃娃"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/banette/",
+      "rank": 260,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0354_00_0.webp"
+    }
   },
   {
     "id": "banettemega",
@@ -10545,7 +10729,14 @@
     ],
     "aliases": [
       "龜足巨鎧"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/barbaracle/",
+      "rank": 177,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0689_00_0.webp"
+    }
   },
   {
     "id": "barbaraclemega",
@@ -10924,7 +11115,29 @@
     ],
     "aliases": [
       "幽尾玄魚"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/basculegion/",
+      "rank": 3,
+      "usageCount": 1765,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0902_00_0.webp"
+    }
+  },
+  {
+    "id": "basculegionfemale",
+    "name": "Basculegion [Female]",
+    "types": [
+      "Water",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/basculegion-female/",
+      "rank": 142,
+      "usageCount": 15,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0902_01_0.webp"
+    }
   },
   {
     "id": "basculegionf",
@@ -11975,7 +12188,14 @@
     ],
     "aliases": [
       "大針蜂"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/beedrill/",
+      "rank": 225,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0015_00_0.webp"
+    }
   },
   {
     "id": "beedrillmega",
@@ -12299,7 +12519,14 @@
     ],
     "aliases": [
       "電肚蛙"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/bellibolt/",
+      "rank": 151,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0939_00_0.webp"
+    }
   },
   {
     "id": "bellossom",
@@ -13362,7 +13589,14 @@
     ],
     "aliases": [
       "水箭龜"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/blastoise/",
+      "rank": 84,
+      "usageCount": 65,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0009_00_0.webp"
+    }
   },
   {
     "id": "blastoisegmax",
@@ -13785,7 +14019,14 @@
     ],
     "aliases": [
       "火焰雞"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/blaziken/",
+      "rank": 49,
+      "usageCount": 164,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0257_00_0.webp"
+    }
   },
   {
     "id": "blazikenmega",
@@ -17442,7 +17683,14 @@
     ],
     "aliases": [
       "噴火駝"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/camerupt/",
+      "rank": 108,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0323_00_0.webp"
+    }
   },
   {
     "id": "cameruptmega",
@@ -19001,7 +19249,14 @@
     ],
     "aliases": [
       "蒼炎刃鬼"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ceruledge/",
+      "rank": 68,
+      "usageCount": 105,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0937_00_0.webp"
+    }
   },
   {
     "id": "cetitan",
@@ -19249,7 +19504,14 @@
     ],
     "aliases": [
       "水晶燈火靈"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chandelure/",
+      "rank": 111,
+      "usageCount": 27,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0609_00_0.webp"
+    }
   },
   {
     "id": "chandeluremega",
@@ -19729,7 +19991,14 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/charizard/",
+      "rank": 7,
+      "usageCount": 1139,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0006_00_0.webp"
+    }
   },
   {
     "id": "charizardgmax",
@@ -20040,7 +20309,14 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/charizard-mega-charizard-x/",
+      "rank": 95,
+      "usageCount": 44,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0006_01_0.webp"
+    }
   },
   {
     "id": "charizardmegay",
@@ -20195,7 +20471,14 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/charizard-mega-charizard-y/",
+      "rank": 10,
+      "usageCount": 1006,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0006_02_0.webp"
+    }
   },
   {
     "id": "charjabug",
@@ -21011,7 +21294,14 @@
     ],
     "aliases": [
       "布里卡隆"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chesnaught/",
+      "rank": 153,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0652_00_0.webp"
+    }
   },
   {
     "id": "chesnaughtmega",
@@ -21840,7 +22130,14 @@
     ],
     "aliases": [
       "風鈴鈴"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chimecho/",
+      "rank": 197,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0358_00_0.webp"
+    }
   },
   {
     "id": "chimechomega",
@@ -22739,7 +23036,14 @@
     ],
     "aliases": [
       "鋼炮臂蝦"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/clawitzer/",
+      "rank": 190,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0693_00_0.webp"
+    }
   },
   {
     "id": "claydol",
@@ -23042,7 +23346,14 @@
     ],
     "aliases": [
       "皮可西"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/clefable/",
+      "rank": 76,
+      "usageCount": 80,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0036_00_0.webp"
+    }
   },
   {
     "id": "clefablemega",
@@ -24201,7 +24512,14 @@
     ],
     "aliases": [
       "死神棺"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/cofagrigus/",
+      "rank": 208,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0563_00_0.webp"
+    }
   },
   {
     "id": "combee",
@@ -24589,7 +24907,14 @@
     ],
     "aliases": [
       "修建老匠"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/conkeldurr/",
+      "rank": 207,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0534_00_0.webp"
+    }
   },
   {
     "id": "copperajah",
@@ -25189,7 +25514,14 @@
     ],
     "aliases": [
       "鋼鎧鴉"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/corviknight/",
+      "rank": 66,
+      "usageCount": 106,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0823_00_0.webp"
+    }
   },
   {
     "id": "corviknightgmax",
@@ -25606,7 +25938,14 @@
     ],
     "aliases": [
       "好勝毛蟹"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/crabominable/",
+      "rank": 145,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0740_00_0.webp"
+    }
   },
   {
     "id": "crabominablemega",
@@ -29005,6 +29344,21 @@
     ]
   },
   {
+    "id": "decidueyehisuianform",
+    "name": "Decidueye [Hisuian Form]",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/decidueye-hisuian-form/",
+      "rank": 172,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0724_01_0.webp"
+    }
+  },
+  {
     "id": "decidueyehisui",
     "name": "Decidueye-Hisui",
     "baseSpecies": "Decidueye",
@@ -29754,7 +30108,14 @@
     ],
     "aliases": [
       "妖火紅狐"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/delphox/",
+      "rank": 33,
+      "usageCount": 337,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0655_00_0.webp"
+    }
   },
   {
     "id": "delphoxmega",
@@ -31797,7 +32158,14 @@
     ],
     "aliases": [
       "百變怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ditto/",
+      "rank": 144,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0132_00_0.webp"
+    }
   },
   {
     "id": "dodrio",
@@ -32676,7 +33044,14 @@
     ],
     "aliases": [
       "毒藻龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/dragalge/",
+      "rank": 89,
+      "usageCount": 55,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0691_00_0.webp"
+    }
   },
   {
     "id": "dragalgemega",
@@ -32873,7 +33248,14 @@
     ],
     "aliases": [
       "多龍巴魯托"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/dragapult/",
+      "rank": 92,
+      "usageCount": 50,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0887_00_0.webp"
+    }
   },
   {
     "id": "dragonair",
@@ -33149,7 +33531,14 @@
     ],
     "aliases": [
       "快龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/dragonite/",
+      "rank": 39,
+      "usageCount": 251,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0149_00_0.webp"
+    }
   },
   {
     "id": "dragonitemega",
@@ -33518,7 +33907,14 @@
     ],
     "aliases": [
       "老翁龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/drampa/",
+      "rank": 134,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0780_00_0.webp"
+    }
   },
   {
     "id": "drampamega",
@@ -36641,7 +37037,14 @@
     ],
     "aliases": [
       "麻麻鰻魚王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/eelektross/",
+      "rank": 58,
+      "usageCount": 131,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0604_00_0.webp"
+    }
   },
   {
     "id": "eelektrossmega",
@@ -38257,7 +38660,14 @@
     ],
     "aliases": [
       "炎武王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/emboar/",
+      "rank": 216,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0500_00_0.webp"
+    }
   },
   {
     "id": "emboarmega",
@@ -38616,7 +39026,14 @@
     ],
     "aliases": [
       "帝王拿波"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/empoleon/",
+      "rank": 159,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0395_00_0.webp"
+    }
   },
   {
     "id": "enamorus",
@@ -39064,7 +39481,14 @@
     ],
     "aliases": [
       "超能艷鴕"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/espathra/",
+      "rank": 132,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0956_00_0.webp"
+    }
   },
   {
     "id": "espeon",
@@ -39192,7 +39616,14 @@
     ],
     "aliases": [
       "太陽伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/espeon/",
+      "rank": 241,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0196_00_0.webp"
+    }
   },
   {
     "id": "espurr",
@@ -39556,7 +39987,14 @@
     ],
     "aliases": [
       "龍頭地鼠"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/excadrill/",
+      "rank": 77,
+      "usageCount": 79,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0530_00_0.webp"
+    }
   },
   {
     "id": "excadrillmega",
@@ -40231,7 +40669,14 @@
     ],
     "aliases": [
       "列陣兵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/falinks/",
+      "rank": 148,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0870_00_0.webp"
+    }
   },
   {
     "id": "falinksmega",
@@ -40314,6 +40759,21 @@
     "aliases": [
       "列陣兵"
     ]
+  },
+  {
+    "id": "fanrotom",
+    "name": "Fan Rotom",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom-fan-rotom/",
+      "rank": 250,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_04_0.webp"
+    }
   },
   {
     "id": "farfetchd",
@@ -40616,7 +41076,14 @@
     ],
     "aliases": [
       "奇麒麟"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/farigiraf/",
+      "rank": 17,
+      "usageCount": 849,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0981_00_0.webp"
+    }
   },
   {
     "id": "fearow",
@@ -41032,7 +41499,14 @@
     ],
     "aliases": [
       "大力鱷"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/feraligatr/",
+      "rank": 180,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0160_00_0.webp"
+    }
   },
   {
     "id": "feraligatrmega",
@@ -42058,7 +42532,14 @@
     ],
     "aliases": [
       "蘋裹龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/flapple/",
+      "rank": 247,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0841_00_0.webp"
+    }
   },
   {
     "id": "flapplegmax",
@@ -42713,7 +43194,14 @@
     ],
     "aliases": [
       "花葉蒂"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/floette-eternal-flower/",
+      "rank": 11,
+      "usageCount": 948,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0670_05_0.webp"
+    }
   },
   {
     "id": "floetteeternal",
@@ -44146,7 +44634,14 @@
     ],
     "aliases": [
       "雪妖女"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/froslass/",
+      "rank": 37,
+      "usageCount": 261,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0478_00_0.webp"
+    }
   },
   {
     "id": "froslassmega",
@@ -44353,6 +44848,21 @@
     ]
   },
   {
+    "id": "frostrotom",
+    "name": "Frost Rotom",
+    "types": [
+      "Electric",
+      "Ice"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom-frost-rotom/",
+      "rank": 238,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_03_0.webp"
+    }
+  },
+  {
     "id": "fuecoco",
     "name": "Fuecoco",
     "baseSpecies": "Fuecoco",
@@ -44503,7 +45013,14 @@
     ],
     "aliases": [
       "多麗米亞"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/furfrou/",
+      "rank": 267,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0676_00_0.webp"
+    }
   },
   {
     "id": "furret",
@@ -44912,7 +45429,14 @@
     ],
     "aliases": [
       "艾路雷朵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gallade/",
+      "rank": 100,
+      "usageCount": 35,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0475_00_0.webp"
+    }
   },
   {
     "id": "gallademega",
@@ -45488,7 +46012,14 @@
     ],
     "aliases": [
       "烈咬陸鯊"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/garchomp/",
+      "rank": 1,
+      "usageCount": 2067,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0445_00_0.webp"
+    }
   },
   {
     "id": "garchompmega",
@@ -45867,7 +46398,14 @@
     ],
     "aliases": [
       "沙奈朵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gardevoir/",
+      "rank": 72,
+      "usageCount": 87,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0282_00_0.webp"
+    }
   },
   {
     "id": "gardevoirmega",
@@ -46091,7 +46629,14 @@
     ],
     "aliases": [
       "鹽石巨靈"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/garganacl/",
+      "rank": 205,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0934_00_0.webp"
+    }
   },
   {
     "id": "gastly",
@@ -47009,7 +47554,14 @@
     ],
     "aliases": [
       "耿鬼"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gengar/",
+      "rank": 51,
+      "usageCount": 156,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0094_00_0.webp"
+    }
   },
   {
     "id": "gengargmax",
@@ -47601,7 +48153,14 @@
     ],
     "aliases": [
       "賽富豪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gholdengo/",
+      "rank": 23,
+      "usageCount": 675,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_1000_00_0.webp"
+    }
   },
   {
     "id": "gible",
@@ -48374,7 +48933,14 @@
     ],
     "aliases": [
       "冰伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/glaceon/",
+      "rank": 234,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0471_00_0.webp"
+    }
   },
   {
     "id": "glalie",
@@ -48479,7 +49045,14 @@
     ],
     "aliases": [
       "冰鬼護"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/glalie/",
+      "rank": 265,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0362_00_0.webp"
+    }
   },
   {
     "id": "glaliemega",
@@ -49043,7 +49616,14 @@
     ],
     "aliases": [
       "晶光花"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/glimmora/",
+      "rank": 54,
+      "usageCount": 139,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0970_00_0.webp"
+    }
   },
   {
     "id": "glimmoramega",
@@ -49246,7 +49826,14 @@
     ],
     "aliases": [
       "天蠍王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gliscor/",
+      "rank": 167,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0472_00_0.webp"
+    }
   },
   {
     "id": "gloom",
@@ -50506,7 +51093,14 @@
     ],
     "aliases": [
       "泥偶巨人"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/golurk/",
+      "rank": 109,
+      "usageCount": 29,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0623_00_0.webp"
+    }
   },
   {
     "id": "golurkmega",
@@ -50751,6 +51345,21 @@
     "aliases": [
       "黏美龍"
     ]
+  },
+  {
+    "id": "goodrahisuianform",
+    "name": "Goodra [Hisuian Form]",
+    "types": [
+      "Steel",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/goodra-hisuian-form/",
+      "rank": 235,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0706_01_0.webp"
+    }
   },
   {
     "id": "goodrahisui",
@@ -51608,7 +52217,14 @@
     ],
     "aliases": [
       "南瓜怪人"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gourgeist/",
+      "rank": 229,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0711_00_0.webp"
+    }
   },
   {
     "id": "gourgeistlarge",
@@ -52818,7 +53434,14 @@
     ],
     "aliases": [
       "甲賀忍蛙"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/greninja/",
+      "rank": 124,
+      "usageCount": 21,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0658_00_0.webp"
+    }
   },
   {
     "id": "greninjaash",
@@ -53512,7 +54135,14 @@
     ],
     "aliases": [
       "長毛巨魔"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/grimmsnarl/",
+      "rank": 13,
+      "usageCount": 920,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0861_00_0.webp"
+    }
   },
   {
     "id": "grimmsnarlgmax",
@@ -55231,7 +55861,14 @@
     ],
     "aliases": [
       "暴鯉龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gyarados/",
+      "rank": 96,
+      "usageCount": 41,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0130_00_0.webp"
+    }
   },
   {
     "id": "gyaradosmega",
@@ -55864,7 +56501,14 @@
     ],
     "aliases": [
       "布莉姆溫"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hatterene/",
+      "rank": 112,
+      "usageCount": 26,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0858_00_0.webp"
+    }
   },
   {
     "id": "hatterenegmax",
@@ -56294,7 +56938,14 @@
     ],
     "aliases": [
       "摔角鷹人"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hawlucha/",
+      "rank": 129,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0701_00_0.webp"
+    }
   },
   {
     "id": "hawluchamega",
@@ -56542,6 +57193,21 @@
     "aliases": [
       "雙斧戰龍"
     ]
+  },
+  {
+    "id": "heatrotom",
+    "name": "Heat Rotom",
+    "types": [
+      "Electric",
+      "Fire"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom-heat-rotom/",
+      "rank": 60,
+      "usageCount": 116,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_01_0.webp"
+    }
   },
   {
     "id": "heatmor",
@@ -56979,7 +57645,14 @@
     ],
     "aliases": [
       "光電傘蜥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/heliolisk/",
+      "rank": 139,
+      "usageCount": 16,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0695_00_0.webp"
+    }
   },
   {
     "id": "helioptile",
@@ -57196,7 +57869,14 @@
     ],
     "aliases": [
       "赫拉克羅斯"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/heracross/",
+      "rank": 245,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0214_00_0.webp"
+    }
   },
   {
     "id": "heracrossmega",
@@ -57591,7 +58271,14 @@
     ],
     "aliases": [
       "河馬獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hippowdon/",
+      "rank": 214,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0450_00_0.webp"
+    }
   },
   {
     "id": "hitmonchan",
@@ -58986,7 +59673,14 @@
     ],
     "aliases": [
       "黑魯加"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/houndoom/",
+      "rank": 243,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0229_00_0.webp"
+    }
   },
   {
     "id": "houndoommega",
@@ -59306,7 +60000,14 @@
     ],
     "aliases": [
       "墓揚犬"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/houndstone/",
+      "rank": 116,
+      "usageCount": 24,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0972_00_0.webp"
+    }
   },
   {
     "id": "huntail",
@@ -59471,7 +60172,14 @@
     ],
     "aliases": [
       "蜜集大蛇"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hydrapple/",
+      "rank": 146,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_1019_00_0.webp"
+    }
   },
   {
     "id": "hydreigon",
@@ -59601,7 +60309,14 @@
     ],
     "aliases": [
       "三首惡龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hydreigon/",
+      "rank": 36,
+      "usageCount": 311,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0635_00_0.webp"
+    }
   },
   {
     "id": "hypno",
@@ -60200,7 +60915,14 @@
     ],
     "aliases": [
       "熾焰咆哮虎"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/incineroar/",
+      "rank": 4,
+      "usageCount": 1591,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0727_00_0.webp"
+    }
   },
   {
     "id": "indeedee",
@@ -60516,7 +61238,14 @@
     ],
     "aliases": [
       "烈焰猴"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/infernape/",
+      "rank": 164,
+      "usageCount": 11,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0392_00_0.webp"
+    }
   },
   {
     "id": "inkay",
@@ -62384,7 +63113,14 @@
     ],
     "aliases": [
       "雷伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/jolteon/",
+      "rank": 152,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0135_00_0.webp"
+    }
   },
   {
     "id": "joltik",
@@ -63290,7 +64026,14 @@
     ],
     "aliases": [
       "袋獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/kangaskhan/",
+      "rank": 53,
+      "usageCount": 152,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0115_00_0.webp"
+    }
   },
   {
     "id": "kangaskhanmega",
@@ -64102,7 +64845,14 @@
     ],
     "aliases": [
       "仆刀將軍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/kingambit/",
+      "rank": 6,
+      "usageCount": 1282,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0983_00_0.webp"
+    }
   },
   {
     "id": "kingdra",
@@ -64800,7 +65550,14 @@
     ],
     "aliases": [
       "劈斧螳螂"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/kleavor/",
+      "rank": 130,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0900_00_0.webp"
+    }
   },
   {
     "id": "klefki",
@@ -64892,7 +65649,14 @@
     ],
     "aliases": [
       "鑰圈兒"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/klefki/",
+      "rank": 150,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0707_00_0.webp"
+    }
   },
   {
     "id": "klink",
@@ -65396,7 +66160,14 @@
     ],
     "aliases": [
       "杖尾鱗甲龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/kommo-o/",
+      "rank": 80,
+      "usageCount": 71,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0784_00_0.webp"
+    }
   },
   {
     "id": "kommoototem",
@@ -66103,7 +66874,14 @@
     ],
     "aliases": [
       "流氓鱷"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/krookodile/",
+      "rank": 194,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0553_00_0.webp"
+    }
   },
   {
     "id": "kubfu",
@@ -68400,7 +69178,14 @@
     ],
     "aliases": [
       "葉伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/leafeon/",
+      "rank": 232,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0470_00_0.webp"
+    }
   },
   {
     "id": "leavanny",
@@ -69159,7 +69944,14 @@
     ],
     "aliases": [
       "酷豹"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/liepard/",
+      "rank": 221,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0510_00_0.webp"
+    }
   },
   {
     "id": "lileep",
@@ -70343,7 +71135,14 @@
     ],
     "aliases": [
       "長耳兔"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lopunny/",
+      "rank": 120,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0428_00_0.webp"
+    }
   },
   {
     "id": "lopunnymega",
@@ -70815,7 +71614,14 @@
     ],
     "aliases": [
       "路卡利歐"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lucario/",
+      "rank": 128,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0448_00_0.webp"
+    }
   },
   {
     "id": "lucariomega",
@@ -72161,7 +72967,14 @@
     ],
     "aliases": [
       "倫琴貓"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/luxray/",
+      "rank": 206,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0405_00_0.webp"
+    }
   },
   {
     "id": "lycanroc",
@@ -72264,7 +73077,28 @@
     ],
     "aliases": [
       "鬃岩狼人"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lycanroc/",
+      "rank": 211,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0745_00_0.webp"
+    }
+  },
+  {
+    "id": "lycanrocduskform",
+    "name": "Lycanroc [Dusk Form]",
+    "types": [
+      "Rock"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lycanroc-dusk-form/",
+      "rank": 79,
+      "usageCount": 73,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0745_02_0.webp"
+    }
   },
   {
     "id": "lycanrocdusk",
@@ -72690,7 +73524,14 @@
     ],
     "aliases": [
       "怪力"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/machamp/",
+      "rank": 193,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0068_00_0.webp"
+    }
   },
   {
     "id": "machampgmax",
@@ -74614,7 +75455,14 @@
     ],
     "aliases": [
       "烏賊王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/malamar/",
+      "rank": 117,
+      "usageCount": 23,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0687_00_0.webp"
+    }
   },
   {
     "id": "malamarmega",
@@ -74844,7 +75692,14 @@
     ],
     "aliases": [
       "象牙豬"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mamoswine/",
+      "rank": 74,
+      "usageCount": 85,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0473_00_0.webp"
+    }
   },
   {
     "id": "manaphy",
@@ -75154,7 +76009,14 @@
     ],
     "aliases": [
       "雷電獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/manectric/",
+      "rank": 201,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0310_00_0.webp"
+    }
   },
   {
     "id": "manectricmega",
@@ -76867,7 +77729,14 @@
     ],
     "aliases": [
       "一家鼠"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/maushold/",
+      "rank": 35,
+      "usageCount": 330,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0925_00_0.webp"
+    }
   },
   {
     "id": "mausholdfour",
@@ -77081,7 +77950,14 @@
     ],
     "aliases": [
       "大嘴娃"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mawile/",
+      "rank": 27,
+      "usageCount": 385,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0303_00_0.webp"
+    }
   },
   {
     "id": "mawilemega",
@@ -77351,7 +78227,14 @@
     ],
     "aliases": [
       "恰雷姆"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/medicham/",
+      "rank": 242,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0308_00_0.webp"
+    }
   },
   {
     "id": "medichammega",
@@ -77624,6 +78507,1016 @@
     ]
   },
   {
+    "id": "megaabomasnow",
+    "name": "Mega Abomasnow",
+    "types": [
+      "Grass",
+      "Ice"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/abomasnow-mega-abomasnow/",
+      "rank": 183,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0460_01_0.webp"
+    }
+  },
+  {
+    "id": "megaabsol",
+    "name": "Mega Absol",
+    "types": [
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/absol-mega-absol/",
+      "rank": 274,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0359_01_0.webp"
+    }
+  },
+  {
+    "id": "megaaerodactyl",
+    "name": "Mega Aerodactyl",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aerodactyl-mega-aerodactyl/",
+      "rank": 29,
+      "usageCount": 357,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0142_01_0.webp"
+    }
+  },
+  {
+    "id": "megaaggron",
+    "name": "Mega Aggron",
+    "types": [
+      "Steel"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/aggron-mega-aggron/",
+      "rank": 175,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0306_01_0.webp"
+    }
+  },
+  {
+    "id": "megaalakazam",
+    "name": "Mega Alakazam",
+    "types": [
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/alakazam-mega-alakazam/",
+      "rank": 168,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0065_01_0.webp"
+    }
+  },
+  {
+    "id": "megaaltaria",
+    "name": "Mega Altaria",
+    "types": [
+      "Dragon",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/altaria-mega-altaria/",
+      "rank": 210,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0334_01_0.webp"
+    }
+  },
+  {
+    "id": "megaampharos",
+    "name": "Mega Ampharos",
+    "types": [
+      "Electric",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ampharos-mega-ampharos/",
+      "rank": 160,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0181_01_0.webp"
+    }
+  },
+  {
+    "id": "megaaudino",
+    "name": "Mega Audino",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/audino-mega-audino/",
+      "rank": 270,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0531_01_0.webp"
+    }
+  },
+  {
+    "id": "megabanette",
+    "name": "Mega Banette",
+    "types": [
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/banette-mega-banette/",
+      "rank": 272,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0354_01_0.webp"
+    }
+  },
+  {
+    "id": "megabarbaracle",
+    "name": "Mega Barbaracle",
+    "types": [
+      "Rock",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/barbaracle-mega-barbaracle/",
+      "rank": 185,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0689_01_0.webp"
+    }
+  },
+  {
+    "id": "megabeedrill",
+    "name": "Mega Beedrill",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/beedrill-mega-beedrill/",
+      "rank": 223,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0015_01_0.webp"
+    }
+  },
+  {
+    "id": "megablastoise",
+    "name": "Mega Blastoise",
+    "types": [
+      "Water"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/blastoise-mega-blastoise/",
+      "rank": 88,
+      "usageCount": 56,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0009_01_0.webp"
+    }
+  },
+  {
+    "id": "megablaziken",
+    "name": "Mega Blaziken",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/blaziken-mega-blaziken/",
+      "rank": 57,
+      "usageCount": 131,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0257_01_0.webp"
+    }
+  },
+  {
+    "id": "megacamerupt",
+    "name": "Mega Camerupt",
+    "types": [
+      "Fire",
+      "Ground"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/camerupt-mega-camerupt/",
+      "rank": 115,
+      "usageCount": 25,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0323_01_0.webp"
+    }
+  },
+  {
+    "id": "megachandelure",
+    "name": "Mega Chandelure",
+    "types": [
+      "Ghost",
+      "Fire"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chandelure-mega-chandelure/",
+      "rank": 131,
+      "usageCount": 18,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0609_01_0.webp"
+    }
+  },
+  {
+    "id": "megachesnaught",
+    "name": "Mega Chesnaught",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chesnaught-mega-chesnaught/",
+      "rank": 162,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0652_01_0.webp"
+    }
+  },
+  {
+    "id": "megachimecho",
+    "name": "Mega Chimecho",
+    "types": [
+      "Psychic",
+      "Steel"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/chimecho-mega-chimecho/",
+      "rank": 199,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0358_01_0.webp"
+    }
+  },
+  {
+    "id": "megaclefable",
+    "name": "Mega Clefable",
+    "types": [
+      "Fairy",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/clefable-mega-clefable/",
+      "rank": 169,
+      "usageCount": 10,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0036_01_0.webp"
+    }
+  },
+  {
+    "id": "megacrabominable",
+    "name": "Mega Crabominable",
+    "types": [
+      "Fighting",
+      "Ice"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/crabominable-mega-crabominable/",
+      "rank": 155,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0740_01_0.webp"
+    }
+  },
+  {
+    "id": "megadelphox",
+    "name": "Mega Delphox",
+    "types": [
+      "Fire",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/delphox-mega-delphox/",
+      "rank": 34,
+      "usageCount": 332,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0655_01_0.webp"
+    }
+  },
+  {
+    "id": "megadragalge",
+    "name": "Mega Dragalge",
+    "types": [
+      "Poison",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/dragalge-mega-dragalge/",
+      "rank": 91,
+      "usageCount": 53,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0691_01_0.webp"
+    }
+  },
+  {
+    "id": "megadragonite",
+    "name": "Mega Dragonite",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/dragonite-mega-dragonite/",
+      "rank": 48,
+      "usageCount": 172,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0149_01_0.webp"
+    }
+  },
+  {
+    "id": "megadrampa",
+    "name": "Mega Drampa",
+    "types": [
+      "Normal",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/drampa-mega-drampa/",
+      "rank": 147,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0780_01_0.webp"
+    }
+  },
+  {
+    "id": "megaeelektross",
+    "name": "Mega Eelektross",
+    "types": [
+      "Electric"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/eelektross-mega-eelektross/",
+      "rank": 59,
+      "usageCount": 125,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0604_01_0.webp"
+    }
+  },
+  {
+    "id": "megaemboar",
+    "name": "Mega Emboar",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/emboar-mega-emboar/",
+      "rank": 222,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0500_01_0.webp"
+    }
+  },
+  {
+    "id": "megaexcadrill",
+    "name": "Mega Excadrill",
+    "types": [
+      "Ground",
+      "Steel"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/excadrill-mega-excadrill/",
+      "rank": 182,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0530_01_0.webp"
+    }
+  },
+  {
+    "id": "megafalinks",
+    "name": "Mega Falinks",
+    "types": [
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/falinks-mega-falinks/",
+      "rank": 149,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0870_01_0.webp"
+    }
+  },
+  {
+    "id": "megaferaligatr",
+    "name": "Mega Feraligatr",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/feraligatr-mega-feraligatr/",
+      "rank": 209,
+      "usageCount": 5,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0160_01_0.webp"
+    }
+  },
+  {
+    "id": "megafloette",
+    "name": "Mega Floette",
+    "types": [
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/floette-mega-floette/",
+      "rank": 14,
+      "usageCount": 916,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0670_06_0.webp"
+    }
+  },
+  {
+    "id": "megafroslass",
+    "name": "Mega Froslass",
+    "types": [
+      "Ice",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/froslass-mega-froslass/",
+      "rank": 40,
+      "usageCount": 243,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0478_01_0.webp"
+    }
+  },
+  {
+    "id": "megagallade",
+    "name": "Mega Gallade",
+    "types": [
+      "Psychic",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gallade-mega-gallade/",
+      "rank": 271,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0475_01_0.webp"
+    }
+  },
+  {
+    "id": "megagarchomp",
+    "name": "Mega Garchomp",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/garchomp-mega-garchomp/",
+      "rank": 140,
+      "usageCount": 16,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0445_01_0.webp"
+    }
+  },
+  {
+    "id": "megagardevoir",
+    "name": "Mega Gardevoir",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gardevoir-mega-gardevoir/",
+      "rank": 81,
+      "usageCount": 71,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0282_01_0.webp"
+    }
+  },
+  {
+    "id": "megagengar",
+    "name": "Mega Gengar",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gengar-mega-gengar/",
+      "rank": 56,
+      "usageCount": 131,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0094_01_0.webp"
+    }
+  },
+  {
+    "id": "megaglimmora",
+    "name": "Mega Glimmora",
+    "types": [
+      "Rock",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/glimmora-mega-glimmora/",
+      "rank": 105,
+      "usageCount": 33,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0970_01_0.webp"
+    }
+  },
+  {
+    "id": "megagolurk",
+    "name": "Mega Golurk",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/golurk-mega-golurk/",
+      "rank": 114,
+      "usageCount": 26,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0623_01_0.webp"
+    }
+  },
+  {
+    "id": "megagreninja",
+    "name": "Mega Greninja",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/greninja-mega-greninja/",
+      "rank": 156,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0658_03_0.webp"
+    }
+  },
+  {
+    "id": "megagyarados",
+    "name": "Mega Gyarados",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/gyarados-mega-gyarados/",
+      "rank": 135,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0130_01_0.webp"
+    }
+  },
+  {
+    "id": "megahawlucha",
+    "name": "Mega Hawlucha",
+    "types": [
+      "Fighting",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/hawlucha-mega-hawlucha/",
+      "rank": 176,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0701_01_0.webp"
+    }
+  },
+  {
+    "id": "megaheracross",
+    "name": "Mega Heracross",
+    "types": [
+      "Bug",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/heracross-mega-heracross/",
+      "rank": 254,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0214_01_0.webp"
+    }
+  },
+  {
+    "id": "megahoundoom",
+    "name": "Mega Houndoom",
+    "types": [
+      "Dark",
+      "Fire"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/houndoom-mega-houndoom/",
+      "rank": 269,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0229_01_0.webp"
+    }
+  },
+  {
+    "id": "megakangaskhan",
+    "name": "Mega Kangaskhan",
+    "types": [
+      "Normal"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/kangaskhan-mega-kangaskhan/",
+      "rank": 78,
+      "usageCount": 76,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0115_01_0.webp"
+    }
+  },
+  {
+    "id": "megalopunny",
+    "name": "Mega Lopunny",
+    "types": [
+      "Normal",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lopunny-mega-lopunny/",
+      "rank": 125,
+      "usageCount": 21,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0428_01_0.webp"
+    }
+  },
+  {
+    "id": "megalucario",
+    "name": "Mega Lucario",
+    "types": [
+      "Fighting",
+      "Steel"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/lucario-mega-lucario/",
+      "rank": 161,
+      "usageCount": 12,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0448_01_0.webp"
+    }
+  },
+  {
+    "id": "megamalamar",
+    "name": "Mega Malamar",
+    "types": [
+      "Dark",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/malamar-mega-malamar/",
+      "rank": 123,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0687_01_0.webp"
+    }
+  },
+  {
+    "id": "megamanectric",
+    "name": "Mega Manectric",
+    "types": [
+      "Electric"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/manectric-mega-manectric/",
+      "rank": 226,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0310_01_0.webp"
+    }
+  },
+  {
+    "id": "megamawile",
+    "name": "Mega Mawile",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mawile-mega-mawile/",
+      "rank": 28,
+      "usageCount": 377,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0303_01_0.webp"
+    }
+  },
+  {
+    "id": "megamedicham",
+    "name": "Mega Medicham",
+    "types": [
+      "Fighting",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/medicham-mega-medicham/",
+      "rank": 253,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0308_01_0.webp"
+    }
+  },
+  {
+    "id": "megameganium",
+    "name": "Mega Meganium",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/meganium-mega-meganium/",
+      "rank": 103,
+      "usageCount": 34,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0154_01_0.webp"
+    }
+  },
+  {
+    "id": "megametagross",
+    "name": "Mega Metagross",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/metagross-mega-metagross/",
+      "rank": 20,
+      "usageCount": 809,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0376_01_0.webp"
+    }
+  },
+  {
+    "id": "megapidgeot",
+    "name": "Mega Pidgeot",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pidgeot-mega-pidgeot/",
+      "rank": 240,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0018_01_0.webp"
+    }
+  },
+  {
+    "id": "megapyroar",
+    "name": "Mega Pyroar",
+    "types": [
+      "Fire",
+      "Normal"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pyroar-mega-pyroar/",
+      "rank": 47,
+      "usageCount": 191,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0668_01_0.webp"
+    }
+  },
+  {
+    "id": "megasableye",
+    "name": "Mega Sableye",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sableye-mega-sableye/",
+      "rank": 276,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0302_01_0.webp"
+    }
+  },
+  {
+    "id": "megasceptile",
+    "name": "Mega Sceptile",
+    "types": [
+      "Grass",
+      "Dragon"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sceptile-mega-sceptile/",
+      "rank": 67,
+      "usageCount": 106,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0254_01_0.webp"
+    }
+  },
+  {
+    "id": "megascizor",
+    "name": "Mega Scizor",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scizor-mega-scizor/",
+      "rank": 102,
+      "usageCount": 35,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0212_01_0.webp"
+    }
+  },
+  {
+    "id": "megascolipede",
+    "name": "Mega Scolipede",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scolipede-mega-scolipede/",
+      "rank": 136,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0545_01_0.webp"
+    }
+  },
+  {
+    "id": "megascovillain",
+    "name": "Mega Scovillain",
+    "types": [
+      "Grass",
+      "Fire"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scovillain-mega-scovillain/",
+      "rank": 63,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0952_01_0.webp"
+    }
+  },
+  {
+    "id": "megascrafty",
+    "name": "Mega Scrafty",
+    "types": [
+      "Dark",
+      "Fighting"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scrafty-mega-scrafty/",
+      "rank": 65,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0560_01_0.webp"
+    }
+  },
+  {
+    "id": "megasharpedo",
+    "name": "Mega Sharpedo",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sharpedo-mega-sharpedo/",
+      "rank": 279,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0319_01_0.webp"
+    }
+  },
+  {
+    "id": "megaskarmory",
+    "name": "Mega Skarmory",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/skarmory-mega-skarmory/",
+      "rank": 202,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0227_01_0.webp"
+    }
+  },
+  {
+    "id": "megaslowbro",
+    "name": "Mega Slowbro",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slowbro-mega-slowbro/",
+      "rank": 278,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0080_01_0.webp"
+    }
+  },
+  {
+    "id": "megastaraptor",
+    "name": "Mega Staraptor",
+    "types": [
+      "Fighting",
+      "Flying"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/staraptor-mega-staraptor/",
+      "rank": 22,
+      "usageCount": 755,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0398_01_0.webp"
+    }
+  },
+  {
+    "id": "megastarmie",
+    "name": "Mega Starmie",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/starmie-mega-starmie/",
+      "rank": 133,
+      "usageCount": 17,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0121_01_0.webp"
+    }
+  },
+  {
+    "id": "megasteelix",
+    "name": "Mega Steelix",
+    "types": [
+      "Steel",
+      "Ground"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/steelix-mega-steelix/",
+      "rank": 184,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0208_01_0.webp"
+    }
+  },
+  {
+    "id": "megaswampert",
+    "name": "Mega Swampert",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/swampert-mega-swampert/",
+      "rank": 19,
+      "usageCount": 840,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0260_01_0.webp"
+    }
+  },
+  {
+    "id": "megatyranitar",
+    "name": "Mega Tyranitar",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tyranitar-mega-tyranitar/",
+      "rank": 52,
+      "usageCount": 155,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0248_01_0.webp"
+    }
+  },
+  {
+    "id": "megavenusaur",
+    "name": "Mega Venusaur",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/venusaur-mega-venusaur/",
+      "rank": 50,
+      "usageCount": 160,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0003_01_0.webp"
+    }
+  },
+  {
+    "id": "megavictreebel",
+    "name": "Mega Victreebel",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/victreebel-mega-victreebel/",
+      "rank": 227,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0071_01_0.webp"
+    }
+  },
+  {
     "id": "meganium",
     "name": "Meganium",
     "baseSpecies": "Meganium",
@@ -77735,7 +79628,14 @@
     ],
     "aliases": [
       "大竺葵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/meganium/",
+      "rank": 101,
+      "usageCount": 35,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0154_00_0.webp"
+    }
   },
   {
     "id": "meganiummega",
@@ -78401,7 +80301,14 @@
     ],
     "aliases": [
       "魔幻假面喵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/meowscarada/",
+      "rank": 85,
+      "usageCount": 59,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0908_00_0.webp"
+    }
   },
   {
     "id": "meowstic",
@@ -78517,7 +80424,28 @@
     ],
     "aliases": [
       "超能妙喵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/meowstic/",
+      "rank": 137,
+      "usageCount": 16,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0678_00_0.webp"
+    }
+  },
+  {
+    "id": "meowsticfemale",
+    "name": "Meowstic [Female]",
+    "types": [
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/meowstic-female/",
+      "rank": 266,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0678_01_0.webp"
+    }
   },
   {
     "id": "meowsticf",
@@ -79614,7 +81542,14 @@
     ],
     "aliases": [
       "巨金怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/metagross/",
+      "rank": 16,
+      "usageCount": 857,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0376_00_0.webp"
+    }
   },
   {
     "id": "metagrossmega",
@@ -81374,7 +83309,14 @@
     ],
     "aliases": [
       "美納斯"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/milotic/",
+      "rank": 42,
+      "usageCount": 214,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0350_00_0.webp"
+    }
   },
   {
     "id": "miltank",
@@ -81731,7 +83673,14 @@
     ],
     "aliases": [
       "謎擬Ｑ"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mimikyu/",
+      "rank": 118,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0778_00_0.webp"
+    }
   },
   {
     "id": "mimikyubusted",
@@ -83359,7 +85308,14 @@
     ],
     "aliases": [
       "莫魯貝可"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/morpeko/",
+      "rank": 236,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0877_00_0.webp"
+    }
   },
   {
     "id": "morpekohangry",
@@ -83550,6 +85506,21 @@
     "aliases": [
       "紳士蛾"
     ]
+  },
+  {
+    "id": "mowrotom",
+    "name": "Mow Rotom",
+    "types": [
+      "Electric",
+      "Grass"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom-mow-rotom/",
+      "rank": 154,
+      "usageCount": 13,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_05_0.webp"
+    }
   },
   {
     "id": "mrmime",
@@ -83939,7 +85910,14 @@
     ],
     "aliases": [
       "踏冰人偶"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mr-rime/",
+      "rank": 192,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0866_00_0.webp"
+    }
   },
   {
     "id": "mudbray",
@@ -84223,7 +86201,14 @@
     ],
     "aliases": [
       "重泥挽馬"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/mudsdale/",
+      "rank": 170,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0750_00_0.webp"
+    }
   },
   {
     "id": "muk",
@@ -85017,7 +87002,14 @@
     ],
     "aliases": [
       "夢夢蝕"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/musharna/",
+      "rank": 259,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0518_00_0.webp"
+    }
   },
   {
     "id": "nacli",
@@ -86675,7 +88667,29 @@
     ],
     "aliases": [
       "九尾"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ninetales/",
+      "rank": 75,
+      "usageCount": 83,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0038_00_0.webp"
+    }
+  },
+  {
+    "id": "ninetalesalolanform",
+    "name": "Ninetales [Alolan Form]",
+    "types": [
+      "Ice",
+      "Fairy"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/ninetales-alolan-form/",
+      "rank": 41,
+      "usageCount": 224,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0038_01_0.webp"
+    }
   },
   {
     "id": "ninetalesalola",
@@ -87222,7 +89236,14 @@
     ],
     "aliases": [
       "音波龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/noivern/",
+      "rank": 213,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0715_00_0.webp"
+    }
   },
   {
     "id": "nosepass",
@@ -89356,7 +91377,14 @@
     ],
     "aliases": [
       "智揮猩"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/oranguru/",
+      "rank": 106,
+      "usageCount": 32,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0765_00_0.webp"
+    }
   },
   {
     "id": "orbeetle",
@@ -89953,7 +91981,14 @@
     ],
     "aliases": [
       "拖拖蚓"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/orthworm/",
+      "rank": 188,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0968_00_0.webp"
+    }
   },
   {
     "id": "oshawott",
@@ -90148,7 +92183,14 @@
     ],
     "aliases": [
       "萬針魚"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/overqwil/",
+      "rank": 104,
+      "usageCount": 34,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0904_00_0.webp"
+    }
   },
   {
     "id": "pachirisu",
@@ -90352,7 +92394,14 @@
     ],
     "aliases": [
       "海豚俠"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/palafin/",
+      "rank": 97,
+      "usageCount": 40,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0964_00_0.webp"
+    }
   },
   {
     "id": "palafinhero",
@@ -92398,7 +94447,14 @@
     ],
     "aliases": [
       "大嘴鷗"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pelipper/",
+      "rank": 9,
+      "usageCount": 1062,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0279_00_0.webp"
+    }
   },
   {
     "id": "perrserker",
@@ -93521,7 +95577,14 @@
     ],
     "aliases": [
       "大比鳥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pidgeot/",
+      "rank": 224,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0018_00_0.webp"
+    }
   },
   {
     "id": "pidgeotmega",
@@ -94133,7 +96196,14 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pikachu/",
+      "rank": 178,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0025_00_0.webp"
+    }
   },
   {
     "id": "pikachualola",
@@ -96469,7 +98539,14 @@
     ],
     "aliases": [
       "蚊香蛙皇"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/politoed/",
+      "rank": 69,
+      "usageCount": 95,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0186_00_0.webp"
+    }
   },
   {
     "id": "poliwag",
@@ -97043,7 +99120,14 @@
     ],
     "aliases": [
       "怖思壺"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/polteageist/",
+      "rank": 263,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0855_00_0.webp"
+    }
   },
   {
     "id": "polteageistantique",
@@ -97924,7 +100008,14 @@
     ],
     "aliases": [
       "西獅海壬"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/primarina/",
+      "rank": 70,
+      "usageCount": 88,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0730_00_0.webp"
+    }
   },
   {
     "id": "primeape",
@@ -99247,7 +101338,14 @@
     ],
     "aliases": [
       "火炎獅"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/pyroar/",
+      "rank": 45,
+      "usageCount": 196,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0668_00_0.webp"
+    }
   },
   {
     "id": "pyroarmega",
@@ -99631,7 +101729,14 @@
     ],
     "aliases": [
       "狂歡浪舞鴨"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/quaquaval/",
+      "rank": 187,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0914_00_0.webp"
+    }
   },
   {
     "id": "quaxly",
@@ -100113,7 +102218,14 @@
     ],
     "aliases": [
       "千針魚"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/qwilfish/",
+      "rank": 258,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0211_00_0.webp"
+    }
   },
   {
     "id": "qwilfishhisui",
@@ -100603,7 +102715,29 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/raichu/",
+      "rank": 25,
+      "usageCount": 630,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0026_00_0.webp"
+    }
+  },
+  {
+    "id": "raichualolanform",
+    "name": "Raichu [Alolan Form]",
+    "types": [
+      "Electric",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/raichu-alolan-form/",
+      "rank": 248,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0026_01_0.webp"
+    }
   },
   {
     "id": "raichualola",
@@ -100866,7 +103000,14 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/raichu-mega-raichu-x/",
+      "rank": 64,
+      "usageCount": 108,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0026_02_0.webp"
+    }
   },
   {
     "id": "raichumegay",
@@ -101001,7 +103142,14 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/raichu-mega-raichu-y/",
+      "rank": 26,
+      "usageCount": 418,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0026_03_0.webp"
+    }
   },
   {
     "id": "raikou",
@@ -101372,7 +103520,14 @@
     ],
     "aliases": [
       "戰槌龍"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rampardos/",
+      "rank": 217,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0409_00_0.webp"
+    }
   },
   {
     "id": "rapidash",
@@ -103410,7 +105565,14 @@
     ],
     "aliases": [
       "人造細胞卵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/reuniclus/",
+      "rank": 218,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0579_00_0.webp"
+    }
   },
   {
     "id": "revavroom",
@@ -103941,7 +106103,14 @@
     ],
     "aliases": [
       "超甲狂犀"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rhyperior/",
+      "rank": 195,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0464_00_0.webp"
+    }
   },
   {
     "id": "ribombee",
@@ -105165,7 +107334,14 @@
     ],
     "aliases": [
       "羅絲雷朵"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/roserade/",
+      "rank": 268,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0407_00_0.webp"
+    }
   },
   {
     "id": "rotom",
@@ -105258,7 +107434,14 @@
     ],
     "aliases": [
       "洛托姆"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom/",
+      "rank": 204,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_00_0.webp"
+    }
   },
   {
     "id": "rotomfan",
@@ -105682,7 +107865,14 @@
     ],
     "aliases": [
       "死神板"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/runerigus/",
+      "rank": 200,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0867_00_0.webp"
+    }
   },
   {
     "id": "sableye",
@@ -105847,7 +108037,14 @@
     ],
     "aliases": [
       "勾魂眼"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sableye/",
+      "rank": 30,
+      "usageCount": 353,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0302_00_0.webp"
+    }
   },
   {
     "id": "sableyemega",
@@ -106475,7 +108672,14 @@
     ],
     "aliases": [
       "焰后蜥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/salazzle/",
+      "rank": 233,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0758_00_0.webp"
+    }
   },
   {
     "id": "salazzletotem",
@@ -106670,7 +108874,29 @@
     ],
     "aliases": [
       "大劍鬼"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/samurott/",
+      "rank": 273,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0503_00_0.webp"
+    }
+  },
+  {
+    "id": "samurotthisuianform",
+    "name": "Samurott [Hisuian Form]",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/samurott-hisuian-form/",
+      "rank": 98,
+      "usageCount": 40,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0503_01_0.webp"
+    }
   },
   {
     "id": "samurotthisui",
@@ -106842,7 +109068,14 @@
     ],
     "aliases": [
       "沙螺蟒"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sandaconda/",
+      "rank": 251,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0844_00_0.webp"
+    }
   },
   {
     "id": "sandacondagmax",
@@ -108082,7 +110315,14 @@
     ],
     "aliases": [
       "蜥蜴王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sceptile/",
+      "rank": 61,
+      "usageCount": 115,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0254_00_0.webp"
+    }
   },
   {
     "id": "sceptilemega",
@@ -108350,7 +110590,14 @@
     ],
     "aliases": [
       "巨鉗螳螂"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scizor/",
+      "rank": 93,
+      "usageCount": 48,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0212_00_0.webp"
+    }
   },
   {
     "id": "scizormega",
@@ -108572,7 +110819,14 @@
     ],
     "aliases": [
       "蜈蚣王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scolipede/",
+      "rank": 122,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0545_00_0.webp"
+    }
   },
   {
     "id": "scolipedemega",
@@ -108826,7 +111080,14 @@
     ],
     "aliases": [
       "狠辣椒"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scovillain/",
+      "rank": 62,
+      "usageCount": 114,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0952_00_0.webp"
+    }
   },
   {
     "id": "scovillainmega",
@@ -109031,7 +111292,14 @@
     ],
     "aliases": [
       "頭巾混混"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/scrafty/",
+      "rank": 55,
+      "usageCount": 137,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0560_00_0.webp"
+    }
   },
   {
     "id": "scraftymega",
@@ -110353,7 +112621,14 @@
     ],
     "aliases": [
       "君主蛇"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/serperior/",
+      "rank": 165,
+      "usageCount": 11,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0497_00_0.webp"
+    }
   },
   {
     "id": "servine",
@@ -110782,7 +113057,14 @@
     ],
     "aliases": [
       "巨牙鯊"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sharpedo/",
+      "rank": 255,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0319_00_0.webp"
+    }
   },
   {
     "id": "sharpedomega",
@@ -114959,7 +117241,14 @@
     ],
     "aliases": [
       "來悲粗茶"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sinistcha/",
+      "rank": 2,
+      "usageCount": 1774,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_1013_00_0.webp"
+    }
   },
   {
     "id": "sinistchamasterpiece",
@@ -115425,7 +117714,14 @@
     ],
     "aliases": [
       "盔甲鳥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/skarmory/",
+      "rank": 181,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0227_00_0.webp"
+    }
   },
   {
     "id": "skarmorymega",
@@ -115630,7 +117926,14 @@
     ],
     "aliases": [
       "骨紋巨聲鱷"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/skeledirge/",
+      "rank": 143,
+      "usageCount": 14,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0911_00_0.webp"
+    }
   },
   {
     "id": "skiddo",
@@ -117002,7 +119305,29 @@
     ],
     "aliases": [
       "呆殼獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slowbro/",
+      "rank": 230,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0080_00_0.webp"
+    }
+  },
+  {
+    "id": "slowbrogalarianform",
+    "name": "Slowbro [Galarian Form]",
+    "types": [
+      "Poison",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slowbro-galarian-form/",
+      "rank": 219,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0080_02_0.webp"
+    }
   },
   {
     "id": "slowbrogalar",
@@ -117462,7 +119787,29 @@
     ],
     "aliases": [
       "呆呆王"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slowking/",
+      "rank": 189,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0199_00_0.webp"
+    }
+  },
+  {
+    "id": "slowkinggalarianform",
+    "name": "Slowking [Galarian Form]",
+    "types": [
+      "Poison",
+      "Psychic"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slowking-galarian-form/",
+      "rank": 196,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0199_01_0.webp"
+    }
   },
   {
     "id": "slowkinggalar",
@@ -118040,7 +120387,14 @@
     ],
     "aliases": [
       "胖甜妮"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/slurpuff/",
+      "rank": 228,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0685_00_0.webp"
+    }
   },
   {
     "id": "smeargle",
@@ -118593,7 +120947,14 @@
     ],
     "aliases": [
       "大狃拉"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sneasler/",
+      "rank": 8,
+      "usageCount": 1076,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0903_00_0.webp"
+    }
   },
   {
     "id": "snivy",
@@ -118910,7 +121271,14 @@
     ],
     "aliases": [
       "卡比獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/snorlax/",
+      "rank": 113,
+      "usageCount": 26,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0143_00_0.webp"
+    }
   },
   {
     "id": "snorlaxgmax",
@@ -120550,7 +122918,14 @@
     ],
     "aliases": [
       "花岩怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/spiritomb/",
+      "rank": 244,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0442_00_0.webp"
+    }
   },
   {
     "id": "spoink",
@@ -121576,7 +123951,14 @@
     ],
     "aliases": [
       "姆克鷹"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/staraptor/",
+      "rank": 18,
+      "usageCount": 848,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0398_00_0.webp"
+    }
   },
   {
     "id": "staraptormega",
@@ -121964,7 +124346,14 @@
     ],
     "aliases": [
       "寶石海星"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/starmie/",
+      "rank": 121,
+      "usageCount": 22,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0121_00_0.webp"
+    }
   },
   {
     "id": "starmiemega",
@@ -122310,7 +124699,14 @@
     ],
     "aliases": [
       "大鋼蛇"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/steelix/",
+      "rank": 127,
+      "usageCount": 19,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0208_00_0.webp"
+    }
   },
   {
     "id": "steelixmega",
@@ -122884,7 +125280,14 @@
     ],
     "aliases": [
       "泥巴魚"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/stunfisk/",
+      "rank": 252,
+      "usageCount": 2,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0618_00_0.webp"
+    }
   },
   {
     "id": "stunfiskgalar",
@@ -124064,7 +126467,14 @@
     ],
     "aliases": [
       "巨沼怪"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/swampert/",
+      "rank": 15,
+      "usageCount": 880,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0260_00_0.webp"
+    }
   },
   {
     "id": "swampertmega",
@@ -124788,7 +127198,14 @@
     ],
     "aliases": [
       "仙子伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/sylveon/",
+      "rank": 21,
+      "usageCount": 770,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0700_00_0.webp"
+    }
   },
   {
     "id": "tadbulb",
@@ -125041,7 +127458,14 @@
     ],
     "aliases": [
       "烈箭鷹"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/talonflame/",
+      "rank": 46,
+      "usageCount": 192,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0663_00_0.webp"
+    }
   },
   {
     "id": "tandemaus",
@@ -126313,6 +128737,36 @@
     "aliases": [
       "肯泰羅"
     ]
+  },
+  {
+    "id": "taurospaldeanformaquabreed",
+    "name": "Tauros [Paldean Form (Aqua Breed)]",
+    "types": [
+      "Fighting",
+      "Water"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tauros-paldean-form-aqua-breed/",
+      "rank": 173,
+      "usageCount": 9,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0128_03_0.webp"
+    }
+  },
+  {
+    "id": "taurospaldeanformblazebreed",
+    "name": "Tauros [Paldean Form (Blaze Breed)]",
+    "types": [
+      "Fighting",
+      "Fire"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tauros-paldean-form-blaze-breed/",
+      "rank": 277,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0128_02_0.webp"
+    }
   },
   {
     "id": "taurospaldeaaqua",
@@ -128189,7 +130643,14 @@
     ],
     "aliases": [
       "巨鍛匠"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tinkaton/",
+      "rank": 107,
+      "usageCount": 31,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0959_00_0.webp"
+    }
   },
   {
     "id": "tinkatuff",
@@ -129352,7 +131813,14 @@
     ],
     "aliases": [
       "煤炭龜"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/torkoal/",
+      "rank": 31,
+      "usageCount": 345,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0324_00_0.webp"
+    }
   },
   {
     "id": "tornadus",
@@ -129777,7 +132245,14 @@
     ],
     "aliases": [
       "土台龜"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/torterra/",
+      "rank": 264,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0389_00_0.webp"
+    }
   },
   {
     "id": "totodile",
@@ -130000,7 +132475,14 @@
     ],
     "aliases": [
       "銃嘴大鳥"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/toucannon/",
+      "rank": 220,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0733_00_0.webp"
+    }
   },
   {
     "id": "toxapex",
@@ -130101,7 +132583,14 @@
     ],
     "aliases": [
       "超壞星"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/toxapex/",
+      "rank": 71,
+      "usageCount": 87,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0748_00_0.webp"
+    }
   },
   {
     "id": "toxel",
@@ -130285,7 +132774,14 @@
     ],
     "aliases": [
       "毒骷蛙"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/toxicroak/",
+      "rank": 262,
+      "usageCount": 1,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0454_00_0.webp"
+    }
   },
   {
     "id": "toxtricity",
@@ -131131,7 +133627,14 @@
     ],
     "aliases": [
       "朽木妖"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/trevenant/",
+      "rank": 179,
+      "usageCount": 8,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0709_00_0.webp"
+    }
   },
   {
     "id": "tropius",
@@ -131529,7 +134032,14 @@
     ],
     "aliases": [
       "甜冷美后"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tsareena/",
+      "rank": 83,
+      "usageCount": 69,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0763_00_0.webp"
+    }
   },
   {
     "id": "turtonator",
@@ -132062,7 +134572,29 @@
     ],
     "aliases": [
       "火爆獸"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/typhlosion/",
+      "rank": 237,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0157_00_0.webp"
+    }
+  },
+  {
+    "id": "typhlosionhisuianform",
+    "name": "Typhlosion [Hisuian Form]",
+    "types": [
+      "Fire",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/typhlosion-hisuian-form/",
+      "rank": 82,
+      "usageCount": 70,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0157_01_0.webp"
+    }
   },
   {
     "id": "typhlosionhisui",
@@ -132319,7 +134851,14 @@
     ],
     "aliases": [
       "班基拉斯"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/tyranitar/",
+      "rank": 43,
+      "usageCount": 213,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0248_00_0.webp"
+    }
   },
   {
     "id": "tyranitarmega",
@@ -132903,7 +135442,14 @@
     ],
     "aliases": [
       "月亮伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/umbreon/",
+      "rank": 163,
+      "usageCount": 11,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0197_00_0.webp"
+    }
   },
   {
     "id": "unfezant",
@@ -134092,7 +136638,14 @@
     ],
     "aliases": [
       "雙倍多多冰"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/vanilluxe/",
+      "rank": 138,
+      "usageCount": 16,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0584_00_0.webp"
+    }
   },
   {
     "id": "vaporeon",
@@ -134216,7 +136769,14 @@
     ],
     "aliases": [
       "水伊布"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/vaporeon/",
+      "rank": 212,
+      "usageCount": 4,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0134_00_0.webp"
+    }
   },
   {
     "id": "varoom",
@@ -134790,7 +137350,14 @@
     ],
     "aliases": [
       "妙蛙花"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/venusaur/",
+      "rank": 32,
+      "usageCount": 338,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0003_00_0.webp"
+    }
   },
   {
     "id": "venusaurgmax",
@@ -135505,7 +138072,14 @@
     ],
     "aliases": [
       "大食花"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/victreebel/",
+      "rank": 198,
+      "usageCount": 6,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0071_00_0.webp"
+    }
   },
   {
     "id": "victreebelmega",
@@ -136035,7 +138609,14 @@
     ],
     "aliases": [
       "霸王花"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/vileplume/",
+      "rank": 73,
+      "usageCount": 86,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0045_00_0.webp"
+    }
   },
   {
     "id": "virizion",
@@ -136237,7 +138818,14 @@
     ],
     "aliases": [
       "彩粉蝶"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/vivillon/",
+      "rank": 90,
+      "usageCount": 53,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0666_00_0.webp"
+    }
   },
   {
     "id": "vivillonfancy",
@@ -136753,7 +139341,14 @@
     ],
     "aliases": [
       "火神蛾"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/volcarona/",
+      "rank": 110,
+      "usageCount": 28,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0637_00_0.webp"
+    }
   },
   {
     "id": "voltorb",
@@ -137741,6 +140336,21 @@
     ]
   },
   {
+    "id": "washrotom",
+    "name": "Wash Rotom",
+    "types": [
+      "Electric",
+      "Water"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/rotom-wash-rotom/",
+      "rank": 38,
+      "usageCount": 253,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0479_02_0.webp"
+    }
+  },
+  {
     "id": "watchog",
     "name": "Watchog",
     "baseSpecies": "Watchog",
@@ -138053,7 +140663,14 @@
     ],
     "aliases": [
       "瑪狃拉"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/weavile/",
+      "rank": 126,
+      "usageCount": 19,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0461_00_0.webp"
+    }
   },
   {
     "id": "weedle",
@@ -138491,7 +141108,14 @@
     ],
     "aliases": [
       "風妖精"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/whimsicott/",
+      "rank": 5,
+      "usageCount": 1453,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0547_00_0.webp"
+    }
   },
   {
     "id": "whirlipede",
@@ -140330,7 +142954,14 @@
     ],
     "aliases": [
       "詭角鹿"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/wyrdeer/",
+      "rank": 191,
+      "usageCount": 7,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0899_00_0.webp"
+    }
   },
   {
     "id": "xatu",
@@ -142896,7 +145527,29 @@
     ],
     "aliases": [
       "索羅亞克"
-    ]
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/zoroark/",
+      "rank": 231,
+      "usageCount": 3,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0571_00_0.webp"
+    }
+  },
+  {
+    "id": "zoroarkhisuianform",
+    "name": "Zoroark [Hisuian Form]",
+    "types": [
+      "Normal",
+      "Ghost"
+    ],
+    "champions": {
+      "source": "Pokemon Zone",
+      "sourceUrl": "https://www.pokemon-zone.com/champions/pokemon/zoroark-hisuian-form/",
+      "rank": 99,
+      "usageCount": 39,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_0571_01_0.webp"
+    }
   },
   {
     "id": "zoroarkhisui",
