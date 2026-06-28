@@ -10,6 +10,8 @@ const pokemon = [
     baseSpecies: "Pikachu",
     baseSpeed: 90,
     aliases: ["皮卡丘"],
+    abilities: ["Static", "Lightning Rod"],
+    moves: ["thunderbolt", "irontail"],
   },
   {
     id: "charizard",
@@ -17,6 +19,8 @@ const pokemon = [
     baseSpecies: "Charizard",
     baseSpeed: 100,
     aliases: ["噴火龍"],
+    abilities: ["Blaze", "Solar Power"],
+    moves: ["flamethrower", "airslash"],
   },
   {
     id: "charizardmegax",
@@ -39,10 +43,76 @@ const pokemon = [
     baseSpeed: 100,
     aliases: ["噴火龍"],
   },
+  {
+    id: "megaabsol",
+    name: "Mega Absol",
+    baseSpeed: 115,
+    aliases: [],
+  },
 ];
 
 test("searches Pokémon by normalized English name", () => {
   assert.equal(searchPokemon(pokemon, "pika")[0].id, "pikachu");
+});
+
+test("searches Pokémon by ability names", () => {
+  assert.equal(
+    searchPokemon(pokemon, "lightning rod", {
+      abilityLookup: new Map([["lightningrod", { name: "Lightning Rod" }]]),
+    })[0].id,
+    "pikachu",
+  );
+});
+
+test("searches Pokémon by move names", () => {
+  assert.equal(
+    searchPokemon(pokemon, "Iron Tail", {
+      moveLookup: new Map([["irontail", { name: "Iron Tail" }]]),
+    })[0].id,
+    "pikachu",
+  );
+});
+
+test("prioritizes usage-backed ability matches over raw ability matches", () => {
+  assert.equal(
+    searchPokemon(pokemon, "static", {
+      abilityLookup: new Map([["static", { name: "Static" }]]),
+      usageStats: {
+        pokemon: {
+          charizard: { abilities: [{ id: "static", name: "Static", usagePercent: 70 }] },
+        },
+      },
+    })[0].id,
+    "charizard",
+  );
+});
+
+test("prioritizes usage-backed move matches over broad learnset matches", () => {
+  assert.equal(
+    searchPokemon(
+      [
+        ...pokemon,
+        {
+          id: "abomasnow",
+          name: "Abomasnow",
+          baseSpecies: "Abomasnow",
+          baseSpeed: 60,
+          aliases: [],
+          moves: ["thunderbolt"],
+        },
+      ],
+      "thunderbolt",
+      {
+        moveLookup: new Map([["thunderbolt", { name: "Thunderbolt" }]]),
+        usageStats: {
+          pokemon: {
+            pikachu: { moves: [{ id: "thunderbolt", name: "Thunderbolt", usagePercent: 35 }] },
+          },
+        },
+      },
+    )[0].id,
+    "pikachu",
+  );
 });
 
 test("searches forms by Traditional Chinese base-species name", () => {
@@ -54,6 +124,10 @@ test("searches forms by Traditional Chinese base-species name", () => {
 
 test("returns an empty result for a blank query", () => {
   assert.deepEqual(searchPokemon(pokemon, "  "), []);
+});
+
+test("search tolerates catalog entries without base species", () => {
+  assert.equal(searchPokemon(pokemon, "char")[0].id, "charizard");
 });
 
 test("groups the base Pokémon with all of its Mega forms", () => {

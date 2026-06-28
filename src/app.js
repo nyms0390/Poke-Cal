@@ -73,12 +73,15 @@ async function initialize() {
 }
 
 elements.search.addEventListener("input", () => {
-  renderSearchResults(searchPokemon(pokemon, elements.search.value));
+  renderSearchResults(searchPokemon(pokemon, elements.search.value, searchOptions()));
 });
 
 elements.search.addEventListener("keydown", (event) => {
   if (event.key !== "Enter") return;
-  const [firstResult] = searchPokemon(pokemon, elements.search.value, 1);
+  const [firstResult] = searchPokemon(pokemon, elements.search.value, {
+    ...searchOptions(),
+    limit: 1,
+  });
   if (firstResult) selectPokemon(firstResult);
 });
 
@@ -91,6 +94,10 @@ for (const control of [elements.moveSearch, elements.moveType, elements.moveCate
   control.addEventListener("input", renderMoveList);
 }
 
+function searchOptions() {
+  return { abilityLookup, moveLookup, usageStats };
+}
+
 function renderSearchResults(results) {
   elements.results.replaceChildren(
     ...results.map((entry) => {
@@ -99,7 +106,7 @@ function renderSearchResults(results) {
       button.className = "search-result";
       button.innerHTML = `
         <span>${entry.name}</span>
-        <small>${entry.aliases.join(" · ") || entry.baseSpecies}</small>
+        <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
         <strong>${entry.baseSpeed}</strong>
       `;
       button.addEventListener("click", () => selectPokemon(entry));
