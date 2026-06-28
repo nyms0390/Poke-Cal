@@ -1,5 +1,5 @@
-import { calculateStat } from "./damage.js";
 import { formatMovePriority } from "./catalog.js";
+import { finalSpeed } from "./speed.js";
 
 export function compareMoveOrder({ attacker, defender, attackerMove, defenderMove, trickRoom = false }) {
   const attackerPriority = Number(attackerMove?.priority ?? 0);
@@ -46,24 +46,6 @@ export function compareMoveOrder({ attacker, defender, attackerMove, defenderMov
   };
 }
 
-export function finalSpeed(state) {
-  if (!state?.pokemon) return 0;
-  const baseSpeed = state.pokemon.baseStats?.spe ?? state.pokemon.baseSpeed;
-  let speed = calculateStat({
-    base: baseSpeed,
-    stat: "spe",
-    sp: state.sp?.spe ?? 0,
-    nature: state.nature,
-    stage: state.stages?.spe ?? 0,
-  });
-
-  speed = Math.floor(speed * Number(state.speedMultiplier ?? 1));
-  if (state.tailwind) speed *= 2;
-  if (state.paralyzed) speed = Math.floor(speed / 2);
-  return Math.max(1, Math.min(10000, speed));
-}
-
 function sideName(side) {
   return side === "attacker" ? "Attacker" : "Defender";
 }
-

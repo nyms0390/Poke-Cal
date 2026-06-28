@@ -1,6 +1,59 @@
 const STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
+const TYPE_BOOSTING_ITEMS = {
+  blackbelt: "Fighting",
+  blackglasses: "Dark",
+  charcoal: "Fire",
+  dragonfang: "Dragon",
+  fairyfeather: "Fairy",
+  hardstone: "Rock",
+  magnet: "Electric",
+  metalcoat: "Steel",
+  miracleseed: "Grass",
+  mysticwater: "Water",
+  nevermeltice: "Ice",
+  poisonbarb: "Poison",
+  sharpbeak: "Flying",
+  silkscarf: "Normal",
+  silverpowder: "Bug",
+  softsand: "Ground",
+  spelltag: "Ghost",
+  twistedspoon: "Psychic",
+};
+const RESIST_BERRIES = {
+  babiriberry: "Steel",
+  chartiberry: "Rock",
+  chilanberry: "Normal",
+  chopleberry: "Fighting",
+  cobaberry: "Flying",
+  colburberry: "Dark",
+  habanberry: "Dragon",
+  kasibberry: "Ghost",
+  kebiaberry: "Poison",
+  occaberry: "Fire",
+  passhoberry: "Water",
+  payapaberry: "Psychic",
+  rindoberry: "Grass",
+  roseliberry: "Fairy",
+  shucaberry: "Ground",
+  tangaberry: "Bug",
+  wacanberry: "Electric",
+  yacheberry: "Ice",
+};
+const TYPE_POWER_ABILITIES = {
+  dragonsmaw: { type: "Dragon", value: 1.5 },
+  rockypayload: { type: "Rock", value: 1.5 },
+  steelworker: { type: "Steel", value: 1.5 },
+  transistor: { type: "Electric", value: 1.3 },
+};
+const MOVE_FLAG_POWER_ABILITIES = {
+  ironfist: { flag: "punch", value: 1.2 },
+  megalauncher: { flag: "pulse", value: 1.5 },
+  sharpness: { flag: "slicing", value: 1.5 },
+  strongjaw: { flag: "bite", value: 1.5 },
+  toughclaws: { flag: "contact", value: 1.3 },
+};
 
 export const NATURES = {
   Hardy: {},
@@ -91,9 +144,7 @@ const UNSUPPORTED_MOVE_IDS = new Set([
   "grassknot",
   "lowkick",
   "electroball",
-  "bodypress",
   "foulplay",
-  "psyshock",
   "terablast",
   "weatherball",
 ]);
@@ -128,7 +179,10 @@ export function typeEffectiveness(moveType, defenderTypes = []) {
 export function unsupportedMoveReason(move) {
   if (!move) return "Missing move data.";
   if (move.category === "Status") return "Status moves do not deal direct damage.";
-  if (move.damage || move.damageCallback || move.ohko) return "Fixed-damage moves are not supported.";
+  if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
+    return "Fixed-damage moves are not supported.";
+  }
+  if (fixedDamageKind(move)) return "";
   if (!move.basePower) return "Variable or zero base power is not supported.";
   if (UNSUPPORTED_MOVE_IDS.has(move.id)) return "Custom damage behavior is not supported.";
   if (!["Physical", "Special"].includes(move.category)) return "Only Physical and Special moves are supported.";
@@ -150,8 +204,9 @@ export function calculateDamage({
 
   const moveType = move.type;
   const typeMultiplier = typeEffectiveness(moveType, defender.types);
+  const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
+  const effectiveCritical = critical && !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]);
   if (typeMultiplier === 0) {
-    const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
     return {
       supported: true,
       rolls: DAMAGE_ROLLS.map(() => 0),
@@ -165,12 +220,33 @@ export function calculateDamage({
     };
   }
 
+  const fixedDamage = fixedDamageValue(move, defenderHp);
+  if (fixedDamage !== null) {
+    const damage = Math.max(1, fixedDamage);
+    const rolls = DAMAGE_ROLLS.map(() => damage);
+    return {
+      supported: true,
+      rolls,
+      minDamage: damage,
+      maxDamage: damage,
+      minPercent: percent(damage, defenderHp),
+      maxPercent: percent(damage, defenderHp),
+      defenderHp,
+      typeMultiplier,
+      notes: ["Fixed damage"],
+    };
+  }
+
   const isPhysical = move.category === "Physical";
-  const attackStat = isPhysical ? "atk" : "spa";
-  const defenseStat = isPhysical ? "def" : "spd";
-  const attack = calculatePokemonStat(attacker, attackerState, attackStat);
-  const defense = calculatePokemonStat(defender, defenderState, defenseStat);
-  const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
+  const attackStat = move.overrideOffensiveStat ?? (isPhysical ? "atk" : "spa");
+  const defenseStat = move.overrideDefensiveStat ?? (isPhysical ? "def" : "spd");
+  const attack = calculatePokemonStat(attacker, attackerState, attackStat, {
+    stagePolicy: criticalStagePolicy("attack", effectiveCritical),
+  });
+  const defense = calculatePokemonStat(defender, defenderState, defenseStat, {
+    ignoreStage: move.ignoreDefensive,
+    stagePolicy: criticalStagePolicy("defense", effectiveCritical),
+  });
   const notes = [];
   let power = move.basePower;
   let attackModifier = 1;
@@ -182,6 +258,7 @@ export function calculateDamage({
     defender,
     move,
     attackerState,
+    defenderState,
     typeMultiplier,
     attackStat,
     isPhysical,
@@ -197,7 +274,9 @@ export function calculateDamage({
   const baseDamage = Math.floor(
     Math.floor(Math.floor(Math.floor((2 * 50) / 5 + 2) * power * modifiedAttack) / defense) / 50,
   ) + 2;
-  const criticalModifier = critical ? 1.5 : 1;
+  const criticalModifier = effectiveCritical
+    ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
+    : 1;
   const burnModifier =
     burned && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
   const spreadModifier =
@@ -237,21 +316,53 @@ export function koSummary({ minDamage, maxDamage, defenderHp }) {
   return "3HKO+";
 }
 
-function calculatePokemonStat(pokemon, state, stat) {
+export function formatDamageResult(result) {
+  if (!result.supported) return result.reason ?? "No direct damage";
+  return `${result.minPercent}% - ${result.maxPercent}%`;
+}
+
+function calculatePokemonStat(pokemon, state, stat, { ignoreStage = false, stagePolicy = sameStage } = {}) {
   const stages = state.stages ?? {};
+  const stage = stat === "hp" || ignoreStage ? 0 : stagePolicy(stages[stat] ?? 0);
   return calculateStat({
     base: pokemon.baseStats[stat],
     stat,
     sp: state.sp?.[stat] ?? 0,
     nature: state.nature ?? "Hardy",
-    stage: stat === "hp" ? 0 : stages[stat] ?? 0,
+    stage,
   });
 }
 
-function activeModifiers({ attacker, defender, move, attackerState, typeMultiplier, attackStat, isPhysical }) {
+function criticalStagePolicy(role, effectiveCritical) {
+  if (!effectiveCritical) return sameStage;
+  if (role === "attack") return (stage) => Math.max(0, stage);
+  return (stage) => Math.min(0, stage);
+}
+
+function sameStage(stage) {
+  return stage;
+}
+
+function fixedDamageKind(move) {
+  const moveId = normalizeId(move?.id ?? move?.name);
+  if (typeof move?.damage === "number") return "numeric";
+  if (moveId === "superfang" || moveId === "ruination") return "half-hp";
+  return "";
+}
+
+function fixedDamageValue(move, defenderHp) {
+  const kind = fixedDamageKind(move);
+  if (kind === "numeric") return move.damage;
+  if (kind === "half-hp") return Math.floor(defenderHp / 2);
+  return null;
+}
+
+function activeModifiers({ attacker, defender, move, attackerState, defenderState, typeMultiplier, attackStat, isPhysical }) {
   const modifiers = [];
   const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
+  const defenderItem = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
   const ability = normalizeId(attackerState.ability?.id ?? attackerState.ability?.name);
+  const defenderAbility = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
 
   if (item === "choiceband" && attackStat === "atk") {
     modifiers.push({ kind: "attack", value: 1.5, label: "Choice Band" });
@@ -272,6 +383,18 @@ function activeModifiers({ attacker, defender, move, attackerState, typeMultipli
   if (item === "wiseglasses" && !isPhysical) {
     modifiers.push({ kind: "power", value: 1.1, label: "Wise Glasses" });
   }
+  if (TYPE_BOOSTING_ITEMS[item] === move.type) {
+    modifiers.push({ kind: "power", value: 1.2, label: attackerState.item.name });
+  }
+  if (
+    RESIST_BERRIES[defenderItem] === move.type &&
+    (defenderItem === "chilanberry" || typeMultiplier > 1)
+  ) {
+    modifiers.push({ kind: "damage", value: 0.5, label: defenderState.item.name });
+  }
+  if ((defenderAbility === "prismarmor" || defenderAbility === "solidrock") && typeMultiplier > 1) {
+    modifiers.push({ kind: "damage", value: 0.75, label: defenderState.ability.name });
+  }
   if ((ability === "hugepower" || ability === "purepower") && attackStat === "atk") {
     modifiers.push({ kind: "attack", value: 2, label: attackerState.ability.name });
   }
@@ -284,6 +407,20 @@ function activeModifiers({ attacker, defender, move, attackerState, typeMultipli
   if (ability === "adaptability" && attacker.types.includes(move.type)) {
     modifiers.push({ kind: "stab", value: 2, label: "Adaptability" });
   }
+  const typePowerAbility = TYPE_POWER_ABILITIES[ability];
+  if (typePowerAbility?.type === move.type) {
+    modifiers.push({ kind: "attack", value: typePowerAbility.value, label: attackerState.ability.name });
+  }
+  const moveFlagPowerAbility = MOVE_FLAG_POWER_ABILITIES[ability];
+  if (moveFlagPowerAbility && move.flags?.[moveFlagPowerAbility.flag]) {
+    modifiers.push({ kind: "power", value: moveFlagPowerAbility.value, label: attackerState.ability.name });
+  }
+  if (ability === "reckless" && (move.recoil || move.hasCrashDamage)) {
+    modifiers.push({ kind: "power", value: 1.2, label: "Reckless" });
+  }
+  if (ability === "tintedlens" && typeMultiplier < 1) {
+    modifiers.push({ kind: "damage", value: 2, label: "Tinted Lens" });
+  }
 
   return modifiers;
 }
@@ -295,6 +432,11 @@ function applyStage(value, stage) {
 
 function hasAbility(state, abilityId) {
   return normalizeId(state.ability?.id ?? state.ability?.name) === abilityId;
+}
+
+function hasAnyAbility(state, abilityIds) {
+  const ability = normalizeId(state.ability?.id ?? state.ability?.name);
+  return abilityIds.includes(ability);
 }
 
 function normalizeId(value) {

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { calculateSpeed } from "../src/speed.js";
+import { calculateSpeed, finalSpeed } from "../src/speed.js";
 
 test("calculates level 50 Champions Speed from base stat and SP", () => {
   assert.deepEqual(
@@ -20,7 +20,7 @@ test("applies nature before stat stages", () => {
     calculateSpeed({
       baseSpeed: 100,
       sp: 32,
-      nature: "positive",
+      nature: "Jolly",
       stage: 1,
     }).modifiedSpeed,
     250,
@@ -63,5 +63,20 @@ test("represents Trick Room as reversed move order, not a changed Speed stat", (
 
 test("rejects SP and stage values outside Champions limits", () => {
   assert.throws(() => calculateSpeed({ baseSpeed: 100, sp: 33 }), /SP/);
-  assert.throws(() => calculateSpeed({ baseSpeed: 100, stage: 7 }), /stage/);
+  assert.throws(() => calculateSpeed({ baseSpeed: 100, stage: 7 }), /Stage/);
+});
+
+test("calculates final Speed from the battle calculator state shape", () => {
+  const side = {
+    pokemon: { baseStats: { spe: 100 } },
+    nature: "Jolly",
+    sp: { spe: 32 },
+    stages: { spe: 1 },
+    item: { id: "choicescarf", name: "Choice Scarf" },
+    tailwind: true,
+    paralyzed: true,
+  };
+
+  assert.equal(finalSpeed(side), 375);
+  assert.equal(finalSpeed({ ...side, speedMultiplier: 1.5 }), 375);
 });

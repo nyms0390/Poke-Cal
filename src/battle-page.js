@@ -8,9 +8,10 @@ import {
   sortByUsage,
   usageForPokemon,
 } from "./catalog.js";
-import { compareMoveOrder, finalSpeed } from "./battle-order.js";
+import { compareMoveOrder } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
-import { calculateDamage, calculateStat, koSummary, NATURES } from "./damage.js";
+import { calculateDamage, calculateStat, formatDamageResult, koSummary, NATURES } from "./damage.js";
+import { finalSpeed } from "./speed.js";
 import { parseUsageSpread, usageDefaultsForPokemon } from "./usage-defaults.js";
 import { damagePercentColor, optionElement, STAT_LABELS, typeBadge } from "./ui.js";
 
@@ -411,7 +412,7 @@ function renderDamageCard(move, sourceSide, targetSide, selected) {
 
   const percent = document.createElement("span");
   percent.className = "damage-percent";
-  percent.textContent = damagePercentText(result);
+  percent.textContent = result.supported ? formatDamageResult(result) : "Unsupported";
   const percentColor = result.supported
     ? damagePercentColor(result.minPercent, result.maxPercent)
     : damagePercentColor(0);
@@ -432,14 +433,9 @@ function renderDamageCard(move, sourceSide, targetSide, selected) {
 
   const ko = document.createElement("span");
   ko.className = "damage-ko";
-  ko.textContent = result.supported ? koSummary(result) : "No direct damage";
+  ko.textContent = result.supported ? koSummary(result) : formatDamageResult(result);
   card.append(heading, meta, ko);
   return card;
-}
-
-function damagePercentText(result) {
-  if (!result.supported) return "0% - 0%";
-  return `${result.minPercent}% - ${result.maxPercent}%`;
 }
 
 function renderMoveOrder() {

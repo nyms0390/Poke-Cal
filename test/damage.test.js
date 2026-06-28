@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   calculateDamage,
   calculateStat,
+  formatDamageResult,
   koSummary,
   natureMultiplier,
   unsupportedMoveReason,
@@ -155,6 +156,88 @@ test("defaults to doubles spread-move damage", () => {
   assert.equal(doubles.notes.includes("Doubles spread move"), true);
 });
 
+test("supports numeric fixed-damage moves and type immunities", () => {
+  const dragonRage = {
+    id: "dragonrage",
+    name: "Dragon Rage",
+    type: "Dragon",
+    category: "Special",
+    basePower: 0,
+    damage: 40,
+  };
+  const sonicBoom = {
+    id: "sonicboom",
+    name: "Sonic Boom",
+    type: "Normal",
+    category: "Special",
+    basePower: 0,
+    damage: 20,
+  };
+  const superFang = {
+    id: "superfang",
+    name: "Super Fang",
+    type: "Normal",
+    category: "Physical",
+    basePower: 0,
+  };
+  const ruination = {
+    id: "ruination",
+    name: "Ruination",
+    type: "Dark",
+    category: "Special",
+    basePower: 0,
+  };
+
+  const dragonRageResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: dragonRage,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.equal(dragonRageResult.supported, true);
+  assert.deepEqual([dragonRageResult.minDamage, dragonRageResult.maxDamage], [40, 40]);
+  assert.deepEqual([dragonRageResult.minPercent, dragonRageResult.maxPercent], [33.6, 33.6]);
+  assert.equal(dragonRageResult.notes.includes("Fixed damage"), true);
+
+  const sonicBoomResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: sonicBoom,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([sonicBoomResult.minDamage, sonicBoomResult.maxDamage], [20, 20]);
+
+  const superFangResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: superFang,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([superFangResult.minDamage, superFangResult.maxDamage], [59, 59]);
+  assert.deepEqual([superFangResult.minPercent, superFangResult.maxPercent], [49.5, 49.5]);
+
+  const ruinationResult = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: ruination,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([ruinationResult.minDamage, ruinationResult.maxDamage], [59, 59]);
+
+  const immune = calculateDamage({
+    attacker: pikachu,
+    defender: { ...squirtle, types: ["Ghost"] },
+    move: sonicBoom,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([immune.minDamage, immune.maxDamage, immune.minPercent], [0, 0, 0]);
+});
+
 test("applies curated item and ability modifiers", () => {
   const physical = { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40 };
   const special = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
@@ -186,10 +269,762 @@ test("applies curated item and ability modifiers", () => {
   }
 });
 
+test("applies type-boosting held items only to matching move types", () => {
+  const ironTail = {
+    id: "irontail",
+    name: "Iron Tail",
+    type: "Steel",
+    category: "Physical",
+    basePower: 100,
+  };
+  const quickAttack = {
+    id: "quickattack",
+    name: "Quick Attack",
+    type: "Normal",
+    category: "Physical",
+    basePower: 40,
+  };
+
+  const noItem = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: ironTail,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const metalCoat = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: ironTail,
+    attackerState: { ...neutralState, item: { id: "metalcoat", name: "Metal Coat" } },
+    defenderState: neutralState,
+  });
+  const nonMatching = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: { ...neutralState, item: { id: "metalcoat", name: "Metal Coat" } },
+    defenderState: neutralState,
+  });
+  const normalNoItem = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(metalCoat.notes.includes("Metal Coat"), true);
+  assert.equal(metalCoat.maxDamage > noItem.maxDamage, true);
+  assert.equal(nonMatching.notes.includes("Metal Coat"), false);
+  assert.deepEqual([nonMatching.minDamage, nonMatching.maxDamage], [normalNoItem.minDamage, normalNoItem.maxDamage]);
+});
+
+test("applies resist berries to matching super-effective damage", () => {
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+  const waterGun = {
+    id: "watergun",
+    name: "Water Gun",
+    type: "Water",
+    category: "Special",
+    basePower: 40,
+  };
+  const quickAttack = {
+    id: "quickattack",
+    name: "Quick Attack",
+    type: "Normal",
+    category: "Physical",
+    basePower: 40,
+  };
+
+  const noBerry = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const wacanBerry = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, item: { id: "wacanberry", name: "Wacan Berry" } },
+  });
+  const neutralPasshoBerry = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, item: { id: "passhoberry", name: "Passho Berry" } },
+  });
+  const neutralWaterGun = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const chilanBerry = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, item: { id: "chilanberry", name: "Chilan Berry" } },
+  });
+  const noChilan = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(wacanBerry.notes.includes("Wacan Berry"), true);
+  assert.deepEqual([wacanBerry.minDamage, wacanBerry.maxDamage], [43, 52]);
+  assert.equal(wacanBerry.maxDamage < noBerry.maxDamage, true);
+  assert.equal(neutralPasshoBerry.notes.includes("Passho Berry"), false);
+  assert.deepEqual(
+    [neutralPasshoBerry.minDamage, neutralPasshoBerry.maxDamage],
+    [neutralWaterGun.minDamage, neutralWaterGun.maxDamage],
+  );
+  assert.equal(chilanBerry.notes.includes("Chilan Berry"), true);
+  assert.equal(chilanBerry.maxDamage < noChilan.maxDamage, true);
+});
+
+test("applies type-specific offensive ability multipliers", () => {
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+  const dragonClaw = {
+    id: "dragonclaw",
+    name: "Dragon Claw",
+    type: "Dragon",
+    category: "Physical",
+    basePower: 80,
+  };
+  const ironTail = {
+    id: "irontail",
+    name: "Iron Tail",
+    type: "Steel",
+    category: "Physical",
+    basePower: 100,
+  };
+  const rockSlide = {
+    id: "rockslide",
+    name: "Rock Slide",
+    type: "Rock",
+    category: "Physical",
+    basePower: 75,
+  };
+  const quickAttack = {
+    id: "quickattack",
+    name: "Quick Attack",
+    type: "Normal",
+    category: "Physical",
+    basePower: 40,
+  };
+
+  const transistor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: { ...neutralState, ability: { id: "transistor", name: "Transistor" } },
+    defenderState: neutralState,
+  });
+  const noTransistor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const dragonsMaw = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: dragonClaw,
+    attackerState: { ...neutralState, ability: { id: "dragonsmaw", name: "Dragon's Maw" } },
+    defenderState: neutralState,
+  });
+  const steelworker = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: ironTail,
+    attackerState: { ...neutralState, ability: { id: "steelworker", name: "Steelworker" } },
+    defenderState: neutralState,
+  });
+  const rockyPayload = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: rockSlide,
+    attackerState: { ...neutralState, ability: { id: "rockypayload", name: "Rocky Payload" } },
+    defenderState: neutralState,
+  });
+  const nonMatching = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: { ...neutralState, ability: { id: "steelworker", name: "Steelworker" } },
+    defenderState: neutralState,
+  });
+  const normalNoAbility = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(transistor.notes.includes("Transistor"), true);
+  assert.equal(transistor.maxDamage > noTransistor.maxDamage, true);
+  assert.equal(dragonsMaw.notes.includes("Dragon's Maw"), true);
+  assert.equal(steelworker.notes.includes("Steelworker"), true);
+  assert.equal(rockyPayload.notes.includes("Rocky Payload"), true);
+  assert.deepEqual([nonMatching.minDamage, nonMatching.maxDamage], [normalNoAbility.minDamage, normalNoAbility.maxDamage]);
+});
+
+test("applies move-flag offensive ability multipliers", () => {
+  const cases = [
+    [
+      "Iron Fist",
+      { id: "ironfist", name: "Iron Fist" },
+      { id: "thunderpunch", name: "Thunder Punch", type: "Electric", category: "Physical", basePower: 75, flags: { punch: 1 } },
+    ],
+    [
+      "Strong Jaw",
+      { id: "strongjaw", name: "Strong Jaw" },
+      { id: "crunch", name: "Crunch", type: "Dark", category: "Physical", basePower: 80, flags: { bite: 1 } },
+    ],
+    [
+      "Sharpness",
+      { id: "sharpness", name: "Sharpness" },
+      { id: "razorleaf", name: "Razor Leaf", type: "Grass", category: "Physical", basePower: 55, flags: { slicing: 1 } },
+    ],
+    [
+      "Tough Claws",
+      { id: "toughclaws", name: "Tough Claws" },
+      { id: "scratch", name: "Scratch", type: "Normal", category: "Physical", basePower: 40, flags: { contact: 1 } },
+    ],
+    [
+      "Mega Launcher",
+      { id: "megalauncher", name: "Mega Launcher" },
+      { id: "aurasphere", name: "Aura Sphere", type: "Fighting", category: "Special", basePower: 80, flags: { pulse: 1 } },
+    ],
+    [
+      "Reckless",
+      { id: "reckless", name: "Reckless" },
+      { id: "flareblitz", name: "Flare Blitz", type: "Fire", category: "Physical", basePower: 120, flags: { contact: 1 }, recoil: [33, 100] },
+    ],
+  ];
+
+  for (const [label, ability, move] of cases) {
+    const boosted = calculateDamage({
+      attacker: pikachu,
+      defender: squirtle,
+      move,
+      attackerState: { ...neutralState, ability },
+      defenderState: neutralState,
+    });
+    const neutral = calculateDamage({
+      attacker: pikachu,
+      defender: squirtle,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+
+    assert.equal(boosted.notes.includes(label), true, label);
+    assert.equal(boosted.maxDamage > neutral.maxDamage, true, label);
+  }
+
+  const nonMatching = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40, flags: {} },
+    attackerState: { ...neutralState, ability: { id: "ironfist", name: "Iron Fist" } },
+    defenderState: neutralState,
+  });
+  assert.equal(nonMatching.notes.includes("Iron Fist"), false);
+});
+
+test("applies Sniper and critical-hit blocking abilities", () => {
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+
+  const normal = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const critical = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    critical: true,
+  });
+  const sniper = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: { ...neutralState, ability: { id: "sniper", name: "Sniper" } },
+    defenderState: neutralState,
+    critical: true,
+  });
+  const battleArmor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "battlearmor", name: "Battle Armor" } },
+    critical: true,
+  });
+  const shellArmor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "shellarmor", name: "Shell Armor" } },
+    critical: true,
+  });
+
+  assert.equal(critical.maxDamage > normal.maxDamage, true);
+  assert.equal(sniper.maxDamage > critical.maxDamage, true);
+  assert.deepEqual([battleArmor.minDamage, battleArmor.maxDamage], [normal.minDamage, normal.maxDamage]);
+  assert.deepEqual([shellArmor.minDamage, shellArmor.maxDamage], [normal.minDamage, normal.maxDamage]);
+});
+
+test("critical hits ignore harmful attacker stages and helpful defender stages", () => {
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+  const neutralCritical = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    critical: true,
+  });
+  const attackerDropped = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, spa: -6 } },
+    defenderState: neutralState,
+    critical: true,
+  });
+  const defenderBoosted = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, spd: 6 } },
+    critical: true,
+  });
+  const attackerBoosted = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, spa: 2 } },
+    defenderState: neutralState,
+    critical: true,
+  });
+
+  assert.deepEqual(
+    [attackerDropped.minDamage, attackerDropped.maxDamage],
+    [neutralCritical.minDamage, neutralCritical.maxDamage],
+  );
+  assert.deepEqual(
+    [defenderBoosted.minDamage, defenderBoosted.maxDamage],
+    [neutralCritical.minDamage, neutralCritical.maxDamage],
+  );
+  assert.equal(attackerBoosted.maxDamage > neutralCritical.maxDamage, true);
+});
+
+test("applies super-effective damage reduction abilities", () => {
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+  const waterGun = {
+    id: "watergun",
+    name: "Water Gun",
+    type: "Water",
+    category: "Special",
+    basePower: 40,
+  };
+
+  const superEffective = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const prismArmor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "prismarmor", name: "Prism Armor" } },
+  });
+  const solidRock = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "solidrock", name: "Solid Rock" } },
+  });
+  const neutral = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralPrismArmor = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "prismarmor", name: "Prism Armor" } },
+  });
+
+  assert.equal(prismArmor.notes.includes("Prism Armor"), true);
+  assert.equal(solidRock.notes.includes("Solid Rock"), true);
+  assert.equal(prismArmor.maxDamage < superEffective.maxDamage, true);
+  assert.equal(solidRock.maxDamage < superEffective.maxDamage, true);
+  assert.deepEqual([neutralPrismArmor.minDamage, neutralPrismArmor.maxDamage], [neutral.minDamage, neutral.maxDamage]);
+});
+
+test("applies Tinted Lens only to not-very-effective attacks", () => {
+  const waterGun = {
+    id: "watergun",
+    name: "Water Gun",
+    type: "Water",
+    category: "Special",
+    basePower: 40,
+  };
+  const quickAttack = {
+    id: "quickattack",
+    name: "Quick Attack",
+    type: "Normal",
+    category: "Physical",
+    basePower: 40,
+  };
+
+  const resisted = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const tintedLens = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: waterGun,
+    attackerState: { ...neutralState, ability: { id: "tintedlens", name: "Tinted Lens" } },
+    defenderState: neutralState,
+  });
+  const neutral = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralTintedLens = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: quickAttack,
+    attackerState: { ...neutralState, ability: { id: "tintedlens", name: "Tinted Lens" } },
+    defenderState: neutralState,
+  });
+
+  assert.equal(tintedLens.notes.includes("Tinted Lens"), true);
+  assert.equal(tintedLens.maxDamage > resisted.maxDamage, true);
+  assert.equal(neutralTintedLens.notes.includes("Tinted Lens"), false);
+  assert.deepEqual([neutralTintedLens.minDamage, neutralTintedLens.maxDamage], [neutral.minDamage, neutral.maxDamage]);
+});
+
+test("uses Defense and Defense stages for Body Press damage", () => {
+  const pressmon = {
+    id: "pressmon",
+    name: "Pressmon",
+    types: ["Fighting"],
+    baseStats: { hp: 80, atk: 20, def: 120, spa: 20, spd: 80, spe: 50 },
+  };
+  const normalmon = {
+    id: "normalmon",
+    name: "Normalmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const bodyPress = {
+    id: "bodypress",
+    name: "Body Press",
+    type: "Fighting",
+    category: "Physical",
+    basePower: 80,
+    overrideOffensiveStat: "def",
+  };
+
+  const neutral = calculateDamage({
+    attacker: pressmon,
+    defender: normalmon,
+    move: bodyPress,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const defenseBoosted = calculateDamage({
+    attacker: pressmon,
+    defender: normalmon,
+    move: bodyPress,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, def: 2 } },
+    defenderState: neutralState,
+  });
+  const attackBoosted = calculateDamage({
+    attacker: pressmon,
+    defender: normalmon,
+    move: bodyPress,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, atk: 6 } },
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual([neutral.minDamage, neutral.maxDamage], [128, 152]);
+  assert.deepEqual([defenseBoosted.minDamage, defenseBoosted.maxDamage], [254, 300]);
+  assert.deepEqual([attackBoosted.minDamage, attackBoosted.maxDamage], [128, 152]);
+});
+
+test("uses Defense and Defense stages for Psyshock-style special damage", () => {
+  const mindmon = {
+    id: "mindmon",
+    name: "Mindmon",
+    types: ["Psychic"],
+    baseStats: { hp: 80, atk: 20, def: 60, spa: 120, spd: 60, spe: 50 },
+  };
+  const shieldmon = {
+    id: "shieldmon",
+    name: "Shieldmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 40, spa: 80, spd: 140, spe: 50 },
+  };
+  const psyshock = {
+    id: "psyshock",
+    name: "Psyshock",
+    type: "Psychic",
+    category: "Special",
+    basePower: 80,
+    overrideDefensiveStat: "def",
+  };
+  const psystrike = {
+    id: "psystrike",
+    name: "Psystrike",
+    type: "Psychic",
+    category: "Special",
+    basePower: 100,
+    overrideDefensiveStat: "def",
+  };
+  const secretSword = {
+    id: "secretsword",
+    name: "Secret Sword",
+    type: "Fighting",
+    category: "Special",
+    basePower: 85,
+    overrideDefensiveStat: "def",
+  };
+  const psychic = {
+    id: "psychic",
+    name: "Psychic",
+    type: "Psychic",
+    category: "Special",
+    basePower: 90,
+  };
+
+  const normalSpecial = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: psychic,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const psyshockResult = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: psyshock,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const psystrikeResult = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: psystrike,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const secretSwordResult = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: secretSword,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const defenseBoosted = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: psyshock,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, def: 2 } },
+  });
+  const spDefenseBoosted = calculateDamage({
+    attacker: mindmon,
+    defender: shieldmon,
+    move: psyshock,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, spd: 6 } },
+  });
+
+  assert.deepEqual([normalSpecial.minDamage, normalSpecial.maxDamage], [45, 54]);
+  assert.deepEqual([psyshockResult.minDamage, psyshockResult.maxDamage], [106, 126]);
+  assert.deepEqual([psystrikeResult.minDamage, psystrikeResult.maxDamage], [132, 156]);
+  assert.deepEqual([secretSwordResult.minDamage, secretSwordResult.maxDamage], [150, 178]);
+  assert.deepEqual([defenseBoosted.minDamage, defenseBoosted.maxDamage], [54, 64]);
+  assert.deepEqual([spDefenseBoosted.minDamage, spDefenseBoosted.maxDamage], [106, 126]);
+});
+
+test("ignores defender Defense stages for ignoreDefensive physical moves", () => {
+  const swordmon = {
+    id: "swordmon",
+    name: "Swordmon",
+    types: ["Fighting", "Dark"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 20, spd: 80, spe: 50 },
+  };
+  const wallmon = {
+    id: "wallmon",
+    name: "Wallmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const slash = {
+    id: "slash",
+    name: "Slash",
+    type: "Normal",
+    category: "Physical",
+    basePower: 70,
+  };
+  const ignoreDefenseMoves = [
+    {
+      id: "chipaway",
+      name: "Chip Away",
+      type: "Normal",
+      category: "Physical",
+      basePower: 70,
+      ignoreDefensive: true,
+    },
+    {
+      id: "darkestlariat",
+      name: "Darkest Lariat",
+      type: "Dark",
+      category: "Physical",
+      basePower: 85,
+      ignoreDefensive: true,
+    },
+    {
+      id: "sacredsword",
+      name: "Sacred Sword",
+      type: "Fighting",
+      category: "Physical",
+      basePower: 90,
+      ignoreDefensive: true,
+    },
+  ];
+  const boostedDefenseState = {
+    ...neutralState,
+    stages: { ...neutralState.stages, def: 4 },
+  };
+
+  const normal = calculateDamage({
+    attacker: swordmon,
+    defender: wallmon,
+    move: slash,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const normalIntoBoost = calculateDamage({
+    attacker: swordmon,
+    defender: wallmon,
+    move: slash,
+    attackerState: neutralState,
+    defenderState: boostedDefenseState,
+  });
+  assert.equal(normalIntoBoost.maxDamage < normal.maxDamage, true);
+
+  for (const move of ignoreDefenseMoves) {
+    const neutral = calculateDamage({
+      attacker: swordmon,
+      defender: wallmon,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const intoBoost = calculateDamage({
+      attacker: swordmon,
+      defender: wallmon,
+      move,
+      attackerState: neutralState,
+      defenderState: boostedDefenseState,
+    });
+
+    assert.deepEqual([intoBoost.minDamage, intoBoost.maxDamage], [neutral.minDamage, neutral.maxDamage], move.name);
+  }
+});
+
 test("classifies unsupported moves and summarizes KOs", () => {
   assert.match(unsupportedMoveReason({ category: "Status", basePower: 0 }), /Status/);
   assert.match(unsupportedMoveReason({ id: "grassknot", category: "Special", basePower: 0 }), /Variable/);
-  assert.match(unsupportedMoveReason({ id: "bodypress", category: "Physical", basePower: 80 }), /Custom/);
+  assert.equal(unsupportedMoveReason({ id: "bodypress", category: "Physical", basePower: 80 }), "");
+  assert.equal(unsupportedMoveReason({ id: "psyshock", category: "Special", basePower: 80 }), "");
+  assert.equal(unsupportedMoveReason({ id: "dragonrage", category: "Special", basePower: 0, damage: 40 }), "");
+  assert.match(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), /Fixed/);
   assert.equal(koSummary({ minDamage: 100, maxDamage: 100, defenderHp: 100 }), "Guaranteed 1HKO");
   assert.equal(koSummary({ minDamage: 45, maxDamage: 60, defenderHp: 100 }), "Possible 2HKO");
+});
+
+test("formats unsupported damage results with their specific reason", () => {
+  const result = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: { id: "grassknot", name: "Grass Knot", type: "Grass", category: "Special", basePower: 0 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(formatDamageResult(result), "Variable or zero base power is not supported.");
 });

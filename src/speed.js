@@ -1,38 +1,22 @@
-const NATURE_MULTIPLIERS = {
-  negative: 0.9,
-  neutral: 1,
-  positive: 1.1,
-};
+import { calculateStat } from "./damage.js";
 
 export function calculateSpeed({
   baseSpeed,
   sp = 0,
-  nature = "neutral",
+  nature = "Hardy",
   stage = 0,
   tailwind = false,
   paralyzed = false,
   speedMultiplier = 1,
   trickRoom = false,
 }) {
-  if (!Number.isInteger(baseSpeed) || baseSpeed < 1) {
-    throw new RangeError("Base Speed must be a positive integer.");
-  }
-  if (!Number.isInteger(sp) || sp < 0 || sp > 32) {
-    throw new RangeError("SP must be an integer from 0 to 32.");
-  }
-  if (!Number.isInteger(stage) || stage < -6 || stage > 6) {
-    throw new RangeError("Speed stage must be an integer from -6 to +6.");
-  }
-  if (!(nature in NATURE_MULTIPLIERS)) {
-    throw new RangeError("Nature must be negative, neutral, or positive.");
-  }
   if (!Number.isFinite(speedMultiplier) || speedMultiplier <= 0) {
     throw new RangeError("Speed multiplier must be positive.");
   }
 
   const rawSpeed = baseSpeed + sp + 20;
-  const natureSpeed = Math.floor(rawSpeed * NATURE_MULTIPLIERS[nature]);
-  let modifiedSpeed = applyStage(natureSpeed, stage);
+  const natureSpeed = calculateStat({ base: baseSpeed, stat: "spe", sp, nature });
+  let modifiedSpeed = calculateStat({ base: baseSpeed, stat: "spe", sp, nature, stage });
   modifiedSpeed = Math.floor(modifiedSpeed * speedMultiplier);
 
   if (tailwind) modifiedSpeed *= 2;
@@ -48,7 +32,28 @@ export function calculateSpeed({
   };
 }
 
-function applyStage(speed, stage) {
-  if (stage >= 0) return Math.floor((speed * (2 + stage)) / 2);
-  return Math.floor((speed * 2) / (2 - stage));
+export function finalSpeed(state) {
+  if (!state?.pokemon) return 0;
+  const manualSpeedMultiplier = Number(state.speedMultiplier ?? 1);
+  const speedMultiplier = hasItem(state, "choicescarf") && manualSpeedMultiplier !== 1.5
+    ? manualSpeedMultiplier * 1.5
+    : manualSpeedMultiplier;
+
+  return calculateSpeed({
+    baseSpeed: state.pokemon.baseStats?.spe ?? state.pokemon.baseSpeed,
+    sp: state.sp?.spe ?? 0,
+    nature: state.nature,
+    stage: state.stages?.spe ?? 0,
+    speedMultiplier,
+    tailwind: state.tailwind,
+    paralyzed: state.paralyzed,
+  }).modifiedSpeed;
+}
+
+function hasItem(state, itemId) {
+  return normalizeId(state.item?.id ?? state.item?.name) === itemId;
+}
+
+function normalizeId(value) {
+  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
