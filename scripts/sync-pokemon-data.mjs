@@ -5,12 +5,9 @@ import {
   extractAbilities,
   extractCatalogEntries,
   extractLearnsetMoves,
-  normalizeChaosUsageStats,
   parseShowdownExport,
 } from "../src/showdown-data.js";
 
-const SMOGON_STATS_URL = "https://www.smogon.com/stats/";
-const DEFAULT_USAGE_FORMAT = "gen9championsbssregma-0";
 const SHOWDOWN_POKEDEX_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/pokedex.ts";
 const SHOWDOWN_LEARNSETS_URL =
@@ -43,7 +40,6 @@ export async function downloadEverything(fetcher = fetchText) {
     movesTextSource,
     itemsTextSource,
     speciesNamesCsv,
-    statsIndex,
   ] = await Promise.all([
     fetcher(SHOWDOWN_POKEDEX_URL),
     fetcher(SHOWDOWN_LEARNSETS_URL),
@@ -54,13 +50,8 @@ export async function downloadEverything(fetcher = fetchText) {
     fetcher(SHOWDOWN_MOVES_TEXT_URL),
     fetcher(SHOWDOWN_ITEMS_TEXT_URL),
     fetcher(SPECIES_NAMES_URL),
-    fetcher(SMOGON_STATS_URL),
   ]);
 
-  const usageMonth = latestStatsMonth(statsIndex);
-  const usageStatsSource = await fetcher(
-    `${SMOGON_STATS_URL}${usageMonth}/chaos/${DEFAULT_USAGE_FORMAT}.json`,
-  );
   const pokedex = parseShowdownExport(pokedexSource, "Pokedex");
   const learnsets = parseShowdownExport(learnsetsSource, "Learnsets");
   const abilities = parseShowdownExport(abilitiesSource, "Abilities");
@@ -76,10 +67,6 @@ export async function downloadEverything(fetcher = fetchText) {
     abilities: extractCatalogEntries(abilities, abilitiesText),
     moves: extractCatalogEntries(moves, movesText),
     items: extractCatalogEntries(items, itemsText),
-    "usage-stats": normalizeChaosUsageStats(JSON.parse(usageStatsSource), {
-      month: usageMonth,
-      format: DEFAULT_USAGE_FORMAT,
-    }),
   };
 }
 
@@ -133,14 +120,6 @@ function parseTraditionalChineseNames(csv) {
   return names;
 }
 
-export function latestStatsMonth(indexHtml) {
-  const months = [...String(indexHtml).matchAll(/href="(\d{4}-\d{2})\/"/g)].map(
-    ([, month]) => month,
-  );
-  if (months.length === 0) throw new Error("Could not find monthly Smogon stats folders.");
-  return months.sort().at(-1);
-}
-
 function parseCsvLine(line) {
   const fields = [];
   let field = "";
@@ -171,7 +150,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   await writeEverything(data);
   console.log(
     `Wrote ${data.pokemon.length} Pokémon/forms, ${data.items.length} items, ` +
-      `${data.abilities.length} abilities, ${data.moves.length} moves, and ` +
-      `${Object.keys(data["usage-stats"].pokemon).length} usage-stat entries to public/*.json`,
+      `${data.abilities.length} abilities, and ${data.moves.length} moves to public/*.json`,
   );
 }

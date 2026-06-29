@@ -39,59 +39,8 @@ export function extractCatalogEntries(table, textTable = {}) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function normalizeChaosUsageStats(chaos, { month, format }) {
-  const pokemon = {};
-
-  for (const [name, entry] of Object.entries(chaos?.data ?? {})) {
-    const rawCount = entry["Raw count"] ?? entry.rawCount ?? entry.raw;
-    pokemon[toId(name)] = {
-      usagePercent: toUsagePercent(entry.usage ?? entry.Usage ?? 0),
-      abilities: normalizeUsageTable(entry.Abilities ?? entry.abilities, rawCount),
-      items: normalizeUsageTable(entry.Items ?? entry.items, rawCount),
-      moves: normalizeUsageTable(entry.Moves ?? entry.moves, rawCount),
-      spreads: normalizeSpreadTable(entry.Spreads ?? entry.spreads, rawCount),
-    };
-  }
-
-  return {
-    source: "Smogon / Pokémon Showdown",
-    month,
-    format,
-    pokemon,
-  };
-}
-
 export function toId(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "");
-}
-
-function normalizeUsageTable(table = {}, denominator) {
-  return Object.entries(table)
-    .map(([name, usage]) => ({
-      id: toId(name),
-      name,
-      usagePercent: toUsagePercent(usage, denominator),
-    }))
-    .sort((a, b) => b.usagePercent - a.usagePercent || a.name.localeCompare(b.name));
-}
-
-function normalizeSpreadTable(table = {}, denominator) {
-  return Object.entries(table)
-    .map(([name, usage]) => ({
-      name,
-      usagePercent: toUsagePercent(usage, denominator),
-    }))
-    .sort((a, b) => b.usagePercent - a.usagePercent || a.name.localeCompare(b.name));
-}
-
-function toUsagePercent(value, denominator) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return 0;
-  const total = Number(denominator);
-  if (Number.isFinite(total) && total > 0) {
-    return Number(((number / total) * 100).toFixed(3));
-  }
-  return number > 0 && number <= 1 ? Number((number * 100).toFixed(3)) : number;
 }
 
 export function stripTypeAssertions(source) {
