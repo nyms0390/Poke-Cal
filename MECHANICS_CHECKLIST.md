@@ -31,19 +31,19 @@ Currently implemented named effects:
 - [ ] Bide
 - [ ] Comeuppance
 - [ ] Counter
-- [ ] Dragon Rage
+- [x] Dragon Rage
 - [ ] Endeavor
 - [ ] Final Gambit
 - [ ] Flame Burst
 - [ ] Metal Burst
 - [ ] Mirror Coat
-- [ ] Nature's Madness
+- [x] Nature's Madness
 - [x] Night Shade
 - [ ] Psywave
 - [x] Ruination
 - [ ] Salt Cure
 - [x] Seismic Toss
-- [ ] Sonic Boom
+- [x] Sonic Boom
 - [x] Super Fang
 
 ### Alternate attacking or defending stat rules
@@ -170,15 +170,15 @@ Currently implemented named effects:
 
 ### Weather, terrain, field, or two-turn context
 
-- [ ] Expanding Force
-- [ ] Fire Pledge
-- [ ] Grav Apple
-- [ ] Hydro Steam
-- [ ] Psyblade
-- [ ] Rising Voltage
-- [ ] Solar Beam
-- [ ] Solar Blade
-- [ ] Water Pledge
+- [x] Expanding Force
+- [x] Fire Pledge
+- [x] Grav Apple
+- [x] Hydro Steam
+- [x] Psyblade
+- [x] Rising Voltage
+- [x] Solar Beam
+- [x] Solar Blade
+- [x] Water Pledge
 
 ### Type chart, immunity, or ability override rules
 

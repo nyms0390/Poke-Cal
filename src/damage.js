@@ -214,6 +214,8 @@ export function calculateDamage({
   burned = false,
   weather = "",
   terrain = "",
+  gravity = false,
+  pledgeCombo = false,
 }) {
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
@@ -254,7 +256,7 @@ export function calculateDamage({
   }
 
   const moveId = normalizeId(move.id ?? move.name);
-  const dynamicPower = effectiveMovePower(move, attackerState, { weather, terrain });
+  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, { weather, terrain, gravity, pledgeCombo });
   if (dynamicPower === null) {
     return { supported: false, reason: "Natural Gift requires a held Berry." };
   }
@@ -289,6 +291,10 @@ export function calculateDamage({
   let attackModifier = 1;
   let damageModifier = 1;
   let stab = attacker.types.includes(moveType) ? 1.5 : 1;
+  if (pledgeCombo && isPledgeMove(move)) {
+    stab = Math.max(stab, 1.5);
+    notes.push("Pledge combo STAB");
+  }
 
   for (const modifier of activeModifiers({
     attacker,
@@ -427,7 +433,7 @@ function effectiveMoveType(move, attacker, attackerState, context = {}) {
   return move.type;
 }
 
-function effectiveMovePower(move, attackerState, context = {}) {
+function effectiveMovePower(move, attackerState, defenderState, context = {}) {
   const item = attackerState.item;
   const moveId = normalizeId(move.id ?? move.name);
   if (moveId === "naturalgift") return item?.naturalGift?.basePower ?? null;
@@ -445,7 +451,35 @@ function effectiveMovePower(move, attackerState, context = {}) {
   ) {
     return move.basePower * 2;
   }
+  if (moveId === "expandingforce" && normalizeId(context.terrain) === "psychicterrain" && attackerState.grounded !== false) {
+    return Math.floor(move.basePower * 1.5);
+  }
+  if (moveId === "risingvoltage" && normalizeId(context.terrain) === "electricterrain" && defenderState.grounded !== false) {
+    return move.basePower * 2;
+  }
+  if (moveId === "psyblade" && normalizeId(context.terrain) === "electricterrain") {
+    return Math.floor(move.basePower * 1.5);
+  }
+  if (
+    (moveId === "solarbeam" || moveId === "solarblade") &&
+    context.weather &&
+    !weatherBlockedByUmbrella(context.weather, item)
+  ) {
+    const weatherId = normalizeId(context.weather);
+    if (weatherId !== "sunnyday" && weatherId !== "desolateland") return Math.floor(move.basePower * 0.5);
+  }
+  if (moveId === "gravapple" && context.gravity) {
+    return Math.floor(move.basePower * 1.5);
+  }
+  if (isPledgeMove(move) && context.pledgeCombo) {
+    return 150;
+  }
   return undefined;
+}
+
+function isPledgeMove(move) {
+  const moveId = normalizeId(move.id ?? move.name);
+  return moveId === "firepledge" || moveId === "waterpledge" || moveId === "grasspledge";
 }
 
 function activeModifiers({ attacker, defender, move, attackerState, defenderState, typeMultiplier, moveType, weather, attackStat, isPhysical }) {
@@ -463,9 +497,9 @@ function activeModifiers({ attacker, defender, move, attackerState, defenderStat
     modifiers.push({ kind: "attack", value: 1.5, label: "Choice Specs" });
   }
   if (item === "lifeorb") modifiers.push({ kind: "damage", value: 1.3, label: "Life Orb" });
-  const weatherModifier = weatherDamageModifier(weather, moveType, attackerItem);
+  const weatherModifier = weatherDamageModifier(weather, move, moveType, attackerItem);
   if (weatherModifier !== 1) {
-    modifiers.push({ kind: "damage", value: weatherModifier, label: weatherLabel(weather) });
+    modifiers.push({ kind: "damage", value: weatherModifier, label: weatherModifierLabel(weather, move) });
   }
   if (item === "lightball" && normalizeId(attacker.name) === "pikachu") {
     modifiers.push({ kind: "attack", value: 2, label: "Light Ball" });
@@ -524,9 +558,12 @@ function activeModifiers({ attacker, defender, move, attackerState, defenderStat
   return modifiers;
 }
 
-function weatherDamageModifier(weather, moveType, item) {
+function weatherDamageModifier(weather, move, moveType, item) {
   if (weatherBlockedByUmbrella(weather, item)) return 1;
   const weatherId = normalizeId(weather);
+  if (normalizeId(move.id ?? move.name) === "hydrosteam" && (weatherId === "sunnyday" || weatherId === "desolateland")) {
+    return 1.5;
+  }
   if ((weatherId === "sunnyday" || weatherId === "desolateland") && moveType === "Fire") return 1.5;
   if ((weatherId === "sunnyday" || weatherId === "desolateland") && moveType === "Water") return 0.5;
   if ((weatherId === "raindance" || weatherId === "primordialsea") && moveType === "Water") return 1.5;
@@ -541,7 +578,8 @@ function weatherBlockedByUmbrella(weather, item) {
     weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
-function weatherLabel(weather) {
+function weatherModifierLabel(weather, move) {
+  if (normalizeId(move.id ?? move.name) === "hydrosteam") return "Hydro Steam in harsh sunlight";
   const weatherId = normalizeId(weather);
   if (weatherId === "sunnyday" || weatherId === "desolateland") return "Harsh sunlight";
   if (weatherId === "raindance" || weatherId === "primordialsea") return "Rain";

@@ -685,6 +685,292 @@ test("uses form, weather, and terrain context for dynamic move type and power", 
   assert.equal(electricTerrainPulse.maxDamage > normalTerrainPulse.maxDamage, true);
 });
 
+test("uses weather, terrain, and field context for conditional move power", () => {
+  const psychicUser = {
+    id: "psychicuser",
+    name: "Psychicuser",
+    types: ["Psychic"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const electricUser = {
+    id: "electricuser",
+    name: "Electricuser",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const waterUser = {
+    id: "wateruser",
+    name: "Wateruser",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const grassUser = {
+    id: "grassuser",
+    name: "Grassuser",
+    types: ["Grass"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const neutralTarget = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const expandingForce = {
+    id: "expandingforce",
+    name: "Expanding Force",
+    type: "Psychic",
+    category: "Special",
+    basePower: 80,
+  };
+  const risingVoltage = {
+    id: "risingvoltage",
+    name: "Rising Voltage",
+    type: "Electric",
+    category: "Special",
+    basePower: 70,
+  };
+  const psyblade = {
+    id: "psyblade",
+    name: "Psyblade",
+    type: "Psychic",
+    category: "Physical",
+    basePower: 80,
+  };
+  const hydroSteam = {
+    id: "hydrosteam",
+    name: "Hydro Steam",
+    type: "Water",
+    category: "Special",
+    basePower: 80,
+  };
+  const solarBeam = {
+    id: "solarbeam",
+    name: "Solar Beam",
+    type: "Grass",
+    category: "Special",
+    basePower: 120,
+  };
+  const solarBlade = {
+    id: "solarblade",
+    name: "Solar Blade",
+    type: "Grass",
+    category: "Physical",
+    basePower: 125,
+  };
+  const gravApple = {
+    id: "gravapple",
+    name: "Grav Apple",
+    type: "Grass",
+    category: "Physical",
+    basePower: 90,
+  };
+
+  const normalExpandingForce = calculateDamage({
+    attacker: psychicUser,
+    defender: neutralTarget,
+    move: expandingForce,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const boostedExpandingForce = calculateDamage({
+    attacker: psychicUser,
+    defender: neutralTarget,
+    move: expandingForce,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    terrain: "Psychic Terrain",
+  });
+  const normalRisingVoltage = calculateDamage({
+    attacker: electricUser,
+    defender: neutralTarget,
+    move: risingVoltage,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const boostedRisingVoltage = calculateDamage({
+    attacker: electricUser,
+    defender: neutralTarget,
+    move: risingVoltage,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, grounded: true },
+    terrain: "Electric Terrain",
+  });
+  const normalPsyblade = calculateDamage({
+    attacker: electricUser,
+    defender: neutralTarget,
+    move: psyblade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const boostedPsyblade = calculateDamage({
+    attacker: electricUser,
+    defender: neutralTarget,
+    move: psyblade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    terrain: "Electric Terrain",
+  });
+  const normalHydroSteam = calculateDamage({
+    attacker: waterUser,
+    defender: neutralTarget,
+    move: hydroSteam,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const sunnyHydroSteam = calculateDamage({
+    attacker: waterUser,
+    defender: neutralTarget,
+    move: hydroSteam,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    weather: "SunnyDay",
+  });
+  const normalSolarBeam = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: solarBeam,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const rainSolarBeam = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: solarBeam,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    weather: "RainDance",
+  });
+  const sunSolarBeam = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: solarBeam,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    weather: "SunnyDay",
+  });
+  const normalSolarBlade = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: solarBlade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const sandSolarBlade = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: solarBlade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    weather: "Sandstorm",
+  });
+  const normalGravApple = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: gravApple,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const gravityGravApple = calculateDamage({
+    attacker: grassUser,
+    defender: neutralTarget,
+    move: gravApple,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    gravity: true,
+  });
+
+  assert.equal(boostedExpandingForce.notes.includes("Expanding Force power 120"), true);
+  assert.equal(boostedExpandingForce.maxDamage > normalExpandingForce.maxDamage, true);
+  assert.equal(boostedRisingVoltage.notes.includes("Rising Voltage power 140"), true);
+  assert.equal(boostedRisingVoltage.maxDamage > normalRisingVoltage.maxDamage, true);
+  assert.equal(boostedPsyblade.notes.includes("Psyblade power 120"), true);
+  assert.equal(boostedPsyblade.maxDamage > normalPsyblade.maxDamage, true);
+  assert.equal(sunnyHydroSteam.notes.includes("Hydro Steam in harsh sunlight"), true);
+  assert.equal(sunnyHydroSteam.maxDamage > normalHydroSteam.maxDamage, true);
+  assert.equal(rainSolarBeam.notes.includes("Solar Beam power 60"), true);
+  assert.equal(rainSolarBeam.maxDamage < normalSolarBeam.maxDamage, true);
+  assert.equal(sunSolarBeam.notes.includes("Solar Beam power 60"), false);
+  assert.deepEqual(sunSolarBeam.rolls, normalSolarBeam.rolls);
+  assert.equal(sandSolarBlade.notes.includes("Solar Blade power 62"), true);
+  assert.equal(sandSolarBlade.maxDamage < normalSolarBlade.maxDamage, true);
+  assert.equal(gravityGravApple.notes.includes("Grav Apple power 135"), true);
+  assert.equal(gravityGravApple.maxDamage > normalGravApple.maxDamage, true);
+});
+
+test("applies combined Pledge base power and forced STAB", () => {
+  const neutralUser = {
+    id: "neutraluser",
+    name: "Neutraluser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const fireUser = {
+    id: "fireuser",
+    name: "Fireuser",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const neutralTarget = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const firePledge = {
+    id: "firepledge",
+    name: "Fire Pledge",
+    type: "Fire",
+    category: "Special",
+    basePower: 80,
+  };
+  const waterPledge = {
+    id: "waterpledge",
+    name: "Water Pledge",
+    type: "Water",
+    category: "Special",
+    basePower: 80,
+  };
+
+  const normalFirePledge = calculateDamage({
+    attacker: neutralUser,
+    defender: neutralTarget,
+    move: firePledge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const combinedFirePledge = calculateDamage({
+    attacker: neutralUser,
+    defender: neutralTarget,
+    move: firePledge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    pledgeCombo: true,
+  });
+  const normalWaterPledge = calculateDamage({
+    attacker: fireUser,
+    defender: neutralTarget,
+    move: waterPledge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const combinedWaterPledge = calculateDamage({
+    attacker: fireUser,
+    defender: neutralTarget,
+    move: waterPledge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    pledgeCombo: true,
+  });
+
+  assert.equal(combinedFirePledge.notes.includes("Fire Pledge power 150"), true);
+  assert.equal(combinedFirePledge.notes.includes("Pledge combo STAB"), true);
+  assert.equal(combinedFirePledge.maxDamage > normalFirePledge.maxDamage, true);
+  assert.equal(combinedWaterPledge.notes.includes("Water Pledge power 150"), true);
+  assert.equal(combinedWaterPledge.notes.includes("Pledge combo STAB"), true);
+  assert.equal(combinedWaterPledge.maxDamage > normalWaterPledge.maxDamage, true);
+});
+
 test("applies resist berries to matching super-effective damage", () => {
   const thunderbolt = {
     id: "thunderbolt",
