@@ -13,6 +13,7 @@ import {
   mergeUsage,
   moveEffect,
   normalizeId,
+  resolveChampionsPokemonMoves,
   resolvePokemonAbilities,
   resolvePokemonItems,
   resolvePokemonMoves,
@@ -74,6 +75,31 @@ test("resolves moves by learnset id with safe fallbacks", () => {
       name: "unknownmove",
     },
   ]);
+});
+
+test("prefers Champions-available moves when catalog metadata exists", () => {
+  const lookup = buildMoveLookup([
+    {
+      id: "thunderbolt",
+      name: "Thunderbolt",
+      champions: { usageCount: 50 },
+    },
+    {
+      id: "hiddenpower",
+      name: "Hidden Power",
+    },
+  ]);
+
+  assert.deepEqual(
+    resolveChampionsPokemonMoves({ moves: ["thunderbolt", "hiddenpower", "unknownmove"] }, lookup),
+    [
+      {
+        id: "thunderbolt",
+        name: "Thunderbolt",
+        champions: { usageCount: 50 },
+      },
+    ],
+  );
 });
 
 test("resolves items and merges usage by normalized id", () => {

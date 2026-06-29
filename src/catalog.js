@@ -44,6 +44,12 @@ export function resolvePokemonMoves(entry, lookup) {
   });
 }
 
+export function resolveChampionsPokemonMoves(entry, lookup) {
+  const moves = resolvePokemonMoves(entry, lookup);
+  const championsMoves = moves.filter((move) => move.champions);
+  return championsMoves.length > 0 ? championsMoves : moves;
+}
+
 export function resolvePokemonItems(usage, lookup) {
   return (usage?.items ?? []).map((usageItem) => {
     const item = lookup.get(normalizeId(usageItem.id)) ?? lookup.get(normalizeId(usageItem.name));
@@ -52,6 +58,23 @@ export function resolvePokemonItems(usage, lookup) {
       usagePercent: usageItem.usagePercent,
     };
   });
+}
+
+export function championsUsageCount(entry) {
+  const count = entry?.champions?.usageCount;
+  return Number.isFinite(count) ? count : -1;
+}
+
+export function sortByChampionsUsage(entries) {
+  return [...entries].sort((a, b) => {
+    const usageDifference = championsUsageCount(b) - championsUsageCount(a);
+    return usageDifference || a.name.localeCompare(b.name);
+  });
+}
+
+export function formatChampionsUsage(entry) {
+  const count = championsUsageCount(entry);
+  return count >= 0 ? `${count.toLocaleString("en-US")} uses` : "—";
 }
 
 export function mergeUsage(entries, usageEntries = []) {

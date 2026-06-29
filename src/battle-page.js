@@ -1,19 +1,16 @@
 import {
   formatMovePriority,
-  formatUsagePercent,
-  mergeUsage,
-  resolvePokemonItems,
+  formatChampionsUsage,
   resolvePokemonAbilities,
-  resolvePokemonMoves,
-  sortByUsage,
-  usageForPokemon,
+  resolveChampionsPokemonMoves,
+  sortByChampionsUsage,
 } from "./catalog.js";
 import { compareMoveOrder } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
 import { calculateDamage, calculateStat, formatDamageResult, koSummary, NATURES } from "./damage.js";
 import { searchPokemon } from "./pokemon.js";
 import { finalSpeed } from "./speed.js";
-import { parseUsageSpread, usageDefaultsForPokemon } from "./usage-defaults.js";
+import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
 import { damagePercentColor, optionElement, STAT_LABELS, typeBadge } from "./ui.js";
 
 const elements = {
@@ -67,7 +64,7 @@ let pokemon = [];
 let abilityLookup = new Map();
 let itemLookup = new Map();
 let moveLookup = new Map();
-let usageStats = null;
+let items = [];
 let damageState = {
   attacker: null,
   defender: null,
@@ -82,11 +79,10 @@ async function initialize() {
     abilityLookup = data.abilityLookup;
     itemLookup = data.itemLookup;
     moveLookup = data.moveLookup;
-    usageStats = data.usageStats;
+    items = data.items;
     elements.status.textContent =
       `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
-      `${data.moves.length} moves loaded` +
-      (usageStats ? "" : " · No Showdown usage data loaded");
+      `${data.moves.length} moves loaded`;
     renderDamageShell();
   } catch (error) {
     elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
@@ -158,7 +154,6 @@ function renderPokemonSearchResults(side) {
   const matches = searchPokemon(pokemon, input.value, {
     abilityLookup,
     moveLookup,
-    usageStats,
     limit: 8,
   });
 
@@ -193,7 +188,6 @@ function handlePokemonSearchKeydown(event, side) {
   const [firstResult] = searchPokemon(pokemon, elements[`${side}PokemonSearch`].value, {
     abilityLookup,
     moveLookup,
-    usageStats,
     limit: 1,
   });
   if (!firstResult) return;
@@ -252,11 +246,10 @@ function renderSideInputs(side) {
 
 function seedDamageSide(side, entry) {
   if (!entry) return;
-  const usage = usageForPokemon(usageStats, entry);
-  const defaults = usageDefaultsForPokemon(entry, usage, {
+  const defaults = championsDefaultsForPokemon(entry, {
     abilityLookup,
-    itemLookup,
     moveLookup,
+    items,
   });
 
   damageState[side] = {
@@ -276,41 +269,34 @@ function seedDamageSide(side, entry) {
   elements[`${side}Pokemon`].value = entry.id;
   elements[`${side}PokemonSearch`].value = entry.name;
   hidePokemonSearchResults(side);
-  renderSideSelects(side, usage, defaults);
+  renderSideSelects(side, defaults);
   syncSideInputs(side);
   renderDamage();
 }
 
-function renderSideSelects(side, usage, defaults) {
+function renderSideSelects(side, defaults) {
   const spreadSelect = elements[`${side}Spread`];
   const natureSelect = elements[`${side}Nature`];
   const abilitySelect = elements[`${side}Ability`];
   const itemSelect = elements[`${side}Item`];
-  const spreads = usage?.spreads ?? [];
-  const abilities = mergeUsage(
-    resolvePokemonAbilities(damageState[side].pokemon, abilityLookup),
-    usage?.abilities,
-  );
-  const items = resolvePokemonItems(usage, itemLookup);
+  const abilities = sortByChampionsUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup));
+  const rankedItems = sortByChampionsUsage(items);
 
   spreadSelect.replaceChildren(
-    optionElement("", "No usage spread"),
-    ...spreads.map((spread) =>
-      optionElement(spread.name, `${spread.name} · ${formatUsagePercent(spread.usagePercent)}`),
-    ),
+    optionElement("", "No Champions spread source"),
   );
   spreadSelect.value = defaults.spreadName;
   natureSelect.value = damageState[side].nature;
   abilitySelect.replaceChildren(
     optionElement("", "No ability modifier"),
     ...abilities.map((ability) =>
-      optionElement(ability.id, `${ability.name} · ${formatUsagePercent(ability.usagePercent)}`),
+      optionElement(ability.id, `${ability.name} · ${formatChampionsUsage(ability)}`),
     ),
   );
   itemSelect.replaceChildren(
     optionElement("", "No item modifier"),
-    ...items.map((item) =>
-      optionElement(item.id, `${item.name} · ${formatUsagePercent(item.usagePercent)}`),
+    ...rankedItems.map((item) =>
+      optionElement(item.id, `${item.name} · ${formatChampionsUsage(item)}`),
     ),
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
@@ -398,7 +384,7 @@ function renderDamageMovePickers(side) {
         ...moves.map((move) =>
           optionElement(
             move.id,
-            `${move.name} · ${formatUsagePercent(move.usagePercent)} · ${move.type ?? "—"}`,
+            `${move.name} · ${formatChampionsUsage(move)} · ${move.type ?? "—"}`,
           ),
         ),
       );
@@ -416,9 +402,7 @@ function renderDamage() {
   if (!attacker?.pokemon || !defender?.pokemon) return;
 
   elements.damageSource.textContent =
-    usageStats
-      ? `Showdown usage defaults · ${usageStats.format} · ${usageStats.month} · top marginal spread, ability, item, and moves`
-      : "No Showdown usage data loaded. Damage defaults use neutral 0 SP.";
+    "Pokemon Zone Champions defaults · ranked ability, item, and moves · neutral 0 SP";
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
@@ -533,8 +517,7 @@ function selectedDamageMoves(side) {
 function damageMovesForSide(side) {
   const state = damageState[side];
   if (!state?.pokemon) return [];
-  const usage = usageForPokemon(usageStats, state.pokemon);
-  return sortByUsage(mergeUsage(resolvePokemonMoves(state.pokemon, moveLookup), usage?.moves));
+  return sortByChampionsUsage(resolveChampionsPokemonMoves(state.pokemon, moveLookup));
 }
 
 function sideSummary(state) {

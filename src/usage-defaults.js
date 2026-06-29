@@ -1,4 +1,10 @@
-import { normalizeId } from "./catalog.js";
+import {
+  championsUsageCount,
+  normalizeId,
+  resolveChampionsPokemonMoves,
+  resolvePokemonAbilities,
+  sortByChampionsUsage,
+} from "./catalog.js";
 import { NATURES } from "./damage.js";
 
 const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
@@ -37,6 +43,25 @@ export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLooku
     ability,
     item,
     moves: topMoves.length > 0 ? topMoves : (entry?.moves ?? []).map((id) => ({ id, name: id })),
+  };
+}
+
+export function championsDefaultsForPokemon(
+  entry,
+  { abilityLookup, moveLookup, items = [] } = {},
+) {
+  const abilities = sortByChampionsUsage(resolvePokemonAbilities(entry, abilityLookup));
+  const sortedItems = sortByChampionsUsage(items).filter((item) => championsUsageCount(item) >= 0);
+  const moves = sortByChampionsUsage(resolveChampionsPokemonMoves(entry, moveLookup));
+
+  return {
+    pokemon: entry,
+    spreadName: "",
+    nature: EMPTY_SPREAD.nature,
+    sp: { ...EMPTY_SPREAD.sp },
+    ability: abilities[0] ?? null,
+    item: sortedItems[0] ?? null,
+    moves: moves.length > 0 ? moves : (entry?.moves ?? []).map((id) => ({ id, name: id })),
   };
 }
 

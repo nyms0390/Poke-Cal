@@ -2,7 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildAbilityLookup, buildItemLookup, buildMoveLookup } from "../src/catalog.js";
-import { parseUsageSpread, usageDefaultsForPokemon } from "../src/usage-defaults.js";
+import {
+  championsDefaultsForPokemon,
+  parseUsageSpread,
+  usageDefaultsForPokemon,
+} from "../src/usage-defaults.js";
 
 test("parses Champions usage spreads", () => {
   assert.deepEqual(parseUsageSpread("Jolly:2/32/0/0/0/32"), {
@@ -74,4 +78,35 @@ test("falls back when usage is missing", () => {
   assert.equal(defaults.ability, null);
   assert.equal(defaults.item, null);
   assert.deepEqual(defaults.moves, [{ id: "tackle", name: "tackle" }]);
+});
+
+test("selects Champions catalog defaults by usage count", () => {
+  const defaults = championsDefaultsForPokemon(
+    {
+      id: "pikachu",
+      abilities: ["Static", "Lightning Rod"],
+      moves: ["thunderbolt", "quickattack", "fakeout"],
+    },
+    {
+      abilityLookup: buildAbilityLookup([
+        { id: "static", name: "Static", champions: { usageCount: 35 } },
+        { id: "lightningrod", name: "Lightning Rod", champions: { usageCount: 65 } },
+      ]),
+      moveLookup: buildMoveLookup([
+        { id: "thunderbolt", name: "Thunderbolt", champions: { usageCount: 90 } },
+        { id: "quickattack", name: "Quick Attack", champions: { usageCount: 60 } },
+        { id: "fakeout", name: "Fake Out", champions: { usageCount: 80 } },
+      ]),
+      items: [
+        { id: "focussash", name: "Focus Sash", champions: { usageCount: 10 } },
+        { id: "lightball", name: "Light Ball", champions: { usageCount: 86 } },
+      ],
+    },
+  );
+
+  assert.equal(defaults.nature, "Hardy");
+  assert.deepEqual(defaults.sp, { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 });
+  assert.equal(defaults.ability.name, "Lightning Rod");
+  assert.equal(defaults.item.name, "Light Ball");
+  assert.deepEqual(defaults.moves.map(({ id }) => id), ["thunderbolt", "fakeout", "quickattack"]);
 });

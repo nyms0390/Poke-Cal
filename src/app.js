@@ -1,15 +1,12 @@
 import {
   filterMoves,
+  formatChampionsUsage,
   formatMoveAccuracy,
   formatMovePower,
-  formatUsagePercent,
-  mergeUsage,
   moveEffect,
-  resolvePokemonItems,
   resolvePokemonAbilities,
-  resolvePokemonMoves,
-  sortByUsage,
-  usageForPokemon,
+  resolveChampionsPokemonMoves,
+  sortByChampionsUsage,
 } from "./catalog.js";
 import { loadPokemonData } from "./data.js";
 import { megaFamily, searchPokemon } from "./pokemon.js";
@@ -44,9 +41,8 @@ const elements = {
 
 let pokemon = [];
 let abilityLookup = new Map();
-let itemLookup = new Map();
 let moveLookup = new Map();
-let usageStats = null;
+let items = [];
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
@@ -58,13 +54,11 @@ async function initialize() {
     const data = await loadPokemonData();
     pokemon = data.pokemon;
     abilityLookup = data.abilityLookup;
-    itemLookup = data.itemLookup;
     moveLookup = data.moveLookup;
-    usageStats = data.usageStats;
+    items = data.items;
     elements.status.textContent =
       `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
-      `${data.moves.length} moves loaded` +
-      (usageStats ? "" : " · No Showdown usage data loaded");
+      `${data.moves.length} moves loaded`;
     selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0]);
   } catch (error) {
     elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
@@ -95,7 +89,7 @@ for (const control of [elements.moveSearch, elements.moveType, elements.moveCate
 }
 
 function searchOptions() {
-  return { abilityLookup, moveLookup, usageStats };
+  return { abilityLookup, moveLookup };
 }
 
 function renderSearchResults(results) {
@@ -188,88 +182,48 @@ function selectForm(entry) {
 }
 
 function renderCatalog() {
-  const usage = usageForPokemon(usageStats, selectedPokemon);
-  renderUsageSource(usage);
+  renderUsageSource();
 
-  const abilities = mergeUsage(
-    resolvePokemonAbilities(selectedPokemon, abilityLookup),
-    usage?.abilities,
-  );
-  const items = resolvePokemonItems(usage, itemLookup);
-  selectedMoves = sortByUsage(
-    mergeUsage(resolvePokemonMoves(selectedPokemon, moveLookup), usage?.moves),
-  );
+  const abilities = sortByChampionsUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup));
+  const rankedItems = sortByChampionsUsage(items);
+  selectedMoves = sortByChampionsUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup));
 
-  renderPlaystyle(usage, abilities, items);
-  renderSpreads(usage?.spreads ?? []);
+  renderPlaystyle(abilities, rankedItems);
+  renderSpreads();
   renderAbilities(abilities);
-  renderItems(items);
+  renderItems(rankedItems);
   renderMoveFilterOptions();
   renderMoveList();
 }
 
-function renderUsageSource(usage) {
-  if (!usageStats) {
-    elements.usageSource.textContent = "No Showdown usage data loaded.";
-  } else if (!usage) {
-    elements.usageSource.textContent =
-      `Showdown usage data · ${usageStats.format} · ${usageStats.month} · no data for this Pokémon`;
-  } else {
-    elements.usageSource.textContent = `Showdown usage data · ${usageStats.format} · ${usageStats.month}`;
-  }
+function renderUsageSource() {
+  elements.usageSource.textContent = "Pokemon Zone Champions catalog popularity";
 }
 
-function renderPlaystyle(usage, abilities, items) {
-  if (!usage) {
-    elements.playstyleSummary.textContent =
-      "No Showdown usage profile is available for this Pokémon yet.";
-    return;
-  }
-
+function renderPlaystyle(abilities, rankedItems) {
   const ability = topName(abilities, "ability");
-  const item = topName(items, "item");
-  const spread = usage.spreads?.[0]?.name ?? "custom";
+  const item = topName(rankedItems, "item");
   const moves = selectedMoves
-    .filter((move) => Number.isFinite(move.usagePercent))
     .slice(0, 4)
     .map((move) => move.name)
     .join(", ");
 
   elements.playstyleSummary.textContent =
-    `${selectedPokemon.name} is most commonly seen with ${ability}, ${item}, and a ${spread} spread. ` +
-    `Frequent Showdown moves include ${moves || "no strongly represented moves"}.`;
+    `${selectedPokemon.name} can use ${ability}. Popular Champions items include ${item}. ` +
+    `High-count Champions moves include ${moves || "no ranked moves"}.`;
 }
 
 function topName(entries, fallback) {
-  const [entry] = sortByUsage(entries);
+  const [entry] = sortByChampionsUsage(entries);
   return entry?.name ?? `no common ${fallback}`;
 }
 
-function renderSpreads(spreads) {
-  elements.spreadCount.textContent = String(spreads.length);
-
-  if (spreads.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "empty-catalog";
-    empty.textContent = "No Showdown spread usage is available for this Pokémon.";
-    elements.spreadList.replaceChildren(empty);
-    return;
-  }
-
-  elements.spreadList.replaceChildren(
-    ...spreads.slice(0, 6).map((spread) => {
-      const row = document.createElement("div");
-      row.className = "spread-row";
-
-      const name = document.createElement("strong");
-      name.textContent = spread.name;
-      const usage = document.createElement("span");
-      usage.textContent = formatUsagePercent(spread.usagePercent);
-
-      row.append(name, usage);
-      return row;
-    }),
-  );
+function renderSpreads() {
+  elements.spreadCount.textContent = "0";
+  const empty = document.createElement("p");
+  empty.className = "empty-catalog";
+  empty.textContent = "No Champions spread source is available.";
+  elements.spreadList.replaceChildren(empty);
 }
 
 function renderAbilities(abilities) {
@@ -293,7 +247,7 @@ function renderAbilities(abilities) {
       }
 
       const usage = document.createElement("span");
-      usage.textContent = formatUsagePercent(ability.usagePercent);
+      usage.textContent = formatChampionsUsage(ability);
       heading.append(usage);
 
       const description = document.createElement("p");
@@ -311,7 +265,7 @@ function renderItems(items) {
   if (items.length === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-catalog";
-    empty.textContent = "No item usage is available for this Pokémon.";
+    empty.textContent = "No Champions item data is available.";
     elements.itemList.replaceChildren(empty);
     return;
   }
@@ -327,7 +281,7 @@ function renderItems(items) {
       const name = document.createElement("strong");
       name.textContent = item.name;
       const usage = document.createElement("span");
-      usage.textContent = formatUsagePercent(item.usagePercent);
+      usage.textContent = formatChampionsUsage(item);
       heading.append(name, usage);
 
       const description = document.createElement("p");
@@ -374,7 +328,7 @@ function renderMoveRow(move) {
   const row = document.createElement("tr");
   row.append(
     moveNameCell(move),
-    textCell(formatUsagePercent(move.usagePercent), "numeric-cell", "Usage"),
+    textCell(formatChampionsUsage(move), "numeric-cell", "Champions"),
     textCell(move.category || "—", "", "Category"),
     textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", "Acc."),

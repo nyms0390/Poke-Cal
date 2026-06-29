@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Quick competitive Pokémon lookup with Showdown usage data, stats, forms, and common play style."
+      content="Quick competitive Pokémon lookup with Champions catalog popularity, stats, forms, and move data."
     />
     <title>PokéCal — Pokémon Lookup</title>
     <link rel="stylesheet" href="./src/styles.css" />
@@ -21,7 +21,7 @@
         <h1>Check a Pokémon at a glance.</h1>
         <p class="intro">
           Search in English or Traditional Chinese, compare forms, and review
-          Smogon / Showdown usage data for common abilities, items, spreads, and moves.
+          Pokemon Zone Champions popularity for abilities, items, and moves.
         </p>
       </header>
 
@@ -60,19 +60,19 @@
         </label>
 
         <div class="tool-page">
-          <p id="usage-source" class="usage-source">Showdown usage data loading…</p>
+          <p id="usage-source" class="usage-source">Champions data loading…</p>
 
-          <section class="catalog-panel" aria-label="Common play style">
+          <section class="catalog-panel" aria-label="Champions popularity">
             <div class="panel-heading">
-              <span>Common play style</span>
-              <strong>Showdown</strong>
+              <span>Champions popularity</span>
+              <strong>Pokemon Zone</strong>
             </div>
-            <p id="playstyle-summary" class="playstyle-summary">Loading usage profile…</p>
+            <p id="playstyle-summary" class="playstyle-summary">Loading Champions profile…</p>
           </section>
 
-          <section class="catalog-panel" aria-label="Common spreads">
+          <section class="catalog-panel" aria-label="Spread source">
             <div class="panel-heading">
-              <span>Common spreads</span>
+              <span>Champions spreads</span>
               <strong id="spread-count">—</strong>
             </div>
             <div id="spread-list" class="spread-list"></div>
@@ -124,7 +124,7 @@
                 <thead>
                   <tr>
                     <th scope="col">Move</th>
-                    <th scope="col">Usage</th>
+                    <th scope="col">Champions</th>
                     <th scope="col">Category</th>
                     <th scope="col">Power</th>
                     <th scope="col">Acc.</th>
@@ -141,7 +141,7 @@
 
       <footer>
         <span id="status">Loading Pokémon data…</span>
-        <span>Showdown usage data · Level 50 · 31 IV · 1 SP = 8 EV</span>
+        <span>Pokemon Zone Champions data · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>
     <script type="module" src="./src/app.js"></script>
