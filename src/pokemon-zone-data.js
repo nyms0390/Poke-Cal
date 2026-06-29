@@ -9,6 +9,21 @@ export function parsePokemonZoneCatalog(html, kind) {
   return parseListingCards(html, kind);
 }
 
+export function parsePokemonZonePokemonDetail(html) {
+  if (/Just a moment|cf_chl|challenge-platform|Enable JavaScript and cookies/i.test(html)) {
+    throw new Error("Pokemon Zone returned a Cloudflare challenge page.");
+  }
+
+  const overview = firstByClass(html, "pokemon-overview-grid");
+  const learnableMoves = firstByClass(html, "learnable-moves-split");
+
+  return {
+    baseStats: parseBaseStats(overview),
+    abilities: parseDetailAbilities(overview),
+    moves: parseLearnableMoves(learnableMoves),
+  };
+}
+
 export function mergePokemonZoneCatalogs(data, catalogs) {
   return {
     ...data,
@@ -132,6 +147,16 @@ function mergePokemonEntry(entry, zoneEntry) {
   return {
     ...entry,
     types: zoneEntry.types.length > 0 ? zoneEntry.types : entry.types,
+    baseStats: zoneEntry.baseStats ?? entry.baseStats,
+    baseSpeed: zoneEntry.baseStats?.spe ?? entry.baseSpeed,
+    abilities:
+      Array.isArray(zoneEntry.abilities) && zoneEntry.abilities.length > 0
+        ? zoneEntry.abilities.map(({ name }) => name)
+        : entry.abilities,
+    moves:
+      Array.isArray(zoneEntry.moves) && zoneEntry.moves.length > 0
+        ? zoneEntry.moves.map(({ id }) => id)
+        : entry.moves,
     champions: championsMetadata(zoneEntry),
   };
 }
@@ -144,7 +169,71 @@ function championsMetadata(zoneEntry) {
     usageCount: zoneEntry.usageCount,
   };
   if (zoneEntry.icon) metadata.icon = zoneEntry.icon;
+  if (Array.isArray(zoneEntry.moves)) metadata.learnableMoveCount = zoneEntry.moves.length;
   return metadata;
+}
+
+function parseBaseStats(overview) {
+  const text = textOf(firstByClass(overview, "pokemon-overview-grid__stats"));
+  const labels = [
+    ["hp", "HP"],
+    ["atk", "Atk"],
+    ["def", "Def"],
+    ["spa", "Sp.Atk"],
+    ["spd", "Sp.Def"],
+    ["spe", "Speed"],
+  ];
+  const stats = {};
+
+  for (const [key, label] of labels) {
+    const match = new RegExp(`\\b${escapeRegExp(label)}\\s+(\\d+)\\b`).exec(text);
+    if (!match) return null;
+    stats[key] = Number(match[1]);
+  }
+
+  return stats;
+}
+
+function parseDetailAbilities(overview) {
+  return elementsByClass(firstByClass(overview, "pokemon-overview-grid__abilities"), "champs-listing-card")
+    .map((card) => ({
+      id: toId(textOf(firstByClass(card, "champs-listing-card__name"))),
+      name: textOf(firstByClass(card, "champs-listing-card__name")),
+      shortDesc: textOf(firstByClass(card, "champs-listing-card__desc")),
+    }))
+    .filter(({ name }) => name);
+}
+
+function parseLearnableMoves(section) {
+  return elementsByTag(section, "tr")
+    .map(parseLearnableMoveRow)
+    .filter(Boolean);
+}
+
+function parseLearnableMoveRow(row) {
+  const cells = elementsByTag(row, "td");
+  if (cells.length < 6) return null;
+
+  const moveCell = cells[0];
+  const name = textOf(moveCell);
+  if (!name) return null;
+
+  const href = attribute(firstTag(moveCell, "a"), "href");
+  return {
+    id: moveIdFromHref(href) ?? toId(name),
+    name,
+    type: textOf(cells[1]) || null,
+    category: textOf(cells[2]) || null,
+    basePower: numberOrNull(textOf(cells[3])),
+    accuracy: numberOrNull(textOf(cells[4])),
+    pp: numberOrNull(textOf(cells[5])),
+  };
+}
+
+function moveIdFromHref(href) {
+  if (!href) return null;
+  const slug = String(href).match(/\/champions\/moves\/([^/]+)\//)?.[1];
+  return slug ? toId(slug) : null;
 }
 
 function pokemonId(name) {
@@ -161,6 +250,11 @@ function numberFromText(text) {
   return value == null ? null : Number(value);
 }
 
+function numberOrNull(text) {
+  const normalized = String(text).trim();
+  return /^\d+$/.test(normalized) ? Number(normalized) : null;
+}
+
 function elementsByClass(html, className) {
   const elements = [];
   const startPattern = new RegExp(
@@ -170,6 +264,17 @@ function elementsByClass(html, className) {
   let match;
   while ((match = startPattern.exec(html))) {
     const end = closingTagIndex(html, match.index, match[1]);
+    if (end !== -1) elements.push(html.slice(match.index, end));
+  }
+  return elements;
+}
+
+function elementsByTag(html, tagName) {
+  const elements = [];
+  const tagPattern = new RegExp(`<${tagName}\\b[^>]*>`, "gi");
+  let match;
+  while ((match = tagPattern.exec(html))) {
+    const end = closingTagIndex(html, match.index, tagName);
     if (end !== -1) elements.push(html.slice(match.index, end));
   }
   return elements;

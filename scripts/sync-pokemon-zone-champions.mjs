@@ -1,7 +1,11 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
-import { mergePokemonZoneCatalogs, parsePokemonZoneCatalog } from "../src/pokemon-zone-data.js";
+import {
+  mergePokemonZoneCatalogs,
+  parsePokemonZoneCatalog,
+  parsePokemonZonePokemonDetail,
+} from "../src/pokemon-zone-data.js";
 
 const POKEMON_ZONE_CHAMPIONS_URL = "https://www.pokemon-zone.com/champions/";
 const CATALOGS = ["pokemon", "moves", "items", "abilities"];
@@ -21,6 +25,7 @@ export async function downloadPokemonZoneChampions({ fetcher = fetchText, snapsh
     if (!snapshotDirectory && catalog !== CATALOGS.at(-1)) await delay(750);
   }
 
+  entries.pokemon = await withPokemonDetails(entries.pokemon, { fetcher, snapshotDirectory });
   return entries;
 }
 
@@ -39,6 +44,59 @@ async function readSnapshotCatalog(snapshotDirectory, catalog) {
     "utf8",
   );
   return parsePokemonZoneCatalog(html, catalog);
+}
+
+async function withPokemonDetails(pokemon, { fetcher, snapshotDirectory }) {
+  const detailed = [];
+
+  for (const entry of pokemon) {
+    const detail = snapshotDirectory
+      ? await readSnapshotPokemonDetail(snapshotDirectory, entry)
+      : await fetchPokemonDetail(fetcher, entry);
+    detailed.push(detail ? { ...entry, ...detail } : entry);
+    if (!snapshotDirectory && entry !== pokemon.at(-1)) await delay(300);
+  }
+
+  return detailed;
+}
+
+async function fetchPokemonDetail(fetcher, entry) {
+  if (!entry.sourceUrl) return null;
+  const html = await fetcher(entry.sourceUrl);
+  return parsePokemonZonePokemonDetail(html);
+}
+
+async function readSnapshotPokemonDetail(snapshotDirectory, entry) {
+  const directoryUrl = pathToFileURL(`${snapshotDirectory}/`);
+  const slug = pokemonDetailSlug(entry);
+  if (!slug) return null;
+
+  try {
+    return JSON.parse(
+      await readFile(new URL(`pokemon-zone-champions-pokemon-${slug}.json`, directoryUrl), "utf8"),
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+
+  try {
+    const html = await readFile(
+      new URL(`pokemon-zone-champions-pokemon-${slug}.html`, directoryUrl),
+      "utf8",
+    );
+    return parsePokemonZonePokemonDetail(html);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    return null;
+  }
+}
+
+function pokemonDetailSlug(entry) {
+  try {
+    return new URL(entry.sourceUrl).pathname.match(/\/champions\/pokemon\/([^/]+)\//)?.[1] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function updatePublicData({ snapshotDirectory } = {}) {
