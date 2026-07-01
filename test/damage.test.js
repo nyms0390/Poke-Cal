@@ -1374,6 +1374,131 @@ test("applies super-effective damage reduction abilities", () => {
   assert.deepEqual([neutralPrismArmor.minDamage, neutralPrismArmor.maxDamage], [neutral.minDamage, neutral.maxDamage]);
 });
 
+test("boosts Collision Course and Electro Drift only when super effective", () => {
+  const fighter = {
+    id: "fighter",
+    name: "Fighter",
+    types: ["Fighting"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const electricUser = {
+    id: "electricuser",
+    name: "Electricuser",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const normalTarget = {
+    id: "normaltarget",
+    name: "Normaltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const waterTarget = {
+    id: "watertarget",
+    name: "Watertarget",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const electricTarget = {
+    id: "electrictarget",
+    name: "Electrictarget",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const collisionCourse = {
+    id: "collisioncourse",
+    name: "Collision Course",
+    type: "Fighting",
+    category: "Physical",
+    basePower: 100,
+  };
+  const fightingMove = {
+    id: "fightingmove",
+    name: "Fighting Move",
+    type: "Fighting",
+    category: "Physical",
+    basePower: 100,
+  };
+  const electroDrift = {
+    id: "electrodrift",
+    name: "Electro Drift",
+    type: "Electric",
+    category: "Special",
+    basePower: 100,
+  };
+  const electricMove = {
+    id: "electricmove",
+    name: "Electric Move",
+    type: "Electric",
+    category: "Special",
+    basePower: 100,
+  };
+
+  const boostedCollision = calculateDamage({
+    attacker: fighter,
+    defender: normalTarget,
+    move: collisionCourse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const regularFighting = calculateDamage({
+    attacker: fighter,
+    defender: normalTarget,
+    move: fightingMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralCollision = calculateDamage({
+    attacker: fighter,
+    defender: waterTarget,
+    move: collisionCourse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralFighting = calculateDamage({
+    attacker: fighter,
+    defender: waterTarget,
+    move: fightingMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const boostedElectroDrift = calculateDamage({
+    attacker: electricUser,
+    defender: waterTarget,
+    move: electroDrift,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const regularElectric = calculateDamage({
+    attacker: electricUser,
+    defender: waterTarget,
+    move: electricMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralElectroDrift = calculateDamage({
+    attacker: electricUser,
+    defender: electricTarget,
+    move: electroDrift,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const neutralElectric = calculateDamage({
+    attacker: electricUser,
+    defender: electricTarget,
+    move: electricMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(boostedCollision.notes.includes("Collision Course super-effective boost"), true);
+  assert.equal(boostedCollision.maxDamage > regularFighting.maxDamage, true);
+  assert.deepEqual(neutralCollision.rolls, neutralFighting.rolls);
+  assert.equal(boostedElectroDrift.notes.includes("Electro Drift super-effective boost"), true);
+  assert.equal(boostedElectroDrift.maxDamage > regularElectric.maxDamage, true);
+  assert.deepEqual(neutralElectroDrift.rolls, neutralElectric.rolls);
+});
+
 test("applies Tinted Lens only to not-very-effective attacks", () => {
   const waterGun = {
     id: "watergun",

@@ -485,6 +485,7 @@ function isPledgeMove(move) {
 function activeModifiers({ attacker, defender, move, attackerState, defenderState, typeMultiplier, moveType, weather, attackStat, isPhysical }) {
   const modifiers = [];
   const attackerItem = attackerState.item;
+  const moveId = normalizeId(move.id ?? move.name);
   const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
   const defenderItem = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
   const ability = normalizeId(attackerState.ability?.id ?? attackerState.ability?.name);
@@ -506,6 +507,9 @@ function activeModifiers({ attacker, defender, move, attackerState, defenderStat
   }
   if (item === "expertbelt" && typeMultiplier > 1) {
     modifiers.push({ kind: "damage", value: 1.2, label: "Expert Belt" });
+  }
+  if ((moveId === "collisioncourse" || moveId === "electrodrift") && typeMultiplier > 1) {
+    modifiers.push({ kind: "damage", value: 4 / 3, label: `${move.name} super-effective boost` });
   }
   if (item === "muscleband" && isPhysical) {
     modifiers.push({ kind: "power", value: 1.1, label: "Muscle Band" });

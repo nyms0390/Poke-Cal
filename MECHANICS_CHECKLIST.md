@@ -26,37 +26,19 @@ Currently implemented named effects:
 
 ## Moves
 
-### Fixed, HP-based, or counter damage
+### Dynamic move type, user type, or item-derived type/power
 
-- [ ] Bide
-- [ ] Comeuppance
-- [ ] Counter
-- [x] Dragon Rage
-- [ ] Endeavor
-- [ ] Final Gambit
-- [ ] Flame Burst
-- [ ] Metal Burst
-- [ ] Mirror Coat
-- [x] Nature's Madness
-- [x] Night Shade
-- [ ] Psywave
-- [x] Ruination
-- [ ] Salt Cure
-- [x] Seismic Toss
-- [x] Sonic Boom
-- [x] Super Fang
-
-### Alternate attacking or defending stat rules
-
-- [x] Body Press
-- [ ] Chip Away
-- [x] Darkest Lariat
-- [x] Foul Play
-- [ ] Photon Geyser
-- [x] Psyshock
-- [x] Psystrike
-- [x] Sacred Sword
-- [x] Secret Sword
+- [ ] Hidden Power
+- [x] Ivy Cudgel
+- [x] Judgment
+- [x] Multi-Attack
+- [x] Natural Gift
+- [x] Raging Bull
+- [x] Revelation Dance
+- [x] Techno Blast
+- [ ] Tera Blast
+- [x] Terrain Pulse
+- [x] Weather Ball
 
 ### Conditional base power from HP, weight, speed, status, order, or history
 
@@ -121,6 +103,18 @@ Currently implemented named effects:
 - [ ] Water Spout
 - [ ] Wring Out
 
+### Weather, terrain, field, or two-turn context
+
+- [x] Expanding Force
+- [x] Fire Pledge
+- [x] Grav Apple
+- [x] Hydro Steam
+- [x] Psyblade
+- [x] Rising Voltage
+- [x] Solar Beam
+- [x] Solar Blade
+- [x] Water Pledge
+
 ### Multi-hit damage and hit-count rules
 
 - [ ] Arm Thrust
@@ -154,42 +148,48 @@ Currently implemented named effects:
 - [ ] Twineedle
 - [ ] Water Shuriken
 
-### Dynamic move type, user type, or item-derived type/power
+### Alternate attacking or defending stat rules
 
-- [ ] Hidden Power
-- [x] Ivy Cudgel
-- [x] Judgment
-- [x] Multi-Attack
-- [x] Natural Gift
-- [x] Raging Bull
-- [x] Revelation Dance
-- [x] Techno Blast
-- [ ] Tera Blast
-- [x] Terrain Pulse
-- [x] Weather Ball
-
-### Weather, terrain, field, or two-turn context
-
-- [x] Expanding Force
-- [x] Fire Pledge
-- [x] Grav Apple
-- [x] Hydro Steam
-- [x] Psyblade
-- [x] Rising Voltage
-- [x] Solar Beam
-- [x] Solar Blade
-- [x] Water Pledge
+- [x] Body Press
+- [x] Chip Away
+- [x] Darkest Lariat
+- [x] Foul Play
+- [x] Photon Geyser
+- [x] Psyshock
+- [x] Psystrike
+- [x] Sacred Sword
+- [x] Secret Sword
 
 ### Type chart, immunity, or ability override rules
 
-- [ ] Collision Course
-- [ ] Electro Drift
+- [x] Collision Course
+- [x] Electro Drift
 - [ ] Freeze-Dry
 - [ ] Future Sight
 - [ ] Moongeist Beam
 - [ ] Smack Down
 - [ ] Sunsteel Strike
 - [ ] Thousand Arrows
+
+### Fixed, HP-based, or counter damage
+
+- [ ] Bide
+- [ ] Comeuppance
+- [ ] Counter
+- [x] Dragon Rage
+- [ ] Endeavor
+- [ ] Final Gambit
+- [ ] Flame Burst
+- [ ] Metal Burst
+- [ ] Mirror Coat
+- [x] Nature's Madness
+- [x] Night Shade
+- [ ] Psywave
+- [x] Ruination
+- [ ] Salt Cure
+- [x] Seismic Toss
+- [x] Sonic Boom
+- [x] Super Fang
 
 ## Items
 
@@ -237,33 +237,33 @@ Currently implemented named effects:
 
 ## Abilities
 
-### Weather and terrain setters, suppressors, and abusers
+### Offensive and defensive stat modifiers
 
-- [ ] Air Lock
-- [ ] Cloud Nine
-- [ ] Drizzle
-- [ ] Drought
-- [ ] Dry Skin
-- [ ] Electric Surge
-- [ ] Flower Gift
-- [ ] Forecast
-- [ ] Grass Pelt
-- [ ] Grassy Surge
-- [ ] Hadron Engine
-- [ ] Ice Face
-- [ ] Mega Sol
-- [ ] Misty Surge
-- [ ] Orichalcum Pulse
-- [ ] Primordial Sea
-- [ ] Protosynthesis
-- [ ] Psychic Surge
-- [ ] Quark Drive
-- [ ] Sand Force
-- [ ] Sand Spit
-- [ ] Sand Stream
-- [ ] Snow Warning
-- [ ] Solar Power
-- [ ] Teraform Zero
+- [ ] Analytic
+- [ ] Battery
+- [ ] Beads of Ruin
+- [ ] Beast Boost
+- [ ] Commander
+- [ ] Defeatist
+- [ ] Fur Coat
+- [ ] Gorilla Tactics
+- [ ] Heatproof
+- [ ] Heavy Metal
+- [ ] Hustle
+- [ ] Intimidate
+- [ ] Intrepid Sword
+- [ ] Marvel Scale
+- [ ] Minus
+- [ ] Plus
+- [ ] Power Spot
+- [ ] Purifying Salt
+- [ ] Slow Start
+- [ ] Stakeout
+- [ ] Sword of Ruin
+- [ ] Tablets of Ruin
+- [ ] Thick Fat
+- [ ] Unaware
+- [ ] Vessel of Ruin
 
 ### Type-changing, type-boosting, and move-family power abilities
 
@@ -298,48 +298,33 @@ Currently implemented named effects:
 - [x] Transistor
 - [ ] Water Bubble
 
-### Offensive and defensive stat modifiers
+### Weather and terrain setters, suppressors, and abusers
 
-- [ ] Analytic
-- [ ] Battery
-- [ ] Beads of Ruin
-- [ ] Beast Boost
-- [ ] Commander
-- [ ] Defeatist
-- [ ] Fur Coat
-- [ ] Gorilla Tactics
-- [ ] Heatproof
-- [ ] Heavy Metal
-- [ ] Hustle
-- [ ] Intimidate
-- [ ] Intrepid Sword
-- [ ] Marvel Scale
-- [ ] Minus
-- [ ] Plus
-- [ ] Power Spot
-- [ ] Purifying Salt
-- [ ] Slow Start
-- [ ] Stakeout
-- [ ] Sword of Ruin
-- [ ] Tablets of Ruin
-- [ ] Thick Fat
-- [ ] Unaware
-- [ ] Vessel of Ruin
-
-### Damage reduction, amplification, critical-hit, and survival rules
-
-- [x] Battle Armor
-- [ ] Multiscale
-- [ ] Parental Bond
-- [x] Prism Armor
-- [ ] Shadow Shield
-- [x] Shell Armor
-- [x] Sniper
-- [x] Solid Rock
-- [ ] Sturdy
-- [ ] Supreme Overlord
-- [ ] Tera Shell
-- [x] Tinted Lens
+- [ ] Air Lock
+- [ ] Cloud Nine
+- [ ] Drizzle
+- [ ] Drought
+- [ ] Dry Skin
+- [ ] Electric Surge
+- [ ] Flower Gift
+- [ ] Forecast
+- [ ] Grass Pelt
+- [ ] Grassy Surge
+- [ ] Hadron Engine
+- [ ] Ice Face
+- [ ] Mega Sol
+- [ ] Misty Surge
+- [ ] Orichalcum Pulse
+- [ ] Primordial Sea
+- [ ] Protosynthesis
+- [ ] Psychic Surge
+- [ ] Quark Drive
+- [ ] Sand Force
+- [ ] Sand Spit
+- [ ] Sand Stream
+- [ ] Snow Warning
+- [ ] Solar Power
+- [ ] Teraform Zero
 
 ### Immunity, redirection, type-chart, and ability-suppression rules
 
@@ -363,11 +348,26 @@ Currently implemented named effects:
 - [ ] Well-Baked Body
 - [ ] Wonder Guard
 
-### Hit-count rules
+### Damage reduction, amplification, critical-hit, and survival rules
 
-- [ ] Skill Link
+- [x] Battle Armor
+- [ ] Multiscale
+- [ ] Parental Bond
+- [x] Prism Armor
+- [ ] Shadow Shield
+- [x] Shell Armor
+- [x] Sniper
+- [x] Solid Rock
+- [ ] Sturdy
+- [ ] Supreme Overlord
+- [ ] Tera Shell
+- [x] Tinted Lens
 
 ### Review bucket: may need calculator support or explicit out-of-scope handling
 
 - [ ] Ripen
 - [ ] Rivalry
+
+### Hit-count rules
+
+- [ ] Skill Link
