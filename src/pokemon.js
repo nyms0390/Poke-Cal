@@ -21,7 +21,7 @@ export function searchPokemon(pokemon, query, options = 12) {
         }),
       );
       const match = matches.every(({ score }) => score < Infinity)
-        ? matches[0]
+        ? combinedMatch(matches)
         : searchMatch(Infinity);
       return { entry, match };
     })
@@ -34,6 +34,13 @@ export function searchPokemon(pokemon, query, options = 12) {
     )
     .slice(0, limit)
     .map(({ entry, match }) => ({ ...entry, searchMatch: match.label }));
+}
+
+function combinedMatch(matches) {
+  const [primaryMatch] = matches;
+  const labels = matches.map(({ label }) => label).filter(Boolean);
+  const label = labels.length > 1 ? labels.join(" + ") : primaryMatch.label;
+  return searchMatch(primaryMatch.score, label, primaryMatch.usagePercent);
 }
 
 function searchTerms(query) {

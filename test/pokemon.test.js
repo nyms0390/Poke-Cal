@@ -115,13 +115,13 @@ test("searches Pokémon by move names", () => {
 });
 
 test("searches Pokémon by plus-separated ability and move terms", () => {
-  assert.deepEqual(
-    searchPokemon(pokemon, "mold + fake", {
-      abilityLookup: new Map([["moldbreaker", { name: "Mold Breaker" }]]),
-      moveLookup: new Map([["fakeout", { name: "Fake Out" }]]),
-    }).map(({ id }) => id),
-    ["tinkaton"],
-  );
+  const [match] = searchPokemon(pokemon, "mold + fake", {
+    abilityLookup: new Map([["moldbreaker", { name: "Mold Breaker" }]]),
+    moveLookup: new Map([["fakeout", { name: "Fake Out" }]]),
+  });
+
+  assert.equal(match.id, "tinkaton");
+  assert.equal(match.searchMatch, "Ability: Mold Breaker + Move: Fake Out");
 });
 
 test("searches Pokémon by plus-separated full ability and move names", () => {
