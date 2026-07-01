@@ -44,6 +44,20 @@ const pokemon = [
     aliases: ["噴火龍"],
   },
   {
+    id: "tatsugiri",
+    name: "Tatsugiri",
+    baseSpecies: "Tatsugiri",
+    baseSpeed: 82,
+    aliases: [],
+  },
+  {
+    id: "tatsugiricurlymega",
+    name: "Tatsugiri-Curly-Mega",
+    baseSpecies: "Tatsugiri",
+    baseSpeed: 82,
+    aliases: [],
+  },
+  {
     id: "megaabsol",
     name: "Mega Absol",
     baseSpeed: 115,
@@ -136,6 +150,13 @@ test("groups the base Pokémon with all of its Mega forms", () => {
       ({ id }) => id,
     ),
     ["charizard", "charizardmegax", "charizardmegay"],
+  );
+});
+
+test("groups Mega forms whose form label appears before Mega", () => {
+  assert.deepEqual(
+    megaFamily(pokemon, pokemon.find(({ id }) => id === "tatsugiri")).map(({ id }) => id),
+    ["tatsugiri", "tatsugiricurlymega"],
   );
 });
 

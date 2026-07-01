@@ -145,10 +145,17 @@ function renderFamilyStats() {
       card.type = "button";
       card.className = "form-card";
       card.dataset.formId = entry.id;
+      const abilities = resolvePokemonAbilities(entry, abilityLookup)
+        .map((ability) => ability.name)
+        .join(" · ");
       card.innerHTML = `
         <span class="form-card-heading">
           <strong>${entry.name}</strong>
           <small>BST ${totalBaseStats(entry.baseStats)}</small>
+        </span>
+        <span class="form-card-abilities">
+          <small>Abilities</small>
+          <strong>${abilities || "—"}</strong>
         </span>
         <span class="form-card-stats">
           ${Object.entries(labels)

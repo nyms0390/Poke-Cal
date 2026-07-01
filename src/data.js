@@ -18,8 +18,12 @@ export async function loadPokemonData() {
     movesResponse.json(),
     itemsResponse.json(),
   ]);
-  const championPokemon = championsEntries(pokemon);
-  const championAbilities = championsEntries(abilities);
+  const championPokemon = includeMegaFamilies(championsEntries(pokemon), pokemon);
+  const championAbilities = includeNamedEntries(
+    championsEntries(abilities),
+    abilities,
+    championPokemon.flatMap((entry) => entry.abilities ?? []),
+  );
   const championMoves = championsEntries(moves);
   const championItems = championsEntries(items);
 
@@ -37,4 +41,28 @@ export async function loadPokemonData() {
 function championsEntries(entries) {
   const filtered = entries.filter((entry) => entry.champions);
   return filtered.length > 0 ? filtered : entries;
+}
+
+function includeMegaFamilies(entries, allPokemon) {
+  if (entries.length === allPokemon.length) return entries;
+
+  const retainedIds = new Set(entries.map((entry) => entry.id));
+  const retainedBaseSpecies = new Set(entries.map((entry) => entry.baseSpecies ?? entry.name));
+  return allPokemon.filter(
+    (entry) =>
+      retainedIds.has(entry.id) ||
+      (retainedBaseSpecies.has(entry.baseSpecies) && entry.name.includes("-Mega")),
+  );
+}
+
+function includeNamedEntries(entries, allEntries, names) {
+  if (entries.length === allEntries.length) return entries;
+
+  const retainedIds = new Set(entries.map((entry) => entry.id));
+  const retainedNames = new Set(entries.map((entry) => entry.name));
+  for (const name of names) {
+    retainedNames.add(name);
+  }
+
+  return allEntries.filter((entry) => retainedIds.has(entry.id) || retainedNames.has(entry.name));
 }

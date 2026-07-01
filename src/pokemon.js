@@ -34,12 +34,14 @@ export function searchPokemon(pokemon, query, options = 12) {
 export function megaFamily(pokemon, selected) {
   const baseSpecies = selected.baseSpecies;
   const isBaseOrMega =
-    selected.name === baseSpecies || selected.name.startsWith(`${baseSpecies}-Mega`);
+    selected.name === baseSpecies ||
+    (selected.baseSpecies === baseSpecies && selected.name.includes("-Mega"));
   if (!isBaseOrMega) return [selected];
 
   const family = pokemon.filter(
     (entry) =>
-      entry.name === baseSpecies || entry.name.startsWith(`${baseSpecies}-Mega`),
+      entry.name === baseSpecies ||
+      (entry.baseSpecies === baseSpecies && entry.name.includes("-Mega")),
   );
 
   if (!family.some((entry) => entry.name.includes("-Mega"))) return [selected];
