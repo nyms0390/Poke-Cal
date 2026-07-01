@@ -72,9 +72,48 @@ export function sortByChampionsUsage(entries) {
   });
 }
 
+export function applyScopedUsage(entries, usageEntries = []) {
+  if (!usageEntries.length) return entries;
+  const usageById = new Map();
+  for (const usage of usageEntries) {
+    usageById.set(normalizeId(usage.id), usage);
+    usageById.set(normalizeId(usage.name), usage);
+  }
+
+  return entries.map((entry) => {
+    const usage = usageById.get(normalizeId(entry.id)) ?? usageById.get(normalizeId(entry.name));
+    if (usage) {
+      return {
+        ...entry,
+        champions: {
+          ...(entry.champions ?? {}),
+          source: "Limitless",
+          usageCount: usage.usageCount,
+          usagePercent: usage.usagePercent,
+        },
+      };
+    }
+
+    return clearEntryUsage(entry);
+  });
+}
+
 export function formatChampionsUsage(entry) {
   const count = championsUsageCount(entry);
-  return count >= 0 ? `${count.toLocaleString("en-US")} uses` : "—";
+  const percent = entry?.champions?.usagePercent;
+  if (count < 0) return "—";
+  if (Number.isFinite(percent)) {
+    return `${percent.toFixed(1)}% · ${count.toLocaleString("en-US")} uses`;
+  }
+  return `${count.toLocaleString("en-US")} uses`;
+}
+
+function clearEntryUsage(entry) {
+  if (!entry.champions) return entry;
+  const champions = { ...entry.champions };
+  delete champions.usageCount;
+  delete champions.usagePercent;
+  return { ...entry, champions };
 }
 
 export function mergeUsage(entries, usageEntries = []) {

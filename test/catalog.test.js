@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  applyScopedUsage,
   buildAbilityLookup,
   buildItemLookup,
   buildMoveLookup,
@@ -161,6 +162,29 @@ test("sorts used entries before unused entries and formats usage", () => {
   );
   assert.equal(formatUsagePercent(88.234), "88.2%");
   assert.equal(formatUsagePercent(undefined), "—");
+});
+
+test("applies scoped usage and clears stale global counts", () => {
+  const scoped = applyScopedUsage(
+    [
+      { id: "fakeout", name: "Fake Out", champions: { usageCount: 1000 } },
+      { id: "protect", name: "Protect", champions: { usageCount: 9000 } },
+    ],
+    [{ id: "fakeout", name: "Fake Out", usageCount: 7, usagePercent: 70 }],
+  );
+
+  assert.equal(scoped[0].champions.usageCount, 7);
+  assert.equal(scoped[0].champions.usagePercent, 70);
+  assert.equal(scoped[1].champions.usageCount, undefined);
+});
+
+test("formats Champions usage rates when Limitless percent is available", async () => {
+  const { formatChampionsUsage } = await import("../src/catalog.js");
+
+  assert.equal(
+    formatChampionsUsage({ champions: { usageCount: 12, usagePercent: 34.56 } }),
+    "34.6% · 12 uses",
+  );
 });
 
 test("selects exact form usage before base species usage", () => {

@@ -28,11 +28,13 @@
     "shortDesc": "A held item that allows Abomasnow to Mega Evolve.",
     "desc": "A held item that allows Abomasnow to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/abomasite/",
-      "rank": 99,
-      "usageCount": 8,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0674.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0674.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/abomasite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.04120313143798929
     }
   },
   {
@@ -51,11 +53,9 @@
     "shortDesc": "A held item that allows Absol to Mega Evolve into Mega Absol.",
     "desc": "A held item that allows Absol to Mega Evolve into Mega Absol.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/absolite/",
-      "rank": 124,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0677.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0677.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/absolite/"
     }
   },
   {
@@ -130,6 +130,16 @@
     "shortDesc": "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use."
   },
   {
+    "id": "aereodactylite",
+    "name": "Aereodactylite",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
+  },
+  {
     "id": "aerodactylite",
     "name": "Aerodactylite",
     "spritenum": 577,
@@ -145,11 +155,13 @@
     "shortDesc": "A held item that allows Aerodactyl to Mega Evolve.",
     "desc": "A held item that allows Aerodactyl to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/aerodactylite/",
-      "rank": 21,
-      "usageCount": 357,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0672.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0672.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/aerodactylite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 207,
+      "usagePercent": 1.4215080346106306
     }
   },
   {
@@ -168,11 +180,13 @@
     "shortDesc": "A held item that allows Aggron to Mega Evolve.",
     "desc": "A held item that allows Aggron to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/aggronite/",
-      "rank": 97,
-      "usageCount": 9,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0667.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0667.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/aggronite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 10,
+      "usagePercent": 0.06867188572998215
     }
   },
   {
@@ -223,11 +237,13 @@
     "shortDesc": "A held item that allows Alakazam to Mega Evolve.",
     "desc": "A held item that allows Alakazam to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/alakazite/",
-      "rank": 93,
-      "usageCount": 10,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0679.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0679.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/alakazite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -261,11 +277,13 @@
     "shortDesc": "A held item that allows Altaria to Mega Evolve.",
     "desc": "A held item that allows Altaria to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/altarianite/",
-      "rank": 109,
-      "usageCount": 5,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0755.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0755.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/altarianite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.020601565718994644
     }
   },
   {
@@ -284,11 +302,13 @@
     "shortDesc": "A held item that allows Ampharos to Mega Evolve.",
     "desc": "A held item that allows Ampharos to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/ampharosite/",
-      "rank": 89,
-      "usageCount": 12,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0658.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0658.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/ampharosite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 9,
+      "usagePercent": 0.061804697156983925
     }
   },
   {
@@ -357,11 +377,13 @@
     "shortDesc": "A held item that allows Audino to Mega Evolve.",
     "desc": "A held item that allows Audino to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/audinite/",
-      "rank": 125,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0757.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/audinite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0757.webp"
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -389,11 +411,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Steel-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Steel-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/babiri-berry/",
-      "rank": 63,
-      "usageCount": 30,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0199.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0199.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/babiri-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.05493750858398572
     }
   },
   {
@@ -412,11 +436,9 @@
     "shortDesc": "A held item that allows Banette to Mega Evolve.",
     "desc": "A held item that allows Banette to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/banettite/",
-      "rank": 126,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0668.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0668.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/banettite/"
     }
   },
   {
@@ -435,11 +457,13 @@
     "shortDesc": "A held item that allows Barbaracle to Mega Evolve.",
     "desc": "A held item that allows Barbaracle to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/barbaracite/",
-      "rank": 100,
-      "usageCount": 8,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2581.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2581.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/barbaracite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 11,
+      "usagePercent": 0.07553907430298036
     }
   },
   {
@@ -482,11 +506,13 @@
     "shortDesc": "A held item that allows Beedrill to Mega Evolve.",
     "desc": "A held item that allows Beedrill to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/beedrillite/",
-      "rank": 111,
-      "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0770.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0770.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/beedrillite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -587,11 +613,13 @@
     },
     "desc": "Boosts the amount of HP restored through HP-absorbing moves by 30%. HP restored by moves such as Ingrain and Strength Sap will also be boosted by 30%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/big-root/",
-      "rank": 64,
-      "usageCount": 29,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0296.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0296.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/big-root/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 13,
+      "usagePercent": 0.08927345144897679
     }
   },
   {
@@ -638,11 +666,13 @@
     },
     "desc": "Boosts the power of the holder’s Fighting-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/black-belt/",
-      "rank": 84,
-      "usageCount": 14,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0241.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0241.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/black-belt/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.04120313143798929
     }
   },
   {
@@ -661,11 +691,13 @@
     },
     "desc": "Boosts the power of the holder’s Dark-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/black-glasses/",
-      "rank": 16,
-      "usageCount": 536,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0240.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0240.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/black-glasses/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 331,
+      "usagePercent": 2.2730394176624094
     }
   },
   {
@@ -698,11 +730,13 @@
     "shortDesc": "A held item that allows Blastoise to Mega Evolve.",
     "desc": "A held item that allows Blastoise to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/blastoisinite/",
-      "rank": 52,
-      "usageCount": 56,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0661.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0661.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/blastoisinite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 40,
+      "usagePercent": 0.2746875429199286
     }
   },
   {
@@ -721,11 +755,13 @@
     "shortDesc": "A held item that allows Blaziken to Mega Evolve.",
     "desc": "A held item that allows Blaziken to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/blazikenite/",
-      "rank": 34,
-      "usageCount": 131,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0664.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0664.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/blazikenite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 84,
+      "usagePercent": 0.57684384013185
     }
   },
   {
@@ -807,11 +843,13 @@
     },
     "desc": "Lowers the accuracy of moves used by opponents against the holder by 10%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/bright-powder/",
-      "rank": 61,
-      "usageCount": 33,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0213.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0213.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/bright-powder/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 11,
+      "usagePercent": 0.07553907430298036
     }
   },
   {
@@ -902,11 +940,13 @@
     "shortDesc": "A held item that allows Camerupt to Mega Evolve.",
     "desc": "A held item that allows Camerupt to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/cameruptite/",
-      "rank": 69,
-      "usageCount": 25,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0767.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0767.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/cameruptite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 16,
+      "usagePercent": 0.10987501716797143
     }
   },
   {
@@ -939,11 +979,13 @@
     "shortDesc": "A held item that allows Chandelure to Mega Evolve.",
     "desc": "A held item that allows Chandelure to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chandelurite/",
-      "rank": 77,
-      "usageCount": 18,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2574.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2574.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/chandelurite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 10,
+      "usagePercent": 0.06867188572998215
     }
   },
   {
@@ -962,11 +1004,13 @@
     },
     "desc": "Boosts the power of the holder’s Fire-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charcoal/",
-      "rank": 23,
-      "usageCount": 340,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0249.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0249.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/charcoal/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 215,
+      "usagePercent": 1.476445543194616
     }
   },
   {
@@ -985,11 +1029,13 @@
     "shortDesc": "A held item that allows Charizard to Mega Evolve into Mega Charizard X.",
     "desc": "A held item that allows Charizard to Mega Evolve into Mega Charizard X.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-x/",
-      "rank": 55,
-      "usageCount": 44,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0660.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0660.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-x/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 24,
+      "usagePercent": 0.16481252575195715
     }
   },
   {
@@ -1008,11 +1054,13 @@
     "shortDesc": "A held item that allows Charizard to Mega Evolve into Mega Charizard Y.",
     "desc": "A held item that allows Charizard to Mega Evolve into Mega Charizard Y.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-y/",
-      "rank": 7,
-      "usageCount": 1007,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0678.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0678.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/charizardite-y/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 595,
+      "usagePercent": 4.085977200933938
     }
   },
   {
@@ -1029,11 +1077,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Rock-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Rock-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/charti-berry/",
-      "rank": 92,
-      "usageCount": 11,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0195.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0195.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/charti-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -1075,11 +1125,13 @@
     "shortDesc": "A held item that allows Chesnaught to Mega Evolve.",
     "desc": "A held item that allows Chesnaught to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chesnaughtite/",
-      "rank": 90,
-      "usageCount": 12,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2575.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2575.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/chesnaughtite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -1138,11 +1190,13 @@
     "shortDesc": "A held item that allows Chimecho to Mega Evolve.",
     "desc": "A held item that allows Chimecho to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chimechite/",
-      "rank": 106,
-      "usageCount": 6,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2637.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2637.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/chimechite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -1182,11 +1236,13 @@
     "shortDesc": "Boosts the holder’s Speed stat by 50%. However, once the holder uses a move, it becomes unable to use any other move but that one until it switches out of battle.",
     "desc": "Boosts the holder’s Speed stat by 50%. However, once the holder uses a move, it becomes unable to use any other move but that one until it switches out of battle.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/choice-scarf/",
-      "rank": 5,
-      "usageCount": 1701,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0287.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0287.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/choice-scarf/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 740,
+      "usagePercent": 5.081719544018679
     }
   },
   {
@@ -1200,7 +1256,13 @@
     "isChoice": true,
     "num": 297,
     "gen": 4,
-    "shortDesc": "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes."
+    "shortDesc": "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes.",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
   },
   {
     "id": "chopleberry",
@@ -1216,11 +1278,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fighting-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Fighting-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/chople-berry/",
-      "rank": 13,
-      "usageCount": 724,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0189.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0189.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/chople-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 285,
+      "usagePercent": 1.9571487433044912
     }
   },
   {
@@ -1264,11 +1328,13 @@
     "shortDesc": "A held item that allows Clefable to Mega Evolve.",
     "desc": "A held item that allows Clefable to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/clefablite/",
-      "rank": 94,
-      "usageCount": 10,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2559.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2559.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/clefablite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 9,
+      "usagePercent": 0.061804697156983925
     }
   },
   {
@@ -1296,11 +1362,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Flying-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Flying-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/coba-berry/",
-      "rank": 25,
-      "usageCount": 265,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0192.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0192.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/coba-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 165,
+      "usagePercent": 1.1330861145447055
     }
   },
   {
@@ -1317,11 +1385,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Dark-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Dark-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/colbur-berry/",
-      "rank": 19,
-      "usageCount": 392,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0198.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0198.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/colbur-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 232,
+      "usagePercent": 1.593187748935586
     }
   },
   {
@@ -1395,11 +1465,13 @@
     "shortDesc": "A held item that allows Crabominable to Mega Evolve.",
     "desc": "A held item that allows Crabominable to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/crabominite/",
-      "rank": 87,
-      "usageCount": 13,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2644.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2644.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/crabominite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.0480703200109875
     }
   },
   {
@@ -1455,11 +1527,13 @@
     "shortDesc": "When the holder summons rain with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "desc": "When the holder summons rain with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/damp-rock/",
-      "rank": 42,
-      "usageCount": 106,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0285.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0285.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/damp-rock/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 31,
+      "usagePercent": 0.21288284576294467
     }
   },
   {
@@ -1595,11 +1669,13 @@
     "shortDesc": "A held item that allows Delphox to Mega Evolve.",
     "desc": "A held item that allows Delphox to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/delphoxite/",
-      "rank": 24,
-      "usageCount": 332,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2576.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2576.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/delphoxite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 162,
+      "usagePercent": 1.1124845488257107
     }
   },
   {
@@ -1691,11 +1767,13 @@
     "shortDesc": "A held item that allows Dragalge to Mega Evolve.",
     "desc": "A held item that allows Dragalge to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragalgite/",
-      "rank": 53,
-      "usageCount": 55,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2582.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2582.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/dragalgite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 25,
+      "usagePercent": 0.17167971432495538
     }
   },
   {
@@ -1717,11 +1795,13 @@
     },
     "desc": "Boosts the power of the holder’s Dragon-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragon-fang/",
-      "rank": 56,
-      "usageCount": 43,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0250.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0250.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/dragon-fang/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 18,
+      "usagePercent": 0.12360939431396785
     }
   },
   {
@@ -1781,11 +1861,13 @@
     "shortDesc": "A held item that allows Dragonite to Mega Evolve.",
     "desc": "A held item that allows Dragonite to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/dragoninite/",
-      "rank": 30,
-      "usageCount": 172,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2562.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2562.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/dragoninite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 52,
+      "usagePercent": 0.35709380579590716
     }
   },
   {
@@ -1818,11 +1900,13 @@
     "shortDesc": "A held item that allows Drampa to Mega Evolve.",
     "desc": "A held item that allows Drampa to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/drampanite/",
-      "rank": 85,
-      "usageCount": 14,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2585.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2585.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/drampanite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 9,
+      "usagePercent": 0.061804697156983925
     }
   },
   {
@@ -1907,6 +1991,16 @@
     "shortDesc": "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type."
   },
   {
+    "id": "ecopelens",
+    "name": "Ecope lens",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
+  },
+  {
     "id": "eelektrossite",
     "name": "Eelektrossite",
     "spritenum": 556,
@@ -1922,11 +2016,13 @@
     "shortDesc": "A held item that allows Eelektross to Mega Evolve.",
     "desc": "A held item that allows Eelektross to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/eelektrossite/",
-      "rank": 37,
-      "usageCount": 125,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2573.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2573.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/eelektrossite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 35,
+      "usagePercent": 0.24035160005493753
     }
   },
   {
@@ -2054,11 +2150,13 @@
     "shortDesc": "A held item that allows Emboar to Mega Evolve.",
     "desc": "A held item that allows Emboar to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/emboarite/",
-      "rank": 112,
-      "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2569.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2569.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/emboarite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.020601565718994644
     }
   },
   {
@@ -2106,11 +2204,13 @@
     "shortDesc": "A held item that allows Excadrill to Mega Evolve.",
     "desc": "A held item that allows Excadrill to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/excadrite/",
-      "rank": 101,
-      "usageCount": 8,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2570.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2570.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/excadrite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.020601565718994644
     }
   },
   {
@@ -2125,11 +2225,13 @@
     "shortDesc": "Boosts the power of the holder’s supereffective moves by 20%.",
     "desc": "Boosts the power of the holder’s supereffective moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/expert-belt/",
-      "rank": 45,
-      "usageCount": 88,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0268.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0268.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/expert-belt/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 44,
+      "usagePercent": 0.30215629721192144
     }
   },
   {
@@ -2159,11 +2261,13 @@
     "shortDesc": "Boosts the power of the holder’s Fairy-type moves by 20%.",
     "desc": "Boosts the power of the holder’s Fairy-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/fairy-feather/",
-      "rank": 14,
-      "usageCount": 717,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_2401.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_2401.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/fairy-feather/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 401,
+      "usagePercent": 2.753742617772284
     }
   },
   {
@@ -2206,11 +2310,13 @@
     "shortDesc": "A held item that allows Falinks to Mega Evolve.",
     "desc": "A held item that allows Falinks to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/falinksite/",
-      "rank": 86,
-      "usageCount": 14,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2587.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2587.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/falinksite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.03433594286499107
     }
   },
   {
@@ -2238,11 +2344,13 @@
     "shortDesc": "A held item that allows Feraligatr to Mega Evolve.",
     "desc": "A held item that allows Feraligatr to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/feraligite/",
-      "rank": 110,
-      "usageCount": 5,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2564.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2564.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/feraligite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -2421,11 +2529,13 @@
     "shortDesc": "A held item that allows Eternal Flower Floette to Mega Evolve.",
     "desc": "A held item that allows Eternal Flower Floette to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/floettite/",
-      "rank": 8,
-      "usageCount": 916,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2579.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2579.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/floettite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 505,
+      "usagePercent": 3.4679302293640983
     }
   },
   {
@@ -2497,11 +2607,13 @@
     "activate": "  [POKEMON] hung on using its Focus Band!",
     "desc": "If the holder takes damage from a move that would knock it out, there’s a 10% chance the holder will endure the hit with 1 HP.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/focus-band/",
-      "rank": 107,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0230.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/focus-band/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 6,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0230.webp"
+      "usagePercent": 0.04120313143798929
     }
   },
   {
@@ -2521,11 +2633,23 @@
     "end": "  [POKEMON] hung on using its Focus Sash!",
     "desc": "If the holder has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/focus-sash/",
-      "rank": 1,
-      "usageCount": 3570,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0275.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0275.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/focus-sash/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1688,
+      "usagePercent": 11.591814311220986
+    }
+  },
+  {
+    "id": "fokusslash",
+    "name": "Fokus Slash",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -2601,11 +2725,13 @@
     "shortDesc": "A held item that allows Froslass to Mega Evolve.",
     "desc": "A held item that allows Froslass to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/froslassite/",
-      "rank": 27,
-      "usageCount": 243,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2566.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2566.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/froslassite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 129,
+      "usagePercent": 0.8858673259167696
     }
   },
   {
@@ -2659,11 +2785,13 @@
     "shortDesc": "A held item that allows Gallade to Mega Evolve.",
     "desc": "A held item that allows Gallade to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/galladite/",
-      "rank": 127,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0756.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/galladite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0756.webp"
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -2695,11 +2823,13 @@
     "shortDesc": "A held item that allows Garchomp to Mega Evolve into Mega Garchomp.",
     "desc": "A held item that allows Garchomp to Mega Evolve into Mega Garchomp.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/garchompite/",
-      "rank": 81,
-      "usageCount": 16,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0683.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0683.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/garchompite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 11,
+      "usagePercent": 0.07553907430298036
     }
   },
   {
@@ -2733,11 +2863,13 @@
     "shortDesc": "A held item that allows Gardevoir to Mega Evolve.",
     "desc": "A held item that allows Gardevoir to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gardevoirite/",
-      "rank": 50,
-      "usageCount": 71,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0657.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0657.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/gardevoirite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 48,
+      "usagePercent": 0.3296250515039143
     }
   },
   {
@@ -2756,11 +2888,13 @@
     "shortDesc": "A held item that allows Gengar to Mega Evolve.",
     "desc": "A held item that allows Gengar to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gengarite/",
-      "rank": 35,
-      "usageCount": 131,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0656.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0656.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/gengarite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 48,
+      "usagePercent": 0.3296250515039143
     }
   },
   {
@@ -2835,11 +2969,13 @@
     "shortDesc": "A held item that allows Glimmora to Mega Evolve.",
     "desc": "A held item that allows Glimmora to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/glimmoranite/",
-      "rank": 62,
-      "usageCount": 33,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2650.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2650.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/glimmoranite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 16,
+      "usagePercent": 0.10987501716797143
     }
   },
   {
@@ -2902,11 +3038,13 @@
     "shortDesc": "A held item that allows Golurk to Mega Evolve.",
     "desc": "A held item that allows Golurk to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/golurkite/",
-      "rank": 68,
-      "usageCount": 26,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2642.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2642.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/golurkite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 10,
+      "usagePercent": 0.06867188572998215
     }
   },
   {
@@ -2990,11 +3128,13 @@
     "shortDesc": "A held item that allows Greninja to Mega Evolve.",
     "desc": "A held item that allows Greninja to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/greninjite/",
-      "rank": 88,
-      "usageCount": 13,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2577.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2577.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/greninjite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -3110,11 +3250,13 @@
     "shortDesc": "A held item that allows Gyarados to Mega Evolve.",
     "desc": "A held item that allows Gyarados to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/gyaradosite/",
-      "rank": 79,
-      "usageCount": 17,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0676.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0676.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/gyaradosite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 14,
+      "usagePercent": 0.096140640021975
     }
   },
   {
@@ -3131,11 +3273,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Dragon-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Dragon-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/haban-berry/",
-      "rank": 58,
-      "usageCount": 37,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0197.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0197.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/haban-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 11,
+      "usagePercent": 0.07553907430298036
     }
   },
   {
@@ -3154,11 +3298,13 @@
     },
     "desc": "Boosts the power of the holder’s Rock-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/hard-stone/",
-      "rank": 113,
-      "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0238.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0238.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/hard-stone/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -3177,11 +3323,13 @@
     "shortDesc": "A held item that allows Hawlucha to Mega Evolve.",
     "desc": "A held item that allows Hawlucha to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/hawluchanite/",
-      "rank": 98,
-      "usageCount": 9,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2583.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2583.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/hawluchanite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.04120313143798929
     }
   },
   {
@@ -3221,11 +3369,13 @@
     "shortDesc": "When the holder summons harsh sunlight with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "desc": "When the holder summons harsh sunlight with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/heat-rock/",
-      "rank": 57,
-      "usageCount": 43,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0284.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0284.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/heat-rock/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 14,
+      "usagePercent": 0.096140640021975
     }
   },
   {
@@ -3291,11 +3441,9 @@
     "shortDesc": "A held item that allows Heracross to Mega Evolve.",
     "desc": "A held item that allows Heracross to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/heracronite/",
-      "rank": 119,
-      "usageCount": 2,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0680.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0680.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/heracronite/"
     }
   },
   {
@@ -3328,11 +3476,9 @@
     "shortDesc": "A held item that allows Houndoom to Mega Evolve.",
     "desc": "A held item that allows Houndoom to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/houndoominite/",
-      "rank": 128,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0666.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0666.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/houndoominite/"
     }
   },
   {
@@ -3453,11 +3599,9 @@
     },
     "desc": "When the holder summons snow with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/icy-rock/",
-      "rank": 120,
-      "usageCount": 2,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0282.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0282.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/icy-rock/"
     }
   },
   {
@@ -3501,11 +3645,13 @@
     },
     "desc": "Halves the holder’s Speed stat. If the holder is off the ground, it will be grounded, meaning it can be affected by Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/iron-ball/",
-      "rank": 70,
-      "usageCount": 25,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0278.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0278.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/iron-ball/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 22,
+      "usagePercent": 0.15107814860596072
     }
   },
   {
@@ -3530,7 +3676,13 @@
     },
     "num": 211,
     "gen": 4,
-    "shortDesc": "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use."
+    "shortDesc": "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
   },
   {
     "id": "jawfossil",
@@ -3560,11 +3712,13 @@
     "shortDesc": "A held item that allows Kangaskhan to Mega Evolve.",
     "desc": "A held item that allows Kangaskhan to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kangaskhanite/",
-      "rank": 48,
-      "usageCount": 76,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0675.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0675.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/kangaskhanite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 36,
+      "usagePercent": 0.2472187886279357
     }
   },
   {
@@ -3581,11 +3735,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ghost-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Ghost-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kasib-berry/",
-      "rank": 15,
-      "usageCount": 649,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0196.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0196.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/kasib-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 289,
+      "usagePercent": 1.984617497596484
     }
   },
   {
@@ -3602,11 +3758,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Poison-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Poison-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kebia-berry/",
-      "rank": 104,
-      "usageCount": 7,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0190.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0190.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/kebia-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -3650,11 +3808,13 @@
     "desc": "When the holder deals damage with its moves, there is a 10% chance that targets will flinch.",
     "shortDesc": "When the holder deals damage with its moves, there is a 10% chance that targets will flinch.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/kings-rock/",
-      "rank": 78,
-      "usageCount": 18,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0221.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0221.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/kings-rock/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 12,
+      "usagePercent": 0.08240626287597858
     }
   },
   {
@@ -3791,11 +3951,13 @@
     "heal": "  [POKEMON] restored a little HP using its Leftovers!",
     "desc": "Restores 1/16 of the holder’s max HP at the end of every turn.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/leftovers/",
-      "rank": 4,
-      "usageCount": 1844,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0234.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0234.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/leftovers/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 904,
+      "usagePercent": 6.207938469990386
     }
   },
   {
@@ -3847,11 +4009,13 @@
     "damage": "  [POKEMON] lost some of its HP!",
     "desc": "Boosts the power of the holder’s moves by 30%. However, the holder also loses 1/10 of its max HP each time it successfully lands an attack.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/life-orb/",
-      "rank": 3,
-      "usageCount": 2698,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0270.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0270.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/life-orb/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1360,
+      "usagePercent": 9.339376459277572
     }
   },
   {
@@ -3893,11 +4057,13 @@
     },
     "desc": "When held by a Pikachu, doubles the holder’s Attack and Sp. Atk.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/light-ball/",
-      "rank": 95,
-      "usageCount": 10,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0236.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0236.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/light-ball/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -3915,11 +4081,13 @@
     },
     "desc": "When the holder uses Light Screen, Reflect, or Aurora Veil, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/light-clay/",
-      "rank": 6,
-      "usageCount": 1041,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0269.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0269.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/light-clay/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 450,
+      "usagePercent": 3.0902348578491967
     }
   },
   {
@@ -3950,11 +4118,13 @@
     "shortDesc": "A held item that allows Lopunny to Mega Evolve.",
     "desc": "A held item that allows Lopunny to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lopunnite/",
-      "rank": 73,
-      "usageCount": 21,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0768.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0768.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/lopunnite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.05493750858398572
     }
   },
   {
@@ -3993,11 +4163,13 @@
     "shortDesc": "A held item that allows Lucario to Mega Evolve into Mega Lucario.",
     "desc": "A held item that allows Lucario to Mega Evolve into Mega Lucario.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lucarionite/",
-      "rank": 91,
-      "usageCount": 12,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0673.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0673.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/lucarionite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.05493750858398572
     }
   },
   {
@@ -4048,11 +4220,13 @@
     "shortDesc": "Cures any status condition or confusion. Disappears for the duration of the battle after a single use.",
     "desc": "Cures any status condition or confusion. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/lum-berry/",
-      "rank": 49,
-      "usageCount": 72,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0157.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0157.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/lum-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 31,
+      "usagePercent": 0.21288284576294467
     }
   },
   {
@@ -4205,11 +4379,13 @@
     },
     "desc": "Boosts the power of the holder’s Electric-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/magnet/",
-      "rank": 75,
-      "usageCount": 20,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0242.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0242.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/magnet/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 17,
+      "usagePercent": 0.11674220574096966
     }
   },
   {
@@ -4271,11 +4447,13 @@
     "shortDesc": "A held item that allows Malamar to Mega Evolve.",
     "desc": "A held item that allows Malamar to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/malamarite/",
-      "rank": 72,
-      "usageCount": 22,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2580.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2580.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/malamarite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.0480703200109875
     }
   },
   {
@@ -4305,11 +4483,13 @@
     "shortDesc": "A held item that allows Manectric to Mega Evolve.",
     "desc": "A held item that allows Manectric to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/manectite/",
-      "rank": 114,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0682.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/manectite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0682.webp"
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -4376,11 +4556,13 @@
     "shortDesc": "A held item that allows Mawile to Mega Evolve.",
     "desc": "A held item that allows Mawile to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mawilite/",
-      "rank": 20,
-      "usageCount": 377,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0681.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0681.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/mawilite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 232,
+      "usagePercent": 1.593187748935586
     }
   },
   {
@@ -4410,11 +4592,13 @@
     "shortDesc": "A held item that allows Medicham to Mega Evolve.",
     "desc": "A held item that allows Medicham to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/medichamite/",
-      "rank": 121,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0665.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/medichamite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0665.webp"
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -4433,11 +4617,13 @@
     "shortDesc": "A held item that allows Meganium to Mega Evolve.",
     "desc": "A held item that allows Meganium to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/meganiumite/",
-      "rank": 60,
-      "usageCount": 34,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2563.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2563.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/meganiumite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 22,
+      "usagePercent": 0.15107814860596072
     }
   },
   {
@@ -4455,11 +4641,13 @@
     },
     "desc": "Cures the holder of the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, and Encore statuses. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mental-herb/",
-      "rank": 36,
-      "usageCount": 126,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0219.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0219.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/mental-herb/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 75,
+      "usagePercent": 0.5150391429748661
     }
   },
   {
@@ -4480,11 +4668,9 @@
     "shortDesc": "A held item that allows Meowstic to Mega Evolve.",
     "desc": "A held item that allows Meowstic to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/meowsticite/",
-      "rank": 129,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2643.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2643.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/meowsticite/"
     }
   },
   {
@@ -4503,11 +4689,13 @@
     "shortDesc": "A held item that allows Metagross to Mega Evolve.",
     "desc": "A held item that allows Metagross to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metagrossite/",
-      "rank": 10,
-      "usageCount": 809,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0758.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0758.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/metagrossite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 348,
+      "usagePercent": 2.389781623403379
     }
   },
   {
@@ -4535,11 +4723,13 @@
       "shortDesc": "Holder's Steel-type attacks have 1.1x power."
     },
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metal-coat/",
-      "rank": 44,
-      "usageCount": 99,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0233.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0233.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/metal-coat/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 41,
+      "usagePercent": 0.28155473149292676
     }
   },
   {
@@ -4579,11 +4769,13 @@
     },
     "desc": "Boosts the power of a move that is used repeatedly. This boost will be 20% on the second usage, 40% on the third, and so on, up to a maximum boost of 100%. If the streak is broken, the move’s power returns to its usual value.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/metronome/",
-      "rank": 82,
-      "usageCount": 15,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0277.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0277.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/metronome/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -4726,11 +4918,13 @@
     },
     "desc": "Boosts the power of the holder’s Grass-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/miracle-seed/",
-      "rank": 71,
-      "usageCount": 25,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0239.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0239.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/miracle-seed/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.020601565718994644
     }
   },
   {
@@ -4796,11 +4990,13 @@
     "shortDesc": "Boosts the power of the holder’s physical moves by 10%.",
     "desc": "Boosts the power of the holder’s physical moves by 10%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/muscle-band/",
-      "rank": 65,
-      "usageCount": 29,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0266.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0266.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/muscle-band/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.0480703200109875
     }
   },
   {
@@ -4837,11 +5033,13 @@
     },
     "desc": "Boosts the power of the holder’s Water-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/mystic-water/",
-      "rank": 17,
-      "usageCount": 498,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0243.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0243.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/mystic-water/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 245,
+      "usagePercent": 1.6824612003845625
     }
   },
   {
@@ -4893,11 +5091,23 @@
     },
     "desc": "Boosts the power of the holder’s Ice-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/never-melt-ice/",
-      "rank": 47,
-      "usageCount": 80,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0246.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0246.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/never-melt-ice/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 28,
+      "usagePercent": 0.19228128004395
+    }
+  },
+  {
+    "id": "noitem",
+    "name": "No Item",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.0480703200109875
     }
   },
   {
@@ -4914,6 +5124,16 @@
     "gen": 3,
     "isNonstandard": "Past",
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
+  },
+  {
+    "id": "none",
+    "name": "None",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.04120313143798929
+    }
   },
   {
     "id": "normalgem",
@@ -4940,6 +5160,16 @@
     "shortDesc": "If holder has a Normal move, this item allows it to use a Normal Z-Move."
   },
   {
+    "id": "nothing",
+    "name": "Nothing",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
+  },
+  {
     "id": "occaberry",
     "name": "Occa Berry",
     "spritenum": 311,
@@ -4953,11 +5183,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fire-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Fire-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/occa-berry/",
-      "rank": 28,
-      "usageCount": 198,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0184.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0184.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/occa-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 105,
+      "usagePercent": 0.7210548001648125
     }
   },
   {
@@ -5048,11 +5280,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Water-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Water-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/passho-berry/",
-      "rank": 26,
-      "usageCount": 252,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0185.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0185.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/passho-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 88,
+      "usagePercent": 0.6043125944238429
     }
   },
   {
@@ -5069,11 +5303,9 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Psychic-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Psychic-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/payapa-berry/",
-      "rank": 130,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0193.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0193.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/payapa-berry/"
     }
   },
   {
@@ -5131,11 +5363,13 @@
     "shortDesc": "A held item that allows Pidgeot to Mega Evolve.",
     "desc": "A held item that allows Pidgeot to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/pidgeotite/",
-      "rank": 118,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0762.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/pidgeotite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0762.webp"
+      "usagePercent": 0.020601565718994644
     }
   },
   {
@@ -5225,7 +5459,13 @@
     "forcedForme": "Arceus-Fairy",
     "num": 644,
     "gen": 6,
-    "shortDesc": "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type."
+    "shortDesc": "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
   },
   {
     "id": "plumefossil",
@@ -5256,11 +5496,13 @@
     },
     "desc": "Boosts the power of the holder’s Poison-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/poison-barb/",
-      "rank": 131,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0245.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0245.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/poison-barb/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -5611,11 +5853,13 @@
     "shortDesc": "A held item that allows Pyroar to Mega Evolve.",
     "desc": "A held item that allows Pyroar to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/pyroarite/",
-      "rank": 29,
-      "usageCount": 191,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2578.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2578.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/pyroarite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 110,
+      "usagePercent": 0.7553907430298036
     }
   },
   {
@@ -5658,11 +5902,13 @@
     "activate": "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
     "desc": "Gives the holder’s moves a 20% chance of going first among moves of the same priority.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/quick-claw/",
-      "rank": 51,
-      "usageCount": 59,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0217.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0217.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/quick-claw/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 30,
+      "usagePercent": 0.20601565718994644
     }
   },
   {
@@ -5711,11 +5957,13 @@
     "shortDesc": "A held item that allows Raichu to Mega Evolve into Mega Raichu X. It has no effect on Alolan Raichu.",
     "desc": "A held item that allows Raichu to Mega Evolve into Mega Raichu X. It has no effect on Alolan Raichu.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-x/",
-      "rank": 38,
-      "usageCount": 108,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2635.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2635.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-x/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 36,
+      "usagePercent": 0.2472187886279357
     }
   },
   {
@@ -5734,11 +5982,13 @@
     "shortDesc": "A held item that allows Raichu to Mega Evolve into Mega Raichu Y. It has no effect on Alolan Raichu.",
     "desc": "A held item that allows Raichu to Mega Evolve into Mega Raichu Y. It has no effect on Alolan Raichu.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-y/",
-      "rank": 18,
-      "usageCount": 418,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2636.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2636.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/raichunite-y/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 206,
+      "usagePercent": 1.414640846037632
     }
   },
   {
@@ -5877,11 +6127,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Grass-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Grass-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/rindo-berry/",
-      "rank": 102,
-      "usageCount": 8,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0187.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0187.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/rindo-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -6017,11 +6269,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Fairy-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Fairy-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/roseli-berry/",
-      "rank": 22,
-      "usageCount": 355,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0686.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0686.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/roseli-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 158,
+      "usagePercent": 1.085015794533718
     }
   },
   {
@@ -6075,11 +6329,9 @@
     "shortDesc": "A held item that allows Sableye to Mega Evolve.",
     "desc": "A held item that allows Sableye to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sablenite/",
-      "rank": 132,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0754.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0754.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/sablenite/"
     }
   },
   {
@@ -6171,11 +6423,13 @@
     "shortDesc": "A held item that allows Sceptile to Mega Evolve.",
     "desc": "A held item that allows Sceptile to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sceptilite/",
-      "rank": 41,
-      "usageCount": 107,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0753.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0753.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/sceptilite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 59,
+      "usagePercent": 0.40516412580689465
     }
   },
   {
@@ -6194,11 +6448,13 @@
     "shortDesc": "A held item that allows Scizor to Mega Evolve.",
     "desc": "A held item that allows Scizor to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scizorite/",
-      "rank": 59,
-      "usageCount": 35,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0670.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0670.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/scizorite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 9,
+      "usagePercent": 0.061804697156983925
     }
   },
   {
@@ -6217,11 +6473,13 @@
     "shortDesc": "A held item that allows Scolipede to Mega Evolve.",
     "desc": "A held item that allows Scolipede to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scolipite/",
-      "rank": 80,
-      "usageCount": 17,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2571.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2571.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/scolipite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -6236,11 +6494,13 @@
     "shortDesc": "Gives the holder a 1-stage Critical-Hit Ratio Boost.",
     "desc": "Gives the holder a 1-stage Critical-Hit Ratio Boost.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scope-lens/",
-      "rank": 83,
-      "usageCount": 15,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0232.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0232.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/scope-lens/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 10,
+      "usagePercent": 0.06867188572998215
     }
   },
   {
@@ -6259,11 +6519,13 @@
     "shortDesc": "A held item that allows Scovillain to Mega Evolve.",
     "desc": "A held item that allows Scovillain to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scovillainite/",
-      "rank": 39,
-      "usageCount": 108,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2647.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2647.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/scovillainite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 73,
+      "usagePercent": 0.5013047658288696
     }
   },
   {
@@ -6282,11 +6544,13 @@
     "shortDesc": "A held item that allows Scrafty to Mega Evolve.",
     "desc": "A held item that allows Scrafty to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/scraftinite/",
-      "rank": 40,
-      "usageCount": 108,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2572.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2572.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/scraftinite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 94,
+      "usagePercent": 0.6455157258618321
     }
   },
   {
@@ -6321,11 +6585,13 @@
     },
     "desc": "Boosts the power of the holder’s Flying-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sharp-beak/",
-      "rank": 43,
-      "usageCount": 104,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0244.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0244.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/sharp-beak/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 40,
+      "usagePercent": 0.2746875429199286
     }
   },
   {
@@ -6344,11 +6610,9 @@
     "shortDesc": "A held item that allows Sharpedo to Mega Evolve.",
     "desc": "A held item that allows Sharpedo to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sharpedonite/",
-      "rank": 133,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0759.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0759.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/sharpedonite/"
     }
   },
   {
@@ -6365,11 +6629,13 @@
     "shortDesc": "Enables the holder to ignore any effects that would usually prevent it from switching out of battle and being replaced by another party Pokémon.",
     "desc": "Enables the holder to ignore any effects that would usually prevent it from switching out of battle and being replaced by another party Pokémon.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shed-shell/",
-      "rank": 134,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0295.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/shed-shell/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0295.webp"
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -6386,11 +6652,13 @@
     "heal": "  [POKEMON] restored a little HP using its Shell Bell!",
     "desc": "When the holder deals damage with its moves, its HP is restored by 1/8 of the damage dealt.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shell-bell/",
-      "rank": 105,
-      "usageCount": 7,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0253.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0253.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/shell-bell/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -6433,11 +6701,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ground-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Ground-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/shuca-berry/",
-      "rank": 46,
-      "usageCount": 83,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0191.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0191.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/shuca-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 30,
+      "usagePercent": 0.20601565718994644
     }
   },
   {
@@ -6456,11 +6726,13 @@
     },
     "desc": "Boosts the power of the holder’s Normal-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/silk-scarf/",
-      "rank": 54,
-      "usageCount": 53,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0251.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0251.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/silk-scarf/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 34,
+      "usagePercent": 0.23348441148193932
     }
   },
   {
@@ -6479,11 +6751,13 @@
     },
     "desc": "Boosts the power of the holder’s Bug-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/silver-powder/",
-      "rank": 135,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0222.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/silver-powder/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0222.webp"
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -6503,11 +6777,13 @@
     },
     "desc": "Restores 1/4 of the holder’s max HP when the holder’s HP drops to 1/2 or less of its max. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/sitrus-berry/",
-      "rank": 2,
-      "usageCount": 3259,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0158.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0158.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/sitrus-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1644,
+      "usagePercent": 11.289658014009065
     }
   },
   {
@@ -6526,11 +6802,13 @@
     "shortDesc": "A held item that allows Skarmory to Mega Evolve.",
     "desc": "A held item that allows Skarmory to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/skarmorite/",
-      "rank": 108,
-      "usageCount": 6,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2565.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2565.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/skarmorite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -6571,11 +6849,13 @@
     "isNonstandard": "Past",
     "shortDesc": "A held item that allows Slowbro to Mega Evolve. It has no effect on Galarian Slowbro.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/slowbronite/",
-      "rank": 136,
-      "usageCount": 1,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0760.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0760.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/slowbronite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.020601565718994644
     },
     "desc": "A held item that allows Slowbro to Mega Evolve. It has no effect on Galarian Slowbro."
   },
@@ -6591,11 +6871,13 @@
     "shortDesc": "When the holder summons a sandstorm with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "desc": "When the holder summons a sandstorm with its moves or Ability, the duration is extended by 3 turns. (Total duration: 8 turns)",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/smooth-rock/",
-      "rank": 122,
-      "usageCount": 2,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0283.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0283.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/smooth-rock/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -6643,11 +6925,13 @@
     },
     "desc": "Boosts the power of the holder’s Ground-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/soft-sand/",
-      "rank": 66,
-      "usageCount": 29,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0237.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0237.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/soft-sand/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 11,
+      "usagePercent": 0.07553907430298036
     }
   },
   {
@@ -6701,11 +6985,13 @@
     },
     "desc": "Boosts the power of the holder’s Ghost-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/spell-tag/",
-      "rank": 67,
-      "usageCount": 29,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0247.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0247.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/spell-tag/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 23,
+      "usagePercent": 0.15794533717895892
     }
   },
   {
@@ -6781,11 +7067,23 @@
     "shortDesc": "A held item that allows Staraptor to Mega Evolve.",
     "desc": "A held item that allows Staraptor to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/staraptite/",
-      "rank": 12,
-      "usageCount": 755,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2639.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2639.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/staraptite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 178,
+      "usagePercent": 1.2223595659936823
+    }
+  },
+  {
+    "id": "staraptornite",
+    "name": "Staraptornite",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
     }
   },
   {
@@ -6817,11 +7115,13 @@
     "shortDesc": "A held item that allows Starmie to Mega Evolve.",
     "desc": "A held item that allows Starmie to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/starminite/",
-      "rank": 76,
-      "usageCount": 19,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2561.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2561.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/starminite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.05493750858398572
     }
   },
   {
@@ -6881,11 +7181,13 @@
     "shortDesc": "A held item that allows Steelix to Mega Evolve.",
     "desc": "A held item that allows Steelix to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/steelixite/",
-      "rank": 103,
-      "usageCount": 8,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0761.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0761.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/steelixite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.03433594286499107
     }
   },
   {
@@ -6979,11 +7281,13 @@
     "shortDesc": "A held item that allows Swampert to Mega Evolve.",
     "desc": "A held item that allows Swampert to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/swampertite/",
-      "rank": 9,
-      "usageCount": 840,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0752.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0752.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/swampertite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 423,
+      "usagePercent": 2.904820766378245
     }
   },
   {
@@ -7163,7 +7467,13 @@
     "onResidualSubOrder": 3,
     "num": 272,
     "gen": 4,
-    "shortDesc": "At the end of every turn, this item attempts to badly poison the holder."
+    "shortDesc": "At the end of every turn, this item attempts to badly poison the holder.",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
   },
   {
     "id": "toxicplate",
@@ -8392,11 +8702,13 @@
     },
     "desc": "Boosts the power of the holder’s Psychic-type moves by 20%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/twisted-spoon/",
-      "rank": 115,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0248.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/twisted-spoon/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0248.webp"
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -8415,11 +8727,13 @@
     "shortDesc": "A held item that allows Tyranitar to Mega Evolve.",
     "desc": "A held item that allows Tyranitar to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/tyranitarite/",
-      "rank": 33,
-      "usageCount": 155,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0669.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0669.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/tyranitarite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 96,
+      "usagePercent": 0.6592501030078286
     }
   },
   {
@@ -8501,11 +8815,13 @@
     "shortDesc": "A held item that allows Venusaur to Mega Evolve.",
     "desc": "A held item that allows Venusaur to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/venusaurite/",
-      "rank": 32,
-      "usageCount": 160,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0659.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_0659.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/venusaurite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 105,
+      "usagePercent": 0.7210548001648125
     }
   },
   {
@@ -8524,11 +8840,13 @@
     "shortDesc": "A held item that allows Victreebel to Mega Evolve.",
     "desc": "A held item that allows Victreebel to Mega Evolve.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/victreebelite/",
-      "rank": 116,
-      "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2560.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_02_2560.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/victreebelite/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
     }
   },
   {
@@ -8562,11 +8880,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Electric-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Electric-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wacan-berry/",
-      "rank": 117,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0186.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/wacan-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0186.webp"
+      "usagePercent": 0.02746875429199286
     }
   },
   {
@@ -8663,7 +8983,13 @@
     },
     "num": 639,
     "gen": 6,
-    "shortDesc": "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use."
+    "shortDesc": "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.006867188572998215
+    }
   },
   {
     "id": "wellspringmask",
@@ -8709,6 +9035,16 @@
     "shortDesc": "Evolves Swirlix into Slurpuff when traded."
   },
   {
+    "id": "whitehearb",
+    "name": "White Hearb",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.01373437714599643
+    }
+  },
+  {
     "id": "whiteherb",
     "name": "White Herb",
     "spritenum": 535,
@@ -8723,11 +9059,13 @@
     "end": "  [POKEMON] returned its stats to normal using its White Herb!",
     "desc": "Restores the holder’s stats to their usual value when they are lowered. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/white-herb/",
-      "rank": 11,
-      "usageCount": 795,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0214.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0214.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/white-herb/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 343,
+      "usagePercent": 2.3554456805383874
     }
   },
   {
@@ -8743,11 +9081,13 @@
     "shortDesc": "Boosts the accuracy of the holder’s moves by 10%.",
     "desc": "Boosts the accuracy of the holder’s moves by 10%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wide-lens/",
-      "rank": 31,
-      "usageCount": 162,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0265.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0265.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/wide-lens/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 58,
+      "usagePercent": 0.3982969372338965
     }
   },
   {
@@ -8782,11 +9122,13 @@
     "shortDesc": "Boosts the power of the holder’s special moves by 10%.",
     "desc": "Boosts the power of the holder’s special moves by 10%.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/wise-glasses/",
-      "rank": 74,
-      "usageCount": 21,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0267.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0267.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/wise-glasses/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 12,
+      "usagePercent": 0.08240626287597858
     }
   },
   {
@@ -8803,11 +9145,13 @@
     "shortDesc": "Halves the damage taken when the holder is hit with a supereffective Ice-type move. Disappears for the duration of the battle after a single use.",
     "desc": "Halves the damage taken when the holder is hit with a supereffective Ice-type move. Disappears for the duration of the battle after a single use.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/yache-berry/",
-      "rank": 96,
-      "usageCount": 10,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0188.webp"
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0188.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/yache-berry/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.03433594286499107
     }
   },
   {
@@ -8849,11 +9193,13 @@
     "shortDesc": "Boosts the accuracy of the holder’s moves by 20% when the holder acts after the targets.",
     "desc": "Boosts the accuracy of the holder’s moves by 20% when the holder acts after the targets.",
     "champions": {
-      "source": "Pokemon Zone",
-      "sourceUrl": "https://www.pokemon-zone.com/champions/items/zoom-lens/",
-      "rank": 123,
+      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0276.webp",
+      "catalogSource": "Pokemon Zone",
+      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/items/zoom-lens/",
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "icon": "https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/ui_ItemIcon_01_0276.webp"
+      "usagePercent": 0.01373437714599643
     }
   },
   {

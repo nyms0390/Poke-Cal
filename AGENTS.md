@@ -44,9 +44,10 @@ Direct equivalents that work with the bundled Node binary:
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test test/battle-order.test.js test/damage.test.js test/speed.test.js
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test test/catalog.test.js test/pokemon.test.js test/stats.test.js test/ui.test.js
-/Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test test/pokemon-zone-data.test.js test/showdown-data.test.js test/sync-pokemon-data.test.js test/usage-defaults.test.js
+/Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test test/limitless-data.test.js test/pokemon-zone-data.test.js test/showdown-data.test.js test/sync-pokemon-data.test.js test/usage-defaults.test.js
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/sync-pokemon-data.mjs
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/sync-pokemon-zone-champions.mjs
+/Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/sync-limitless-champions-usage.mjs
 /Users/zhangyang/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/serve.mjs
 ```
 
@@ -60,7 +61,9 @@ Traditional Chinese aliases, then writes `public/pokemon.json`,
 `public/abilities.json`, `public/moves.json`, and `public/items.json`.
 
 `scripts/sync-pokemon-zone-champions.mjs` overlays Pokemon Zone Champions
-catalog metadata and popularity counts onto those same `public/*.json` files.
+catalog metadata onto those same `public/*.json` files.
+`scripts/sync-limitless-champions-usage.mjs` overlays Limitless Champions
+tournament usage counts, rates, and per-Pokemon default distributions.
 Run the Showdown sync first when rebuilding from scratch.
 
 Pokemon Zone may block command-line fetches. If live fetches fail, use the
@@ -68,8 +71,9 @@ script's `--snapshot-dir` support with saved catalog pages or JSON snapshots
 instead of adding retry loops or changing parser behavior blindly.
 
 Label external battle and catalog data precisely in user-facing copy:
-Pokemon Zone is the Champions catalog/popularity source, Pokemon Showdown is the
-mechanics/catalog seed, and PokeAPI is only the Traditional Chinese alias source.
+Limitless is the Champions tournament usage source, Pokemon Zone is the
+Champions catalog/detail source, Pokemon Showdown is the mechanics/catalog seed,
+and PokeAPI is only the Traditional Chinese alias source.
 
 ## Testing Expectations
 
@@ -83,7 +87,8 @@ Run the narrowest relevant test first:
   `test/ui.test.js`.
 - Showdown parsing, generated catalog shape, usage defaults, or sync scripts:
   `test/showdown-data.test.js`, `test/sync-pokemon-data.test.js`,
-  `test/usage-defaults.test.js`, and/or `test/pokemon-zone-data.test.js`.
+  `test/usage-defaults.test.js`, `test/limitless-data.test.js`, and/or
+  `test/pokemon-zone-data.test.js`.
 
 Run the full `node --test` suite before finishing shared logic, generated data,
 or cross-page UI changes. For browser-visible changes, start the local server

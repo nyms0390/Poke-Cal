@@ -1,4 +1,5 @@
 import {
+  applyScopedUsage,
   formatMovePriority,
   formatChampionsUsage,
   resolvePokemonAbilities,
@@ -279,8 +280,11 @@ function renderSideSelects(side, defaults) {
   const natureSelect = elements[`${side}Nature`];
   const abilitySelect = elements[`${side}Ability`];
   const itemSelect = elements[`${side}Item`];
-  const abilities = sortByChampionsUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup));
-  const rankedItems = sortByChampionsUsage(items);
+  const usage = damageState[side].pokemon?.champions?.usage;
+  const abilities = sortByChampionsUsage(
+    applyScopedUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities),
+  );
+  const rankedItems = sortByChampionsUsage(applyScopedUsage(items, usage?.items));
 
   spreadSelect.replaceChildren(
     optionElement("", "No Champions spread source"),
@@ -402,7 +406,7 @@ function renderDamage() {
   if (!attacker?.pokemon || !defender?.pokemon) return;
 
   elements.damageSource.textContent =
-    "Pokemon Zone Champions defaults · ranked ability, item, and moves · neutral 0 SP";
+    "Limitless Champions defaults · ranked ability, item, moves, and nature · neutral 0 SP";
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
@@ -517,7 +521,12 @@ function selectedDamageMoves(side) {
 function damageMovesForSide(side) {
   const state = damageState[side];
   if (!state?.pokemon) return [];
-  return sortByChampionsUsage(resolveChampionsPokemonMoves(state.pokemon, moveLookup));
+  return sortByChampionsUsage(
+    applyScopedUsage(
+      resolveChampionsPokemonMoves(state.pokemon, moveLookup),
+      state.pokemon.champions?.usage?.moves,
+    ),
+  );
 }
 
 function sideSummary(state) {

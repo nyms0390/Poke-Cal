@@ -31,6 +31,7 @@ export function parseUsageSpread(name) {
 
 export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLookup, moveLookup } = {}) {
   const spread = parseUsageSpread(topUsageEntry(usage?.spreads)?.name) ?? EMPTY_SPREAD;
+  const nature = topUsageEntry(usage?.natures)?.name;
   const ability = resolveUsageEntry(topUsageEntry(usage?.abilities), abilityLookup);
   const item = resolveUsageEntry(topUsageEntry(usage?.items), itemLookup);
   const topMoves = (usage?.moves ?? []).slice(0, 4).map((move) => resolveUsageEntry(move, moveLookup));
@@ -38,7 +39,7 @@ export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLooku
   return {
     pokemon: entry,
     spreadName: topUsageEntry(usage?.spreads)?.name ?? "",
-    nature: spread.nature,
+    nature: nature && nature in NATURES ? nature : spread.nature,
     sp: { ...spread.sp },
     ability,
     item,
@@ -50,6 +51,14 @@ export function championsDefaultsForPokemon(
   entry,
   { abilityLookup, moveLookup, items = [] } = {},
 ) {
+  if (entry?.champions?.usage) {
+    return usageDefaultsForPokemon(entry, entry.champions.usage, {
+      abilityLookup,
+      itemLookup: itemLookupFromEntries(items),
+      moveLookup,
+    });
+  }
+
   const abilities = sortByChampionsUsage(resolvePokemonAbilities(entry, abilityLookup));
   const sortedItems = sortByChampionsUsage(items).filter((item) => championsUsageCount(item) >= 0);
   const moves = sortByChampionsUsage(resolveChampionsPokemonMoves(entry, moveLookup));
@@ -63,6 +72,15 @@ export function championsDefaultsForPokemon(
     item: sortedItems[0] ?? null,
     moves: moves.length > 0 ? moves : (entry?.moves ?? []).map((id) => ({ id, name: id })),
   };
+}
+
+function itemLookupFromEntries(items) {
+  const lookup = new Map();
+  for (const item of items) {
+    lookup.set(normalizeId(item.id), item);
+    lookup.set(normalizeId(item.name), item);
+  }
+  return lookup;
 }
 
 export function topUsageEntry(entries = []) {

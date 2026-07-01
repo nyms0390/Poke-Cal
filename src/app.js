@@ -1,4 +1,5 @@
 import {
+  applyScopedUsage,
   filterMoves,
   formatChampionsUsage,
   formatMoveAccuracy,
@@ -59,7 +60,9 @@ async function initialize() {
     elements.status.textContent =
       `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
       `${data.moves.length} moves loaded`;
-    selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0]);
+    selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
+      syncSearch: false,
+    });
   } catch (error) {
     elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
     console.error(error);
@@ -110,12 +113,12 @@ function renderSearchResults(results) {
   elements.results.hidden = results.length === 0;
 }
 
-function selectPokemon(entry) {
+function selectPokemon(entry, options = {}) {
   if (!entry) return;
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
   renderFamilyStats();
-  selectForm(entry);
+  selectForm(entry, options);
   elements.results.hidden = true;
 }
 
@@ -166,9 +169,9 @@ function renderFamilyStats() {
   );
 }
 
-function selectForm(entry) {
+function selectForm(entry, options = {}) {
   selectedPokemon = entry;
-  elements.search.value = entry.baseSpecies;
+  if (options.syncSearch !== false) elements.search.value = entry.baseSpecies;
   elements.selectedName.textContent = entry.name;
   elements.selectedTypes.replaceChildren(...(entry.types ?? []).map(typeBadge));
   elements.selectedAlias.textContent = entry.aliases.join(" · ") || entry.baseSpecies;
@@ -184,9 +187,14 @@ function selectForm(entry) {
 function renderCatalog() {
   renderUsageSource();
 
-  const abilities = sortByChampionsUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup));
-  const rankedItems = sortByChampionsUsage(items);
-  selectedMoves = sortByChampionsUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup));
+  const usage = selectedPokemon?.champions?.usage;
+  const abilities = sortByChampionsUsage(
+    applyScopedUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities),
+  );
+  const rankedItems = sortByChampionsUsage(applyScopedUsage(items, usage?.items));
+  selectedMoves = sortByChampionsUsage(
+    applyScopedUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup), usage?.moves),
+  );
 
   renderPlaystyle(abilities, rankedItems);
   renderSpreads();
@@ -197,7 +205,7 @@ function renderCatalog() {
 }
 
 function renderUsageSource() {
-  elements.usageSource.textContent = "Pokemon Zone Champions catalog popularity";
+  elements.usageSource.textContent = "Limitless Champions tournament usage";
 }
 
 function renderPlaystyle(abilities, rankedItems) {

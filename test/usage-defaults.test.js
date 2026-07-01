@@ -110,3 +110,39 @@ test("selects Champions catalog defaults by usage count", () => {
   assert.equal(defaults.item.name, "Light Ball");
   assert.deepEqual(defaults.moves.map(({ id }) => id), ["thunderbolt", "fakeout", "quickattack"]);
 });
+
+test("prefers per-Pokemon Limitless usage defaults when available", () => {
+  const defaults = championsDefaultsForPokemon(
+    {
+      id: "raichu",
+      abilities: ["Static", "Lightning Rod"],
+      moves: ["thunderbolt", "fakeout", "protect"],
+      champions: {
+        usage: {
+          abilities: [{ id: "lightningrod", name: "Lightning Rod", usagePercent: 90 }],
+          items: [{ id: "raichunitey", name: "Raichunite Y", usagePercent: 80 }],
+          moves: [
+            { id: "fakeout", name: "Fake Out", usagePercent: 95 },
+            { id: "protect", name: "Protect", usagePercent: 70 },
+          ],
+          natures: [{ id: "timid", name: "Timid", usagePercent: 60 }],
+        },
+      },
+    },
+    {
+      abilityLookup: buildAbilityLookup([
+        { id: "lightningrod", name: "Lightning Rod", champions: { usageCount: 1 } },
+      ]),
+      moveLookup: buildMoveLookup([
+        { id: "fakeout", name: "Fake Out", champions: { usageCount: 1 } },
+        { id: "protect", name: "Protect", champions: { usageCount: 1 } },
+      ]),
+      items: [{ id: "raichunitey", name: "Raichunite Y", champions: { usageCount: 1 } }],
+    },
+  );
+
+  assert.equal(defaults.nature, "Timid");
+  assert.equal(defaults.ability.name, "Lightning Rod");
+  assert.equal(defaults.item.name, "Raichunite Y");
+  assert.deepEqual(defaults.moves.map(({ id }) => id), ["fakeout", "protect"]);
+});
