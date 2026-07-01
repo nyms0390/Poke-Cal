@@ -8,8 +8,6 @@
     "desc": "Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%.",
     "shortDesc": "Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/adaptability/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 761,
@@ -72,8 +70,6 @@
     "desc": "Boosts the power of the Pokémon’s moves by 30% when the Pokémon is the last to move that turn.",
     "shortDesc": "Boosts the power of the Pokémon’s moves by 30% when the Pokémon is the last to move that turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/analytic/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -92,11 +88,7 @@
       "desc": "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
       "shortDesc": "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages."
     },
-    "boost": "  [POKEMON] maxed its Attack!",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/anger-point/"
-    }
+    "boost": "  [POKEMON] maxed its Attack!"
   },
   {
     "id": "angershell",
@@ -156,8 +148,6 @@
     "shortDesc": "Opponents are unable to use priority moves against the Pokémon or its allies.",
     "block": "#damp",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/armor-tail/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 510,
@@ -176,8 +166,6 @@
     "shortDesc": "The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses.",
     "block": "  [POKEMON] is protected by an aromatic veil!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/aroma-veil/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 10,
@@ -326,8 +314,6 @@
     "desc": "Boosts the Pokémon’s Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max.",
     "shortDesc": "Boosts the Pokémon’s Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/berserk/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -345,8 +331,6 @@
     "shortDesc": "The Pokémon’s Defense stat cannot be lowered by other Pokémon’s moves or Abilities.",
     "desc": "The Pokémon’s Defense stat cannot be lowered by other Pokémon’s moves or Abilities.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/big-pecks/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -368,8 +352,6 @@
       "shortDesc": "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5x power."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/blaze/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 663,
@@ -387,8 +369,6 @@
     "shortDesc": "The Pokémon is immune to ball and bomb moves.",
     "desc": "The Pokémon is immune to ball and bomb moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/bulletproof/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -407,8 +387,6 @@
       "desc": "If this Pokemon eats a held Berry, it restores 1/3 of its maximum HP, rounded down, in addition to the Berry's effect. This effect can also activate after the effects of Bug Bite, Fling, and Pluck if the eaten Berry has an effect on this Pokemon."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/cheek-pouch/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -436,8 +414,6 @@
       "desc": "If Sunny Day is active, this Pokemon's Speed is doubled."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/chlorophyll/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 250,
@@ -455,8 +431,6 @@
     "shortDesc": "The Pokémon’s stats cannot be lowered by other Pokémon’s moves or Abilities.",
     "desc": "The Pokémon’s stats cannot be lowered by other Pokémon’s moves or Abilities.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/clear-body/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 343,
@@ -474,8 +448,6 @@
     "start": "#airlock",
     "desc": "Eliminates the effects of weather.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/cloud-nine/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 10,
@@ -537,8 +509,6 @@
     "desc": "When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages.",
     "shortDesc": "When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/competitive/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 123,
@@ -555,8 +525,6 @@
     "shortDesc": "Boosts the accuracy of the Pokémon’s moves by 30%.",
     "desc": "Boosts the accuracy of the Pokémon’s moves by 30%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/compound-eyes/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 29,
@@ -580,8 +548,6 @@
     },
     "desc": "Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/contrary/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 14,
@@ -595,11 +561,7 @@
     "rating": 2.5,
     "num": 212,
     "shortDesc": "The Pokémon can poison or badly poison targets even if they’re Steel or Poison types.",
-    "desc": "The Pokémon can poison or badly poison targets even if they’re Steel or Poison types.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/corrosion/"
-    }
+    "desc": "The Pokémon can poison or badly poison targets even if they’re Steel or Poison types."
   },
   {
     "id": "costar",
@@ -630,8 +592,6 @@
     "shortDesc": "If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn.",
     "desc": "If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/cud-chew/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -645,11 +605,7 @@
     "rating": 0,
     "num": 261,
     "shortDesc": "When the Pokémon enters a battle, it removes all stat changes from its allies.",
-    "desc": "When the Pokémon enters a battle, it removes all stat changes from its allies.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/curious-medicine/"
-    }
+    "desc": "When the Pokémon enters a battle, it removes all stat changes from its allies."
   },
   {
     "id": "cursedbody",
@@ -660,8 +616,6 @@
     "desc": "When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns.",
     "shortDesc": "When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/cursed-body/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 146,
@@ -684,8 +638,6 @@
       "shortDesc": "1/3 chance of infatuating Pokemon of the opposite gender if they make contact."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/cute-charm/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 9,
@@ -716,8 +668,6 @@
     },
     "block": "  [SOURCE] cannot use [MOVE]!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/damp/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 166,
@@ -787,8 +737,6 @@
     "desc": "When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages.",
     "shortDesc": "When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/defiant/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 760,
@@ -838,8 +786,6 @@
     "block": "  Its disguise served it as a decoy!",
     "transform": "[POKEMON]'s disguise was busted!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/disguise/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -886,8 +832,6 @@
     "shortDesc": "Summons rain for 5 turns when the Pokémon enters a battle.",
     "desc": "Summons rain for 5 turns when the Pokémon enters a battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/drizzle/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 538,
@@ -903,8 +847,6 @@
     "shortDesc": "Summons harsh sunlight for 5 turns when the Pokémon enters a battle.",
     "desc": "Summons harsh sunlight for 5 turns when the Pokémon enters a battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/drought/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 277,
@@ -927,8 +869,6 @@
     },
     "damage": "  ([POKEMON] was hurt by its Dry Skin.)",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/dry-skin/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -942,11 +882,7 @@
     "rating": 1.5,
     "num": 48,
     "shortDesc": "The Pokémon awakens from sleep twice as fast as other Pokémon.",
-    "desc": "The Pokémon awakens from sleep twice as fast as other Pokémon.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/early-bird/"
-    }
+    "desc": "The Pokémon awakens from sleep twice as fast as other Pokémon."
   },
   {
     "id": "eartheater",
@@ -959,8 +895,6 @@
     "desc": "Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.",
     "shortDesc": "Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/earth-eater/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -1001,8 +935,6 @@
       "shortDesc": "10% chance of poison/paralysis/sleep on others making contact with this Pokemon."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/effect-spore/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -1018,8 +950,6 @@
     "shortDesc": "Turns the entire field into Electric Terrain for 5 turns when the Pokémon enters a battle.",
     "desc": "Turns the entire field into Electric Terrain for 5 turns when the Pokémon enters a battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/electric-surge/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -1037,8 +967,6 @@
     "start": "  Being hit by [MOVE] charged [POKEMON] with power!",
     "desc": "When the Pokémon takes damage from a move, it gains the Electric Boost status.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/electromorphosis/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 10,
@@ -1129,8 +1057,6 @@
     "shortDesc": "Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%.",
     "start": "  [POKEMON] is radiating a fairy aura!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/fairy-aura/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 18,
@@ -1159,8 +1085,6 @@
     "shortDesc": "Boosts the power of the Pokémon’s Fire-type moves by 50%.",
     "desc": "Boosts the power of the Pokémon’s Fire-type moves by 50%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/fire-mane/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -1183,8 +1107,6 @@
     },
     "desc": "When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/flame-body/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 18,
@@ -1224,8 +1146,6 @@
     },
     "start": "  The power of [POKEMON]'s Fire-type moves rose!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/flash-fire/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 102,
@@ -1269,8 +1189,6 @@
     "shortDesc": "Grass-type allies are immune to status conditions and cannot have their stats lowered.",
     "block": "  [POKEMON] surrounded itself with a veil of petals!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/flower-veil/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 486,
@@ -1331,8 +1249,6 @@
     "shortDesc": "Reduces the damage allies take by 25%.",
     "desc": "Reduces the damage allies take by 25%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/friend-guard/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 100,
@@ -1353,8 +1269,6 @@
     "activateNoTarget": "  [POKEMON] frisked its target and found one [ITEM]!",
     "desc": "When the Pokémon enters a battle, it identifies opponents’ held items.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/frisk/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 14,
@@ -1379,11 +1293,7 @@
     "rating": 4,
     "num": 169,
     "shortDesc": "Halves the damage the Pokémon takes from physical moves.",
-    "desc": "Halves the damage the Pokémon takes from physical moves.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/fur-coat/"
-    }
+    "desc": "Halves the damage the Pokémon takes from physical moves."
   },
   {
     "id": "galewings",
@@ -1397,8 +1307,6 @@
     },
     "desc": "Increases the priority of the Pokémon’s Flying-type moves by 1 stage while its HP is full.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/gale-wings/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 79,
@@ -1436,8 +1344,6 @@
     "shortDesc": "The Pokémon is immune to status moves used by other Pokémon.",
     "desc": "The Pokémon is immune to status moves used by other Pokémon.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/good-as-gold/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 255,
@@ -1453,8 +1359,6 @@
     "shortDesc": "When the Pokémon is hit by a contact move, the attacker’s Speed stat is lowered by 1 stage.",
     "desc": "When the Pokémon is hit by a contact move, the attacker’s Speed stat is lowered by 1 stage.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/gooey/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -1534,8 +1438,6 @@
     "desc": "When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon’s physical moves.",
     "shortDesc": "When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon’s physical moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/guts/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -1563,11 +1465,7 @@
     "num": 139,
     "desc": "If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry.",
     "shortDesc": "If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry.",
-    "addItem": "  [POKEMON] harvested one [ITEM]!",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/harvest/"
-    }
+    "addItem": "  [POKEMON] harvested one [ITEM]!"
   },
   {
     "id": "healer",
@@ -1580,8 +1478,6 @@
     "desc": "The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn.",
     "shortDesc": "The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/healer/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -1609,8 +1505,6 @@
       "shortDesc": "The power of Fire-type attacks against this Pokemon is halved; burn damage halved."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/heatproof/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -1627,11 +1521,7 @@
     "rating": 0,
     "num": 134,
     "desc": "Doubles the Pokémon’s weight.",
-    "shortDesc": "Doubles the Pokémon’s weight.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/heavy-metal/"
-    }
+    "shortDesc": "Doubles the Pokémon’s weight."
   },
   {
     "id": "honeygather",
@@ -1652,8 +1542,6 @@
     "heal": "  [POKEMON] drank down all the matcha that [SOURCE] made!",
     "desc": "When the Pokémon enters a battle, it restores 1/4 of its ally’s max HP.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/hospitality/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 814,
@@ -1670,8 +1558,6 @@
     "shortDesc": "Doubles the power of the Pokémon’s physical moves.",
     "desc": "Doubles the power of the Pokémon’s physical moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/huge-power/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 20,
@@ -1695,8 +1581,6 @@
     "desc": "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn.",
     "shortDesc": "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/hunger-switch/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -1714,8 +1598,6 @@
     "desc": "When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%.",
     "shortDesc": "When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/hustle/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -1747,8 +1629,6 @@
     "shortDesc": "The Pokémon’s Attack stat cannot be lowered by other Pokémon’s moves or Abilities.",
     "desc": "The Pokémon’s Attack stat cannot be lowered by other Pokémon’s moves or Abilities.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/hyper-cutter/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 150,
@@ -1766,10 +1646,6 @@
     "gen8": {
       "desc": "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
       "shortDesc": "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail."
-    },
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/ice-body/"
     }
   },
   {
@@ -1821,8 +1697,6 @@
       "shortDesc": "No competitive use."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/illuminate/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -1845,8 +1719,6 @@
     "shortDesc": "The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move.",
     "end": "  [POKEMON]'s illusion wore off!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/illusion/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 13,
@@ -1862,11 +1734,7 @@
     "rating": 2,
     "num": 17,
     "shortDesc": "The Pokémon cannot be poisoned or badly poisoned.",
-    "desc": "The Pokémon cannot be poisoned or badly poisoned.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/immunity/"
-    }
+    "desc": "The Pokémon cannot be poisoned or badly poisoned."
   },
   {
     "id": "imposter",
@@ -1882,8 +1750,6 @@
     "desc": "The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon’s stats apart from its HP.",
     "shortDesc": "The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon’s stats apart from its HP.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/imposter/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 10,
@@ -1907,8 +1773,6 @@
       "shortDesc": "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/infiltrator/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -1941,8 +1805,6 @@
       "shortDesc": "This Pokemon cannot be made to flinch."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/inner-focus/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 61,
@@ -1960,8 +1822,6 @@
     "shortDesc": "The Pokémon cannot become drowsy or be put to sleep.",
     "desc": "The Pokémon cannot become drowsy or be put to sleep.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/insomnia/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -1991,8 +1851,6 @@
       "desc": "On switch-in, this Pokemon lowers the Attack of opposing Pokemon by 1 stage. Pokemon behind a substitute are immune."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/intimidate/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1159,
@@ -2031,8 +1889,6 @@
     "desc": "Boosts the power of the Pokémon’s punching moves by 20%.",
     "shortDesc": "Boosts the power of the Pokémon’s punching moves by 20%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/iron-fist/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -2068,8 +1924,6 @@
       "shortDesc": "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/keen-eye/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -2104,8 +1958,6 @@
       "shortDesc": "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/leaf-guard/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 12,
@@ -2134,8 +1986,6 @@
       "shortDesc": "This Pokemon is immune to Ground."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/levitate/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 359,
@@ -2164,11 +2014,7 @@
     "rating": 1,
     "num": 135,
     "desc": "Halves the Pokémon’s weight.",
-    "shortDesc": "Halves the Pokémon’s weight.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/light-metal/"
-    }
+    "shortDesc": "Halves the Pokémon’s weight."
   },
   {
     "id": "lightningrod",
@@ -2190,8 +2036,6 @@
     },
     "activate": "  [POKEMON] took the attack!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/lightning-rod/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 245,
@@ -2209,8 +2053,6 @@
     "shortDesc": "The Pokémon cannot be paralyzed.",
     "desc": "The Pokémon cannot be paralyzed.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/limber/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -2252,8 +2094,6 @@
     "desc": "The Pokémon’s sound-based moves become Water-type moves.",
     "shortDesc": "The Pokémon’s sound-based moves become Water-type moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/liquid-voice/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 32,
@@ -2284,8 +2124,6 @@
     },
     "move": "#magiccoat",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/magic-bounce/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 18,
@@ -2305,8 +2143,6 @@
       "shortDesc": "This Pokemon can only be damaged by direct attacks, and can't be fully paralyzed."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/magic-guard/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -2322,8 +2158,6 @@
     "desc": "If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves.",
     "shortDesc": "If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/magician/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -2341,8 +2175,6 @@
     "shortDesc": "The Pokémon cannot be frozen.",
     "desc": "The Pokémon cannot be frozen.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/magma-armor/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -2384,11 +2216,7 @@
     "rating": 2.5,
     "num": 63,
     "shortDesc": "When the Pokémon has a status condition, its Defense stat is boosted by 50%.",
-    "desc": "When the Pokémon has a status condition, its Defense stat is boosted by 50%.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/marvel-scale/"
-    }
+    "desc": "When the Pokémon has a status condition, its Defense stat is boosted by 50%."
   },
   {
     "id": "megalauncher",
@@ -2400,8 +2228,6 @@
     "desc": "Boosts the power of the Pokémon’s pulse moves by 50%.",
     "shortDesc": "Boosts the power of the Pokémon’s pulse moves by 50%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/mega-launcher/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -2419,8 +2245,6 @@
     "shortDesc": "Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight.",
     "desc": "Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/mega-sol/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -2436,8 +2260,6 @@
     "shortDesc": "The Pokémon’s attacks become critical hits if the target is poisoned or badly poisoned.",
     "desc": "The Pokémon’s attacks become critical hits if the target is poisoned or badly poisoned.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/merciless/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -2496,8 +2318,6 @@
     "desc": "Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them.",
     "shortDesc": "Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/mirror-armor/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 54,
@@ -2537,8 +2357,6 @@
     },
     "start": "  [POKEMON] breaks the mold!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/mold-breaker/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 20,
@@ -2560,8 +2378,6 @@
       "shortDesc": "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/moody/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 61,
@@ -2605,8 +2421,6 @@
     "desc": "When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage.",
     "shortDesc": "When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/moxie/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 7,
@@ -2624,8 +2438,6 @@
     "shortDesc": "Halves the damage the Pokémon takes while its HP is full.",
     "desc": "Halves the damage the Pokémon takes while its HP is full.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/multiscale/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 58,
@@ -2678,8 +2490,6 @@
     },
     "changeAbility": "  [TARGET]'s Ability became Mummy!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/mummy/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -2706,8 +2516,6 @@
     "activate": "  ([POKEMON] is cured by its Natural Cure)",
     "desc": "The Pokémon’s status conditions are cured when it switches out of battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/natural-cure/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 9,
@@ -2764,8 +2572,6 @@
     "shortDesc": "The accuracy of moves used both by and against the Pokémon becomes 100%.",
     "desc": "The accuracy of moves used both by and against the Pokémon becomes 100%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/no-guard/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 15,
@@ -2819,8 +2625,6 @@
       "shortDesc": "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/oblivious/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 41,
@@ -2874,8 +2678,6 @@
       "shortDesc": "This Pokemon is immune to damage from Sandstorm or Hail."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/overcoat/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 6,
@@ -2897,8 +2699,6 @@
       "shortDesc": "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5x power."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/overgrow/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 73,
@@ -2920,8 +2720,6 @@
       "shortDesc": "This Pokemon cannot be confused."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/own-tempo/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -2988,8 +2786,6 @@
     "desc": "When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item.",
     "shortDesc": "When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/pickpocket/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 10,
@@ -3039,8 +2835,6 @@
       "shortDesc": "This Pokemon's Normal-type moves become Fairy type and have 1.3x power."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/pixilate/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 399,
@@ -3065,8 +2859,6 @@
       "shortDesc": "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/plus/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -3083,8 +2875,6 @@
     "desc": "If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP.",
     "shortDesc": "If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/poison-heal/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -3107,8 +2897,6 @@
     },
     "desc": "When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/poison-point/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -3139,8 +2927,6 @@
     "desc": "When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned.",
     "shortDesc": "When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/poison-touch/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 100,
@@ -3210,8 +2996,6 @@
       "shortDesc": "This Pokemon's non-damaging moves have their priority increased by 1."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/prankster/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1182,
@@ -3238,8 +3022,6 @@
     },
     "start": "  [POKEMON] is exerting its pressure!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/pressure/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 26,
@@ -3285,8 +3067,6 @@
       "shortDesc": "This Pokemon's type changes to match the type of the move it is about to use."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/protean/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 29,
@@ -3351,8 +3131,6 @@
     "shortDesc": "Doubles the power of the Pokémon’s physical moves.",
     "desc": "Doubles the power of the Pokémon’s physical moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/pure-power/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -3372,8 +3150,6 @@
     "desc": "Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions.",
     "shortDesc": "Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/purifying-salt/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -3420,8 +3196,6 @@
     "shortDesc": "Opponents are unable to use priority moves against the Pokémon or its allies.",
     "block": "#damp",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/queenly-majesty/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 27,
@@ -3439,8 +3213,6 @@
     "activate": "  Quick Draw made [POKEMON] move faster!",
     "desc": "The Pokémon’s moves have a 30% chance of going first among moves of the same priority.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/quick-draw/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -3457,10 +3229,6 @@
     "shortDesc": "When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon’s Speed stat.",
     "gen6": {
       "desc": "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of quartering Speed."
-    },
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/quick-feet/"
     }
   },
   {
@@ -3475,8 +3243,6 @@
       "desc": "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/rain-dish/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 32,
@@ -3541,8 +3307,6 @@
     "desc": "Boosts the power of the Pokémon’s moves by 20% if they have recoil or crash damage.",
     "shortDesc": "Boosts the power of the Pokémon’s moves by 20% if they have recoil or crash damage.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/reckless/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 13,
@@ -3573,8 +3337,6 @@
     "shortDesc": "The Pokémon has 1/3 of its max HP restored when it switches out of battle.",
     "desc": "The Pokémon has 1/3 of its max HP restored when it switches out of battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/regenerator/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 68,
@@ -3602,8 +3364,6 @@
     "desc": "Boosts the power of the Pokémon’s moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon’s gender is unknown.",
     "shortDesc": "Boosts the power of the Pokémon’s moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon’s gender is unknown.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/rivalry/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -3638,8 +3398,6 @@
       "shortDesc": "This Pokemon does not take recoil damage besides Struggle and crash damage."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/rock-head/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 35,
@@ -3674,8 +3432,6 @@
     },
     "damage": "  [POKEMON] was hurt!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/rough-skin/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 907,
@@ -3698,11 +3454,7 @@
     "rating": 2,
     "num": 159,
     "desc": "Boosts the power of the Pokémon’s Rock-, Ground-, and Steel-type moves by 30% in a sandstorm.",
-    "shortDesc": "Boosts the power of the Pokémon’s Rock-, Ground-, and Steel-type moves by 30% in a sandstorm.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sand-force/"
-    }
+    "shortDesc": "Boosts the power of the Pokémon’s Rock-, Ground-, and Steel-type moves by 30% in a sandstorm."
   },
   {
     "id": "sandrush",
@@ -3713,8 +3465,6 @@
     "desc": "Doubles the Pokémon’s Speed stat in a sandstorm.",
     "shortDesc": "Doubles the Pokémon’s Speed stat in a sandstorm.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sand-rush/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 72,
@@ -3741,8 +3491,6 @@
     "shortDesc": "Summons a sandstorm for 5 turns when the Pokémon enters a battle.",
     "desc": "Summons a sandstorm for 5 turns when the Pokémon enters a battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sand-stream/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 115,
@@ -3761,8 +3509,6 @@
     "desc": "Boosts the Pokémon’s evasiveness by 25% in a sandstorm.",
     "shortDesc": "Boosts the Pokémon’s evasiveness by 25% in a sandstorm.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sand-veil/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 25,
@@ -3781,8 +3527,6 @@
     "desc": "Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage.",
     "shortDesc": "Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sap-sipper/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -3823,8 +3567,6 @@
       "shortDesc": "This Pokemon can hit Ghost types with Normal- and Fighting-type moves."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/scrappy/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 82,
@@ -3840,8 +3582,6 @@
     "shortDesc": "When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses.",
     "desc": "When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/screen-cleaner/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -3917,8 +3657,6 @@
     "shortDesc": "Boosts the power of the Pokémon’s slicing moves by 50%.",
     "desc": "Boosts the power of the Pokémon’s slicing moves by 50%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sharpness/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 56,
@@ -3936,8 +3674,6 @@
     "desc": "The Pokémon has a 30% chance of curing its own status conditions at the end of every turn.",
     "shortDesc": "The Pokémon has a 30% chance of curing its own status conditions at the end of every turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/shed-skin/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -3963,8 +3699,6 @@
       "desc": "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Color Change, Pickpocket, Red Card, and Eject Button from activating."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sheer-force/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -3983,8 +3717,6 @@
     "shortDesc": "Attacks landed on the Pokémon will never be critical hits.",
     "desc": "Attacks landed on the Pokémon will never be critical hits.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/shell-armor/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4017,8 +3749,6 @@
       "desc": "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, or cause this Pokemon's stat stages to be lowered. The secondary effect added by King's Rock is also prevented against this Pokemon."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/shield-dust/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -4080,8 +3810,6 @@
       "desc": "This Pokemon's multi-hit attacks always hit the maximum number of times. Does not affect Triple Kick."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/skill-link/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4127,8 +3855,6 @@
     "shortDesc": "Boosts the power of the Pokémon’s critical hits by 125% instead of 50%.",
     "desc": "Boosts the power of the Pokémon’s critical hits by 125% instead of 50%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sniper/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -4151,8 +3877,6 @@
       "shortDesc": "If Hail is active, this Pokemon's evasiveness is 1.25x; immunity to Hail."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/snow-cloak/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 35,
@@ -4171,8 +3895,6 @@
     },
     "desc": "Summons snow for 5 turns when the Pokémon enters a battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/snow-warning/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 127,
@@ -4192,8 +3914,6 @@
       "desc": "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/solar-power/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 109,
@@ -4211,8 +3931,6 @@
     "shortDesc": "Reduces the damage the Pokémon takes from supereffective moves by 25%.",
     "desc": "Reduces the damage the Pokémon takes from supereffective moves by 25%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/solid-rock/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 18,
@@ -4248,8 +3966,6 @@
     },
     "desc": "The Pokémon is immune to sound-based moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/soundproof/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 12,
@@ -4267,8 +3983,6 @@
     "desc": "Boosts the Pokémon’s Speed stat by 1 stage at the end of every turn.",
     "shortDesc": "Boosts the Pokémon’s Speed stat by 1 stage at the end of every turn.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/speed-boost/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 102,
@@ -4285,8 +3999,6 @@
     "shortDesc": "When the Pokémon takes damage from a move, it burns the attacker.",
     "desc": "When the Pokémon takes damage from a move, it burns the attacker.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/spicy-spray/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4322,8 +4034,6 @@
     "shortDesc": "The Pokémon ignores the effects of Abilities and moves that draw in moves.",
     "desc": "The Pokémon ignores the effects of Abilities and moves that draw in moves.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/stalwart/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -4339,8 +4049,6 @@
     "shortDesc": "When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage.",
     "desc": "When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/stamina/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 460,
@@ -4369,8 +4077,6 @@
     "transform": "Changed to Blade Forme!",
     "transformEnd": "Changed to Shield Forme!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/stance-change/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -4393,8 +4099,6 @@
     },
     "desc": "When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/static/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 23,
@@ -4408,11 +4112,7 @@
     "rating": 1,
     "num": 80,
     "shortDesc": "When the Pokémon flinches, its Speed stat is boosted by 1 stage.",
-    "desc": "When the Pokémon flinches, its Speed stat is boosted by 1 stage.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/steadfast/"
-    }
+    "desc": "When the Pokémon flinches, its Speed stat is boosted by 1 stage."
   },
   {
     "id": "steamengine",
@@ -4496,11 +4196,7 @@
     "rating": 3.5,
     "num": 173,
     "desc": "Boosts the power of the Pokémon’s biting moves by 50%.",
-    "shortDesc": "Boosts the power of the Pokémon’s biting moves by 50%.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/strong-jaw/"
-    }
+    "shortDesc": "Boosts the power of the Pokémon’s biting moves by 50%."
   },
   {
     "id": "sturdy",
@@ -4519,8 +4215,6 @@
     },
     "activate": "  [POKEMON] endured the hit!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/sturdy/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 19,
@@ -4548,8 +4242,6 @@
     "shortDesc": "The Pokémon has a 1-stage Critical-Hit Ratio Boost.",
     "desc": "The Pokémon has a 1-stage Critical-Hit Ratio Boost.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/super-luck/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4566,8 +4258,6 @@
     "start": "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
     "desc": "When the Pokémon enters a battle, opponents’ evasiveness is lowered by 1 stage. This Ability is triggered only once per battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/supersweet-syrup/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 6,
@@ -4585,8 +4275,6 @@
     "shortDesc": "When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%.",
     "activate": "  [POKEMON] gained strength from the fallen!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/supreme-overlord/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -4600,11 +4288,7 @@
     "rating": 3,
     "num": 207,
     "shortDesc": "Doubles the Pokémon’s Speed stat on Electric Terrain.",
-    "desc": "Doubles the Pokémon’s Speed stat on Electric Terrain.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/surge-surfer/"
-    }
+    "desc": "Doubles the Pokémon’s Speed stat on Electric Terrain."
   },
   {
     "id": "swarm",
@@ -4621,8 +4305,6 @@
       "shortDesc": "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5x power."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/swarm/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4659,8 +4341,6 @@
       "desc": "If Rain Dance is active, this Pokemon's Speed is doubled."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/swift-swim/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 76,
@@ -4692,8 +4372,6 @@
     },
     "activate": "  [POKEMON] shared its [ITEM] with [TARGET]!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/symbiosis/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -4712,8 +4390,6 @@
       "desc": "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same non-volatile status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/synchronize/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
@@ -4762,8 +4438,6 @@
       "shortDesc": "This Pokemon's moves of 60 power or less have 1.5x power, except Struggle."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/technician/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 31,
@@ -4782,8 +4456,6 @@
     "block": "  [POKEMON] can't be hit by attacks from its ally Pokémon!",
     "desc": "The Pokémon dodges attacks from its allies.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/telepathy/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 13,
@@ -4896,8 +4568,6 @@
       "shortDesc": "Fire-/Ice-type moves against this Pokemon deal damage with a halved Sp. Atk stat."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/thick-fat/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 22,
@@ -4927,8 +4597,6 @@
       "shortDesc": "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/torrent/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 257,
@@ -4945,8 +4613,6 @@
     "shortDesc": "Boosts the power of the Pokémon’s contact moves by 30%.",
     "desc": "Boosts the power of the Pokémon’s contact moves by 30%.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/tough-claws/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 73,
@@ -4981,8 +4647,6 @@
     "shortDesc": "When the Pokémon takes damage from a physical move, it gives the opponent’s side the Toxic Spikes status.",
     "desc": "When the Pokémon takes damage from a physical move, it gives the opponent’s side the Toxic Spikes status.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/toxic-debris/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 34,
@@ -5022,8 +4686,6 @@
     },
     "changeAbility": "  [POKEMON] traced [SOURCE]'s [ABILITY]!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/trace/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 33,
@@ -5101,8 +4763,6 @@
     "desc": "The Pokémon ignores the target’s stat changes when attacking, and ignores the attacker’s stat changes when being attacked. It cannot ignore changes to the Speed stat, however.",
     "shortDesc": "The Pokémon ignores the target’s stat changes when attacking, and ignores the attacker’s stat changes when being attacked. It cannot ignore changes to the Speed stat, however.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/unaware/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 31,
@@ -5119,8 +4779,6 @@
     "desc": "Doubles the Pokémon’s Speed stat when its held item is consumed or lost.",
     "shortDesc": "Doubles the Pokémon’s Speed stat when its held item is consumed or lost.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/unburden/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 359,
@@ -5138,8 +4796,6 @@
     "shortDesc": "Makes opponents unable to eat Berries.",
     "start": "  [TEAM] is too nervous to eat Berries!",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/unnerve/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 386,
@@ -5163,10 +4819,6 @@
     "rating": 2,
     "num": 260,
     "shortDesc": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target’s protective effects is still triggered.",
-    "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/unseen-fist/"
-    },
     "desc": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target’s protective effects is still triggered."
   },
   {
@@ -5198,8 +4850,6 @@
     "shortDesc": "The Pokémon cannot become drowsy or be put to sleep.",
     "desc": "The Pokémon cannot become drowsy or be put to sleep.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/vital-spirit/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -5221,8 +4871,6 @@
       "shortDesc": "This Pokemon heals 1/4 its max HP when hit by a damaging Electric move; immunity."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/volt-absorb/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 8,
@@ -5242,8 +4890,6 @@
     },
     "activate": "#skillswap",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/wandering-spirit/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
@@ -5261,8 +4907,6 @@
     "desc": "Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.",
     "shortDesc": "Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/water-absorb/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
@@ -5282,8 +4926,6 @@
     "desc": "Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.",
     "shortDesc": "Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/water-bubble/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 9,
@@ -5321,8 +4963,6 @@
       "shortDesc": "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1."
     },
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/weak-armor/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
@@ -5351,8 +4991,6 @@
     "shortDesc": "The Pokémon’s stats cannot be lowered by other Pokémon’s moves or Abilities.",
     "desc": "The Pokémon’s stats cannot be lowered by other Pokémon’s moves or Abilities.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/white-smoke/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
@@ -5466,8 +5104,6 @@
     "activate": "  [POKEMON] underwent a heroic transformation!",
     "desc": "The Pokémon changes into its Hero Form when it switches out of battle.",
     "champions": {
-      "catalogSource": "Pokemon Zone",
-      "catalogSourceUrl": "https://www.pokemon-zone.com/champions/abilities/zero-to-hero/",
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 13,

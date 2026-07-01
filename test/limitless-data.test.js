@@ -77,7 +77,7 @@ test("aggregates Limitless standings into usage rates", () => {
   );
 });
 
-test("merges Limitless usage without keeping old Pokemon Zone counts", () => {
+test("merges Limitless usage without keeping old catalog-source metadata", () => {
   const usage = {
     pokemon: [
       {
@@ -104,12 +104,12 @@ test("merges Limitless usage without keeping old Pokemon Zone counts", () => {
         {
           id: "raichu",
           name: "Raichu",
-          champions: { source: "Pokemon Zone", sourceUrl: "https://example.test/raichu", usageCount: 418 },
+          champions: { source: "Legacy Catalog", sourceUrl: "https://example.test/raichu", usageCount: 418 },
         },
         {
           id: "pikachu",
           name: "Pikachu",
-          champions: { source: "Pokemon Zone", sourceUrl: "https://example.test/pikachu", usageCount: 8 },
+          champions: { source: "Legacy Catalog", sourceUrl: "https://example.test/pikachu", usageCount: 8 },
         },
       ],
       abilities: [{ id: "lightningrod", name: "Lightning Rod" }],
@@ -120,10 +120,10 @@ test("merges Limitless usage without keeping old Pokemon Zone counts", () => {
   );
 
   assert.equal(merged.pokemon[1].champions.source, "Limitless");
-  assert.equal(merged.pokemon[1].champions.catalogSource, "Pokemon Zone");
+  assert.equal(merged.pokemon[1].champions.catalogSource, undefined);
   assert.equal(merged.pokemon[1].champions.usageCount, 2);
   assert.equal(merged.pokemon[1].champions.usage.items[0].id, "raichunitey");
   assert.equal(merged.pokemon[0].champions.source, undefined);
   assert.equal(merged.pokemon[0].champions.usageCount, undefined);
-  assert.equal(merged.pokemon[0].champions.catalogSource, "Pokemon Zone");
+  assert.equal(merged.pokemon[0].champions.catalogSource, undefined);
 });

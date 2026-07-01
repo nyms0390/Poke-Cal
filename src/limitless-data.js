@@ -184,14 +184,15 @@ function limitlessMetadata(champions, usage) {
 function clearUsageMetadata(champions) {
   if (!champions) return {};
   const metadata = { ...champions };
-  if (metadata.source && metadata.source !== "Limitless") {
-    metadata.catalogSource = metadata.source;
+  const isLimitless = metadata.source === "Limitless";
+  if (!isLimitless) {
     delete metadata.source;
-  }
-  if (metadata.sourceUrl && metadata.catalogSource) {
-    metadata.catalogSourceUrl = metadata.sourceUrl;
     delete metadata.sourceUrl;
   }
+  delete metadata.catalogSource;
+  delete metadata.catalogSourceUrl;
+  delete metadata.icon;
+  delete metadata.learnableMoveCount;
   delete metadata.rank;
   delete metadata.usage;
   delete metadata.usageCount;

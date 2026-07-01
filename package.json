@@ -7,12 +7,11 @@
     "test": "node --test",
     "test:battle": "node --test test/battle-order.test.js test/damage.test.js test/speed.test.js",
     "test:catalog": "node --test test/catalog.test.js test/pokemon.test.js test/stats.test.js test/ui.test.js",
-    "test:data": "node --test test/limitless-data.test.js test/pokemon-zone-data.test.js test/showdown-data.test.js test/sync-pokemon-data.test.js test/usage-defaults.test.js",
+    "test:data": "node --test test/limitless-data.test.js test/showdown-data.test.js test/sync-pokemon-data.test.js test/usage-defaults.test.js",
     "test:damage": "node --test test/damage.test.js",
     "test:pokemon": "node --test test/pokemon.test.js",
     "sync-data": "node scripts/sync-pokemon-data.mjs",
-    "sync-champions-data": "node scripts/sync-pokemon-zone-champions.mjs && node scripts/sync-limitless-champions-usage.mjs",
-    "sync-champions-catalog": "node scripts/sync-pokemon-zone-champions.mjs",
+    "sync-champions-data": "node scripts/sync-limitless-champions-usage.mjs",
     "sync-champions-usage": "node scripts/sync-limitless-champions-usage.mjs",
     "start": "node scripts/serve.mjs"
   }
