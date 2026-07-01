@@ -155,6 +155,7 @@ function renderPokemonSearchResults(side) {
   const matches = searchPokemon(pokemon, input.value, {
     abilityLookup,
     moveLookup,
+    itemLookup,
     limit: 8,
   });
 
@@ -189,6 +190,7 @@ function handlePokemonSearchKeydown(event, side) {
   const [firstResult] = searchPokemon(pokemon, elements[`${side}PokemonSearch`].value, {
     abilityLookup,
     moveLookup,
+    itemLookup,
     limit: 1,
   });
   if (!firstResult) return;

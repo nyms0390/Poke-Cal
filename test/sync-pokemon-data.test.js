@@ -32,6 +32,7 @@ const fixtures = new Map([
     `export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
       static: {
         name: "Static",
+        num: 9,
         rating: 2,
       },
     };`,
@@ -49,6 +50,7 @@ const fixtures = new Map([
     "moves.ts",
     `export const Moves: import('../sim/dex-moves').MoveDataTable = {
       thunderbolt: {
+        num: 85,
         name: "Thunderbolt",
         type: "Electric",
         category: "Special",
@@ -72,6 +74,7 @@ const fixtures = new Map([
     "items.ts",
     `export const Items: import('../sim/dex-items').ItemDataTable = {
       lightball: {
+        num: 236,
         name: "Light Ball",
         itemUser: ["Pikachu"],
         onModifyAtk() {
@@ -94,6 +97,37 @@ const fixtures = new Map([
     [
       "pokemon_species_id,local_language_id,name,genus",
       "25,4,皮卡丘,鼠寶可夢",
+    ].join("\n"),
+  ],
+  [
+    "move_names.csv",
+    [
+      "move_id,local_language_id,name",
+      "85,4,十萬伏特",
+      "85,9,Thunderbolt",
+    ].join("\n"),
+  ],
+  [
+    "ability_names.csv",
+    [
+      "ability_id,local_language_id,name",
+      "9,4,靜電",
+      "9,9,Static",
+    ].join("\n"),
+  ],
+  [
+    "items.csv",
+    [
+      "id,identifier,category_id,cost,fling_power,fling_effect_id",
+      "236,light-ball,12,1000,,",
+    ].join("\n"),
+  ],
+  [
+    "item_names.csv",
+    [
+      "item_id,local_language_id,name",
+      "236,4,電氣球",
+      "236,9,Light Ball",
     ].join("\n"),
   ],
 ]);
@@ -120,6 +154,9 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
       aliases: ["皮卡丘"],
     },
   ]);
+  assert.deepEqual(data.abilities[0].aliases, ["靜電"]);
+  assert.deepEqual(data.moves[0].aliases, ["十萬伏特"]);
+  assert.deepEqual(data.items[0].aliases, ["電氣球"]);
   assert.equal(data.abilities[0].shortDesc.includes("paralyzed"), true);
   assert.equal(data.moves[0].basePower, 90);
   assert.equal(data.items[0].shortDesc.includes("Pikachu"), true);

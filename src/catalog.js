@@ -4,11 +4,17 @@ export function normalizeId(value) {
     .replace(/[^a-z0-9]/g, "");
 }
 
+function normalizeSearchValue(value) {
+  return String(value ?? "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9\u3400-\u9fff]/g, "");
+}
+
 export function buildAbilityLookup(abilities) {
   const lookup = new Map();
   for (const ability of abilities) {
-    lookup.set(normalizeId(ability.id), ability);
-    lookup.set(normalizeId(ability.name), ability);
+    addLookupKeys(lookup, ability, [ability.id, ability.name]);
   }
   return lookup;
 }
@@ -16,7 +22,7 @@ export function buildAbilityLookup(abilities) {
 export function buildMoveLookup(moves) {
   const lookup = new Map();
   for (const move of moves) {
-    lookup.set(normalizeId(move.id), move);
+    addLookupKeys(lookup, move, [move.id]);
   }
   return lookup;
 }
@@ -24,10 +30,16 @@ export function buildMoveLookup(moves) {
 export function buildItemLookup(items) {
   const lookup = new Map();
   for (const item of items) {
-    lookup.set(normalizeId(item.id), item);
-    lookup.set(normalizeId(item.name), item);
+    addLookupKeys(lookup, item, [item.id, item.name]);
   }
   return lookup;
+}
+
+function addLookupKeys(lookup, entry, values) {
+  for (const value of values) {
+    const key = normalizeId(value);
+    if (key) lookup.set(key, entry);
+  }
 }
 
 export function resolvePokemonAbilities(entry, lookup) {
@@ -142,14 +154,22 @@ export function usageForPokemon(usageStats, entry) {
 }
 
 export function filterMoves(moves, { query = "", type = "", category = "" } = {}) {
-  const normalizedQuery = normalizeId(query);
+  const normalizedQuery = normalizeSearchValue(query);
   return moves.filter((move) => {
     if (type && move.type !== type) return false;
     if (category && move.category !== category) return false;
     if (!normalizedQuery) return true;
 
-    return [move.id, move.name, move.type, move.category, move.shortDesc, move.desc]
-      .map(normalizeId)
+    return [
+      move.id,
+      move.name,
+      ...(move.aliases ?? []),
+      move.type,
+      move.category,
+      move.shortDesc,
+      move.desc,
+    ]
+      .map(normalizeSearchValue)
       .some((candidate) => candidate.includes(normalizedQuery));
   });
 }

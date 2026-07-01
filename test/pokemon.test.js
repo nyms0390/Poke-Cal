@@ -105,10 +105,28 @@ test("searches Pokémon by ability names", () => {
   );
 });
 
+test("searches Pokémon by ability Traditional Chinese aliases", () => {
+  assert.equal(
+    searchPokemon(pokemon, "避雷針", {
+      abilityLookup: new Map([["lightningrod", { name: "Lightning Rod", aliases: ["避雷針"] }]]),
+    })[0].id,
+    "pikachu",
+  );
+});
+
 test("searches Pokémon by move names", () => {
   assert.equal(
     searchPokemon(pokemon, "Iron Tail", {
       moveLookup: new Map([["irontail", { name: "Iron Tail" }]]),
+    })[0].id,
+    "pikachu",
+  );
+});
+
+test("searches Pokémon by move Traditional Chinese aliases", () => {
+  assert.equal(
+    searchPokemon(pokemon, "鐵尾", {
+      moveLookup: new Map([["irontail", { name: "Iron Tail", aliases: ["鐵尾"] }]]),
     })[0].id,
     "pikachu",
   );
@@ -124,6 +142,16 @@ test("searches Pokémon by plus-separated ability and move terms", () => {
   assert.equal(match.searchMatch, "Ability: Mold Breaker + Move: Fake Out");
 });
 
+test("searches Pokémon by plus-separated Traditional Chinese ability and move aliases", () => {
+  const [match] = searchPokemon(pokemon, "破格 + 擊掌奇襲", {
+    abilityLookup: new Map([["moldbreaker", { name: "Mold Breaker", aliases: ["破格"] }]]),
+    moveLookup: new Map([["fakeout", { name: "Fake Out", aliases: ["擊掌奇襲"] }]]),
+  });
+
+  assert.equal(match.id, "tinkaton");
+  assert.equal(match.searchMatch, "Ability: Mold Breaker + Move: Fake Out");
+});
+
 test("searches Pokémon by plus-separated full ability and move names", () => {
   assert.deepEqual(
     searchPokemon(pokemon, "mold breaker + fake out", {
@@ -131,6 +159,28 @@ test("searches Pokémon by plus-separated full ability and move names", () => {
       moveLookup: new Map([["fakeout", { name: "Fake Out" }]]),
     }).map(({ id }) => id),
     ["tinkaton"],
+  );
+});
+
+test("searches Pokémon by Champions item Traditional Chinese aliases", () => {
+  assert.equal(
+    searchPokemon(
+      [
+        {
+          ...pokemon[0],
+          champions: {
+            usage: {
+              items: [{ id: "lightball", name: "Light Ball", usagePercent: 91 }],
+            },
+          },
+        },
+      ],
+      "電氣球",
+      {
+        itemLookup: new Map([["lightball", { name: "Light Ball", aliases: ["電氣球"] }]]),
+      },
+    )[0].id,
+    "pikachu",
   );
 });
 

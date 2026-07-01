@@ -216,6 +216,7 @@ test("filters moves by query, type, and category", () => {
     {
       id: "thunderbolt",
       name: "Thunderbolt",
+      aliases: ["十萬伏特"],
       type: "Electric",
       category: "Special",
       shortDesc: "10% chance to paralyze the target.",
@@ -230,6 +231,9 @@ test("filters moves by query, type, and category", () => {
   ];
 
   assert.deepEqual(filterMoves(moves, { query: "para" }).map(({ id }) => id), [
+    "thunderbolt",
+  ]);
+  assert.deepEqual(filterMoves(moves, { query: "十萬伏特" }).map(({ id }) => id), [
     "thunderbolt",
   ]);
   assert.deepEqual(filterMoves(moves, { type: "Normal" }).map(({ id }) => id), [

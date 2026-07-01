@@ -43,6 +43,7 @@ const elements = {
 let pokemon = [];
 let abilityLookup = new Map();
 let moveLookup = new Map();
+let itemLookup = new Map();
 let items = [];
 let selectedPokemon = null;
 let selectedFamily = [];
@@ -56,6 +57,7 @@ async function initialize() {
     pokemon = data.pokemon;
     abilityLookup = data.abilityLookup;
     moveLookup = data.moveLookup;
+    itemLookup = data.itemLookup;
     items = data.items;
     elements.status.textContent =
       `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
@@ -92,7 +94,7 @@ for (const control of [elements.moveSearch, elements.moveType, elements.moveCate
 }
 
 function searchOptions() {
-  return { abilityLookup, moveLookup };
+  return { abilityLookup, moveLookup, itemLookup };
 }
 
 function renderSearchResults(results) {

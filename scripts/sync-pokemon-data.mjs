@@ -26,8 +26,16 @@ const SHOWDOWN_ITEMS_TEXT_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/items.ts";
 const SPECIES_NAMES_URL =
   "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv";
+const MOVE_NAMES_URL =
+  "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv";
+const ABILITY_NAMES_URL =
+  "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/ability_names.csv";
+const ITEMS_URL = "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/items.csv";
+const ITEM_NAMES_URL =
+  "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/item_names.csv";
 
 const outputDirectory = new URL("../public/", import.meta.url);
+const TRADITIONAL_CHINESE_LANGUAGE_ID = 4;
 
 export async function downloadEverything(fetcher = fetchText) {
   const [
@@ -40,6 +48,10 @@ export async function downloadEverything(fetcher = fetchText) {
     movesTextSource,
     itemsTextSource,
     speciesNamesCsv,
+    moveNamesCsv,
+    abilityNamesCsv,
+    itemsCsv,
+    itemNamesCsv,
   ] = await Promise.all([
     fetcher(SHOWDOWN_POKEDEX_URL),
     fetcher(SHOWDOWN_LEARNSETS_URL),
@@ -50,6 +62,10 @@ export async function downloadEverything(fetcher = fetchText) {
     fetcher(SHOWDOWN_MOVES_TEXT_URL),
     fetcher(SHOWDOWN_ITEMS_TEXT_URL),
     fetcher(SPECIES_NAMES_URL),
+    fetcher(MOVE_NAMES_URL),
+    fetcher(ABILITY_NAMES_URL),
+    fetcher(ITEMS_URL),
+    fetcher(ITEM_NAMES_URL),
   ]);
 
   const pokedex = parseShowdownExport(pokedexSource, "Pokedex");
@@ -61,12 +77,23 @@ export async function downloadEverything(fetcher = fetchText) {
   const movesText = parseShowdownExport(movesTextSource, "MovesText");
   const itemsText = parseShowdownExport(itemsTextSource, "ItemsText");
   const aliasesByNumber = parseTraditionalChineseNames(speciesNamesCsv);
+  const moveAliasesByNumber = parseLocalizedNamesByNumber(moveNamesCsv);
+  const abilityAliasesByNumber = parseLocalizedNamesByNumber(abilityNamesCsv);
+  const itemIdsByIdentifier = parsePokeApiItemIds(itemsCsv);
+  const itemAliasesByNumber = parseLocalizedNamesByNumber(itemNamesCsv);
 
   return {
     pokemon: buildPokemon(pokedex, learnsets, aliasesByNumber),
-    abilities: extractCatalogEntries(abilities, abilitiesText),
-    moves: extractCatalogEntries(moves, movesText),
-    items: extractCatalogEntries(items, itemsText),
+    abilities: attachNumberedAliases(
+      extractCatalogEntries(abilities, abilitiesText),
+      abilityAliasesByNumber,
+    ),
+    moves: attachNumberedAliases(extractCatalogEntries(moves, movesText), moveAliasesByNumber),
+    items: attachIdentifierAliases(
+      extractCatalogEntries(items, itemsText),
+      itemIdsByIdentifier,
+      itemAliasesByNumber,
+    ),
   };
 }
 
@@ -110,7 +137,9 @@ function parseTraditionalChineseNames(csv) {
     const [numberText, languageText, name] = parseCsvLine(line);
     const number = Number(numberText);
     const language = Number(languageText);
-    if (!Number.isInteger(number) || language !== 4 || !name) continue;
+    if (!Number.isInteger(number) || language !== TRADITIONAL_CHINESE_LANGUAGE_ID || !name) {
+      continue;
+    }
 
     const aliases = names.get(number) ?? [];
     if (!aliases.includes(name)) aliases.push(name);
@@ -118,6 +147,60 @@ function parseTraditionalChineseNames(csv) {
   }
 
   return names;
+}
+
+function parseLocalizedNamesByNumber(csv) {
+  const names = new Map();
+
+  for (const line of csv.split(/\r?\n/).slice(1)) {
+    if (!line) continue;
+    const [numberText, languageText, name] = parseCsvLine(line);
+    const number = Number(numberText);
+    const language = Number(languageText);
+    if (!Number.isInteger(number) || language !== TRADITIONAL_CHINESE_LANGUAGE_ID || !name) {
+      continue;
+    }
+
+    names.set(number, [name]);
+  }
+
+  return names;
+}
+
+function parsePokeApiItemIds(csv) {
+  const ids = new Map();
+
+  for (const line of csv.split(/\r?\n/).slice(1)) {
+    if (!line) continue;
+    const [idText, identifier] = parseCsvLine(line);
+    const id = Number(idText);
+    if (!Number.isInteger(id) || !identifier) continue;
+    ids.set(normalizePokeApiIdentifier(identifier), id);
+  }
+
+  return ids;
+}
+
+function attachNumberedAliases(entries, aliasesByNumber) {
+  return entries.map((entry) => attachAliases(entry, aliasesByNumber.get(entry.num)));
+}
+
+function attachIdentifierAliases(entries, idsByIdentifier, aliasesByNumber) {
+  return entries.map((entry) => {
+    const pokeApiId = idsByIdentifier.get(normalizePokeApiIdentifier(entry.id));
+    return attachAliases(entry, aliasesByNumber.get(pokeApiId));
+  });
+}
+
+function attachAliases(entry, aliases = []) {
+  const uniqueAliases = [...new Set(aliases)].filter((alias) => alias && alias !== entry.name);
+  return uniqueAliases.length > 0 ? { ...entry, aliases: uniqueAliases } : entry;
+}
+
+function normalizePokeApiIdentifier(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 }
 
 function parseCsvLine(line) {

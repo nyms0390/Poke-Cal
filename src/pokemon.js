@@ -6,7 +6,7 @@ export function normalizeSearch(value) {
 }
 
 export function searchPokemon(pokemon, query, options = 12) {
-  const { limit, abilityLookup, moveLookup, usageStats } =
+  const { limit, abilityLookup, moveLookup, itemLookup, usageStats } =
     typeof options === "number" ? { limit: options } : { limit: 12, ...options };
   const queryTerms = searchTerms(query);
   if (queryTerms.length === 0) return [];
@@ -17,6 +17,7 @@ export function searchPokemon(pokemon, query, options = 12) {
         matchScore(entry, term, {
           abilityLookup,
           moveLookup,
+          itemLookup,
           usageStats,
         }),
       );
@@ -72,7 +73,7 @@ export function megaFamily(pokemon, selected) {
   });
 }
 
-function matchScore(entry, query, { abilityLookup, moveLookup, usageStats } = {}) {
+function matchScore(entry, query, { abilityLookup, moveLookup, itemLookup, usageStats } = {}) {
   const candidates = [entry.name, entry.baseSpecies, ...(entry.aliases ?? [])].map(
     normalizeSearch,
   );
@@ -84,7 +85,8 @@ function matchScore(entry, query, { abilityLookup, moveLookup, usageStats } = {}
   const usage = usageForEntry(usageStats, entry);
   const usageMatch =
     catalogMatch(usage?.abilities, query, abilityLookup, "Ability", 3) ??
-    catalogMatch(usage?.moves, query, moveLookup, "Move", 3);
+    catalogMatch(usage?.moves, query, moveLookup, "Move", 3) ??
+    catalogMatch(usage?.items, query, itemLookup, "Item", 3);
   if (usageMatch) return usageMatch;
 
   const catalogMatchResult =
@@ -103,7 +105,9 @@ function catalogMatch(entries = [], query, lookup, label, baseScore) {
     const rawName = typeof entry === "string" ? entry : entry.name;
     const resolved = lookup?.get(normalizeSearch(rawId)) ?? lookup?.get(normalizeSearch(rawName));
     const displayName = resolved?.name ?? rawName ?? rawId;
-    const candidates = [rawId, rawName, displayName].map(normalizeSearch);
+    const candidates = [rawId, rawName, displayName, ...(resolved?.aliases ?? [])].map(
+      normalizeSearch,
+    );
     const score =
       candidates.includes(query) ? baseScore
       : candidates.some((candidate) => candidate.startsWith(query)) ? baseScore + 1
@@ -128,12 +132,11 @@ function catalogMatch(entries = [], query, lookup, label, baseScore) {
 }
 
 function usageForEntry(usageStats, entry) {
-  if (!usageStats?.pokemon) return null;
-  return (
-    usageStats.pokemon[normalizeSearch(entry.id)] ??
-    usageStats.pokemon[normalizeSearch(entry.baseSpecies)] ??
-    null
-  );
+  const usage =
+    usageStats?.pokemon?.[normalizeSearch(entry.id)] ??
+    usageStats?.pokemon?.[normalizeSearch(entry.baseSpecies)] ??
+    null;
+  return usage ?? entry.champions?.usage ?? null;
 }
 
 function searchMatch(score, label = "", usagePercent = -1) {
