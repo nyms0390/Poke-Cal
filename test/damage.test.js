@@ -7,6 +7,7 @@ import {
   formatDamageResult,
   koSummary,
   natureMultiplier,
+  natureOptionLabel,
   unsupportedMoveReason,
 } from "../src/damage.js";
 
@@ -44,6 +45,12 @@ test("maps all named natures to stat multipliers", () => {
   assert.equal(natureMultiplier("Jolly", "spa"), 0.9);
   assert.equal(natureMultiplier("Quirky", "atk"), 1);
   assert.equal(natureMultiplier("Unknown", "atk"), 1);
+});
+
+test("formats nature dropdown labels with stat effects", () => {
+  assert.equal(natureOptionLabel("Adamant"), "Adamant +Atk -SpA");
+  assert.equal(natureOptionLabel("Jolly"), "Jolly +Spe -SpA");
+  assert.equal(natureOptionLabel("Hardy"), "Hardy");
 });
 
 test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges", () => {

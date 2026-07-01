@@ -8,7 +8,14 @@ import {
 } from "./catalog.js";
 import { compareMoveOrder } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
-import { calculateDamage, calculateStat, formatDamageResult, koSummary, NATURES } from "./damage.js";
+import {
+  calculateDamage,
+  calculateStat,
+  formatDamageResult,
+  koSummary,
+  NATURES,
+  natureOptionLabel,
+} from "./damage.js";
 import { searchPokemon } from "./pokemon.js";
 import { finalSpeed } from "./speed.js";
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
@@ -51,8 +58,8 @@ const elements = {
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
-  attackerFinalSpeed: document.querySelector("#attacker-final-speed"),
-  defenderFinalSpeed: document.querySelector("#defender-final-speed"),
+  attackerFinalStats: document.querySelector("#attacker-final-stats"),
+  defenderFinalStats: document.querySelector("#defender-final-stats"),
   damageCount: document.querySelector("#damage-count"),
   damageList: document.querySelector("#damage-list"),
   status: document.querySelector("#status"),
@@ -133,7 +140,9 @@ document.addEventListener("click", (event) => {
 });
 
 function renderDamageShell() {
-  const natureOptions = Object.keys(NATURES).map((nature) => optionElement(nature, nature));
+  const natureOptions = Object.keys(NATURES).map((nature) =>
+    optionElement(nature, natureOptionLabel(nature)),
+  );
   elements.attackerNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
   elements.defenderNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
 
@@ -412,8 +421,8 @@ function renderDamage() {
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
-  elements.attackerFinalSpeed.textContent = String(finalSpeed(attacker));
-  elements.defenderFinalSpeed.textContent = String(finalSpeed(defender));
+  renderFinalStats(elements.attackerFinalStats, attacker);
+  renderFinalStats(elements.defenderFinalStats, defender);
   renderMoveOrder();
   elements.speedSummary.textContent =
     `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
@@ -431,6 +440,38 @@ function renderDamage() {
     damageColumn("Attacker moves", attackerRows),
     damageColumn("Defender moves", defenderRows),
   );
+}
+
+function renderFinalStats(container, state) {
+  const nature = NATURES[state.nature] ?? {};
+  container.replaceChildren(
+    ...SP_STATS.map((stat) => {
+      const entry = document.createElement("span");
+      entry.className = "final-stat";
+
+      const label = document.createElement("span");
+      label.textContent = STAT_LABELS[stat];
+
+      const value = document.createElement("strong");
+      value.textContent = String(finalStat(state, stat));
+      if (nature.up === stat) value.classList.add("increase");
+      if (nature.down === stat) value.classList.add("decrease");
+
+      entry.append(label, value);
+      return entry;
+    }),
+  );
+}
+
+function finalStat(state, stat) {
+  if (stat === "spe") return finalSpeed(state);
+  return calculateStat({
+    base: state.pokemon.baseStats[stat],
+    stat,
+    sp: state.sp[stat] ?? 0,
+    nature: state.nature,
+    stage: stat === "hp" ? 0 : state.stages[stat] ?? 0,
+  });
 }
 
 function damageColumn(title, cards) {

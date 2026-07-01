@@ -98,6 +98,14 @@ export const NATURES = {
   Quirky: {},
 };
 
+const NATURE_STAT_LABELS = {
+  atk: "Atk",
+  def: "Def",
+  spa: "SpA",
+  spd: "SpD",
+  spe: "Spe",
+};
+
 const TYPE_EFFECTIVENESS = {
   Normal: { Rock: 0.5, Ghost: 0, Steel: 0.5 },
   Fire: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 2, Bug: 2, Rock: 0.5, Dragon: 0.5, Steel: 2 },
@@ -167,6 +175,12 @@ export function natureMultiplier(natureName, stat) {
   if (nature.up === stat) return 1.1;
   if (nature.down === stat) return 0.9;
   return 1;
+}
+
+export function natureOptionLabel(natureName) {
+  const nature = NATURES[natureName] ?? NATURES.Hardy;
+  if (!nature.up || !nature.down) return natureName;
+  return `${natureName} +${NATURE_STAT_LABELS[nature.up]} -${NATURE_STAT_LABELS[nature.down]}`;
 }
 
 export function calculateStat({ base, stat, sp = 0, nature = "Hardy", stage = 0 }) {
