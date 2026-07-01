@@ -63,6 +63,33 @@ const pokemon = [
     baseSpeed: 115,
     aliases: [],
   },
+  {
+    id: "tinkaton",
+    name: "Tinkaton",
+    baseSpecies: "Tinkaton",
+    baseSpeed: 94,
+    aliases: [],
+    abilities: ["Mold Breaker"],
+    moves: ["fakeout"],
+  },
+  {
+    id: "excadrill",
+    name: "Excadrill",
+    baseSpecies: "Excadrill",
+    baseSpeed: 88,
+    aliases: [],
+    abilities: ["Mold Breaker"],
+    moves: ["earthquake"],
+  },
+  {
+    id: "hariyama",
+    name: "Hariyama",
+    baseSpecies: "Hariyama",
+    baseSpeed: 50,
+    aliases: [],
+    abilities: ["Thick Fat"],
+    moves: ["fakeout"],
+  },
 ];
 
 test("searches Pokémon by normalized English name", () => {
@@ -85,6 +112,30 @@ test("searches Pokémon by move names", () => {
     })[0].id,
     "pikachu",
   );
+});
+
+test("searches Pokémon by plus-separated ability and move terms", () => {
+  assert.deepEqual(
+    searchPokemon(pokemon, "mold + fake", {
+      abilityLookup: new Map([["moldbreaker", { name: "Mold Breaker" }]]),
+      moveLookup: new Map([["fakeout", { name: "Fake Out" }]]),
+    }).map(({ id }) => id),
+    ["tinkaton"],
+  );
+});
+
+test("searches Pokémon by plus-separated full ability and move names", () => {
+  assert.deepEqual(
+    searchPokemon(pokemon, "mold breaker + fake out", {
+      abilityLookup: new Map([["moldbreaker", { name: "Mold Breaker" }]]),
+      moveLookup: new Map([["fakeout", { name: "Fake Out" }]]),
+    }).map(({ id }) => id),
+    ["tinkaton"],
+  );
+});
+
+test("returns an empty result for separator-only search", () => {
+  assert.deepEqual(searchPokemon(pokemon, "+"), []);
 });
 
 test("prioritizes usage-backed ability matches over raw ability matches", () => {

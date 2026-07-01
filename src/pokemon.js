@@ -8,16 +8,21 @@ export function normalizeSearch(value) {
 export function searchPokemon(pokemon, query, options = 12) {
   const { limit, abilityLookup, moveLookup, usageStats } =
     typeof options === "number" ? { limit: options } : { limit: 12, ...options };
-  const normalizedQuery = normalizeSearch(query);
-  if (!normalizedQuery) return [];
+  const queryTerms = searchTerms(query);
+  if (queryTerms.length === 0) return [];
 
   return pokemon
     .map((entry) => {
-      const match = matchScore(entry, normalizedQuery, {
-        abilityLookup,
-        moveLookup,
-        usageStats,
-      });
+      const matches = queryTerms.map((term) =>
+        matchScore(entry, term, {
+          abilityLookup,
+          moveLookup,
+          usageStats,
+        }),
+      );
+      const match = matches.every(({ score }) => score < Infinity)
+        ? matches[0]
+        : searchMatch(Infinity);
       return { entry, match };
     })
     .filter(({ match }) => match.score < Infinity)
@@ -29,6 +34,13 @@ export function searchPokemon(pokemon, query, options = 12) {
     )
     .slice(0, limit)
     .map(({ entry, match }) => ({ ...entry, searchMatch: match.label }));
+}
+
+function searchTerms(query) {
+  return String(query ?? "")
+    .split("+")
+    .map(normalizeSearch)
+    .filter(Boolean);
 }
 
 export function megaFamily(pokemon, selected) {
