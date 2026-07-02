@@ -116,6 +116,7 @@ function buildPokemon(pokedex, learnsets, aliasesByNumber) {
       types: [...(entry.types ?? [])],
       baseStats: { ...entry.baseStats },
       baseSpeed: entry.baseStats.spe,
+      weightkg: entry.weightkg,
       abilities: extractAbilities(entry),
       moves: extractLearnsetMoves(learnsets, id, entry.baseSpecies ?? entry.name),
       aliases: aliasesByNumber.get(entry.num) ?? [],

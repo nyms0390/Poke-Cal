@@ -69,6 +69,19 @@ const TERRAIN_PULSE_TYPES = {
   mistyterrain: "Fairy",
   psychicterrain: "Psychic",
 };
+const HISTORY_BASE_POWER_MOVE_IDS = new Set([
+  "echoedvoice",
+  "furycutter",
+  "iceball",
+  "lashout",
+  "lastrespects",
+  "ragefist",
+  "retaliate",
+  "rollout",
+  "stompingtantrum",
+  "temperflare",
+]);
+const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
 
 export const NATURES = {
   Hardy: {},
@@ -164,8 +177,6 @@ const TYPE_EFFECTIVENESS = {
 const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
   "nightshade",
-  "grassknot",
-  "lowkick",
   "electroball",
   "terablast",
 ]);
@@ -197,8 +208,17 @@ export function calculateStat({ base, stat, sp = 0, nature = "Hardy", stage = 0 
   return applyStage(trained, stage);
 }
 
-export function typeEffectiveness(moveType, defenderTypes = []) {
+export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}) {
+  const moveId = normalizeId(move?.id ?? move?.name);
+  if (moveId === "thousandarrows" && defenderTypes.includes("Flying")) {
+    if (defenderState.grounded !== true) return 1;
+    return defenderTypes.reduce((multiplier, defenderType) => {
+      if (defenderType === "Flying") return multiplier;
+      return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
+    }, 1);
+  }
   return defenderTypes.reduce((multiplier, defenderType) => {
+    if (moveId === "freezedry" && defenderType === "Water") return multiplier * 2;
     return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
   }, 1);
 }
@@ -207,6 +227,7 @@ export function unsupportedMoveReason(move) {
   if (!move) return "Missing move data.";
   if (move.category === "Status") return "Status moves do not deal direct damage.";
   if (normalizeId(move.id ?? move.name) === "naturalgift") return "";
+  if (TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (fixedDamageKind(move)) return "";
   if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
     return "Fixed-damage moves are not supported.";
@@ -235,9 +256,9 @@ export function calculateDamage({
   if (unsupported) return { supported: false, reason: unsupported };
 
   const moveType = effectiveMoveType(move, attacker, attackerState, { weather, terrain });
-  const typeMultiplier = typeEffectiveness(moveType, defender.types);
+  const typeMultiplier = typeEffectiveness(moveType, defender.types, move, defenderState);
   const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
-  const effectiveCritical = critical && !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]);
+  const effectiveCritical = critical && (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
     return {
       supported: true,
@@ -270,9 +291,12 @@ export function calculateDamage({
   }
 
   const moveId = normalizeId(move.id ?? move.name);
-  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, { weather, terrain, gravity, pledgeCombo });
+  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, { defender, weather, terrain, gravity, pledgeCombo });
   if (dynamicPower === null) {
-    return { supported: false, reason: "Natural Gift requires a held Berry." };
+    const reason = TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)
+      ? `${move.name} requires defender weight.`
+      : "Natural Gift requires a held Berry.";
+    return { supported: false, reason };
   }
   let isPhysical = move.category === "Physical";
   let attackStat = move.overrideOffensiveStat ?? (isPhysical ? "atk" : "spa");
@@ -301,7 +325,13 @@ export function calculateDamage({
   const notes = [];
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
   let power = dynamicPower ?? move.basePower;
-  if (dynamicPower !== undefined) notes.push(`${move.name} power ${dynamicPower}`);
+  if (dynamicPower !== undefined) {
+    notes.push(`${move.name} power ${dynamicPower}`);
+  } else if (HISTORY_BASE_POWER_MOVE_IDS.has(moveId)) {
+    notes.push(`${move.name} baseline power ${move.basePower}`);
+  } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
+    notes.push(`${move.name} power ${power}`);
+  }
   let attackModifier = 1;
   let damageModifier = 1;
   let stab = attacker.types.includes(moveType) ? 1.5 : 1;
@@ -341,6 +371,8 @@ export function calculateDamage({
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
+  const hitCount = fixedHitCount(move);
+  if (hitCount > 1) notes.push(`${move.name} hits ${hitCount} times`);
 
   const rolls = DAMAGE_ROLLS.map((roll) => {
     let damage = baseDamage;
@@ -351,7 +383,7 @@ export function calculateDamage({
     damage = Math.floor(damage * burnModifier);
     damage = Math.floor(damage * spreadModifier);
     damage = Math.floor(damage * damageModifier);
-    return Math.max(1, damage);
+    return Math.max(1, damage) * hitCount;
   });
 
   return {
@@ -418,6 +450,10 @@ function fixedDamageValue(move, defenderHp) {
   return null;
 }
 
+function fixedHitCount(move) {
+  return move.multihit === 2 ? 2 : 1;
+}
+
 function effectiveMoveType(move, attacker, attackerState, context = {}) {
   const item = attackerState.item;
   const moveId = normalizeId(move.id ?? move.name);
@@ -451,6 +487,10 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
   const item = attackerState.item;
   const moveId = normalizeId(move.id ?? move.name);
   if (moveId === "naturalgift") return item?.naturalGift?.basePower ?? null;
+  if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
+    const weight = targetWeightKg(context.defender, defenderState);
+    return weight === null ? null : targetWeightBasePower(weight);
+  }
   if (
     moveId === "weatherball" &&
     WEATHER_BALL_TYPES[normalizeId(context.weather)] &&
@@ -491,6 +531,20 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
   return undefined;
 }
 
+function targetWeightKg(defender, defenderState) {
+  const weight = defenderState.weightkg ?? defenderState.weightKg ?? defender?.weightkg ?? defender?.weightKg;
+  return Number.isFinite(weight) && weight > 0 ? weight : null;
+}
+
+function targetWeightBasePower(weightKg) {
+  if (weightKg < 10) return 20;
+  if (weightKg < 25) return 40;
+  if (weightKg < 50) return 60;
+  if (weightKg < 100) return 80;
+  if (weightKg < 200) return 100;
+  return 120;
+}
+
 function isPledgeMove(move) {
   const moveId = normalizeId(move.id ?? move.name);
   return moveId === "firepledge" || moveId === "waterpledge" || moveId === "grasspledge";
@@ -503,7 +557,7 @@ function activeModifiers({ attacker, defender, move, attackerState, defenderStat
   const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
   const defenderItem = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
   const ability = normalizeId(attackerState.ability?.id ?? attackerState.ability?.name);
-  const defenderAbility = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
+  const defenderAbility = move.ignoreAbility ? "" : normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
 
   if (item === "choiceband" && attackStat === "atk") {
     modifiers.push({ kind: "attack", value: 1.5, label: "Choice Band" });

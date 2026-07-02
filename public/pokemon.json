@@ -212,7 +212,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 135.5
   },
   {
     "id": "abomasnowmega",
@@ -332,7 +333,8 @@
     ],
     "aliases": [
       "暴雪王"
-    ]
+    ],
+    "weightkg": 185
   },
   {
     "id": "abra",
@@ -455,7 +457,8 @@
     ],
     "aliases": [
       "凱西"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "absol",
@@ -653,7 +656,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 47
   },
   {
     "id": "absolmega",
@@ -791,7 +795,8 @@
     ],
     "aliases": [
       "阿勃梭魯"
-    ]
+    ],
+    "weightkg": 49
   },
   {
     "id": "absolmegaz",
@@ -930,7 +935,8 @@
     ],
     "aliases": [
       "阿勃梭魯"
-    ]
+    ],
+    "weightkg": 49
   },
   {
     "id": "accelgor",
@@ -1019,7 +1025,8 @@
     ],
     "aliases": [
       "敏捷蟲"
-    ]
+    ],
+    "weightkg": 25.3
   },
   {
     "id": "aegislash",
@@ -1256,7 +1263,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 53
   },
   {
     "id": "aegislashblade",
@@ -1345,7 +1353,8 @@
     ],
     "aliases": [
       "堅盾劍怪"
-    ]
+    ],
+    "weightkg": 53
   },
   {
     "id": "aerodactyl",
@@ -1656,7 +1665,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 59
   },
   {
     "id": "aerodactylmega",
@@ -1781,7 +1791,8 @@
     ],
     "aliases": [
       "化石翼龍"
-    ]
+    ],
+    "weightkg": 79
   },
   {
     "id": "aggron",
@@ -2013,7 +2024,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 360
   },
   {
     "id": "aggronmega",
@@ -2160,7 +2172,8 @@
     ],
     "aliases": [
       "波士可多拉"
-    ]
+    ],
+    "weightkg": 395
   },
   {
     "id": "aipom",
@@ -2300,7 +2313,8 @@
     ],
     "aliases": [
       "長尾怪手"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "alakazam",
@@ -2519,7 +2533,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 48
   },
   {
     "id": "alakazammega",
@@ -2654,7 +2669,8 @@
     ],
     "aliases": [
       "胡地"
-    ]
+    ],
+    "weightkg": 48
   },
   {
     "id": "alcremie",
@@ -2845,7 +2861,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.5
   },
   {
     "id": "alcremiegmax",
@@ -2924,7 +2941,8 @@
     ],
     "aliases": [
       "霜奶仙"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "alomomola",
@@ -3025,7 +3043,8 @@
     ],
     "aliases": [
       "保母曼波"
-    ]
+    ],
+    "weightkg": 31.6
   },
   {
     "id": "altaria",
@@ -3246,7 +3265,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 20.6
   },
   {
     "id": "altariamega",
@@ -3372,7 +3392,8 @@
     ],
     "aliases": [
       "七夕青鳥"
-    ]
+    ],
+    "weightkg": 20.6
   },
   {
     "id": "amaura",
@@ -3477,7 +3498,8 @@
     ],
     "aliases": [
       "冰雪龍"
-    ]
+    ],
+    "weightkg": 25.2
   },
   {
     "id": "ambipom",
@@ -3601,7 +3623,8 @@
     ],
     "aliases": [
       "雙尾怪手"
-    ]
+    ],
+    "weightkg": 20.3
   },
   {
     "id": "amoonguss",
@@ -3686,7 +3709,8 @@
     ],
     "aliases": [
       "敗露球菇"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "ampharos",
@@ -3906,7 +3930,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 61.5
   },
   {
     "id": "ampharosmega",
@@ -4032,7 +4057,8 @@
     ],
     "aliases": [
       "電龍"
-    ]
+    ],
+    "weightkg": 61.5
   },
   {
     "id": "annihilape",
@@ -4370,7 +4396,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 56
   },
   {
     "id": "anorith",
@@ -4463,7 +4490,8 @@
     ],
     "aliases": [
       "太古羽蟲"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "appletun",
@@ -4615,7 +4643,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 13
   },
   {
     "id": "appletungmax",
@@ -4703,7 +4732,8 @@
     ],
     "aliases": [
       "豐蜜龍"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "applin",
@@ -4742,7 +4772,8 @@
     ],
     "aliases": [
       "啃果蟲"
-    ]
+    ],
+    "weightkg": 0.5
   },
   {
     "id": "araquanid",
@@ -4971,7 +5002,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 82
   },
   {
     "id": "araquanidtotem",
@@ -5047,7 +5079,8 @@
     ],
     "aliases": [
       "滴蛛霸"
-    ]
+    ],
+    "weightkg": 217.5
   },
   {
     "id": "arbok",
@@ -5174,7 +5207,8 @@
     ],
     "aliases": [
       "阿柏怪"
-    ]
+    ],
+    "weightkg": 65
   },
   {
     "id": "arboliva",
@@ -5250,7 +5284,8 @@
     ],
     "aliases": [
       "奧利瓦"
-    ]
+    ],
+    "weightkg": 48.2
   },
   {
     "id": "arcanine",
@@ -5425,7 +5460,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 155
   },
   {
     "id": "arcaninehisui",
@@ -5658,7 +5694,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 168
   },
   {
     "id": "arceus",
@@ -5858,7 +5895,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusbug",
@@ -6058,7 +6096,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusdark",
@@ -6258,7 +6297,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusdragon",
@@ -6458,7 +6498,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceuselectric",
@@ -6658,7 +6699,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusfairy",
@@ -6858,7 +6900,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusfighting",
@@ -7058,7 +7101,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusfire",
@@ -7258,7 +7302,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusflying",
@@ -7458,7 +7503,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusghost",
@@ -7658,7 +7704,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusgrass",
@@ -7858,7 +7905,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusground",
@@ -8058,7 +8106,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusice",
@@ -8258,7 +8307,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceuspoison",
@@ -8458,7 +8508,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceuspsychic",
@@ -8658,7 +8709,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceusrock",
@@ -8858,7 +8910,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceussteel",
@@ -9058,7 +9111,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "arceuswater",
@@ -9258,7 +9312,8 @@
     ],
     "aliases": [
       "阿爾宙斯"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "archaludon",
@@ -9556,7 +9611,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 60
   },
   {
     "id": "archen",
@@ -9657,7 +9713,8 @@
     ],
     "aliases": [
       "始祖小鳥"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "archeops",
@@ -9763,7 +9820,8 @@
     ],
     "aliases": [
       "始祖大鳥"
-    ]
+    ],
+    "weightkg": 32
   },
   {
     "id": "arctibax",
@@ -9826,7 +9884,8 @@
     ],
     "aliases": [
       "凍脊龍"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "arctovish",
@@ -9899,7 +9958,8 @@
     ],
     "aliases": [
       "鰓魚海獸"
-    ]
+    ],
+    "weightkg": 175
   },
   {
     "id": "arctozolt",
@@ -9981,7 +10041,8 @@
     ],
     "aliases": [
       "雷鳥海獸"
-    ]
+    ],
+    "weightkg": 150
   },
   {
     "id": "ariados",
@@ -10148,7 +10209,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 33.5
   },
   {
     "id": "armaldo",
@@ -10254,7 +10316,8 @@
     ],
     "aliases": [
       "太古盔甲"
-    ]
+    ],
+    "weightkg": 68.2
   },
   {
     "id": "armarouge",
@@ -10511,7 +10574,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 85
   },
   {
     "id": "aromatisse",
@@ -10747,7 +10811,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 15.5
   },
   {
     "id": "aron",
@@ -10849,7 +10914,8 @@
     ],
     "aliases": [
       "可可多拉"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "arrokuda",
@@ -10921,7 +10987,8 @@
     ],
     "aliases": [
       "刺梭魚"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "articuno",
@@ -11038,7 +11105,8 @@
     ],
     "aliases": [
       "急凍鳥"
-    ]
+    ],
+    "weightkg": 55.4
   },
   {
     "id": "articunogalar",
@@ -11122,7 +11190,8 @@
     ],
     "aliases": [
       "急凍鳥"
-    ]
+    ],
+    "weightkg": 50.9
   },
   {
     "id": "audino",
@@ -11345,7 +11414,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 31
   },
   {
     "id": "audinomega",
@@ -11479,7 +11549,8 @@
     ],
     "aliases": [
       "差不多娃娃"
-    ]
+    ],
+    "weightkg": 32
   },
   {
     "id": "aurorus",
@@ -11642,7 +11713,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 225
   },
   {
     "id": "avalugg",
@@ -11743,7 +11815,8 @@
     ],
     "aliases": [
       "冰岩怪"
-    ]
+    ],
+    "weightkg": 505
   },
   {
     "id": "avalugghisui",
@@ -11822,7 +11895,8 @@
     ],
     "aliases": [
       "冰岩怪"
-    ]
+    ],
+    "weightkg": 262.4
   },
   {
     "id": "axew",
@@ -11929,7 +12003,8 @@
     ],
     "aliases": [
       "牙牙"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "azelf",
@@ -12054,7 +12129,8 @@
     ],
     "aliases": [
       "亞克諾姆"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "azumarill",
@@ -12281,7 +12357,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 28.5
   },
   {
     "id": "azurill",
@@ -12383,7 +12460,8 @@
     ],
     "aliases": [
       "露力麗"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "bagon",
@@ -12481,7 +12559,8 @@
     ],
     "aliases": [
       "寶貝龍"
-    ]
+    ],
+    "weightkg": 42.1
   },
   {
     "id": "baltoy",
@@ -12591,7 +12670,8 @@
     ],
     "aliases": [
       "天秤偶"
-    ]
+    ],
+    "weightkg": 21.5
   },
   {
     "id": "banette",
@@ -12712,7 +12792,8 @@
     ],
     "aliases": [
       "詛咒娃娃"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "banettemega",
@@ -12831,7 +12912,8 @@
     ],
     "aliases": [
       "詛咒娃娃"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "barbaracle",
@@ -13045,7 +13127,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 96
   },
   {
     "id": "barbaraclemega",
@@ -13169,7 +13252,8 @@
     ],
     "aliases": [
       "龜足巨鎧"
-    ]
+    ],
+    "weightkg": 100
   },
   {
     "id": "barboach",
@@ -13267,7 +13351,8 @@
     ],
     "aliases": [
       "泥泥鰍"
-    ]
+    ],
+    "weightkg": 1.9
   },
   {
     "id": "barraskewda",
@@ -13340,7 +13425,8 @@
     ],
     "aliases": [
       "戽斗尖梭"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "basculegion",
@@ -13524,7 +13610,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 110
   },
   {
     "id": "basculegion",
@@ -13820,7 +13907,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 110
   },
   {
     "id": "basculegionf",
@@ -14004,7 +14092,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 110
   },
   {
     "id": "basculin",
@@ -14105,7 +14194,8 @@
     ],
     "aliases": [
       "野蠻鱸魚"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "basculinbluestriped",
@@ -14206,7 +14296,8 @@
     ],
     "aliases": [
       "野蠻鱸魚"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "basculinwhitestriped",
@@ -14279,7 +14370,8 @@
     ],
     "aliases": [
       "野蠻鱸魚"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "bastiodon",
@@ -14389,7 +14481,8 @@
     ],
     "aliases": [
       "護城龍"
-    ]
+    ],
+    "weightkg": 149.5
   },
   {
     "id": "baxcalibur",
@@ -14469,7 +14562,8 @@
     ],
     "aliases": [
       "戟脊龍"
-    ]
+    ],
+    "weightkg": 210
   },
   {
     "id": "baxcaliburmega",
@@ -14549,7 +14643,8 @@
     ],
     "aliases": [
       "戟脊龍"
-    ]
+    ],
+    "weightkg": 315
   },
   {
     "id": "bayleef",
@@ -14649,7 +14744,8 @@
     ],
     "aliases": [
       "月桂葉"
-    ]
+    ],
+    "weightkg": 15.8
   },
   {
     "id": "beartic",
@@ -14834,7 +14930,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 260
   },
   {
     "id": "beautifly",
@@ -14921,7 +15018,8 @@
     ],
     "aliases": [
       "狩獵鳳蝶"
-    ]
+    ],
+    "weightkg": 28.4
   },
   {
     "id": "beedrill",
@@ -15123,7 +15221,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 29.5
   },
   {
     "id": "beedrillmega",
@@ -15230,7 +15329,8 @@
     ],
     "aliases": [
       "大針蜂"
-    ]
+    ],
+    "weightkg": 40.5
   },
   {
     "id": "beheeyem",
@@ -15341,7 +15441,8 @@
     ],
     "aliases": [
       "大宇怪"
-    ]
+    ],
+    "weightkg": 34.5
   },
   {
     "id": "beldum",
@@ -15377,7 +15478,8 @@
     ],
     "aliases": [
       "鐵啞鈴"
-    ]
+    ],
+    "weightkg": 95.2
   },
   {
     "id": "bellibolt",
@@ -15583,7 +15685,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 113
   },
   {
     "id": "bellossom",
@@ -15688,7 +15791,8 @@
     ],
     "aliases": [
       "美麗花"
-    ]
+    ],
+    "weightkg": 5.8
   },
   {
     "id": "bellsprout",
@@ -15796,7 +15900,8 @@
     ],
     "aliases": [
       "喇叭芽"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "bergmite",
@@ -15885,7 +15990,8 @@
     ],
     "aliases": [
       "冰寶"
-    ]
+    ],
+    "weightkg": 99.5
   },
   {
     "id": "bewear",
@@ -15983,7 +16089,8 @@
     ],
     "aliases": [
       "穿著熊"
-    ]
+    ],
+    "weightkg": 135
   },
   {
     "id": "bibarel",
@@ -16091,7 +16198,8 @@
     ],
     "aliases": [
       "大尾狸"
-    ]
+    ],
+    "weightkg": 31.5
   },
   {
     "id": "bidoof",
@@ -16188,7 +16296,8 @@
     ],
     "aliases": [
       "大牙狸"
-    ]
+    ],
+    "weightkg": 20
   },
   {
     "id": "binacle",
@@ -16302,7 +16411,8 @@
     ],
     "aliases": [
       "龜腳腳"
-    ]
+    ],
+    "weightkg": 31
   },
   {
     "id": "bisharp",
@@ -16415,7 +16525,8 @@
     ],
     "aliases": [
       "劈斬司令"
-    ]
+    ],
+    "weightkg": 70
   },
   {
     "id": "blacephalon",
@@ -16507,7 +16618,8 @@
     ],
     "aliases": [
       "砰頭小丑"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "blastoise",
@@ -16752,7 +16864,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 85.5
   },
   {
     "id": "blastoisegmax",
@@ -16891,7 +17004,8 @@
     ],
     "aliases": [
       "水箭龜"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "blastoisemega",
@@ -17029,7 +17143,8 @@
     ],
     "aliases": [
       "水箭龜"
-    ]
+    ],
+    "weightkg": 101.1
   },
   {
     "id": "blaziken",
@@ -17377,7 +17492,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 52
   },
   {
     "id": "blazikenmega",
@@ -17522,7 +17638,8 @@
     ],
     "aliases": [
       "火焰雞"
-    ]
+    ],
+    "weightkg": 52
   },
   {
     "id": "blipbug",
@@ -17554,7 +17671,8 @@
     ],
     "aliases": [
       "索偵蟲"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "blissey",
@@ -17713,7 +17831,8 @@
     ],
     "aliases": [
       "幸福蛋"
-    ]
+    ],
+    "weightkg": 46.8
   },
   {
     "id": "blitzle",
@@ -17805,7 +17924,8 @@
     ],
     "aliases": [
       "斑斑馬"
-    ]
+    ],
+    "weightkg": 29.8
   },
   {
     "id": "boldore",
@@ -17880,7 +18000,8 @@
     ],
     "aliases": [
       "地幔岩"
-    ]
+    ],
+    "weightkg": 102
   },
   {
     "id": "boltund",
@@ -17949,7 +18070,8 @@
     ],
     "aliases": [
       "逐電犬"
-    ]
+    ],
+    "weightkg": 34
   },
   {
     "id": "bombirdier",
@@ -18038,7 +18160,8 @@
     ],
     "aliases": [
       "下石鳥"
-    ]
+    ],
+    "weightkg": 42.9
   },
   {
     "id": "bonsly",
@@ -18139,7 +18262,8 @@
     ],
     "aliases": [
       "盆才怪"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "bouffalant",
@@ -18239,7 +18363,8 @@
     ],
     "aliases": [
       "爆炸頭水牛"
-    ]
+    ],
+    "weightkg": 94.6
   },
   {
     "id": "bounsweet",
@@ -18324,7 +18449,8 @@
     ],
     "aliases": [
       "甜竹竹"
-    ]
+    ],
+    "weightkg": 3.2
   },
   {
     "id": "braixen",
@@ -18432,7 +18558,8 @@
     ],
     "aliases": [
       "長尾火狐"
-    ]
+    ],
+    "weightkg": 14.5
   },
   {
     "id": "brambleghast",
@@ -18501,7 +18628,8 @@
     ],
     "aliases": [
       "怖納噬草"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "bramblin",
@@ -18572,7 +18700,8 @@
     ],
     "aliases": [
       "納噬草"
-    ]
+    ],
+    "weightkg": 0.6
   },
   {
     "id": "braviary",
@@ -18673,7 +18802,8 @@
     ],
     "aliases": [
       "勇士雄鷹"
-    ]
+    ],
+    "weightkg": 41
   },
   {
     "id": "braviaryhisui",
@@ -18769,7 +18899,8 @@
     ],
     "aliases": [
       "勇士雄鷹"
-    ]
+    ],
+    "weightkg": 43.4
   },
   {
     "id": "breloom",
@@ -18900,7 +19031,8 @@
     ],
     "aliases": [
       "斗笠菇"
-    ]
+    ],
+    "weightkg": 39.2
   },
   {
     "id": "brionne",
@@ -18990,7 +19122,8 @@
     ],
     "aliases": [
       "花漾海獅"
-    ]
+    ],
+    "weightkg": 17.5
   },
   {
     "id": "bronzong",
@@ -19116,7 +19249,8 @@
     ],
     "aliases": [
       "青銅鐘"
-    ]
+    ],
+    "weightkg": 187
   },
   {
     "id": "bronzor",
@@ -19229,7 +19363,8 @@
     ],
     "aliases": [
       "銅鏡怪"
-    ]
+    ],
+    "weightkg": 60.5
   },
   {
     "id": "brutebonnet",
@@ -19306,7 +19441,8 @@
     ],
     "aliases": [
       "猛惡菇"
-    ]
+    ],
+    "weightkg": 21
   },
   {
     "id": "bruxish",
@@ -19418,7 +19554,8 @@
     ],
     "aliases": [
       "磨牙彩皮魚"
-    ]
+    ],
+    "weightkg": 19
   },
   {
     "id": "budew",
@@ -19505,7 +19642,8 @@
     ],
     "aliases": [
       "含羞苞"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "buizel",
@@ -19617,7 +19755,8 @@
     ],
     "aliases": [
       "泳圈鼬"
-    ]
+    ],
+    "weightkg": 29.5
   },
   {
     "id": "bulbasaur",
@@ -19733,7 +19872,8 @@
     ],
     "aliases": [
       "妙蛙種子"
-    ]
+    ],
+    "weightkg": 6.9
   },
   {
     "id": "buneary",
@@ -19852,7 +19992,8 @@
     ],
     "aliases": [
       "捲捲耳"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "bunnelby",
@@ -19944,7 +20085,8 @@
     ],
     "aliases": [
       "掘掘兔"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "burmy",
@@ -19977,7 +20119,8 @@
     ],
     "aliases": [
       "結草兒"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "butterfree",
@@ -20091,7 +20234,8 @@
     ],
     "aliases": [
       "巴大蝶"
-    ]
+    ],
+    "weightkg": 32
   },
   {
     "id": "butterfreegmax",
@@ -20205,7 +20349,8 @@
     ],
     "aliases": [
       "巴大蝶"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "buzzwole",
@@ -20296,7 +20441,8 @@
     ],
     "aliases": [
       "爆肌蚊"
-    ]
+    ],
+    "weightkg": 333.6
   },
   {
     "id": "cacnea",
@@ -20425,7 +20571,8 @@
     ],
     "aliases": [
       "刺球仙人掌"
-    ]
+    ],
+    "weightkg": 51.3
   },
   {
     "id": "cacturne",
@@ -20563,7 +20710,8 @@
     ],
     "aliases": [
       "夢歌仙人掌"
-    ]
+    ],
+    "weightkg": 77.4
   },
   {
     "id": "calyrex",
@@ -20658,7 +20806,8 @@
     ],
     "aliases": [
       "蕾冠王"
-    ]
+    ],
+    "weightkg": 7.7
   },
   {
     "id": "calyrexice",
@@ -20792,7 +20941,8 @@
     ],
     "aliases": [
       "蕾冠王"
-    ]
+    ],
+    "weightkg": 809.1
   },
   {
     "id": "calyrexshadow",
@@ -20916,7 +21066,8 @@
     ],
     "aliases": [
       "蕾冠王"
-    ]
+    ],
+    "weightkg": 53.6
   },
   {
     "id": "camerupt",
@@ -21140,7 +21291,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 220
   },
   {
     "id": "cameruptmega",
@@ -21256,7 +21408,8 @@
     ],
     "aliases": [
       "噴火駝"
-    ]
+    ],
+    "weightkg": 320.5
   },
   {
     "id": "capsakid",
@@ -21322,7 +21475,8 @@
     ],
     "aliases": [
       "熱辣娃"
-    ]
+    ],
+    "weightkg": 3
   },
   {
     "id": "carbink",
@@ -21428,7 +21582,8 @@
     ],
     "aliases": [
       "小碎鑽"
-    ]
+    ],
+    "weightkg": 5.7
   },
   {
     "id": "carkol",
@@ -21511,7 +21666,8 @@
     ],
     "aliases": [
       "大炭車"
-    ]
+    ],
+    "weightkg": 78
   },
   {
     "id": "carnivine",
@@ -21605,7 +21761,8 @@
     ],
     "aliases": [
       "尖牙籠"
-    ]
+    ],
+    "weightkg": 27
   },
   {
     "id": "carracosta",
@@ -21706,7 +21863,8 @@
     ],
     "aliases": [
       "肋骨海龜"
-    ]
+    ],
+    "weightkg": 81
   },
   {
     "id": "carvanha",
@@ -21803,7 +21961,8 @@
     ],
     "aliases": [
       "利牙魚"
-    ]
+    ],
+    "weightkg": 20.8
   },
   {
     "id": "cascoon",
@@ -21833,7 +21992,8 @@
     ],
     "aliases": [
       "盾甲繭"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "castform",
@@ -21928,7 +22088,8 @@
     ],
     "aliases": [
       "飄浮泡泡"
-    ]
+    ],
+    "weightkg": 0.8
   },
   {
     "id": "castformrainy",
@@ -22023,7 +22184,8 @@
     ],
     "aliases": [
       "飄浮泡泡"
-    ]
+    ],
+    "weightkg": 0.8
   },
   {
     "id": "castformsnowy",
@@ -22118,7 +22280,8 @@
     ],
     "aliases": [
       "飄浮泡泡"
-    ]
+    ],
+    "weightkg": 0.8
   },
   {
     "id": "castformsunny",
@@ -22213,7 +22376,8 @@
     ],
     "aliases": [
       "飄浮泡泡"
-    ]
+    ],
+    "weightkg": 0.8
   },
   {
     "id": "caterpie",
@@ -22244,7 +22408,8 @@
     ],
     "aliases": [
       "綠毛蟲"
-    ]
+    ],
+    "weightkg": 2.9
   },
   {
     "id": "celebi",
@@ -22375,7 +22540,8 @@
     ],
     "aliases": [
       "時拉比"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "celesteela",
@@ -22466,7 +22632,8 @@
     ],
     "aliases": [
       "鐵火輝夜"
-    ]
+    ],
+    "weightkg": 999.9
   },
   {
     "id": "centiskorch",
@@ -22540,7 +22707,8 @@
     ],
     "aliases": [
       "焚焰蚣"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "centiskorchgmax",
@@ -22614,7 +22782,8 @@
     ],
     "aliases": [
       "焚焰蚣"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "ceruledge",
@@ -22859,7 +23028,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 62
   },
   {
     "id": "cetitan",
@@ -22932,7 +23102,8 @@
     ],
     "aliases": [
       "浩大鯨"
-    ]
+    ],
+    "weightkg": 700
   },
   {
     "id": "cetoddle",
@@ -23007,7 +23178,8 @@
     ],
     "aliases": [
       "走鯨"
-    ]
+    ],
+    "weightkg": 45
   },
   {
     "id": "chandelure",
@@ -23243,7 +23415,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 34.3
   },
   {
     "id": "chandeluremega",
@@ -23341,7 +23514,8 @@
     ],
     "aliases": [
       "水晶燈火靈"
-    ]
+    ],
+    "weightkg": 69.6
   },
   {
     "id": "chansey",
@@ -23511,7 +23685,8 @@
     ],
     "aliases": [
       "吉利蛋"
-    ]
+    ],
+    "weightkg": 34.6
   },
   {
     "id": "charcadet",
@@ -23567,7 +23742,8 @@
     ],
     "aliases": [
       "炭小侍"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "charizard",
@@ -24009,7 +24185,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 90.5
   },
   {
     "id": "charizardgmax",
@@ -24165,7 +24342,8 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "charizardmegax",
@@ -24320,7 +24498,8 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "weightkg": 110.5
   },
   {
     "id": "charizardmegay",
@@ -24475,7 +24654,8 @@
     ],
     "aliases": [
       "噴火龍"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "charjabug",
@@ -24556,7 +24736,8 @@
     ],
     "aliases": [
       "蟲電寶"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "charmander",
@@ -24692,7 +24873,8 @@
     ],
     "aliases": [
       "小火龍"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "charmeleon",
@@ -24817,7 +24999,8 @@
     ],
     "aliases": [
       "火恐龍"
-    ]
+    ],
+    "weightkg": 19
   },
   {
     "id": "chatot",
@@ -24904,7 +25087,8 @@
     ],
     "aliases": [
       "聒噪鳥"
-    ]
+    ],
+    "weightkg": 1.9
   },
   {
     "id": "cherrim",
@@ -24985,7 +25169,8 @@
     ],
     "aliases": [
       "櫻花兒"
-    ]
+    ],
+    "weightkg": 9.3
   },
   {
     "id": "cherrimsunshine",
@@ -25066,7 +25251,8 @@
     ],
     "aliases": [
       "櫻花兒"
-    ]
+    ],
+    "weightkg": 9.3
   },
   {
     "id": "cherubi",
@@ -25149,7 +25335,8 @@
     ],
     "aliases": [
       "櫻花寶"
-    ]
+    ],
+    "weightkg": 3.3
   },
   {
     "id": "chesnaught",
@@ -25379,7 +25566,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 90
   },
   {
     "id": "chesnaughtmega",
@@ -25520,7 +25708,8 @@
     ],
     "aliases": [
       "布里卡隆"
-    ]
+    ],
+    "weightkg": 90
   },
   {
     "id": "chespin",
@@ -25642,7 +25831,8 @@
     ],
     "aliases": [
       "哈力栗"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "chewtle",
@@ -25712,7 +25902,8 @@
     ],
     "aliases": [
       "咬咬龜"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "chiyu",
@@ -25784,7 +25975,8 @@
     ],
     "aliases": [
       "古玉魚"
-    ]
+    ],
+    "weightkg": 4.9
   },
   {
     "id": "chienpao",
@@ -25855,7 +26047,8 @@
     ],
     "aliases": [
       "古劍豹"
-    ]
+    ],
+    "weightkg": 152.2
   },
   {
     "id": "chikorita",
@@ -25958,7 +26151,8 @@
     ],
     "aliases": [
       "菊草葉"
-    ]
+    ],
+    "weightkg": 6.4
   },
   {
     "id": "chimchar",
@@ -26083,7 +26277,8 @@
     ],
     "aliases": [
       "小火焰猴"
-    ]
+    ],
+    "weightkg": 6.2
   },
   {
     "id": "chimecho",
@@ -26266,7 +26461,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 1
   },
   {
     "id": "chimechomega",
@@ -26392,7 +26588,8 @@
     ],
     "aliases": [
       "風鈴鈴"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "chinchou",
@@ -26497,7 +26694,8 @@
     ],
     "aliases": [
       "燈籠魚"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "chingling",
@@ -26601,7 +26799,8 @@
     ],
     "aliases": [
       "鈴鐺響"
-    ]
+    ],
+    "weightkg": 0.6
   },
   {
     "id": "cinccino",
@@ -26703,7 +26902,8 @@
     ],
     "aliases": [
       "奇諾栗鼠"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "cinderace",
@@ -26804,7 +27004,8 @@
     ],
     "aliases": [
       "閃焰王牌"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "cinderacegmax",
@@ -26905,7 +27106,8 @@
     ],
     "aliases": [
       "閃焰王牌"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "clamperl",
@@ -26976,7 +27178,8 @@
     ],
     "aliases": [
       "珍珠貝"
-    ]
+    ],
+    "weightkg": 52.5
   },
   {
     "id": "clauncher",
@@ -27067,7 +27270,8 @@
     ],
     "aliases": [
       "鐵臂槍蝦"
-    ]
+    ],
+    "weightkg": 8.3
   },
   {
     "id": "clawitzer",
@@ -27253,7 +27457,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 35.3
   },
   {
     "id": "claydol",
@@ -27373,7 +27578,8 @@
     ],
     "aliases": [
       "念力土偶"
-    ]
+    ],
+    "weightkg": 108
   },
   {
     "id": "clefable",
@@ -27728,7 +27934,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 40
   },
   {
     "id": "clefablemega",
@@ -27910,7 +28117,8 @@
     ],
     "aliases": [
       "皮可西"
-    ]
+    ],
+    "weightkg": 42.3
   },
   {
     "id": "clefairy",
@@ -28091,7 +28299,8 @@
     ],
     "aliases": [
       "皮皮"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "cleffa",
@@ -28223,7 +28432,8 @@
     ],
     "aliases": [
       "皮寶寶"
-    ]
+    ],
+    "weightkg": 3
   },
   {
     "id": "clobbopus",
@@ -28291,7 +28501,8 @@
     ],
     "aliases": [
       "拳拳蛸"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "clodsire",
@@ -28377,7 +28588,8 @@
     ],
     "aliases": [
       "土王"
-    ]
+    ],
+    "weightkg": 223
   },
   {
     "id": "cloyster",
@@ -28493,7 +28705,8 @@
     ],
     "aliases": [
       "刺甲貝"
-    ]
+    ],
+    "weightkg": 132.5
   },
   {
     "id": "coalossal",
@@ -28585,7 +28798,8 @@
     ],
     "aliases": [
       "巨炭山"
-    ]
+    ],
+    "weightkg": 310.5
   },
   {
     "id": "coalossalgmax",
@@ -28677,7 +28891,8 @@
     ],
     "aliases": [
       "巨炭山"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "cobalion",
@@ -28785,7 +29000,8 @@
     ],
     "aliases": [
       "勾帕路翁"
-    ]
+    ],
+    "weightkg": 250
   },
   {
     "id": "cofagrigus",
@@ -28969,7 +29185,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 76.5
   },
   {
     "id": "combee",
@@ -29014,7 +29231,8 @@
     ],
     "aliases": [
       "三蜜蜂"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "combusken",
@@ -29139,7 +29357,8 @@
     ],
     "aliases": [
       "力壯雞"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "comfey",
@@ -29249,7 +29468,8 @@
     ],
     "aliases": [
       "花療環環"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "conkeldurr",
@@ -29445,7 +29665,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 87
   },
   {
     "id": "copperajah",
@@ -29535,7 +29756,8 @@
     ],
     "aliases": [
       "大王銅象"
-    ]
+    ],
+    "weightkg": 650
   },
   {
     "id": "copperajahgmax",
@@ -29625,7 +29847,8 @@
     ],
     "aliases": [
       "大王銅象"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "corphish",
@@ -29738,7 +29961,8 @@
     ],
     "aliases": [
       "龍蝦小兵"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "corsola",
@@ -29861,7 +30085,8 @@
     ],
     "aliases": [
       "太陽珊瑚"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "corsolagalar",
@@ -29954,7 +30179,8 @@
     ],
     "aliases": [
       "太陽珊瑚"
-    ]
+    ],
+    "weightkg": 0.5
   },
   {
     "id": "corviknight",
@@ -30223,7 +30449,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 75
   },
   {
     "id": "corviknightgmax",
@@ -30314,7 +30541,8 @@
     ],
     "aliases": [
       "鋼鎧鴉"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "corvisquire",
@@ -30385,7 +30613,8 @@
     ],
     "aliases": [
       "藍鴉"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "cosmoem",
@@ -30412,7 +30641,8 @@
     ],
     "aliases": [
       "科斯莫姆"
-    ]
+    ],
+    "weightkg": 999.9
   },
   {
     "id": "cosmog",
@@ -30439,7 +30669,8 @@
     ],
     "aliases": [
       "科斯莫古"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "cottonee",
@@ -30528,7 +30759,8 @@
     ],
     "aliases": [
       "木棉球"
-    ]
+    ],
+    "weightkg": 0.6
   },
   {
     "id": "crabominable",
@@ -30710,7 +30942,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 180
   },
   {
     "id": "crabominablemega",
@@ -30820,7 +31053,8 @@
     ],
     "aliases": [
       "好勝毛蟹"
-    ]
+    ],
+    "weightkg": 252.8
   },
   {
     "id": "crabrawler",
@@ -30920,7 +31154,8 @@
     ],
     "aliases": [
       "好勝蟹"
-    ]
+    ],
+    "weightkg": 7
   },
   {
     "id": "cradily",
@@ -31026,7 +31261,8 @@
     ],
     "aliases": [
       "搖籃百合"
-    ]
+    ],
+    "weightkg": 60.4
   },
   {
     "id": "cramorant",
@@ -31113,7 +31349,8 @@
     ],
     "aliases": [
       "古月鳥"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "cramorantgorging",
@@ -31200,7 +31437,8 @@
     ],
     "aliases": [
       "古月鳥"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "cramorantgulping",
@@ -31287,7 +31525,8 @@
     ],
     "aliases": [
       "古月鳥"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "cranidos",
@@ -31398,7 +31637,8 @@
     ],
     "aliases": [
       "頭蓋龍"
-    ]
+    ],
+    "weightkg": 31.5
   },
   {
     "id": "crawdaunt",
@@ -31521,7 +31761,8 @@
     ],
     "aliases": [
       "鐵螯龍蝦"
-    ]
+    ],
+    "weightkg": 32.8
   },
   {
     "id": "cresselia",
@@ -31626,7 +31867,8 @@
     ],
     "aliases": [
       "克雷色利亞"
-    ]
+    ],
+    "weightkg": 85.6
   },
   {
     "id": "croagunk",
@@ -31764,7 +32006,8 @@
     ],
     "aliases": [
       "不良蛙"
-    ]
+    ],
+    "weightkg": 23
   },
   {
     "id": "crobat",
@@ -31870,7 +32113,8 @@
     ],
     "aliases": [
       "叉字蝠"
-    ]
+    ],
+    "weightkg": 75
   },
   {
     "id": "crocalor",
@@ -31940,7 +32184,8 @@
     ],
     "aliases": [
       "炙燙鱷"
-    ]
+    ],
+    "weightkg": 30.7
   },
   {
     "id": "croconaw",
@@ -32064,7 +32309,8 @@
     ],
     "aliases": [
       "藍鱷"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "crustle",
@@ -32156,7 +32402,8 @@
     ],
     "aliases": [
       "岩殿居蟹"
-    ]
+    ],
+    "weightkg": 200
   },
   {
     "id": "cryogonal",
@@ -32247,7 +32494,8 @@
     ],
     "aliases": [
       "幾何雪花"
-    ]
+    ],
+    "weightkg": 148
   },
   {
     "id": "cubchoo",
@@ -32357,7 +32605,8 @@
     ],
     "aliases": [
       "噴嚏熊"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "cubone",
@@ -32480,7 +32729,8 @@
     ],
     "aliases": [
       "卡拉卡拉"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "cufant",
@@ -32563,7 +32813,8 @@
     ],
     "aliases": [
       "銅象"
-    ]
+    ],
+    "weightkg": 100
   },
   {
     "id": "cursola",
@@ -32658,7 +32909,8 @@
     ],
     "aliases": [
       "魔靈珊瑚"
-    ]
+    ],
+    "weightkg": 0.4
   },
   {
     "id": "cutiefly",
@@ -32764,7 +33016,8 @@
     ],
     "aliases": [
       "萌虻"
-    ]
+    ],
+    "weightkg": 0.2
   },
   {
     "id": "cyclizar",
@@ -32847,7 +33100,8 @@
     ],
     "aliases": [
       "摩托蜥"
-    ]
+    ],
+    "weightkg": 63
   },
   {
     "id": "cyndaquil",
@@ -32951,7 +33205,8 @@
     ],
     "aliases": [
       "火球鼠"
-    ]
+    ],
+    "weightkg": 7.9
   },
   {
     "id": "dachsbun",
@@ -33025,7 +33280,8 @@
     ],
     "aliases": [
       "麻花犬"
-    ]
+    ],
+    "weightkg": 14.9
   },
   {
     "id": "darkrai",
@@ -33146,7 +33402,8 @@
     ],
     "aliases": [
       "達克萊伊"
-    ]
+    ],
+    "weightkg": 50.5
   },
   {
     "id": "darkraimega",
@@ -33267,7 +33524,8 @@
     ],
     "aliases": [
       "達克萊伊"
-    ]
+    ],
+    "weightkg": 240
   },
   {
     "id": "darmanitan",
@@ -33382,7 +33640,8 @@
     ],
     "aliases": [
       "達摩狒狒"
-    ]
+    ],
+    "weightkg": 92.9
   },
   {
     "id": "darmanitangalar",
@@ -33474,7 +33733,8 @@
     ],
     "aliases": [
       "達摩狒狒"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "darmanitangalarzen",
@@ -33589,7 +33849,8 @@
     ],
     "aliases": [
       "達摩狒狒"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "darmanitanzen",
@@ -33704,7 +33965,8 @@
     ],
     "aliases": [
       "達摩狒狒"
-    ]
+    ],
+    "weightkg": 92.9
   },
   {
     "id": "dartrix",
@@ -33806,7 +34068,8 @@
     ],
     "aliases": [
       "投羽梟"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "darumaka",
@@ -33900,7 +34163,8 @@
     ],
     "aliases": [
       "火紅不倒翁"
-    ]
+    ],
+    "weightkg": 37.5
   },
   {
     "id": "darumakagalar",
@@ -33983,7 +34247,8 @@
     ],
     "aliases": [
       "火紅不倒翁"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "decidueye",
@@ -34106,7 +34371,8 @@
     ],
     "aliases": [
       "狙射樹梟"
-    ]
+    ],
+    "weightkg": 36.6
   },
   {
     "id": "decidueyehisui",
@@ -34304,7 +34570,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 37
   },
   {
     "id": "dedenne",
@@ -34407,7 +34674,8 @@
     ],
     "aliases": [
       "咚咚鼠"
-    ]
+    ],
+    "weightkg": 2.2
   },
   {
     "id": "deerling",
@@ -34506,7 +34774,8 @@
     ],
     "aliases": [
       "四季鹿"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "deino",
@@ -34599,7 +34868,8 @@
     ],
     "aliases": [
       "單首龍"
-    ]
+    ],
+    "weightkg": 17.3
   },
   {
     "id": "delcatty",
@@ -34698,7 +34968,8 @@
     ],
     "aliases": [
       "優雅貓"
-    ]
+    ],
+    "weightkg": 32.6
   },
   {
     "id": "delibird",
@@ -34828,7 +35099,8 @@
     ],
     "aliases": [
       "信使鳥"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "delphox",
@@ -35124,7 +35396,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 39
   },
   {
     "id": "delphoxmega",
@@ -35253,7 +35526,8 @@
     ],
     "aliases": [
       "妖火紅狐"
-    ]
+    ],
+    "weightkg": 39
   },
   {
     "id": "deoxys",
@@ -35407,7 +35681,8 @@
     ],
     "aliases": [
       "代歐奇希斯"
-    ]
+    ],
+    "weightkg": 60.8
   },
   {
     "id": "deoxysattack",
@@ -35561,7 +35836,8 @@
     ],
     "aliases": [
       "代歐奇希斯"
-    ]
+    ],
+    "weightkg": 60.8
   },
   {
     "id": "deoxysdefense",
@@ -35715,7 +35991,8 @@
     ],
     "aliases": [
       "代歐奇希斯"
-    ]
+    ],
+    "weightkg": 60.8
   },
   {
     "id": "deoxysspeed",
@@ -35869,7 +36146,8 @@
     ],
     "aliases": [
       "代歐奇希斯"
-    ]
+    ],
+    "weightkg": 60.8
   },
   {
     "id": "dewgong",
@@ -35982,7 +36260,8 @@
     ],
     "aliases": [
       "白海獅"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "dewott",
@@ -36078,7 +36357,8 @@
     ],
     "aliases": [
       "雙刃丸"
-    ]
+    ],
+    "weightkg": 24.5
   },
   {
     "id": "dewpider",
@@ -36168,7 +36448,8 @@
     ],
     "aliases": [
       "滴蛛"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "dhelmise",
@@ -36270,7 +36551,8 @@
     ],
     "aliases": [
       "破破舵輪"
-    ]
+    ],
+    "weightkg": 210
   },
   {
     "id": "dialga",
@@ -36389,7 +36671,8 @@
     ],
     "aliases": [
       "帝牙盧卡"
-    ]
+    ],
+    "weightkg": 683
   },
   {
     "id": "dialgaorigin",
@@ -36508,7 +36791,8 @@
     ],
     "aliases": [
       "帝牙盧卡"
-    ]
+    ],
+    "weightkg": 850
   },
   {
     "id": "diancie",
@@ -36624,7 +36908,8 @@
     ],
     "aliases": [
       "蒂安希"
-    ]
+    ],
+    "weightkg": 8.8
   },
   {
     "id": "dianciemega",
@@ -36740,7 +37025,8 @@
     ],
     "aliases": [
       "蒂安希"
-    ]
+    ],
+    "weightkg": 27.8
   },
   {
     "id": "diggersby",
@@ -36856,7 +37142,8 @@
     ],
     "aliases": [
       "掘地兔"
-    ]
+    ],
+    "weightkg": 42.4
   },
   {
     "id": "diglett",
@@ -36965,7 +37252,8 @@
     ],
     "aliases": [
       "地鼠"
-    ]
+    ],
+    "weightkg": 0.8
   },
   {
     "id": "diglettalola",
@@ -37071,7 +37359,8 @@
     ],
     "aliases": [
       "地鼠"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "dipplin",
@@ -37140,7 +37429,8 @@
     ],
     "aliases": [
       "裹蜜蟲"
-    ]
+    ],
+    "weightkg": 4.4
   },
   {
     "id": "ditto",
@@ -37261,7 +37551,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 4
   },
   {
     "id": "dodrio",
@@ -37371,7 +37662,8 @@
     ],
     "aliases": [
       "嘟嘟利"
-    ]
+    ],
+    "weightkg": 85.2
   },
   {
     "id": "doduo",
@@ -37475,7 +37767,8 @@
     ],
     "aliases": [
       "嘟嘟"
-    ]
+    ],
+    "weightkg": 39.2
   },
   {
     "id": "dolliv",
@@ -37535,7 +37828,8 @@
     ],
     "aliases": [
       "奧利紐"
-    ]
+    ],
+    "weightkg": 11.9
   },
   {
     "id": "dondozo",
@@ -37608,7 +37902,8 @@
     ],
     "aliases": [
       "吃吼霸"
-    ]
+    ],
+    "weightkg": 220
   },
   {
     "id": "donphan",
@@ -37727,7 +38022,8 @@
     ],
     "aliases": [
       "頓甲"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "dottler",
@@ -37795,7 +38091,8 @@
     ],
     "aliases": [
       "天罩蟲"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "doublade",
@@ -37875,7 +38172,8 @@
     ],
     "aliases": [
       "雙劍鞘"
-    ]
+    ],
+    "weightkg": 4.5
   },
   {
     "id": "dracovish",
@@ -37953,7 +38251,8 @@
     ],
     "aliases": [
       "鰓魚龍"
-    ]
+    ],
+    "weightkg": 215
   },
   {
     "id": "dracozolt",
@@ -38039,7 +38338,8 @@
     ],
     "aliases": [
       "雷鳥龍"
-    ]
+    ],
+    "weightkg": 190
   },
   {
     "id": "dragalge",
@@ -38294,7 +38594,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 81.5
   },
   {
     "id": "dragalgemega",
@@ -38393,7 +38694,8 @@
     ],
     "aliases": [
       "毒藻龍"
-    ]
+    ],
+    "weightkg": 100.3
   },
   {
     "id": "dragapult",
@@ -38669,7 +38971,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 50
   },
   {
     "id": "dragonair",
@@ -38779,7 +39082,8 @@
     ],
     "aliases": [
       "哈克龍"
-    ]
+    ],
+    "weightkg": 16.5
   },
   {
     "id": "dragonite",
@@ -39243,7 +39547,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 210
   },
   {
     "id": "dragonitemega",
@@ -39408,7 +39713,8 @@
     ],
     "aliases": [
       "快龍"
-    ]
+    ],
+    "weightkg": 290
   },
   {
     "id": "drakloak",
@@ -39496,7 +39802,8 @@
     ],
     "aliases": [
       "多龍奇"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "drampa",
@@ -39700,7 +40007,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 185
   },
   {
     "id": "drampamega",
@@ -39814,7 +40122,8 @@
     ],
     "aliases": [
       "老翁龍"
-    ]
+    ],
+    "weightkg": 240.5
   },
   {
     "id": "drapion",
@@ -39932,7 +40241,8 @@
     ],
     "aliases": [
       "龍王蠍"
-    ]
+    ],
+    "weightkg": 61.5
   },
   {
     "id": "dratini",
@@ -40044,7 +40354,8 @@
     ],
     "aliases": [
       "迷你龍"
-    ]
+    ],
+    "weightkg": 3.3
   },
   {
     "id": "drednaw",
@@ -40145,7 +40456,8 @@
     ],
     "aliases": [
       "暴噬龜"
-    ]
+    ],
+    "weightkg": 115.5
   },
   {
     "id": "drednawgmax",
@@ -40246,7 +40558,8 @@
     ],
     "aliases": [
       "暴噬龜"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "dreepy",
@@ -40300,7 +40613,8 @@
     ],
     "aliases": [
       "多龍梅西亞"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "drifblim",
@@ -40422,7 +40736,8 @@
     ],
     "aliases": [
       "隨風球"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "drifloon",
@@ -40543,7 +40858,8 @@
     ],
     "aliases": [
       "飄飄球"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "drilbur",
@@ -40633,7 +40949,8 @@
     ],
     "aliases": [
       "螺釘地鼠"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "drizzile",
@@ -40700,7 +41017,8 @@
     ],
     "aliases": [
       "變澀蜥"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "drowzee",
@@ -40843,7 +41161,8 @@
     ],
     "aliases": [
       "催眠貘"
-    ]
+    ],
+    "weightkg": 32.4
   },
   {
     "id": "druddigon",
@@ -40961,7 +41280,8 @@
     ],
     "aliases": [
       "赤面龍"
-    ]
+    ],
+    "weightkg": 139
   },
   {
     "id": "dubwool",
@@ -41026,7 +41346,8 @@
     ],
     "aliases": [
       "毛毛角羊"
-    ]
+    ],
+    "weightkg": 43
   },
   {
     "id": "ducklett",
@@ -41114,7 +41435,8 @@
     ],
     "aliases": [
       "鴨寶寶"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "dudunsparce",
@@ -41227,7 +41549,8 @@
     ],
     "aliases": [
       "土龍節節"
-    ]
+    ],
+    "weightkg": 39.2
   },
   {
     "id": "dudunsparcethreesegment",
@@ -41340,7 +41663,8 @@
     ],
     "aliases": [
       "土龍節節"
-    ]
+    ],
+    "weightkg": 47.4
   },
   {
     "id": "dugtrio",
@@ -41452,7 +41776,8 @@
     ],
     "aliases": [
       "三地鼠"
-    ]
+    ],
+    "weightkg": 33.3
   },
   {
     "id": "dugtrioalola",
@@ -41562,7 +41887,8 @@
     ],
     "aliases": [
       "三地鼠"
-    ]
+    ],
+    "weightkg": 66.6
   },
   {
     "id": "dunsparce",
@@ -41705,7 +42031,8 @@
     ],
     "aliases": [
       "土龍弟弟"
-    ]
+    ],
+    "weightkg": 14
   },
   {
     "id": "duosion",
@@ -41809,7 +42136,8 @@
     ],
     "aliases": [
       "雙卵細胞球"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "duraludon",
@@ -41897,7 +42225,8 @@
     ],
     "aliases": [
       "鋁鋼龍"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "duraludongmax",
@@ -41985,7 +42314,8 @@
     ],
     "aliases": [
       "鋁鋼龍"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "durant",
@@ -42078,7 +42408,8 @@
     ],
     "aliases": [
       "鐵蟻"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "dusclops",
@@ -42205,7 +42536,8 @@
     ],
     "aliases": [
       "彷徨夜靈"
-    ]
+    ],
+    "weightkg": 30.6
   },
   {
     "id": "dusknoir",
@@ -42332,7 +42664,8 @@
     ],
     "aliases": [
       "黑夜魔靈"
-    ]
+    ],
+    "weightkg": 106.6
   },
   {
     "id": "duskull",
@@ -42440,7 +42773,8 @@
     ],
     "aliases": [
       "夜巡靈"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "dustox",
@@ -42527,7 +42861,8 @@
     ],
     "aliases": [
       "毒粉蛾"
-    ]
+    ],
+    "weightkg": 31.6
   },
   {
     "id": "dwebble",
@@ -42615,7 +42950,8 @@
     ],
     "aliases": [
       "石居蟹"
-    ]
+    ],
+    "weightkg": 14.5
   },
   {
     "id": "eelektrik",
@@ -42701,7 +43037,8 @@
     ],
     "aliases": [
       "麻麻鰻"
-    ]
+    ],
+    "weightkg": 22
   },
   {
     "id": "eelektross",
@@ -43007,7 +43344,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 80.5
   },
   {
     "id": "eelektrossmega",
@@ -43129,7 +43467,8 @@
     ],
     "aliases": [
       "麻麻鰻魚王"
-    ]
+    ],
+    "weightkg": 180
   },
   {
     "id": "eevee",
@@ -43232,7 +43571,8 @@
     ],
     "aliases": [
       "伊布"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "eeveegmax",
@@ -43335,7 +43675,8 @@
     ],
     "aliases": [
       "伊布"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "eeveestarter",
@@ -43417,7 +43758,8 @@
     ],
     "aliases": [
       "伊布"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "eiscue",
@@ -43497,7 +43839,8 @@
     ],
     "aliases": [
       "冰砌鵝"
-    ]
+    ],
+    "weightkg": 89
   },
   {
     "id": "eiscuenoice",
@@ -43577,7 +43920,8 @@
     ],
     "aliases": [
       "冰砌鵝"
-    ]
+    ],
+    "weightkg": 89
   },
   {
     "id": "ekans",
@@ -43699,7 +44043,8 @@
     ],
     "aliases": [
       "阿柏蛇"
-    ]
+    ],
+    "weightkg": 6.9
   },
   {
     "id": "eldegoss",
@@ -43764,7 +44109,8 @@
     ],
     "aliases": [
       "白蓬蓬"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "electabuzz",
@@ -43886,7 +44232,8 @@
     ],
     "aliases": [
       "電擊獸"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "electivire",
@@ -44005,7 +44352,8 @@
     ],
     "aliases": [
       "電擊魔獸"
-    ]
+    ],
+    "weightkg": 138.6
   },
   {
     "id": "electrike",
@@ -44097,7 +44445,8 @@
     ],
     "aliases": [
       "落雷獸"
-    ]
+    ],
+    "weightkg": 15.2
   },
   {
     "id": "electrode",
@@ -44197,7 +44546,8 @@
     ],
     "aliases": [
       "頑皮雷彈"
-    ]
+    ],
+    "weightkg": 66.6
   },
   {
     "id": "electrodehisui",
@@ -44275,7 +44625,8 @@
     ],
     "aliases": [
       "頑皮雷彈"
-    ]
+    ],
+    "weightkg": 71
   },
   {
     "id": "elekid",
@@ -44387,7 +44738,8 @@
     ],
     "aliases": [
       "電擊怪"
-    ]
+    ],
+    "weightkg": 23.5
   },
   {
     "id": "elgyem",
@@ -44496,7 +44848,8 @@
     ],
     "aliases": [
       "小灰怪"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "emboar",
@@ -44711,7 +45064,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 150
   },
   {
     "id": "emboarmega",
@@ -44837,7 +45191,8 @@
     ],
     "aliases": [
       "炎武王"
-    ]
+    ],
+    "weightkg": 180.3
   },
   {
     "id": "emolga",
@@ -45019,7 +45374,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 5
   },
   {
     "id": "empoleon",
@@ -45240,7 +45596,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 84.5
   },
   {
     "id": "enamorus",
@@ -45318,7 +45675,8 @@
     ],
     "aliases": [
       "眷戀雲"
-    ]
+    ],
+    "weightkg": 48
   },
   {
     "id": "enamorustherian",
@@ -45395,7 +45753,8 @@
     ],
     "aliases": [
       "眷戀雲"
-    ]
+    ],
+    "weightkg": 48
   },
   {
     "id": "entei",
@@ -45504,7 +45863,8 @@
     ],
     "aliases": [
       "炎帝"
-    ]
+    ],
+    "weightkg": 198
   },
   {
     "id": "escavalier",
@@ -45599,7 +45959,8 @@
     ],
     "aliases": [
       "騎士蝸牛"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "espathra",
@@ -45818,7 +46179,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 90
   },
   {
     "id": "espeon",
@@ -46004,7 +46366,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 26.5
   },
   {
     "id": "espurr",
@@ -46108,7 +46471,8 @@
     ],
     "aliases": [
       "妙喵"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "eternatus",
@@ -46187,7 +46551,8 @@
     ],
     "aliases": [
       "無極汰那"
-    ]
+    ],
+    "weightkg": 950
   },
   {
     "id": "eternatuseternamax",
@@ -46266,7 +46631,8 @@
     ],
     "aliases": [
       "無極汰那"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "excadrill",
@@ -46498,7 +46864,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 40.4
   },
   {
     "id": "excadrillmega",
@@ -46598,7 +46965,8 @@
     ],
     "aliases": [
       "龍頭地鼠"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "exeggcute",
@@ -46715,7 +47083,8 @@
     ],
     "aliases": [
       "蛋蛋"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "exeggutor",
@@ -46843,7 +47212,8 @@
     ],
     "aliases": [
       "椰蛋樹"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "exeggutoralola",
@@ -46970,7 +47340,8 @@
     ],
     "aliases": [
       "椰蛋樹"
-    ]
+    ],
+    "weightkg": 415.6
   },
   {
     "id": "exploud",
@@ -47090,7 +47461,8 @@
     ],
     "aliases": [
       "爆音怪"
-    ]
+    ],
+    "weightkg": 84
   },
   {
     "id": "falinks",
@@ -47249,7 +47621,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 62
   },
   {
     "id": "falinksmega",
@@ -47331,7 +47704,8 @@
     ],
     "aliases": [
       "列陣兵"
-    ]
+    ],
+    "weightkg": 99
   },
   {
     "id": "farfetchd",
@@ -47456,7 +47830,8 @@
     ],
     "aliases": [
       "大蔥鴨"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "farfetchdgalar",
@@ -47532,7 +47907,8 @@
     ],
     "aliases": [
       "大蔥鴨"
-    ]
+    ],
+    "weightkg": 42
   },
   {
     "id": "farigiraf",
@@ -47980,7 +48356,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 160
   },
   {
     "id": "fearow",
@@ -48075,7 +48452,8 @@
     ],
     "aliases": [
       "大嘴雀"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "feebas",
@@ -48155,7 +48533,8 @@
     ],
     "aliases": [
       "醜醜魚"
-    ]
+    ],
+    "weightkg": 7.4
   },
   {
     "id": "fennekin",
@@ -48255,7 +48634,8 @@
     ],
     "aliases": [
       "火狐狸"
-    ]
+    ],
+    "weightkg": 9.4
   },
   {
     "id": "feraligatr",
@@ -48484,7 +48864,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 88.8
   },
   {
     "id": "feraligatrmega",
@@ -48625,7 +49006,8 @@
     ],
     "aliases": [
       "大力鱷"
-    ]
+    ],
+    "weightkg": 108.8
   },
   {
     "id": "ferroseed",
@@ -48711,7 +49093,8 @@
     ],
     "aliases": [
       "種子鐵球"
-    ]
+    ],
+    "weightkg": 18.8
   },
   {
     "id": "ferrothorn",
@@ -48812,7 +49195,8 @@
     ],
     "aliases": [
       "堅果啞鈴"
-    ]
+    ],
+    "weightkg": 110
   },
   {
     "id": "fezandipiti",
@@ -48902,7 +49286,8 @@
     ],
     "aliases": [
       "吉雉雞"
-    ]
+    ],
+    "weightkg": 30.1
   },
   {
     "id": "fidough",
@@ -48976,7 +49361,8 @@
     ],
     "aliases": [
       "狗仔包"
-    ]
+    ],
+    "weightkg": 10.9
   },
   {
     "id": "finizen",
@@ -49045,7 +49431,8 @@
     ],
     "aliases": [
       "波普海豚"
-    ]
+    ],
+    "weightkg": 60.2
   },
   {
     "id": "finneon",
@@ -49143,7 +49530,8 @@
     ],
     "aliases": [
       "螢光魚"
-    ]
+    ],
+    "weightkg": 7
   },
   {
     "id": "flaaffy",
@@ -49252,7 +49640,8 @@
     ],
     "aliases": [
       "茸茸羊"
-    ]
+    ],
+    "weightkg": 13.3
   },
   {
     "id": "flabebe",
@@ -49348,7 +49737,8 @@
     ],
     "aliases": [
       "花蓓蓓"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "flamigo",
@@ -49430,7 +49820,8 @@
     ],
     "aliases": [
       "纏紅鶴"
-    ]
+    ],
+    "weightkg": 37
   },
   {
     "id": "flapple",
@@ -49568,7 +49959,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 1
   },
   {
     "id": "flapplegmax",
@@ -49648,7 +50040,8 @@
     ],
     "aliases": [
       "蘋裹龍"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "flareon",
@@ -49769,7 +50162,8 @@
     ],
     "aliases": [
       "火伊布"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "fletchinder",
@@ -49859,7 +50253,8 @@
     ],
     "aliases": [
       "火箭雀"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "fletchling",
@@ -49944,7 +50339,8 @@
     ],
     "aliases": [
       "小箭雀"
-    ]
+    ],
+    "weightkg": 1.7
   },
   {
     "id": "flittle",
@@ -50016,7 +50412,8 @@
     ],
     "aliases": [
       "飄飄雛"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "floatzel",
@@ -50129,7 +50526,8 @@
     ],
     "aliases": [
       "浮潛鼬"
-    ]
+    ],
+    "weightkg": 33.5
   },
   {
     "id": "floette",
@@ -50317,7 +50715,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.9
   },
   {
     "id": "floetteeternal",
@@ -50533,7 +50932,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.9
   },
   {
     "id": "floettemega",
@@ -50626,7 +51026,8 @@
     ],
     "aliases": [
       "花葉蒂"
-    ]
+    ],
+    "weightkg": 100.8
   },
   {
     "id": "floragato",
@@ -50699,7 +51100,8 @@
     ],
     "aliases": [
       "蒂蕾喵"
-    ]
+    ],
+    "weightkg": 12.2
   },
   {
     "id": "florges",
@@ -50795,7 +51197,8 @@
     ],
     "aliases": [
       "花潔夫人"
-    ]
+    ],
+    "weightkg": 10
   },
   {
     "id": "fluttermane",
@@ -50870,7 +51273,8 @@
     ],
     "aliases": [
       "振翼髮"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "flygon",
@@ -51006,7 +51410,8 @@
     ],
     "aliases": [
       "沙漠蜻蜓"
-    ]
+    ],
+    "weightkg": 82
   },
   {
     "id": "fomantis",
@@ -51090,7 +51495,8 @@
     ],
     "aliases": [
       "偽螳草"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "foongus",
@@ -51173,7 +51579,8 @@
     ],
     "aliases": [
       "哎呀球菇"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "forretress",
@@ -51297,7 +51704,8 @@
     ],
     "aliases": [
       "佛烈托斯"
-    ]
+    ],
+    "weightkg": 125.8
   },
   {
     "id": "fraxure",
@@ -51400,7 +51808,8 @@
     ],
     "aliases": [
       "斧牙龍"
-    ]
+    ],
+    "weightkg": 36
   },
   {
     "id": "frigibax",
@@ -51462,7 +51871,8 @@
     ],
     "aliases": [
       "涼脊龍"
-    ]
+    ],
+    "weightkg": 17
   },
   {
     "id": "frillish",
@@ -51561,7 +51971,8 @@
     ],
     "aliases": [
       "輕飄飄"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "froakie",
@@ -51664,7 +52075,8 @@
     ],
     "aliases": [
       "呱呱泡蛙"
-    ]
+    ],
+    "weightkg": 7
   },
   {
     "id": "frogadier",
@@ -51764,7 +52176,8 @@
     ],
     "aliases": [
       "呱頭蛙"
-    ]
+    ],
+    "weightkg": 10.9
   },
   {
     "id": "froslass",
@@ -52034,7 +52447,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 26.6
   },
   {
     "id": "froslassmega",
@@ -52155,7 +52569,8 @@
     ],
     "aliases": [
       "雪妖女"
-    ]
+    ],
+    "weightkg": 29.6
   },
   {
     "id": "frosmoth",
@@ -52238,7 +52653,8 @@
     ],
     "aliases": [
       "雪絨蛾"
-    ]
+    ],
+    "weightkg": 42
   },
   {
     "id": "fuecoco",
@@ -52309,7 +52725,8 @@
     ],
     "aliases": [
       "呆火鱷"
-    ]
+    ],
+    "weightkg": 9.8
   },
   {
     "id": "furfrou",
@@ -52391,7 +52808,8 @@
     ],
     "aliases": [
       "多麗米亞"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "furret",
@@ -52518,7 +52936,8 @@
     ],
     "aliases": [
       "大尾立"
-    ]
+    ],
+    "weightkg": 32.5
   },
   {
     "id": "gabite",
@@ -52626,7 +53045,8 @@
     ],
     "aliases": [
       "尖牙陸鯊"
-    ]
+    ],
+    "weightkg": 56
   },
   {
     "id": "gallade",
@@ -52990,7 +53410,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 52
   },
   {
     "id": "gallademega",
@@ -53162,7 +53583,8 @@
     ],
     "aliases": [
       "艾路雷朵"
-    ]
+    ],
+    "weightkg": 56.4
   },
   {
     "id": "galvantula",
@@ -53260,7 +53682,8 @@
     ],
     "aliases": [
       "電蜘蛛"
-    ]
+    ],
+    "weightkg": 14.3
   },
   {
     "id": "garbodor",
@@ -53353,7 +53776,8 @@
     ],
     "aliases": [
       "灰塵山"
-    ]
+    ],
+    "weightkg": 107.3
   },
   {
     "id": "garbodorgmax",
@@ -53446,7 +53870,8 @@
     ],
     "aliases": [
       "灰塵山"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "garchomp",
@@ -53906,7 +54331,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 95
   },
   {
     "id": "garchompmega",
@@ -54025,7 +54451,8 @@
     ],
     "aliases": [
       "烈咬陸鯊"
-    ]
+    ],
+    "weightkg": 95
   },
   {
     "id": "garchompmegaz",
@@ -54143,7 +54570,8 @@
     ],
     "aliases": [
       "烈咬陸鯊"
-    ]
+    ],
+    "weightkg": 99
   },
   {
     "id": "gardevoir",
@@ -54487,7 +54915,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 48.4
   },
   {
     "id": "gardevoirmega",
@@ -54627,7 +55056,8 @@
     ],
     "aliases": [
       "沙奈朵"
-    ]
+    ],
+    "weightkg": 48.4
   },
   {
     "id": "garganacl",
@@ -54769,7 +55199,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 240
   },
   {
     "id": "gastly",
@@ -54891,7 +55322,8 @@
     ],
     "aliases": [
       "鬼斯"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "gastrodon",
@@ -54997,7 +55429,8 @@
     ],
     "aliases": [
       "海兔獸"
-    ]
+    ],
+    "weightkg": 29.9
   },
   {
     "id": "genesect",
@@ -55105,7 +55538,8 @@
     ],
     "aliases": [
       "蓋諾賽克特"
-    ]
+    ],
+    "weightkg": 82.5
   },
   {
     "id": "genesectburn",
@@ -55213,7 +55647,8 @@
     ],
     "aliases": [
       "蓋諾賽克特"
-    ]
+    ],
+    "weightkg": 82.5
   },
   {
     "id": "genesectchill",
@@ -55321,7 +55756,8 @@
     ],
     "aliases": [
       "蓋諾賽克特"
-    ]
+    ],
+    "weightkg": 82.5
   },
   {
     "id": "genesectdouse",
@@ -55429,7 +55865,8 @@
     ],
     "aliases": [
       "蓋諾賽克特"
-    ]
+    ],
+    "weightkg": 82.5
   },
   {
     "id": "genesectshock",
@@ -55537,7 +55974,8 @@
     ],
     "aliases": [
       "蓋諾賽克特"
-    ]
+    ],
+    "weightkg": 82.5
   },
   {
     "id": "gengar",
@@ -55841,7 +56279,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 40.5
   },
   {
     "id": "gengargmax",
@@ -55991,7 +56430,8 @@
     ],
     "aliases": [
       "耿鬼"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "gengarmega",
@@ -56141,7 +56581,8 @@
     ],
     "aliases": [
       "耿鬼"
-    ]
+    ],
+    "weightkg": 40.5
   },
   {
     "id": "geodude",
@@ -56255,7 +56696,8 @@
     ],
     "aliases": [
       "小拳石"
-    ]
+    ],
+    "weightkg": 20
   },
   {
     "id": "geodudealola",
@@ -56362,7 +56804,8 @@
     ],
     "aliases": [
       "小拳石"
-    ]
+    ],
+    "weightkg": 20.3
   },
   {
     "id": "gholdengo",
@@ -56647,7 +57090,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 30
   },
   {
     "id": "gible",
@@ -56751,7 +57195,8 @@
     ],
     "aliases": [
       "圓陸鯊"
-    ]
+    ],
+    "weightkg": 20.5
   },
   {
     "id": "gigalith",
@@ -56834,7 +57279,8 @@
     ],
     "aliases": [
       "龐岩怪"
-    ]
+    ],
+    "weightkg": 260
   },
   {
     "id": "gimmighoul",
@@ -56877,7 +57323,8 @@
     ],
     "aliases": [
       "索財靈"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "gimmighoulroaming",
@@ -56920,7 +57367,8 @@
     ],
     "aliases": [
       "索財靈"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "girafarig",
@@ -57060,7 +57508,8 @@
     ],
     "aliases": [
       "麒麟奇"
-    ]
+    ],
+    "weightkg": 41.5
   },
   {
     "id": "giratina",
@@ -57184,7 +57633,8 @@
     ],
     "aliases": [
       "騎拉帝納"
-    ]
+    ],
+    "weightkg": 750
   },
   {
     "id": "giratinaorigin",
@@ -57307,7 +57757,8 @@
     ],
     "aliases": [
       "騎拉帝納"
-    ]
+    ],
+    "weightkg": 650
   },
   {
     "id": "glaceon",
@@ -57478,7 +57929,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 25.9
   },
   {
     "id": "glalie",
@@ -57583,7 +58035,8 @@
     ],
     "aliases": [
       "冰鬼護"
-    ]
+    ],
+    "weightkg": 256.5
   },
   {
     "id": "glaliemega",
@@ -57686,7 +58139,8 @@
     ],
     "aliases": [
       "冰鬼護"
-    ]
+    ],
+    "weightkg": 350.2
   },
   {
     "id": "glameow",
@@ -57786,7 +58240,8 @@
     ],
     "aliases": [
       "魅力喵"
-    ]
+    ],
+    "weightkg": 3.9
   },
   {
     "id": "glastrier",
@@ -57866,7 +58321,8 @@
     ],
     "aliases": [
       "雪暴馬"
-    ]
+    ],
+    "weightkg": 800
   },
   {
     "id": "gligar",
@@ -58005,7 +58461,8 @@
     ],
     "aliases": [
       "天蠍"
-    ]
+    ],
+    "weightkg": 64.8
   },
   {
     "id": "glimmet",
@@ -58073,7 +58530,8 @@
     ],
     "aliases": [
       "晶光芽"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "glimmora",
@@ -58283,7 +58741,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 45
   },
   {
     "id": "glimmoramega",
@@ -58356,7 +58815,8 @@
     ],
     "aliases": [
       "晶光花"
-    ]
+    ],
+    "weightkg": 77
   },
   {
     "id": "gliscor",
@@ -58646,7 +59106,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 42.5
   },
   {
     "id": "gloom",
@@ -58745,7 +59206,8 @@
     ],
     "aliases": [
       "臭臭花"
-    ]
+    ],
+    "weightkg": 8.6
   },
   {
     "id": "gogoat",
@@ -58846,7 +59308,8 @@
     ],
     "aliases": [
       "坐騎山羊"
-    ]
+    ],
+    "weightkg": 91
   },
   {
     "id": "golbat",
@@ -58954,7 +59417,8 @@
     ],
     "aliases": [
       "大嘴蝠"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "goldeen",
@@ -59056,7 +59520,8 @@
     ],
     "aliases": [
       "角金魚"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "golduck",
@@ -59205,7 +59670,8 @@
     ],
     "aliases": [
       "哥達鴨"
-    ]
+    ],
+    "weightkg": 76.6
   },
   {
     "id": "golem",
@@ -59326,7 +59792,8 @@
     ],
     "aliases": [
       "隆隆岩"
-    ]
+    ],
+    "weightkg": 300
   },
   {
     "id": "golemalola",
@@ -59442,7 +59909,8 @@
     ],
     "aliases": [
       "隆隆岩"
-    ]
+    ],
+    "weightkg": 316
   },
   {
     "id": "golett",
@@ -59559,7 +60027,8 @@
     ],
     "aliases": [
       "泥偶小人"
-    ]
+    ],
+    "weightkg": 92
   },
   {
     "id": "golisopod",
@@ -59666,7 +60135,8 @@
     ],
     "aliases": [
       "具甲武者"
-    ]
+    ],
+    "weightkg": 108
   },
   {
     "id": "golisopodmega",
@@ -59773,7 +60243,8 @@
     ],
     "aliases": [
       "具甲武者"
-    ]
+    ],
+    "weightkg": 148
   },
   {
     "id": "golurk",
@@ -60006,7 +60477,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 330
   },
   {
     "id": "golurkmega",
@@ -60137,7 +60609,8 @@
     ],
     "aliases": [
       "泥偶巨人"
-    ]
+    ],
+    "weightkg": 330
   },
   {
     "id": "goodra",
@@ -60250,7 +60723,8 @@
     ],
     "aliases": [
       "黏美龍"
-    ]
+    ],
+    "weightkg": 150.5
   },
   {
     "id": "goodrahisui",
@@ -60474,7 +60948,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 334.1
   },
   {
     "id": "goomy",
@@ -60551,7 +61026,8 @@
     ],
     "aliases": [
       "黏黏寶"
-    ]
+    ],
+    "weightkg": 2.8
   },
   {
     "id": "gorebyss",
@@ -60633,7 +61109,8 @@
     ],
     "aliases": [
       "櫻花魚"
-    ]
+    ],
+    "weightkg": 22.6
   },
   {
     "id": "gossifleur",
@@ -60698,7 +61175,8 @@
     ],
     "aliases": [
       "幼棉棉"
-    ]
+    ],
+    "weightkg": 2.2
   },
   {
     "id": "gothita",
@@ -60814,7 +61292,8 @@
     ],
     "aliases": [
       "哥德寶寶"
-    ]
+    ],
+    "weightkg": 5.8
   },
   {
     "id": "gothitelle",
@@ -60934,7 +61413,8 @@
     ],
     "aliases": [
       "哥德小姐"
-    ]
+    ],
+    "weightkg": 44
   },
   {
     "id": "gothorita",
@@ -61046,7 +61526,8 @@
     ],
     "aliases": [
       "哥德小童"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "gougingfire",
@@ -61133,7 +61614,8 @@
     ],
     "aliases": [
       "破空焰"
-    ]
+    ],
+    "weightkg": 590
   },
   {
     "id": "gourgeist",
@@ -61296,7 +61778,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 12.5
   },
   {
     "id": "gourgeistlarge",
@@ -61401,7 +61884,8 @@
     ],
     "aliases": [
       "南瓜怪人"
-    ]
+    ],
+    "weightkg": 14
   },
   {
     "id": "gourgeistsmall",
@@ -61506,7 +61990,8 @@
     ],
     "aliases": [
       "南瓜怪人"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "gourgeistsuper",
@@ -61611,7 +62096,8 @@
     ],
     "aliases": [
       "南瓜怪人"
-    ]
+    ],
+    "weightkg": 39
   },
   {
     "id": "grafaiai",
@@ -61695,7 +62181,8 @@
     ],
     "aliases": [
       "塗標客"
-    ]
+    ],
+    "weightkg": 27.2
   },
   {
     "id": "granbull",
@@ -61839,7 +62326,8 @@
     ],
     "aliases": [
       "布魯皇"
-    ]
+    ],
+    "weightkg": 48.7
   },
   {
     "id": "grapploct",
@@ -61915,7 +62403,8 @@
     ],
     "aliases": [
       "八爪武師"
-    ]
+    ],
+    "weightkg": 39
   },
   {
     "id": "graveler",
@@ -62030,7 +62519,8 @@
     ],
     "aliases": [
       "隆隆石"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "graveleralola",
@@ -62138,7 +62628,8 @@
     ],
     "aliases": [
       "隆隆石"
-    ]
+    ],
+    "weightkg": 110
   },
   {
     "id": "greattusk",
@@ -62222,7 +62713,8 @@
     ],
     "aliases": [
       "雄偉牙"
-    ]
+    ],
+    "weightkg": 320
   },
   {
     "id": "greavard",
@@ -62300,7 +62792,8 @@
     ],
     "aliases": [
       "墓仔狗"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "greedent",
@@ -62387,7 +62880,8 @@
     ],
     "aliases": [
       "藏飽栗鼠"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "greninja",
@@ -62636,7 +63130,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 40
   },
   {
     "id": "greninjaash",
@@ -62753,7 +63248,8 @@
     ],
     "aliases": [
       "甲賀忍蛙"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "greninjabond",
@@ -62864,7 +63360,8 @@
     ],
     "aliases": [
       "甲賀忍蛙"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "greninjamega",
@@ -62981,7 +63478,8 @@
     ],
     "aliases": [
       "甲賀忍蛙"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "grimer",
@@ -63101,7 +63599,8 @@
     ],
     "aliases": [
       "臭泥"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "grimeralola",
@@ -63227,7 +63726,8 @@
     ],
     "aliases": [
       "臭泥"
-    ]
+    ],
+    "weightkg": 42
   },
   {
     "id": "grimmsnarl",
@@ -63604,7 +64104,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 61
   },
   {
     "id": "grimmsnarlgmax",
@@ -63707,7 +64208,8 @@
     ],
     "aliases": [
       "長毛巨魔"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "grookey",
@@ -63791,7 +64293,8 @@
     ],
     "aliases": [
       "敲音猴"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "grotle",
@@ -63890,7 +64393,8 @@
     ],
     "aliases": [
       "樹林龜"
-    ]
+    ],
+    "weightkg": 97
   },
   {
     "id": "groudon",
@@ -64023,7 +64527,8 @@
     ],
     "aliases": [
       "固拉多"
-    ]
+    ],
+    "weightkg": 950
   },
   {
     "id": "groudonprimal",
@@ -64157,7 +64662,8 @@
     ],
     "aliases": [
       "固拉多"
-    ]
+    ],
+    "weightkg": 999.7
   },
   {
     "id": "grovyle",
@@ -64278,7 +64784,8 @@
     ],
     "aliases": [
       "森林蜥蜴"
-    ]
+    ],
+    "weightkg": 21.6
   },
   {
     "id": "growlithe",
@@ -64386,7 +64893,8 @@
     ],
     "aliases": [
       "卡蒂狗"
-    ]
+    ],
+    "weightkg": 19
   },
   {
     "id": "growlithehisui",
@@ -64468,7 +64976,8 @@
     ],
     "aliases": [
       "卡蒂狗"
-    ]
+    ],
+    "weightkg": 22.7
   },
   {
     "id": "grubbin",
@@ -64545,7 +65054,8 @@
     ],
     "aliases": [
       "強顎雞母蟲"
-    ]
+    ],
+    "weightkg": 4.4
   },
   {
     "id": "grumpig",
@@ -64692,7 +65202,8 @@
     ],
     "aliases": [
       "噗噗豬"
-    ]
+    ],
+    "weightkg": 71.5
   },
   {
     "id": "gulpin",
@@ -64805,7 +65316,8 @@
     ],
     "aliases": [
       "溶食獸"
-    ]
+    ],
+    "weightkg": 10.3
   },
   {
     "id": "gumshoos",
@@ -64912,7 +65424,8 @@
     ],
     "aliases": [
       "貓鼬探長"
-    ]
+    ],
+    "weightkg": 14.2
   },
   {
     "id": "gumshoostotem",
@@ -64993,7 +65506,8 @@
     ],
     "aliases": [
       "貓鼬探長"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "gurdurr",
@@ -65093,7 +65607,8 @@
     ],
     "aliases": [
       "鐵骨土人"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "guzzlord",
@@ -65195,7 +65710,8 @@
     ],
     "aliases": [
       "惡食大王"
-    ]
+    ],
+    "weightkg": 888
   },
   {
     "id": "gyarados",
@@ -65495,7 +66011,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 235
   },
   {
     "id": "gyaradosmega",
@@ -65622,7 +66139,8 @@
     ],
     "aliases": [
       "暴鯉龍"
-    ]
+    ],
+    "weightkg": 305
   },
   {
     "id": "hakamoo",
@@ -65728,7 +66246,8 @@
     ],
     "aliases": [
       "鱗甲龍"
-    ]
+    ],
+    "weightkg": 47
   },
   {
     "id": "happiny",
@@ -65828,7 +66347,8 @@
     ],
     "aliases": [
       "小福蛋"
-    ]
+    ],
+    "weightkg": 24.4
   },
   {
     "id": "hariyama",
@@ -65956,7 +66476,8 @@
     ],
     "aliases": [
       "鐵掌力士"
-    ]
+    ],
+    "weightkg": 253.8
   },
   {
     "id": "hatenna",
@@ -66034,7 +66555,8 @@
     ],
     "aliases": [
       "迷布莉姆"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "hatterene",
@@ -66276,7 +66798,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 5.1
   },
   {
     "id": "hatterenegmax",
@@ -66370,7 +66893,8 @@
     ],
     "aliases": [
       "布莉姆溫"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "hattrem",
@@ -66446,7 +66970,8 @@
     ],
     "aliases": [
       "提布莉姆"
-    ]
+    ],
+    "weightkg": 4.8
   },
   {
     "id": "haunter",
@@ -66570,7 +67095,8 @@
     ],
     "aliases": [
       "鬼斯通"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "hawlucha",
@@ -66830,7 +67356,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 21.5
   },
   {
     "id": "hawluchamega",
@@ -66964,7 +67491,8 @@
     ],
     "aliases": [
       "摔角鷹人"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "haxorus",
@@ -67077,7 +67605,8 @@
     ],
     "aliases": [
       "雙斧戰龍"
-    ]
+    ],
+    "weightkg": 105.5
   },
   {
     "id": "heatmor",
@@ -67184,7 +67713,8 @@
     ],
     "aliases": [
       "熔蟻獸"
-    ]
+    ],
+    "weightkg": 58
   },
   {
     "id": "heatran",
@@ -67297,7 +67827,8 @@
     ],
     "aliases": [
       "席多藍恩"
-    ]
+    ],
+    "weightkg": 430
   },
   {
     "id": "heatranmega",
@@ -67410,7 +67941,8 @@
     ],
     "aliases": [
       "席多藍恩"
-    ]
+    ],
+    "weightkg": 570
   },
   {
     "id": "heliolisk",
@@ -67639,7 +68171,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 21
   },
   {
     "id": "helioptile",
@@ -67730,7 +68263,8 @@
     ],
     "aliases": [
       "傘電蜥"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "heracross",
@@ -67856,7 +68390,8 @@
     ],
     "aliases": [
       "赫拉克羅斯"
-    ]
+    ],
+    "weightkg": 54
   },
   {
     "id": "heracrossmega",
@@ -67980,7 +68515,8 @@
     ],
     "aliases": [
       "赫拉克羅斯"
-    ]
+    ],
+    "weightkg": 62.5
   },
   {
     "id": "herdier",
@@ -68063,7 +68599,8 @@
     ],
     "aliases": [
       "哈約克"
-    ]
+    ],
+    "weightkg": 14.7
   },
   {
     "id": "hippopotas",
@@ -68156,7 +68693,8 @@
     ],
     "aliases": [
       "沙河馬"
-    ]
+    ],
+    "weightkg": 49.5
   },
   {
     "id": "hippowdon",
@@ -68251,7 +68789,8 @@
     ],
     "aliases": [
       "河馬獸"
-    ]
+    ],
+    "weightkg": 300
   },
   {
     "id": "hitmonchan",
@@ -68379,7 +68918,8 @@
     ],
     "aliases": [
       "快拳郎"
-    ]
+    ],
+    "weightkg": 50.2
   },
   {
     "id": "hitmonlee",
@@ -68507,7 +69047,8 @@
     ],
     "aliases": [
       "飛腿郎"
-    ]
+    ],
+    "weightkg": 49.8
   },
   {
     "id": "hitmontop",
@@ -68620,7 +69161,8 @@
     ],
     "aliases": [
       "戰舞郎"
-    ]
+    ],
+    "weightkg": 48
   },
   {
     "id": "hooh",
@@ -68750,7 +69292,8 @@
     ],
     "aliases": [
       "鳳王"
-    ]
+    ],
+    "weightkg": 199
   },
   {
     "id": "honchkrow",
@@ -68864,7 +69407,8 @@
     ],
     "aliases": [
       "烏鴉頭頭"
-    ]
+    ],
+    "weightkg": 27.3
   },
   {
     "id": "honedge",
@@ -68947,7 +69491,8 @@
     ],
     "aliases": [
       "獨劍鞘"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "hoopa",
@@ -69070,7 +69615,8 @@
     ],
     "aliases": [
       "胡帕"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "hoopaunbound",
@@ -69193,7 +69739,8 @@
     ],
     "aliases": [
       "胡帕"
-    ]
+    ],
+    "weightkg": 490
   },
   {
     "id": "hoothoot",
@@ -69313,7 +69860,8 @@
     ],
     "aliases": [
       "咕咕"
-    ]
+    ],
+    "weightkg": 21.2
   },
   {
     "id": "hoppip",
@@ -69424,7 +69972,8 @@
     ],
     "aliases": [
       "毽子草"
-    ]
+    ],
+    "weightkg": 0.5
   },
   {
     "id": "horsea",
@@ -69523,7 +70072,8 @@
     ],
     "aliases": [
       "墨海馬"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "houndoom",
@@ -69646,7 +70196,8 @@
     ],
     "aliases": [
       "黑魯加"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "houndoommega",
@@ -69767,7 +70318,8 @@
     ],
     "aliases": [
       "黑魯加"
-    ]
+    ],
+    "weightkg": 49.5
   },
   {
     "id": "houndour",
@@ -69890,7 +70442,8 @@
     ],
     "aliases": [
       "戴魯比"
-    ]
+    ],
+    "weightkg": 10.8
   },
   {
     "id": "houndstone",
@@ -70090,7 +70643,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 15
   },
   {
     "id": "huntail",
@@ -70171,7 +70725,8 @@
     ],
     "aliases": [
       "獵斑魚"
-    ]
+    ],
+    "weightkg": 27
   },
   {
     "id": "hydrapple",
@@ -70385,7 +70940,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 93
   },
   {
     "id": "hydreigon",
@@ -70717,7 +71273,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 160
   },
   {
     "id": "hypno",
@@ -70861,7 +71418,8 @@
     ],
     "aliases": [
       "引夢貘人"
-    ]
+    ],
+    "weightkg": 75.6
   },
   {
     "id": "igglybuff",
@@ -70986,7 +71544,8 @@
     ],
     "aliases": [
       "寶寶丁"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "illumise",
@@ -71107,7 +71666,8 @@
     ],
     "aliases": [
       "甜甜螢"
-    ]
+    ],
+    "weightkg": 17.7
   },
   {
     "id": "impidimp",
@@ -71185,7 +71745,8 @@
     ],
     "aliases": [
       "搗蛋小妖"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "incineroar",
@@ -71656,7 +72217,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 83
   },
   {
     "id": "indeedee",
@@ -71741,7 +72303,8 @@
     ],
     "aliases": [
       "愛管侍"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "indeedeef",
@@ -71826,7 +72389,8 @@
     ],
     "aliases": [
       "愛管侍"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "infernape",
@@ -72078,7 +72642,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 55
   },
   {
     "id": "inkay",
@@ -72192,7 +72757,8 @@
     ],
     "aliases": [
       "好啦魷"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "inteleon",
@@ -72286,7 +72852,8 @@
     ],
     "aliases": [
       "千面避役"
-    ]
+    ],
+    "weightkg": 45.2
   },
   {
     "id": "inteleongmax",
@@ -72380,7 +72947,8 @@
     ],
     "aliases": [
       "千面避役"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "ironboulder",
@@ -72455,7 +73023,8 @@
     ],
     "aliases": [
       "铁磐岩"
-    ]
+    ],
+    "weightkg": 162.5
   },
   {
     "id": "ironbundle",
@@ -72522,7 +73091,8 @@
     ],
     "aliases": [
       "鐵包袱"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "ironcrown",
@@ -72597,7 +73167,8 @@
     ],
     "aliases": [
       "铁头壳"
-    ]
+    ],
+    "weightkg": 156
   },
   {
     "id": "ironhands",
@@ -72679,7 +73250,8 @@
     ],
     "aliases": [
       "鐵臂膀"
-    ]
+    ],
+    "weightkg": 380.7
   },
   {
     "id": "ironjugulis",
@@ -72761,7 +73333,8 @@
     ],
     "aliases": [
       "鐵脖頸"
-    ]
+    ],
+    "weightkg": 111
   },
   {
     "id": "ironleaves",
@@ -72844,7 +73417,8 @@
     ],
     "aliases": [
       "鐵斑葉"
-    ]
+    ],
+    "weightkg": 125
   },
   {
     "id": "ironmoth",
@@ -72922,7 +73496,8 @@
     ],
     "aliases": [
       "鐵毒蛾"
-    ]
+    ],
+    "weightkg": 36
   },
   {
     "id": "ironthorns",
@@ -73024,7 +73599,8 @@
     ],
     "aliases": [
       "鐵荊棘"
-    ]
+    ],
+    "weightkg": 303
   },
   {
     "id": "irontreads",
@@ -73102,7 +73678,8 @@
     ],
     "aliases": [
       "鐵轍跡"
-    ]
+    ],
+    "weightkg": 240
   },
   {
     "id": "ironvaliant",
@@ -73208,7 +73785,8 @@
     ],
     "aliases": [
       "鐵武者"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "ivysaur",
@@ -73316,7 +73894,8 @@
     ],
     "aliases": [
       "妙蛙草"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "jangmoo",
@@ -73409,7 +73988,8 @@
     ],
     "aliases": [
       "心鱗寶"
-    ]
+    ],
+    "weightkg": 29.7
   },
   {
     "id": "jellicent",
@@ -73507,7 +74087,8 @@
     ],
     "aliases": [
       "胖嘟嘟"
-    ]
+    ],
+    "weightkg": 135
   },
   {
     "id": "jigglypuff",
@@ -73683,7 +74264,8 @@
     ],
     "aliases": [
       "胖丁"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "jirachi",
@@ -73822,7 +74404,8 @@
     ],
     "aliases": [
       "基拉祈"
-    ]
+    ],
+    "weightkg": 1.1
   },
   {
     "id": "jolteon",
@@ -74082,7 +74665,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 24.5
   },
   {
     "id": "joltik",
@@ -74179,7 +74763,8 @@
     ],
     "aliases": [
       "電電蟲"
-    ]
+    ],
+    "weightkg": 0.6
   },
   {
     "id": "jumpluff",
@@ -74286,7 +74871,8 @@
     ],
     "aliases": [
       "毽子棉"
-    ]
+    ],
+    "weightkg": 3
   },
   {
     "id": "jynx",
@@ -74435,7 +75021,8 @@
     ],
     "aliases": [
       "迷唇姐"
-    ]
+    ],
+    "weightkg": 40.6
   },
   {
     "id": "kabuto",
@@ -74546,7 +75133,8 @@
     ],
     "aliases": [
       "化石盔"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "kabutops",
@@ -74677,7 +75265,8 @@
     ],
     "aliases": [
       "鐮刀盔"
-    ]
+    ],
+    "weightkg": 40.5
   },
   {
     "id": "kadabra",
@@ -74806,7 +75395,8 @@
     ],
     "aliases": [
       "勇基拉"
-    ]
+    ],
+    "weightkg": 56.5
   },
   {
     "id": "kakuna",
@@ -74837,7 +75427,8 @@
     ],
     "aliases": [
       "鐵殼蛹"
-    ]
+    ],
+    "weightkg": 10
   },
   {
     "id": "kangaskhan",
@@ -75148,7 +75739,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 80
   },
   {
     "id": "kangaskhanmega",
@@ -75297,7 +75889,8 @@
     ],
     "aliases": [
       "袋獸"
-    ]
+    ],
+    "weightkg": 100
   },
   {
     "id": "karrablast",
@@ -75377,7 +75970,8 @@
     ],
     "aliases": [
       "蓋蓋蟲"
-    ]
+    ],
+    "weightkg": 5.9
   },
   {
     "id": "kartana",
@@ -75448,7 +76042,8 @@
     ],
     "aliases": [
       "紙御劍"
-    ]
+    ],
+    "weightkg": 0.1
   },
   {
     "id": "kecleon",
@@ -75585,7 +76180,8 @@
     ],
     "aliases": [
       "變隱龍"
-    ]
+    ],
+    "weightkg": 22
   },
   {
     "id": "keldeo",
@@ -75692,7 +76288,8 @@
     ],
     "aliases": [
       "凱路迪歐"
-    ]
+    ],
+    "weightkg": 48.5
   },
   {
     "id": "keldeoresolute",
@@ -75799,7 +76396,8 @@
     ],
     "aliases": [
       "凱路迪歐"
-    ]
+    ],
+    "weightkg": 48.5
   },
   {
     "id": "kilowattrel",
@@ -75874,7 +76472,8 @@
     ],
     "aliases": [
       "大電海燕"
-    ]
+    ],
+    "weightkg": 38.6
   },
   {
     "id": "kingambit",
@@ -76192,7 +76791,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 120
   },
   {
     "id": "kingdra",
@@ -76293,7 +76893,8 @@
     ],
     "aliases": [
       "刺龍王"
-    ]
+    ],
+    "weightkg": 152
   },
   {
     "id": "kingler",
@@ -76405,7 +77006,8 @@
     ],
     "aliases": [
       "巨鉗蟹"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "kinglergmax",
@@ -76517,7 +77119,8 @@
     ],
     "aliases": [
       "巨鉗蟹"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "kirlia",
@@ -76643,7 +77246,8 @@
     ],
     "aliases": [
       "奇魯莉安"
-    ]
+    ],
+    "weightkg": 20.2
   },
   {
     "id": "klang",
@@ -76724,7 +77328,8 @@
     ],
     "aliases": [
       "齒輪組"
-    ]
+    ],
+    "weightkg": 51
   },
   {
     "id": "klawf",
@@ -76806,7 +77411,8 @@
     ],
     "aliases": [
       "毛崖蟹"
-    ]
+    ],
+    "weightkg": 79
   },
   {
     "id": "kleavor",
@@ -76972,7 +77578,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 89
   },
   {
     "id": "klefki",
@@ -77176,7 +77783,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 3
   },
   {
     "id": "klink",
@@ -77256,7 +77864,8 @@
     ],
     "aliases": [
       "齒輪兒"
-    ]
+    ],
+    "weightkg": 21
   },
   {
     "id": "klinklang",
@@ -77343,7 +77952,8 @@
     ],
     "aliases": [
       "齒輪怪"
-    ]
+    ],
+    "weightkg": 81
   },
   {
     "id": "koffing",
@@ -77449,7 +78059,8 @@
     ],
     "aliases": [
       "瓦斯彈"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "komala",
@@ -77547,7 +78158,8 @@
     ],
     "aliases": [
       "樹枕尾熊"
-    ]
+    ],
+    "weightkg": 19.9
   },
   {
     "id": "kommoo",
@@ -77822,7 +78434,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 78.2
   },
   {
     "id": "kommoototem",
@@ -77928,7 +78541,8 @@
     ],
     "aliases": [
       "杖尾鱗甲龍"
-    ]
+    ],
+    "weightkg": 207.5
   },
   {
     "id": "koraidon",
@@ -78026,7 +78640,8 @@
     ],
     "aliases": [
       "故勒頓"
-    ]
+    ],
+    "weightkg": 303
   },
   {
     "id": "krabby",
@@ -78135,7 +78750,8 @@
     ],
     "aliases": [
       "大鉗蟹"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "kricketot",
@@ -78174,7 +78790,8 @@
     ],
     "aliases": [
       "圓法師"
-    ]
+    ],
+    "weightkg": 2.2
   },
   {
     "id": "kricketune",
@@ -78273,7 +78890,8 @@
     ],
     "aliases": [
       "音箱蟀"
-    ]
+    ],
+    "weightkg": 25.5
   },
   {
     "id": "krokorok",
@@ -78393,7 +79011,8 @@
     ],
     "aliases": [
       "混混鱷"
-    ]
+    ],
+    "weightkg": 33.4
   },
   {
     "id": "krookodile",
@@ -78529,7 +79148,8 @@
     ],
     "aliases": [
       "流氓鱷"
-    ]
+    ],
+    "weightkg": 96.3
   },
   {
     "id": "kubfu",
@@ -78602,7 +79222,8 @@
     ],
     "aliases": [
       "熊徒弟"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "kyogre",
@@ -78700,7 +79321,8 @@
     ],
     "aliases": [
       "蓋歐卡"
-    ]
+    ],
+    "weightkg": 352
   },
   {
     "id": "kyogreprimal",
@@ -78798,7 +79420,8 @@
     ],
     "aliases": [
       "蓋歐卡"
-    ]
+    ],
+    "weightkg": 430
   },
   {
     "id": "kyurem",
@@ -78910,7 +79533,8 @@
     ],
     "aliases": [
       "酋雷姆"
-    ]
+    ],
+    "weightkg": 325
   },
   {
     "id": "kyuremblack",
@@ -79023,7 +79647,8 @@
     ],
     "aliases": [
       "酋雷姆"
-    ]
+    ],
+    "weightkg": 325
   },
   {
     "id": "kyuremwhite",
@@ -79136,7 +79761,8 @@
     ],
     "aliases": [
       "酋雷姆"
-    ]
+    ],
+    "weightkg": 325
   },
   {
     "id": "lairon",
@@ -79237,7 +79863,8 @@
     ],
     "aliases": [
       "可多拉"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "lampent",
@@ -79333,7 +79960,8 @@
     ],
     "aliases": [
       "燈火幽靈"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "landorus",
@@ -79439,7 +80067,8 @@
     ],
     "aliases": [
       "土地雲"
-    ]
+    ],
+    "weightkg": 68
   },
   {
     "id": "landorustherian",
@@ -79544,7 +80173,8 @@
     ],
     "aliases": [
       "土地雲"
-    ]
+    ],
+    "weightkg": 68
   },
   {
     "id": "lanturn",
@@ -79654,7 +80284,8 @@
     ],
     "aliases": [
       "電燈怪"
-    ]
+    ],
+    "weightkg": 22.5
   },
   {
     "id": "lapras",
@@ -79794,7 +80425,8 @@
     ],
     "aliases": [
       "拉普拉斯"
-    ]
+    ],
+    "weightkg": 220
   },
   {
     "id": "laprasgmax",
@@ -79934,7 +80566,8 @@
     ],
     "aliases": [
       "拉普拉斯"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "larvesta",
@@ -80022,7 +80655,8 @@
     ],
     "aliases": [
       "燃燒蟲"
-    ]
+    ],
+    "weightkg": 28.8
   },
   {
     "id": "larvitar",
@@ -80129,7 +80763,8 @@
     ],
     "aliases": [
       "幼基拉斯"
-    ]
+    ],
+    "weightkg": 72
   },
   {
     "id": "latias",
@@ -80278,7 +80913,8 @@
     ],
     "aliases": [
       "拉帝亞斯"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "latiasmega",
@@ -80427,7 +81063,8 @@
     ],
     "aliases": [
       "拉帝亞斯"
-    ]
+    ],
+    "weightkg": 52
   },
   {
     "id": "latios",
@@ -80569,7 +81206,8 @@
     ],
     "aliases": [
       "拉帝歐斯"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "latiosmega",
@@ -80711,7 +81349,8 @@
     ],
     "aliases": [
       "拉帝歐斯"
-    ]
+    ],
+    "weightkg": 70
   },
   {
     "id": "leafeon",
@@ -80826,7 +81465,8 @@
     ],
     "aliases": [
       "葉伊布"
-    ]
+    ],
+    "weightkg": 25.5
   },
   {
     "id": "leavanny",
@@ -80937,7 +81577,8 @@
     ],
     "aliases": [
       "保母蟲"
-    ]
+    ],
+    "weightkg": 20.5
   },
   {
     "id": "lechonk",
@@ -81006,7 +81647,8 @@
     ],
     "aliases": [
       "愛吃豚"
-    ]
+    ],
+    "weightkg": 10.2
   },
   {
     "id": "ledian",
@@ -81107,7 +81749,8 @@
     ],
     "aliases": [
       "安瓢蟲"
-    ]
+    ],
+    "weightkg": 35.6
   },
   {
     "id": "ledyba",
@@ -81209,7 +81852,8 @@
     ],
     "aliases": [
       "芭瓢蟲"
-    ]
+    ],
+    "weightkg": 10.8
   },
   {
     "id": "lickilicky",
@@ -81336,7 +81980,8 @@
     ],
     "aliases": [
       "大舌舔"
-    ]
+    ],
+    "weightkg": 140
   },
   {
     "id": "lickitung",
@@ -81481,7 +82126,8 @@
     ],
     "aliases": [
       "大舌頭"
-    ]
+    ],
+    "weightkg": 65.5
   },
   {
     "id": "liepard",
@@ -81643,7 +82289,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 37.5
   },
   {
     "id": "lileep",
@@ -81740,7 +82387,8 @@
     ],
     "aliases": [
       "觸手百合"
-    ]
+    ],
+    "weightkg": 23.8
   },
   {
     "id": "lilligant",
@@ -81834,7 +82482,8 @@
     ],
     "aliases": [
       "裙兒小姐"
-    ]
+    ],
+    "weightkg": 16.3
   },
   {
     "id": "lilliganthisui",
@@ -81924,7 +82573,8 @@
     ],
     "aliases": [
       "裙兒小姐"
-    ]
+    ],
+    "weightkg": 19.2
   },
   {
     "id": "lillipup",
@@ -82011,7 +82661,8 @@
     ],
     "aliases": [
       "小約克"
-    ]
+    ],
+    "weightkg": 4.1
   },
   {
     "id": "linoone",
@@ -82127,7 +82778,8 @@
     ],
     "aliases": [
       "直衝熊"
-    ]
+    ],
+    "weightkg": 32.5
   },
   {
     "id": "linoonegalar",
@@ -82218,7 +82870,8 @@
     ],
     "aliases": [
       "直衝熊"
-    ]
+    ],
+    "weightkg": 32.5
   },
   {
     "id": "litleo",
@@ -82313,7 +82966,8 @@
     ],
     "aliases": [
       "小獅獅"
-    ]
+    ],
+    "weightkg": 13.5
   },
   {
     "id": "litten",
@@ -82403,7 +83057,8 @@
     ],
     "aliases": [
       "火斑喵"
-    ]
+    ],
+    "weightkg": 4.3
   },
   {
     "id": "litwick",
@@ -82503,7 +83158,8 @@
     ],
     "aliases": [
       "燭光靈"
-    ]
+    ],
+    "weightkg": 3.1
   },
   {
     "id": "lokix",
@@ -82580,7 +83236,8 @@
     ],
     "aliases": [
       "烈腿蝗"
-    ]
+    ],
+    "weightkg": 17.5
   },
   {
     "id": "lombre",
@@ -82701,7 +83358,8 @@
     ],
     "aliases": [
       "蓮帽小童"
-    ]
+    ],
+    "weightkg": 32.5
   },
   {
     "id": "lopunny",
@@ -82939,7 +83597,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 33.3
   },
   {
     "id": "lopunnymega",
@@ -83064,7 +83723,8 @@
     ],
     "aliases": [
       "長耳兔"
-    ]
+    ],
+    "weightkg": 28.3
   },
   {
     "id": "lotad",
@@ -83164,7 +83824,8 @@
     ],
     "aliases": [
       "蓮葉童子"
-    ]
+    ],
+    "weightkg": 2.6
   },
   {
     "id": "loudred",
@@ -83269,7 +83930,8 @@
     ],
     "aliases": [
       "吼爆彈"
-    ]
+    ],
+    "weightkg": 40.5
   },
   {
     "id": "lucario",
@@ -83553,7 +84215,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 54
   },
   {
     "id": "lucariomega",
@@ -83693,7 +84356,8 @@
     ],
     "aliases": [
       "路卡利歐"
-    ]
+    ],
+    "weightkg": 57.5
   },
   {
     "id": "lucariomegaz",
@@ -83833,7 +84497,8 @@
     ],
     "aliases": [
       "路卡利歐"
-    ]
+    ],
+    "weightkg": 49.4
   },
   {
     "id": "ludicolo",
@@ -83962,7 +84627,8 @@
     ],
     "aliases": [
       "樂天河童"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "lugia",
@@ -84108,7 +84774,8 @@
     ],
     "aliases": [
       "洛奇亞"
-    ]
+    ],
+    "weightkg": 216
   },
   {
     "id": "lumineon",
@@ -84204,7 +84871,8 @@
     ],
     "aliases": [
       "霓虹魚"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "lunala",
@@ -84315,7 +84983,8 @@
     ],
     "aliases": [
       "露奈雅拉"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "lunatone",
@@ -84435,7 +85104,8 @@
     ],
     "aliases": [
       "月石"
-    ]
+    ],
+    "weightkg": 168
   },
   {
     "id": "lurantis",
@@ -84532,7 +85202,8 @@
     ],
     "aliases": [
       "蘭螳花"
-    ]
+    ],
+    "weightkg": 18.5
   },
   {
     "id": "lurantistotem",
@@ -84612,7 +85283,8 @@
     ],
     "aliases": [
       "蘭螳花"
-    ]
+    ],
+    "weightkg": 58
   },
   {
     "id": "luvdisc",
@@ -84703,7 +85375,8 @@
     ],
     "aliases": [
       "愛心魚"
-    ]
+    ],
+    "weightkg": 8.7
   },
   {
     "id": "luxio",
@@ -84797,7 +85470,8 @@
     ],
     "aliases": [
       "勒克貓"
-    ]
+    ],
+    "weightkg": 30.5
   },
   {
     "id": "luxray",
@@ -84957,7 +85631,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 42
   },
   {
     "id": "lycanroc",
@@ -85118,7 +85793,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 25
   },
   {
     "id": "lycanrocdusk",
@@ -85341,7 +86017,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 25
   },
   {
     "id": "lycanrocmidnight",
@@ -85457,7 +86134,8 @@
     ],
     "aliases": [
       "鬃岩狼人"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "mabosstiff",
@@ -85534,7 +86212,8 @@
     ],
     "aliases": [
       "獒教父"
-    ]
+    ],
+    "weightkg": 61
   },
   {
     "id": "machamp",
@@ -85774,7 +86453,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 130
   },
   {
     "id": "machampgmax",
@@ -85902,7 +86582,8 @@
     ],
     "aliases": [
       "怪力"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "machoke",
@@ -86019,7 +86700,8 @@
     ],
     "aliases": [
       "豪力"
-    ]
+    ],
+    "weightkg": 70.5
   },
   {
     "id": "machop",
@@ -86142,7 +86824,8 @@
     ],
     "aliases": [
       "腕力"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "magby",
@@ -86251,7 +86934,8 @@
     ],
     "aliases": [
       "鴨嘴寶寶"
-    ]
+    ],
+    "weightkg": 21.4
   },
   {
     "id": "magcargo",
@@ -86364,7 +87048,8 @@
     ],
     "aliases": [
       "熔岩蝸牛"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "magearna",
@@ -86494,7 +87179,8 @@
     ],
     "aliases": [
       "瑪機雅娜"
-    ]
+    ],
+    "weightkg": 80.5
   },
   {
     "id": "magearnamega",
@@ -86624,7 +87310,8 @@
     ],
     "aliases": [
       "瑪機雅娜"
-    ]
+    ],
+    "weightkg": 248.1
   },
   {
     "id": "magearnaoriginal",
@@ -86733,7 +87420,8 @@
     ],
     "aliases": [
       "瑪機雅娜"
-    ]
+    ],
+    "weightkg": 80.5
   },
   {
     "id": "magearnaoriginalmega",
@@ -86863,7 +87551,8 @@
     ],
     "aliases": [
       "瑪機雅娜"
-    ]
+    ],
+    "weightkg": 248.1
   },
   {
     "id": "magikarp",
@@ -86896,7 +87585,8 @@
     ],
     "aliases": [
       "鯉魚王"
-    ]
+    ],
+    "weightkg": 10
   },
   {
     "id": "magmar",
@@ -87018,7 +87708,8 @@
     ],
     "aliases": [
       "鴨嘴火獸"
-    ]
+    ],
+    "weightkg": 44.5
   },
   {
     "id": "magmortar",
@@ -87138,7 +87829,8 @@
     ],
     "aliases": [
       "鴨嘴炎獸"
-    ]
+    ],
+    "weightkg": 68
   },
   {
     "id": "magnemite",
@@ -87240,7 +87932,8 @@
     ],
     "aliases": [
       "小磁怪"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "magneton",
@@ -87346,7 +88039,8 @@
     ],
     "aliases": [
       "三合一磁怪"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "magnezone",
@@ -87455,7 +88149,8 @@
     ],
     "aliases": [
       "自爆磁怪"
-    ]
+    ],
+    "weightkg": 180
   },
   {
     "id": "makuhita",
@@ -87582,7 +88277,8 @@
     ],
     "aliases": [
       "幕下力士"
-    ]
+    ],
+    "weightkg": 86.4
   },
   {
     "id": "malamar",
@@ -87816,7 +88512,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 47
   },
   {
     "id": "malamarmega",
@@ -87930,7 +88627,8 @@
     ],
     "aliases": [
       "烏賊王"
-    ]
+    ],
+    "weightkg": 69.8
   },
   {
     "id": "mamoswine",
@@ -88170,7 +88868,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 291
   },
   {
     "id": "manaphy",
@@ -88276,7 +88975,8 @@
     ],
     "aliases": [
       "瑪納霏"
-    ]
+    ],
+    "weightkg": 1.4
   },
   {
     "id": "mandibuzz",
@@ -88383,7 +89083,8 @@
     ],
     "aliases": [
       "禿鷹娜"
-    ]
+    ],
+    "weightkg": 39.5
   },
   {
     "id": "manectric",
@@ -88550,7 +89251,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 40.2
   },
   {
     "id": "manectricmega",
@@ -88645,7 +89347,8 @@
     ],
     "aliases": [
       "雷電獸"
-    ]
+    ],
+    "weightkg": 44
   },
   {
     "id": "mankey",
@@ -88790,7 +89493,8 @@
     ],
     "aliases": [
       "猴怪"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "mantine",
@@ -88905,7 +89609,8 @@
     ],
     "aliases": [
       "巨翅飛魚"
-    ]
+    ],
+    "weightkg": 220
   },
   {
     "id": "mantyke",
@@ -88997,7 +89702,8 @@
     ],
     "aliases": [
       "小球飛魚"
-    ]
+    ],
+    "weightkg": 65
   },
   {
     "id": "maractus",
@@ -89089,7 +89795,8 @@
     ],
     "aliases": [
       "沙鈴仙人掌"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "mareanie",
@@ -89183,7 +89890,8 @@
     ],
     "aliases": [
       "好壞星"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "mareep",
@@ -89281,7 +89989,8 @@
     ],
     "aliases": [
       "咩利羊"
-    ]
+    ],
+    "weightkg": 7.8
   },
   {
     "id": "marill",
@@ -89417,7 +90126,8 @@
     ],
     "aliases": [
       "瑪力露"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "marowak",
@@ -89543,7 +90253,8 @@
     ],
     "aliases": [
       "嘎啦嘎啦"
-    ]
+    ],
+    "weightkg": 45
   },
   {
     "id": "marowakalola",
@@ -89668,7 +90379,8 @@
     ],
     "aliases": [
       "嘎啦嘎啦"
-    ]
+    ],
+    "weightkg": 34
   },
   {
     "id": "marowakalolatotem",
@@ -89773,7 +90485,8 @@
     ],
     "aliases": [
       "嘎啦嘎啦"
-    ]
+    ],
+    "weightkg": 98
   },
   {
     "id": "marshadow",
@@ -89883,7 +90596,8 @@
     ],
     "aliases": [
       "瑪夏多"
-    ]
+    ],
+    "weightkg": 22.2
   },
   {
     "id": "marshtomp",
@@ -90000,7 +90714,8 @@
     ],
     "aliases": [
       "沼躍魚"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "maschiff",
@@ -90070,7 +90785,8 @@
     ],
     "aliases": [
       "偶叫獒"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "masquerain",
@@ -90186,7 +90902,8 @@
     ],
     "aliases": [
       "雨翅蛾"
-    ]
+    ],
+    "weightkg": 3.6
   },
   {
     "id": "maushold",
@@ -90501,7 +91218,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 2.3
   },
   {
     "id": "mausholdfour",
@@ -90578,7 +91296,8 @@
     ],
     "aliases": [
       "一家鼠"
-    ]
+    ],
+    "weightkg": 2.8
   },
   {
     "id": "mawile",
@@ -90863,7 +91582,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 11.5
   },
   {
     "id": "mawilemega",
@@ -90998,7 +91718,8 @@
     ],
     "aliases": [
       "大嘴娃"
-    ]
+    ],
+    "weightkg": 23.5
   },
   {
     "id": "medicham",
@@ -91215,7 +91936,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 31.5
   },
   {
     "id": "medichammega",
@@ -91349,7 +92071,8 @@
     ],
     "aliases": [
       "恰雷姆"
-    ]
+    ],
+    "weightkg": 31.5
   },
   {
     "id": "meditite",
@@ -91485,7 +92208,8 @@
     ],
     "aliases": [
       "瑪沙那"
-    ]
+    ],
+    "weightkg": 11.2
   },
   {
     "id": "meganium",
@@ -91735,7 +92459,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 100.5
   },
   {
     "id": "meganiummega",
@@ -91849,7 +92574,8 @@
     ],
     "aliases": [
       "大竺葵"
-    ]
+    ],
+    "weightkg": 201
   },
   {
     "id": "melmetal",
@@ -91921,7 +92647,8 @@
     ],
     "aliases": [
       "美錄梅塔"
-    ]
+    ],
+    "weightkg": 800
   },
   {
     "id": "melmetalgmax",
@@ -91993,7 +92720,8 @@
     ],
     "aliases": [
       "美錄梅塔"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "meloetta",
@@ -92125,7 +92853,8 @@
     ],
     "aliases": [
       "美洛耶塔"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "meloettapirouette",
@@ -92257,7 +92986,8 @@
     ],
     "aliases": [
       "美洛耶塔"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "meltan",
@@ -92302,7 +93032,8 @@
     ],
     "aliases": [
       "美錄坦"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "meowscarada",
@@ -92573,7 +93304,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 31.2
   },
   {
     "id": "meowstic",
@@ -92813,7 +93545,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 8.5
   },
   {
     "id": "meowsticf",
@@ -92928,7 +93661,8 @@
     ],
     "aliases": [
       "超能妙喵"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "meowsticfmega",
@@ -93042,7 +93776,8 @@
     ],
     "aliases": [
       "超能妙喵"
-    ]
+    ],
+    "weightkg": 10.1
   },
   {
     "id": "meowsticmmega",
@@ -93156,7 +93891,8 @@
     ],
     "aliases": [
       "超能妙喵"
-    ]
+    ],
+    "weightkg": 10.1
   },
   {
     "id": "meowth",
@@ -93295,7 +94031,8 @@
     ],
     "aliases": [
       "喵喵"
-    ]
+    ],
+    "weightkg": 4.2
   },
   {
     "id": "meowthalola",
@@ -93416,7 +94153,8 @@
     ],
     "aliases": [
       "喵喵"
-    ]
+    ],
+    "weightkg": 4.2
   },
   {
     "id": "meowthgalar",
@@ -93519,7 +94257,8 @@
     ],
     "aliases": [
       "喵喵"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "meowthgmax",
@@ -93658,7 +94397,8 @@
     ],
     "aliases": [
       "喵喵"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "mesprit",
@@ -93780,7 +94520,8 @@
     ],
     "aliases": [
       "艾姆利多"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "metagross",
@@ -94130,7 +94871,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 550
   },
   {
     "id": "metagrossmega",
@@ -94259,7 +95001,8 @@
     ],
     "aliases": [
       "巨金怪"
-    ]
+    ],
+    "weightkg": 942.9
   },
   {
     "id": "metang",
@@ -94380,7 +95123,8 @@
     ],
     "aliases": [
       "金屬怪"
-    ]
+    ],
+    "weightkg": 202.5
   },
   {
     "id": "metapod",
@@ -94410,7 +95154,8 @@
     ],
     "aliases": [
       "鐵甲蛹"
-    ]
+    ],
+    "weightkg": 9.9
   },
   {
     "id": "mew",
@@ -94810,7 +95555,8 @@
     ],
     "aliases": [
       "夢幻"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "mewtwo",
@@ -95004,7 +95750,8 @@
     ],
     "aliases": [
       "超夢"
-    ]
+    ],
+    "weightkg": 122
   },
   {
     "id": "mewtwomegax",
@@ -95198,7 +95945,8 @@
     ],
     "aliases": [
       "超夢"
-    ]
+    ],
+    "weightkg": 127
   },
   {
     "id": "mewtwomegay",
@@ -95391,7 +96139,8 @@
     ],
     "aliases": [
       "超夢"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "mienfoo",
@@ -95501,7 +96250,8 @@
     ],
     "aliases": [
       "功夫鼬"
-    ]
+    ],
+    "weightkg": 20
   },
   {
     "id": "mienshao",
@@ -95618,7 +96368,8 @@
     ],
     "aliases": [
       "師父鼬"
-    ]
+    ],
+    "weightkg": 35.5
   },
   {
     "id": "mightyena",
@@ -95723,7 +96474,8 @@
     ],
     "aliases": [
       "大狼犬"
-    ]
+    ],
+    "weightkg": 37
   },
   {
     "id": "milcery",
@@ -95777,7 +96529,8 @@
     ],
     "aliases": [
       "小仙奶"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "milotic",
@@ -96110,7 +96863,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 162
   },
   {
     "id": "miltank",
@@ -96236,7 +96990,8 @@
     ],
     "aliases": [
       "大奶罐"
-    ]
+    ],
+    "weightkg": 75.5
   },
   {
     "id": "mimejr",
@@ -96354,7 +97109,8 @@
     ],
     "aliases": [
       "魔尼尼"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "mimikyu",
@@ -96591,7 +97347,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.7
   },
   {
     "id": "mimikyubusted",
@@ -96704,7 +97461,8 @@
     ],
     "aliases": [
       "謎擬Ｑ"
-    ]
+    ],
+    "weightkg": 0.7
   },
   {
     "id": "mimikyubustedtotem",
@@ -96817,7 +97575,8 @@
     ],
     "aliases": [
       "謎擬Ｑ"
-    ]
+    ],
+    "weightkg": 2.8
   },
   {
     "id": "mimikyutotem",
@@ -96909,7 +97668,8 @@
     ],
     "aliases": [
       "謎擬Ｑ"
-    ]
+    ],
+    "weightkg": 2.8
   },
   {
     "id": "minccino",
@@ -97009,7 +97769,8 @@
     ],
     "aliases": [
       "泡沫栗鼠"
-    ]
+    ],
+    "weightkg": 5.8
   },
   {
     "id": "minior",
@@ -97099,7 +97860,8 @@
     ],
     "aliases": [
       "小隕星"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "miniormeteor",
@@ -97189,7 +97951,8 @@
     ],
     "aliases": [
       "小隕星"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "minun",
@@ -97301,7 +98064,8 @@
     ],
     "aliases": [
       "負電拍拍"
-    ]
+    ],
+    "weightkg": 4.2
   },
   {
     "id": "miraidon",
@@ -97383,7 +98147,8 @@
     ],
     "aliases": [
       "密勒頓"
-    ]
+    ],
+    "weightkg": 240
   },
   {
     "id": "misdreavus",
@@ -97515,7 +98280,8 @@
     ],
     "aliases": [
       "夢妖"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "mismagius",
@@ -97636,7 +98402,8 @@
     ],
     "aliases": [
       "夢妖魔"
-    ]
+    ],
+    "weightkg": 4.4
   },
   {
     "id": "moltres",
@@ -97747,7 +98514,8 @@
     ],
     "aliases": [
       "火焰鳥"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "moltresgalar",
@@ -97827,7 +98595,8 @@
     ],
     "aliases": [
       "火焰鳥"
-    ]
+    ],
+    "weightkg": 66
   },
   {
     "id": "monferno",
@@ -97955,7 +98724,8 @@
     ],
     "aliases": [
       "猛火猴"
-    ]
+    ],
+    "weightkg": 22
   },
   {
     "id": "morelull",
@@ -98039,7 +98809,8 @@
     ],
     "aliases": [
       "睡睡菇"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "morgrem",
@@ -98119,7 +98890,8 @@
     ],
     "aliases": [
       "詐唬魔"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "morpeko",
@@ -98295,7 +99067,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 3
   },
   {
     "id": "morpekohangry",
@@ -98395,7 +99168,8 @@
     ],
     "aliases": [
       "莫魯貝可"
-    ]
+    ],
+    "weightkg": 3
   },
   {
     "id": "mothim",
@@ -98485,7 +99259,8 @@
     ],
     "aliases": [
       "紳士蛾"
-    ]
+    ],
+    "weightkg": 23.3
   },
   {
     "id": "mrmime",
@@ -98641,7 +99416,8 @@
     ],
     "aliases": [
       "魔牆人偶"
-    ]
+    ],
+    "weightkg": 54.5
   },
   {
     "id": "mrmimegalar",
@@ -98758,7 +99534,8 @@
     ],
     "aliases": [
       "魔牆人偶"
-    ]
+    ],
+    "weightkg": 56.8
   },
   {
     "id": "mrrime",
@@ -98981,7 +99758,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 58.2
   },
   {
     "id": "mudbray",
@@ -99065,7 +99843,8 @@
     ],
     "aliases": [
       "泥驢仔"
-    ]
+    ],
+    "weightkg": 110
   },
   {
     "id": "mudkip",
@@ -99176,7 +99955,8 @@
     ],
     "aliases": [
       "水躍魚"
-    ]
+    ],
+    "weightkg": 7.6
   },
   {
     "id": "mudsdale",
@@ -99377,7 +100157,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 920
   },
   {
     "id": "muk",
@@ -99506,7 +100287,8 @@
     ],
     "aliases": [
       "臭臭泥"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "mukalola",
@@ -99631,7 +100413,8 @@
     ],
     "aliases": [
       "臭臭泥"
-    ]
+    ],
+    "weightkg": 52
   },
   {
     "id": "munchlax",
@@ -99764,7 +100547,8 @@
     ],
     "aliases": [
       "小卡比獸"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "munkidori",
@@ -99847,7 +100631,8 @@
     ],
     "aliases": [
       "願增猿"
-    ]
+    ],
+    "weightkg": 12.2
   },
   {
     "id": "munna",
@@ -99949,7 +100734,8 @@
     ],
     "aliases": [
       "食夢夢"
-    ]
+    ],
+    "weightkg": 23.3
   },
   {
     "id": "murkrow",
@@ -100073,7 +100859,8 @@
     ],
     "aliases": [
       "黑暗鴉"
-    ]
+    ],
+    "weightkg": 2.1
   },
   {
     "id": "musharna",
@@ -100229,7 +101016,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 60.5
   },
   {
     "id": "nacli",
@@ -100295,7 +101083,8 @@
     ],
     "aliases": [
       "鹽石寶"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "naclstack",
@@ -100364,7 +101153,8 @@
     ],
     "aliases": [
       "鹽石壘"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "naganadel",
@@ -100467,7 +101257,8 @@
     ],
     "aliases": [
       "四顎針龍"
-    ]
+    ],
+    "weightkg": 150
   },
   {
     "id": "natu",
@@ -100588,7 +101379,8 @@
     ],
     "aliases": [
       "天然雀"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "necrozma",
@@ -100703,7 +101495,8 @@
     ],
     "aliases": [
       "奈克洛茲瑪"
-    ]
+    ],
+    "weightkg": 230
   },
   {
     "id": "necrozmadawnwings",
@@ -100730,7 +101523,8 @@
     ],
     "aliases": [
       "奈克洛茲瑪"
-    ]
+    ],
+    "weightkg": 350
   },
   {
     "id": "necrozmaduskmane",
@@ -100757,7 +101551,8 @@
     ],
     "aliases": [
       "奈克洛茲瑪"
-    ]
+    ],
+    "weightkg": 460
   },
   {
     "id": "necrozmaultra",
@@ -100785,7 +101580,8 @@
     ],
     "aliases": [
       "奈克洛茲瑪"
-    ]
+    ],
+    "weightkg": 230
   },
   {
     "id": "nickit",
@@ -100847,7 +101643,8 @@
     ],
     "aliases": [
       "偷兒狐"
-    ]
+    ],
+    "weightkg": 8.9
   },
   {
     "id": "nidoking",
@@ -101009,7 +101806,8 @@
     ],
     "aliases": [
       "尼多王"
-    ]
+    ],
+    "weightkg": 62
   },
   {
     "id": "nidoqueen",
@@ -101170,7 +101968,8 @@
     ],
     "aliases": [
       "尼多后"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "nidoranf",
@@ -101276,7 +102075,8 @@
     ],
     "aliases": [
       "尼多蘭"
-    ]
+    ],
+    "weightkg": 7
   },
   {
     "id": "nidoranm",
@@ -101383,7 +102183,8 @@
     ],
     "aliases": [
       "尼多朗"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "nidorina",
@@ -101487,7 +102288,8 @@
     ],
     "aliases": [
       "尼多娜"
-    ]
+    ],
+    "weightkg": 20
   },
   {
     "id": "nidorino",
@@ -101590,7 +102392,8 @@
     ],
     "aliases": [
       "尼多力諾"
-    ]
+    ],
+    "weightkg": 19.5
   },
   {
     "id": "nihilego",
@@ -101688,7 +102491,8 @@
     ],
     "aliases": [
       "虛吾伊德"
-    ]
+    ],
+    "weightkg": 55.5
   },
   {
     "id": "nincada",
@@ -101769,7 +102573,8 @@
     ],
     "aliases": [
       "土居忍士"
-    ]
+    ],
+    "weightkg": 5.5
   },
   {
     "id": "ninetales",
@@ -102035,7 +102840,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 19.9
   },
   {
     "id": "ninetalesalola",
@@ -102335,7 +103141,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 19.9
   },
   {
     "id": "ninjask",
@@ -102431,7 +103238,8 @@
     ],
     "aliases": [
       "鐵面忍者"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "noctowl",
@@ -102552,7 +103360,8 @@
     ],
     "aliases": [
       "貓頭夜鷹"
-    ]
+    ],
+    "weightkg": 40.8
   },
   {
     "id": "noibat",
@@ -102652,7 +103461,8 @@
     ],
     "aliases": [
       "嗡蝠"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "noivern",
@@ -102766,7 +103576,8 @@
     ],
     "aliases": [
       "音波龍"
-    ]
+    ],
+    "weightkg": 85
   },
   {
     "id": "nosepass",
@@ -102877,7 +103688,8 @@
     ],
     "aliases": [
       "朝北鼻"
-    ]
+    ],
+    "weightkg": 97
   },
   {
     "id": "numel",
@@ -102994,7 +103806,8 @@
     ],
     "aliases": [
       "呆火駝"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "nuzleaf",
@@ -103127,7 +103940,8 @@
     ],
     "aliases": [
       "長鼻葉"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "nymble",
@@ -103184,7 +103998,8 @@
     ],
     "aliases": [
       "豆蟋蟀"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "obstagoon",
@@ -103293,7 +104108,8 @@
     ],
     "aliases": [
       "堵攔熊"
-    ]
+    ],
+    "weightkg": 46
   },
   {
     "id": "octillery",
@@ -103399,7 +104215,8 @@
     ],
     "aliases": [
       "章魚桶"
-    ]
+    ],
+    "weightkg": 28.5
   },
   {
     "id": "oddish",
@@ -103500,7 +104317,8 @@
     ],
     "aliases": [
       "走路草"
-    ]
+    ],
+    "weightkg": 5.4
   },
   {
     "id": "ogerpon",
@@ -103587,7 +104405,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponcornerstone",
@@ -103675,7 +104494,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponcornerstonetera",
@@ -103763,7 +104583,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponhearthflame",
@@ -103851,7 +104672,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponhearthflametera",
@@ -103939,7 +104761,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerpontealtera",
@@ -104026,7 +104849,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponwellspring",
@@ -104114,7 +104938,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "ogerponwellspringtera",
@@ -104202,7 +105027,8 @@
     ],
     "aliases": [
       "厄鬼椪"
-    ]
+    ],
+    "weightkg": 39.8
   },
   {
     "id": "oinkologne",
@@ -104276,7 +105102,8 @@
     ],
     "aliases": [
       "飄香豚"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "oinkolognef",
@@ -104350,7 +105177,8 @@
     ],
     "aliases": [
       "飄香豚"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "okidogi",
@@ -104442,7 +105270,8 @@
     ],
     "aliases": [
       "夠讚狗"
-    ]
+    ],
+    "weightkg": 92
   },
   {
     "id": "omanyte",
@@ -104550,7 +105379,8 @@
     ],
     "aliases": [
       "菊石獸"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "omastar",
@@ -104664,7 +105494,8 @@
     ],
     "aliases": [
       "多刺菊石獸"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "onix",
@@ -104781,7 +105612,8 @@
     ],
     "aliases": [
       "大岩蛇"
-    ]
+    ],
+    "weightkg": 210
   },
   {
     "id": "oranguru",
@@ -105024,7 +105856,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 76
   },
   {
     "id": "orbeetle",
@@ -105105,7 +105938,8 @@
     ],
     "aliases": [
       "以歐路普"
-    ]
+    ],
+    "weightkg": 40.8
   },
   {
     "id": "orbeetlegmax",
@@ -105186,7 +106020,8 @@
     ],
     "aliases": [
       "以歐路普"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "oricorio",
@@ -105277,7 +106112,8 @@
     ],
     "aliases": [
       "花舞鳥"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "oricoriopau",
@@ -105368,7 +106204,8 @@
     ],
     "aliases": [
       "花舞鳥"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "oricoriopompom",
@@ -105459,7 +106296,8 @@
     ],
     "aliases": [
       "花舞鳥"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "oricoriosensu",
@@ -105550,7 +106388,8 @@
     ],
     "aliases": [
       "花舞鳥"
-    ]
+    ],
+    "weightkg": 3.4
   },
   {
     "id": "orthworm",
@@ -105721,7 +106560,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 310
   },
   {
     "id": "oshawott",
@@ -105824,7 +106664,8 @@
     ],
     "aliases": [
       "水水獺"
-    ]
+    ],
+    "weightkg": 5.9
   },
   {
     "id": "overqwil",
@@ -106040,7 +106881,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 60.5
   },
   {
     "id": "pachirisu",
@@ -106157,7 +106999,8 @@
     ],
     "aliases": [
       "帕奇利茲"
-    ]
+    ],
+    "weightkg": 3.9
   },
   {
     "id": "palafin",
@@ -106362,7 +107205,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 60.2
   },
   {
     "id": "palafinhero",
@@ -106449,7 +107293,8 @@
     ],
     "aliases": [
       "海豚俠"
-    ]
+    ],
+    "weightkg": 97.4
   },
   {
     "id": "palkia",
@@ -106574,7 +107419,8 @@
     ],
     "aliases": [
       "帕路奇亞"
-    ]
+    ],
+    "weightkg": 336
   },
   {
     "id": "palkiaorigin",
@@ -106699,7 +107545,8 @@
     ],
     "aliases": [
       "帕路奇亞"
-    ]
+    ],
+    "weightkg": 660
   },
   {
     "id": "palossand",
@@ -106799,7 +107646,8 @@
     ],
     "aliases": [
       "噬沙堡爺"
-    ]
+    ],
+    "weightkg": 250
   },
   {
     "id": "palpitoad",
@@ -106879,7 +107727,8 @@
     ],
     "aliases": [
       "藍蟾蜍"
-    ]
+    ],
+    "weightkg": 17
   },
   {
     "id": "pancham",
@@ -106997,7 +107846,8 @@
     ],
     "aliases": [
       "頑皮熊貓"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "pangoro",
@@ -107195,7 +108045,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 136
   },
   {
     "id": "panpour",
@@ -107295,7 +108146,8 @@
     ],
     "aliases": [
       "冷水猴"
-    ]
+    ],
+    "weightkg": 13.5
   },
   {
     "id": "pansage",
@@ -107393,7 +108245,8 @@
     ],
     "aliases": [
       "花椰猴"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "pansear",
@@ -107491,7 +108344,8 @@
     ],
     "aliases": [
       "爆香猴"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "paras",
@@ -107606,7 +108460,8 @@
     ],
     "aliases": [
       "派拉斯"
-    ]
+    ],
+    "weightkg": 5.4
   },
   {
     "id": "parasect",
@@ -107714,7 +108569,8 @@
     ],
     "aliases": [
       "派拉斯特"
-    ]
+    ],
+    "weightkg": 29.5
   },
   {
     "id": "passimian",
@@ -107831,7 +108687,8 @@
     ],
     "aliases": [
       "投擲猴"
-    ]
+    ],
+    "weightkg": 82.8
   },
   {
     "id": "patrat",
@@ -107921,7 +108778,8 @@
     ],
     "aliases": [
       "探探鼠"
-    ]
+    ],
+    "weightkg": 11.6
   },
   {
     "id": "pawmi",
@@ -107998,7 +108856,8 @@
     ],
     "aliases": [
       "布撥"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "pawmo",
@@ -108079,7 +108938,8 @@
     ],
     "aliases": [
       "布土撥"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "pawmot",
@@ -108178,7 +109038,8 @@
     ],
     "aliases": [
       "巴布土撥"
-    ]
+    ],
+    "weightkg": 41
   },
   {
     "id": "pawniard",
@@ -108290,7 +109151,8 @@
     ],
     "aliases": [
       "駒刀小兵"
-    ]
+    ],
+    "weightkg": 10.2
   },
   {
     "id": "pecharunt",
@@ -108351,7 +109213,8 @@
     ],
     "aliases": [
       "桃歹郎"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "pelipper",
@@ -108740,7 +109603,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 28
   },
   {
     "id": "perrserker",
@@ -108847,7 +109711,8 @@
     ],
     "aliases": [
       "喵頭目"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "persian",
@@ -108984,7 +109849,8 @@
     ],
     "aliases": [
       "貓老大"
-    ]
+    ],
+    "weightkg": 32
   },
   {
     "id": "persianalola",
@@ -109108,7 +109974,8 @@
     ],
     "aliases": [
       "貓老大"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "petilil",
@@ -109193,7 +110060,8 @@
     ],
     "aliases": [
       "百合根娃娃"
-    ]
+    ],
+    "weightkg": 6.6
   },
   {
     "id": "phanpy",
@@ -109296,7 +110164,8 @@
     ],
     "aliases": [
       "小小象"
-    ]
+    ],
+    "weightkg": 33.5
   },
   {
     "id": "phantump",
@@ -109408,7 +110277,8 @@
     ],
     "aliases": [
       "小木靈"
-    ]
+    ],
+    "weightkg": 7
   },
   {
     "id": "pheromosa",
@@ -109500,7 +110370,8 @@
     ],
     "aliases": [
       "費洛美螂"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "phione",
@@ -109591,7 +110462,8 @@
     ],
     "aliases": [
       "霏歐納"
-    ]
+    ],
+    "weightkg": 3.1
   },
   {
     "id": "pichu",
@@ -109704,7 +110576,8 @@
     ],
     "aliases": [
       "皮丘"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "pichuspikyeared",
@@ -109772,7 +110645,8 @@
     ],
     "aliases": [
       "皮丘"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "pidgeot",
@@ -109933,7 +110807,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 39.5
   },
   {
     "id": "pidgeotmega",
@@ -110022,7 +110897,8 @@
     ],
     "aliases": [
       "大比鳥"
-    ]
+    ],
+    "weightkg": 50.5
   },
   {
     "id": "pidgeotto",
@@ -110111,7 +110987,8 @@
     ],
     "aliases": [
       "比比鳥"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "pidgey",
@@ -110203,7 +111080,8 @@
     ],
     "aliases": [
       "波波"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "pidove",
@@ -110283,7 +111161,8 @@
     ],
     "aliases": [
       "豆豆鴿"
-    ]
+    ],
+    "weightkg": 2.1
   },
   {
     "id": "pignite",
@@ -110398,7 +111277,8 @@
     ],
     "aliases": [
       "炒炒豬"
-    ]
+    ],
+    "weightkg": 55.5
   },
   {
     "id": "pikachu",
@@ -110633,7 +111513,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 6
   },
   {
     "id": "pikachualola",
@@ -110745,7 +111626,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachubelle",
@@ -110771,7 +111653,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachucosplay",
@@ -110850,7 +111733,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachugmax",
@@ -110997,7 +111881,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "pikachuhoenn",
@@ -111109,7 +111994,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachukalos",
@@ -111221,7 +112107,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachulibre",
@@ -111247,7 +112134,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachuoriginal",
@@ -111359,7 +112247,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachupartner",
@@ -111471,7 +112360,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachuphd",
@@ -111497,7 +112387,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachupopstar",
@@ -111523,7 +112414,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachurockstar",
@@ -111549,7 +112441,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachusinnoh",
@@ -111661,7 +112554,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachustarter",
@@ -111749,7 +112643,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachuunova",
@@ -111861,7 +112756,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikachuworld",
@@ -111956,7 +112852,8 @@
     ],
     "aliases": [
       "皮卡丘"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "pikipek",
@@ -112042,7 +112939,8 @@
     ],
     "aliases": [
       "小篤兒"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "piloswine",
@@ -112151,7 +113049,8 @@
     ],
     "aliases": [
       "長毛豬"
-    ]
+    ],
+    "weightkg": 55.8
   },
   {
     "id": "pincurchin",
@@ -112237,7 +113136,8 @@
     ],
     "aliases": [
       "啪嚓海膽"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "pineco",
@@ -112341,7 +113241,8 @@
     ],
     "aliases": [
       "榛果球"
-    ]
+    ],
+    "weightkg": 7.2
   },
   {
     "id": "pinsir",
@@ -112453,7 +113354,8 @@
     ],
     "aliases": [
       "凱羅斯"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "pinsirmega",
@@ -112564,7 +113466,8 @@
     ],
     "aliases": [
       "凱羅斯"
-    ]
+    ],
+    "weightkg": 59
   },
   {
     "id": "piplup",
@@ -112676,7 +113579,8 @@
     ],
     "aliases": [
       "波加曼"
-    ]
+    ],
+    "weightkg": 5.2
   },
   {
     "id": "plusle",
@@ -112790,7 +113694,8 @@
     ],
     "aliases": [
       "正電拍拍"
-    ]
+    ],
+    "weightkg": 4.2
   },
   {
     "id": "poipole",
@@ -112852,7 +113757,8 @@
     ],
     "aliases": [
       "毒貝比"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "politoed",
@@ -113135,7 +114041,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 33.9
   },
   {
     "id": "poliwag",
@@ -113240,7 +114147,8 @@
     ],
     "aliases": [
       "蚊香蝌蚪"
-    ]
+    ],
+    "weightkg": 12.4
   },
   {
     "id": "poliwhirl",
@@ -113356,7 +114264,8 @@
     ],
     "aliases": [
       "蚊香君"
-    ]
+    ],
+    "weightkg": 20
   },
   {
     "id": "poliwrath",
@@ -113499,7 +114408,8 @@
     ],
     "aliases": [
       "蚊香泳士"
-    ]
+    ],
+    "weightkg": 54
   },
   {
     "id": "poltchageist",
@@ -113564,7 +114474,8 @@
     ],
     "aliases": [
       "斯魔茶"
-    ]
+    ],
+    "weightkg": 1.1
   },
   {
     "id": "poltchageistartisan",
@@ -113629,7 +114540,8 @@
     ],
     "aliases": [
       "斯魔茶"
-    ]
+    ],
+    "weightkg": 1.1
   },
   {
     "id": "polteageist",
@@ -113767,7 +114679,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.4
   },
   {
     "id": "polteageistantique",
@@ -113847,7 +114760,8 @@
     ],
     "aliases": [
       "怖思壺"
-    ]
+    ],
+    "weightkg": 0.4
   },
   {
     "id": "ponyta",
@@ -113941,7 +114855,8 @@
     ],
     "aliases": [
       "小火馬"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "ponytagalar",
@@ -114013,7 +114928,8 @@
     ],
     "aliases": [
       "小火馬"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "poochyena",
@@ -114117,7 +115033,8 @@
     ],
     "aliases": [
       "土狼犬"
-    ]
+    ],
+    "weightkg": 13.6
   },
   {
     "id": "popplio",
@@ -114210,7 +115127,8 @@
     ],
     "aliases": [
       "球球海獅"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "porygon",
@@ -114324,7 +115242,8 @@
     ],
     "aliases": [
       "多邊獸"
-    ]
+    ],
+    "weightkg": 36.5
   },
   {
     "id": "porygonz",
@@ -114430,7 +115349,8 @@
     ],
     "aliases": [
       "多邊獸Ｚ"
-    ]
+    ],
+    "weightkg": 34
   },
   {
     "id": "porygon2",
@@ -114535,7 +115455,8 @@
     ],
     "aliases": [
       "多邊獸Ⅱ"
-    ]
+    ],
+    "weightkg": 32.5
   },
   {
     "id": "primarina",
@@ -114856,7 +115777,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 44
   },
   {
     "id": "primeape",
@@ -114998,7 +115920,8 @@
     ],
     "aliases": [
       "火爆猴"
-    ]
+    ],
+    "weightkg": 32
   },
   {
     "id": "prinplup",
@@ -115108,7 +116031,8 @@
     ],
     "aliases": [
       "波皇子"
-    ]
+    ],
+    "weightkg": 23
   },
   {
     "id": "probopass",
@@ -115223,7 +116147,8 @@
     ],
     "aliases": [
       "大朝北鼻"
-    ]
+    ],
+    "weightkg": 340
   },
   {
     "id": "psyduck",
@@ -115370,7 +116295,8 @@
     ],
     "aliases": [
       "可達鴨"
-    ]
+    ],
+    "weightkg": 19.6
   },
   {
     "id": "pumpkaboo",
@@ -115471,7 +116397,8 @@
     ],
     "aliases": [
       "南瓜精"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "pumpkaboolarge",
@@ -115572,7 +116499,8 @@
     ],
     "aliases": [
       "南瓜精"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "pumpkaboosmall",
@@ -115673,7 +116601,8 @@
     ],
     "aliases": [
       "南瓜精"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "pumpkaboosuper",
@@ -115774,7 +116703,8 @@
     ],
     "aliases": [
       "南瓜精"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "pupitar",
@@ -115881,7 +116811,8 @@
     ],
     "aliases": [
       "沙基拉斯"
-    ]
+    ],
+    "weightkg": 152
   },
   {
     "id": "purrloin",
@@ -115982,7 +116913,8 @@
     ],
     "aliases": [
       "扒手貓"
-    ]
+    ],
+    "weightkg": 10.1
   },
   {
     "id": "purugly",
@@ -116081,7 +117013,8 @@
     ],
     "aliases": [
       "東施喵"
-    ]
+    ],
+    "weightkg": 43.8
   },
   {
     "id": "pyroar",
@@ -116333,7 +117266,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 81.5
   },
   {
     "id": "pyroarmega",
@@ -116429,7 +117363,8 @@
     ],
     "aliases": [
       "火炎獅"
-    ]
+    ],
+    "weightkg": 93.3
   },
   {
     "id": "pyukumuku",
@@ -116495,7 +117430,8 @@
     ],
     "aliases": [
       "拳海參"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "quagsire",
@@ -116625,7 +117561,8 @@
     ],
     "aliases": [
       "沼王"
-    ]
+    ],
+    "weightkg": 75
   },
   {
     "id": "quaquaval",
@@ -116859,7 +117796,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 61.9
   },
   {
     "id": "quaxly",
@@ -116926,7 +117864,8 @@
     ],
     "aliases": [
       "潤水鴨"
-    ]
+    ],
+    "weightkg": 6.1
   },
   {
     "id": "quaxwell",
@@ -116994,7 +117933,8 @@
     ],
     "aliases": [
       "湧躍鴨"
-    ]
+    ],
+    "weightkg": 21.5
   },
   {
     "id": "quilava",
@@ -117094,7 +118034,8 @@
     ],
     "aliases": [
       "火岩鼠"
-    ]
+    ],
+    "weightkg": 19
   },
   {
     "id": "quilladin",
@@ -117214,7 +118155,8 @@
     ],
     "aliases": [
       "胖胖哈力"
-    ]
+    ],
+    "weightkg": 29
   },
   {
     "id": "qwilfish",
@@ -117417,7 +118359,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 3.9
   },
   {
     "id": "qwilfishhisui",
@@ -117513,7 +118456,8 @@
     ],
     "aliases": [
       "千針魚"
-    ]
+    ],
+    "weightkg": 3.9
   },
   {
     "id": "raboot",
@@ -117595,7 +118539,8 @@
     ],
     "aliases": [
       "騰蹴小將"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "rabsca",
@@ -117690,7 +118635,8 @@
     ],
     "aliases": [
       "蟲甲聖"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "ragingbolt",
@@ -117771,7 +118717,8 @@
     ],
     "aliases": [
       "猛雷鼓"
-    ]
+    ],
+    "weightkg": 480
   },
   {
     "id": "raichu",
@@ -118217,7 +119164,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 30
   },
   {
     "id": "raichualola",
@@ -118345,7 +119293,8 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "weightkg": 21
   },
   {
     "id": "raichumegax",
@@ -118480,7 +119429,8 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "raichumegay",
@@ -118615,7 +119565,8 @@
     ],
     "aliases": [
       "雷丘"
-    ]
+    ],
+    "weightkg": 26
   },
   {
     "id": "raikou",
@@ -118727,7 +119678,8 @@
     ],
     "aliases": [
       "雷公"
-    ]
+    ],
+    "weightkg": 178
   },
   {
     "id": "ralts",
@@ -118861,7 +119813,8 @@
     ],
     "aliases": [
       "拉魯拉絲"
-    ]
+    ],
+    "weightkg": 6.6
   },
   {
     "id": "rampardos",
@@ -119098,7 +120051,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 102.5
   },
   {
     "id": "rapidash",
@@ -119202,7 +120156,8 @@
     ],
     "aliases": [
       "烈焰馬"
-    ]
+    ],
+    "weightkg": 95
   },
   {
     "id": "rapidashgalar",
@@ -119285,7 +120240,8 @@
     ],
     "aliases": [
       "烈焰馬"
-    ]
+    ],
+    "weightkg": 80
   },
   {
     "id": "raticate",
@@ -119395,7 +120351,8 @@
     ],
     "aliases": [
       "拉達"
-    ]
+    ],
+    "weightkg": 18.5
   },
   {
     "id": "raticatealola",
@@ -119490,7 +120447,8 @@
     ],
     "aliases": [
       "拉達"
-    ]
+    ],
+    "weightkg": 25.5
   },
   {
     "id": "raticatealolatotem",
@@ -119579,7 +120537,8 @@
     ],
     "aliases": [
       "拉達"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "rattata",
@@ -119686,7 +120645,8 @@
     ],
     "aliases": [
       "小拉達"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "rattataalola",
@@ -119777,7 +120737,8 @@
     ],
     "aliases": [
       "小拉達"
-    ]
+    ],
+    "weightkg": 3.8
   },
   {
     "id": "rayquaza",
@@ -119910,7 +120871,8 @@
     ],
     "aliases": [
       "烈空坐"
-    ]
+    ],
+    "weightkg": 206.5
   },
   {
     "id": "rayquazamega",
@@ -120043,7 +121005,8 @@
     ],
     "aliases": [
       "烈空坐"
-    ]
+    ],
+    "weightkg": 392
   },
   {
     "id": "regice",
@@ -120152,7 +121115,8 @@
     ],
     "aliases": [
       "雷吉艾斯"
-    ]
+    ],
+    "weightkg": 175
   },
   {
     "id": "regidrago",
@@ -120220,7 +121184,8 @@
     ],
     "aliases": [
       "雷吉鐸拉戈"
-    ]
+    ],
+    "weightkg": 200
   },
   {
     "id": "regieleki",
@@ -120292,7 +121257,8 @@
     ],
     "aliases": [
       "雷吉艾勒奇"
-    ]
+    ],
+    "weightkg": 145
   },
   {
     "id": "regigigas",
@@ -120401,7 +121367,8 @@
     ],
     "aliases": [
       "雷吉奇卡斯"
-    ]
+    ],
+    "weightkg": 420
   },
   {
     "id": "regirock",
@@ -120514,7 +121481,8 @@
     ],
     "aliases": [
       "雷吉洛克"
-    ]
+    ],
+    "weightkg": 230
   },
   {
     "id": "registeel",
@@ -120629,7 +121597,8 @@
     ],
     "aliases": [
       "雷吉斯奇魯"
-    ]
+    ],
+    "weightkg": 205
   },
   {
     "id": "relicanth",
@@ -120735,7 +121704,8 @@
     ],
     "aliases": [
       "古空棘魚"
-    ]
+    ],
+    "weightkg": 23.4
   },
   {
     "id": "rellor",
@@ -120794,7 +121764,8 @@
     ],
     "aliases": [
       "蟲滾泥"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "remoraid",
@@ -120893,7 +121864,8 @@
     ],
     "aliases": [
       "鐵炮魚"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "reshiram",
@@ -121011,7 +121983,8 @@
     ],
     "aliases": [
       "萊希拉姆"
-    ]
+    ],
+    "weightkg": 330
   },
   {
     "id": "reuniclus",
@@ -121236,7 +122209,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 20.1
   },
   {
     "id": "revavroom",
@@ -121318,7 +122292,8 @@
     ],
     "aliases": [
       "普隆隆姆"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "rhydon",
@@ -121480,7 +122455,8 @@
     ],
     "aliases": [
       "鑽角犀獸"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "rhyhorn",
@@ -121615,7 +122591,8 @@
     ],
     "aliases": [
       "獨角犀牛"
-    ]
+    ],
+    "weightkg": 115
   },
   {
     "id": "rhyperior",
@@ -121873,7 +122850,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 282.8
   },
   {
     "id": "ribombee",
@@ -121984,7 +122962,8 @@
     ],
     "aliases": [
       "蝶結萌虻"
-    ]
+    ],
+    "weightkg": 0.5
   },
   {
     "id": "ribombeetotem",
@@ -122069,7 +123048,8 @@
     ],
     "aliases": [
       "蝶結萌虻"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "rillaboom",
@@ -122172,7 +123152,8 @@
     ],
     "aliases": [
       "轟擂金剛猩"
-    ]
+    ],
+    "weightkg": 90
   },
   {
     "id": "rillaboomgmax",
@@ -122275,7 +123256,8 @@
     ],
     "aliases": [
       "轟擂金剛猩"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "riolu",
@@ -122399,7 +123381,8 @@
     ],
     "aliases": [
       "利歐路"
-    ]
+    ],
+    "weightkg": 20.2
   },
   {
     "id": "roaringmoon",
@@ -122493,7 +123476,8 @@
     ],
     "aliases": [
       "轟鳴月"
-    ]
+    ],
+    "weightkg": 380
   },
   {
     "id": "rockruff",
@@ -122585,7 +123569,8 @@
     ],
     "aliases": [
       "岩狗狗"
-    ]
+    ],
+    "weightkg": 9.2
   },
   {
     "id": "rockruffdusk",
@@ -122675,7 +123660,8 @@
     ],
     "aliases": [
       "岩狗狗"
-    ]
+    ],
+    "weightkg": 9.2
   },
   {
     "id": "roggenrola",
@@ -122753,7 +123739,8 @@
     ],
     "aliases": [
       "石丸子"
-    ]
+    ],
+    "weightkg": 18
   },
   {
     "id": "rolycoly",
@@ -122823,7 +123810,8 @@
     ],
     "aliases": [
       "小炭仔"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "rookidee",
@@ -122897,7 +123885,8 @@
     ],
     "aliases": [
       "稚山雀"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "roselia",
@@ -123000,7 +123989,8 @@
     ],
     "aliases": [
       "毒薔薇"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "roserade",
@@ -123097,7 +124087,8 @@
     ],
     "aliases": [
       "羅絲雷朵"
-    ]
+    ],
+    "weightkg": 14.5
   },
   {
     "id": "rotom",
@@ -123278,7 +124269,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rotomfan",
@@ -123363,7 +124355,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rotomfrost",
@@ -123514,7 +124507,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rotomheat",
@@ -123695,7 +124689,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rotommow",
@@ -123858,7 +124853,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rotomwash",
@@ -124117,7 +125113,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 0.3
   },
   {
     "id": "rowlet",
@@ -124219,7 +125216,8 @@
     ],
     "aliases": [
       "木木梟"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "rufflet",
@@ -124313,7 +125311,8 @@
     ],
     "aliases": [
       "毛頭小鷹"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "runerigus",
@@ -124406,7 +125405,8 @@
     ],
     "aliases": [
       "死神板"
-    ]
+    ],
+    "weightkg": 66.6
   },
   {
     "id": "sableye",
@@ -124827,7 +125827,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 11
   },
   {
     "id": "sableyemega",
@@ -124990,7 +125991,8 @@
     ],
     "aliases": [
       "勾魂眼"
-    ]
+    ],
+    "weightkg": 161
   },
   {
     "id": "salamence",
@@ -125111,7 +126113,8 @@
     ],
     "aliases": [
       "暴飛龍"
-    ]
+    ],
+    "weightkg": 102.6
   },
   {
     "id": "salamencemega",
@@ -125231,7 +126234,8 @@
     ],
     "aliases": [
       "暴飛龍"
-    ]
+    ],
+    "weightkg": 112.6
   },
   {
     "id": "salandit",
@@ -125335,7 +126339,8 @@
     ],
     "aliases": [
       "夜盜火蜥"
-    ]
+    ],
+    "weightkg": 4.8
   },
   {
     "id": "salazzle",
@@ -125455,7 +126460,8 @@
     ],
     "aliases": [
       "焰后蜥"
-    ]
+    ],
+    "weightkg": 22.2
   },
   {
     "id": "salazzletotem",
@@ -125538,7 +126544,8 @@
     ],
     "aliases": [
       "焰后蜥"
-    ]
+    ],
+    "weightkg": 81
   },
   {
     "id": "samurott",
@@ -125708,7 +126715,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 94.6
   },
   {
     "id": "samurotthisui",
@@ -125942,7 +126950,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 58.2
   },
   {
     "id": "sandaconda",
@@ -126022,7 +127031,8 @@
     ],
     "aliases": [
       "沙螺蟒"
-    ]
+    ],
+    "weightkg": 65.5
   },
   {
     "id": "sandacondagmax",
@@ -126102,7 +127112,8 @@
     ],
     "aliases": [
       "沙螺蟒"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "sandile",
@@ -126210,7 +127221,8 @@
     ],
     "aliases": [
       "黑眼鱷"
-    ]
+    ],
+    "weightkg": 15.2
   },
   {
     "id": "sandshrew",
@@ -126335,7 +127347,8 @@
     ],
     "aliases": [
       "穿山鼠"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "sandshrewalola",
@@ -126453,7 +127466,8 @@
     ],
     "aliases": [
       "穿山鼠"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "sandslash",
@@ -126580,7 +127594,8 @@
     ],
     "aliases": [
       "穿山王"
-    ]
+    ],
+    "weightkg": 29.5
   },
   {
     "id": "sandslashalola",
@@ -126701,7 +127716,8 @@
     ],
     "aliases": [
       "穿山王"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "sandyshocks",
@@ -126781,7 +127797,8 @@
     ],
     "aliases": [
       "沙鐵皮"
-    ]
+    ],
+    "weightkg": 60
   },
   {
     "id": "sandygast",
@@ -126880,7 +127897,8 @@
     ],
     "aliases": [
       "沙丘娃"
-    ]
+    ],
+    "weightkg": 70
   },
   {
     "id": "sawk",
@@ -126975,7 +127993,8 @@
     ],
     "aliases": [
       "打擊鬼"
-    ]
+    ],
+    "weightkg": 51
   },
   {
     "id": "sawsbuck",
@@ -127083,7 +128102,8 @@
     ],
     "aliases": [
       "萌芽鹿"
-    ]
+    ],
+    "weightkg": 92.5
   },
   {
     "id": "scatterbug",
@@ -127119,7 +128139,8 @@
     ],
     "aliases": [
       "粉蝶蟲"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "sceptile",
@@ -127380,7 +128401,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 52.2
   },
   {
     "id": "sceptilemega",
@@ -127523,7 +128545,8 @@
     ],
     "aliases": [
       "蜥蜴王"
-    ]
+    ],
+    "weightkg": 55.2
   },
   {
     "id": "scizor",
@@ -127778,7 +128801,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 118
   },
   {
     "id": "scizormega",
@@ -127901,7 +128925,8 @@
     ],
     "aliases": [
       "巨鉗螳螂"
-    ]
+    ],
+    "weightkg": 125
   },
   {
     "id": "scolipede",
@@ -128070,7 +129095,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 200.5
   },
   {
     "id": "scolipedemega",
@@ -128167,7 +129193,8 @@
     ],
     "aliases": [
       "蜈蚣王"
-    ]
+    ],
+    "weightkg": 230.5
   },
   {
     "id": "scorbunny",
@@ -128249,7 +129276,8 @@
     ],
     "aliases": [
       "炎兔兒"
-    ]
+    ],
+    "weightkg": 4.5
   },
   {
     "id": "scovillain",
@@ -128454,7 +129482,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 15
   },
   {
     "id": "scovillainmega",
@@ -128527,7 +129556,8 @@
     ],
     "aliases": [
       "狠辣椒"
-    ]
+    ],
+    "weightkg": 22
   },
   {
     "id": "scrafty",
@@ -128873,7 +129903,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 30
   },
   {
     "id": "scraftymega",
@@ -129003,7 +130034,8 @@
     ],
     "aliases": [
       "頭巾混混"
-    ]
+    ],
+    "weightkg": 31
   },
   {
     "id": "scraggy",
@@ -129132,7 +130164,8 @@
     ],
     "aliases": [
       "滑滑小子"
-    ]
+    ],
+    "weightkg": 11.8
   },
   {
     "id": "screamtail",
@@ -129238,7 +130271,8 @@
     ],
     "aliases": [
       "吼叫尾"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "scyther",
@@ -129355,7 +130389,8 @@
     ],
     "aliases": [
       "飛天螳螂"
-    ]
+    ],
+    "weightkg": 56
   },
   {
     "id": "seadra",
@@ -129452,7 +130487,8 @@
     ],
     "aliases": [
       "海刺龍"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "seaking",
@@ -129553,7 +130589,8 @@
     ],
     "aliases": [
       "金魚王"
-    ]
+    ],
+    "weightkg": 39
   },
   {
     "id": "sealeo",
@@ -129640,7 +130677,8 @@
     ],
     "aliases": [
       "海魔獅"
-    ]
+    ],
+    "weightkg": 87.6
   },
   {
     "id": "seedot",
@@ -129742,7 +130780,8 @@
     ],
     "aliases": [
       "橡實果"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "seel",
@@ -129856,7 +130895,8 @@
     ],
     "aliases": [
       "小海獅"
-    ]
+    ],
+    "weightkg": 90
   },
   {
     "id": "seismitoad",
@@ -129960,7 +131000,8 @@
     ],
     "aliases": [
       "蟾蜍王"
-    ]
+    ],
+    "weightkg": 62
   },
   {
     "id": "sentret",
@@ -130086,7 +131127,8 @@
     ],
     "aliases": [
       "尾立"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "serperior",
@@ -130295,7 +131337,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 63
   },
   {
     "id": "servine",
@@ -130390,7 +131433,8 @@
     ],
     "aliases": [
       "青藤蛇"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "seviper",
@@ -130520,7 +131564,8 @@
     ],
     "aliases": [
       "飯匙蛇"
-    ]
+    ],
+    "weightkg": 52.5
   },
   {
     "id": "sewaddle",
@@ -130614,7 +131659,8 @@
     ],
     "aliases": [
       "蟲寶包"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "sharpedo",
@@ -130724,7 +131770,8 @@
     ],
     "aliases": [
       "巨牙鯊"
-    ]
+    ],
+    "weightkg": 88.8
   },
   {
     "id": "sharpedomega",
@@ -130833,7 +131880,8 @@
     ],
     "aliases": [
       "巨牙鯊"
-    ]
+    ],
+    "weightkg": 130.3
   },
   {
     "id": "shaymin",
@@ -130930,7 +131978,8 @@
     ],
     "aliases": [
       "謝米"
-    ]
+    ],
+    "weightkg": 2.1
   },
   {
     "id": "shayminsky",
@@ -131028,7 +132077,8 @@
     ],
     "aliases": [
       "謝米"
-    ]
+    ],
+    "weightkg": 5.2
   },
   {
     "id": "shedinja",
@@ -131124,7 +132174,8 @@
     ],
     "aliases": [
       "脫殼忍者"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "shelgon",
@@ -131220,7 +132271,8 @@
     ],
     "aliases": [
       "甲殼龍"
-    ]
+    ],
+    "weightkg": 110.5
   },
   {
     "id": "shellder",
@@ -131323,7 +132375,8 @@
     ],
     "aliases": [
       "大舌貝"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "shellos",
@@ -131425,7 +132478,8 @@
     ],
     "aliases": [
       "無殼海兔"
-    ]
+    ],
+    "weightkg": 6.3
   },
   {
     "id": "shelmet",
@@ -131504,7 +132558,8 @@
     ],
     "aliases": [
       "小嘴蝸"
-    ]
+    ],
+    "weightkg": 7.7
   },
   {
     "id": "shieldon",
@@ -131608,7 +132663,8 @@
     ],
     "aliases": [
       "盾甲龍"
-    ]
+    ],
+    "weightkg": 57
   },
   {
     "id": "shiftry",
@@ -131769,7 +132825,8 @@
     ],
     "aliases": [
       "狡猾天狗"
-    ]
+    ],
+    "weightkg": 59.6
   },
   {
     "id": "shiinotic",
@@ -131855,7 +132912,8 @@
     ],
     "aliases": [
       "燈罩夜菇"
-    ]
+    ],
+    "weightkg": 11.5
   },
   {
     "id": "shinx",
@@ -131954,7 +133012,8 @@
     ],
     "aliases": [
       "小貓怪"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "shroodle",
@@ -132035,7 +133094,8 @@
     ],
     "aliases": [
       "滋汁鼴"
-    ]
+    ],
+    "weightkg": 0.7
   },
   {
     "id": "shroomish",
@@ -132125,7 +133185,8 @@
     ],
     "aliases": [
       "蘑蘑菇"
-    ]
+    ],
+    "weightkg": 4.5
   },
   {
     "id": "shuckle",
@@ -132234,7 +133295,8 @@
     ],
     "aliases": [
       "壺壺"
-    ]
+    ],
+    "weightkg": 20.5
   },
   {
     "id": "shuppet",
@@ -132349,7 +133411,8 @@
     ],
     "aliases": [
       "怨影娃娃"
-    ]
+    ],
+    "weightkg": 2.3
   },
   {
     "id": "sigilyph",
@@ -132460,7 +133523,8 @@
     ],
     "aliases": [
       "象徵鳥"
-    ]
+    ],
+    "weightkg": 14
   },
   {
     "id": "silcoon",
@@ -132490,7 +133554,8 @@
     ],
     "aliases": [
       "甲殼繭"
-    ]
+    ],
+    "weightkg": 10
   },
   {
     "id": "silicobra",
@@ -132560,7 +133625,8 @@
     ],
     "aliases": [
       "沙包蛇"
-    ]
+    ],
+    "weightkg": 7.6
   },
   {
     "id": "silvally",
@@ -132671,7 +133737,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallybug",
@@ -132782,7 +133849,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallydark",
@@ -132893,7 +133961,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallydragon",
@@ -133004,7 +134073,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyelectric",
@@ -133115,7 +134185,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyfairy",
@@ -133226,7 +134297,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyfighting",
@@ -133337,7 +134409,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyfire",
@@ -133448,7 +134521,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyflying",
@@ -133559,7 +134633,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyghost",
@@ -133670,7 +134745,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallygrass",
@@ -133781,7 +134857,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyground",
@@ -133892,7 +134969,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyice",
@@ -134003,7 +135081,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallypoison",
@@ -134114,7 +135193,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallypsychic",
@@ -134225,7 +135305,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallyrock",
@@ -134336,7 +135417,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallysteel",
@@ -134447,7 +135529,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "silvallywater",
@@ -134558,7 +135641,8 @@
     ],
     "aliases": [
       "銀伴戰獸"
-    ]
+    ],
+    "weightkg": 100.5
   },
   {
     "id": "simipour",
@@ -134651,7 +135735,8 @@
     ],
     "aliases": [
       "冷水猿"
-    ]
+    ],
+    "weightkg": 29
   },
   {
     "id": "simisage",
@@ -134741,7 +135826,8 @@
     ],
     "aliases": [
       "花椰猿"
-    ]
+    ],
+    "weightkg": 30.5
   },
   {
     "id": "simisear",
@@ -134891,7 +135977,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 28
   },
   {
     "id": "sinistcha",
@@ -135299,7 +136386,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 2.2
   },
   {
     "id": "sinistchamasterpiece",
@@ -135367,7 +136455,8 @@
     ],
     "aliases": [
       "來悲粗茶"
-    ]
+    ],
+    "weightkg": 2.2
   },
   {
     "id": "sinistea",
@@ -135439,7 +136528,8 @@
     ],
     "aliases": [
       "來悲茶"
-    ]
+    ],
+    "weightkg": 0.2
   },
   {
     "id": "sinisteaantique",
@@ -135512,7 +136602,8 @@
     ],
     "aliases": [
       "來悲茶"
-    ]
+    ],
+    "weightkg": 0.2
   },
   {
     "id": "sirfetchd",
@@ -135582,7 +136673,8 @@
     ],
     "aliases": [
       "蔥遊兵"
-    ]
+    ],
+    "weightkg": 117
   },
   {
     "id": "sizzlipede",
@@ -135647,7 +136739,8 @@
     ],
     "aliases": [
       "燒火蚣"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "skarmory",
@@ -135829,7 +136922,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 50.5
   },
   {
     "id": "skarmorymega",
@@ -135945,7 +137039,8 @@
     ],
     "aliases": [
       "盔甲鳥"
-    ]
+    ],
+    "weightkg": 40.4
   },
   {
     "id": "skeledirge",
@@ -136092,7 +137187,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 326.5
   },
   {
     "id": "skiddo",
@@ -136187,7 +137283,8 @@
     ],
     "aliases": [
       "坐騎小羊"
-    ]
+    ],
+    "weightkg": 31
   },
   {
     "id": "skiploom",
@@ -136291,7 +137388,8 @@
     ],
     "aliases": [
       "毽子花"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "skitty",
@@ -136401,7 +137499,8 @@
     ],
     "aliases": [
       "向尾喵"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "skorupi",
@@ -136506,7 +137605,8 @@
     ],
     "aliases": [
       "鉗尾蠍"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "skrelp",
@@ -136603,7 +137703,8 @@
     ],
     "aliases": [
       "垃垃藻"
-    ]
+    ],
+    "weightkg": 7.3
   },
   {
     "id": "skuntank",
@@ -136725,7 +137826,8 @@
     ],
     "aliases": [
       "坦克臭鼬"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "skwovet",
@@ -136798,7 +137900,8 @@
     ],
     "aliases": [
       "貪心栗鼠"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "slaking",
@@ -136947,7 +138050,8 @@
     ],
     "aliases": [
       "請假王"
-    ]
+    ],
+    "weightkg": 130.5
   },
   {
     "id": "slakoth",
@@ -137068,7 +138172,8 @@
     ],
     "aliases": [
       "懶人獺"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "sliggoo",
@@ -137146,7 +138251,8 @@
     ],
     "aliases": [
       "黏美兒"
-    ]
+    ],
+    "weightkg": 17.5
   },
   {
     "id": "sliggoohisui",
@@ -137218,7 +138324,8 @@
     ],
     "aliases": [
       "黏美兒"
-    ]
+    ],
+    "weightkg": 68.5
   },
   {
     "id": "slitherwing",
@@ -137301,7 +138408,8 @@
     ],
     "aliases": [
       "爬地翅"
-    ]
+    ],
+    "weightkg": 92
   },
   {
     "id": "slowbro",
@@ -137612,7 +138720,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 78.5
   },
   {
     "id": "slowbrogalar",
@@ -137830,7 +138939,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 70.5
   },
   {
     "id": "slowbromega",
@@ -137991,7 +139101,8 @@
     ],
     "aliases": [
       "呆殼獸"
-    ]
+    ],
+    "weightkg": 120
   },
   {
     "id": "slowking",
@@ -138212,7 +139323,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 79.5
   },
   {
     "id": "slowkinggalar",
@@ -138456,7 +139568,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 79.5
   },
   {
     "id": "slowpoke",
@@ -138598,7 +139711,8 @@
     ],
     "aliases": [
       "呆呆獸"
-    ]
+    ],
+    "weightkg": 36
   },
   {
     "id": "slowpokegalar",
@@ -138703,7 +139817,8 @@
     ],
     "aliases": [
       "呆呆獸"
-    ]
+    ],
+    "weightkg": 36
   },
   {
     "id": "slugma",
@@ -138810,7 +139925,8 @@
     ],
     "aliases": [
       "熔岩蟲"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "slurpuff",
@@ -138954,7 +140070,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 5
   },
   {
     "id": "smeargle",
@@ -138994,7 +140111,8 @@
     ],
     "aliases": [
       "圖圖犬"
-    ]
+    ],
+    "weightkg": 58
   },
   {
     "id": "smoliv",
@@ -139057,7 +140175,8 @@
     ],
     "aliases": [
       "迷你芙"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "smoochum",
@@ -139177,7 +140296,8 @@
     ],
     "aliases": [
       "迷唇娃"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "sneasel",
@@ -139322,7 +140442,8 @@
     ],
     "aliases": [
       "狃拉"
-    ]
+    ],
+    "weightkg": 28
   },
   {
     "id": "sneaselhisui",
@@ -139414,7 +140535,8 @@
     ],
     "aliases": [
       "狃拉"
-    ]
+    ],
+    "weightkg": 27
   },
   {
     "id": "sneasler",
@@ -139775,7 +140897,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 43
   },
   {
     "id": "snivy",
@@ -139879,7 +141002,8 @@
     ],
     "aliases": [
       "藤藤蛇"
-    ]
+    ],
+    "weightkg": 8.1
   },
   {
     "id": "snom",
@@ -139927,7 +141051,8 @@
     ],
     "aliases": [
       "雪吞蟲"
-    ]
+    ],
+    "weightkg": 3.8
   },
   {
     "id": "snorlax",
@@ -140264,7 +141389,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 460
   },
   {
     "id": "snorlaxgmax",
@@ -140429,7 +141555,8 @@
     ],
     "aliases": [
       "卡比獸"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "snorunt",
@@ -140518,7 +141645,8 @@
     ],
     "aliases": [
       "雪童子"
-    ]
+    ],
+    "weightkg": 16.8
   },
   {
     "id": "snover",
@@ -140620,7 +141748,8 @@
     ],
     "aliases": [
       "雪笠怪"
-    ]
+    ],
+    "weightkg": 50.5
   },
   {
     "id": "snubbull",
@@ -140758,7 +141887,8 @@
     ],
     "aliases": [
       "布魯"
-    ]
+    ],
+    "weightkg": 7.8
   },
   {
     "id": "sobble",
@@ -140830,7 +141960,8 @@
     ],
     "aliases": [
       "淚眼蜥"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "solgaleo",
@@ -140943,7 +142074,8 @@
     ],
     "aliases": [
       "索爾迦雷歐"
-    ]
+    ],
+    "weightkg": 230
   },
   {
     "id": "solosis",
@@ -141049,7 +142181,8 @@
     ],
     "aliases": [
       "單卵細胞球"
-    ]
+    ],
+    "weightkg": 1
   },
   {
     "id": "solrock",
@@ -141173,7 +142306,8 @@
     ],
     "aliases": [
       "太陽岩"
-    ]
+    ],
+    "weightkg": 154
   },
   {
     "id": "spearow",
@@ -141269,7 +142403,8 @@
     ],
     "aliases": [
       "烈雀"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "spectrier",
@@ -141344,7 +142479,8 @@
     ],
     "aliases": [
       "靈幽馬"
-    ]
+    ],
+    "weightkg": 44.5
   },
   {
     "id": "spewpa",
@@ -141378,7 +142514,8 @@
     ],
     "aliases": [
       "粉蝶蛹"
-    ]
+    ],
+    "weightkg": 8.4
   },
   {
     "id": "spheal",
@@ -141473,7 +142610,8 @@
     ],
     "aliases": [
       "海豹球"
-    ]
+    ],
+    "weightkg": 39.5
   },
   {
     "id": "spidops",
@@ -141554,7 +142692,8 @@
     ],
     "aliases": [
       "操陷蛛"
-    ]
+    ],
+    "weightkg": 16.5
   },
   {
     "id": "spinarak",
@@ -141663,7 +142802,8 @@
     ],
     "aliases": [
       "圓絲蛛"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "spinda",
@@ -141792,7 +142932,8 @@
     ],
     "aliases": [
       "晃晃斑"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "spiritomb",
@@ -141904,7 +143045,8 @@
     ],
     "aliases": [
       "花岩怪"
-    ]
+    ],
+    "weightkg": 108
   },
   {
     "id": "spoink",
@@ -142023,7 +143165,8 @@
     ],
     "aliases": [
       "跳跳豬"
-    ]
+    ],
+    "weightkg": 30.6
   },
   {
     "id": "sprigatito",
@@ -142095,7 +143238,8 @@
     ],
     "aliases": [
       "新葉喵"
-    ]
+    ],
+    "weightkg": 4.1
   },
   {
     "id": "spritzee",
@@ -142184,7 +143328,8 @@
     ],
     "aliases": [
       "粉香香"
-    ]
+    ],
+    "weightkg": 0.5
   },
   {
     "id": "squawkabilly",
@@ -142259,7 +143404,8 @@
     ],
     "aliases": [
       "怒鸚哥"
-    ]
+    ],
+    "weightkg": 2.4
   },
   {
     "id": "squawkabillyblue",
@@ -142334,7 +143480,8 @@
     ],
     "aliases": [
       "怒鸚哥"
-    ]
+    ],
+    "weightkg": 2.4
   },
   {
     "id": "squawkabillywhite",
@@ -142409,7 +143556,8 @@
     ],
     "aliases": [
       "怒鸚哥"
-    ]
+    ],
+    "weightkg": 2.4
   },
   {
     "id": "squawkabillyyellow",
@@ -142484,7 +143632,8 @@
     ],
     "aliases": [
       "怒鸚哥"
-    ]
+    ],
+    "weightkg": 2.4
   },
   {
     "id": "squirtle",
@@ -142619,7 +143768,8 @@
     ],
     "aliases": [
       "傑尼龜"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "stakataka",
@@ -142711,7 +143861,8 @@
     ],
     "aliases": [
       "壘磊石"
-    ]
+    ],
+    "weightkg": 820
   },
   {
     "id": "stantler",
@@ -142839,7 +143990,8 @@
     ],
     "aliases": [
       "驚角鹿"
-    ]
+    ],
+    "weightkg": 71.2
   },
   {
     "id": "staraptor",
@@ -143120,7 +144272,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 24.9
   },
   {
     "id": "staraptormega",
@@ -143210,7 +144363,8 @@
     ],
     "aliases": [
       "姆克鷹"
-    ]
+    ],
+    "weightkg": 50
   },
   {
     "id": "staravia",
@@ -143295,7 +144449,8 @@
     ],
     "aliases": [
       "姆克鳥"
-    ]
+    ],
+    "weightkg": 15.5
   },
   {
     "id": "starly",
@@ -143387,7 +144542,8 @@
     ],
     "aliases": [
       "姆克兒"
-    ]
+    ],
+    "weightkg": 2
   },
   {
     "id": "starmie",
@@ -143668,7 +144824,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 80
   },
   {
     "id": "starmiemega",
@@ -143787,7 +144944,8 @@
     ],
     "aliases": [
       "寶石海星"
-    ]
+    ],
+    "weightkg": 80
   },
   {
     "id": "staryu",
@@ -143890,7 +145048,8 @@
     ],
     "aliases": [
       "海星星"
-    ]
+    ],
+    "weightkg": 34.5
   },
   {
     "id": "steelix",
@@ -144162,7 +145321,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 400
   },
   {
     "id": "steelixmega",
@@ -144284,7 +145444,8 @@
     ],
     "aliases": [
       "大鋼蛇"
-    ]
+    ],
+    "weightkg": 740
   },
   {
     "id": "steenee",
@@ -144376,7 +145537,8 @@
     ],
     "aliases": [
       "甜舞妮"
-    ]
+    ],
+    "weightkg": 8.2
   },
   {
     "id": "stonjourner",
@@ -144456,7 +145618,8 @@
     ],
     "aliases": [
       "巨石丁"
-    ]
+    ],
+    "weightkg": 520
   },
   {
     "id": "stoutland",
@@ -144544,7 +145707,8 @@
     ],
     "aliases": [
       "長毛狗"
-    ]
+    ],
+    "weightkg": 61
   },
   {
     "id": "stufful",
@@ -144634,7 +145798,8 @@
     ],
     "aliases": [
       "童偶熊"
-    ]
+    ],
+    "weightkg": 6.8
   },
   {
     "id": "stunfisk",
@@ -144794,7 +145959,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 11
   },
   {
     "id": "stunfiskgalar",
@@ -144877,7 +146043,8 @@
     ],
     "aliases": [
       "泥巴魚"
-    ]
+    ],
+    "weightkg": 20.5
   },
   {
     "id": "stunky",
@@ -144998,7 +146165,8 @@
     ],
     "aliases": [
       "臭鼬噗"
-    ]
+    ],
+    "weightkg": 19.2
   },
   {
     "id": "sudowoodo",
@@ -145125,7 +146293,8 @@
     ],
     "aliases": [
       "樹才怪"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "suicune",
@@ -145236,7 +146405,8 @@
     ],
     "aliases": [
       "水君"
-    ]
+    ],
+    "weightkg": 187
   },
   {
     "id": "sunflora",
@@ -145332,7 +146502,8 @@
     ],
     "aliases": [
       "向日花怪"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "sunkern",
@@ -145422,7 +146593,8 @@
     ],
     "aliases": [
       "向日種子"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "surskit",
@@ -145524,7 +146696,8 @@
     ],
     "aliases": [
       "溜溜糖球"
-    ]
+    ],
+    "weightkg": 1.7
   },
   {
     "id": "swablu",
@@ -145634,7 +146807,8 @@
     ],
     "aliases": [
       "青綿鳥"
-    ]
+    ],
+    "weightkg": 1.2
   },
   {
     "id": "swadloon",
@@ -145720,7 +146894,8 @@
     ],
     "aliases": [
       "寶包繭"
-    ]
+    ],
+    "weightkg": 7.3
   },
   {
     "id": "swalot",
@@ -145837,7 +147012,8 @@
     ],
     "aliases": [
       "吞食獸"
-    ]
+    ],
+    "weightkg": 80
   },
   {
     "id": "swampert",
@@ -146236,7 +147412,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 81.9
   },
   {
     "id": "swampertmega",
@@ -146372,7 +147549,8 @@
     ],
     "aliases": [
       "巨沼怪"
-    ]
+    ],
+    "weightkg": 102
   },
   {
     "id": "swanna",
@@ -146462,7 +147640,8 @@
     ],
     "aliases": [
       "舞天鵝"
-    ]
+    ],
+    "weightkg": 24.2
   },
   {
     "id": "swellow",
@@ -146546,7 +147725,8 @@
     ],
     "aliases": [
       "大王燕"
-    ]
+    ],
+    "weightkg": 19.8
   },
   {
     "id": "swinub",
@@ -146652,7 +147832,8 @@
     ],
     "aliases": [
       "小山豬"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "swirlix",
@@ -146736,7 +147917,8 @@
     ],
     "aliases": [
       "綿綿泡芙"
-    ]
+    ],
+    "weightkg": 3.5
   },
   {
     "id": "swoobat",
@@ -146853,7 +148035,8 @@
     ],
     "aliases": [
       "心蝙蝠"
-    ]
+    ],
+    "weightkg": 10.5
   },
   {
     "id": "sylveon",
@@ -147228,7 +148411,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 23.5
   },
   {
     "id": "tadbulb",
@@ -147295,7 +148479,8 @@
     ],
     "aliases": [
       "光蚪仔"
-    ]
+    ],
+    "weightkg": 0.4
   },
   {
     "id": "taillow",
@@ -147384,7 +148569,8 @@
     ],
     "aliases": [
       "傲骨燕"
-    ]
+    ],
+    "weightkg": 2.3
   },
   {
     "id": "talonflame",
@@ -147701,7 +148887,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 24.5
   },
   {
     "id": "tandemaus",
@@ -147778,7 +148965,8 @@
     ],
     "aliases": [
       "一對鼠"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "tangela",
@@ -147885,7 +149073,8 @@
     ],
     "aliases": [
       "蔓藤怪"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "tangrowth",
@@ -147995,7 +149184,8 @@
     ],
     "aliases": [
       "巨蔓藤"
-    ]
+    ],
+    "weightkg": 128.6
   },
   {
     "id": "tapubulu",
@@ -148103,7 +149293,8 @@
     ],
     "aliases": [
       "卡璞・哞哞"
-    ]
+    ],
+    "weightkg": 45.5
   },
   {
     "id": "tapufini",
@@ -148201,7 +149392,8 @@
     ],
     "aliases": [
       "卡璞・鰭鰭"
-    ]
+    ],
+    "weightkg": 21.2
   },
   {
     "id": "tapukoko",
@@ -148302,7 +149494,8 @@
     ],
     "aliases": [
       "卡璞・鳴鳴"
-    ]
+    ],
+    "weightkg": 20.5
   },
   {
     "id": "tapulele",
@@ -148400,7 +149593,8 @@
     ],
     "aliases": [
       "卡璞・蝶蝶"
-    ]
+    ],
+    "weightkg": 18.6
   },
   {
     "id": "tarountula",
@@ -148470,7 +149664,8 @@
     ],
     "aliases": [
       "團珠蛛"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "tatsugiri",
@@ -148533,7 +149728,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "tatsugiricurlymega",
@@ -148596,7 +149792,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "tatsugiridroopy",
@@ -148659,7 +149856,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "tatsugiridroopymega",
@@ -148722,7 +149920,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "tatsugiristretchy",
@@ -148786,7 +149985,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 8
   },
   {
     "id": "tatsugiristretchymega",
@@ -148849,7 +150049,8 @@
     ],
     "aliases": [
       "米立龍"
-    ]
+    ],
+    "weightkg": 24
   },
   {
     "id": "tauros",
@@ -148972,7 +150173,8 @@
     ],
     "aliases": [
       "肯泰羅"
-    ]
+    ],
+    "weightkg": 88.4
   },
   {
     "id": "taurospaldeaaqua",
@@ -149160,7 +150362,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 110
   },
   {
     "id": "taurospaldeablaze",
@@ -149243,7 +150446,8 @@
     ],
     "aliases": [
       "肯泰羅"
-    ]
+    ],
+    "weightkg": 85
   },
   {
     "id": "taurospaldeacombat",
@@ -149320,7 +150524,8 @@
     ],
     "aliases": [
       "肯泰羅"
-    ]
+    ],
+    "weightkg": 115
   },
   {
     "id": "teddiursa",
@@ -149449,7 +150654,8 @@
     ],
     "aliases": [
       "熊寶寶"
-    ]
+    ],
+    "weightkg": 8.8
   },
   {
     "id": "tentacool",
@@ -149569,7 +150775,8 @@
     ],
     "aliases": [
       "瑪瑙水母"
-    ]
+    ],
+    "weightkg": 45.5
   },
   {
     "id": "tentacruel",
@@ -149691,7 +150898,8 @@
     ],
     "aliases": [
       "毒刺水母"
-    ]
+    ],
+    "weightkg": 55
   },
   {
     "id": "tepig",
@@ -149789,7 +150997,8 @@
     ],
     "aliases": [
       "暖暖豬"
-    ]
+    ],
+    "weightkg": 9.9
   },
   {
     "id": "terapagos",
@@ -149873,7 +151082,8 @@
     ],
     "aliases": [
       "太樂巴戈斯"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "terapagosstellar",
@@ -149957,7 +151167,8 @@
     ],
     "aliases": [
       "太樂巴戈斯"
-    ]
+    ],
+    "weightkg": 77
   },
   {
     "id": "terapagosterastal",
@@ -150041,7 +151252,8 @@
     ],
     "aliases": [
       "太樂巴戈斯"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "terrakion",
@@ -150142,7 +151354,8 @@
     ],
     "aliases": [
       "代拉基翁"
-    ]
+    ],
+    "weightkg": 260
   },
   {
     "id": "thievul",
@@ -150215,7 +151428,8 @@
     ],
     "aliases": [
       "狐大盜"
-    ]
+    ],
+    "weightkg": 19.9
   },
   {
     "id": "throh",
@@ -150312,7 +151526,8 @@
     ],
     "aliases": [
       "投摔鬼"
-    ]
+    ],
+    "weightkg": 55.5
   },
   {
     "id": "thundurus",
@@ -150429,7 +151644,8 @@
     ],
     "aliases": [
       "雷電雲"
-    ]
+    ],
+    "weightkg": 61
   },
   {
     "id": "thundurustherian",
@@ -150545,7 +151761,8 @@
     ],
     "aliases": [
       "雷電雲"
-    ]
+    ],
+    "weightkg": 61
   },
   {
     "id": "thwackey",
@@ -150625,7 +151842,8 @@
     ],
     "aliases": [
       "啪咚猴"
-    ]
+    ],
+    "weightkg": 14
   },
   {
     "id": "timburr",
@@ -150732,7 +151950,8 @@
     ],
     "aliases": [
       "搬運小匠"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "tinglu",
@@ -150804,7 +152023,8 @@
     ],
     "aliases": [
       "古鼎鹿"
-    ]
+    ],
+    "weightkg": 699.7
   },
   {
     "id": "tinkatink",
@@ -150878,7 +152098,8 @@
     ],
     "aliases": [
       "小鍛匠"
-    ]
+    ],
+    "weightkg": 8.9
   },
   {
     "id": "tinkaton",
@@ -151133,7 +152354,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 112.8
   },
   {
     "id": "tinkatuff",
@@ -151205,7 +152427,8 @@
     ],
     "aliases": [
       "巧鍛匠"
-    ]
+    ],
+    "weightkg": 59.1
   },
   {
     "id": "tirtouga",
@@ -151302,7 +152525,8 @@
     ],
     "aliases": [
       "原蓋海龜"
-    ]
+    ],
+    "weightkg": 16.5
   },
   {
     "id": "toedscool",
@@ -151387,7 +152611,8 @@
     ],
     "aliases": [
       "原野水母"
-    ]
+    ],
+    "weightkg": 33
   },
   {
     "id": "toedscruel",
@@ -151469,7 +152694,8 @@
     ],
     "aliases": [
       "陸地水母"
-    ]
+    ],
+    "weightkg": 58
   },
   {
     "id": "togedemaru",
@@ -151575,7 +152801,8 @@
     ],
     "aliases": [
       "托戈德瑪爾"
-    ]
+    ],
+    "weightkg": 3.3
   },
   {
     "id": "togedemarutotem",
@@ -151660,7 +152887,8 @@
     ],
     "aliases": [
       "托戈德瑪爾"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "togekiss",
@@ -151802,7 +153030,8 @@
     ],
     "aliases": [
       "波克基斯"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "togepi",
@@ -151930,7 +153159,8 @@
     ],
     "aliases": [
       "波克比"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "togetic",
@@ -152073,7 +153303,8 @@
     ],
     "aliases": [
       "波克基古"
-    ]
+    ],
+    "weightkg": 3.2
   },
   {
     "id": "torchic",
@@ -152181,7 +153412,8 @@
     ],
     "aliases": [
       "火稚雞"
-    ]
+    ],
+    "weightkg": 2.5
   },
   {
     "id": "torkoal",
@@ -152456,7 +153688,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 80.4
   },
   {
     "id": "tornadus",
@@ -152564,7 +153797,8 @@
     ],
     "aliases": [
       "龍捲雲"
-    ]
+    ],
+    "weightkg": 63
   },
   {
     "id": "tornadustherian",
@@ -152671,7 +153905,8 @@
     ],
     "aliases": [
       "龍捲雲"
-    ]
+    ],
+    "weightkg": 63
   },
   {
     "id": "torracat",
@@ -152759,7 +153994,8 @@
     ],
     "aliases": [
       "炎熱喵"
-    ]
+    ],
+    "weightkg": 25
   },
   {
     "id": "torterra",
@@ -152881,7 +154117,8 @@
     ],
     "aliases": [
       "土台龜"
-    ]
+    ],
+    "weightkg": 310
   },
   {
     "id": "totodile",
@@ -153006,7 +154243,8 @@
     ],
     "aliases": [
       "小鋸鱷"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "toucannon",
@@ -153162,7 +154400,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 26
   },
   {
     "id": "toxapex",
@@ -153375,7 +154614,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 14.5
   },
   {
     "id": "toxel",
@@ -153424,7 +154664,8 @@
     ],
     "aliases": [
       "毒電嬰"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "toxicroak",
@@ -153617,7 +154858,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 44.4
   },
   {
     "id": "toxtricity",
@@ -153725,7 +154967,8 @@
     ],
     "aliases": [
       "顫弦蠑螈"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "toxtricitygmax",
@@ -153833,7 +155076,8 @@
     ],
     "aliases": [
       "顫弦蠑螈"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "toxtricitylowkey",
@@ -153942,7 +155186,8 @@
     ],
     "aliases": [
       "顫弦蠑螈"
-    ]
+    ],
+    "weightkg": 40
   },
   {
     "id": "toxtricitylowkeygmax",
@@ -154050,7 +155295,8 @@
     ],
     "aliases": [
       "顫弦蠑螈"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "tranquill",
@@ -154124,7 +155370,8 @@
     ],
     "aliases": [
       "咕咕鴿"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "trapinch",
@@ -154214,7 +155461,8 @@
     ],
     "aliases": [
       "大顎蟻"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "treecko",
@@ -154338,7 +155586,8 @@
     ],
     "aliases": [
       "木守宮"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "trevenant",
@@ -154557,7 +155806,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 71
   },
   {
     "id": "tropius",
@@ -154681,7 +155931,8 @@
     ],
     "aliases": [
       "熱帶龍"
-    ]
+    ],
+    "weightkg": 100
   },
   {
     "id": "trubbish",
@@ -154765,7 +156016,8 @@
     ],
     "aliases": [
       "破破袋"
-    ]
+    ],
+    "weightkg": 31
   },
   {
     "id": "trumbeak",
@@ -154851,7 +156103,8 @@
     ],
     "aliases": [
       "喇叭啄鳥"
-    ]
+    ],
+    "weightkg": 14.8
   },
   {
     "id": "tsareena",
@@ -155097,7 +156350,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 21.4
   },
   {
     "id": "turtonator",
@@ -155203,7 +156457,8 @@
     ],
     "aliases": [
       "爆焰龜獸"
-    ]
+    ],
+    "weightkg": 212
   },
   {
     "id": "turtwig",
@@ -155310,7 +156565,8 @@
     ],
     "aliases": [
       "草苗龜"
-    ]
+    ],
+    "weightkg": 10.2
   },
   {
     "id": "tympole",
@@ -155388,7 +156644,8 @@
     ],
     "aliases": [
       "圓蝌蚪"
-    ]
+    ],
+    "weightkg": 4.5
   },
   {
     "id": "tynamo",
@@ -155421,7 +156678,8 @@
     ],
     "aliases": [
       "麻麻小魚"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "typenull",
@@ -155502,7 +156760,8 @@
     ],
     "aliases": [
       "屬性：空"
-    ]
+    ],
+    "weightkg": 120.5
   },
   {
     "id": "typhlosion",
@@ -155688,7 +156947,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 79.5
   },
   {
     "id": "typhlosionhisui",
@@ -155926,7 +157186,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 69.8
   },
   {
     "id": "tyranitar",
@@ -156343,7 +157604,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 202
   },
   {
     "id": "tyranitarmega",
@@ -156503,7 +157765,8 @@
     ],
     "aliases": [
       "班基拉斯"
-    ]
+    ],
+    "weightkg": 255
   },
   {
     "id": "tyrantrum",
@@ -156608,7 +157871,8 @@
     ],
     "aliases": [
       "怪顎龍"
-    ]
+    ],
+    "weightkg": 270
   },
   {
     "id": "tyrogue",
@@ -156700,7 +157964,8 @@
     ],
     "aliases": [
       "無畏小子"
-    ]
+    ],
+    "weightkg": 21
   },
   {
     "id": "tyrunt",
@@ -156802,7 +158067,8 @@
     ],
     "aliases": [
       "寶寶暴龍"
-    ]
+    ],
+    "weightkg": 26
   },
   {
     "id": "umbreon",
@@ -157051,7 +158317,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 27
   },
   {
     "id": "unfezant",
@@ -157130,7 +158397,8 @@
     ],
     "aliases": [
       "高傲雉雞"
-    ]
+    ],
+    "weightkg": 29
   },
   {
     "id": "unown",
@@ -157156,7 +158424,8 @@
     ],
     "aliases": [
       "未知圖騰"
-    ]
+    ],
+    "weightkg": 5
   },
   {
     "id": "ursaluna",
@@ -157258,7 +158527,8 @@
     ],
     "aliases": [
       "月月熊"
-    ]
+    ],
+    "weightkg": 290
   },
   {
     "id": "ursalunabloodmoon",
@@ -157353,7 +158623,8 @@
     ],
     "aliases": [
       "月月熊"
-    ]
+    ],
+    "weightkg": 333
   },
   {
     "id": "ursaring",
@@ -157485,7 +158756,8 @@
     ],
     "aliases": [
       "圈圈熊"
-    ]
+    ],
+    "weightkg": 125.8
   },
   {
     "id": "urshifu",
@@ -157586,7 +158858,8 @@
     ],
     "aliases": [
       "武道熊師"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "urshifugmax",
@@ -157687,7 +158960,8 @@
     ],
     "aliases": [
       "武道熊師"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "urshifurapidstrike",
@@ -157785,7 +159059,8 @@
     ],
     "aliases": [
       "武道熊師"
-    ]
+    ],
+    "weightkg": 105
   },
   {
     "id": "urshifurapidstrikegmax",
@@ -157886,7 +159161,8 @@
     ],
     "aliases": [
       "武道熊師"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "uxie",
@@ -158008,7 +159284,8 @@
     ],
     "aliases": [
       "由克希"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "vanillish",
@@ -158082,7 +159359,8 @@
     ],
     "aliases": [
       "多多冰"
-    ]
+    ],
+    "weightkg": 41
   },
   {
     "id": "vanillite",
@@ -158161,7 +159439,8 @@
     ],
     "aliases": [
       "迷你冰"
-    ]
+    ],
+    "weightkg": 5.7
   },
   {
     "id": "vanilluxe",
@@ -158316,7 +159595,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 57.5
   },
   {
     "id": "vaporeon",
@@ -158546,7 +159826,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 29
   },
   {
     "id": "varoom",
@@ -158620,7 +159901,8 @@
     ],
     "aliases": [
       "噗隆隆"
-    ]
+    ],
+    "weightkg": 35
   },
   {
     "id": "veluza",
@@ -158695,7 +159977,8 @@
     ],
     "aliases": [
       "輕身鱈"
-    ]
+    ],
+    "weightkg": 90
   },
   {
     "id": "venipede",
@@ -158775,7 +160058,8 @@
     ],
     "aliases": [
       "百足蜈蚣"
-    ]
+    ],
+    "weightkg": 5.3
   },
   {
     "id": "venomoth",
@@ -158896,7 +160180,8 @@
     ],
     "aliases": [
       "摩魯蛾"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "venonat",
@@ -158998,7 +160283,8 @@
     ],
     "aliases": [
       "毛球"
-    ]
+    ],
+    "weightkg": 30
   },
   {
     "id": "venusaur",
@@ -159340,7 +160626,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 100
   },
   {
     "id": "venusaurgmax",
@@ -159462,7 +160749,8 @@
     ],
     "aliases": [
       "妙蛙花"
-    ]
+    ],
+    "weightkg": 0
   },
   {
     "id": "venusaurmega",
@@ -159583,7 +160871,8 @@
     ],
     "aliases": [
       "妙蛙花"
-    ]
+    ],
+    "weightkg": 155.5
   },
   {
     "id": "vespiquen",
@@ -159703,7 +160992,8 @@
     ],
     "aliases": [
       "蜂女王"
-    ]
+    ],
+    "weightkg": 38.5
   },
   {
     "id": "vibrava",
@@ -159817,7 +161107,8 @@
     ],
     "aliases": [
       "超音波幼蟲"
-    ]
+    ],
+    "weightkg": 15.3
   },
   {
     "id": "victini",
@@ -159943,7 +161234,8 @@
     ],
     "aliases": [
       "比克提尼"
-    ]
+    ],
+    "weightkg": 4
   },
   {
     "id": "victreebel",
@@ -160143,7 +161435,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 15.5
   },
   {
     "id": "victreebelmega",
@@ -160254,7 +161547,8 @@
     ],
     "aliases": [
       "大食花"
-    ]
+    ],
+    "weightkg": 125.5
   },
   {
     "id": "vigoroth",
@@ -160389,7 +161683,8 @@
     ],
     "aliases": [
       "過動猿"
-    ]
+    ],
+    "weightkg": 46.5
   },
   {
     "id": "vikavolt",
@@ -160489,7 +161784,8 @@
     ],
     "aliases": [
       "鍬農炮蟲"
-    ]
+    ],
+    "weightkg": 45
   },
   {
     "id": "vikavolttotem",
@@ -160567,7 +161863,8 @@
     ],
     "aliases": [
       "鍬農炮蟲"
-    ]
+    ],
+    "weightkg": 147.5
   },
   {
     "id": "vileplume",
@@ -160821,7 +162118,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 18.6
   },
   {
     "id": "virizion",
@@ -160928,7 +162226,8 @@
     ],
     "aliases": [
       "畢力吉翁"
-    ]
+    ],
+    "weightkg": 200
   },
   {
     "id": "vivillon",
@@ -161141,7 +162440,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 17
   },
   {
     "id": "vivillonfancy",
@@ -161235,7 +162535,8 @@
     ],
     "aliases": [
       "彩粉蝶"
-    ]
+    ],
+    "weightkg": 17
   },
   {
     "id": "vivillonpokeball",
@@ -161328,7 +162629,8 @@
     ],
     "aliases": [
       "彩粉蝶"
-    ]
+    ],
+    "weightkg": 17
   },
   {
     "id": "volbeat",
@@ -161444,7 +162746,8 @@
     ],
     "aliases": [
       "電螢蟲"
-    ]
+    ],
+    "weightkg": 17.7
   },
   {
     "id": "volcanion",
@@ -161552,7 +162855,8 @@
     ],
     "aliases": [
       "波爾凱尼恩"
-    ]
+    ],
+    "weightkg": 195
   },
   {
     "id": "volcarona",
@@ -161817,7 +163121,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 46
   },
   {
     "id": "voltorb",
@@ -161912,7 +163217,8 @@
     ],
     "aliases": [
       "霹靂電球"
-    ]
+    ],
+    "weightkg": 10.4
   },
   {
     "id": "voltorbhisui",
@@ -161987,7 +163293,8 @@
     ],
     "aliases": [
       "霹靂電球"
-    ]
+    ],
+    "weightkg": 13
   },
   {
     "id": "vullaby",
@@ -162088,7 +163395,8 @@
     ],
     "aliases": [
       "禿鷹丫頭"
-    ]
+    ],
+    "weightkg": 9
   },
   {
     "id": "vulpix",
@@ -162201,7 +163509,8 @@
     ],
     "aliases": [
       "六尾"
-    ]
+    ],
+    "weightkg": 9.9
   },
   {
     "id": "vulpixalola",
@@ -162314,7 +163623,8 @@
     ],
     "aliases": [
       "六尾"
-    ]
+    ],
+    "weightkg": 9.9
   },
   {
     "id": "wailmer",
@@ -162409,7 +163719,8 @@
     ],
     "aliases": [
       "吼吼鯨"
-    ]
+    ],
+    "weightkg": 130
   },
   {
     "id": "wailord",
@@ -162504,7 +163815,8 @@
     ],
     "aliases": [
       "吼鯨王"
-    ]
+    ],
+    "weightkg": 398
   },
   {
     "id": "walkingwake",
@@ -162583,7 +163895,8 @@
     ],
     "aliases": [
       "波盪水"
-    ]
+    ],
+    "weightkg": 280
   },
   {
     "id": "walrein",
@@ -162684,7 +163997,8 @@
     ],
     "aliases": [
       "帝牙海獅"
-    ]
+    ],
+    "weightkg": 150.6
   },
   {
     "id": "wartortle",
@@ -162802,7 +164116,8 @@
     ],
     "aliases": [
       "卡咪龜"
-    ]
+    ],
+    "weightkg": 22.5
   },
   {
     "id": "watchog",
@@ -162906,7 +164221,8 @@
     ],
     "aliases": [
       "步哨鼠"
-    ]
+    ],
+    "weightkg": 27
   },
   {
     "id": "wattrel",
@@ -162980,7 +164296,8 @@
     ],
     "aliases": [
       "電海燕"
-    ]
+    ],
+    "weightkg": 3.6
   },
   {
     "id": "weavile",
@@ -163259,7 +164576,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 34
   },
   {
     "id": "weedle",
@@ -163290,7 +164608,8 @@
     ],
     "aliases": [
       "獨角蟲"
-    ]
+    ],
+    "weightkg": 3.2
   },
   {
     "id": "weepinbell",
@@ -163396,7 +164715,8 @@
     ],
     "aliases": [
       "口呆花"
-    ]
+    ],
+    "weightkg": 6.4
   },
   {
     "id": "weezing",
@@ -163501,7 +164821,8 @@
     ],
     "aliases": [
       "雙彈瓦斯"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "weezinggalar",
@@ -163600,7 +164921,8 @@
     ],
     "aliases": [
       "雙彈瓦斯"
-    ]
+    ],
+    "weightkg": 16
   },
   {
     "id": "whimsicott",
@@ -164007,7 +165329,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 6.6
   },
   {
     "id": "whirlipede",
@@ -164084,7 +165407,8 @@
     ],
     "aliases": [
       "車輪毬"
-    ]
+    ],
+    "weightkg": 58.5
   },
   {
     "id": "whiscash",
@@ -164193,7 +165517,8 @@
     ],
     "aliases": [
       "鯰魚王"
-    ]
+    ],
+    "weightkg": 23.6
   },
   {
     "id": "whismur",
@@ -164292,7 +165617,8 @@
     ],
     "aliases": [
       "咕妞妞"
-    ]
+    ],
+    "weightkg": 16.3
   },
   {
     "id": "wigglytuff",
@@ -164473,7 +165799,8 @@
     ],
     "aliases": [
       "胖可丁"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "wiglett",
@@ -164539,7 +165866,8 @@
     ],
     "aliases": [
       "海地鼠"
-    ]
+    ],
+    "weightkg": 1.8
   },
   {
     "id": "wimpod",
@@ -164603,7 +165931,8 @@
     ],
     "aliases": [
       "膽小蟲"
-    ]
+    ],
+    "weightkg": 12
   },
   {
     "id": "wingull",
@@ -164709,7 +166038,8 @@
     ],
     "aliases": [
       "長翅鷗"
-    ]
+    ],
+    "weightkg": 9.5
   },
   {
     "id": "wishiwashi",
@@ -164786,7 +166116,8 @@
     ],
     "aliases": [
       "弱丁魚"
-    ]
+    ],
+    "weightkg": 0.3
   },
   {
     "id": "wishiwashischool",
@@ -164863,7 +166194,8 @@
     ],
     "aliases": [
       "弱丁魚"
-    ]
+    ],
+    "weightkg": 78.6
   },
   {
     "id": "wochien",
@@ -164941,7 +166273,8 @@
     ],
     "aliases": [
       "古簡蝸"
-    ]
+    ],
+    "weightkg": 74.2
   },
   {
     "id": "wobbuffet",
@@ -164975,7 +166308,8 @@
     ],
     "aliases": [
       "果然翁"
-    ]
+    ],
+    "weightkg": 28.5
   },
   {
     "id": "woobat",
@@ -165092,7 +166426,8 @@
     ],
     "aliases": [
       "滾滾蝙蝠"
-    ]
+    ],
+    "weightkg": 2.1
   },
   {
     "id": "wooloo",
@@ -165149,7 +166484,8 @@
     ],
     "aliases": [
       "毛辮羊"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "wooper",
@@ -165269,7 +166605,8 @@
     ],
     "aliases": [
       "烏波"
-    ]
+    ],
+    "weightkg": 8.5
   },
   {
     "id": "wooperpaldea",
@@ -165356,7 +166693,8 @@
     ],
     "aliases": [
       "烏波"
-    ]
+    ],
+    "weightkg": 11
   },
   {
     "id": "wormadam",
@@ -165443,7 +166781,8 @@
     ],
     "aliases": [
       "結草貴婦"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "wormadamsandy",
@@ -165531,7 +166870,8 @@
     ],
     "aliases": [
       "結草貴婦"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "wormadamtrash",
@@ -165617,7 +166957,8 @@
     ],
     "aliases": [
       "結草貴婦"
-    ]
+    ],
+    "weightkg": 6.5
   },
   {
     "id": "wugtrio",
@@ -165685,7 +167026,8 @@
     ],
     "aliases": [
       "三海地鼠"
-    ]
+    ],
+    "weightkg": 5.4
   },
   {
     "id": "wurmple",
@@ -165717,7 +167059,8 @@
     ],
     "aliases": [
       "刺尾蟲"
-    ]
+    ],
+    "weightkg": 3.6
   },
   {
     "id": "wynaut",
@@ -165752,7 +167095,8 @@
     ],
     "aliases": [
       "小果然"
-    ]
+    ],
+    "weightkg": 14
   },
   {
     "id": "wyrdeer",
@@ -165934,7 +167278,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 95.1
   },
   {
     "id": "xatu",
@@ -166053,7 +167398,8 @@
     ],
     "aliases": [
       "天然鳥"
-    ]
+    ],
+    "weightkg": 15
   },
   {
     "id": "xerneas",
@@ -166147,7 +167493,8 @@
     ],
     "aliases": [
       "哲爾尼亞斯"
-    ]
+    ],
+    "weightkg": 215
   },
   {
     "id": "xerneasneutral",
@@ -166241,7 +167588,8 @@
     ],
     "aliases": [
       "哲爾尼亞斯"
-    ]
+    ],
+    "weightkg": 215
   },
   {
     "id": "xurkitree",
@@ -166324,7 +167672,8 @@
     ],
     "aliases": [
       "電束木"
-    ]
+    ],
+    "weightkg": 100
   },
   {
     "id": "yamask",
@@ -166419,7 +167768,8 @@
     ],
     "aliases": [
       "哭哭面具"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "yamaskgalar",
@@ -166495,7 +167845,8 @@
     ],
     "aliases": [
       "哭哭面具"
-    ]
+    ],
+    "weightkg": 1.5
   },
   {
     "id": "yamper",
@@ -166559,7 +167910,8 @@
     ],
     "aliases": [
       "來電汪"
-    ]
+    ],
+    "weightkg": 13.5
   },
   {
     "id": "yanma",
@@ -166659,7 +168011,8 @@
     ],
     "aliases": [
       "蜻蜻蜓"
-    ]
+    ],
+    "weightkg": 38
   },
   {
     "id": "yanmega",
@@ -166763,7 +168116,8 @@
     ],
     "aliases": [
       "遠古巨蜓"
-    ]
+    ],
+    "weightkg": 51.5
   },
   {
     "id": "yungoos",
@@ -166856,7 +168210,8 @@
     ],
     "aliases": [
       "貓鼬少"
-    ]
+    ],
+    "weightkg": 6
   },
   {
     "id": "yveltal",
@@ -166948,7 +168303,8 @@
     ],
     "aliases": [
       "伊裴爾塔爾"
-    ]
+    ],
+    "weightkg": 203
   },
   {
     "id": "zacian",
@@ -167036,7 +168392,8 @@
     ],
     "aliases": [
       "蒼響"
-    ]
+    ],
+    "weightkg": 110
   },
   {
     "id": "zaciancrowned",
@@ -167063,7 +168420,8 @@
     ],
     "aliases": [
       "蒼響"
-    ]
+    ],
+    "weightkg": 355
   },
   {
     "id": "zamazenta",
@@ -167156,7 +168514,8 @@
     ],
     "aliases": [
       "藏瑪然特"
-    ]
+    ],
+    "weightkg": 210
   },
   {
     "id": "zamazentacrowned",
@@ -167183,7 +168542,8 @@
     ],
     "aliases": [
       "藏瑪然特"
-    ]
+    ],
+    "weightkg": 785
   },
   {
     "id": "zangoose",
@@ -167333,7 +168693,8 @@
     ],
     "aliases": [
       "貓鼬斬"
-    ]
+    ],
+    "weightkg": 40.3
   },
   {
     "id": "zapdos",
@@ -167448,7 +168809,8 @@
     ],
     "aliases": [
       "閃電鳥"
-    ]
+    ],
+    "weightkg": 52.6
   },
   {
     "id": "zapdosgalar",
@@ -167536,7 +168898,8 @@
     ],
     "aliases": [
       "閃電鳥"
-    ]
+    ],
+    "weightkg": 58.2
   },
   {
     "id": "zarude",
@@ -167644,7 +169007,8 @@
     ],
     "aliases": [
       "薩戮德"
-    ]
+    ],
+    "weightkg": 70
   },
   {
     "id": "zarudedada",
@@ -167752,7 +169116,8 @@
     ],
     "aliases": [
       "薩戮德"
-    ]
+    ],
+    "weightkg": 70
   },
   {
     "id": "zebstrika",
@@ -167849,7 +169214,8 @@
     ],
     "aliases": [
       "雷電斑馬"
-    ]
+    ],
+    "weightkg": 79.5
   },
   {
     "id": "zekrom",
@@ -167973,7 +169339,8 @@
     ],
     "aliases": [
       "捷克羅姆"
-    ]
+    ],
+    "weightkg": 345
   },
   {
     "id": "zeraora",
@@ -168081,7 +169448,8 @@
     ],
     "aliases": [
       "捷拉奧拉"
-    ]
+    ],
+    "weightkg": 44.5
   },
   {
     "id": "zeraoramega",
@@ -168189,7 +169557,8 @@
     ],
     "aliases": [
       "捷拉奧拉"
-    ]
+    ],
+    "weightkg": 44.5
   },
   {
     "id": "zigzagoon",
@@ -168297,7 +169666,8 @@
     ],
     "aliases": [
       "蛇紋熊"
-    ]
+    ],
+    "weightkg": 17.5
   },
   {
     "id": "zigzagoongalar",
@@ -168381,7 +169751,8 @@
     ],
     "aliases": [
       "蛇紋熊"
-    ]
+    ],
+    "weightkg": 17.5
   },
   {
     "id": "zoroark",
@@ -168500,7 +169871,8 @@
     ],
     "aliases": [
       "索羅亞克"
-    ]
+    ],
+    "weightkg": 81.1
   },
   {
     "id": "zoroarkhisui",
@@ -168737,7 +170109,8 @@
           }
         ]
       }
-    }
+    },
+    "weightkg": 73
   },
   {
     "id": "zorua",
@@ -168846,7 +170219,8 @@
     ],
     "aliases": [
       "索羅亞"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "zoruahisui",
@@ -168928,7 +170302,8 @@
     ],
     "aliases": [
       "索羅亞"
-    ]
+    ],
+    "weightkg": 12.5
   },
   {
     "id": "zubat",
@@ -169037,7 +170412,8 @@
     ],
     "aliases": [
       "超音蝠"
-    ]
+    ],
+    "weightkg": 7.5
   },
   {
     "id": "zweilous",
@@ -169131,7 +170507,8 @@
     ],
     "aliases": [
       "雙首暴龍"
-    ]
+    ],
+    "weightkg": 50
   },
   {
     "id": "zygarde",
@@ -169228,7 +170605,8 @@
     ],
     "aliases": [
       "基格爾德"
-    ]
+    ],
+    "weightkg": 305
   },
   {
     "id": "zygarde10",
@@ -169268,7 +170646,8 @@
     ],
     "aliases": [
       "基格爾德"
-    ]
+    ],
+    "weightkg": 33.5
   },
   {
     "id": "zygardecomplete",
@@ -169364,7 +170743,8 @@
     ],
     "aliases": [
       "基格爾德"
-    ]
+    ],
+    "weightkg": 610
   },
   {
     "id": "zygardemega",
@@ -169460,6 +170840,7 @@
     ],
     "aliases": [
       "基格爾德"
-    ]
+    ],
+    "weightkg": 610
   }
 ]
