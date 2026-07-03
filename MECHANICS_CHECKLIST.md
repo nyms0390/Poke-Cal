@@ -121,7 +121,7 @@ Currently implemented named effects:
 
 ### User HP as damage
 
-- [ ] Final Gambit
+- [x] Final Gambit
 
 ### Accuracy-chained multi-hit damage
 

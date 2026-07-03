@@ -274,7 +274,7 @@ export function calculateDamage({
     };
   }
 
-  const fixedDamage = fixedDamageValue(move, defenderHp);
+  const fixedDamage = fixedDamageValue(move, defenderHp, attacker, attackerState);
   if (fixedDamage !== null) {
     const damage = Math.max(1, fixedDamage);
     const rolls = DAMAGE_ROLLS.map(() => damage);
@@ -452,14 +452,19 @@ function fixedDamageKind(move) {
   if (typeof move?.damage === "number") return "numeric";
   if (move?.damage === "level") return "level";
   if (moveId === "superfang" || moveId === "ruination" || moveId === "naturesmadness") return "half-hp";
+  if (moveId === "finalgambit") return "user-hp";
   return "";
 }
 
-function fixedDamageValue(move, defenderHp) {
+function fixedDamageValue(move, defenderHp, attacker, attackerState) {
   const kind = fixedDamageKind(move);
   if (kind === "numeric") return move.damage;
   if (kind === "level") return 50;
   if (kind === "half-hp") return Math.floor(defenderHp / 2);
+  if (kind === "user-hp") {
+    const attackerHp = calculatePokemonStat(attacker, attackerState, "hp");
+    return currentPokemonHp(attackerState, attackerHp);
+  }
   return null;
 }
 

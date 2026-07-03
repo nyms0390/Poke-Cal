@@ -306,6 +306,45 @@ test("supports numeric fixed-damage moves and type immunities", () => {
   assert.deepEqual([normalImmuneToNightShade.minDamage, normalImmuneToNightShade.maxDamage], [0, 0]);
 });
 
+test("uses the attacker's current HP as Final Gambit damage", () => {
+  const finalGambit = {
+    id: "finalgambit",
+    name: "Final Gambit",
+    type: "Fighting",
+    category: "Special",
+    basePower: 0,
+  };
+
+  const fullHp = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: finalGambit,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const currentHp = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: finalGambit,
+    attackerState: { ...neutralState, currentHp: 83 },
+    defenderState: neutralState,
+  });
+  const immune = calculateDamage({
+    attacker: pikachu,
+    defender: { ...squirtle, types: ["Ghost"] },
+    move: finalGambit,
+    attackerState: { ...neutralState, currentHp: 83 },
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual([fullHp.minDamage, fullHp.maxDamage], [110, 110]);
+  assert.deepEqual([fullHp.minPercent, fullHp.maxPercent], [92.4, 92.4]);
+  assert.equal(fullHp.notes.includes("Fixed damage"), true);
+  assert.deepEqual([currentHp.minDamage, currentHp.maxDamage], [83, 83]);
+  assert.deepEqual([currentHp.minPercent, currentHp.maxPercent], [69.7, 69.7]);
+  assert.deepEqual([immune.minDamage, immune.maxDamage, immune.minPercent], [0, 0, 0]);
+});
+
 test("applies curated item and ability modifiers", () => {
   const physical = { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40 };
   const special = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
