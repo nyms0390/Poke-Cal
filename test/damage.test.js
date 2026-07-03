@@ -1966,6 +1966,78 @@ test("sums successive-hit base-power damage", () => {
   }
 });
 
+test("displays Population Bomb's accuracy-chained hit damage range", () => {
+  const maushold = {
+    id: "maushold",
+    name: "Maushold",
+    types: ["Normal"],
+    baseStats: { hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111 },
+  };
+  const target = {
+    id: "populationbombtarget",
+    name: "Populationbombtarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const populationBomb = {
+    id: "populationbomb",
+    name: "Population Bomb",
+    type: "Normal",
+    category: "Physical",
+    basePower: 20,
+    multihit: 10,
+    multiaccuracy: true,
+  };
+  const singleHit = { ...populationBomb, id: "populationbombsingle", name: "Population Bomb Single" };
+  delete singleHit.multihit;
+  delete singleHit.multiaccuracy;
+  const singleHitResult = calculateDamage({
+    attacker: maushold,
+    defender: target,
+    move: singleHit,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  const standard = calculateDamage({
+    attacker: maushold,
+    defender: target,
+    move: populationBomb,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const loadedDice = calculateDamage({
+    attacker: maushold,
+    defender: target,
+    move: populationBomb,
+    attackerState: { ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } },
+    defenderState: neutralState,
+  });
+  const skillLink = calculateDamage({
+    attacker: maushold,
+    defender: target,
+    move: populationBomb,
+    attackerState: { ...neutralState, ability: { id: "skilllink", name: "Skill Link" } },
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual(
+    [standard.minDamage, standard.maxDamage],
+    [singleHitResult.minDamage, singleHitResult.maxDamage * 10],
+  );
+  assert.equal(standard.notes.includes("Population Bomb hits 1-10 times"), true);
+  assert.deepEqual(
+    [loadedDice.minDamage, loadedDice.maxDamage],
+    [singleHitResult.minDamage * 4, singleHitResult.maxDamage * 10],
+  );
+  assert.equal(loadedDice.notes.includes("Population Bomb hits 4-10 times"), true);
+  assert.deepEqual(
+    [skillLink.minDamage, skillLink.maxDamage],
+    [singleHitResult.minDamage * 10, singleHitResult.maxDamage * 10],
+  );
+  assert.equal(skillLink.notes.includes("Population Bomb hits 10 times"), true);
+});
+
 test("applies move-specific type effectiveness overrides", () => {
   const iceUser = {
     id: "iceuser",

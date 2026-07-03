@@ -125,7 +125,7 @@ Currently implemented named effects:
 
 ### Accuracy-chained multi-hit damage
 
-- [ ] Population Bomb
+- [x] Population Bomb
 
 ### Party-member-count multi-hit damage
 

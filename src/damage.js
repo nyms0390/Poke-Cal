@@ -381,11 +381,15 @@ export function calculateDamage({
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
-  const hitCount = fixedHitCount(move);
-  if (hitCount > 1 && hitPowers.length === 1) notes.push(`${move.name} hits ${hitCount} times`);
+  const hitCounts = hitCountRange(move, attackerState);
+  if (hitPowers.length === 1 && (hitCounts.min > 1 || hitCounts.max > 1)) {
+    notes.push(hitCounts.min === hitCounts.max
+      ? `${move.name} hits ${hitCounts.max} times`
+      : `${move.name} hits ${hitCounts.min}-${hitCounts.max} times`);
+  }
 
-  const rolls = DAMAGE_ROLLS.map((roll) => {
-    const damage = hitPowers.reduce((total, hitPower) => {
+  const damageForRoll = (roll) =>
+    hitPowers.reduce((total, hitPower) => {
       let hitDamage = baseDamageForPower(hitPower, modifiedAttack, defense);
       hitDamage = Math.floor(hitDamage * criticalModifier);
       hitDamage = Math.floor(hitDamage * roll / 100);
@@ -396,8 +400,11 @@ export function calculateDamage({
       hitDamage = Math.floor(hitDamage * damageModifier);
       return total + Math.max(1, hitDamage);
     }, 0);
-    return damage * hitCount;
-  });
+  const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.min);
+  const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.max);
+  const rolls = hitCounts.min === hitCounts.max
+    ? minHitRolls
+    : [minHitRolls[0], ...maxHitRolls.slice(1)];
 
   return {
     supported: true,
@@ -468,8 +475,16 @@ function fixedDamageValue(move, defenderHp, attacker, attackerState) {
   return null;
 }
 
-function fixedHitCount(move) {
-  return move.multihit === 2 ? 2 : 1;
+function hitCountRange(move, attackerState) {
+  const moveId = normalizeId(move.id ?? move.name);
+  const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
+  if (moveId === "populationbomb") {
+    if (hasAbility(attackerState, "skilllink")) return { min: 10, max: 10 };
+    if (item === "loadeddice") return { min: 4, max: 10 };
+    return { min: 1, max: 10 };
+  }
+  if (move.multihit === 2) return { min: 2, max: 2 };
+  return { min: 1, max: 1 };
 }
 
 function successiveHitBasePowers(move, power) {
