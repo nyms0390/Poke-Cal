@@ -1883,6 +1883,50 @@ test("doubles displayed damage for fixed two-hit moves", () => {
   }
 });
 
+test("sums successive-hit base-power damage", () => {
+  const tripleHitUser = {
+    id: "triplehituser",
+    name: "Triplehituser",
+    types: ["Ice", "Fighting"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const target = {
+    id: "triplehittarget",
+    name: "Triplehittarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const cases = [
+    ["Triple Axel", "tripleaxel", "Ice", 20, [20, 40, 60]],
+    ["Triple Kick", "triplekick", "Fighting", 10, [10, 20, 30]],
+  ];
+
+  for (const [name, id, type, basePower, hitPowers] of cases) {
+    const move = { id, name, type, category: "Physical", basePower, multihit: 3, multiaccuracy: true };
+    const result = calculateDamage({
+      attacker: tripleHitUser,
+      defender: target,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const expectedRolls = hitPowers.reduce((rolls, power) => {
+      const singleHit = { id: `${id}${power}`, name: `${name} ${power}`, type, category: "Physical", basePower: power };
+      const singleResult = calculateDamage({
+        attacker: tripleHitUser,
+        defender: target,
+        move: singleHit,
+        attackerState: neutralState,
+        defenderState: neutralState,
+      });
+      return rolls.map((damage, index) => damage + singleResult.rolls[index]);
+    }, Array(16).fill(0));
+
+    assert.deepEqual(result.rolls, expectedRolls, name);
+    assert.equal(result.notes.includes(`${name} hits 3 times at ${hitPowers.join("/")}`), true, name);
+  }
+});
+
 test("applies move-specific type effectiveness overrides", () => {
   const iceUser = {
     id: "iceuser",

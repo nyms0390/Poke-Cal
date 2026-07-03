@@ -341,6 +341,7 @@ export function calculateDamage({
     notes.push(`${move.name} power ${power}`);
   }
   let attackModifier = 1;
+  const powerModifiers = [];
   let damageModifier = 1;
   let stab = attacker.types.includes(moveType) ? 1.5 : 1;
   if (pledgeCombo && isPledgeMove(move)) {
@@ -362,15 +363,16 @@ export function calculateDamage({
   })) {
     notes.push(modifier.label);
     if (modifier.kind === "attack") attackModifier *= modifier.value;
-    if (modifier.kind === "power") power = Math.floor(power * modifier.value);
+    if (modifier.kind === "power") powerModifiers.push(modifier.value);
     if (modifier.kind === "damage") damageModifier *= modifier.value;
     if (modifier.kind === "stab") stab = modifier.value;
   }
 
+  const baseHitPowers = successiveHitBasePowers(move, power);
+  const hitPowers = baseHitPowers.map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
+  if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
+  power = hitPowers[0];
   const modifiedAttack = Math.max(1, Math.floor(attack * attackModifier));
-  const baseDamage = Math.floor(
-    Math.floor(Math.floor(Math.floor((2 * 50) / 5 + 2) * power * modifiedAttack) / defense) / 50,
-  ) + 2;
   const criticalModifier = effectiveCritical
     ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
     : 1;
@@ -380,18 +382,21 @@ export function calculateDamage({
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
   const hitCount = fixedHitCount(move);
-  if (hitCount > 1) notes.push(`${move.name} hits ${hitCount} times`);
+  if (hitCount > 1 && hitPowers.length === 1) notes.push(`${move.name} hits ${hitCount} times`);
 
   const rolls = DAMAGE_ROLLS.map((roll) => {
-    let damage = baseDamage;
-    damage = Math.floor(damage * criticalModifier);
-    damage = Math.floor(damage * roll / 100);
-    damage = Math.floor(damage * stab);
-    damage = Math.floor(damage * typeMultiplier);
-    damage = Math.floor(damage * burnModifier);
-    damage = Math.floor(damage * spreadModifier);
-    damage = Math.floor(damage * damageModifier);
-    return Math.max(1, damage) * hitCount;
+    const damage = hitPowers.reduce((total, hitPower) => {
+      let hitDamage = baseDamageForPower(hitPower, modifiedAttack, defense);
+      hitDamage = Math.floor(hitDamage * criticalModifier);
+      hitDamage = Math.floor(hitDamage * roll / 100);
+      hitDamage = Math.floor(hitDamage * stab);
+      hitDamage = Math.floor(hitDamage * typeMultiplier);
+      hitDamage = Math.floor(hitDamage * burnModifier);
+      hitDamage = Math.floor(hitDamage * spreadModifier);
+      hitDamage = Math.floor(hitDamage * damageModifier);
+      return total + Math.max(1, hitDamage);
+    }, 0);
+    return damage * hitCount;
   });
 
   return {
@@ -460,6 +465,22 @@ function fixedDamageValue(move, defenderHp) {
 
 function fixedHitCount(move) {
   return move.multihit === 2 ? 2 : 1;
+}
+
+function successiveHitBasePowers(move, power) {
+  const moveId = normalizeId(move.id ?? move.name);
+  if (moveId === "tripleaxel" || moveId === "triplekick") return [power, power * 2, power * 3];
+  return [power];
+}
+
+function applyPowerModifiers(power, modifiers) {
+  return modifiers.reduce((modifiedPower, modifier) => Math.floor(modifiedPower * modifier), power);
+}
+
+function baseDamageForPower(power, attack, defense) {
+  return Math.floor(
+    Math.floor(Math.floor(Math.floor((2 * 50) / 5 + 2) * power * attack) / defense) / 50,
+  ) + 2;
 }
 
 function effectiveMoveType(move, attacker, attackerState, context = {}) {

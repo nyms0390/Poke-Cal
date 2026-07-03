@@ -116,8 +116,8 @@ Currently implemented named effects:
 
 ### Successive-hit base-power changes
 
-- [ ] Triple Axel
-- [ ] Triple Kick
+- [x] Triple Axel
+- [x] Triple Kick
 
 ### User HP as damage
 
