@@ -905,6 +905,109 @@ test("uses weather, terrain, and field context for conditional move power", () =
   assert.equal(gravityGravApple.maxDamage > normalGravApple.maxDamage, true);
 });
 
+test("scales high-user-HP move power from the attacker's current HP", () => {
+  const fireUser = {
+    id: "fireuser",
+    name: "Fireuser",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const waterUser = {
+    id: "wateruser",
+    name: "Wateruser",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const dragonUser = {
+    id: "dragonuser",
+    name: "Dragonuser",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const neutralTarget = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const eruption = {
+    id: "eruption",
+    name: "Eruption",
+    type: "Fire",
+    category: "Special",
+    basePower: 150,
+    target: "allAdjacentFoes",
+  };
+  const waterSpout = {
+    id: "waterspout",
+    name: "Water Spout",
+    type: "Water",
+    category: "Special",
+    basePower: 150,
+    target: "allAdjacentFoes",
+  };
+  const dragonEnergy = {
+    id: "dragonenergy",
+    name: "Dragon Energy",
+    type: "Dragon",
+    category: "Special",
+    basePower: 150,
+    target: "allAdjacentFoes",
+  };
+
+  const fullHp = calculateDamage({
+    attacker: fireUser,
+    defender: neutralTarget,
+    move: eruption,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const halfHp = calculateDamage({
+    attacker: fireUser,
+    defender: neutralTarget,
+    move: eruption,
+    attackerState: { ...neutralState, currentHp: 77 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const oneHp = calculateDamage({
+    attacker: fireUser,
+    defender: neutralTarget,
+    move: eruption,
+    attackerState: { ...neutralState, currentHp: 1 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const waterSpoutHalfHp = calculateDamage({
+    attacker: waterUser,
+    defender: neutralTarget,
+    move: waterSpout,
+    attackerState: { ...neutralState, currentHp: 77 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const dragonEnergyHalfHp = calculateDamage({
+    attacker: dragonUser,
+    defender: neutralTarget,
+    move: dragonEnergy,
+    attackerState: { ...neutralState, currentHp: 77 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+
+  assert.equal(fullHp.notes.includes("Eruption power 150"), true);
+  assert.deepEqual([fullHp.minDamage, fullHp.maxDamage], [118, 141]);
+  assert.equal(halfHp.notes.includes("Eruption power 74"), true);
+  assert.deepEqual([halfHp.minDamage, halfHp.maxDamage], [58, 70]);
+  assert.equal(oneHp.notes.includes("Eruption power 1"), true);
+  assert.deepEqual([oneHp.minDamage, oneHp.maxDamage], [1, 3]);
+  assert.equal(waterSpoutHalfHp.notes.includes("Water Spout power 74"), true);
+  assert.deepEqual([waterSpoutHalfHp.minDamage, waterSpoutHalfHp.maxDamage], [58, 70]);
+  assert.equal(dragonEnergyHalfHp.notes.includes("Dragon Energy power 74"), true);
+  assert.deepEqual([dragonEnergyHalfHp.minDamage, dragonEnergyHalfHp.maxDamage], [58, 70]);
+});
+
 test("applies combined Pledge base power and forced STAB", () => {
   const neutralUser = {
     id: "neutraluser",

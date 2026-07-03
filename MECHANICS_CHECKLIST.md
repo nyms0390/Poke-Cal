@@ -86,9 +86,9 @@ Currently implemented named effects:
 
 ### High-user-HP-scaled base power
 
-- [ ] Eruption
-- [ ] Water Spout
-- [ ] Dragon Energy
+- [x] Eruption
+- [x] Water Spout
+- [x] Dragon Energy
 
 ### Target Attack-as-user-Attack damage
 

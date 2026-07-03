@@ -81,6 +81,7 @@ const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "stompingtantrum",
   "temperflare",
 ]);
+const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"]);
 const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
 
 export const NATURES = {
@@ -291,7 +292,14 @@ export function calculateDamage({
   }
 
   const moveId = normalizeId(move.id ?? move.name);
-  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, { defender, weather, terrain, gravity, pledgeCombo });
+  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, {
+    attacker,
+    defender,
+    weather,
+    terrain,
+    gravity,
+    pledgeCombo,
+  });
   if (dynamicPower === null) {
     const reason = TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)
       ? `${move.name} requires defender weight.`
@@ -487,6 +495,9 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
   const item = attackerState.item;
   const moveId = normalizeId(move.id ?? move.name);
   if (moveId === "naturalgift") return item?.naturalGift?.basePower ?? null;
+  if (USER_HP_POWER_MOVE_IDS.has(moveId)) {
+    return userHpScaledBasePower(move.basePower, context.attacker, attackerState);
+  }
   if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
     const weight = targetWeightKg(context.defender, defenderState);
     return weight === null ? null : targetWeightBasePower(weight);
@@ -529,6 +540,18 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
     return 150;
   }
   return undefined;
+}
+
+function userHpScaledBasePower(basePower, attacker, attackerState) {
+  const maxHp = calculatePokemonStat(attacker, attackerState, "hp");
+  const currentHp = currentPokemonHp(attackerState, maxHp);
+  return Math.max(1, Math.floor((basePower * currentHp) / maxHp));
+}
+
+function currentPokemonHp(state, maxHp) {
+  const hp = state.currentHp ?? state.currentHP;
+  if (!Number.isFinite(hp)) return maxHp;
+  return Math.min(maxHp, Math.max(1, Math.floor(hp)));
 }
 
 function targetWeightKg(defender, defenderState) {
