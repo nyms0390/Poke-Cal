@@ -8,6 +8,7 @@ const pokemon = [
     id: "pikachu",
     name: "Pikachu",
     baseSpecies: "Pikachu",
+    types: ["Electric"],
     baseSpeed: 90,
     aliases: ["皮卡丘"],
     abilities: ["Static", "Lightning Rod"],
@@ -17,6 +18,7 @@ const pokemon = [
     id: "charizard",
     name: "Charizard",
     baseSpecies: "Charizard",
+    types: ["Fire", "Flying"],
     baseSpeed: 100,
     aliases: ["噴火龍"],
     abilities: ["Blaze", "Solar Power"],
@@ -26,6 +28,7 @@ const pokemon = [
     id: "charizardmegax",
     name: "Charizard-Mega-X",
     baseSpecies: "Charizard",
+    types: ["Fire", "Dragon"],
     baseSpeed: 100,
     aliases: ["噴火龍"],
   },
@@ -33,6 +36,7 @@ const pokemon = [
     id: "charizardmegay",
     name: "Charizard-Mega-Y",
     baseSpecies: "Charizard",
+    types: ["Fire", "Flying"],
     baseSpeed: 100,
     aliases: ["噴火龍"],
   },
@@ -40,6 +44,7 @@ const pokemon = [
     id: "charizardgmax",
     name: "Charizard-Gmax",
     baseSpecies: "Charizard",
+    types: ["Fire", "Flying"],
     baseSpeed: 100,
     aliases: ["噴火龍"],
   },
@@ -47,6 +52,7 @@ const pokemon = [
     id: "tatsugiri",
     name: "Tatsugiri",
     baseSpecies: "Tatsugiri",
+    types: ["Dragon", "Water"],
     baseSpeed: 82,
     aliases: [],
   },
@@ -54,12 +60,14 @@ const pokemon = [
     id: "tatsugiricurlymega",
     name: "Tatsugiri-Curly-Mega",
     baseSpecies: "Tatsugiri",
+    types: ["Dragon", "Water"],
     baseSpeed: 82,
     aliases: [],
   },
   {
     id: "megaabsol",
     name: "Mega Absol",
+    types: ["Dark"],
     baseSpeed: 115,
     aliases: [],
   },
@@ -67,6 +75,7 @@ const pokemon = [
     id: "tinkaton",
     name: "Tinkaton",
     baseSpecies: "Tinkaton",
+    types: ["Fairy", "Steel"],
     baseSpeed: 94,
     aliases: [],
     abilities: ["Mold Breaker"],
@@ -76,6 +85,7 @@ const pokemon = [
     id: "excadrill",
     name: "Excadrill",
     baseSpecies: "Excadrill",
+    types: ["Ground", "Steel"],
     baseSpeed: 88,
     aliases: [],
     abilities: ["Mold Breaker"],
@@ -85,6 +95,7 @@ const pokemon = [
     id: "hariyama",
     name: "Hariyama",
     baseSpecies: "Hariyama",
+    types: ["Fighting"],
     baseSpeed: 50,
     aliases: [],
     abilities: ["Thick Fat"],
@@ -94,6 +105,41 @@ const pokemon = [
 
 test("searches Pokémon by normalized English name", () => {
   assert.equal(searchPokemon(pokemon, "pika")[0].id, "pikachu");
+});
+
+test("searches Pokémon by type", () => {
+  assert.deepEqual(
+    searchPokemon(pokemon, "fire").map(({ id }) => id),
+    ["charizard", "charizardgmax", "charizardmegax", "charizardmegay"],
+  );
+});
+
+test("searches Pokémon by type with normalized casing", () => {
+  assert.equal(searchPokemon(pokemon, "FIRE")[0].id, "charizard");
+});
+
+test("searches Pokémon by plus-separated type terms", () => {
+  const matches = searchPokemon(pokemon, "fire + flying");
+
+  assert.deepEqual(
+    matches.map(({ id }) => id),
+    ["charizard", "charizardgmax", "charizardmegay"],
+  );
+  assert.equal(matches[0].searchMatch, "Type: Fire + Type: Flying");
+});
+
+test("prioritizes type matches over usage-backed catalog matches", () => {
+  assert.equal(
+    searchPokemon(pokemon, "fire", {
+      usageStats: {
+        pokemon: {
+          pikachu: { abilities: [{ id: "fire", name: "Fire", usagePercent: 100 }] },
+        },
+      },
+      abilityLookup: new Map([["fire", { name: "Fire" }]]),
+    })[0].id,
+    "charizard",
+  );
 });
 
 test("searches Pokémon by ability names", () => {

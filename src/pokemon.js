@@ -82,6 +82,9 @@ function matchScore(entry, query, { abilityLookup, moveLookup, itemLookup, usage
   if (candidates.some((candidate) => candidate.startsWith(query))) return searchMatch(1);
   if (candidates.some((candidate) => candidate.includes(query))) return searchMatch(2);
 
+  const typeMatchResult = typeMatch(entry.types, query);
+  if (typeMatchResult) return typeMatchResult;
+
   const usage = usageForEntry(usageStats, entry);
   const usageMatch =
     catalogMatch(usage?.abilities, query, abilityLookup, "Ability", 3) ??
@@ -95,6 +98,26 @@ function matchScore(entry, query, { abilityLookup, moveLookup, itemLookup, usage
   if (catalogMatchResult) return catalogMatchResult;
 
   return searchMatch(Infinity);
+}
+
+function typeMatch(types = [], query) {
+  let bestMatch = null;
+
+  for (const type of types) {
+    const normalizedType = normalizeSearch(type);
+    const score =
+      normalizedType === query ? 2.5
+      : normalizedType.startsWith(query) ? 3.5
+      : normalizedType.includes(query) ? 4.5
+      : Infinity;
+
+    if (score === Infinity) continue;
+
+    const match = searchMatch(score, `Type: ${type}`);
+    if (!bestMatch || match.score < bestMatch.score) bestMatch = match;
+  }
+
+  return bestMatch;
 }
 
 function catalogMatch(entries = [], query, lookup, label, baseScore) {
