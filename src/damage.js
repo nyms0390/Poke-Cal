@@ -226,8 +226,9 @@ export function typeEffectiveness(moveType, defenderTypes = [], move = null, def
 
 export function unsupportedMoveReason(move) {
   if (!move) return "Missing move data.";
+  const moveId = normalizeId(move.id ?? move.name);
   if (move.category === "Status") return "Status moves do not deal direct damage.";
-  if (normalizeId(move.id ?? move.name) === "naturalgift") return "";
+  if (moveId === "beatup" || moveId === "naturalgift") return "";
   if (TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (fixedDamageKind(move)) return "";
   if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
@@ -483,6 +484,10 @@ function hitCountRange(move, attackerState) {
     if (item === "loadeddice") return { min: 4, max: 10 };
     return { min: 1, max: 10 };
   }
+  if (moveId === "beatup") {
+    const hits = eligibleBeatUpPartyCount(attackerState);
+    return { min: hits, max: hits };
+  }
   if (move.multihit === 2) return { min: 2, max: 2 };
   return { min: 1, max: 1 };
 }
@@ -536,6 +541,7 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
   const item = attackerState.item;
   const moveId = normalizeId(move.id ?? move.name);
   if (moveId === "naturalgift") return item?.naturalGift?.basePower ?? null;
+  if (moveId === "beatup") return beatUpBasePower(context.attacker, attackerState);
   if (USER_HP_POWER_MOVE_IDS.has(moveId)) {
     return userHpScaledBasePower(move.basePower, context.attacker, attackerState);
   }
@@ -581,6 +587,18 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
     return 150;
   }
   return undefined;
+}
+
+function beatUpBasePower(attacker, attackerState) {
+  const baseAttack = attackerState.beatUpBaseAttack ?? attacker?.baseStats?.atk;
+  if (!Number.isFinite(baseAttack)) return null;
+  return Math.max(1, 5 + Math.floor(baseAttack / 10));
+}
+
+function eligibleBeatUpPartyCount(attackerState) {
+  const count = attackerState.beatUpPartyCount ?? attackerState.partyMemberCount ?? attackerState.partyCount ?? 6;
+  if (!Number.isFinite(count)) return 6;
+  return Math.min(6, Math.max(1, Math.floor(count)));
 }
 
 function userHpScaledBasePower(basePower, attacker, attackerState) {

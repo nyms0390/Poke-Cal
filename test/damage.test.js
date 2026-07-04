@@ -345,6 +345,60 @@ test("uses the attacker's current HP as Final Gambit damage", () => {
   assert.deepEqual([immune.minDamage, immune.maxDamage, immune.minPercent], [0, 0, 0]);
 });
 
+test("scales Beat Up damage by eligible party member count", () => {
+  const beatUp = {
+    id: "beatup",
+    name: "Beat Up",
+    type: "Dark",
+    category: "Physical",
+    basePower: 0,
+  };
+  const darkUser = {
+    id: "darkuser",
+    name: "Darkuser",
+    types: ["Dark"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 40, spd: 80, spe: 50 },
+  };
+  const psychicTarget = {
+    id: "psychictarget",
+    name: "Psychictarget",
+    types: ["Psychic"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+
+  const fullParty = calculateDamage({
+    attacker: darkUser,
+    defender: psychicTarget,
+    move: beatUp,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const threeMembers = calculateDamage({
+    attacker: darkUser,
+    defender: psychicTarget,
+    move: beatUp,
+    attackerState: { ...neutralState, beatUpPartyCount: 3 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+  const resisted = calculateDamage({
+    attacker: darkUser,
+    defender: { ...psychicTarget, types: ["Fairy"] },
+    move: beatUp,
+    attackerState: { ...neutralState, beatUpPartyCount: 3 },
+    defenderState: neutralState,
+    battleFormat: "singles",
+  });
+
+  assert.equal(fullParty.notes.includes("Beat Up power 17"), true);
+  assert.equal(fullParty.notes.includes("Beat Up hits 6 times"), true);
+  assert.deepEqual([fullParty.minDamage, fullParty.maxDamage], [180, 216]);
+  assert.equal(threeMembers.notes.includes("Beat Up hits 3 times"), true);
+  assert.deepEqual([threeMembers.minDamage, threeMembers.maxDamage], [90, 108]);
+  assert.deepEqual([resisted.minDamage, resisted.maxDamage, resisted.minPercent], [21, 27, 13.5]);
+});
+
 test("applies curated item and ability modifiers", () => {
   const physical = { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40 };
   const special = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };

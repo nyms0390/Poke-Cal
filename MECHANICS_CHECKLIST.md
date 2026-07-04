@@ -129,7 +129,7 @@ Currently implemented named effects:
 
 ### Party-member-count multi-hit damage
 
-- [ ] Beat Up
+- [x] Beat Up
 
 ### User-versus-target weight-scaled base power
 
