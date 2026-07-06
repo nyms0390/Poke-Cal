@@ -1858,6 +1858,50 @@ test("uses Showdown baseline power for unavailable move-history state moves", ()
   }
 });
 
+test("uses Showdown baseline power for unavailable combo or target-state moves", () => {
+  const contextUser = {
+    id: "contextuser",
+    name: "Contextuser",
+    types: ["Normal", "Electric", "Fire", "Flying", "Dragon"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const target = {
+    id: "contexttarget",
+    name: "Contexttarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const contextMoves = [
+    ["Round", "round", "Normal", "Special", 60],
+    ["Fusion Bolt", "fusionbolt", "Electric", "Physical", 100],
+    ["Fusion Flare", "fusionflare", "Fire", "Special", 100],
+    ["Gust", "gust", "Flying", "Special", 40],
+    ["Twister", "twister", "Dragon", "Special", 40, "allAdjacentFoes"],
+  ];
+
+  for (const [name, id, type, category, basePower, targetKind] of contextMoves) {
+    const move = { id, name, type, category, basePower, target: targetKind };
+    const baseline = { id: `${id}baseline`, name: `${name} Baseline`, type, category, basePower, target: targetKind };
+    const result = calculateDamage({
+      attacker: contextUser,
+      defender: target,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const expected = calculateDamage({
+      attacker: contextUser,
+      defender: target,
+      move: baseline,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+
+    assert.deepEqual(result.rolls, expected.rolls, name);
+    assert.equal(result.notes.includes(`${name} baseline power ${basePower}`), true, name);
+  }
+});
+
 test("scales Low Kick and Grass Knot power from target weight", () => {
   const physicalUser = {
     id: "physicaluser",

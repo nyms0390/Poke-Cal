@@ -145,11 +145,11 @@ Currently implemented named effects:
 
 ### Calculator-assumed base power for unavailable combo or target-state context
 
-- [ ] Round
-- [ ] Fusion Bolt
-- [ ] Fusion Flare
-- [ ] Gust
-- [ ] Twister
+- [x] Round
+- [x] Fusion Bolt
+- [x] Fusion Flare
+- [x] Gust
+- [x] Twister
 
 ### No held item base-power doubling
 

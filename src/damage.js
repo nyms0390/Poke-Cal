@@ -81,6 +81,13 @@ const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "stompingtantrum",
   "temperflare",
 ]);
+const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
+  "fusionbolt",
+  "fusionflare",
+  "gust",
+  "round",
+  "twister",
+]);
 const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"]);
 const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
 const USER_TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["heatcrash", "heavyslam"]);
@@ -341,7 +348,7 @@ export function calculateDamage({
   let power = dynamicPower ?? move.basePower;
   if (dynamicPower !== undefined) {
     notes.push(`${move.name} power ${dynamicPower}`);
-  } else if (HISTORY_BASE_POWER_MOVE_IDS.has(moveId)) {
+  } else if (HISTORY_BASE_POWER_MOVE_IDS.has(moveId) || UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS.has(moveId)) {
     notes.push(`${move.name} baseline power ${move.basePower}`);
   } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
     notes.push(`${move.name} power ${power}`);
