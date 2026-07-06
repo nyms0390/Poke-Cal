@@ -83,6 +83,7 @@ const HISTORY_BASE_POWER_MOVE_IDS = new Set([
 ]);
 const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"]);
 const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
+const USER_TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["heatcrash", "heavyslam"]);
 
 export const NATURES = {
   Hardy: {},
@@ -230,6 +231,7 @@ export function unsupportedMoveReason(move) {
   if (move.category === "Status") return "Status moves do not deal direct damage.";
   if (moveId === "beatup" || moveId === "naturalgift") return "";
   if (TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
+  if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (fixedDamageKind(move)) return "";
   if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
     return "Fixed-damage moves are not supported.";
@@ -302,9 +304,12 @@ export function calculateDamage({
     pledgeCombo,
   });
   if (dynamicPower === null) {
-    const reason = TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)
-      ? `${move.name} requires defender weight.`
-      : "Natural Gift requires a held Berry.";
+    let reason = "Natural Gift requires a held Berry.";
+    if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
+      reason = `${move.name} requires attacker and defender weights.`;
+    } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
+      reason = `${move.name} requires defender weight.`;
+    }
     return { supported: false, reason };
   }
   let isPhysical = move.category === "Physical";
@@ -549,6 +554,11 @@ function effectiveMovePower(move, attackerState, defenderState, context = {}) {
     const weight = targetWeightKg(context.defender, defenderState);
     return weight === null ? null : targetWeightBasePower(weight);
   }
+  if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
+    const attackerWeight = pokemonWeightKg(context.attacker, attackerState);
+    const defenderWeight = pokemonWeightKg(context.defender, defenderState);
+    return attackerWeight === null || defenderWeight === null ? null : userTargetWeightBasePower(attackerWeight, defenderWeight);
+  }
   if (
     moveId === "weatherball" &&
     WEATHER_BALL_TYPES[normalizeId(context.weather)] &&
@@ -618,6 +628,11 @@ function targetWeightKg(defender, defenderState) {
   return Number.isFinite(weight) && weight > 0 ? weight : null;
 }
 
+function pokemonWeightKg(pokemon, state) {
+  const weight = state.weightkg ?? state.weightKg ?? pokemon?.weightkg ?? pokemon?.weightKg;
+  return Number.isFinite(weight) && weight > 0 ? weight : null;
+}
+
 function targetWeightBasePower(weightKg) {
   if (weightKg < 10) return 20;
   if (weightKg < 25) return 40;
@@ -625,6 +640,14 @@ function targetWeightBasePower(weightKg) {
   if (weightKg < 100) return 80;
   if (weightKg < 200) return 100;
   return 120;
+}
+
+function userTargetWeightBasePower(attackerWeightKg, defenderWeightKg) {
+  if (attackerWeightKg >= defenderWeightKg * 5) return 120;
+  if (attackerWeightKg >= defenderWeightKg * 4) return 100;
+  if (attackerWeightKg >= defenderWeightKg * 3) return 80;
+  if (attackerWeightKg >= defenderWeightKg * 2) return 60;
+  return 40;
 }
 
 function isPledgeMove(move) {

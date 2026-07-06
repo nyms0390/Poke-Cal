@@ -133,8 +133,8 @@ Currently implemented named effects:
 
 ### User-versus-target weight-scaled base power
 
-- [ ] Heavy Slam
-- [ ] Heat Crash
+- [x] Heavy Slam
+- [x] Heat Crash
 
 ### Terrain-boosted or terrain-conditional base power
 

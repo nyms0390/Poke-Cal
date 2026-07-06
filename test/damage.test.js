@@ -1926,6 +1926,64 @@ test("scales Low Kick and Grass Knot power from target weight", () => {
   }
 });
 
+test("scales Heavy Slam and Heat Crash power from user-versus-target weight", () => {
+  const attacker = {
+    id: "weightuser",
+    name: "Weightuser",
+    types: ["Steel", "Fire"],
+    weightkg: 100,
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const heavySlam = {
+    id: "heavyslam",
+    name: "Heavy Slam",
+    type: "Steel",
+    category: "Physical",
+    basePower: 0,
+  };
+  const heatCrash = {
+    id: "heatcrash",
+    name: "Heat Crash",
+    type: "Fire",
+    category: "Physical",
+    basePower: 0,
+  };
+  const weightCases = [
+    [20, 120],
+    [25, 100],
+    [33.3, 80],
+    [50, 60],
+    [50.1, 40],
+  ];
+
+  for (const [weightkg, expectedPower] of weightCases) {
+    const defender = {
+      id: `ratio${weightkg}`,
+      name: `Ratio ${weightkg}`,
+      types: ["Normal"],
+      weightkg,
+      baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+    };
+    const heavySlamResult = calculateDamage({
+      attacker,
+      defender,
+      move: heavySlam,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const heatCrashResult = calculateDamage({
+      attacker,
+      defender,
+      move: heatCrash,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+
+    assert.equal(heavySlamResult.notes.includes(`Heavy Slam power ${expectedPower}`), true, `Heavy Slam ${weightkg}`);
+    assert.equal(heatCrashResult.notes.includes(`Heat Crash power ${expectedPower}`), true, `Heat Crash ${weightkg}`);
+  }
+});
+
 test("doubles displayed damage for fixed two-hit moves", () => {
   const twoHitUser = {
     id: "twohituser",
