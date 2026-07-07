@@ -148,9 +148,12 @@ function usageLookup(entries) {
 
 function clearUsage(entry) {
   if (!entry.champions) return entry;
+  const champions = clearUsageMetadata(entry.champions);
+  const spreads = entry.champions.usage?.spreads;
+  if (spreads) champions.usage = { spreads };
   return {
     ...entry,
-    champions: clearUsageMetadata(entry.champions),
+    champions,
   };
 }
 
@@ -162,11 +165,12 @@ function mergeCatalogUsage(entry, usage) {
 }
 
 function mergePokemonUsage(entry, usage) {
+  const spreads = entry.champions?.usage?.spreads;
   return {
     ...entry,
     champions: {
       ...limitlessMetadata(entry.champions, usage),
-      usage: usage.usage,
+      usage: spreads ? { ...usage.usage, spreads } : usage.usage,
     },
   };
 }

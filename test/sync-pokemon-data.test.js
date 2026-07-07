@@ -94,6 +94,52 @@ const fixtures = new Map([
     };`,
   ],
   [
+    "champions/formats-data.ts",
+    `export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
+      pikachu: {
+        tier: "OU",
+      },
+    };`,
+  ],
+  [
+    "champions/learnsets.ts",
+    `export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
+      pikachu: {
+        learnset: {
+          volttackle: ["9M"],
+          thunderbolt: ["9M"],
+        },
+      },
+    };`,
+  ],
+  [
+    "champions/abilities.ts",
+    `export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+      static: {
+        inherit: true,
+        rating: 3,
+      },
+    };`,
+  ],
+  [
+    "champions/moves.ts",
+    `export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
+      thunderbolt: {
+        inherit: true,
+        basePower: 95,
+      },
+    };`,
+  ],
+  [
+    "champions/items.ts",
+    `export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
+      lightball: {
+        inherit: true,
+        isNonstandard: "Past",
+      },
+    };`,
+  ],
+  [
     "pokemon_species_names.csv",
     [
       "pokemon_species_id,local_language_id,name,genus",
@@ -152,16 +198,21 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
       baseSpeed: 90,
       weightkg: 6,
       abilities: ["Lightning Rod", "Static"],
-      moves: ["quickattack", "thunderbolt"],
+      moves: ["thunderbolt", "volttackle"],
       aliases: ["皮卡丘"],
+      champions: { legal: true, tier: "OU" },
     },
   ]);
   assert.deepEqual(data.abilities[0].aliases, ["靜電"]);
   assert.deepEqual(data.moves[0].aliases, ["十萬伏特"]);
   assert.deepEqual(data.items[0].aliases, ["電氣球"]);
   assert.equal(data.abilities[0].shortDesc.includes("paralyzed"), true);
-  assert.equal(data.moves[0].basePower, 90);
+  assert.equal(data.abilities[0].rating, 3);
+  assert.equal(data.abilities[0].champions.legal, true);
+  assert.equal(data.moves[0].basePower, 95);
+  assert.equal(data.moves[0].champions.legal, true);
   assert.equal(data.items[0].shortDesc.includes("Pikachu"), true);
+  assert.equal(data.items[0].champions.legal, false);
   assert.equal("onModifyAtk" in data.items[0], false);
   assert.equal("usage-stats" in data, false);
 });

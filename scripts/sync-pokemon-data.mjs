@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
+import { CHAMPIONS_MOD_BASE_URL, applyChampionsData } from "../src/champions-data.js";
 import {
   extractAbilities,
   extractCatalogEntries,
@@ -24,6 +25,11 @@ const SHOWDOWN_MOVES_TEXT_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/moves.ts";
 const SHOWDOWN_ITEMS_TEXT_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/items.ts";
+const CHAMPIONS_FORMATS_DATA_URL = `${CHAMPIONS_MOD_BASE_URL}/formats-data.ts`;
+const CHAMPIONS_LEARNSETS_URL = `${CHAMPIONS_MOD_BASE_URL}/learnsets.ts`;
+const CHAMPIONS_ABILITIES_URL = `${CHAMPIONS_MOD_BASE_URL}/abilities.ts`;
+const CHAMPIONS_MOVES_URL = `${CHAMPIONS_MOD_BASE_URL}/moves.ts`;
+const CHAMPIONS_ITEMS_URL = `${CHAMPIONS_MOD_BASE_URL}/items.ts`;
 const SPECIES_NAMES_URL =
   "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv";
 const MOVE_NAMES_URL =
@@ -47,6 +53,11 @@ export async function downloadEverything(fetcher = fetchText) {
     abilitiesTextSource,
     movesTextSource,
     itemsTextSource,
+    championsFormatsDataSource,
+    championsLearnsetsSource,
+    championsAbilitiesSource,
+    championsMovesSource,
+    championsItemsSource,
     speciesNamesCsv,
     moveNamesCsv,
     abilityNamesCsv,
@@ -61,6 +72,11 @@ export async function downloadEverything(fetcher = fetchText) {
     fetcher(SHOWDOWN_ABILITIES_TEXT_URL),
     fetcher(SHOWDOWN_MOVES_TEXT_URL),
     fetcher(SHOWDOWN_ITEMS_TEXT_URL),
+    fetcher(CHAMPIONS_FORMATS_DATA_URL),
+    fetcher(CHAMPIONS_LEARNSETS_URL),
+    fetcher(CHAMPIONS_ABILITIES_URL),
+    fetcher(CHAMPIONS_MOVES_URL),
+    fetcher(CHAMPIONS_ITEMS_URL),
     fetcher(SPECIES_NAMES_URL),
     fetcher(MOVE_NAMES_URL),
     fetcher(ABILITY_NAMES_URL),
@@ -76,25 +92,35 @@ export async function downloadEverything(fetcher = fetchText) {
   const abilitiesText = parseShowdownExport(abilitiesTextSource, "AbilitiesText");
   const movesText = parseShowdownExport(movesTextSource, "MovesText");
   const itemsText = parseShowdownExport(itemsTextSource, "ItemsText");
+  const championsMod = {
+    formatsData: parseShowdownExport(championsFormatsDataSource, "FormatsData"),
+    learnsets: parseShowdownExport(championsLearnsetsSource, "Learnsets"),
+    abilities: parseShowdownExport(championsAbilitiesSource, "Abilities"),
+    moves: parseShowdownExport(championsMovesSource, "Moves"),
+    items: parseShowdownExport(championsItemsSource, "Items"),
+  };
   const aliasesByNumber = parseTraditionalChineseNames(speciesNamesCsv);
   const moveAliasesByNumber = parseLocalizedNamesByNumber(moveNamesCsv);
   const abilityAliasesByNumber = parseLocalizedNamesByNumber(abilityNamesCsv);
   const itemIdsByIdentifier = parsePokeApiItemIds(itemsCsv);
   const itemAliasesByNumber = parseLocalizedNamesByNumber(itemNamesCsv);
 
-  return {
-    pokemon: buildPokemon(pokedex, learnsets, aliasesByNumber),
-    abilities: attachNumberedAliases(
-      extractCatalogEntries(abilities, abilitiesText),
-      abilityAliasesByNumber,
-    ),
-    moves: attachNumberedAliases(extractCatalogEntries(moves, movesText), moveAliasesByNumber),
-    items: attachIdentifierAliases(
-      extractCatalogEntries(items, itemsText),
-      itemIdsByIdentifier,
-      itemAliasesByNumber,
-    ),
-  };
+  return applyChampionsData(
+    {
+      pokemon: buildPokemon(pokedex, learnsets, aliasesByNumber),
+      abilities: attachNumberedAliases(
+        extractCatalogEntries(abilities, abilitiesText),
+        abilityAliasesByNumber,
+      ),
+      moves: attachNumberedAliases(extractCatalogEntries(moves, movesText), moveAliasesByNumber),
+      items: attachIdentifierAliases(
+        extractCatalogEntries(items, itemsText),
+        itemIdsByIdentifier,
+        itemAliasesByNumber,
+      ),
+    },
+    championsMod,
+  );
 }
 
 export async function writeEverything(data) {

@@ -127,3 +127,59 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
   assert.equal(merged.pokemon[0].champions.usageCount, undefined);
   assert.equal(merged.pokemon[0].champions.catalogSource, undefined);
 });
+
+test("keeps Smogon SP spreads when merging or clearing Limitless usage", () => {
+  const spreads = [{ name: "Jolly:2/32/0/0/0/32", usageCount: 60, usagePercent: 60 }];
+  const usage = {
+    pokemon: [
+      {
+        id: "raichu",
+        name: "Raichu",
+        usageCount: 2,
+        usagePercent: 100,
+        usage: { abilities: [], items: [], moves: [], natures: [] },
+      },
+    ],
+    abilities: [],
+    items: [],
+    moves: [],
+  };
+
+  const merged = mergeLimitlessUsage(
+    {
+      pokemon: [
+        {
+          id: "raichu",
+          name: "Raichu",
+          champions: { legal: true, spreadsMeta: { source: "Smogon" }, usage: { spreads } },
+        },
+        {
+          id: "pikachu",
+          name: "Pikachu",
+          champions: {
+            legal: true,
+            source: "Limitless",
+            usageCount: 4,
+            spreadsMeta: { source: "Smogon" },
+            usage: { spreads, moves: [{ id: "fakeout", name: "Fake Out" }] },
+          },
+        },
+      ],
+      abilities: [],
+      items: [],
+      moves: [],
+    },
+    usage,
+  );
+
+  const [pikachu, raichu] = merged.pokemon;
+  assert.deepEqual(raichu.champions.usage.spreads, spreads);
+  assert.deepEqual(raichu.champions.usage.abilities, []);
+  assert.equal(raichu.champions.spreadsMeta.source, "Smogon");
+  assert.equal(raichu.champions.legal, true);
+
+  assert.deepEqual(pikachu.champions.usage, { spreads });
+  assert.equal(pikachu.champions.usageCount, undefined);
+  assert.equal(pikachu.champions.spreadsMeta.source, "Smogon");
+  assert.equal(pikachu.champions.legal, true);
+});

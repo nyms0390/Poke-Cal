@@ -1,59 +1,89 @@
 # PokéCal
 
-A compact competitive Pokémon toolkit for quick Pokémon lookup, Champions
-tournament usage, and two-Pokémon battle calculations.
+A compact, dependency-free competitive Pokémon toolkit: quick species lookup with Champions tournament usage, plus a two-Pokémon battle calculator.
 
-## Features
+## Overview
 
-- Search by English or Traditional Chinese species name.
-- Browse base stats, forms, abilities, moves, and items with Champions metadata.
-- Review Limitless Champions usage rates for Pokémon, abilities, items, and moves.
-- Open `battle.html` to configure two Pokémon, moves, SP, natures, stages, abilities, items, and status.
-- Compare move order from priority, Speed, Tailwind, paralysis, common item/ability multipliers, and Trick Room.
-- Calculate damage ranges and percentages for selected moves on both sides.
+PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows base stats, forms, abilities, moves, and items with Limitless Champions usage rates. The battle calculator (`battle.html`) configures two Pokémon (moves, SP, natures, stat stages, abilities, items, status) and computes move order and damage ranges. All catalog data is generated into `public/*.json` by sync scripts that pull from Pokémon Showdown, Limitless, and PokeAPI.
 
-## Run
+## Project Structure
 
-Use Node.js 20 or newer:
+```
+PokéCal/
+├── index.html                 # Lookup page (loads src/app.js)
+├── battle.html                # Battle calculator page (loads src/battle-page.js)
+├── src/
+│   ├── app.js                 # Lookup page controller
+│   ├── battle-page.js         # Battle calculator page controller
+│   ├── damage.js              # Damage formula engine
+│   ├── speed.js               # Speed calculation (Tailwind, paralysis, items, ...)
+│   ├── battle-order.js        # Move order (priority, Speed, Trick Room)
+│   ├── catalog.js             # Catalog search/sort helpers
+│   ├── data.js                # Data loading helpers
+│   ├── pokemon.js             # Species helpers
+│   ├── stats.js               # Stat math
+│   ├── showdown-data.js       # Pokémon Showdown export parsing
+│   ├── champions-data.js      # Champions mod overlay (legality, learnsets, balance)
+│   ├── limitless-data.js      # Limitless Champions usage building/merging
+│   ├── smogon-data.js         # Smogon ladder stats parsing (SP spreads)
+│   ├── usage-defaults.js      # Default move/item/ability seeding from usage
+│   ├── ui.js                  # Shared rendering helpers
+│   └── styles.css             # Shared styles
+├── public/                    # Generated catalogs (pokemon/abilities/moves/items .json)
+├── scripts/
+│   ├── sync-pokemon-data.mjs              # Regenerate public/*.json from Showdown (+ Champions mod) + PokeAPI
+│   ├── sync-limitless-champions-usage.mjs # Overlay Limitless Champions usage
+│   ├── sync-champions-spreads.mjs         # Overlay Smogon ladder SP spreads
+│   └── serve.mjs                          # Static file server (127.0.0.1:4173)
+├── test/                      # Node built-in test runner suites (node --test)
+├── data/pokeapi/              # Local snapshots of PokeAPI CSVs (sync script downloads from GitHub)
+├── .github/workflows/pages.yml # Deploys repo root to GitHub Pages on push to main
+└── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
+```
+
+## Requirements
+
+- Node.js 20 or newer (uses `node --test`, `fetch`, ES modules)
+- No npm dependencies (`npm install` is unnecessary)
+
+## Setup
 
 ```sh
-npm run sync-data
-npm test
+npm run sync-data              # regenerate public/*.json from Showdown (incl. Champions mod) + PokeAPI (needs internet)
+npm run sync-champions-data    # overlay Limitless Champions usage (run after sync-data)
+npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run after sync-champions-data)
+npm run sync-all               # all three, in order
+```
+
+Generated catalogs are committed, so syncing is only needed to refresh data.
+
+## Usage
+
+```sh
 npm start
 ```
 
-Then open <http://127.0.0.1:4173> for lookup or
-<http://127.0.0.1:4173/battle.html> for the battle calculator.
+Then open <http://127.0.0.1:4173> for lookup or <http://127.0.0.1:4173/battle.html> for the battle calculator. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
 
 ## Data Sources
 
-`sync-data` downloads Pokémon Showdown's Pokédex, learnset, ability, move, item,
-and text-description data, plus PokeAPI's Traditional Chinese species-name
-localization CSV. Run `sync-champions-data` after `sync-data` to overlay
-Limitless Champions tournament usage.
+- Pokémon Showdown (mechanics/catalog seed: pokedex, learnsets, abilities, moves, items, text descriptions): <https://github.com/smogon/pokemon-showdown/tree/master/data>
+- Pokémon Showdown Champions mod (Champions legality and balance overrides: per-species legality/tier from `formats-data.ts`, Champions learnsets, move/item/ability availability and stat changes): <https://github.com/smogon/pokemon-showdown/tree/master/data/mods/champions>. Applied during `sync-data`; catalogs get a `champions.legal` flag and Champions-legal Pokémon get Champions learnsets and move/item stats.
+- Limitless tournament API (Champions usage counts, rates, per-Pokémon items/abilities/moves/natures): <https://play.limitlesstcg.com/tournaments> (`VGC` game, `M-B` format, last 50 tournaments by default)
+- Smogon ladder usage stats (popular SP spreads per Pokémon, `Nature:HP/Atk/Def/SpA/SpD/Spe` with usage rates): <https://www.smogon.com/stats/> chaos JSON for the Champions VGC ladder. `sync-champions-spreads` auto-detects the latest month and newest regulation (Bo1 + Bo3, rating cutoff 1760 by default; override with `--month`, `--formats`, `--cutoff`, `--top`) and writes top spreads to `champions.usage.spreads` in `public/pokemon.json`.
+- PokeAPI CSVs (Traditional Chinese search aliases only): `pokemon_species_names.csv`, `move_names.csv`, `ability_names.csv`, `items.csv`, `item_names.csv`
 
-Pokémon Showdown remains the mechanics/catalog seed for stats, forms, learnsets,
-abilities, moves, items, and descriptions. Limitless is the source for Champions
-tournament usage counts, rates, per-Pokémon items, abilities, moves, and natures.
-PokeAPI only supplies search aliases.
+Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.json`, `public/items.json`. Re-run `npm run sync-data` when Showdown data changes; `npm run sync-champions-data` (alias: `sync-champions-usage`) when Limitless has new Champions tournaments; `npm run sync-champions-spreads` when Smogon publishes new monthly stats (1st–2nd of each month). `.github/workflows/update-data.yml` runs all three weekly and commits changes.
 
-Raw sources:
+## Development
 
-- Pokémon, learnsets, abilities, moves, items, and descriptions:
-  <https://github.com/smogon/pokemon-showdown/tree/master/data>
-- Limitless tournament API:
-  <https://play.limitlesstcg.com/tournaments>
-- Traditional Chinese species search aliases:
-  <https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_species_names.csv>
+```sh
+npm test                 # full suite (node --test)
+npm run test:battle      # battle-order, damage, speed
+npm run test:catalog     # catalog, pokemon, stats, ui
+npm run test:data        # champions-data, data, limitless-data, showdown-data, smogon-data, sync-pokemon-data, usage-defaults
+npm run test:damage      # damage only
+npm run test:pokemon     # pokemon only
+```
 
-The generated data files are:
-
-- `public/pokemon.json`
-- `public/abilities.json`
-- `public/moves.json`
-- `public/items.json`
-
-Run `npm run sync-data` again when a future Pokémon Showdown patch updates
-Pokémon, items, abilities, moves, or descriptions. Run
-`npm run sync-champions-data` when Limitless has new Champions tournaments. Use
-`npm run sync-champions-usage` to refresh only Limitless usage.
+No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` publishes the repository root to GitHub Pages on every push to `main`.
