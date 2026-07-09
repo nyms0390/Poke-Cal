@@ -624,7 +624,7 @@ select:focus {
 
 .damage-controls {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) minmax(0, 1fr);
   gap: 1px;
   background: var(--line);
 }
@@ -637,6 +637,50 @@ select:focus {
   background:
     linear-gradient(180deg, rgb(78 93 160 / 4%), transparent 45%),
     #080d1c;
+}
+
+.field-card {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+  padding: clamp(20px, 3vw, 32px) clamp(18px, 3vw, 28px);
+  background:
+    linear-gradient(180deg, rgb(255 61 191 / 4%), transparent 45%),
+    #0b1023;
+}
+
+.radio-group {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio-group legend {
+  padding: 0;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.radio-option {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  color: #dbe3f7;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.radio-option input {
+  accent-color: var(--magenta);
 }
 
 .damage-side > label,
@@ -822,6 +866,13 @@ select:focus {
   color: #a9b8d6;
   font-size: 0.86rem;
   line-height: 1.35;
+}
+
+.damage-notes {
+  margin: 0;
+  color: #6d7ba0;
+  font-size: 0.76rem;
+  line-height: 1.4;
 }
 
 .damage-result-summary {
@@ -1168,7 +1219,8 @@ footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .damage-side {
+  .damage-side,
+  .field-card {
     min-width: 0;
   }
 

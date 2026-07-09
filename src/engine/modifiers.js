@@ -199,7 +199,56 @@ function superEffectiveMoveModifier(ctx) {
   return null;
 }
 
-const GENERIC_ATTACKER_MODIFIERS = [weatherModifier, plateModifier, superEffectiveMoveModifier];
+// -- Terrain basics (field.js task P1-01) ----------------------------------------------------
+// A Pokémon's `state.grounded` defaults to "auto" (undefined), which every existing terrain/
+// gravity check in this codebase already treats as grounded — only an explicit `false`
+// (Flying-type, Levitate, Air Balloon, etc.) opts a side out. Mirrored here for consistency.
+
+function isGrounded(state) {
+  return state?.grounded !== false;
+}
+
+// Electric/Grassy/Psychic Terrain boost matching-type moves ×1.3 for the grounded user.
+// Misty Terrain has no offensive boost of its own (only the Dragon reduction below).
+const TERRAIN_BOOST_TYPES = {
+  electricterrain: "Electric",
+  grassyterrain: "Grass",
+  psychicterrain: "Psychic",
+};
+
+function terrainPowerModifier(ctx) {
+  const boostType = TERRAIN_BOOST_TYPES[normalizeId(ctx.field.terrain)];
+  if (!boostType || boostType !== ctx.moveType) return null;
+  if (!isGrounded(ctx.attackerState)) return null;
+  return { kind: "power", value: 1.3, label: `${ctx.field.terrain} boost` };
+}
+
+// Misty Terrain halves Dragon-type damage against grounded targets.
+function mistyTerrainDragonModifier(ctx) {
+  if (normalizeId(ctx.field.terrain) !== "mistyterrain") return null;
+  if (ctx.moveType !== "Dragon") return null;
+  if (!isGrounded(ctx.defenderState)) return null;
+  return { kind: "damage", value: 0.5, label: "Misty Terrain weakens Dragon moves" };
+}
+
+// Grassy Terrain halves ground-shaking moves against grounded targets.
+const GRASSY_TERRAIN_HALVED_MOVE_IDS = new Set(["earthquake", "bulldoze", "magnitude"]);
+
+function grassyTerrainGroundMoveModifier(ctx) {
+  if (normalizeId(ctx.field.terrain) !== "grassyterrain") return null;
+  if (!GRASSY_TERRAIN_HALVED_MOVE_IDS.has(normalizeId(ctx.move.id ?? ctx.move.name))) return null;
+  if (!isGrounded(ctx.defenderState)) return null;
+  return { kind: "damage", value: 0.5, label: "Grassy Terrain weakens ground-shaking moves" };
+}
+
+const GENERIC_ATTACKER_MODIFIERS = [
+  weatherModifier,
+  plateModifier,
+  superEffectiveMoveModifier,
+  terrainPowerModifier,
+  mistyTerrainDragonModifier,
+  grassyTerrainGroundMoveModifier,
+];
 
 function toList(result) {
   if (!result) return [];

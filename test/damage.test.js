@@ -2699,3 +2699,207 @@ test("formats unsupported damage results with their specific reason", () => {
 
   assert.equal(formatDamageResult(result), "Grass Knot requires defender weight.");
 });
+
+// -- P1-01 field UI golden checks --------------------------------------------------------------
+// Hand-computed against the pipeline documented in ROADMAP.md ("Damage pipeline order"), not the
+// NCP calculator, since these fixtures use round base stats chosen to keep the arithmetic exact.
+
+test("golden: Charizard Weather Ball gets the Fire type, the power double, and the sun damage boost", () => {
+  const charizard = {
+    id: "charizard",
+    name: "Charizard",
+    types: ["Fire", "Flying"],
+    baseStats: { hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
+  };
+  const neutralTarget = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const weatherBall = { id: "weatherball", name: "Weather Ball", type: "Normal", category: "Special", basePower: 50 };
+
+  const noWeather = calculateDamage({
+    attacker: charizard,
+    defender: neutralTarget,
+    move: weatherBall,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const inSun = calculateDamage({
+    attacker: charizard,
+    defender: neutralTarget,
+    move: weatherBall,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+
+  // No weather: Normal-type, basePower 50, no STAB. atk unused (Special); spa 129 vs spd 100.
+  // base = floor(22*50*129/100/50)+2 = 30. roll 85-100% -> 25-30.
+  assert.deepEqual([noWeather.minDamage, noWeather.maxDamage], [25, 30]);
+  // Sun: Fire type, power doubled to 100 (STAB x1.5), plus the sun Fire damage boost (x1.5).
+  // base = floor(22*100*129/100/50)+2 = 58. x1.5 STAB, then x1.5 sun -> roll 85-100% -> 109-130.
+  assert.deepEqual([inSun.minDamage, inSun.maxDamage], [109, 130]);
+  assert.equal(inSun.notes.includes("Weather Ball is Fire type"), true);
+  assert.equal(inSun.notes.includes("Weather Ball power 100"), true);
+  assert.equal(inSun.notes.includes("Harsh sunlight"), true);
+});
+
+test("golden: Electric Terrain gives grounded Electric moves a x1.3 boost, not ungrounded ones", () => {
+  const attacker = {
+    id: "electricattacker",
+    name: "Electricattacker",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 100, spe: 50 },
+  };
+  const discharge = { id: "discharge", name: "Discharge", type: "Electric", category: "Special", basePower: 100 };
+
+  const noTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: discharge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const groundedInTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: discharge,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+  const ungroundedInTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: discharge,
+    attackerState: { ...neutralState, grounded: false },
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+
+  // No terrain: spa 120 vs spd 120, power 100, STAB x1.5. base = floor(22*100*120/120/50)+2 = 46.
+  // roll 85-100% -> 58-69 after STAB.
+  assert.deepEqual([noTerrain.minDamage, noTerrain.maxDamage], [58, 69]);
+  // Electric Terrain boosts power to floor(100*1.3)=130 for the grounded attacker.
+  // base = floor(22*130*120/120/50)+2 = 59. roll 85-100% -> 75-88 after STAB.
+  assert.deepEqual([groundedInTerrain.minDamage, groundedInTerrain.maxDamage], [75, 88]);
+  assert.equal(groundedInTerrain.notes.includes("Electric Terrain boost"), true);
+  // An ungrounded attacker (Levitate, Flying, etc.) does not get the terrain boost.
+  assert.deepEqual([ungroundedInTerrain.minDamage, ungroundedInTerrain.maxDamage], [58, 69]);
+});
+
+test("golden: Misty Terrain halves Dragon damage into grounded targets only", () => {
+  const attacker = {
+    id: "dragonattacker",
+    name: "Dragonattacker",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 100, spe: 50 },
+  };
+  const dragonPulse = { id: "dragonpulse", name: "Dragon Pulse", type: "Dragon", category: "Special", basePower: 100 };
+
+  const noTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: dragonPulse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const groundedInMisty = calculateDamage({
+    attacker,
+    defender,
+    move: dragonPulse,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Misty Terrain" }),
+  });
+  const ungroundedInMisty = calculateDamage({
+    attacker,
+    defender,
+    move: dragonPulse,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, grounded: false },
+    field: createField({ terrain: "Misty Terrain" }),
+  });
+
+  // Same stats as the Electric Terrain case above: no terrain -> 58-69.
+  assert.deepEqual([noTerrain.minDamage, noTerrain.maxDamage], [58, 69]);
+  // Misty Terrain halves the final damage into a grounded target: floor(69*0.5)=34, floor(58*0.5)=29.
+  assert.deepEqual([groundedInMisty.minDamage, groundedInMisty.maxDamage], [29, 34]);
+  assert.equal(groundedInMisty.notes.includes("Misty Terrain weakens Dragon moves"), true);
+  // A Flying-type or otherwise ungrounded target is unaffected.
+  assert.deepEqual([ungroundedInMisty.minDamage, ungroundedInMisty.maxDamage], [58, 69]);
+});
+
+test("golden: Grassy Terrain halves Earthquake and Bulldoze into grounded targets only", () => {
+  const attacker = {
+    id: "groundattacker",
+    name: "Groundattacker",
+    types: ["Ground"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "neutraltarget",
+    name: "Neutraltarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 100, spa: 80, spd: 80, spe: 50 },
+  };
+  const earthquake = { id: "earthquake", name: "Earthquake", type: "Ground", category: "Physical", basePower: 100 };
+  const bulldoze = { id: "bulldoze", name: "Bulldoze", type: "Ground", category: "Physical", basePower: 60 };
+
+  const noTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: earthquake,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const groundedInGrassy = calculateDamage({
+    attacker,
+    defender,
+    move: earthquake,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Grassy Terrain" }),
+  });
+  const ungroundedInGrassy = calculateDamage({
+    attacker,
+    defender,
+    move: earthquake,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, grounded: false },
+    field: createField({ terrain: "Grassy Terrain" }),
+  });
+  const bulldozeInGrassy = calculateDamage({
+    attacker,
+    defender,
+    move: bulldoze,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Grassy Terrain" }),
+  });
+
+  // atk 120 vs def 120, power 100, STAB x1.5 (Ground). base = floor(22*100*120/120/50)+2 = 46.
+  // roll 85-100% -> 58-69 after STAB, same shape as the terrain cases above.
+  assert.deepEqual([noTerrain.minDamage, noTerrain.maxDamage], [58, 69]);
+  // Grassy Terrain halves Earthquake's final damage into a grounded target.
+  assert.deepEqual([groundedInGrassy.minDamage, groundedInGrassy.maxDamage], [29, 34]);
+  assert.equal(groundedInGrassy.notes.includes("Grassy Terrain weakens ground-shaking moves"), true);
+  // Not halved against an ungrounded (e.g. Flying) target.
+  assert.deepEqual([ungroundedInGrassy.minDamage, ungroundedInGrassy.maxDamage], [58, 69]);
+  // Bulldoze is halved by the same rule.
+  assert.equal(bulldozeInGrassy.notes.includes("Grassy Terrain weakens ground-shaking moves"), true);
+});

@@ -80,13 +80,17 @@ export function applyControl(state, { kind, stat, index, value }) {
 
 // Assembles the pieces shared by every damage calculation in one render pass: both sides'
 // Pokémon/state and the Field object built from the raw battle-condition control values
-// (`fieldInputs = { format, trickRoom, critical }`). Callers add `move`, and for the
-// defender-as-source cards, swap attacker/defender before calling calculateDamage.
+// (`fieldInputs = { format, weather, terrain, gravity, trickRoom, critical }`). Callers add
+// `move`, and for the defender-as-source cards, swap attacker/defender before calling
+// calculateDamage.
 export function buildCalcInput(damageState, fieldInputs = {}) {
   // createField spreads its overrides object, so an explicit `key: undefined` would clobber
   // the default — only pass through keys the caller actually supplied.
   const fieldOverrides = {};
   if (fieldInputs.format !== undefined) fieldOverrides.format = fieldInputs.format;
+  if (fieldInputs.weather !== undefined) fieldOverrides.weather = fieldInputs.weather;
+  if (fieldInputs.terrain !== undefined) fieldOverrides.terrain = fieldInputs.terrain;
+  if (fieldInputs.gravity !== undefined) fieldOverrides.gravity = fieldInputs.gravity;
   if (fieldInputs.trickRoom !== undefined) fieldOverrides.trickRoom = fieldInputs.trickRoom;
 
   return {

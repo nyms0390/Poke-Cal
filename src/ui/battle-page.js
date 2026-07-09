@@ -62,7 +62,10 @@ const elements = {
   attackerBurned: document.querySelector("#attacker-burned"),
   defenderBurned: document.querySelector("#defender-burned"),
   trickRoom: document.querySelector("#trick-room"),
-  battleFormat: document.querySelector("#battle-format"),
+  fieldGravity: document.querySelector("#field-gravity"),
+  fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
+  fieldWeatherInputs: document.querySelectorAll('input[name="field-weather"]'),
+  fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
@@ -99,6 +102,16 @@ let damageState = {
   defender: null,
 };
 
+// Module-level field selections (ROADMAP.md P1-01 step 2) — kept separate from damageState so
+// switching either side's Pokémon never resets weather/terrain/format/gravity/Trick Room.
+let fieldState = {
+  format: "doubles",
+  weather: "",
+  terrain: "",
+  gravity: false,
+  trickRoom: false,
+};
+
 initialize();
 
 async function initialize() {
@@ -133,11 +146,19 @@ for (const control of [
   elements.defenderParalyzed,
   elements.attackerBurned,
   elements.defenderBurned,
-  elements.trickRoom,
-  elements.battleFormat,
   elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
+}
+
+for (const control of [
+  ...elements.fieldFormatInputs,
+  ...elements.fieldWeatherInputs,
+  ...elements.fieldTerrainInputs,
+  elements.fieldGravity,
+  elements.trickRoom,
+]) {
+  control.addEventListener("input", handleFieldControl);
 }
 
 for (const side of ["attacker", "defender"]) {
@@ -302,6 +323,19 @@ function syncSideInputs(side) {
   }
 }
 
+// Updates the module-level fieldState from a Field-card control (format/weather/terrain radio
+// groups, gravity/Trick Room checkboxes). Kept separate from damageState/applyControl since the
+// field applies to both sides at once and must survive either side's Pokémon changing.
+function handleFieldControl(event) {
+  const { name, id, checked, value } = event.target;
+  if (name === "field-format") fieldState = { ...fieldState, format: value };
+  else if (name === "field-weather") fieldState = { ...fieldState, weather: value };
+  else if (name === "field-terrain") fieldState = { ...fieldState, terrain: value };
+  else if (id === "field-gravity") fieldState = { ...fieldState, gravity: checked };
+  else if (id === "trick-room") fieldState = { ...fieldState, trickRoom: checked };
+  renderDamage();
+}
+
 // Translates a raw DOM event into battle-state.js's `applyControl` call, then writes any
 // DOM-visible side effects (SP/stage clamping echoed back into the input, spread selection
 // re-syncing the nature/SP/stage inputs) before re-rendering.
@@ -399,8 +433,7 @@ function renderDamage() {
   renderFinalStats(elements.defenderFinalStats, defender);
 
   const calcInput = buildCalcInput(damageState, {
-    format: elements.battleFormat.value,
-    trickRoom: elements.trickRoom.checked,
+    ...fieldState,
     critical: elements.damageCritical.checked,
   });
 
@@ -512,6 +545,14 @@ function renderDamageCard(move, sourceSide, selected, calcInput) {
   ko.className = "damage-ko";
   ko.textContent = result.supported ? koSummary(result) : formatDamageResult(result);
   card.append(heading, meta, ko);
+
+  if (result.supported && result.notes?.length) {
+    const notes = document.createElement("p");
+    notes.className = "damage-notes";
+    notes.textContent = result.notes.join(" · ");
+    card.append(notes);
+  }
+
   return card;
 }
 

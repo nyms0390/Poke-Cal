@@ -142,3 +142,18 @@ test("buildCalcInput defaults critical to false and format/trickRoom to Field de
   assert.equal(input.field.format, "doubles");
   assert.equal(input.field.trickRoom, false);
 });
+
+test("buildCalcInput passes weather/terrain/gravity through to the Field object", () => {
+  const damageState = {
+    attacker: createSideState(pikachu, usageDefaults),
+    defender: createSideState(pikachu, usageDefaults),
+  };
+  const input = buildCalcInput(damageState, {
+    weather: "SunnyDay",
+    terrain: "Electric Terrain",
+    gravity: true,
+  });
+  assert.equal(input.field.weather, "SunnyDay");
+  assert.equal(input.field.terrain, "Electric Terrain");
+  assert.equal(input.field.gravity, true);
+});
