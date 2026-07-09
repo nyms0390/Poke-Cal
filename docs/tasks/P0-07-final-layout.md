@@ -106,3 +106,12 @@ npm test
   `test:damage` (41), `test:pokemon` (24) individually — all green. Did not drive a real browser
   against the dev server (no GUI browser reachable from this sandbox) — a manual `npm start`
   check at desktop/mobile widths is still worth doing, per this task's own acceptance criteria.
+- **Manual browser check completed** (2026-07-09): ran `npm start` on the user's machine and
+  drove their real Chrome via the browser tools. Battle Calculator page verified at 1440px and
+  ~500px widths (site's only breakpoint is `max-width: 720px`): all controls render (SP/stage
+  inputs, spread/nature selects, battle-condition checkboxes), move-damage cards compute and
+  display % ranges live. Edited an ATK stage input directly in the browser — `applyControl`
+  clamped it to +6, ATK recalculated 67→268 (67×4, correct for +6 stage), and Fake Out's damage
+  range updated live from 11%–13.6% to 44.1%–51.9%, confirming `buildCalcInput`/`applyControl`
+  wiring from `battle-state.js` works end-to-end in a real browser. No horizontal overflow at
+  narrow width, zero console errors throughout.
