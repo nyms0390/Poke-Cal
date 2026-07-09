@@ -1,5 +1,7 @@
-import { formatMovePriority } from "./catalog.js";
+import { formatMovePriority } from "../catalog.js";
 
+// Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
+// space is tight.
 export const STAT_LABELS = {
   hp: "HP",
   atk: "Atk",
@@ -7,6 +9,16 @@ export const STAT_LABELS = {
   spa: "SpA",
   spd: "SpD",
   spe: "Spe",
+};
+
+// Full-word stat labels — used on the lookup page's form-card stat grid.
+export const FULL_STAT_LABELS = {
+  hp: "HP",
+  atk: "Attack",
+  def: "Defense",
+  spa: "Sp. Atk",
+  spd: "Sp. Def",
+  spe: "Speed",
 };
 
 export function optionElement(value, text) {
@@ -85,4 +97,65 @@ export function textCell(text, className = "", label = "") {
   if (label) cell.dataset.label = label;
   cell.textContent = text;
   return cell;
+}
+
+// Shared Pokémon search-result row, used by both the lookup page's Pokémon search and the
+// battle page's attacker/defender search. `onSelect` receives the chosen entry.
+// `preventBlur: true` (battle page only) keeps the search input focused across the click by
+// stopping the pointerdown from blurring it before the click handler runs.
+export function searchResultButton(entry, onSelect, { preventBlur = false } = {}) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "search-result";
+  button.innerHTML = `
+    <span>${entry.name}</span>
+    <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
+    <strong>${entry.baseSpeed}</strong>
+  `;
+  if (preventBlur) button.addEventListener("pointerdown", (event) => event.preventDefault());
+  button.addEventListener("click", () => onSelect(entry));
+  return button;
+}
+
+// Shared SP / stat-stage number inputs for the battle page's attacker/defender columns.
+export function spInput({ stat, side, value = 0, onChange }) {
+  return statNumberInput({
+    stat,
+    side,
+    value,
+    onChange,
+    kind: "sp",
+    label: `${STAT_LABELS[stat]} SP`,
+    min: 0,
+    max: 32,
+  });
+}
+
+export function stageInput({ stat, side, value = 0, onChange }) {
+  return statNumberInput({
+    stat,
+    side,
+    value,
+    onChange,
+    kind: "stage",
+    label: `${STAT_LABELS[stat]} stage`,
+    min: -6,
+    max: 6,
+  });
+}
+
+function statNumberInput({ stat, side, value, onChange, kind, label: labelText, min, max }) {
+  const label = document.createElement("label");
+  label.textContent = labelText;
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = String(min);
+  input.max = String(max);
+  input.value = String(value);
+  input.dataset.side = side;
+  input.dataset.kind = kind;
+  input.dataset.stat = stat;
+  if (onChange) input.addEventListener("input", onChange);
+  label.append(input);
+  return label;
 }

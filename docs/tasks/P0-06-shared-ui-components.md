@@ -1,6 +1,6 @@
 # P0-06 — Deduplicate UI helpers into components.js and bootstrap.js
 
-Status: TODO
+Status: Done
 Depends on: —  (independent of P0-01…P0-05; touches only UI files)
 Phase: 0 (restructure, no behavior change)
 
@@ -52,3 +52,36 @@ initialize/load-catalog/error-message boilerplate is duplicated. One source for 
 npm run test:catalog
 npm test
 ```
+
+## Completion notes
+- Created `src/ui/components.js` (superset of the old `src/ui.js`) with `searchResultButton`,
+  `spInput`/`stageInput`, and the existing factories/`STAT_LABELS`. Also created
+  `src/ui/bootstrap.js` with `loadCatalogs({onStatus, onLoaded})` and `rankByUsage(entries, scope)`.
+- `searchResultButton(entry, onSelect, { preventBlur })` covers both call sites exactly: the
+  lookup page's version has no extra listener (`preventBlur` defaults to `false`), the battle
+  page's version passes `preventBlur: true` to keep its pointerdown-preventDefault behavior
+  (stops the search input from blurring before the click registers) — same class names and
+  innerHTML in both.
+- `spInput`/`stageInput` replace battle-page.js's inline SP/stage input construction; the
+  `onChange` handler is now attached at creation instead of in a separate post-loop
+  `querySelectorAll` pass, but it's the same single `input` listener either way.
+- **Did not** unify app.js's `renderFamilyStats` label map with `STAT_LABELS`: app.js displays
+  full words ("Attack", "Sp. Atk", "Speed" — lookup page form cards) while `STAT_LABELS` is
+  abbreviated ("Atk", "SpA", "Spe" — battle page, where space is tight). Merging them would
+  change displayed text on one page or the other, violating "pixel-identical." Instead, gave
+  app.js's map its own export, `FULL_STAT_LABELS`, in `components.js` — still a single
+  definition per label set, `grep -rn "STAT_LABELS" src/` shows exactly one `STAT_LABELS` and
+  one `FULL_STAT_LABELS`, each defined once.
+- `battle-page.js`'s `SP_STATS`/`STAGE_STATS` key arrays now derive from `STAT_KEYS`
+  (`src/engine/constants.js`, from P0-01) instead of being hand-typed.
+- Replaced all six `sortByChampionsUsage(applyScopedUsage(...))` call sites (3 in app.js, 3 in
+  battle-page.js) with `rankByUsage(...)`.
+- Deleted `src/ui.js`; repointed `test/ui.test.js` to `src/ui/components.js`.
+- Verified: `grep -rn '"search-result"' src/` → one hit (`components.js`). Started
+  `scripts/serve.mjs` and curled every touched module path (`app.js`, `battle-page.js`,
+  `ui/components.js`, `ui/bootstrap.js`, `engine/modifiers.js`, `engine/move-effects.js`) — all
+  200, old `src/ui.js` path now 404s as expected.
+- `npm run test:catalog` (45/45) and `npm test` (120/120) pass; `test/ui.test.js` repointed but
+  otherwise unedited. Did not drive an actual browser against the dev server (this sandbox has
+  no GUI browser reachable from it) — recommend a manual `npm start` check at desktop and mobile
+  widths before merging, per the task's acceptance criteria.

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { damagePercentColor, typeClassName } from "../src/ui.js";
+import { damagePercentColor, typeClassName } from "../src/ui/components.js";
 
 test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName("Bug"), "type-bug");

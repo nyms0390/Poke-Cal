@@ -1,5 +1,4 @@
 import {
-  applyScopedUsage,
   filterMoves,
   formatChampionsUsage,
   formatMoveAccuracy,
@@ -7,12 +6,19 @@ import {
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
-  sortByChampionsUsage,
 } from "./catalog.js";
-import { loadPokemonData } from "./data.js";
 import { megaFamily, searchPokemon } from "./pokemon.js";
 import { totalBaseStats } from "./stats.js";
-import { moveNameCell, optionElement, textCell, typeBadge, updateSelectOptions } from "./ui.js";
+import { loadCatalogs, rankByUsage } from "./ui/bootstrap.js";
+import {
+  FULL_STAT_LABELS,
+  moveNameCell,
+  optionElement,
+  searchResultButton,
+  textCell,
+  typeBadge,
+  updateSelectOptions,
+} from "./ui/components.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
@@ -52,23 +58,20 @@ let selectedMoves = [];
 initialize();
 
 async function initialize() {
-  try {
-    const data = await loadPokemonData();
-    pokemon = data.pokemon;
-    abilityLookup = data.abilityLookup;
-    moveLookup = data.moveLookup;
-    itemLookup = data.itemLookup;
-    items = data.items;
-    elements.status.textContent =
-      `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
-      `${data.moves.length} moves loaded`;
-    selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
-      syncSearch: false,
-    });
-  } catch (error) {
-    elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
-    console.error(error);
-  }
+  const data = await loadCatalogs({
+    onStatus: (text) => {
+      elements.status.textContent = text;
+    },
+  });
+  if (!data) return;
+  pokemon = data.pokemon;
+  abilityLookup = data.abilityLookup;
+  moveLookup = data.moveLookup;
+  itemLookup = data.itemLookup;
+  items = data.items;
+  selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
+    syncSearch: false,
+  });
 }
 
 elements.search.addEventListener("input", () => {
@@ -99,18 +102,7 @@ function searchOptions() {
 
 function renderSearchResults(results) {
   elements.results.replaceChildren(
-    ...results.map((entry) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "search-result";
-      button.innerHTML = `
-        <span>${entry.name}</span>
-        <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
-        <strong>${entry.baseSpeed}</strong>
-      `;
-      button.addEventListener("click", () => selectPokemon(entry));
-      return button;
-    }),
+    ...results.map((entry) => searchResultButton(entry, selectPokemon)),
   );
   elements.results.hidden = results.length === 0;
 }
@@ -132,15 +124,6 @@ function renderFormOptions() {
 }
 
 function renderFamilyStats() {
-  const labels = {
-    hp: "HP",
-    atk: "Attack",
-    def: "Defense",
-    spa: "Sp. Atk",
-    spd: "Sp. Def",
-    spe: "Speed",
-  };
-
   elements.baseStats.replaceChildren(
     ...selectedFamily.map((entry) => {
       const card = document.createElement("button");
@@ -160,7 +143,7 @@ function renderFamilyStats() {
           <strong>${abilities || "—"}</strong>
         </span>
         <span class="form-card-stats">
-          ${Object.entries(labels)
+          ${Object.entries(FULL_STAT_LABELS)
             .map(
               ([key, label]) => `
                 <span class="${key === "spe" ? "speed-stat" : ""}">
@@ -197,13 +180,9 @@ function renderCatalog() {
   renderUsageSource();
 
   const usage = selectedPokemon?.champions?.usage;
-  const abilities = sortByChampionsUsage(
-    applyScopedUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities),
-  );
-  const rankedItems = sortByChampionsUsage(applyScopedUsage(items, usage?.items));
-  selectedMoves = sortByChampionsUsage(
-    applyScopedUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup), usage?.moves),
-  );
+  const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
+  const rankedItems = rankByUsage(items, usage?.items);
+  selectedMoves = rankByUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup), usage?.moves);
 
   renderPlaystyle(abilities, rankedItems);
   renderSpreads();
@@ -231,7 +210,7 @@ function renderPlaystyle(abilities, rankedItems) {
 }
 
 function topName(entries, fallback) {
-  const [entry] = sortByChampionsUsage(entries);
+  const [entry] = rankByUsage(entries);
   return entry?.name ?? `no common ${fallback}`;
 }
 

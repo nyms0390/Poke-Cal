@@ -1,14 +1,12 @@
 import {
-  applyScopedUsage,
   formatMovePriority,
   formatChampionsUsage,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
-  sortByChampionsUsage,
 } from "./catalog.js";
 import { compareMoveOrder } from "./battle-order.js";
-import { loadPokemonData } from "./data.js";
 import { createField } from "./engine/field.js";
+import { STAT_KEYS } from "./engine/constants.js";
 import {
   calculateDamage,
   calculateStat,
@@ -20,7 +18,16 @@ import {
 import { searchPokemon } from "./pokemon.js";
 import { finalSpeed } from "./speed.js";
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
-import { damagePercentColor, optionElement, STAT_LABELS, typeBadge } from "./ui.js";
+import { loadCatalogs, rankByUsage } from "./ui/bootstrap.js";
+import {
+  damagePercentColor,
+  optionElement,
+  searchResultButton,
+  spInput,
+  stageInput,
+  STAT_LABELS,
+  typeBadge,
+} from "./ui/components.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -66,8 +73,8 @@ const elements = {
   status: document.querySelector("#status"),
 };
 
-const SP_STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
-const STAGE_STATS = ["atk", "def", "spa", "spd", "spe"];
+const SP_STATS = STAT_KEYS;
+const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
 
 let pokemon = [];
 let abilityLookup = new Map();
@@ -82,21 +89,18 @@ let damageState = {
 initialize();
 
 async function initialize() {
-  try {
-    const data = await loadPokemonData();
-    pokemon = data.pokemon;
-    abilityLookup = data.abilityLookup;
-    itemLookup = data.itemLookup;
-    moveLookup = data.moveLookup;
-    items = data.items;
-    elements.status.textContent =
-      `${pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
-      `${data.moves.length} moves loaded`;
-    renderDamageShell();
-  } catch (error) {
-    elements.status.textContent = "Run npm run sync-data to generate Pokémon data.";
-    console.error(error);
-  }
+  const data = await loadCatalogs({
+    onStatus: (text) => {
+      elements.status.textContent = text;
+    },
+  });
+  if (!data) return;
+  pokemon = data.pokemon;
+  abilityLookup = data.abilityLookup;
+  itemLookup = data.itemLookup;
+  moveLookup = data.moveLookup;
+  items = data.items;
+  renderDamageShell();
 }
 
 for (const control of [
@@ -170,19 +174,9 @@ function renderPokemonSearchResults(side) {
   });
 
   results.replaceChildren(
-    ...matches.map((entry) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "search-result";
-      button.innerHTML = `
-        <span>${entry.name}</span>
-        <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
-        <strong>${entry.baseSpeed}</strong>
-      `;
-      button.addEventListener("pointerdown", (event) => event.preventDefault());
-      button.addEventListener("click", () => seedDamageSide(side, entry));
-      return button;
-    }),
+    ...matches.map((entry) =>
+      searchResultButton(entry, (picked) => seedDamageSide(side, picked), { preventBlur: true }),
+    ),
   );
   const isOpen = matches.length > 0;
   results.hidden = !isOpen;
@@ -219,42 +213,12 @@ function renderSideInputs(side) {
   const stageContainer = elements[`${side}StageInputs`];
 
   spContainer.replaceChildren(
-    ...SP_STATS.map((stat) => {
-      const label = document.createElement("label");
-      label.textContent = `${STAT_LABELS[stat]} SP`;
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = "0";
-      input.max = "32";
-      input.value = "0";
-      input.dataset.side = side;
-      input.dataset.kind = "sp";
-      input.dataset.stat = stat;
-      label.append(input);
-      return label;
-    }),
+    ...SP_STATS.map((stat) => spInput({ stat, side, onChange: handleDamageControl })),
   );
 
   stageContainer.replaceChildren(
-    ...STAGE_STATS.map((stat) => {
-      const label = document.createElement("label");
-      label.textContent = `${STAT_LABELS[stat]} stage`;
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = "-6";
-      input.max = "6";
-      input.value = "0";
-      input.dataset.side = side;
-      input.dataset.kind = "stage";
-      input.dataset.stat = stat;
-      label.append(input);
-      return label;
-    }),
+    ...STAGE_STATS.map((stat) => stageInput({ stat, side, onChange: handleDamageControl })),
   );
-
-  for (const input of [...spContainer.querySelectorAll("input"), ...stageContainer.querySelectorAll("input")]) {
-    input.addEventListener("input", handleDamageControl);
-  }
 }
 
 function seedDamageSide(side, entry) {
@@ -293,10 +257,8 @@ function renderSideSelects(side, defaults) {
   const abilitySelect = elements[`${side}Ability`];
   const itemSelect = elements[`${side}Item`];
   const usage = damageState[side].pokemon?.champions?.usage;
-  const abilities = sortByChampionsUsage(
-    applyScopedUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities),
-  );
-  const rankedItems = sortByChampionsUsage(applyScopedUsage(items, usage?.items));
+  const abilities = rankByUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities);
+  const rankedItems = rankByUsage(items, usage?.items);
 
   spreadSelect.replaceChildren(
     optionElement("", "No Champions spread source"),
@@ -569,11 +531,9 @@ function selectedDamageMoves(side) {
 function damageMovesForSide(side) {
   const state = damageState[side];
   if (!state?.pokemon) return [];
-  return sortByChampionsUsage(
-    applyScopedUsage(
-      resolveChampionsPokemonMoves(state.pokemon, moveLookup),
-      state.pokemon.champions?.usage?.moves,
-    ),
+  return rankByUsage(
+    resolveChampionsPokemonMoves(state.pokemon, moveLookup),
+    state.pokemon.champions?.usage?.moves,
   );
 }
 
