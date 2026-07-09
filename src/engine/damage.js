@@ -189,6 +189,7 @@ export function calculateDamage({
     moveType,
     attackStat,
     isPhysical,
+    critical: effectiveCritical,
   })) {
     notes.push(modifier.label);
     if (modifier.kind === "attack") attackModifier *= modifier.value;

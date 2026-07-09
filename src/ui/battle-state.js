@@ -78,11 +78,31 @@ export function applyControl(state, { kind, stat, index, value }) {
   }
 }
 
+// A field-card side panel tracks all 8 side-condition checkboxes for one physical side of the
+// field (see battle-page.js's "Attacker's side"/"Defender's side" panels), because whichever
+// Pokémon stands there can either be the one attacking (its Helping Hand/Power Spot/Battery/
+// Steely Spirit boost its own move) or the one defending (its Reflect/Light Screen/Aurora Veil/
+// Friend Guard reduce the incoming hit) depending on which row of the damage list is being
+// calculated. `pickBoostFields`/`pickScreenFields` slice that 8-key panel object down to the
+// 4-key shape `field.attackerSide`/`field.defenderSide` (src/engine/field.js) actually expects.
+const BOOST_FIELD_KEYS = ["helpingHand", "powerSpot", "battery", "steelySpirit"];
+const SCREEN_FIELD_KEYS = ["reflect", "lightScreen", "auroraVeil", "friendGuard"];
+
+function pickFields(panel, keys) {
+  if (!panel) return undefined;
+  const picked = {};
+  for (const key of keys) picked[key] = Boolean(panel[key]);
+  return picked;
+}
+
 // Assembles the pieces shared by every damage calculation in one render pass: both sides'
-// Pokémon/state and the Field object built from the raw battle-condition control values
-// (`fieldInputs = { format, weather, terrain, gravity, trickRoom, critical }`). Callers add
-// `move`, and for the defender-as-source cards, swap attacker/defender before calling
-// calculateDamage.
+// Pokémon/state and the Field object(s) built from the raw battle-condition control values
+// (`fieldInputs = { format, weather, terrain, gravity, trickRoom, critical, attackerSide,
+// defenderSide }`). `attackerSide`/`defenderSide` are the two field-card panel objects, keyed by
+// physical side rather than by calculation direction. `field` is for the attacker-as-source
+// damage rows; `reverseField` swaps which panel supplies the boosts vs. the screens, for the
+// defender-as-source rows. Callers add `move`, and for the defender-as-source cards, swap
+// attacker/defender (and field/reverseField) before calling calculateDamage.
 export function buildCalcInput(damageState, fieldInputs = {}) {
   // createField spreads its overrides object, so an explicit `key: undefined` would clobber
   // the default — only pass through keys the caller actually supplied.
@@ -93,12 +113,28 @@ export function buildCalcInput(damageState, fieldInputs = {}) {
   if (fieldInputs.gravity !== undefined) fieldOverrides.gravity = fieldInputs.gravity;
   if (fieldInputs.trickRoom !== undefined) fieldOverrides.trickRoom = fieldInputs.trickRoom;
 
+  const attackerPanel = fieldInputs.attackerSide;
+  const defenderPanel = fieldInputs.defenderSide;
+  const attackerBoosts = pickFields(attackerPanel, BOOST_FIELD_KEYS);
+  const attackerScreens = pickFields(attackerPanel, SCREEN_FIELD_KEYS);
+  const defenderBoosts = pickFields(defenderPanel, BOOST_FIELD_KEYS);
+  const defenderScreens = pickFields(defenderPanel, SCREEN_FIELD_KEYS);
+
   return {
     attacker: damageState.attacker.pokemon,
     defender: damageState.defender.pokemon,
     attackerState: damageState.attacker,
     defenderState: damageState.defender,
-    field: createField(fieldOverrides),
+    field: createField({
+      ...fieldOverrides,
+      ...(attackerBoosts ? { attackerSide: attackerBoosts } : {}),
+      ...(defenderScreens ? { defenderSide: defenderScreens } : {}),
+    }),
+    reverseField: createField({
+      ...fieldOverrides,
+      ...(defenderBoosts ? { attackerSide: defenderBoosts } : {}),
+      ...(attackerScreens ? { defenderSide: attackerScreens } : {}),
+    }),
     critical: Boolean(fieldInputs.critical),
   };
 }

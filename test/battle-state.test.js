@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { applyControl, buildCalcInput, createSideState } from "../src/ui/battle-state.js";
+import { calculateDamage } from "../src/engine/damage.js";
 
 const pikachu = {
   id: "pikachu",
@@ -156,4 +157,84 @@ test("buildCalcInput passes weather/terrain/gravity through to the Field object"
   assert.equal(input.field.weather, "SunnyDay");
   assert.equal(input.field.terrain, "Electric Terrain");
   assert.equal(input.field.gravity, true);
+});
+
+// P1-02: attackerSide/defenderSide are field-card panels keyed by physical side ("Attacker's
+// side"/"Defender's side"), not by calculation direction — buildCalcInput must slice them into
+// the right role for each direction's Field object.
+test("buildCalcInput's field boosts the attacker-as-source row from the attacker panel only", () => {
+  const damageState = {
+    attacker: createSideState(pikachu, usageDefaults),
+    defender: createSideState(pikachu, usageDefaults),
+  };
+  const input = buildCalcInput(damageState, {
+    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false },
+    defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
+  });
+
+  assert.equal(input.field.attackerSide.helpingHand, true);
+  assert.equal(input.field.defenderSide.reflect, false);
+});
+
+test("buildCalcInput's reverseField swaps which panel supplies boosts vs. screens", () => {
+  const damageState = {
+    attacker: createSideState(pikachu, usageDefaults),
+    defender: createSideState(pikachu, usageDefaults),
+  };
+  const input = buildCalcInput(damageState, {
+    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false, reflect: true },
+    defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
+  });
+
+  // Side A's (the "Attacker's side" panel's) Helping Hand must not boost side B's move: in the
+  // reverse direction (defender-as-source), the attackerSide comes from the defender panel, so
+  // Helping Hand is off.
+  assert.equal(input.reverseField.attackerSide.helpingHand, false);
+  // Side A's Reflect becomes the incoming screen once side A is the one being hit.
+  assert.equal(input.reverseField.defenderSide.reflect, true);
+});
+
+test("buildCalcInput direction handling changes calculated damage: side A's Helping Hand only boosts side A's move", () => {
+  const attackerPokemon = {
+    id: "attackmon",
+    name: "Attackmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defenderPokemon = {
+    id: "defendmon",
+    name: "Defendmon",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const move = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 100 };
+  const damageState = {
+    attacker: createSideState(attackerPokemon, { ...usageDefaults, ability: null, item: null }),
+    defender: createSideState(defenderPokemon, { ...usageDefaults, ability: null, item: null }),
+  };
+  const input = buildCalcInput(damageState, {
+    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false },
+    defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
+  });
+
+  const sideAAttacks = calculateDamage({
+    attacker: input.attacker,
+    defender: input.defender,
+    move,
+    attackerState: input.attackerState,
+    defenderState: input.defenderState,
+    field: input.field,
+  });
+  const sideBAttacks = calculateDamage({
+    attacker: input.defender,
+    defender: input.attacker,
+    move,
+    attackerState: input.defenderState,
+    defenderState: input.attackerState,
+    field: input.reverseField,
+  });
+
+  assert.equal(sideAAttacks.notes.includes("Helping Hand"), true);
+  assert.equal(sideBAttacks.notes.includes("Helping Hand"), false);
+  assert.equal(sideAAttacks.maxDamage > sideBAttacks.maxDamage, true);
 });

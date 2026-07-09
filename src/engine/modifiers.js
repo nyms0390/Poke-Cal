@@ -241,6 +241,45 @@ function grassyTerrainGroundMoveModifier(ctx) {
   return { kind: "damage", value: 0.5, label: "Grassy Terrain weakens ground-shaking moves" };
 }
 
+// -- Side conditions (field.js task P0-03, wired up in P1-02) -------------------------------
+// `field.attackerSide` boosts the attacker's own move (Helping Hand, Power Spot, Battery,
+// Steely Spirit); `field.defenderSide` reduces incoming damage (screens, Friend Guard).
+// Both read straight off `ctx.field` rather than an ability/item id, so they live in the
+// generic producer lists below rather than ITEM_MODIFIERS/ABILITY_MODIFIERS.
+
+function attackerSideConditionModifiers(ctx) {
+  const side = ctx.field?.attackerSide;
+  if (!side) return [];
+  const modifiers = [];
+  if (side.helpingHand) modifiers.push({ kind: "power", value: 1.5, label: "Helping Hand" });
+  if (side.battery && !ctx.isPhysical) modifiers.push({ kind: "power", value: 1.3, label: "Battery" });
+  if (side.powerSpot) modifiers.push({ kind: "power", value: 1.3, label: "Power Spot" });
+  if (side.steelySpirit && ctx.moveType === "Steel") {
+    modifiers.push({ kind: "power", value: 1.5, label: "Steely Spirit" });
+  }
+  return modifiers;
+}
+
+// Reflect/Light Screen/Aurora Veil never stack (Aurora Veil alone covers both categories) and
+// are all skipped on a critical hit; Friend Guard is unrelated to crit and always applies.
+function defenderSideConditionModifiers(ctx) {
+  const side = ctx.field?.defenderSide;
+  if (!side) return [];
+  const modifiers = [];
+  if (!ctx.critical) {
+    const screenValue = ctx.field?.format === "doubles" ? 2 / 3 : 0.5;
+    if (side.auroraVeil) {
+      modifiers.push({ kind: "damage", value: screenValue, label: "Aurora Veil" });
+    } else if (side.reflect && ctx.isPhysical) {
+      modifiers.push({ kind: "damage", value: screenValue, label: "Reflect" });
+    } else if (side.lightScreen && !ctx.isPhysical) {
+      modifiers.push({ kind: "damage", value: screenValue, label: "Light Screen" });
+    }
+  }
+  if (side.friendGuard) modifiers.push({ kind: "damage", value: 0.75, label: "Friend Guard" });
+  return modifiers;
+}
+
 const GENERIC_ATTACKER_MODIFIERS = [
   weatherModifier,
   plateModifier,
@@ -248,7 +287,10 @@ const GENERIC_ATTACKER_MODIFIERS = [
   terrainPowerModifier,
   mistyTerrainDragonModifier,
   grassyTerrainGroundMoveModifier,
+  attackerSideConditionModifiers,
 ];
+
+const GENERIC_DEFENDER_MODIFIERS = [defenderSideConditionModifiers];
 
 function toList(result) {
   if (!result) return [];
@@ -272,6 +314,9 @@ export function collectModifiers(ctx) {
     modifiers.push(...toList(producer(attackerCtx)));
   }
   modifiers.push(...toList(ITEM_MODIFIERS[defenderItemId]?.(defenderCtx)));
+  for (const producer of GENERIC_DEFENDER_MODIFIERS) {
+    modifiers.push(...toList(producer(defenderCtx)));
+  }
   modifiers.push(...toList(ABILITY_MODIFIERS[defenderAbilityId]?.(defenderCtx)));
   modifiers.push(...toList(ABILITY_MODIFIERS[attackerAbilityId]?.(attackerCtx)));
   return modifiers;

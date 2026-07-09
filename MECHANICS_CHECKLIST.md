@@ -558,7 +558,7 @@ Currently implemented named effects:
 - [x] Dragon's Maw
 - [x] Rocky Payload
 - [x] Steelworker
-- [ ] Steely Spirit
+- [x] Steely Spirit
 - [x] Transistor
 
 ### Terrain setting
@@ -583,11 +583,11 @@ Currently implemented named effects:
 
 ### Ally special move power support
 
-- [ ] Battery
+- [x] Battery
 
 ### Ally all-move power support
 
-- [ ] Power Spot
+- [x] Power Spot
 
 ### Global ruin stat modifiers
 

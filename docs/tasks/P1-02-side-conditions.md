@@ -1,6 +1,6 @@
 # P1-02 — Side conditions: screens, Helping Hand, Friend Guard, Power Spot, Battery, Steely Spirit
 
-Status: TODO
+Status: Done
 Depends on: P1-01
 Phase: 1 (calculator foundations)
 

@@ -66,6 +66,7 @@ const elements = {
   fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
   fieldWeatherInputs: document.querySelectorAll('input[name="field-weather"]'),
   fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
+  fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
@@ -102,14 +103,35 @@ let damageState = {
   defender: null,
 };
 
+// One field-card panel's worth of side conditions — see battle-state.js's buildCalcInput doc
+// comment for why this is 8 keys (both boost- and screen-type) rather than the engine's two
+// separate 4-key attackerSide/defenderSide shapes.
+function neutralFieldSidePanel() {
+  return {
+    helpingHand: false,
+    powerSpot: false,
+    battery: false,
+    steelySpirit: false,
+    reflect: false,
+    lightScreen: false,
+    auroraVeil: false,
+    friendGuard: false,
+  };
+}
+
 // Module-level field selections (ROADMAP.md P1-01 step 2) — kept separate from damageState so
 // switching either side's Pokémon never resets weather/terrain/format/gravity/Trick Room.
+// attackerSide/defenderSide (P1-02) are keyed by physical field side ("Attacker's side"/
+// "Defender's side" panels), not by calculation direction — buildCalcInput derives both
+// directions' Field objects from these two panels.
 let fieldState = {
   format: "doubles",
   weather: "",
   terrain: "",
   gravity: false,
   trickRoom: false,
+  attackerSide: neutralFieldSidePanel(),
+  defenderSide: neutralFieldSidePanel(),
 };
 
 initialize();
@@ -155,6 +177,7 @@ for (const control of [
   ...elements.fieldFormatInputs,
   ...elements.fieldWeatherInputs,
   ...elements.fieldTerrainInputs,
+  ...elements.fieldSideInputs,
   elements.fieldGravity,
   elements.trickRoom,
 ]) {
@@ -327,8 +350,11 @@ function syncSideInputs(side) {
 // groups, gravity/Trick Room checkboxes). Kept separate from damageState/applyControl since the
 // field applies to both sides at once and must survive either side's Pokémon changing.
 function handleFieldControl(event) {
-  const { name, id, checked, value } = event.target;
-  if (name === "field-format") fieldState = { ...fieldState, format: value };
+  const { name, id, checked, value, dataset } = event.target;
+  if (dataset.kind === "field-side") {
+    const { side, key } = dataset;
+    fieldState = { ...fieldState, [side]: { ...fieldState[side], [key]: checked } };
+  } else if (name === "field-format") fieldState = { ...fieldState, format: value };
   else if (name === "field-weather") fieldState = { ...fieldState, weather: value };
   else if (name === "field-terrain") fieldState = { ...fieldState, terrain: value };
   else if (id === "field-gravity") fieldState = { ...fieldState, gravity: checked };
@@ -507,7 +533,10 @@ function renderDamageCard(move, sourceSide, selected, calcInput) {
     move,
     attackerState: isDefenderSource ? calcInput.defenderState : calcInput.attackerState,
     defenderState: isDefenderSource ? calcInput.attackerState : calcInput.defenderState,
-    field: calcInput.field,
+    // The Defender's side conditions boost the defender's own moves when it's the source of
+    // this row (and the Attacker's side conditions become the incoming screens) — see
+    // battle-state.js's buildCalcInput doc comment.
+    field: isDefenderSource ? calcInput.reverseField : calcInput.field,
     critical: calcInput.critical,
   });
 

@@ -2903,3 +2903,256 @@ test("golden: Grassy Terrain halves Earthquake and Bulldoze into grounded target
   // Bulldoze is halved by the same rule.
   assert.equal(bulldozeInGrassy.notes.includes("Grassy Terrain weakens ground-shaking moves"), true);
 });
+
+// -- P1-02 side conditions ---------------------------------------------------------------------
+// Hand-computed against the pipeline documented in ROADMAP.md steps 1 (power modifiers) and 12
+// (final modifiers). Shared fixtures: a 100/100/100/100/100/50 Normal-type attacker/defender pair
+// (both physical and special variants) so STAB always applies and the base damage is a round 46
+// with no field conditions, matching the terrain golden tests above.
+
+const physicalAttacker = {
+  id: "physicalattacker",
+  name: "Physicalattacker",
+  types: ["Normal"],
+  baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 50 },
+};
+const specialAttacker = {
+  id: "specialattacker",
+  name: "Specialattacker",
+  types: ["Normal"],
+  baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 50 },
+};
+const sideConditionDefender = {
+  id: "neutraltarget",
+  name: "Neutraltarget",
+  types: ["Water"],
+  baseStats: { hp: 80, atk: 80, def: 100, spa: 80, spd: 100, spe: 50 },
+};
+const physicalNormalMove = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 100 };
+const specialNormalMove = { id: "hypervoice", name: "Hyper Voice", type: "Normal", category: "Special", basePower: 100 };
+
+test("golden: Helping Hand boosts move power and stacks with Life Orb (power step, then final-damage step)", () => {
+  const noBoost = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const helpingHand = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { helpingHand: true } }),
+  });
+  const helpingHandAndLifeOrb = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: { ...neutralState, item: { id: "lifeorb", name: "Life Orb" } },
+    defenderState: neutralState,
+    field: createField({ attackerSide: { helpingHand: true } }),
+  });
+
+  // No boost: atk 100 vs def 100, power 100, STAB x1.5. base = floor(22*100*100/100/50)+2 = 46.
+  assert.deepEqual([noBoost.minDamage, noBoost.maxDamage], [58, 69]);
+  // Helping Hand raises power to 150 before the base-damage step: base = floor(22*150*100/100/50)+2 = 68.
+  assert.deepEqual([helpingHand.minDamage, helpingHand.maxDamage], [85, 102]);
+  assert.equal(helpingHand.notes.includes("Helping Hand"), true);
+  // Life Orb (x1.3) applies after STAB/type in the final-damage step, on top of Helping Hand's
+  // power-step boost: 85*1.3 -> 110 (floored), 102*1.3 -> 132 (floored, per-roll rounding).
+  assert.deepEqual([helpingHandAndLifeOrb.minDamage, helpingHandAndLifeOrb.maxDamage], [110, 132]);
+});
+
+test("golden: Battery boosts only special moves; Power Spot boosts either category", () => {
+  const batterySpecial = calculateDamage({
+    attacker: specialAttacker,
+    defender: sideConditionDefender,
+    move: specialNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { battery: true } }),
+  });
+  const batteryPhysical = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { battery: true } }),
+  });
+  const powerSpot = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { powerSpot: true } }),
+  });
+
+  // Battery raises the special move's power to 130: base = floor(22*130*100/100/50)+2 = 59.
+  assert.deepEqual([batterySpecial.minDamage, batterySpecial.maxDamage], [75, 88]);
+  assert.equal(batterySpecial.notes.includes("Battery"), true);
+  // Battery does not touch a physical move.
+  assert.deepEqual([batteryPhysical.minDamage, batteryPhysical.maxDamage], [58, 69]);
+  assert.equal(batteryPhysical.notes.includes("Battery"), false);
+  // Power Spot raises any category's power to 130, same 75-88 shape as Battery above.
+  assert.deepEqual([powerSpot.minDamage, powerSpot.maxDamage], [75, 88]);
+  assert.equal(powerSpot.notes.includes("Power Spot"), true);
+});
+
+test("golden: Steely Spirit boosts only Steel-type moves", () => {
+  const steelMove = { id: "ironhead", name: "Iron Head", type: "Steel", category: "Physical", basePower: 100 };
+  const boosted = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: steelMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { steelySpirit: true } }),
+  });
+  const notBoosted = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ attackerSide: { steelySpirit: true } }),
+  });
+
+  // Steely Spirit raises Iron Head's power to 150 (no STAB — the attacker isn't Steel-type),
+  // base = floor(22*150*100/100/50)+2 = 68. Steel is not very effective into Water (x0.5):
+  // floor(68*0.85)=57, floor(68*1)=68, halved to 28/34.
+  assert.deepEqual([boosted.minDamage, boosted.maxDamage], [28, 34]);
+  assert.equal(boosted.notes.includes("Steely Spirit"), true);
+  // A non-Steel move on the same side is untouched.
+  assert.deepEqual([notBoosted.minDamage, notBoosted.maxDamage], [58, 69]);
+  assert.equal(notBoosted.notes.includes("Steely Spirit"), false);
+});
+
+test("golden: Reflect halves physical damage (x2/3 in doubles, x1/2 in singles), never special", () => {
+  const doublesReflect = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { reflect: true } }),
+  });
+  const singlesReflect = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles", defenderSide: { reflect: true } }),
+  });
+  const reflectVsSpecial = calculateDamage({
+    attacker: specialAttacker,
+    defender: sideConditionDefender,
+    move: specialNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { reflect: true } }),
+  });
+
+  // No-field base is 58-69 (see the Helping Hand test above); doubles Reflect applies x2/3:
+  // floor(58*2/3)=38, floor(69*2/3)=46.
+  assert.deepEqual([doublesReflect.minDamage, doublesReflect.maxDamage], [38, 46]);
+  assert.equal(doublesReflect.notes.includes("Reflect"), true);
+  // Singles Reflect applies x1/2: floor(58*0.5)=29, floor(69*0.5)=34.
+  assert.deepEqual([singlesReflect.minDamage, singlesReflect.maxDamage], [29, 34]);
+  // Reflect never reduces a special move.
+  assert.deepEqual([reflectVsSpecial.minDamage, reflectVsSpecial.maxDamage], [58, 69]);
+  assert.equal(reflectVsSpecial.notes.includes("Reflect"), false);
+});
+
+test("golden: Light Screen halves special damage only; Aurora Veil covers both and never stacks with the others", () => {
+  const lightScreen = calculateDamage({
+    attacker: specialAttacker,
+    defender: sideConditionDefender,
+    move: specialNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { lightScreen: true } }),
+  });
+  const auroraVeilPhysical = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { auroraVeil: true } }),
+  });
+  const auroraVeilAndReflect = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { reflect: true, auroraVeil: true } }),
+  });
+
+  // Same x2/3 doubles shape as Reflect: 38-46.
+  assert.deepEqual([lightScreen.minDamage, lightScreen.maxDamage], [38, 46]);
+  assert.equal(lightScreen.notes.includes("Light Screen"), true);
+  assert.deepEqual([auroraVeilPhysical.minDamage, auroraVeilPhysical.maxDamage], [38, 46]);
+  assert.equal(auroraVeilPhysical.notes.includes("Aurora Veil"), true);
+  // Reflect + Aurora Veil active together only ever apply one screen multiplier.
+  assert.deepEqual([auroraVeilAndReflect.minDamage, auroraVeilAndReflect.maxDamage], [38, 46]);
+  assert.deepEqual(auroraVeilAndReflect.notes.filter((note) => note === "Reflect" || note === "Aurora Veil"), [
+    "Aurora Veil",
+  ]);
+});
+
+test("golden: a critical hit ignores all three screens but not Friend Guard, which always applies", () => {
+  const critIgnoresReflect = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { reflect: true } }),
+    critical: true,
+  });
+  const friendGuard = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { friendGuard: true } }),
+  });
+  const friendGuardOnCrit = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { friendGuard: true } }),
+    critical: true,
+  });
+  const friendGuardAndReflect = calculateDamage({
+    attacker: physicalAttacker,
+    defender: sideConditionDefender,
+    move: physicalNormalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ defenderSide: { reflect: true, friendGuard: true } }),
+  });
+
+  // Crit base (x1.5 crit multiplier ahead of the roll): floor(46*1.5)=69, roll 85-100% -> 87-103,
+  // with no Reflect discount at all.
+  assert.deepEqual([critIgnoresReflect.minDamage, critIgnoresReflect.maxDamage], [87, 103]);
+  assert.equal(critIgnoresReflect.notes.includes("Reflect"), false);
+  // Friend Guard x0.75 on the no-field 58-69 base: floor(58*0.75)=43, floor(69*0.75)=51.
+  assert.deepEqual([friendGuard.minDamage, friendGuard.maxDamage], [43, 51]);
+  // Friend Guard still applies on a crit (only the screens are crit-skipped): 87*0.75 -> 65, 103*0.75 -> 77.
+  assert.deepEqual([friendGuardOnCrit.minDamage, friendGuardOnCrit.maxDamage], [65, 77]);
+  assert.equal(friendGuardOnCrit.notes.includes("Friend Guard"), true);
+  // Friend Guard stacks multiplicatively with a screen (different modifier kinds): the doubles
+  // Reflect discount (x2/3) times Friend Guard (x0.75) is exactly x0.5: floor(58*0.5)=29, floor(69*0.5)=34.
+  assert.deepEqual([friendGuardAndReflect.minDamage, friendGuardAndReflect.maxDamage], [29, 34]);
+});
