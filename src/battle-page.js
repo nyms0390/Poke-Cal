@@ -8,6 +8,7 @@ import {
 } from "./catalog.js";
 import { compareMoveOrder } from "./battle-order.js";
 import { loadPokemonData } from "./data.js";
+import { createField } from "./engine/field.js";
 import {
   calculateDamage,
   calculateStat,
@@ -423,16 +424,21 @@ function renderDamage() {
   elements.defenderSummary.textContent = sideSummary(defender);
   renderFinalStats(elements.attackerFinalStats, attacker);
   renderFinalStats(elements.defenderFinalStats, defender);
-  renderMoveOrder();
+  const field = createField({
+    format: elements.battleFormat.value,
+    trickRoom: elements.trickRoom.checked,
+  });
+
+  renderMoveOrder(field);
   elements.speedSummary.textContent =
     `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
     `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
 
   const attackerRows = selectedDamageMoves("attacker").map((move, index) =>
-    renderDamageCard(move, "attacker", "defender", index === 0),
+    renderDamageCard(move, "attacker", "defender", index === 0, field),
   );
   const defenderRows = selectedDamageMoves("defender").map((move, index) =>
-    renderDamageCard(move, "defender", "attacker", index === 0),
+    renderDamageCard(move, "defender", "attacker", index === 0, field),
   );
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = `${rows.length} moves`;
@@ -485,7 +491,7 @@ function damageColumn(title, cards) {
   return column;
 }
 
-function renderDamageCard(move, sourceSide, targetSide, selected) {
+function renderDamageCard(move, sourceSide, targetSide, selected, field) {
   const source = damageState[sourceSide];
   const target = damageState[targetSide];
   const result = calculateDamage({
@@ -494,9 +500,8 @@ function renderDamageCard(move, sourceSide, targetSide, selected) {
     move,
     attackerState: source,
     defenderState: target,
-    battleFormat: elements.battleFormat.value,
+    field,
     critical: elements.damageCritical.checked,
-    burned: source.burned,
   });
 
   const card = document.createElement("article");
@@ -536,7 +541,7 @@ function renderDamageCard(move, sourceSide, targetSide, selected) {
   return card;
 }
 
-function renderMoveOrder() {
+function renderMoveOrder(field) {
   const [attackerMove] = selectedDamageMoves("attacker");
   const [defenderMove] = selectedDamageMoves("defender");
   if (!attackerMove || !defenderMove) {
@@ -549,7 +554,7 @@ function renderMoveOrder() {
     defender: damageState.defender,
     attackerMove,
     defenderMove,
-    trickRoom: elements.trickRoom.checked,
+    trickRoom: field.trickRoom,
   });
   elements.moveOrder.textContent = result.reason;
 }

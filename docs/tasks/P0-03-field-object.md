@@ -1,6 +1,6 @@
 # P0-03 — Introduce the Field object and thread it through the engine
 
-Status: TODO
+Status: Done
 Depends on: P0-02
 Phase: 0 (restructure, no behavior change)
 

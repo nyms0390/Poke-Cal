@@ -1,6 +1,7 @@
 import { NATURES, natureMultiplier, natureOptionLabel } from "./engine/natures.js";
 import { TYPE_EFFECTIVENESS } from "./engine/type-chart.js";
 import { calculateStat, applyStage } from "./engine/stats.js";
+import { createField } from "./engine/field.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };
@@ -143,14 +144,10 @@ export function calculateDamage({
   move,
   attackerState,
   defenderState,
-  battleFormat = "doubles",
+  field = createField(),
   critical = false,
-  burned = false,
-  weather = "",
-  terrain = "",
-  gravity = false,
-  pledgeCombo = false,
 }) {
+  const { format: battleFormat, weather, terrain, gravity, pledgeCombo = false } = field;
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
@@ -278,7 +275,7 @@ export function calculateDamage({
     ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
     : 1;
   const burnModifier =
-    burned && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
+    attackerState.burned && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");

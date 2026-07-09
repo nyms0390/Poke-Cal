@@ -10,6 +10,7 @@ import {
   natureOptionLabel,
   unsupportedMoveReason,
 } from "../src/damage.js";
+import { createField } from "../src/engine/field.js";
 
 const pikachu = {
   id: "pikachu",
@@ -92,7 +93,6 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
     move: physical,
     attackerState: { ...neutralState, burned: true },
     defenderState: neutralState,
-    burned: true,
   });
   const critical = calculateDamage({
     attacker: pikachu,
@@ -154,7 +154,7 @@ test("defaults to doubles spread-move damage", () => {
     move: spreadThunderbolt,
     attackerState: neutralState,
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
 
   assert.deepEqual([doubles.minDamage, doubles.maxDamage], [64, 78]);
@@ -372,7 +372,7 @@ test("scales Beat Up damage by eligible party member count", () => {
     move: beatUp,
     attackerState: neutralState,
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const threeMembers = calculateDamage({
     attacker: darkUser,
@@ -380,7 +380,7 @@ test("scales Beat Up damage by eligible party member count", () => {
     move: beatUp,
     attackerState: { ...neutralState, beatUpPartyCount: 3 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const resisted = calculateDamage({
     attacker: darkUser,
@@ -388,7 +388,7 @@ test("scales Beat Up damage by eligible party member count", () => {
     move: beatUp,
     attackerState: { ...neutralState, beatUpPartyCount: 3 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
 
   assert.equal(fullParty.notes.includes("Beat Up power 17"), true);
@@ -424,7 +424,6 @@ test("applies curated item and ability modifiers", () => {
       move,
       attackerState: { ...neutralState, ...statePatch },
       defenderState: neutralState,
-      burned: statePatch.burned ?? false,
     });
     assert.equal(result.notes.includes(label), true, label);
   }
@@ -754,7 +753,7 @@ test("uses form, weather, and terrain context for dynamic move type and power", 
     move: weatherBall,
     attackerState: neutralState,
     defenderState: neutralState,
-    weather: "RainDance",
+    field: createField({ weather: "RainDance" }),
   });
   const normalTerrainPulse = calculateDamage({
     attacker: pulseUser,
@@ -769,7 +768,7 @@ test("uses form, weather, and terrain context for dynamic move type and power", 
     move: terrainPulse,
     attackerState: neutralState,
     defenderState: neutralState,
-    terrain: "Electric Terrain",
+    field: createField({ terrain: "Electric Terrain" }),
   });
 
   assert.equal(fireCudgel.typeMultiplier, 2);
@@ -879,7 +878,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: expandingForce,
     attackerState: neutralState,
     defenderState: neutralState,
-    terrain: "Psychic Terrain",
+    field: createField({ terrain: "Psychic Terrain" }),
   });
   const normalRisingVoltage = calculateDamage({
     attacker: electricUser,
@@ -894,7 +893,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: risingVoltage,
     attackerState: neutralState,
     defenderState: { ...neutralState, grounded: true },
-    terrain: "Electric Terrain",
+    field: createField({ terrain: "Electric Terrain" }),
   });
   const normalPsyblade = calculateDamage({
     attacker: electricUser,
@@ -909,7 +908,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: psyblade,
     attackerState: neutralState,
     defenderState: neutralState,
-    terrain: "Electric Terrain",
+    field: createField({ terrain: "Electric Terrain" }),
   });
   const normalHydroSteam = calculateDamage({
     attacker: waterUser,
@@ -924,7 +923,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: hydroSteam,
     attackerState: neutralState,
     defenderState: neutralState,
-    weather: "SunnyDay",
+    field: createField({ weather: "SunnyDay" }),
   });
   const normalSolarBeam = calculateDamage({
     attacker: grassUser,
@@ -939,7 +938,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: solarBeam,
     attackerState: neutralState,
     defenderState: neutralState,
-    weather: "RainDance",
+    field: createField({ weather: "RainDance" }),
   });
   const sunSolarBeam = calculateDamage({
     attacker: grassUser,
@@ -947,7 +946,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: solarBeam,
     attackerState: neutralState,
     defenderState: neutralState,
-    weather: "SunnyDay",
+    field: createField({ weather: "SunnyDay" }),
   });
   const normalSolarBlade = calculateDamage({
     attacker: grassUser,
@@ -962,7 +961,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: solarBlade,
     attackerState: neutralState,
     defenderState: neutralState,
-    weather: "Sandstorm",
+    field: createField({ weather: "Sandstorm" }),
   });
   const normalGravApple = calculateDamage({
     attacker: grassUser,
@@ -977,7 +976,7 @@ test("uses weather, terrain, and field context for conditional move power", () =
     move: gravApple,
     attackerState: neutralState,
     defenderState: neutralState,
-    gravity: true,
+    field: createField({ gravity: true }),
   });
 
   assert.equal(boostedExpandingForce.notes.includes("Expanding Force power 120"), true);
@@ -1054,7 +1053,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     move: eruption,
     attackerState: neutralState,
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const halfHp = calculateDamage({
     attacker: fireUser,
@@ -1062,7 +1061,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     move: eruption,
     attackerState: { ...neutralState, currentHp: 77 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const oneHp = calculateDamage({
     attacker: fireUser,
@@ -1070,7 +1069,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     move: eruption,
     attackerState: { ...neutralState, currentHp: 1 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const waterSpoutHalfHp = calculateDamage({
     attacker: waterUser,
@@ -1078,7 +1077,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     move: waterSpout,
     attackerState: { ...neutralState, currentHp: 77 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
   const dragonEnergyHalfHp = calculateDamage({
     attacker: dragonUser,
@@ -1086,7 +1085,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     move: dragonEnergy,
     attackerState: { ...neutralState, currentHp: 77 },
     defenderState: neutralState,
-    battleFormat: "singles",
+    field: createField({ format: "singles" }),
   });
 
   assert.equal(fullHp.notes.includes("Eruption power 150"), true);
@@ -1148,7 +1147,7 @@ test("applies combined Pledge base power and forced STAB", () => {
     move: firePledge,
     attackerState: neutralState,
     defenderState: neutralState,
-    pledgeCombo: true,
+    field: createField({ pledgeCombo: true }),
   });
   const normalWaterPledge = calculateDamage({
     attacker: fireUser,
@@ -1163,7 +1162,7 @@ test("applies combined Pledge base power and forced STAB", () => {
     move: waterPledge,
     attackerState: neutralState,
     defenderState: neutralState,
-    pledgeCombo: true,
+    field: createField({ pledgeCombo: true }),
   });
 
   assert.equal(combinedFirePledge.notes.includes("Fire Pledge power 150"), true);
