@@ -5,70 +5,17 @@ import { createField } from "./engine/field.js";
 import {
   moveEffect,
   isPledgeMove,
-  weatherBlockedByUmbrella,
   USER_HP_POWER_MOVE_IDS,
   TARGET_WEIGHT_POWER_MOVE_IDS,
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
 } from "./engine/move-effects.js";
+import { collectModifiers } from "./engine/modifiers.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };
 
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
-const TYPE_BOOSTING_ITEMS = {
-  blackbelt: "Fighting",
-  blackglasses: "Dark",
-  charcoal: "Fire",
-  dragonfang: "Dragon",
-  fairyfeather: "Fairy",
-  hardstone: "Rock",
-  magnet: "Electric",
-  metalcoat: "Steel",
-  miracleseed: "Grass",
-  mysticwater: "Water",
-  nevermeltice: "Ice",
-  poisonbarb: "Poison",
-  sharpbeak: "Flying",
-  silkscarf: "Normal",
-  silverpowder: "Bug",
-  softsand: "Ground",
-  spelltag: "Ghost",
-  twistedspoon: "Psychic",
-};
-const RESIST_BERRIES = {
-  babiriberry: "Steel",
-  chartiberry: "Rock",
-  chilanberry: "Normal",
-  chopleberry: "Fighting",
-  cobaberry: "Flying",
-  colburberry: "Dark",
-  habanberry: "Dragon",
-  kasibberry: "Ghost",
-  kebiaberry: "Poison",
-  occaberry: "Fire",
-  passhoberry: "Water",
-  payapaberry: "Psychic",
-  rindoberry: "Grass",
-  roseliberry: "Fairy",
-  shucaberry: "Ground",
-  tangaberry: "Bug",
-  wacanberry: "Electric",
-  yacheberry: "Ice",
-};
-const TYPE_POWER_ABILITIES = {
-  dragonsmaw: { type: "Dragon", value: 1.5 },
-  rockypayload: { type: "Rock", value: 1.5 },
-  steelworker: { type: "Steel", value: 1.5 },
-  transistor: { type: "Electric", value: 1.3 },
-};
-const MOVE_FLAG_POWER_ABILITIES = {
-  ironfist: { flag: "punch", value: 1.2 },
-  megalauncher: { flag: "pulse", value: 1.5 },
-  sharpness: { flag: "slicing", value: 1.5 },
-  strongjaw: { flag: "bite", value: 1.5 },
-  toughclaws: { flag: "contact", value: 1.3 },
-};
 const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "echoedvoice",
   "furycutter",
@@ -137,7 +84,7 @@ export function calculateDamage({
   field = createField(),
   critical = false,
 }) {
-  const { format: battleFormat, weather, terrain, gravity, pledgeCombo = false } = field;
+  const { format: battleFormat, pledgeCombo = false } = field;
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
@@ -236,15 +183,10 @@ export function calculateDamage({
     notes.push("Pledge combo STAB");
   }
 
-  for (const modifier of activeModifiers({
-    attacker,
-    defender,
-    move,
-    attackerState,
-    defenderState,
+  for (const modifier of collectModifiers({
+    ...ctx,
     typeMultiplier,
     moveType,
-    weather,
     attackStat,
     isPhysical,
   })) {
@@ -389,107 +331,6 @@ function effectiveMoveType(ctx) {
 
 function effectiveMovePower(ctx) {
   return moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).basePower?.(ctx);
-}
-
-function activeModifiers({ attacker, defender, move, attackerState, defenderState, typeMultiplier, moveType, weather, attackStat, isPhysical }) {
-  const modifiers = [];
-  const attackerItem = attackerState.item;
-  const moveId = normalizeId(move.id ?? move.name);
-  const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
-  const defenderItem = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
-  const ability = normalizeId(attackerState.ability?.id ?? attackerState.ability?.name);
-  const defenderAbility = move.ignoreAbility ? "" : normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
-
-  if (item === "choiceband" && attackStat === "atk") {
-    modifiers.push({ kind: "attack", value: 1.5, label: "Choice Band" });
-  }
-  if (item === "choicespecs" && attackStat === "spa") {
-    modifiers.push({ kind: "attack", value: 1.5, label: "Choice Specs" });
-  }
-  if (item === "lifeorb") modifiers.push({ kind: "damage", value: 1.3, label: "Life Orb" });
-  const weatherModifier = weatherDamageModifier(weather, move, moveType, attackerItem);
-  if (weatherModifier !== 1) {
-    modifiers.push({ kind: "damage", value: weatherModifier, label: weatherModifierLabel(weather, move) });
-  }
-  if (item === "lightball" && normalizeId(attacker.name) === "pikachu") {
-    modifiers.push({ kind: "attack", value: 2, label: "Light Ball" });
-  }
-  if (item === "expertbelt" && typeMultiplier > 1) {
-    modifiers.push({ kind: "damage", value: 1.2, label: "Expert Belt" });
-  }
-  if ((moveId === "collisioncourse" || moveId === "electrodrift") && typeMultiplier > 1) {
-    modifiers.push({ kind: "damage", value: 4 / 3, label: `${move.name} super-effective boost` });
-  }
-  if (item === "muscleband" && isPhysical) {
-    modifiers.push({ kind: "power", value: 1.1, label: "Muscle Band" });
-  }
-  if (item === "wiseglasses" && !isPhysical) {
-    modifiers.push({ kind: "power", value: 1.1, label: "Wise Glasses" });
-  }
-  if (TYPE_BOOSTING_ITEMS[item] === moveType) {
-    modifiers.push({ kind: "power", value: 1.2, label: attackerState.item.name });
-  }
-  if (attackerItem?.onPlate === moveType) {
-    modifiers.push({ kind: "power", value: 1.2, label: attackerItem.name });
-  }
-  if (
-    RESIST_BERRIES[defenderItem] === moveType &&
-    (defenderItem === "chilanberry" || typeMultiplier > 1)
-  ) {
-    modifiers.push({ kind: "damage", value: 0.5, label: defenderState.item.name });
-  }
-  if ((defenderAbility === "prismarmor" || defenderAbility === "solidrock") && typeMultiplier > 1) {
-    modifiers.push({ kind: "damage", value: 0.75, label: defenderState.ability.name });
-  }
-  if ((ability === "hugepower" || ability === "purepower") && attackStat === "atk") {
-    modifiers.push({ kind: "attack", value: 2, label: attackerState.ability.name });
-  }
-  if (ability === "guts" && attackerState.burned && attackStat === "atk") {
-    modifiers.push({ kind: "attack", value: 1.5, label: "Guts" });
-  }
-  if (ability === "technician" && move.basePower <= 60) {
-    modifiers.push({ kind: "power", value: 1.5, label: "Technician" });
-  }
-  if (ability === "adaptability" && attacker.types.includes(moveType)) {
-    modifiers.push({ kind: "stab", value: 2, label: "Adaptability" });
-  }
-  const typePowerAbility = TYPE_POWER_ABILITIES[ability];
-  if (typePowerAbility?.type === moveType) {
-    modifiers.push({ kind: "attack", value: typePowerAbility.value, label: attackerState.ability.name });
-  }
-  const moveFlagPowerAbility = MOVE_FLAG_POWER_ABILITIES[ability];
-  if (moveFlagPowerAbility && move.flags?.[moveFlagPowerAbility.flag]) {
-    modifiers.push({ kind: "power", value: moveFlagPowerAbility.value, label: attackerState.ability.name });
-  }
-  if (ability === "reckless" && (move.recoil || move.hasCrashDamage)) {
-    modifiers.push({ kind: "power", value: 1.2, label: "Reckless" });
-  }
-  if (ability === "tintedlens" && typeMultiplier < 1) {
-    modifiers.push({ kind: "damage", value: 2, label: "Tinted Lens" });
-  }
-
-  return modifiers;
-}
-
-function weatherDamageModifier(weather, move, moveType, item) {
-  if (weatherBlockedByUmbrella(weather, item)) return 1;
-  const weatherId = normalizeId(weather);
-  if (normalizeId(move.id ?? move.name) === "hydrosteam" && (weatherId === "sunnyday" || weatherId === "desolateland")) {
-    return 1.5;
-  }
-  if ((weatherId === "sunnyday" || weatherId === "desolateland") && moveType === "Fire") return 1.5;
-  if ((weatherId === "sunnyday" || weatherId === "desolateland") && moveType === "Water") return 0.5;
-  if ((weatherId === "raindance" || weatherId === "primordialsea") && moveType === "Water") return 1.5;
-  if ((weatherId === "raindance" || weatherId === "primordialsea") && moveType === "Fire") return 0.5;
-  return 1;
-}
-
-function weatherModifierLabel(weather, move) {
-  if (normalizeId(move.id ?? move.name) === "hydrosteam") return "Hydro Steam in harsh sunlight";
-  const weatherId = normalizeId(weather);
-  if (weatherId === "sunnyday" || weatherId === "desolateland") return "Harsh sunlight";
-  if (weatherId === "raindance" || weatherId === "primordialsea") return "Rain";
-  return String(weather);
 }
 
 function hasAbility(state, abilityId) {
