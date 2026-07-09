@@ -85,3 +85,9 @@ npm test
   otherwise unedited. Did not drive an actual browser against the dev server (this sandbox has
   no GUI browser reachable from it) — recommend a manual `npm start` check at desktop and mobile
   widths before merging, per the task's acceptance criteria.
+- **Manual browser check completed** (2026-07-09): ran `npm start` on the user's machine and
+  drove their real Chrome via the browser tools (the sandbox has no GUI browser, so this had to
+  happen against a locally-running server instead). Lookup page verified at 1440px and ~500px
+  widths (site's only breakpoint is `max-width: 720px`): search-result dropdown
+  (`searchResultButton`) renders and filters correctly for "char", clicking a result updates the
+  Pokémon card, no layout overflow at narrow width, zero console errors on load or interaction.
