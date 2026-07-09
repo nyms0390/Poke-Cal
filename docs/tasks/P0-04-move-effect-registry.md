@@ -1,6 +1,6 @@
 # P0-04 — Replace move string-ladders with a move-effect registry
 
-Status: TODO
+Status: Done
 Depends on: P0-03
 Phase: 0 (restructure, no behavior change)
 
@@ -64,3 +64,22 @@ only re-encoded.
 npm run test:damage
 npm test
 ```
+
+## Completion notes
+- Created `src/engine/move-effects.js` with `MOVE_EFFECTS`/`moveEffect()`, migrating every
+  moveId-specific branch out of `effectiveMoveType`, `effectiveMovePower`, `fixedDamageKind`,
+  `hitCountRange`, `successiveHitBasePowers`, and the Photon Geyser inline branch (now an
+  `offensiveStat` handler). `isPledgeMove` also moved there since its body was a `moveId === "…"`
+  chain feeding the pledge-combo STAB check in `calculateDamage`.
+- Body Press / Foul Play / Psyshock already avoided moveId ladders (they use the generic
+  `move.overrideOffensiveStat` / `overrideDefensiveStat` / `overrideOffensivePokemon` Showdown
+  data fields), so no registry entries were needed for them — only Photon Geyser needed dynamic
+  `offensiveStat` logic.
+- `grep -n 'moveId ===' src/damage.js` is **not** fully zero after this task: two pre-existing
+  groups remain out of scope — `typeEffectiveness`'s Thousand Arrows/Freeze-Dry type-chart
+  exceptions (not listed under this task's "Files to read", no handler shape defined for
+  type-effectiveness overrides), and `activeModifiers`'s Collision Course/Electro Drift boost
+  (explicitly P0-05's target per that task's "Files to read"). `unsupportedMoveReason`'s
+  Beat Up/Natural Gift check also remains, per step 5 ("keep as-is").
+- `npm run test:damage` (41/41) and `npm test` (120/120) pass unedited; no expected values
+  changed.

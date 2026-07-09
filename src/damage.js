@@ -2,6 +2,14 @@ import { NATURES, natureMultiplier, natureOptionLabel } from "./engine/natures.j
 import { TYPE_EFFECTIVENESS } from "./engine/type-chart.js";
 import { calculateStat, applyStage } from "./engine/stats.js";
 import { createField } from "./engine/field.js";
+import {
+  moveEffect,
+  isPledgeMove,
+  weatherBlockedByUmbrella,
+  USER_HP_POWER_MOVE_IDS,
+  TARGET_WEIGHT_POWER_MOVE_IDS,
+  USER_TARGET_WEIGHT_POWER_MOVE_IDS,
+} from "./engine/move-effects.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };
@@ -61,21 +69,6 @@ const MOVE_FLAG_POWER_ABILITIES = {
   strongjaw: { flag: "bite", value: 1.5 },
   toughclaws: { flag: "contact", value: 1.3 },
 };
-const WEATHER_BALL_TYPES = {
-  desolateland: "Fire",
-  sunnyday: "Fire",
-  primordialsea: "Water",
-  raindance: "Water",
-  sandstorm: "Rock",
-  snowscape: "Ice",
-  hail: "Ice",
-};
-const TERRAIN_PULSE_TYPES = {
-  electricterrain: "Electric",
-  grassyterrain: "Grass",
-  mistyterrain: "Fairy",
-  psychicterrain: "Psychic",
-};
 const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "echoedvoice",
   "furycutter",
@@ -95,9 +88,6 @@ const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
   "round",
   "twister",
 ]);
-const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"]);
-const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
-const USER_TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["heatcrash", "heavyslam"]);
 
 const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
@@ -151,9 +141,13 @@ export function calculateDamage({
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
-  const moveType = effectiveMoveType(move, attacker, attackerState, { weather, terrain });
+  const ctx = { move, attacker, defender, attackerState, defenderState, field };
+  const moveType = effectiveMoveType(ctx);
   const typeMultiplier = typeEffectiveness(moveType, defender.types, move, defenderState);
   const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
+  const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
+  ctx.defenderHp = defenderHp;
+  ctx.attackerMaxHp = attackerMaxHp;
   const effectiveCritical = critical && (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
     return {
@@ -169,7 +163,7 @@ export function calculateDamage({
     };
   }
 
-  const fixedDamage = fixedDamageValue(move, defenderHp, attacker, attackerState);
+  const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
     const damage = Math.max(1, fixedDamage);
     const rolls = DAMAGE_ROLLS.map(() => damage);
@@ -187,14 +181,7 @@ export function calculateDamage({
   }
 
   const moveId = normalizeId(move.id ?? move.name);
-  const dynamicPower = effectiveMovePower(move, attackerState, defenderState, {
-    attacker,
-    defender,
-    weather,
-    terrain,
-    gravity,
-    pledgeCombo,
-  });
+  const dynamicPower = effectiveMovePower(ctx);
   if (dynamicPower === null) {
     let reason = "Natural Gift requires a held Berry.";
     if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
@@ -207,15 +194,16 @@ export function calculateDamage({
   let isPhysical = move.category === "Physical";
   let attackStat = move.overrideOffensiveStat ?? (isPhysical ? "atk" : "spa");
   let defenseStat = move.overrideDefensiveStat ?? (isPhysical ? "def" : "spd");
-  if (moveId === "photongeyser") {
-    const physicalAttack = calculatePokemonStat(attacker, attackerState, "atk", {
+  const offensiveStatHandler = moveEffect(moveId).offensiveStat;
+  if (offensiveStatHandler) {
+    ctx.physicalAttack = calculatePokemonStat(attacker, attackerState, "atk", {
       stagePolicy: criticalStagePolicy("attack", effectiveCritical),
     });
-    const specialAttack = calculatePokemonStat(attacker, attackerState, "spa", {
+    ctx.specialAttack = calculatePokemonStat(attacker, attackerState, "spa", {
       stagePolicy: criticalStagePolicy("attack", effectiveCritical),
     });
-    isPhysical = physicalAttack > specialAttack;
-    attackStat = isPhysical ? "atk" : "spa";
+    attackStat = offensiveStatHandler(ctx);
+    isPhysical = attackStat === "atk";
     defenseStat = isPhysical ? "def" : "spd";
   }
   const attackSource = move.overrideOffensivePokemon === "target"
@@ -231,6 +219,7 @@ export function calculateDamage({
   const notes = [];
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
   let power = dynamicPower ?? move.basePower;
+  ctx.power = power;
   if (dynamicPower !== undefined) {
     notes.push(`${move.name} power ${dynamicPower}`);
   } else if (HISTORY_BASE_POWER_MOVE_IDS.has(moveId) || UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS.has(moveId)) {
@@ -266,7 +255,7 @@ export function calculateDamage({
     if (modifier.kind === "stab") stab = modifier.value;
   }
 
-  const baseHitPowers = successiveHitBasePowers(move, power);
+  const baseHitPowers = successiveHitBasePowers(ctx);
   const hitPowers = baseHitPowers.map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
   if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
   power = hitPowers[0];
@@ -279,7 +268,7 @@ export function calculateDamage({
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
-  const hitCounts = hitCountRange(move, attackerState);
+  const hitCounts = hitCountRange(ctx);
   if (hitPowers.length === 1 && (hitCounts.min > 1 || hitCounts.max > 1)) {
     notes.push(hitCounts.min === hitCounts.max
       ? `${move.name} hits ${hitCounts.max} times`
@@ -352,47 +341,36 @@ function sameStage(stage) {
   return stage;
 }
 
+// Thin lookup: only the numeric/"level" cases read move data directly; every other
+// moveId-specific fixed-damage case is a registry entry (see src/engine/move-effects.js).
 function fixedDamageKind(move) {
-  const moveId = normalizeId(move?.id ?? move?.name);
   if (typeof move?.damage === "number") return "numeric";
   if (move?.damage === "level") return "level";
-  if (moveId === "superfang" || moveId === "ruination" || moveId === "naturesmadness") return "half-hp";
-  if (moveId === "finalgambit") return "user-hp";
+  if (moveEffect(normalizeId(move?.id ?? move?.name)).fixedDamage) return "registry";
   return "";
 }
 
-function fixedDamageValue(move, defenderHp, attacker, attackerState) {
+function fixedDamageValue(ctx) {
+  const { move } = ctx;
   const kind = fixedDamageKind(move);
   if (kind === "numeric") return move.damage;
   if (kind === "level") return 50;
-  if (kind === "half-hp") return Math.floor(defenderHp / 2);
-  if (kind === "user-hp") {
-    const attackerHp = calculatePokemonStat(attacker, attackerState, "hp");
-    return currentPokemonHp(attackerState, attackerHp);
-  }
+  if (kind === "registry") return moveEffect(normalizeId(move.id ?? move.name)).fixedDamage(ctx);
   return null;
 }
 
-function hitCountRange(move, attackerState) {
-  const moveId = normalizeId(move.id ?? move.name);
-  const item = normalizeId(attackerState.item?.id ?? attackerState.item?.name);
-  if (moveId === "populationbomb") {
-    if (hasAbility(attackerState, "skilllink")) return { min: 10, max: 10 };
-    if (item === "loadeddice") return { min: 4, max: 10 };
-    return { min: 1, max: 10 };
+function hitCountRange(ctx) {
+  const hits = moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).hits?.(ctx);
+  if (hits !== undefined) {
+    return Array.isArray(hits) ? { min: hits[0], max: hits[1] } : { min: hits, max: hits };
   }
-  if (moveId === "beatup") {
-    const hits = eligibleBeatUpPartyCount(attackerState);
-    return { min: hits, max: hits };
-  }
-  if (move.multihit === 2) return { min: 2, max: 2 };
+  if (ctx.move.multihit === 2) return { min: 2, max: 2 };
   return { min: 1, max: 1 };
 }
 
-function successiveHitBasePowers(move, power) {
-  const moveId = normalizeId(move.id ?? move.name);
-  if (moveId === "tripleaxel" || moveId === "triplekick") return [power, power * 2, power * 3];
-  return [power];
+function successiveHitBasePowers(ctx) {
+  const hitPowers = moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).hitPowers?.(ctx);
+  return hitPowers ?? [ctx.power];
 }
 
 function applyPowerModifiers(power, modifiers) {
@@ -405,146 +383,12 @@ function baseDamageForPower(power, attack, defense) {
   ) + 2;
 }
 
-function effectiveMoveType(move, attacker, attackerState, context = {}) {
-  const item = attackerState.item;
-  const moveId = normalizeId(move.id ?? move.name);
-  if (moveId === "judgment" && item?.onPlate) return item.onPlate;
-  if (moveId === "multiattack" && item?.onMemory) return item.onMemory;
-  if (moveId === "technoblast" && item?.onDrive) return item.onDrive;
-  if (moveId === "naturalgift" && item?.naturalGift?.type) return item.naturalGift.type;
-  if (moveId === "revelationdance") return attacker.types.find((type) => type !== "Typeless") ?? move.type;
-  if (moveId === "ragingbull") {
-    const attackerId = normalizeId(attacker.id ?? attacker.name);
-    if (attackerId === "taurospaldeaaqua") return "Water";
-    if (attackerId === "taurospaldeablaze") return "Fire";
-    if (attackerId === "taurospaldeacombat") return "Fighting";
-  }
-  if (moveId === "ivycudgel") {
-    const attackerId = normalizeId(attacker.id ?? attacker.name);
-    if (attackerId.includes("wellspring")) return "Water";
-    if (attackerId.includes("hearthflame")) return "Fire";
-    if (attackerId.includes("cornerstone")) return "Rock";
-  }
-  if (moveId === "weatherball" && !weatherBlockedByUmbrella(context.weather, item)) {
-    return WEATHER_BALL_TYPES[normalizeId(context.weather)] ?? move.type;
-  }
-  if (moveId === "terrainpulse" && attackerState.grounded !== false) {
-    return TERRAIN_PULSE_TYPES[normalizeId(context.terrain)] ?? move.type;
-  }
-  return move.type;
+function effectiveMoveType(ctx) {
+  return moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).moveType?.(ctx) ?? ctx.move.type;
 }
 
-function effectiveMovePower(move, attackerState, defenderState, context = {}) {
-  const item = attackerState.item;
-  const moveId = normalizeId(move.id ?? move.name);
-  if (moveId === "naturalgift") return item?.naturalGift?.basePower ?? null;
-  if (moveId === "beatup") return beatUpBasePower(context.attacker, attackerState);
-  if (USER_HP_POWER_MOVE_IDS.has(moveId)) {
-    return userHpScaledBasePower(move.basePower, context.attacker, attackerState);
-  }
-  if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
-    const weight = targetWeightKg(context.defender, defenderState);
-    return weight === null ? null : targetWeightBasePower(weight);
-  }
-  if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
-    const attackerWeight = pokemonWeightKg(context.attacker, attackerState);
-    const defenderWeight = pokemonWeightKg(context.defender, defenderState);
-    return attackerWeight === null || defenderWeight === null ? null : userTargetWeightBasePower(attackerWeight, defenderWeight);
-  }
-  if (
-    moveId === "weatherball" &&
-    WEATHER_BALL_TYPES[normalizeId(context.weather)] &&
-    !weatherBlockedByUmbrella(context.weather, item)
-  ) {
-    return move.basePower * 2;
-  }
-  if (
-    moveId === "terrainpulse" &&
-    TERRAIN_PULSE_TYPES[normalizeId(context.terrain)] &&
-    attackerState.grounded !== false
-  ) {
-    return move.basePower * 2;
-  }
-  if (moveId === "expandingforce" && normalizeId(context.terrain) === "psychicterrain" && attackerState.grounded !== false) {
-    return Math.floor(move.basePower * 1.5);
-  }
-  if (moveId === "risingvoltage" && normalizeId(context.terrain) === "electricterrain" && defenderState.grounded !== false) {
-    return move.basePower * 2;
-  }
-  if (moveId === "psyblade" && normalizeId(context.terrain) === "electricterrain") {
-    return Math.floor(move.basePower * 1.5);
-  }
-  if (
-    (moveId === "solarbeam" || moveId === "solarblade") &&
-    context.weather &&
-    !weatherBlockedByUmbrella(context.weather, item)
-  ) {
-    const weatherId = normalizeId(context.weather);
-    if (weatherId !== "sunnyday" && weatherId !== "desolateland") return Math.floor(move.basePower * 0.5);
-  }
-  if (moveId === "gravapple" && context.gravity) {
-    return Math.floor(move.basePower * 1.5);
-  }
-  if (isPledgeMove(move) && context.pledgeCombo) {
-    return 150;
-  }
-  return undefined;
-}
-
-function beatUpBasePower(attacker, attackerState) {
-  const baseAttack = attackerState.beatUpBaseAttack ?? attacker?.baseStats?.atk;
-  if (!Number.isFinite(baseAttack)) return null;
-  return Math.max(1, 5 + Math.floor(baseAttack / 10));
-}
-
-function eligibleBeatUpPartyCount(attackerState) {
-  const count = attackerState.beatUpPartyCount ?? attackerState.partyMemberCount ?? attackerState.partyCount ?? 6;
-  if (!Number.isFinite(count)) return 6;
-  return Math.min(6, Math.max(1, Math.floor(count)));
-}
-
-function userHpScaledBasePower(basePower, attacker, attackerState) {
-  const maxHp = calculatePokemonStat(attacker, attackerState, "hp");
-  const currentHp = currentPokemonHp(attackerState, maxHp);
-  return Math.max(1, Math.floor((basePower * currentHp) / maxHp));
-}
-
-function currentPokemonHp(state, maxHp) {
-  const hp = state.currentHp ?? state.currentHP;
-  if (!Number.isFinite(hp)) return maxHp;
-  return Math.min(maxHp, Math.max(1, Math.floor(hp)));
-}
-
-function targetWeightKg(defender, defenderState) {
-  const weight = defenderState.weightkg ?? defenderState.weightKg ?? defender?.weightkg ?? defender?.weightKg;
-  return Number.isFinite(weight) && weight > 0 ? weight : null;
-}
-
-function pokemonWeightKg(pokemon, state) {
-  const weight = state.weightkg ?? state.weightKg ?? pokemon?.weightkg ?? pokemon?.weightKg;
-  return Number.isFinite(weight) && weight > 0 ? weight : null;
-}
-
-function targetWeightBasePower(weightKg) {
-  if (weightKg < 10) return 20;
-  if (weightKg < 25) return 40;
-  if (weightKg < 50) return 60;
-  if (weightKg < 100) return 80;
-  if (weightKg < 200) return 100;
-  return 120;
-}
-
-function userTargetWeightBasePower(attackerWeightKg, defenderWeightKg) {
-  if (attackerWeightKg >= defenderWeightKg * 5) return 120;
-  if (attackerWeightKg >= defenderWeightKg * 4) return 100;
-  if (attackerWeightKg >= defenderWeightKg * 3) return 80;
-  if (attackerWeightKg >= defenderWeightKg * 2) return 60;
-  return 40;
-}
-
-function isPledgeMove(move) {
-  const moveId = normalizeId(move.id ?? move.name);
-  return moveId === "firepledge" || moveId === "waterpledge" || moveId === "grasspledge";
+function effectiveMovePower(ctx) {
+  return moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).basePower?.(ctx);
 }
 
 function activeModifiers({ attacker, defender, move, attackerState, defenderState, typeMultiplier, moveType, weather, attackStat, isPhysical }) {
@@ -638,13 +482,6 @@ function weatherDamageModifier(weather, move, moveType, item) {
   if ((weatherId === "raindance" || weatherId === "primordialsea") && moveType === "Water") return 1.5;
   if ((weatherId === "raindance" || weatherId === "primordialsea") && moveType === "Fire") return 0.5;
   return 1;
-}
-
-function weatherBlockedByUmbrella(weather, item) {
-  const weatherId = normalizeId(weather);
-  if (normalizeId(item?.id ?? item?.name) !== "utilityumbrella") return false;
-  return weatherId === "raindance" || weatherId === "primordialsea" ||
-    weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
 function weatherModifierLabel(weather, move) {
