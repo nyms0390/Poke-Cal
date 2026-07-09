@@ -1,4 +1,4 @@
-import { formatMovePriority } from "../catalog.js";
+import { formatMovePriority } from "../data/catalog.js";
 
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
 // space is tight.

@@ -7,7 +7,7 @@ import {
   extractLearnsetMoves,
   parseShowdownExport,
   stripTypeAssertions,
-} from "../src/showdown-data.js";
+} from "../src/data/showdown-data.js";
 
 test("parses Showdown TypeScript exports", () => {
   const source = `export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {

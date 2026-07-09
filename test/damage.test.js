@@ -9,7 +9,7 @@ import {
   natureMultiplier,
   natureOptionLabel,
   unsupportedMoveReason,
-} from "../src/damage.js";
+} from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
 
 const pikachu = {

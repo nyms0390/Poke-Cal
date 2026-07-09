@@ -10,7 +10,7 @@ Requires Node.js 20+. No `npm install` needed.
 npm start                      # static server at http://127.0.0.1:4173 (PORT env to change)
 npm test                       # full suite via node --test
 npm run test:battle            # battle-order, damage, speed tests
-npm run test:catalog           # catalog, pokemon, stats, ui tests
+npm run test:catalog           # battle-state, catalog, pokemon, stats, ui tests
 npm run test:data              # champions-data, data, limitless-data, showdown-data, smogon-data, sync-pokemon-data, usage-defaults tests
 npm run test:damage            # test/damage.test.js only
 npm run test:pokemon           # test/pokemon.test.js only
@@ -22,25 +22,32 @@ npm run sync-all               # all three syncs in order
 
 ## Architecture
 
-- Two static HTML entry points: `index.html` -> `src/app.js` (lookup), `battle.html` -> `src/battle-page.js` (calculator). Both share `src/styles.css` and load catalogs from `public/*.json`.
-- Battle engine is centralized in `src/damage.js` (damage formula), `src/speed.js` (Speed modifiers: Tailwind, paralysis, items/abilities), and `src/battle-order.js` (priority + Trick Room). Prefer engine helpers over UI-only patches.
-- Shared helpers: `src/catalog.js` (search/sort), `src/data.js` (loading), `src/pokemon.js`, `src/stats.js`, `src/ui.js`, `src/usage-defaults.js` (seeds default moves/items from usage).
-- Data pipeline: `scripts/sync-pokemon-data.mjs` downloads Showdown `.ts` data exports (parsed by `src/showdown-data.js`), overlays the Showdown Champions mod (`data/mods/champions`: legality flags in `champions.legal`/`champions.tier`, Champions learnsets, move/item/ability balance changes) via `src/champions-data.js`, plus PokeAPI CSVs (Traditional Chinese aliases), and writes `public/pokemon.json`, `abilities.json`, `moves.json`, `items.json`. `scripts/sync-limitless-champions-usage.mjs` merges Limitless Champions tournament usage (VGC / M-B format, 50 tournaments) via `src/limitless-data.js`. `scripts/sync-champions-spreads.mjs` merges popular SP spreads from Smogon ladder chaos stats (auto-detects latest month + newest Champions VGC regulation, Bo1+Bo3, cutoff 1760) via `src/smogon-data.js` into `champions.usage.spreads`.
+`src/` has three layers — `engine/` (pure battle math, no DOM/fetch), `data/` (loading, parsing, usage), `ui/` (DOM controllers) — plus `src/styles.css`. Data files must not import from `ui/`; `ui/` may import `engine/` and `data/`. See ROADMAP.md "Target code structure" for the authoritative layout and rationale.
+
+- Two static HTML entry points: `index.html` -> `src/ui/lookup-page.js` (lookup), `battle.html` -> `src/ui/battle-page.js` (calculator). Both share `src/styles.css` and load catalogs from `public/*.json`.
+- Battle engine is centralized in `src/engine/damage.js` (damage formula, delegating move-specific behavior to `src/engine/move-effects.js` and ability/item modifiers to `src/engine/modifiers.js`), `src/engine/speed.js` (Speed modifiers: Tailwind, paralysis, items/abilities), and `src/engine/battle-order.js` (priority + Trick Room). Prefer engine helpers over UI-only patches.
+- Shared data helpers: `src/data/catalog.js` (search/sort), `src/data/data.js` (loading), `src/data/pokemon.js`, `src/data/usage-defaults.js` (seeds default moves/items from usage).
+- Shared UI helpers: `src/ui/components.js` (DOM factories: search-result buttons, SP/stage inputs, `STAT_LABELS`), `src/ui/bootstrap.js` (`loadCatalogs`, `rankByUsage`), `src/ui/battle-state.js` (pure battle-page state: `createSideState`, `applyControl`, `buildCalcInput` — no DOM).
+- Data pipeline: `scripts/sync-pokemon-data.mjs` downloads Showdown `.ts` data exports (parsed by `src/data/showdown-data.js`), overlays the Showdown Champions mod (`data/mods/champions`: legality flags in `champions.legal`/`champions.tier`, Champions learnsets, move/item/ability balance changes) via `src/data/champions-data.js`, plus PokeAPI CSVs (Traditional Chinese aliases), and writes `public/pokemon.json`, `abilities.json`, `moves.json`, `items.json`. `scripts/sync-limitless-champions-usage.mjs` merges Limitless Champions tournament usage (VGC / M-B format, 50 tournaments) via `src/data/limitless-data.js`. `scripts/sync-champions-spreads.mjs` merges popular SP spreads from Smogon ladder chaos stats (auto-detects latest month + newest Champions VGC regulation, Bo1+Bo3, cutoff 1760) via `src/data/smogon-data.js` into `champions.usage.spreads`.
 - Tests use Node's built-in test runner (`node --test`) in `test/`.
 - Deployment: `.github/workflows/pages.yml` deploys the repo root to GitHub Pages on push to `main`.
 
 ## Key Files
 
-- `src/app.js` — lookup page controller.
-- `src/battle-page.js` — battle calculator page controller.
-- `src/damage.js` / `src/speed.js` / `src/battle-order.js` — battle math engine.
-- `src/showdown-data.js` — parses Showdown TypeScript data exports.
-- `src/champions-data.js` — applies the Showdown Champions mod overlay (`CHAMPIONS_MOD_BASE_URL`).
-- `src/limitless-data.js` — builds/merges Limitless usage (`LIMITLESS_API_BASE_URL`).
-- `src/smogon-data.js` — parses/merges Smogon ladder SP spreads (`SMOGON_STATS_URL`).
+- `src/ui/lookup-page.js` — lookup page controller.
+- `src/ui/battle-page.js` — battle calculator page controller.
+- `src/ui/battle-state.js` — pure battle-page state helpers (state shape, control updates, calculateDamage input assembly); unit-tested in `test/battle-state.test.js`.
+- `src/engine/damage.js` / `src/engine/speed.js` / `src/engine/battle-order.js` — battle math engine.
+- `src/engine/move-effects.js` — per-move registry (`MOVE_EFFECTS`/`moveEffect()`) replacing moveId ladders.
+- `src/engine/modifiers.js` — per-ability/per-item damage-modifier registry (`ABILITY_MODIFIERS`/`ITEM_MODIFIERS`/`collectModifiers()`).
+- `src/data/showdown-data.js` — parses Showdown TypeScript data exports.
+- `src/data/champions-data.js` — applies the Showdown Champions mod overlay (`CHAMPIONS_MOD_BASE_URL`).
+- `src/data/limitless-data.js` — builds/merges Limitless usage (`LIMITLESS_API_BASE_URL`).
+- `src/data/smogon-data.js` — parses/merges Smogon ladder SP spreads (`SMOGON_STATS_URL`).
 - `scripts/serve.mjs` — minimal static HTTP server bound to 127.0.0.1:4173.
 - `public/*.json` — generated catalogs; do not hand-edit, fix sync/parser code and regenerate.
 - `MECHANICS_CHECKLIST.md` — battle-calculator accuracy tracker; only mark items done after implementing and verifying with a test or reproducible manual check.
+- `ROADMAP.md` / `docs/tasks/*.md` — the restructure/feature plan and its one-file-per-work-unit task log.
 
 ## Conventions & Gotchas
 

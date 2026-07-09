@@ -6,10 +6,10 @@ import {
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
-} from "./catalog.js";
-import { megaFamily, searchPokemon } from "./pokemon.js";
-import { totalBaseStats } from "./stats.js";
-import { loadCatalogs, rankByUsage } from "./ui/bootstrap.js";
+} from "../data/catalog.js";
+import { megaFamily, searchPokemon } from "../data/pokemon.js";
+import { totalBaseStats } from "../engine/stats.js";
+import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
   moveNameCell,
@@ -18,7 +18,7 @@ import {
   textCell,
   typeBadge,
   updateSelectOptions,
-} from "./ui/components.js";
+} from "./components.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),

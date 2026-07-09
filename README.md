@@ -10,25 +10,36 @@ PokéCal is a browser-first ES-module web app with no build step and no npm depe
 
 ```
 PokéCal/
-├── index.html                 # Lookup page (loads src/app.js)
-├── battle.html                # Battle calculator page (loads src/battle-page.js)
+├── index.html                 # Lookup page (loads src/ui/lookup-page.js)
+├── battle.html                # Battle calculator page (loads src/ui/battle-page.js)
 ├── src/
-│   ├── app.js                 # Lookup page controller
-│   ├── battle-page.js         # Battle calculator page controller
-│   ├── damage.js              # Damage formula engine
-│   ├── speed.js               # Speed calculation (Tailwind, paralysis, items, ...)
-│   ├── battle-order.js        # Move order (priority, Speed, Trick Room)
-│   ├── catalog.js             # Catalog search/sort helpers
-│   ├── data.js                # Data loading helpers
-│   ├── pokemon.js             # Species helpers
-│   ├── stats.js               # Stat math
-│   ├── showdown-data.js       # Pokémon Showdown export parsing
-│   ├── champions-data.js      # Champions mod overlay (legality, learnsets, balance)
-│   ├── limitless-data.js      # Limitless Champions usage building/merging
-│   ├── smogon-data.js         # Smogon ladder stats parsing (SP spreads)
-│   ├── usage-defaults.js      # Default move/item/ability seeding from usage
-│   ├── ui.js                  # Shared rendering helpers
-│   └── styles.css             # Shared styles
+│   ├── engine/                 # Pure battle math — no DOM, no fetch
+│   │   ├── constants.js        # LEVEL, STAT_KEYS
+│   │   ├── natures.js          # NATURES table + natureMultiplier/natureOptionLabel
+│   │   ├── type-chart.js       # TYPE_EFFECTIVENESS + typeEffectiveness()
+│   │   ├── stats.js            # calculateStat, applyStage, totalBaseStats
+│   │   ├── field.js            # createField() — weather/terrain/room/side conditions
+│   │   ├── move-effects.js     # registry: moveId -> {basePower, moveType, hits, ...}
+│   │   ├── modifiers.js        # registries: ability/item -> modifier producers
+│   │   ├── damage.js           # the damage pipeline (orchestration only)
+│   │   ├── speed.js            # Speed calculation (Tailwind, paralysis, items, ...)
+│   │   └── battle-order.js     # Move order (priority, Speed, Trick Room)
+│   ├── data/                   # loading, parsing, usage
+│   │   ├── data.js              # Data loading helpers
+│   │   ├── catalog.js           # Catalog search/sort helpers
+│   │   ├── pokemon.js           # Species helpers
+│   │   ├── showdown-data.js     # Pokémon Showdown export parsing
+│   │   ├── champions-data.js    # Champions mod overlay (legality, learnsets, balance)
+│   │   ├── limitless-data.js    # Limitless Champions usage building/merging
+│   │   ├── smogon-data.js       # Smogon ladder stats parsing (SP spreads)
+│   │   └── usage-defaults.js    # Default move/item/ability seeding from usage
+│   ├── ui/                     # DOM only — build inputs for the engine, render outputs
+│   │   ├── components.js        # Shared DOM factories (search results, SP/stage inputs, STAT_LABELS)
+│   │   ├── bootstrap.js         # Shared page init / catalog loading / usage ranking
+│   │   ├── battle-state.js      # Pure battle-page state helpers (no DOM)
+│   │   ├── lookup-page.js       # Lookup page controller
+│   │   └── battle-page.js       # Battle calculator page controller
+│   └── styles.css              # Shared styles
 ├── public/                    # Generated catalogs (pokemon/abilities/moves/items .json)
 ├── scripts/
 │   ├── sync-pokemon-data.mjs              # Regenerate public/*.json from Showdown (+ Champions mod) + PokeAPI
@@ -38,6 +49,7 @@ PokéCal/
 ├── test/                      # Node built-in test runner suites (node --test)
 ├── data/pokeapi/              # Local snapshots of PokeAPI CSVs (sync script downloads from GitHub)
 ├── .github/workflows/pages.yml # Deploys repo root to GitHub Pages on push to main
+├── ROADMAP.md                  # Master plan + task index (docs/tasks/*.md)
 └── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
 ```
 
@@ -80,7 +92,7 @@ Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.j
 ```sh
 npm test                 # full suite (node --test)
 npm run test:battle      # battle-order, damage, speed
-npm run test:catalog     # catalog, pokemon, stats, ui
+npm run test:catalog     # battle-state, catalog, pokemon, stats, ui
 npm run test:data        # champions-data, data, limitless-data, showdown-data, smogon-data, sync-pokemon-data, usage-defaults
 npm run test:damage      # damage only
 npm run test:pokemon     # pokemon only

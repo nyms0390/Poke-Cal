@@ -8,7 +8,7 @@ import {
   discoverChampionsFormats,
   latestStatsMonth,
   mergeSmogonSpreads,
-} from "../src/smogon-data.js";
+} from "../src/data/smogon-data.js";
 
 const statsIndexHtml = `
 <a href="../">../</a>

@@ -5,7 +5,7 @@ import {
   LIMITLESS_API_BASE_URL,
   buildLimitlessUsage,
   mergeLimitlessUsage,
-} from "../src/limitless-data.js";
+} from "../src/data/limitless-data.js";
 
 const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_GAME = "VGC";

@@ -1,4 +1,4 @@
-import { formatMovePriority } from "./catalog.js";
+import { formatMovePriority } from "../data/catalog.js";
 import { finalSpeed } from "./speed.js";
 
 export function compareMoveOrder({ attacker, defender, attackerMove, defenderMove, trickRoom = false }) {

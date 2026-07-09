@@ -1,15 +1,15 @@
-import { NATURES, natureMultiplier, natureOptionLabel } from "./engine/natures.js";
-import { TYPE_EFFECTIVENESS } from "./engine/type-chart.js";
-import { calculateStat, applyStage } from "./engine/stats.js";
-import { createField } from "./engine/field.js";
+import { NATURES, natureMultiplier, natureOptionLabel } from "./natures.js";
+import { TYPE_EFFECTIVENESS } from "./type-chart.js";
+import { calculateStat, applyStage } from "./stats.js";
+import { createField } from "./field.js";
 import {
   moveEffect,
   isPledgeMove,
   USER_HP_POWER_MOVE_IDS,
   TARGET_WEIGHT_POWER_MOVE_IDS,
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
-} from "./engine/move-effects.js";
-import { collectModifiers } from "./engine/modifiers.js";
+} from "./move-effects.js";
+import { collectModifiers } from "./modifiers.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };

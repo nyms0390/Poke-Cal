@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildAbilityLookup, buildItemLookup, buildMoveLookup } from "../src/catalog.js";
+import { buildAbilityLookup, buildItemLookup, buildMoveLookup } from "../src/data/catalog.js";
 import {
   championsDefaultsForPokemon,
   parseUsageSpread,
   usageDefaultsForPokemon,
-} from "../src/usage-defaults.js";
+} from "../src/data/usage-defaults.js";
 
 test("parses Champions usage spreads", () => {
   assert.deepEqual(parseUsageSpread("Jolly:2/32/0/0/0/32"), {

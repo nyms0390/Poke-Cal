@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { calculateSpeed, finalSpeed } from "../src/speed.js";
+import { calculateSpeed, finalSpeed } from "../src/engine/speed.js";
 
 test("calculates level 50 Champions Speed from base stat and SP", () => {
   assert.deepEqual(

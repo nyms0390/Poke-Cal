@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { megaFamily, searchPokemon } from "../src/pokemon.js";
+import { megaFamily, searchPokemon } from "../src/data/pokemon.js";
 
 const pokemon = [
   {

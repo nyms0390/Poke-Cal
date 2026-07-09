@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { applyChampionsData, isChampionsLegalFormatsEntry } from "../src/champions-data.js";
+import { applyChampionsData, isChampionsLegalFormatsEntry } from "../src/data/champions-data.js";
 
 const catalogs = {
   pokemon: [

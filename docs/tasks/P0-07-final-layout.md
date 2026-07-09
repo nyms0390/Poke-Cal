@@ -1,6 +1,6 @@
 # P0-07 — Final directory layout, battle-state extraction, docs update
 
-Status: TODO
+Status: Done
 Depends on: P0-01, P0-02, P0-03, P0-04, P0-05, P0-06
 Phase: 0 (restructure, no behavior change)
 
@@ -58,3 +58,51 @@ controller so it is unit-testable.
 ```sh
 npm test
 ```
+
+## Completion notes
+- Moved via `git mv`: `damage.js`/`speed.js`/`battle-order.js` → `src/engine/`;
+  `data.js`/`catalog.js`/`pokemon.js`/`showdown-data.js`/`limitless-data.js`/`usage-defaults.js`
+  → `src/data/`; `app.js` → `src/ui/lookup-page.js`; `battle-page.js` → `src/ui/battle-page.js`.
+  Also moved `champions-data.js` and `smogon-data.js` into `src/data/` — not named in this
+  task's file list, but required by the acceptance criterion that `src/` root contain only
+  `engine/`, `data/`, `ui/`, `styles.css`. Deleted `src/stats.js` (the P0-02 compat re-export);
+  its one export (`totalBaseStats`) now comes directly from `src/engine/stats.js`.
+- Created `src/ui/battle-state.js`: `createSideState(pokemon, usageDefaults)` (pure, canonical
+  side-state shape incl. the new `status`/`teraType`/`currentHpFraction` keys — battle-page.js
+  still overlays the existing tailwind/paralyzed/burned/speedMultiplier control values after
+  calling it, so switching a side's Pokémon doesn't reset that side's battle conditions),
+  `applyControl(state, {kind, stat, index, value})` (replaces the id-string/dataset-kind
+  ladder in `handleDamageControl` with one switch over an explicit `kind`; for "ability"/"item"
+  the caller resolves the `<select>`'s chosen entry against the lookup Map *before* calling in,
+  since that resolution needs the DOM element itself), and `buildCalcInput(damageState,
+  fieldInputs)` (assembles both sides' Pokémon/state plus a `Field` from the raw battle-condition
+  control values, shared by every damage card in one render pass; `renderDamageCard` swaps
+  attacker/defender for the defender-as-source cards). `battle-page.js`'s `handleDamageControl`
+  now translates a raw DOM event into `{kind, side, stat, index, value}` via
+  `controlFromTarget`/`controlValue`, then calls `applyControl` and writes back only the
+  DOM-visible side effects (SP/stage clamped-value echo, spread re-sync).
+- Added `test/battle-state.test.js` (12 cases: `createSideState` defaults/shape/non-mutation;
+  `applyControl` for sp/stage clamping, ability/item passthrough, move-index replacement, valid
+  vs. invalid spread, nature/speedMultiplier/booleans, unknown kind; `buildCalcInput` assembly
+  and Field defaults). Caught a real bug while writing it: `buildCalcInput` was passing
+  `format: undefined`/`trickRoom: undefined` through to `createField` when omitted, which
+  clobbers `createField`'s own defaults because it spreads its overrides object — fixed by only
+  forwarding keys the caller actually supplied. Not reachable from the live app (the DOM reads
+  that feed `fieldInputs` are never undefined), so no behavior change to the shipped pages.
+- Updated every import in `src/`, `test/`, and `scripts/*.mjs` to the new paths; updated
+  `index.html`/`battle.html` `<script type="module">` src to `src/ui/lookup-page.js` /
+  `src/ui/battle-page.js` (stylesheet path unchanged — `styles.css` stays at `src/` root).
+  Added `test/battle-state.test.js` to the `test:catalog` npm script group (alongside
+  `ui.test.js`, the other UI-layer pure-logic suite).
+- Verified: `ls src/` → exactly `engine data ui styles.css`. `grep -rn "document\." src/engine
+  src/data` → empty. `grep -rn "src/app.js|src/ui.js|src/stats.js" README.md AGENTS.md docs/`
+  → empty (docs/tasks/*.md intentionally still describe prior tasks' *historical* paths at the
+  time they ran — e.g. P0-01's task file correctly says `src/damage.js` because that's where it
+  was when P0-01 executed — so those are out of scope for this check, matching how P0-04/05/06's
+  own "Steps" sections were left untouched by later tasks too). Started `scripts/serve.mjs` and
+  curled every moved module path plus the two HTML entry points (all 200) and every pre-move
+  path (all 404, confirming nothing still resolves the old locations).
+- `npm test` 132/132; also ran `test:battle` (52), `test:catalog` (57), `test:data` (23),
+  `test:damage` (41), `test:pokemon` (24) individually — all green. Did not drive a real browser
+  against the dev server (no GUI browser reachable from this sandbox) — a manual `npm start`
+  check at desktop/mobile widths is still worth doing, per this task's own acceptance criteria.

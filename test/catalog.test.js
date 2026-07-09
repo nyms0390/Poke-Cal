@@ -20,7 +20,7 @@ import {
   resolvePokemonMoves,
   sortByUsage,
   usageForPokemon,
-} from "../src/catalog.js";
+} from "../src/data/catalog.js";
 
 test("normalizes Showdown-style identifiers", () => {
   assert.equal(normalizeId("Thunder Punch"), "thunderpunch");
@@ -179,7 +179,7 @@ test("applies scoped usage and clears stale global counts", () => {
 });
 
 test("formats Champions usage rates when Limitless percent is available", async () => {
-  const { formatChampionsUsage } = await import("../src/catalog.js");
+  const { formatChampionsUsage } = await import("../src/data/catalog.js");
 
   assert.equal(
     formatChampionsUsage({ champions: { usageCount: 12, usagePercent: 34.56 } }),

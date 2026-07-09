@@ -1,8 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { totalBaseStats } from "../src/stats.js";
-import { calculateStat, applyStage } from "../src/engine/stats.js";
+import { totalBaseStats, calculateStat, applyStage } from "../src/engine/stats.js";
 
 test("totals all six Pokémon base stats", () => {
   assert.equal(

@@ -1,13 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
-import { CHAMPIONS_MOD_BASE_URL, applyChampionsData } from "../src/champions-data.js";
+import { CHAMPIONS_MOD_BASE_URL, applyChampionsData } from "../src/data/champions-data.js";
 import {
   extractAbilities,
   extractCatalogEntries,
   extractLearnsetMoves,
   parseShowdownExport,
-} from "../src/showdown-data.js";
+} from "../src/data/showdown-data.js";
 
 const SHOWDOWN_POKEDEX_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/pokedex.ts";

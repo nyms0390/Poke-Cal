@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildLimitlessUsage, mergeLimitlessUsage } from "../src/limitless-data.js";
+import { buildLimitlessUsage, mergeLimitlessUsage } from "../src/data/limitless-data.js";
 
 test("aggregates Limitless standings into usage rates", () => {
   const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];

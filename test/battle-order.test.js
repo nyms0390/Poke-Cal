@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { compareMoveOrder } from "../src/battle-order.js";
-import { finalSpeed } from "../src/speed.js";
+import { compareMoveOrder } from "../src/engine/battle-order.js";
+import { finalSpeed } from "../src/engine/speed.js";
 
 const fastSide = { pokemon: { baseSpeed: 120 }, sp: { spe: 0 }, nature: "Hardy", stages: { spe: 0 } };
 const slowSide = { pokemon: { baseSpeed: 60 }, sp: { spe: 0 }, nature: "Hardy", stages: { spe: 0 } };

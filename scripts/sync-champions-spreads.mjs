@@ -8,7 +8,7 @@ import {
   discoverChampionsFormats,
   latestStatsMonth,
   mergeSmogonSpreads,
-} from "../src/smogon-data.js";
+} from "../src/data/smogon-data.js";
 
 const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_CUTOFF = 1760;

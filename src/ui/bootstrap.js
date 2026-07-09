@@ -1,5 +1,5 @@
-import { applyScopedUsage, sortByChampionsUsage } from "../catalog.js";
-import { loadPokemonData } from "../data.js";
+import { applyScopedUsage, sortByChampionsUsage } from "../data/catalog.js";
+import { loadPokemonData } from "../data/data.js";
 
 // Shared catalog-loading boilerplate for both page controllers: fetch the Pokémon/ability/
 // move/item catalogs, report a status line, and surface the "run the sync script" error copy

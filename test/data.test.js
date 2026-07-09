@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { loadPokemonData } from "../src/data.js";
+import { loadPokemonData } from "../src/data/data.js";
 
 test("keeps Mega forms for Champions-used base Pokémon", async () => {
   const originalFetch = globalThis.fetch;

@@ -3,10 +3,9 @@ import {
   formatChampionsUsage,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
-} from "./catalog.js";
-import { compareMoveOrder } from "./battle-order.js";
-import { createField } from "./engine/field.js";
-import { STAT_KEYS } from "./engine/constants.js";
+} from "../data/catalog.js";
+import { compareMoveOrder } from "../engine/battle-order.js";
+import { STAT_KEYS } from "../engine/constants.js";
 import {
   calculateDamage,
   calculateStat,
@@ -14,11 +13,12 @@ import {
   koSummary,
   NATURES,
   natureOptionLabel,
-} from "./damage.js";
-import { searchPokemon } from "./pokemon.js";
-import { finalSpeed } from "./speed.js";
-import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
-import { loadCatalogs, rankByUsage } from "./ui/bootstrap.js";
+} from "../engine/damage.js";
+import { searchPokemon } from "../data/pokemon.js";
+import { finalSpeed } from "../engine/speed.js";
+import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
+import { applyControl, buildCalcInput, createSideState } from "./battle-state.js";
+import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
   optionElement,
@@ -27,7 +27,7 @@ import {
   stageInput,
   STAT_LABELS,
   typeBadge,
-} from "./ui/components.js";
+} from "./components.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -75,6 +75,19 @@ const elements = {
 
 const SP_STATS = STAT_KEYS;
 const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
+
+// Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
+// applyControl. Kept in sync with battle.html's control ids.
+const ID_CONTROL_KINDS = {
+  spread: "spread",
+  nature: "nature",
+  ability: "ability",
+  item: "item",
+  "speed-multiplier": "speedMultiplier",
+  tailwind: "tailwind",
+  paralyzed: "paralyzed",
+  burned: "burned",
+};
 
 let pokemon = [];
 let abilityLookup = new Map();
@@ -229,19 +242,14 @@ function seedDamageSide(side, entry) {
     items,
   });
 
-  damageState[side] = {
-    pokemon: entry,
-    nature: defaults.nature,
-    sp: { ...defaults.sp },
-    stages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-    ability: defaults.ability,
-    item: defaults.item,
-    selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeDamageId(defaults.moves[index]?.id)),
-    speedMultiplier: Number(elements[`${side}SpeedMultiplier`]?.value ?? 1),
-    tailwind: elements[`${side}Tailwind`]?.checked ?? false,
-    paralyzed: elements[`${side}Paralyzed`]?.checked ?? false,
-    burned: elements[`${side}Burned`]?.checked ?? false,
-  };
+  // createSideState gives the pure/default shape; the existing battle-condition controls for
+  // this side are preserved rather than reset, same as before the battle-state.js extraction.
+  const state = createSideState(entry, defaults);
+  state.speedMultiplier = Number(elements[`${side}SpeedMultiplier`]?.value ?? 1);
+  state.tailwind = elements[`${side}Tailwind`]?.checked ?? false;
+  state.paralyzed = elements[`${side}Paralyzed`]?.checked ?? false;
+  state.burned = elements[`${side}Burned`]?.checked ?? false;
+  damageState[side] = state;
 
   elements[`${side}Pokemon`].value = entry.id;
   elements[`${side}PokemonSearch`].value = entry.name;
@@ -294,47 +302,50 @@ function syncSideInputs(side) {
   }
 }
 
+// Translates a raw DOM event into battle-state.js's `applyControl` call, then writes any
+// DOM-visible side effects (SP/stage clamping echoed back into the input, spread selection
+// re-syncing the nature/SP/stage inputs) before re-rendering.
 function handleDamageControl(event) {
-  const id = event.target.id;
-  for (const side of ["attacker", "defender"]) {
-    const state = damageState[side];
-    if (!state) continue;
-    if (id === `${side}-spread`) {
-      const spread = parseUsageSpread(event.target.value);
-      if (spread) {
-        state.nature = spread.nature;
-        state.sp = { ...spread.sp };
-        syncSideInputs(side);
+  const control = controlFromTarget(event.target);
+  if (control) {
+    const state = damageState[control.side];
+    if (state) {
+      damageState[control.side] = applyControl(state, control);
+      if (control.kind === "spread") syncSideInputs(control.side);
+      if (control.kind === "sp" || control.kind === "stage") {
+        const key = control.kind === "stage" ? "stages" : "sp";
+        event.target.value = damageState[control.side][key][control.stat];
       }
     }
-    if (id === `${side}-nature`) state.nature = event.target.value;
-    if (id === `${side}-ability`) state.ability = selectedOptionEntry(event.target, abilityLookup);
-    if (id === `${side}-item`) state.item = selectedOptionEntry(event.target, itemLookup);
-    if (id === `${side}-speed-multiplier`) state.speedMultiplier = Number(event.target.value);
-    if (id === `${side}-tailwind`) state.tailwind = event.target.checked;
-    if (id === `${side}-paralyzed`) state.paralyzed = event.target.checked;
-    if (id === `${side}-burned`) state.burned = event.target.checked;
   }
-
-  if (event.target.dataset.kind === "sp" || event.target.dataset.kind === "stage") {
-    const { side, kind, stat } = event.target.dataset;
-    const minimum = kind === "stage" ? -6 : 0;
-    const maximum = kind === "stage" ? 6 : 32;
-    damageState[side][kind === "stage" ? "stages" : "sp"][stat] = clampInteger(
-      event.target.value,
-      minimum,
-      maximum,
-    );
-    event.target.value = damageState[side][kind === "stage" ? "stages" : "sp"][stat];
-  }
-
-  if (event.target.dataset.kind === "damage-move") {
-    const { side } = event.target.dataset;
-    const index = Number(event.target.dataset.index);
-    damageState[side].selectedMoveIds[index] = normalizeDamageId(event.target.value);
-  }
-
   renderDamage();
+}
+
+function controlFromTarget(target) {
+  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|paralyzed|burned)$/.exec(
+    target.id ?? "",
+  );
+  if (idMatch) {
+    const [, side, key] = idMatch;
+    const kind = ID_CONTROL_KINDS[key];
+    return { kind, side, value: controlValue(kind, target) };
+  }
+  if (target.dataset.kind === "sp" || target.dataset.kind === "stage") {
+    const { side, kind, stat } = target.dataset;
+    return { kind, side, stat, value: target.value };
+  }
+  if (target.dataset.kind === "damage-move") {
+    const { side, index } = target.dataset;
+    return { kind: "move", side, index: Number(index), value: target.value };
+  }
+  return null;
+}
+
+function controlValue(kind, target) {
+  if (kind === "tailwind" || kind === "paralyzed" || kind === "burned") return target.checked;
+  if (kind === "ability") return selectedOptionEntry(target, abilityLookup);
+  if (kind === "item") return selectedOptionEntry(target, itemLookup);
+  return target.value;
 }
 
 function selectedOptionEntry(select, lookup) {
@@ -386,21 +397,23 @@ function renderDamage() {
   elements.defenderSummary.textContent = sideSummary(defender);
   renderFinalStats(elements.attackerFinalStats, attacker);
   renderFinalStats(elements.defenderFinalStats, defender);
-  const field = createField({
+
+  const calcInput = buildCalcInput(damageState, {
     format: elements.battleFormat.value,
     trickRoom: elements.trickRoom.checked,
+    critical: elements.damageCritical.checked,
   });
 
-  renderMoveOrder(field);
+  renderMoveOrder(calcInput.field);
   elements.speedSummary.textContent =
     `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
     `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
 
   const attackerRows = selectedDamageMoves("attacker").map((move, index) =>
-    renderDamageCard(move, "attacker", "defender", index === 0, field),
+    renderDamageCard(move, "attacker", index === 0, calcInput),
   );
   const defenderRows = selectedDamageMoves("defender").map((move, index) =>
-    renderDamageCard(move, "defender", "attacker", index === 0, field),
+    renderDamageCard(move, "defender", index === 0, calcInput),
   );
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = `${rows.length} moves`;
@@ -453,17 +466,16 @@ function damageColumn(title, cards) {
   return column;
 }
 
-function renderDamageCard(move, sourceSide, targetSide, selected, field) {
-  const source = damageState[sourceSide];
-  const target = damageState[targetSide];
+function renderDamageCard(move, sourceSide, selected, calcInput) {
+  const isDefenderSource = sourceSide === "defender";
   const result = calculateDamage({
-    attacker: source.pokemon,
-    defender: target.pokemon,
+    attacker: isDefenderSource ? calcInput.defender : calcInput.attacker,
+    defender: isDefenderSource ? calcInput.attacker : calcInput.defender,
     move,
-    attackerState: source,
-    defenderState: target,
-    field,
-    critical: elements.damageCritical.checked,
+    attackerState: isDefenderSource ? calcInput.defenderState : calcInput.attackerState,
+    defenderState: isDefenderSource ? calcInput.attackerState : calcInput.defenderState,
+    field: calcInput.field,
+    critical: calcInput.critical,
   });
 
   const card = document.createElement("article");
@@ -545,12 +557,6 @@ function sideSummary(state) {
     nature: state.nature,
   });
   return `${state.pokemon.name} · ${state.nature} · HP ${hp}`;
-}
-
-function clampInteger(value, minimum, maximum) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return minimum;
-  return Math.max(minimum, Math.min(maximum, Math.trunc(number)));
 }
 
 function normalizeDamageId(value) {
