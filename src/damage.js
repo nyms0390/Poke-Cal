@@ -1,9 +1,10 @@
 import { NATURES, natureMultiplier, natureOptionLabel } from "./engine/natures.js";
 import { TYPE_EFFECTIVENESS } from "./engine/type-chart.js";
+import { calculateStat, applyStage } from "./engine/stats.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
+export { calculateStat, applyStage };
 
-const STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const TYPE_BOOSTING_ITEMS = {
@@ -103,20 +104,6 @@ const UNSUPPORTED_MOVE_IDS = new Set([
   "electroball",
   "terablast",
 ]);
-
-export function calculateStat({ base, stat, sp = 0, nature = "Hardy", stage = 0 }) {
-  if (!STATS.includes(stat)) throw new RangeError(`Unsupported stat: ${stat}`);
-  if (!Number.isInteger(base) || base < 1) throw new RangeError("Base stat must be positive.");
-  if (!Number.isInteger(sp) || sp < 0 || sp > 32) throw new RangeError("SP must be 0-32.");
-  if (!Number.isInteger(stage) || stage < -6 || stage > 6) {
-    throw new RangeError("Stage must be -6 to +6.");
-  }
-
-  if (stat === "hp") return base + sp + 75;
-
-  const trained = Math.floor((base + sp + 20) * natureMultiplier(nature, stat));
-  return applyStage(trained, stage);
-}
 
 export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}) {
   const moveId = normalizeId(move?.id ?? move?.name);
@@ -669,11 +656,6 @@ function weatherModifierLabel(weather, move) {
   if (weatherId === "sunnyday" || weatherId === "desolateland") return "Harsh sunlight";
   if (weatherId === "raindance" || weatherId === "primordialsea") return "Rain";
   return String(weather);
-}
-
-function applyStage(value, stage) {
-  if (stage >= 0) return Math.floor((value * (2 + stage)) / 2);
-  return Math.floor((value * 2) / (2 - stage));
 }
 
 function hasAbility(state, abilityId) {

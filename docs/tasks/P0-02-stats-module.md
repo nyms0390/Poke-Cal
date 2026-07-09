@@ -1,6 +1,6 @@
 # P0-02 — Move stat math into src/engine/stats.js
 
-Status: TODO
+Status: Done
 Depends on: P0-01
 Phase: 0 (restructure, no behavior change)
 

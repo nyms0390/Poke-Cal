@@ -1,4 +1,4 @@
-import { calculateStat } from "./damage.js";
+import { calculateStat } from "./engine/stats.js";
 
 export function calculateSpeed({
   baseSpeed,
