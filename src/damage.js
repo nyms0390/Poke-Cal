@@ -1,3 +1,8 @@
+import { NATURES, natureMultiplier, natureOptionLabel } from "./engine/natures.js";
+import { TYPE_EFFECTIVENESS } from "./engine/type-chart.js";
+
+export { NATURES, natureMultiplier, natureOptionLabel };
+
 const STATS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
@@ -92,116 +97,12 @@ const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"
 const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
 const USER_TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["heatcrash", "heavyslam"]);
 
-export const NATURES = {
-  Hardy: {},
-  Lonely: { up: "atk", down: "def" },
-  Brave: { up: "atk", down: "spe" },
-  Adamant: { up: "atk", down: "spa" },
-  Naughty: { up: "atk", down: "spd" },
-  Bold: { up: "def", down: "atk" },
-  Docile: {},
-  Relaxed: { up: "def", down: "spe" },
-  Impish: { up: "def", down: "spa" },
-  Lax: { up: "def", down: "spd" },
-  Timid: { up: "spe", down: "atk" },
-  Hasty: { up: "spe", down: "def" },
-  Serious: {},
-  Jolly: { up: "spe", down: "spa" },
-  Naive: { up: "spe", down: "spd" },
-  Modest: { up: "spa", down: "atk" },
-  Mild: { up: "spa", down: "def" },
-  Quiet: { up: "spa", down: "spe" },
-  Bashful: {},
-  Rash: { up: "spa", down: "spd" },
-  Calm: { up: "spd", down: "atk" },
-  Gentle: { up: "spd", down: "def" },
-  Sassy: { up: "spd", down: "spe" },
-  Careful: { up: "spd", down: "spa" },
-  Quirky: {},
-};
-
-const NATURE_STAT_LABELS = {
-  atk: "Atk",
-  def: "Def",
-  spa: "SpA",
-  spd: "SpD",
-  spe: "Spe",
-};
-
-const TYPE_EFFECTIVENESS = {
-  Normal: { Rock: 0.5, Ghost: 0, Steel: 0.5 },
-  Fire: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 2, Bug: 2, Rock: 0.5, Dragon: 0.5, Steel: 2 },
-  Water: { Fire: 2, Water: 0.5, Grass: 0.5, Ground: 2, Rock: 2, Dragon: 0.5 },
-  Electric: { Water: 2, Electric: 0.5, Grass: 0.5, Ground: 0, Flying: 2, Dragon: 0.5 },
-  Grass: {
-    Fire: 0.5,
-    Water: 2,
-    Grass: 0.5,
-    Poison: 0.5,
-    Ground: 2,
-    Flying: 0.5,
-    Bug: 0.5,
-    Rock: 2,
-    Dragon: 0.5,
-    Steel: 0.5,
-  },
-  Ice: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 0.5, Ground: 2, Flying: 2, Dragon: 2, Steel: 0.5 },
-  Fighting: {
-    Normal: 2,
-    Ice: 2,
-    Poison: 0.5,
-    Flying: 0.5,
-    Psychic: 0.5,
-    Bug: 0.5,
-    Rock: 2,
-    Ghost: 0,
-    Dark: 2,
-    Steel: 2,
-    Fairy: 0.5,
-  },
-  Poison: { Grass: 2, Poison: 0.5, Ground: 0.5, Rock: 0.5, Ghost: 0.5, Steel: 0, Fairy: 2 },
-  Ground: { Fire: 2, Electric: 2, Grass: 0.5, Poison: 2, Flying: 0, Bug: 0.5, Rock: 2, Steel: 2 },
-  Flying: { Electric: 0.5, Grass: 2, Fighting: 2, Bug: 2, Rock: 0.5, Steel: 0.5 },
-  Psychic: { Fighting: 2, Poison: 2, Psychic: 0.5, Dark: 0, Steel: 0.5 },
-  Bug: {
-    Fire: 0.5,
-    Grass: 2,
-    Fighting: 0.5,
-    Poison: 0.5,
-    Flying: 0.5,
-    Psychic: 2,
-    Ghost: 0.5,
-    Dark: 2,
-    Steel: 0.5,
-    Fairy: 0.5,
-  },
-  Rock: { Fire: 2, Ice: 2, Fighting: 0.5, Ground: 0.5, Flying: 2, Bug: 2, Steel: 0.5 },
-  Ghost: { Normal: 0, Psychic: 2, Ghost: 2, Dark: 0.5 },
-  Dragon: { Dragon: 2, Steel: 0.5, Fairy: 0 },
-  Dark: { Fighting: 0.5, Psychic: 2, Ghost: 2, Dark: 0.5, Fairy: 0.5 },
-  Steel: { Fire: 0.5, Water: 0.5, Electric: 0.5, Ice: 2, Rock: 2, Steel: 0.5, Fairy: 2 },
-  Fairy: { Fire: 0.5, Fighting: 2, Poison: 0.5, Dragon: 2, Dark: 2, Steel: 0.5 },
-};
-
 const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
   "nightshade",
   "electroball",
   "terablast",
 ]);
-
-export function natureMultiplier(natureName, stat) {
-  const nature = NATURES[natureName] ?? NATURES.Hardy;
-  if (nature.up === stat) return 1.1;
-  if (nature.down === stat) return 0.9;
-  return 1;
-}
-
-export function natureOptionLabel(natureName) {
-  const nature = NATURES[natureName] ?? NATURES.Hardy;
-  if (!nature.up || !nature.down) return natureName;
-  return `${natureName} +${NATURE_STAT_LABELS[nature.up]} -${NATURE_STAT_LABELS[nature.down]}`;
-}
 
 export function calculateStat({ base, stat, sp = 0, nature = "Hardy", stage = 0 }) {
   if (!STATS.includes(stat)) throw new RangeError(`Unsupported stat: ${stat}`);

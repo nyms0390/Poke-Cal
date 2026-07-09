@@ -1,6 +1,6 @@
 # P0-01 — Extract data tables from damage.js into engine modules
 
-Status: TODO
+Status: Done
 Depends on: —
 Phase: 0 (restructure, no behavior change)
 

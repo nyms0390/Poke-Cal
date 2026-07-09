@@ -39,6 +39,31 @@ spreads. Consequences:
   (max 32 / neutral 0 / plus-nature / minus-nature) weighted by observed **nature usage**,
   which we do have. This is documented in P5-01; do not invent spread data.
 
+## Competitive landscape (PokéOmni, verified 2026-07-09)
+
+[pokeomni.com](https://pokeomni.com/) launched 2026-07-07: same niche (Champions doubles), same
+primary data source (LimitlessTCG, 4-week window, weekly refresh). React/Vite SPA on Vercel with
+Firebase-synced teams; dex data is PokeAPI-shaped and baked into the bundle at build time.
+
+**They beat us on data breadth**: per-Pokémon **win rate**, **common-teammates %**, and **team
+archetypes** (count/share/winrate + per-member sets, ~25k team samples/season), all derived from
+the same standings endpoint we already sync. **We beat them on calculator depth** (their calc has
+no screens, Friend Guard, status, spread modifier, or KO %) and on **spread data** (Smogon ladder
+SP overlay — they only have natures).
+
+Takeaways, in priority order:
+
+1. **Win rate + teammate co-occurrence + archetype clustering** in `src/data/limitless-data.js` —
+   cheap extension of the standings parse we already do; feeds P5-01 threat data directly.
+2. **Freshness + sample-size labels** wherever usage data is shown
+   (`LimitlessTCG · M-B · <date> · n samples`) — applies to P4-01 and the builder.
+3. **Speed-tier presets** (base / neutral / max / max+nature / scarf variants) — adopt their
+   preset-chip UX in P4-03 / P5-03.
+4. **Season/regulation switcher** with archived stats — future consideration, not scheduled.
+
+Non-goals from their feature set: accounts/cloud sync, battle-sim matchup grid, i18n — they
+conflict with the no-dependency constraint or don't serve the calculator-first product goals.
+
 ## Target code structure
 
 Phase 0 migrates the code to this layout. After P0-07, all paths below are canonical:
