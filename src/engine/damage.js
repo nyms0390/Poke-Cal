@@ -10,8 +10,8 @@ import {
   TARGET_WEIGHT_POWER_MOVE_IDS,
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
 } from "./move-effects.js";
-import { collectModifiers } from "./modifiers.js";
-import { koChance, koText } from "./ko-chance.js";
+import { applyHitCountOverride, collectModifiers } from "./modifiers.js";
+import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };
@@ -41,12 +41,25 @@ const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
 const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
   "nightshade",
-  "electroball",
+  "counter",
+  "mirrorcoat",
+  "metalburst",
+  "comeuppance",
+  "futuresight",
+  "bide",
 ]);
+const UNSUPPORTED_MOVE_REASONS = {
+  counter: "Requires the last damage received this turn.",
+  mirrorcoat: "Requires the last damage received this turn.",
+  metalburst: "Requires the last damage received this turn.",
+  comeuppance: "Requires the last damage received this turn.",
+  futuresight: "Requires delayed damage resolution and stored user state.",
+  bide: "Requires stored damage taken over prior turns.",
+};
 
 export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}) {
   const moveId = normalizeId(move?.id ?? move?.name);
-  if (moveId === "thousandarrows" && defenderTypes.includes("Flying")) {
+  if (["smackdown", "thousandarrows"].includes(moveId) && defenderTypes.includes("Flying")) {
     if (defenderState.grounded !== true) return 1;
     return defenderTypes.reduce((multiplier, defenderType) => {
       if (defenderType === "Flying") return multiplier;
@@ -67,11 +80,11 @@ export function unsupportedMoveReason(move) {
   if (TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (fixedDamageKind(move)) return "";
+  if (UNSUPPORTED_MOVE_IDS.has(moveId)) return UNSUPPORTED_MOVE_REASONS[moveId] ?? "Custom damage behavior is not supported.";
   if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
     return "Fixed-damage moves are not supported.";
   }
-  if (!move.basePower) return "Variable or zero base power is not supported.";
-  if (UNSUPPORTED_MOVE_IDS.has(move.id)) return "Custom damage behavior is not supported.";
+  if (!move.basePower && !moveEffect(moveId).basePower) return "Variable or zero base power is not supported.";
   if (!["Physical", "Special"].includes(move.category)) return "Only Physical and Special moves are supported.";
   return "";
 }
@@ -90,20 +103,33 @@ export function calculateDamage({
   critical = false,
   moveOptions = {},
 }) {
-  const { format: battleFormat, pledgeCombo = false } = field;
+  const weatherSuppressed = hasAnyAbility(attackerState, ["cloudnine", "airlock"]) ||
+    hasAnyAbility(defenderState, ["cloudnine", "airlock"]);
+  const effectiveField = {
+    ...field,
+    weather: weatherSuppressed ? "" : field.weather,
+    weatherSuppressed,
+  };
+  const { format: battleFormat, pledgeCombo = false } = effectiveField;
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
-  const ctx = { move, attacker, defender, attackerState, defenderState, field, moveOptions };
+  const ctx = { move, attacker, defender, attackerState, defenderState, field: effectiveField, moveOptions };
   const moveType = effectiveMoveType(ctx);
   const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
   const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState);
-  const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
-  const defenderCurrentHp = currentHp(defenderState, defenderHp);
+  const defenderMaxHp = calculatePokemonStat(defender, defenderState, "hp");
+  const defenderCurrentHp = currentHp(defenderState, defenderMaxHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
+  const attackerCurrentHp = currentHp(attackerState, attackerMaxHp);
   ctx.defenderHp = defenderCurrentHp;
+  ctx.defenderMaxHp = defenderMaxHp;
+  ctx.attackerHp = attackerCurrentHp;
   ctx.attackerMaxHp = attackerMaxHp;
-  const effectiveCritical = critical && (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
+  const moveId = normalizeId(move.id ?? move.name);
+  const alwaysCritical = moveEffect(moveId).alwaysCrit === true;
+  const effectiveCritical = (critical || alwaysCritical) &&
+    (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
     const rolls = DAMAGE_ROLLS.map(() => 0);
     return {
@@ -113,37 +139,37 @@ export function calculateDamage({
       maxDamage: 0,
       minPercent: 0,
       maxPercent: 0,
-      defenderHp,
+      defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
-      notes: ["Immune", ...teraNotes(attackerState, defenderState)],
+      notes: ["Immune", ...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)],
     };
   }
 
   const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
-    const damage = Math.max(1, fixedDamage);
+    const damage = Math.max(0, fixedDamage);
     const rolls = DAMAGE_ROLLS.map(() => damage);
     return {
       supported: true,
       rolls,
       minDamage: damage,
       maxDamage: damage,
-      minPercent: percent(damage, defenderHp),
-      maxPercent: percent(damage, defenderHp),
-      defenderHp,
+      minPercent: percent(damage, defenderMaxHp),
+      maxPercent: percent(damage, defenderMaxHp),
+      defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
-      notes: ["Fixed damage", ...teraNotes(attackerState, defenderState)],
+      notes: ["Fixed damage", ...fieldNotes(effectiveField, attackerState, defenderState), moveEffect(moveId).note?.(ctx), ...teraNotes(attackerState, defenderState)].filter(Boolean),
     };
   }
 
-  const moveId = normalizeId(move.id ?? move.name);
   const dynamicPower = effectiveMovePower(ctx);
   if (dynamicPower === null) {
     let reason = "Natural Gift requires a held Berry.";
+    if (moveId === "fling") reason = "Fling requires a held item with fling power data.";
     if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
       reason = `${move.name} requires attacker and defender weights.`;
     } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
@@ -172,12 +198,17 @@ export function calculateDamage({
   const attack = calculatePokemonStat(attackSource.pokemon, attackSource.state, attackStat, {
     stagePolicy: criticalStagePolicy("attack", effectiveCritical),
   });
-  const defense = calculatePokemonStat(defender, defenderState, defenseStat, {
+  const baseDefense = calculatePokemonStat(defender, defenderState, defenseStat, {
     ignoreStage: move.ignoreDefensive,
     stagePolicy: criticalStagePolicy("defense", effectiveCritical),
   });
-  const notes = [...teraNotes(attackerState, defenderState)];
+  const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField);
+  const defense = sandstormSpDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
+  const notes = [...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)];
+  if (sandstormSpDefenseBoost) notes.push("Sandstorm Rock SpD boost");
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
+  const moveNote = moveEffect(moveId).note?.(ctx);
+  if (moveNote) notes.push(moveNote);
   let power = dynamicPower ?? move.basePower;
   ctx.power = power;
   if (dynamicPower !== undefined) {
@@ -196,19 +227,29 @@ export function calculateDamage({
     notes.push("Pledge combo STAB");
   }
 
-  for (const modifier of collectModifiers({
+  let hitCounts = hitCountRange(ctx);
+  ctx.hitCountRange = hitCounts;
+  const modifiers = collectModifiers({
     ...ctx,
     typeMultiplier,
     moveType,
     attackStat,
     isPhysical,
     critical: effectiveCritical,
-  })) {
+  });
+  for (const modifier of modifiers) {
     notes.push(modifier.label);
     if (modifier.kind === "attack") attackModifier *= modifier.value;
     if (modifier.kind === "power") powerModifiers.push(modifier.value);
     if (modifier.kind === "damage") damageModifier *= modifier.value;
     if (modifier.kind === "stab") stab = modifier.value;
+    if (modifier.kind === "hits") hitCounts = applyHitCountOverride(hitCounts, modifier.value);
+  }
+
+  const selectedHitCount = Number(moveOptions.hitCount);
+  if (Number.isFinite(selectedHitCount)) {
+    const count = Math.max(hitCounts.min, Math.min(hitCounts.max, Math.trunc(selectedHitCount)));
+    hitCounts = { min: count, max: count };
   }
 
   const baseHitPowers = successiveHitBasePowers(ctx);
@@ -220,11 +261,12 @@ export function calculateDamage({
     ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
     : 1;
   const burnModifier =
-    attackerState.status === "burn" && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
+    attackerState.status === "burn" && isPhysical && !hasAbility(attackerState, "guts") && !moveEffect(moveId).ignoreBurn
+      ? 0.5
+      : 1;
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
-  const hitCounts = hitCountRange(ctx);
   if (hitPowers.length === 1 && (hitCounts.min > 1 || hitCounts.max > 1)) {
     notes.push(hitCounts.min === hitCounts.max
       ? `${move.name} hits ${hitCounts.max} times`
@@ -246,21 +288,23 @@ export function calculateDamage({
     hitPowers.reduce((total, hitPower) => total + damageForHit(hitPower, roll), 0);
   const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.min);
   const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.max);
-  const rolls = hitCounts.min === hitCounts.max
-    ? minHitRolls
-    : [minHitRolls[0], ...maxHitRolls.slice(1)];
   const rollDistribution = hitCounts.min === hitCounts.max
     ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit)
     : null;
+  const rolls = hitCounts.min === hitCounts.max && hitCounts.min > 1
+    ? rollDistribution.map(({ damage }) => damage)
+    : hitCounts.min === hitCounts.max
+      ? minHitRolls
+      : [minHitRolls[0], ...maxHitRolls.slice(1)];
 
   return {
     supported: true,
     rolls,
     minDamage: Math.min(...rolls),
     maxDamage: Math.max(...rolls),
-    minPercent: percent(Math.min(...rolls), defenderHp),
-    maxPercent: percent(Math.max(...rolls), defenderHp),
-    defenderHp,
+    minPercent: percent(Math.min(...rolls), defenderMaxHp),
+    maxPercent: percent(Math.max(...rolls), defenderMaxHp),
+    defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
     ko: rollDistribution
@@ -288,18 +332,10 @@ function fullMoveDistribution(hitPowers, hitCount, damageForHit) {
   const powers = hitPowers.length > 1
     ? hitPowers
     : Array.from({ length: hitCount }, () => hitPowers[0]);
-  let distribution = new Map([[0, 1]]);
-  for (const power of powers) {
-    const next = new Map();
-    for (const [total, probability] of distribution) {
-      for (const roll of DAMAGE_ROLLS) {
-        const damage = total + damageForHit(power, roll);
-        next.set(damage, (next.get(damage) ?? 0) + probability / DAMAGE_ROLLS.length);
-      }
-    }
-    distribution = next;
-  }
-  return [...distribution].map(([damage, chance]) => ({ damage, chance }));
+  return convolveDistributions(powers.map((power) => DAMAGE_ROLLS.map((roll) => ({
+    damage: damageForHit(power, roll),
+    chance: 1 / DAMAGE_ROLLS.length,
+  }))));
 }
 
 function stabMultiplier(attacker, attackerState, moveType) {
@@ -314,6 +350,25 @@ function teraNotes(attackerState, defenderState) {
   return [attackerState.teraType, defenderState.teraType]
     .filter(Boolean)
     .map((type) => `Tera (${type})`);
+}
+
+function fieldNotes(field, attackerState, defenderState) {
+  const notes = [];
+  if (field.weatherSuppressed) notes.push("Cloud Nine/Air Lock suppresses weather");
+  if (
+    !field.weatherSuppressed &&
+    normalizeId(field.weather) === "raindance" &&
+    (hasAnyAbility(attackerState, ["primordialsea"]) || hasAnyAbility(defenderState, ["primordialsea"]))
+  ) {
+    notes.push("Primordial Sea treated as Rain");
+  }
+  return notes;
+}
+
+function hasSandstormSpDefenseBoost(pokemon, state, stat, field) {
+  if (stat !== "spd" || normalizeId(field.weather) !== "sandstorm") return false;
+  const types = state.teraType ? [state.teraType] : pokemon.types ?? [];
+  return types.includes("Rock");
 }
 
 export function koSummary({ minDamage, maxDamage, defenderHp, defenderCurrentHp = defenderHp }) {
@@ -369,8 +424,9 @@ function fixedDamageValue(ctx) {
   return null;
 }
 
-function hitCountRange(ctx) {
-  const hits = moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).hits?.(ctx);
+export function hitCountRange(ctx) {
+  const configuredHits = moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).hits;
+  const hits = typeof configuredHits === "function" ? configuredHits(ctx) : configuredHits;
   if (hits !== undefined) {
     return Array.isArray(hits) ? { min: hits[0], max: hits[1] } : { min: hits, max: hits };
   }

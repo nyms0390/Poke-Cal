@@ -4,7 +4,7 @@
 //   ctx = { move, attacker, defender, attackerState, defenderState, field,
 //           typeMultiplier, moveType, attackStat, isPhysical, attackerPerspective }
 // and return a modifier ({ kind, value, label }), an array of modifiers, or null/undefined.
-// kind ∈ "power" | "attack" | "defense" | "damage" | "stab"
+// kind ∈ "power" | "attack" | "defense" | "damage" | "stab" | "hits"
 //
 // `collectModifiers(ctx)` runs each registry once for the attacker's own ability/item
 // (attackerPerspective: true) and once for the defender's (attackerPerspective: false) —
@@ -18,6 +18,21 @@ import { isGrounded } from "./field.js";
 
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+export function applyHitCountOverride(range, value) {
+  if (value === "max") return { min: range.max, max: range.max };
+  if (Array.isArray(value)) {
+    return {
+      min: Math.max(range.min, Math.min(range.max, value[0])),
+      max: Math.max(range.min, Math.min(range.max, value[1])),
+    };
+  }
+  if (Number.isFinite(value)) {
+    const count = Math.max(range.min, Math.min(range.max, value));
+    return { min: count, max: count };
+  }
+  return range;
 }
 
 export const TYPE_BOOSTING_ITEMS = {
@@ -73,6 +88,27 @@ export const MOVE_FLAG_POWER_ABILITIES = {
   strongjaw: { flag: "bite", value: 1.5 },
   toughclaws: { flag: "contact", value: 1.3 },
 };
+const FIELD_ABILITY_BOOST = 4915 / 4096;
+const IMPLIED_FIELDS = {
+  drizzle: { weather: "RainDance" },
+  drought: { weather: "SunnyDay" },
+  snowwarning: { weather: "Snowscape" },
+  sandstream: { weather: "Sandstorm" },
+  sandspit: { weather: "Sandstorm" },
+  primordialsea: { weather: "RainDance", note: "Primordial Sea treated as Rain" },
+  electricsurge: { terrain: "Electric Terrain" },
+  grassysurge: { terrain: "Grassy Terrain" },
+  mistysurge: { terrain: "Misty Terrain" },
+  psychicsurge: { terrain: "Psychic Terrain" },
+  orichalcumpulse: { weather: "SunnyDay" },
+  hadronengine: { terrain: "Electric Terrain" },
+  megasol: { weather: "SunnyDay" },
+};
+
+export function impliedField(ability) {
+  const abilityId = normalizeId(ability?.id ?? ability?.name ?? ability);
+  return IMPLIED_FIELDS[abilityId] ?? {};
+}
 
 export const ITEM_MODIFIERS = {
   choiceband: (ctx) =>
@@ -90,6 +126,14 @@ export const ITEM_MODIFIERS = {
     ctx.attackerPerspective && ctx.isPhysical ? { kind: "power", value: 1.1, label: "Muscle Band" } : null,
   wiseglasses: (ctx) =>
     ctx.attackerPerspective && !ctx.isPhysical ? { kind: "power", value: 1.1, label: "Wise Glasses" } : null,
+  loadeddice: (ctx) => {
+    if (!ctx.attackerPerspective || ctx.hitCountRange?.max <= 1) return null;
+    return {
+      kind: "hits",
+      value: [Math.max(4, ctx.hitCountRange.min), ctx.hitCountRange.max],
+      label: "Loaded Dice",
+    };
+  },
 };
 
 for (const [itemId, type] of Object.entries(TYPE_BOOSTING_ITEMS)) {
@@ -111,6 +155,10 @@ export const ABILITY_MODIFIERS = {
   hugepower: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk"
       ? { kind: "attack", value: 2, label: ctx.attackerState.ability.name }
+      : null,
+  skilllink: (ctx) =>
+    ctx.attackerPerspective && ctx.hitCountRange?.max > 1
+      ? { kind: "hits", value: "max", label: "Skill Link" }
       : null,
   purepower: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk"
@@ -138,7 +186,30 @@ export const ABILITY_MODIFIERS = {
     !ctx.attackerPerspective && ctx.typeMultiplier > 1
       ? { kind: "damage", value: 0.75, label: ctx.defenderState.ability.name }
       : null,
+  orichalcumpulse: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "atk" && (normalizeId(ctx.field.weather) === "sunnyday" || normalizeId(ctx.field.weather) === "desolateland")
+      ? { kind: "attack", value: FIELD_ABILITY_BOOST, label: ctx.attackerState.ability.name }
+      : null,
+  hadronengine: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "spa" && normalizeId(ctx.field.terrain) === "electricterrain"
+      ? { kind: "attack", value: FIELD_ABILITY_BOOST, label: ctx.attackerState.ability.name }
+      : null,
 };
+
+export function resolveHitCountRange(range, { move, attackerState }) {
+  let resolved = range;
+  const itemId = normalizeId(attackerState?.item?.id ?? attackerState?.item?.name);
+  const abilityId = normalizeId(attackerState?.ability?.id ?? attackerState?.ability?.name);
+  const producers = [
+    itemId === "loadeddice" ? ITEM_MODIFIERS.loadeddice : null,
+    abilityId === "skilllink" ? ABILITY_MODIFIERS.skilllink : null,
+  ];
+  for (const producer of producers) {
+    const modifier = producer?.({ move, attackerState, attackerPerspective: true, hitCountRange: resolved });
+    if (modifier?.kind === "hits") resolved = applyHitCountOverride(resolved, modifier.value);
+  }
+  return resolved;
+}
 
 for (const [abilityId, info] of Object.entries(TYPE_POWER_ABILITIES)) {
   ABILITY_MODIFIERS[abilityId] = (ctx) =>

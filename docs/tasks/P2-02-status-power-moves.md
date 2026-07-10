@@ -1,6 +1,6 @@
 # P2-02 — Status-conditional power moves
 
-Status: TODO
+Status: Done
 Depends on: P1-03
 Phase: 2 (mechanics burn-down)
 

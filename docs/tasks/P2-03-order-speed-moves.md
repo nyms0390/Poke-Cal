@@ -1,6 +1,6 @@
 # P2-03 — Speed-scaled and turn-order-conditional moves
 
-Status: TODO
+Status: Done
 Depends on: P1-06
 Phase: 2 (mechanics burn-down)
 

@@ -6,6 +6,22 @@ function hkoLabel(hits) {
   return hits === 1 ? "OHKO" : `${hits}HKO`;
 }
 
+// Convolve independent weighted damage distributions without enumerating every roll path.
+export function convolveDistributions(distributions) {
+  let totals = new Map([[0, 1]]);
+  for (const distribution of distributions) {
+    const next = new Map();
+    for (const [total, probability] of totals) {
+      for (const entry of distribution) {
+        const nextTotal = total + entry.damage;
+        next.set(nextTotal, (next.get(nextTotal) ?? 0) + probability * entry.chance);
+      }
+    }
+    totals = next;
+  }
+  return [...totals].map(([damage, chance]) => ({ damage, chance }));
+}
+
 /**
  * Calculate exact KO probabilities from either uniform damage rolls or a weighted
  * full-move damage distribution. hitsPerTurn is for callers whose input represents

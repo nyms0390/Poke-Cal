@@ -1,6 +1,6 @@
 # P2-01 — Standard multi-hit moves, Skill Link, fixed three-hit moves
 
-Status: TODO
+Status: Done
 Depends on: P1-06
 Phase: 2 (mechanics burn-down)
 

@@ -153,24 +153,24 @@ Currently implemented named effects:
 
 ### No held item base-power doubling
 
-- [ ] Acrobatics
+- [x] Acrobatics
 
 ### Multi-hit damage with stat changes
 
-- [ ] Scale Shot
+- [x] Scale Shot
 
 ### Target status base-power doubling
 
-- [ ] Hex
-- [ ] Venoshock
-- [ ] Barb Barrage
-- [ ] Infernal Parade
-- [ ] Smelling Salts
-- [ ] Wake-Up Slap
+- [x] Hex
+- [x] Venoshock
+- [x] Barb Barrage
+- [x] Infernal Parade
+- [x] Smelling Salts
+- [x] Wake-Up Slap
 
 ### Target HP equalization damage
 
-- [ ] Endeavor
+- [x] Endeavor
 
 ### Form- or species-derived move type
 
@@ -185,63 +185,63 @@ Currently implemented named effects:
 
 ### Calculator-assumed base power for unavailable damage-before-moving state
 
-- [ ] Avalanche
-- [ ] Assurance
-- [ ] Revenge
+- [x] Avalanche
+- [x] Assurance
+- [x] Revenge
 
 ### Grounding or airborne immunity override
 
-- [ ] Smack Down
+- [x] Smack Down
 - [x] Thousand Arrows
 
 ### User status base-power doubling
 
-- [ ] Facade
+- [x] Facade
 
 ### Counter last received damage
 
-- [ ] Mirror Coat
-- [ ] Counter
-- [ ] Metal Burst
-- [ ] Comeuppance
+- [x] Mirror Coat — unsupported: requires last damage received this turn
+- [x] Counter — unsupported: requires last damage received this turn
+- [x] Metal Burst — unsupported: requires last damage received this turn
+- [x] Comeuppance — unsupported: requires last damage received this turn
 
 ### Stat-boost-count base-power scaling
 
-- [ ] Stored Power
-- [ ] Power Trip
-- [ ] Punishment
+- [x] Stored Power
+- [x] Power Trip
+- [x] Punishment
 
 ### Standard two-to-five-hit damage
 
-- [ ] Bullet Seed
-- [ ] Icicle Spear
-- [ ] Bone Rush
-- [ ] Rock Blast
-- [ ] Water Shuriken
-- [ ] Arm Thrust
-- [ ] Barrage
-- [ ] Comet Punch
-- [ ] Double Slap
-- [ ] Fury Attack
-- [ ] Fury Swipes
-- [ ] Pin Missile
-- [ ] Spike Cannon
-- [ ] Tail Slap
+- [x] Bullet Seed
+- [x] Icicle Spear
+- [x] Bone Rush
+- [x] Rock Blast
+- [x] Water Shuriken
+- [x] Arm Thrust
+- [x] Barrage
+- [x] Comet Punch
+- [x] Double Slap
+- [x] Fury Attack
+- [x] Fury Swipes
+- [x] Pin Missile
+- [x] Spike Cannon
+- [x] Tail Slap
 
 ### Target HP-scaled base power
 
-- [ ] Hard Press
-- [ ] Crush Grip
-- [ ] Wring Out
+- [x] Hard Press
+- [x] Crush Grip
+- [x] Wring Out
 
 ### Held-item thrown base power
 
-- [ ] Fling
+- [x] Fling
 
 ### User-versus-target speed-scaled base power
 
-- [ ] Gyro Ball
-- [ ] Electro Ball
+- [x] Gyro Ball
+- [x] Electro Ball
 
 ### Ignore defensive abilities
 
@@ -250,11 +250,11 @@ Currently implemented named effects:
 
 ### Residual trapping damage
 
-- [ ] Salt Cure
+- [x] Salt Cure — residual is shown as a note; damage is not applied on the current turn
 
 ### IV-derived move type
 
-- [ ] Hidden Power
+- [x] Hidden Power — defaults to Dark; callers may provide `hiddenPowerType`
 
 ### Tera-derived move type and attacking stat
 
@@ -276,40 +276,40 @@ Currently implemented named effects:
 
 ### Acting before the target base-power doubling
 
-- [ ] Bolt Beak
-- [ ] Fishious Rend
+- [x] Bolt Beak
+- [x] Fishious Rend
 
 ### Acting after the target base-power doubling
 
-- [ ] Payback
+- [x] Payback
 
 ### Target HP threshold base-power doubling
 
-- [ ] Brine
+- [x] Brine
 
 ### Low-user-HP-scaled base power
 
-- [ ] Flail
-- [ ] Reversal
+- [x] Flail
+- [x] Reversal
 
 ### Calculator-assumed friendship base power
 
-- [ ] Frustration
-- [ ] Pika Papow
-- [ ] Return
-- [ ] Veevee Volley
+- [x] Frustration — assumes minimum friendship
+- [x] Pika Papow — assumes maximum friendship
+- [x] Return — assumes maximum friendship
+- [x] Veevee Volley — assumes maximum friendship
 
 ### Calculator-assumed base power for unavailable stockpile count
 
-- [ ] Spit Up
+- [x] Spit Up — assumes 3 Stockpile uses
 
 ### Calculator-assumed base power for unavailable PP count
 
-- [ ] Trump Card
+- [x] Trump Card — assumes 5+ PP remaining
 
 ### Calculator-assumed base power for unavailable switching context
 
-- [ ] Pursuit
+- [x] Pursuit — switch doubling is not modeled
 
 ### Pledge combo field effect and base power
 
@@ -318,8 +318,8 @@ Currently implemented named effects:
 
 ### Fixed three-hit damage
 
-- [ ] Surging Strikes
-- [ ] Triple Dive
+- [x] Surging Strikes
+- [x] Triple Dive
 
 ### Stronger offensive stat selection
 
@@ -332,11 +332,11 @@ Currently implemented named effects:
 
 ### Delayed damage with stored user state
 
-- [ ] Future Sight
+- [x] Future Sight — unsupported: requires delayed damage resolution and stored user state
 
 ### Stored-damage release
 
-- [ ] Bide
+- [x] Bide — unsupported: requires stored damage taken over prior turns
 
 ### Fixed-level or fixed-value damage
 
@@ -347,7 +347,7 @@ Currently implemented named effects:
 
 ### Random fixed damage
 
-- [ ] Psywave
+- [x] Psywave — assumes level-50 average damage
 
 ### Adjacent-target splash damage
 
@@ -411,12 +411,12 @@ Currently implemented named effects:
 
 ### Weather setting
 
-- [ ] Drizzle
-- [ ] Drought
-- [ ] Snow Warning
-- [ ] Sand Stream
-- [ ] Primordial Sea
-- [ ] Sand Spit
+- [x] Drizzle
+- [x] Drought
+- [x] Snow Warning
+- [x] Sand Stream
+- [x] Primordial Sea
+- [x] Sand Spit
 
 ### Normal-type move conversion with power boost
 
@@ -502,8 +502,8 @@ Currently implemented named effects:
 
 ### Weather effect suppression
 
-- [ ] Cloud Nine
-- [ ] Air Lock
+- [x] Cloud Nine
+- [x] Air Lock
 
 ### Type immunity with stat boost or healing
 
@@ -563,14 +563,14 @@ Currently implemented named effects:
 
 ### Terrain setting
 
-- [ ] Electric Surge
-- [ ] Grassy Surge
-- [ ] Misty Surge
-- [ ] Psychic Surge
+- [x] Electric Surge
+- [x] Grassy Surge
+- [x] Misty Surge
+- [x] Psychic Surge
 
 ### Sunny-Day-as-active move behavior
 
-- [ ] Mega Sol
+- [x] Mega Sol
 
 ### Critical-hit prevention
 
@@ -579,7 +579,7 @@ Currently implemented named effects:
 
 ### Maximum multi-hit count
 
-- [ ] Skill Link
+- [x] Skill Link
 
 ### Ally special move power support
 
@@ -644,7 +644,7 @@ Currently implemented named effects:
 
 ### Sun-setting Attack boost
 
-- [ ] Orichalcum Pulse
+- [x] Orichalcum Pulse
 
 ### Sun or Booster Energy highest-stat boost
 
@@ -664,7 +664,7 @@ Currently implemented named effects:
 
 ### Electric Terrain setting and Special Attack boost
 
-- [ ] Hadron Engine
+- [x] Hadron Engine
 
 ### Weather and terrain removal
 

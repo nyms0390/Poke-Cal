@@ -1,6 +1,6 @@
 # P2-04 — HP-scaled and remaining miscellaneous moves
 
-Status: TODO
+Status: Done
 Depends on: P1-04, P1-05
 Phase: 2 (mechanics burn-down)
 

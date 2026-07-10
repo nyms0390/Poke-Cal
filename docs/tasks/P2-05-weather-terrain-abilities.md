@@ -1,6 +1,6 @@
 # P2-05 — Weather/terrain-setting and weather-suppressing abilities
 
-Status: TODO
+Status: Done
 Depends on: P1-01
 Phase: 2 (mechanics burn-down)
 

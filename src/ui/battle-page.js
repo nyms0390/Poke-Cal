@@ -10,9 +10,12 @@ import {
   calculateDamage,
   calculateStat,
   formatDamageResult,
+  hitCountRange,
   NATURES,
   natureOptionLabel,
 } from "../engine/damage.js";
+import { impliedField, resolveHitCountRange } from "../engine/modifiers.js";
+import { isOrderConditionalMove } from "../engine/move-effects.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -315,6 +318,7 @@ function seedDamageSide(side, entry) {
   hidePokemonSearchResults(side);
   renderSideSelects(side, defaults);
   syncSideInputs(side);
+  applyAbilityImpliedField(damageState[side].ability);
   renderDamage();
 }
 
@@ -400,7 +404,10 @@ function handleDamageControl(event) {
     if (state) {
       damageState[control.side] = applyControl(state, control);
       if (control.kind === "spread") syncSideInputs(control.side);
-      if (control.kind === "move") renderDamageMovePickers(control.side);
+      if (control.kind === "ability") applyAbilityImpliedField(damageState[control.side].ability);
+      if (["move", "hitCount", "targetMoved", "ability", "item"].includes(control.kind)) {
+        renderDamageMovePickers(control.side);
+      }
       if (control.kind === "sp" || control.kind === "stage") {
         const key = control.kind === "stage" ? "stages" : "sp";
         event.target.value = damageState[control.side][key][control.stat];
@@ -408,6 +415,26 @@ function handleDamageControl(event) {
     }
   }
   renderDamage();
+}
+
+function applyAbilityImpliedField(ability) {
+  const implied = impliedField(ability);
+  let nextFieldState = fieldState;
+  if (implied.weather !== undefined && fieldState.weather !== implied.weather) {
+    nextFieldState = { ...nextFieldState, weather: implied.weather };
+    syncRadioGroup(elements.fieldWeatherInputs, implied.weather);
+  }
+  if (implied.terrain !== undefined && fieldState.terrain !== implied.terrain) {
+    nextFieldState = { ...nextFieldState, terrain: implied.terrain };
+    syncRadioGroup(elements.fieldTerrainInputs, implied.terrain);
+  }
+  fieldState = nextFieldState;
+}
+
+function syncRadioGroup(inputs, value) {
+  for (const input of inputs) {
+    input.checked = input.value === value;
+  }
 }
 
 function controlFromTarget(target) {
@@ -438,6 +465,14 @@ function controlFromTarget(target) {
   if (target.dataset.kind === "single-target") {
     const { side, index } = target.dataset;
     return { kind: "singleTarget", side, index: Number(index), value: target.checked };
+  }
+  if (target.dataset.kind === "hit-count") {
+    const { side, index } = target.dataset;
+    return { kind: "hitCount", side, index: Number(index), value: target.value };
+  }
+  if (target.dataset.kind === "target-moved") {
+    const { side, index } = target.dataset;
+    return { kind: "targetMoved", side, index: Number(index), value: target.checked };
   }
   return null;
 }
@@ -483,6 +518,38 @@ function renderDamageMovePickers(side) {
       label.append(select);
 
       const selectedMove = moves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(select.value));
+      const hitRange = selectedMove ? moveHitCountRange(selectedMove, state) : null;
+      if (hitRange && hitRange.min !== hitRange.max) {
+        const hitCountLabel = document.createElement("label");
+        hitCountLabel.textContent = "Hits";
+        const hitCount = document.createElement("select");
+        hitCount.dataset.kind = "hit-count";
+        hitCount.dataset.side = side;
+        hitCount.dataset.index = String(index);
+        hitCount.replaceChildren(
+          ...Array.from({ length: hitRange.max - hitRange.min + 1 }, (_, offset) => {
+            const count = hitRange.min + offset;
+            return optionElement(count, `${count} hits`);
+          }),
+        );
+        hitCount.value = String(selectedHitCountFor(side, index, hitRange));
+        hitCount.addEventListener("input", handleDamageControl);
+        hitCountLabel.append(hitCount);
+        label.append(hitCountLabel);
+      }
+      if (selectedMove && isOrderConditionalMove(selectedMove)) {
+        const assumptionLabel = document.createElement("label");
+        assumptionLabel.className = "inline-toggle";
+        const assumption = document.createElement("input");
+        assumption.type = "checkbox";
+        assumption.dataset.kind = "target-moved";
+        assumption.dataset.side = side;
+        assumption.dataset.index = String(index);
+        assumption.checked = targetMovedForMove(side, index, selectedMove);
+        assumption.addEventListener("input", handleDamageControl);
+        assumptionLabel.append(assumption, " Target already moved");
+        label.append(assumptionLabel);
+      }
       const singleTargetLabel = document.createElement("label");
       singleTargetLabel.className = "inline-toggle";
       singleTargetLabel.hidden = fieldState.format !== "doubles" || !SPREAD_MOVE_TARGETS.has(selectedMove?.target);
@@ -498,6 +565,20 @@ function renderDamageMovePickers(side) {
       return label;
     }),
   );
+}
+
+function moveHitCountRange(move, state) {
+  return resolveHitCountRange(
+    hitCountRange({ move, attackerState: state }),
+    { move, attackerState: state },
+  );
+}
+
+function selectedHitCountFor(side, index, range) {
+  const storedValue = damageState[side].selectedHitCounts?.[index];
+  const stored = Number(storedValue);
+  const requested = storedValue !== null && storedValue !== undefined && Number.isFinite(stored) ? stored : 3;
+  return Math.max(range.min, Math.min(range.max, Math.trunc(requested)));
 }
 
 function renderDamage() {
@@ -526,14 +607,10 @@ function renderDamage() {
     `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
 
   const attackerRows = selectedDamageMoves("attacker").map(({ move, index }, rowIndex) =>
-    renderDamageCard(move, "attacker", rowIndex === 0, calcInput, {
-      singleTarget: damageState.attacker.singleTargetMoves?.[index],
-    }),
+    renderDamageCard(move, "attacker", rowIndex === 0, calcInput, moveOptionsForDamage("attacker", index, move)),
   );
   const defenderRows = selectedDamageMoves("defender").map(({ move, index }, rowIndex) =>
-    renderDamageCard(move, "defender", rowIndex === 0, calcInput, {
-      singleTarget: damageState.defender.singleTargetMoves?.[index],
-    }),
+    renderDamageCard(move, "defender", rowIndex === 0, calcInput, moveOptionsForDamage("defender", index, move)),
   );
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = `${rows.length} moves`;
@@ -541,6 +618,38 @@ function renderDamage() {
     damageColumn("Attacker moves", attackerRows),
     damageColumn("Defender moves", defenderRows),
   );
+}
+
+function selectedHitCountForMove(side, index, move) {
+  const range = moveHitCountRange(move, damageState[side]);
+  return range.min === range.max ? undefined : selectedHitCountFor(side, index, range);
+}
+
+function targetMovedForMove(side, index, move) {
+  const stored = damageState[side].targetMovedOverrides?.[index];
+  if (stored !== null && stored !== undefined) return Boolean(stored);
+  const otherSide = side === "attacker" ? "defender" : "attacker";
+  if (!damageState[otherSide]?.pokemon) return false;
+  const opponentMove = selectedDamageMoves(otherSide)[0]?.move;
+  if (!opponentMove) return false;
+  const order = compareMoveOrder({
+    attacker: damageState[side],
+    defender: damageState[otherSide],
+    attackerMove: move,
+    defenderMove: opponentMove,
+    trickRoom: fieldState.trickRoom,
+  });
+  return order.firstSide === "defender";
+}
+
+function moveOptionsForDamage(side, index, move) {
+  const otherSide = side === "attacker" ? "defender" : "attacker";
+  return {
+    singleTarget: damageState[side].singleTargetMoves?.[index],
+    hitCount: selectedHitCountForMove(side, index, move),
+    opponentMove: selectedDamageMoves(otherSide)[0]?.move,
+    targetMoved: targetMovedForMove(side, index, move),
+  };
 }
 
 function renderFinalStats(container, state) {

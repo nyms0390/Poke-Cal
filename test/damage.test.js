@@ -11,6 +11,7 @@ import {
   unsupportedMoveReason,
 } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
+import { impliedField } from "../src/engine/modifiers.js";
 
 const pikachu = {
   id: "pikachu",
@@ -104,6 +105,276 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
   });
   assert.equal(burned.maxDamage < normal.maxDamage, true);
   assert.equal(critical.maxDamage > normal.maxDamage, true);
+});
+
+test("doubles target-status move power only for the required status", () => {
+  const attacker = {
+    id: "statususer",
+    name: "Statususer",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "statustarget",
+    name: "Statustarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const cases = [
+    ["Hex", "hex", "Ghost", "Special", 65, "paralysis", "freeze"],
+    ["Venoshock", "venoshock", "Poison", "Special", 65, "poison", "burn"],
+    ["Barb Barrage", "barbbarrage", "Poison", "Physical", 60, "toxic", "burn"],
+    ["Infernal Parade", "infernalparade", "Ghost", "Special", 60, "sleep", "freeze"],
+    ["Smelling Salts", "smellingsalts", "Normal", "Physical", 70, "paralysis", "sleep"],
+    ["Wake-Up Slap", "wakeupslap", "Fighting", "Physical", 70, "sleep", "paralysis"],
+  ];
+
+  for (const [name, id, type, category, basePower, matchingStatus, otherStatus] of cases) {
+    const move = { id, name, type, category, basePower };
+    const baseline = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const doubledPower = calculateDamage({
+      attacker,
+      defender,
+      move: { ...move, id: `${id}double`, name: `${name} doubled`, basePower: basePower * 2 },
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    const matching = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: neutralState,
+      defenderState: { ...neutralState, status: matchingStatus },
+    });
+    const other = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: neutralState,
+      defenderState: { ...neutralState, status: otherStatus },
+    });
+
+    assert.deepEqual([matching.minDamage, matching.maxDamage], [doubledPower.minDamage, doubledPower.maxDamage], name);
+    assert.deepEqual([other.minDamage, other.maxDamage], [baseline.minDamage, baseline.maxDamage], `${name} non-match`);
+  }
+});
+
+test("Facade doubles for user status and ignores the physical burn penalty", () => {
+  const attacker = {
+    id: "facadeuser",
+    name: "Facadeuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "facadetarget",
+    name: "Facadetarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const facade = { id: "facade", name: "Facade", type: "Normal", category: "Physical", basePower: 70 };
+  const doubledFacade = { ...facade, id: "facadedouble", name: "Facade doubled", basePower: 140 };
+  const burned = calculateDamage({
+    attacker,
+    defender,
+    move: facade,
+    attackerState: { ...neutralState, status: "burn" },
+    defenderState: neutralState,
+  });
+  const expected = calculateDamage({
+    attacker,
+    defender,
+    move: doubledFacade,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const healthy = calculateDamage({ attacker, defender, move: facade, attackerState: neutralState, defenderState: neutralState });
+
+  assert.deepEqual([burned.minDamage, burned.maxDamage], [expected.minDamage, expected.maxDamage], "burned Facade golden");
+  for (const status of ["poison", "toxic", "paralysis"]) {
+    const statusResult = calculateDamage({
+      attacker,
+      defender,
+      move: facade,
+      attackerState: { ...neutralState, status },
+      defenderState: neutralState,
+    });
+    assert.deepEqual([statusResult.minDamage, statusResult.maxDamage], [expected.minDamage, expected.maxDamage], status);
+  }
+  assert.deepEqual([healthy.minDamage, healthy.maxDamage], [57, 67]);
+});
+
+test("calculates Gyro Ball from the user's and target's final Speed", () => {
+  const slowPokemon = {
+    id: "slowuser",
+    name: "Slowuser",
+    types: ["Steel"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 20 },
+  };
+  const fastPokemon = {
+    id: "fasttarget",
+    name: "Fasttarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 100 },
+  };
+  const attackerState = { ...neutralState, pokemon: slowPokemon };
+  const defenderState = { ...neutralState, pokemon: fastPokemon };
+  const gyroBall = { id: "gyroball", name: "Gyro Ball", type: "Steel", category: "Physical", basePower: 0 };
+  const expectedPower = Math.min(150, Math.floor((25 * 120) / 40) + 1);
+  const actual = calculateDamage({
+    attacker: slowPokemon,
+    defender: fastPokemon,
+    move: gyroBall,
+    attackerState,
+    defenderState,
+  });
+  const expected = calculateDamage({
+    attacker: slowPokemon,
+    defender: fastPokemon,
+    move: { ...gyroBall, id: "gyroballreference", name: "Gyro Ball reference", basePower: expectedPower },
+    attackerState,
+    defenderState,
+  });
+
+  assert.deepEqual([actual.minDamage, actual.maxDamage], [expected.minDamage, expected.maxDamage]);
+  assert.equal(actual.notes.includes(`Gyro Ball power ${expectedPower}`), true);
+});
+
+test("uses all Electro Ball speed-ratio thresholds", () => {
+  const target = {
+    id: "electroballtarget",
+    name: "Electroballtarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 20 },
+  };
+  const targetState = { ...neutralState, pokemon: target };
+  const electroBall = { id: "electroball", name: "Electro Ball", type: "Electric", category: "Special", basePower: 0 };
+  const cases = [[180, 150], [100, 120], [60, 80], [40, 60], [20, 60], [15, 40]];
+
+  for (const [userBaseSpeed, expectedPower] of cases) {
+    const user = {
+      id: `electroballuser${userBaseSpeed}`,
+      name: `Electroballuser${userBaseSpeed}`,
+      types: ["Electric"],
+      baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: userBaseSpeed },
+    };
+    const attackerState = { ...neutralState, pokemon: user };
+    const actual = calculateDamage({ attacker: user, defender: target, move: electroBall, attackerState, defenderState: targetState });
+    const expected = calculateDamage({
+      attacker: user,
+      defender: target,
+      move: { ...electroBall, id: `electroballreference${userBaseSpeed}`, basePower: expectedPower },
+      attackerState,
+      defenderState: targetState,
+    });
+
+    assert.deepEqual([actual.minDamage, actual.maxDamage], [expected.minDamage, expected.maxDamage], `${userBaseSpeed} Speed`);
+  }
+});
+
+test("doubles Bolt Beak and Fishious Rend before the target, and Payback after it", () => {
+  const fast = {
+    id: "orderfast",
+    name: "Orderfast",
+    types: ["Electric", "Water", "Dark"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 120 },
+  };
+  const slow = {
+    id: "orderslow",
+    name: "Orderslow",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 20 },
+  };
+  const fastState = { ...neutralState, pokemon: fast };
+  const slowState = { ...neutralState, pokemon: slow };
+  const opponentMove = { id: "orderopponent", name: "Order Opponent", type: "Normal", category: "Physical", basePower: 40 };
+  const cases = [
+    ["Bolt Beak", "boltbeak", "Electric", fast, fastState, slow, slowState, 170, "Assumes target has not moved"],
+    ["Bolt Beak", "boltbeak", "Electric", slow, slowState, fast, fastState, 85, "Assumes target already moved"],
+    ["Fishious Rend", "fishiousrend", "Water", fast, fastState, slow, slowState, 170, "Assumes target has not moved"],
+    ["Payback", "payback", "Dark", slow, slowState, fast, fastState, 100, "Assumes target already moved"],
+  ];
+
+  for (const [name, id, type, user, userState, target, targetState, expectedPower, note] of cases) {
+    const move = { id, name, type, category: "Physical", basePower: id === "payback" ? 50 : 85 };
+    const actual = calculateDamage({
+      attacker: user,
+      defender: target,
+      move,
+      attackerState: userState,
+      defenderState: targetState,
+      moveOptions: { opponentMove },
+    });
+    const expected = calculateDamage({
+      attacker: user,
+      defender: target,
+      move: { ...move, id: `${id}reference`, basePower: expectedPower },
+      attackerState: userState,
+      defenderState: targetState,
+    });
+
+    assert.deepEqual([actual.minDamage, actual.maxDamage], [expected.minDamage, expected.maxDamage], name);
+    assert.equal(actual.notes.includes(note), true, `${name} assumption`);
+  }
+});
+
+test("defaults history-assumed moves to normal power and doubles with the override", () => {
+  const attacker = {
+    id: "historyuser",
+    name: "Historyuser",
+    types: ["Ice", "Dark", "Fighting"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "historytarget",
+    name: "Historytarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const attackerState = { ...neutralState, pokemon: attacker };
+  const defenderState = { ...neutralState, pokemon: defender };
+  const cases = [
+    ["Avalanche", "avalanche", "Ice", 60],
+    ["Assurance", "assurance", "Dark", 60],
+    ["Revenge", "revenge", "Fighting", 60],
+  ];
+
+  for (const [name, id, type, basePower] of cases) {
+    const move = { id, name, type, category: "Physical", basePower };
+    const normal = calculateDamage({ attacker, defender, move, attackerState, defenderState });
+    const doubled = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState,
+      defenderState,
+      moveOptions: { targetMoved: true },
+    });
+    const baselineReference = calculateDamage({
+      attacker,
+      defender,
+      move: { ...move, id: `${id}reference`, basePower: basePower * 2 },
+      attackerState,
+      defenderState,
+    });
+
+    assert.equal(normal.notes.includes("Assumes target has not moved"), true, name);
+    const baseReference = calculateDamage({
+      attacker,
+      defender,
+      move: { ...move, id: `${id}basereference` },
+      attackerState,
+      defenderState,
+    });
+    assert.deepEqual([normal.minDamage, normal.maxDamage], [baseReference.minDamage, baseReference.maxDamage], `${name} default`);
+    assert.deepEqual([doubled.minDamage, doubled.maxDamage], [baselineReference.minDamage, baselineReference.maxDamage], `${name} override`);
+  }
 });
 
 test("truncates damage percentages like Pikalytics Champions calculator", () => {
@@ -1035,6 +1306,174 @@ test("uses weather, terrain, and field context for conditional move power", () =
   assert.equal(sandSolarBlade.maxDamage < normalSolarBlade.maxDamage, true);
   assert.equal(gravityGravApple.notes.includes("Grav Apple power 135"), true);
   assert.equal(gravityGravApple.maxDamage > normalGravApple.maxDamage, true);
+});
+
+test("maps field-implying abilities to the UI field values", () => {
+  assert.deepEqual(impliedField("Drought"), { weather: "SunnyDay" });
+  assert.deepEqual(impliedField({ id: "primordialsea", name: "Primordial Sea" }), {
+    weather: "RainDance",
+    note: "Primordial Sea treated as Rain",
+  });
+  assert.deepEqual(impliedField("Snow Warning"), { weather: "Snowscape" });
+  assert.deepEqual(impliedField("Sand Spit"), { weather: "Sandstorm" });
+  assert.deepEqual(impliedField("Hadron Engine"), { terrain: "Electric Terrain" });
+  assert.deepEqual(impliedField("Mega Sol"), { weather: "SunnyDay" });
+  assert.deepEqual(impliedField("Levitate"), {});
+});
+
+test("applies weather and terrain ability boosts only in their active fields", () => {
+  const physicalUser = {
+    id: "physicaluser",
+    name: "Physicaluser",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const specialUser = {
+    id: "specialuser",
+    name: "Specialuser",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const target = {
+    id: "fieldboosttarget",
+    name: "Fieldboosttarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const dragonClaw = { id: "dragonclaw", name: "Dragon Claw", type: "Dragon", category: "Physical", basePower: 80 };
+  const thunderbolt = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
+  const orichalcumPulse = { id: "orichalcumpulse", name: "Orichalcum Pulse" };
+  const hadronEngine = { id: "hadronengine", name: "Hadron Engine" };
+
+  const orichalcumNoSun = calculateDamage({
+    attacker: physicalUser,
+    defender: target,
+    move: dragonClaw,
+    attackerState: { ...neutralState, ability: orichalcumPulse },
+    defenderState: neutralState,
+  });
+  const orichalcumSun = calculateDamage({
+    attacker: physicalUser,
+    defender: target,
+    move: dragonClaw,
+    attackerState: { ...neutralState, ability: orichalcumPulse },
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const hadronNoTerrain = calculateDamage({
+    attacker: specialUser,
+    defender: target,
+    move: thunderbolt,
+    attackerState: { ...neutralState, ability: hadronEngine },
+    defenderState: neutralState,
+  });
+  const hadronTerrain = calculateDamage({
+    attacker: specialUser,
+    defender: target,
+    move: thunderbolt,
+    attackerState: { ...neutralState, ability: hadronEngine },
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+
+  assert.equal(orichalcumSun.notes.includes("Orichalcum Pulse"), true);
+  assert.equal(orichalcumSun.maxDamage > orichalcumNoSun.maxDamage, true);
+  assert.equal(hadronTerrain.notes.includes("Hadron Engine"), true);
+  assert.equal(hadronTerrain.maxDamage > hadronNoTerrain.maxDamage, true);
+});
+
+test("suppresses weather effects when Cloud Nine or Air Lock is active", () => {
+  const waterUser = {
+    id: "wateruser",
+    name: "Wateruser",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const weatherUser = {
+    id: "weatheruser",
+    name: "Weatheruser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const rockTarget = {
+    id: "rocktarget",
+    name: "Rocktarget",
+    types: ["Rock"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const fireTarget = {
+    id: "firetarget",
+    name: "Firetarget",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const surf = { id: "surf", name: "Surf", type: "Water", category: "Special", basePower: 90, target: "allAdjacent" };
+  const weatherBall = { id: "weatherball", name: "Weather Ball", type: "Normal", category: "Special", basePower: 50 };
+
+  const noWeatherSurf = calculateDamage({
+    attacker: waterUser,
+    defender: rockTarget,
+    move: surf,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const rainSurf = calculateDamage({
+    attacker: waterUser,
+    defender: rockTarget,
+    move: surf,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "RainDance" }),
+  });
+  const sandSurf = calculateDamage({
+    attacker: waterUser,
+    defender: rockTarget,
+    move: surf,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "Sandstorm" }),
+  });
+  const cloudNineSurf = calculateDamage({
+    attacker: waterUser,
+    defender: rockTarget,
+    move: surf,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "cloudnine", name: "Cloud Nine" } },
+    field: createField({ weather: "RainDance" }),
+  });
+  const cloudNineSandSurf = calculateDamage({
+    attacker: waterUser,
+    defender: rockTarget,
+    move: surf,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "cloudnine", name: "Cloud Nine" } },
+    field: createField({ weather: "Sandstorm" }),
+  });
+  const noWeatherBall = calculateDamage({
+    attacker: weatherUser,
+    defender: fireTarget,
+    move: weatherBall,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const suppressedWeatherBall = calculateDamage({
+    attacker: weatherUser,
+    defender: fireTarget,
+    move: weatherBall,
+    attackerState: { ...neutralState, ability: { id: "airlock", name: "Air Lock" } },
+    defenderState: neutralState,
+    field: createField({ weather: "RainDance" }),
+  });
+
+  assert.equal(rainSurf.maxDamage > noWeatherSurf.maxDamage, true);
+  assert.deepEqual(cloudNineSurf.rolls, noWeatherSurf.rolls);
+  assert.equal(sandSurf.maxDamage < noWeatherSurf.maxDamage, true);
+  assert.equal(sandSurf.notes.includes("Sandstorm Rock SpD boost"), true);
+  assert.deepEqual(cloudNineSandSurf.rolls, noWeatherSurf.rolls);
+  assert.equal(cloudNineSurf.notes.includes("Rain"), false);
+  assert.equal(cloudNineSurf.notes.includes("Cloud Nine/Air Lock suppresses weather"), true);
+  assert.deepEqual(suppressedWeatherBall.rolls, noWeatherBall.rolls);
+  assert.equal(suppressedWeatherBall.notes.includes("Weather Ball is Water type"), false);
 });
 
 test("scales high-user-HP move power from the attacker's current HP", () => {
@@ -2205,7 +2644,7 @@ test("doubles displayed damage for fixed two-hit moves", () => {
       defenderState: neutralState,
     });
 
-    assert.deepEqual(result.rolls, expectedSingleHit.rolls.map((damage) => damage * 2), name);
+    assert.deepEqual([result.minDamage, result.maxDamage], [expectedSingleHit.minDamage * 2, expectedSingleHit.maxDamage * 2], name);
     assert.equal(result.notes.includes(`${name} hits 2 times`), true, name);
   }
 });
@@ -2281,19 +2720,18 @@ test("sums successive-hit base-power damage", () => {
       attackerState: neutralState,
       defenderState: neutralState,
     });
-    const expectedRolls = hitPowers.reduce((rolls, power) => {
-      const singleHit = { id: `${id}${power}`, name: `${name} ${power}`, type, category: "Physical", basePower: power };
-      const singleResult = calculateDamage({
-        attacker: tripleHitUser,
-        defender: target,
-        move: singleHit,
-        attackerState: neutralState,
-        defenderState: neutralState,
-      });
-      return rolls.map((damage, index) => damage + singleResult.rolls[index]);
-    }, Array(16).fill(0));
-
-    assert.deepEqual(result.rolls, expectedRolls, name);
+    const singleResults = hitPowers.map((power) => calculateDamage({
+      attacker: tripleHitUser,
+      defender: target,
+      move: { id: `${id}${power}`, name: `${name} ${power}`, type, category: "Physical", basePower: power },
+      attackerState: neutralState,
+      defenderState: neutralState,
+    }));
+    assert.deepEqual(
+      [result.minDamage, result.maxDamage],
+      [singleResults.reduce((total, entry) => total + entry.minDamage, 0), singleResults.reduce((total, entry) => total + entry.maxDamage, 0)],
+      name,
+    );
     assert.equal(result.notes.includes(`${name} hits 3 times at ${hitPowers.join("/")}`), true, name);
   }
 });
@@ -2370,6 +2808,165 @@ test("displays Population Bomb's accuracy-chained hit damage range", () => {
     [singleHitResult.minDamage * 10, singleHitResult.maxDamage * 10],
   );
   assert.equal(skillLink.notes.includes("Population Bomb hits 10 times"), true);
+});
+
+test("supports standard ranged multi-hit moves with a selected hit count", () => {
+  const attacker = {
+    id: "multiuser",
+    name: "Multiuser",
+    types: ["Grass"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "multitarget",
+    name: "Multitarget",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const bulletSeed = {
+    id: "bulletseed",
+    name: "Bullet Seed",
+    type: "Grass",
+    category: "Physical",
+    basePower: 25,
+  };
+  const singleHit = calculateDamage({
+    attacker,
+    defender,
+    move: { ...bulletSeed, id: "bulletseedsingle", name: "Bullet Seed single" },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const threeHit = calculateDamage({
+    attacker,
+    defender,
+    move: bulletSeed,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    moveOptions: { hitCount: 3 },
+  });
+  const fiveHit = calculateDamage({
+    attacker,
+    defender,
+    move: bulletSeed,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    moveOptions: { hitCount: 5 },
+  });
+
+  assert.deepEqual([threeHit.minDamage, threeHit.maxDamage], [singleHit.minDamage * 3, singleHit.maxDamage * 3]);
+  assert.deepEqual([fiveHit.minDamage, fiveHit.maxDamage], [singleHit.minDamage * 5, singleHit.maxDamage * 5]);
+  assert.equal(threeHit.notes.includes("Bullet Seed hits 3 times"), true);
+  assert.equal(fiveHit.notes.includes("Bullet Seed hits 5 times"), true);
+  const scaleShot = calculateDamage({
+    attacker,
+    defender,
+    move: { id: "scaleshot", name: "Scale Shot", type: "Dragon", category: "Physical", basePower: 25 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+    moveOptions: { hitCount: 3 },
+  });
+  assert.equal(scaleShot.notes.includes("-1 Def / +1 Spe after use"), true);
+});
+
+test("Skill Link and Loaded Dice clamp ranged multi-hit counts", () => {
+  const attacker = {
+    id: "multiuser",
+    name: "Multiuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "multitarget",
+    name: "Multitarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const rockBlast = {
+    id: "rockblast",
+    name: "Rock Blast",
+    type: "Rock",
+    category: "Physical",
+    basePower: 25,
+  };
+  const singleHit = calculateDamage({
+    attacker,
+    defender,
+    move: { ...rockBlast, id: "rockblastsingle", name: "Rock Blast single" },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const loadedDice = calculateDamage({
+    attacker,
+    defender,
+    move: rockBlast,
+    attackerState: { ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } },
+    defenderState: neutralState,
+    moveOptions: { hitCount: 3 },
+  });
+  const skillLink = calculateDamage({
+    attacker,
+    defender,
+    move: rockBlast,
+    attackerState: { ...neutralState, ability: { id: "skilllink", name: "Skill Link" } },
+    defenderState: neutralState,
+    moveOptions: { hitCount: 3 },
+  });
+
+  assert.deepEqual([loadedDice.minDamage, loadedDice.maxDamage], [singleHit.minDamage * 4, singleHit.maxDamage * 4]);
+  assert.deepEqual([skillLink.minDamage, skillLink.maxDamage], [singleHit.minDamage * 5, singleHit.maxDamage * 5]);
+  assert.equal(loadedDice.notes.includes("Loaded Dice"), true);
+  assert.equal(skillLink.notes.includes("Skill Link"), true);
+});
+
+test("Surging Strikes is always critical and bypasses screens", () => {
+  const attacker = {
+    id: "urshifurapidstrike",
+    name: "Urshifu-Rapid-Strike",
+    types: ["Water", "Fighting"],
+    baseStats: { hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97 },
+  };
+  const defender = {
+    id: "screenuser",
+    name: "Screenuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const move = {
+    id: "surgingstrikes",
+    name: "Surging Strikes",
+    type: "Water",
+    category: "Physical",
+    basePower: 25,
+  };
+  const screened = calculateDamage({
+    attacker,
+    defender,
+    move: { ...move, id: "surgingstrikessingle", name: "Surging Strikes single" },
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles", defenderSide: { reflect: true } }),
+  });
+  const criticalSingle = calculateDamage({
+    attacker,
+    defender,
+    move: { ...move, id: "surgingstrikessingle", name: "Surging Strikes single" },
+    attackerState: neutralState,
+    defenderState: neutralState,
+    critical: true,
+  });
+  const surging = calculateDamage({
+    attacker,
+    defender,
+    move,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles", defenderSide: { reflect: true } }),
+  });
+
+  assert.deepEqual([surging.minDamage, surging.maxDamage], [criticalSingle.minDamage * 3, criticalSingle.maxDamage * 3]);
+  assert.equal(surging.minDamage > screened.minDamage, true);
+  assert.equal(surging.notes.includes("Surging Strikes hits 3 times"), true);
 });
 
 test("applies move-specific type effectiveness overrides", () => {
@@ -2865,6 +3462,189 @@ test("classifies unsupported moves and summarizes KOs", () => {
   assert.equal(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), "");
   assert.equal(koSummary({ minDamage: 100, maxDamage: 100, defenderHp: 100 }), "Guaranteed 1HKO");
   assert.equal(koSummary({ minDamage: 45, maxDamage: 60, defenderHp: 100 }), "Possible 2HKO");
+});
+
+test("supports P2-04 target-HP, itemless, and stat-boost-scaled powers", () => {
+  const attacker = {
+    id: "p204attacker",
+    name: "P204attacker",
+    types: ["Normal"],
+    baseStats: { hp: 100, atk: 100, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "p204defender",
+    name: "P204defender",
+    types: ["Normal"],
+    baseStats: { hp: 100, atk: 80, def: 100, spa: 80, spd: 100, spe: 50 },
+  };
+  const hardPress = { id: "hardpress", name: "Hard Press", type: "Steel", category: "Physical", basePower: 0 };
+  const acrobatics = { id: "acrobatics", name: "Acrobatics", type: "Flying", category: "Physical", basePower: 55 };
+  const storedPower = { id: "storedpower", name: "Stored Power", type: "Psychic", category: "Special", basePower: 20 };
+
+  const fullHardPress = calculateDamage({
+    attacker,
+    defender,
+    move: hardPress,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+  const halfTargetHardPress = calculateDamage({
+    attacker,
+    defender,
+    move: hardPress,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, currentHpFraction: 0.5 },
+    field: createField({ format: "singles" }),
+  });
+  const oneHpHardPress = calculateDamage({
+    attacker,
+    defender,
+    move: hardPress,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, currentHpFraction: 1 / 175 },
+    field: createField({ format: "singles" }),
+  });
+  const itemlessAcrobatics = calculateDamage({
+    attacker,
+    defender,
+    move: acrobatics,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+  const acrobaticsReference = calculateDamage({
+    attacker,
+    defender,
+    move: { ...acrobatics, id: "acrobaticsreference", basePower: 110 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+  const boostedStoredPower = calculateDamage({
+    attacker,
+    defender,
+    move: storedPower,
+    attackerState: { ...neutralState, stages: { atk: 2, def: 2, spa: 0, spd: 0, spe: 0 } },
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+  const storedPowerReference = calculateDamage({
+    attacker,
+    defender,
+    move: { ...storedPower, id: "storedpowerreference", basePower: 100 },
+    attackerState: { ...neutralState, stages: { atk: 2, def: 2, spa: 0, spd: 0, spe: 0 } },
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+
+  assert.equal(fullHardPress.supported, true);
+  assert.equal(fullHardPress.notes.includes("Hard Press power 100"), true);
+  assert.deepEqual([fullHardPress.minDamage, fullHardPress.maxDamage], [39, 46]);
+  assert.equal(halfTargetHardPress.notes.includes("Hard Press power 50"), true);
+  assert.deepEqual([halfTargetHardPress.minDamage, halfTargetHardPress.maxDamage], [20, 24]);
+  assert.deepEqual([oneHpHardPress.minDamage, oneHpHardPress.maxDamage], [1, 2]);
+  assert.deepEqual([itemlessAcrobatics.minDamage, itemlessAcrobatics.maxDamage], [acrobaticsReference.minDamage, acrobaticsReference.maxDamage]);
+  assert.deepEqual([itemlessAcrobatics.minDamage, itemlessAcrobatics.maxDamage], [42, 50]);
+  assert.deepEqual([boostedStoredPower.minDamage, boostedStoredPower.maxDamage], [storedPowerReference.minDamage, storedPowerReference.maxDamage]);
+  assert.deepEqual([boostedStoredPower.minDamage, boostedStoredPower.maxDamage], [39, 46]);
+});
+
+test("reports precise reasons for P2-04 moves that require stored battle history", () => {
+  for (const [id, text] of [
+    ["counter", "last damage received"],
+    ["mirrorcoat", "last damage received"],
+    ["metalburst", "last damage received"],
+    ["comeuppance", "last damage received"],
+    ["futuresight", "delayed"],
+    ["bide", "stored damage"],
+  ]) {
+    assert.match(unsupportedMoveReason({ id, name: id, type: "Normal", category: "Physical", basePower: 0 }), new RegExp(text, "i"), id);
+  }
+});
+
+test("covers the remaining P2-04 registry assumptions and HP thresholds", () => {
+  const attacker = {
+    id: "p204attacker2",
+    name: "P204attacker2",
+    types: ["Normal"],
+    baseStats: { hp: 100, atk: 100, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "p204defender2",
+    name: "P204defender2",
+    types: ["Normal"],
+    baseStats: { hp: 100, atk: 80, def: 100, spa: 80, spd: 100, spe: 50 },
+  };
+  const singles = createField({ format: "singles" });
+  const move = (id, name, type, category, basePower = 0) => ({ id, name, type, category, basePower });
+  const result = (moveData, attackerState = neutralState, defenderState = neutralState) => calculateDamage({
+    attacker,
+    defender,
+    move: moveData,
+    attackerState,
+    defenderState,
+    field: singles,
+  });
+
+  assert.equal(result(move("crushgrip", "Crush Grip", "Normal", "Physical"), neutralState, { ...neutralState, currentHpFraction: 0.5 }).notes.includes("Crush Grip power 60"), true);
+  assert.equal(result(move("wringout", "Wring Out", "Normal", "Special"), neutralState, { ...neutralState, currentHpFraction: 0.5 }).notes.includes("Wring Out power 60"), true);
+  assert.equal(result(move("hardpress", "Hard Press", "Steel", "Physical"), neutralState, { ...neutralState, currentHpFraction: 1 / 175 }).notes.includes("Hard Press power 1"), true);
+
+  const brine = move("brine", "Brine", "Water", "Special", 65);
+  assert.equal(result(brine).notes.includes("Brine power 65"), false);
+  assert.equal(result(brine, neutralState, { ...neutralState, currentHpFraction: 0.5 }).notes.includes("Brine power 130"), true);
+
+  for (const id of ["flail", "reversal"]) {
+    assert.equal(result(move(id, id, id === "flail" ? "Normal" : "Fighting", "Physical"), { ...neutralState, currentHpFraction: 0.1 }).notes.includes(`${id} power 150`), true);
+  }
+
+  const endeavor = result(move("endeavor", "Endeavor", "Normal", "Physical"), { ...neutralState, currentHpFraction: 0.25 }, { ...neutralState, currentHpFraction: 0.75 });
+  assert.deepEqual([endeavor.minDamage, endeavor.maxDamage], [87, 87]);
+
+  const fling = result(move("fling", "Fling", "Dark", "Physical"), { ...neutralState, item: { id: "ironball", name: "Iron Ball", fling: { basePower: 130 } } });
+  assert.equal(fling.notes.includes("Fling power 130"), true);
+  assert.match(formatDamageResult(result(move("fling", "Fling", "Dark", "Physical"))), /held item/);
+
+  const punishment = result(move("punishment", "Punishment", "Dark", "Physical"), neutralState, { ...neutralState, stages: { atk: 2, def: 2, spa: 2, spd: 2, spe: 2 } });
+  assert.equal(punishment.notes.includes("Punishment power 200"), true);
+  assert.equal(result(move("powertrip", "Power Trip", "Dark", "Physical"), { ...neutralState, stages: { atk: 6, def: 6, spa: 6, spd: 6, spe: 6 } }).notes.includes("Power Trip power 620"), true);
+
+  const flyingDefender = { ...defender, types: ["Flying"] };
+  const smackDown = calculateDamage({
+    attacker,
+    defender: flyingDefender,
+    move: move("smackdown", "Smack Down", "Rock", "Physical", 50),
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: singles,
+  });
+  assert.equal(smackDown.typeMultiplier, 1);
+
+  const hiddenPower = result(move("hiddenpower", "Hidden Power", "Normal", "Special", 60));
+  const hiddenPowerFire = result({ ...move("hiddenpower", "Hidden Power", "Normal", "Special", 60), hiddenPowerType: "Fire" });
+  assert.equal(hiddenPower.notes.includes("Hidden Power is Dark type"), true);
+  assert.equal(hiddenPowerFire.notes.includes("Hidden Power is Fire type"), true);
+  assert.match(result(move("saltcure", "Salt Cure", "Rock", "Physical", 40)).notes.join(" "), /Salt Cure residual/);
+  const psywave = result(move("psywave", "Psywave", "Psychic", "Special"));
+  assert.deepEqual([psywave.minDamage, psywave.maxDamage], [50, 50]);
+  assert.match(psywave.notes.join(" "), /level-50 average/);
+
+  for (const [id, text] of [
+    ["return", "maximum friendship"],
+    ["frustration", "minimum friendship"],
+    ["pikapapow", "maximum friendship"],
+    ["veeveevolley", "maximum friendship"],
+    ["spitup", "3 Stockpile"],
+    ["trumpcard", "5+ PP"],
+    ["pursuit", "switch not modeled"],
+    ["ficklebeam", "30% chance"],
+    ["magnitude", "Magnitude 7"],
+    ["present", "80 BP outcome"],
+    ["psywave", "level-50 average"],
+  ]) {
+    assert.equal(result(move(id, id, "Normal", "Physical", id === "pursuit" ? 40 : 0)).notes.some((note) => note.includes(text)), true, id);
+  }
 });
 
 test("formats unsupported damage results with their specific reason", () => {
