@@ -1,6 +1,6 @@
 # P2-06 — Type-changing and offensive abilities
 
-Status: TODO
+Status: Done
 Depends on: P1-03
 Phase: 2 (mechanics burn-down)
 
@@ -60,3 +60,10 @@ in P2-07) · "Offensive type-chart immunity bypass" (Scrappy, Mind's Eye)
 ```sh
 npm run test:damage && npm test
 ```
+
+## Completion notes
+- Added ability-driven type conversion for Pixilate/Aerilate/Galvanize/Refrigerate/Dragonize,
+  Normalize, and Liquid Voice, plus Scrappy/Mind's Eye immunity bypass.
+- Added P2-06 offensive ability multipliers and UI assumptions for Plus/Minus allies,
+  Rivalry relation, switched-in targets, and Supreme Overlord fainted-ally count.
+- Left Water Bubble's incoming Fire reduction for P2-07, as directed there.

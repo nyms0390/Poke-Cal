@@ -404,10 +404,10 @@ Currently implemented named effects:
 
 ### Low-HP type attack boost
 
-- [ ] Blaze
-- [ ] Torrent
-- [ ] Overgrow
-- [ ] Swarm
+- [x] Blaze
+- [x] Torrent
+- [x] Overgrow
+- [x] Swarm
 
 ### Weather setting
 
@@ -420,12 +420,12 @@ Currently implemented named effects:
 
 ### Normal-type move conversion with power boost
 
-- [ ] Pixilate
-- [ ] Aerilate
-- [ ] Dragonize
-- [ ] Galvanize
-- [ ] Normalize
-- [ ] Refrigerate
+- [x] Pixilate
+- [x] Aerilate
+- [x] Dragonize
+- [x] Galvanize
+- [x] Normalize
+- [x] Refrigerate
 
 ### Redirected attack immunity and stat boost
 
@@ -434,22 +434,22 @@ Currently implemented named effects:
 
 ### Sun-dependent Special Attack boost
 
-- [ ] Solar Power
+- [x] Solar Power
 
 ### Offensive type-chart immunity bypass
 
-- [ ] Scrappy
-- [ ] Mind's Eye
+- [x] Scrappy
+- [x] Mind's Eye
 
 ### Move-flag power boost
 
 - [x] Tough Claws
 - [x] Sharpness
 - [x] Reckless
-- [ ] Sheer Force
+- [x] Sheer Force
 - [x] Iron Fist
 - [x] Mega Launcher
-- [ ] Punk Rock
+- [x] Punk Rock
 - [x] Strong Jaw
 
 ### Full-HP damage reduction
@@ -463,7 +463,7 @@ Currently implemented named effects:
 
 ### Sound move type conversion
 
-- [ ] Liquid Voice
+- [x] Liquid Voice
 
 ### Type-specific incoming offensive-stat halving
 
@@ -484,8 +484,8 @@ Currently implemented named effects:
 
 ### Aura field type power boost
 
-- [ ] Fairy Aura
-- [ ] Dark Aura
+- [x] Fairy Aura
+- [x] Dark Aura
 
 ### Full-HP survival from lethal hit
 
@@ -498,7 +498,8 @@ Currently implemented named effects:
 
 ### Water damage boost and Fire damage reduction
 
-- [ ] Water Bubble
+- [ ] Water Bubble — Water attack boost implemented; incoming Fire reduction remains
+  in P2-07
 
 ### Weather effect suppression
 
@@ -519,7 +520,7 @@ Currently implemented named effects:
 
 ### Fainted-ally damage boost
 
-- [ ] Supreme Overlord
+- [x] Supreme Overlord
 
 ### Powder, weather, and Effect Spore immunity
 
@@ -527,8 +528,8 @@ Currently implemented named effects:
 
 ### Ally-paired Special Attack multiplier
 
-- [ ] Plus
-- [ ] Minus
+- [x] Plus
+- [x] Minus
 
 ### Weather-conditioned healing and Fire weakness
 
@@ -541,20 +542,20 @@ Currently implemented named effects:
 
 ### Gender-based damage modifier
 
-- [ ] Rivalry
+- [x] Rivalry
 
 ### Last-to-move power boost
 
-- [ ] Analytic
+- [x] Analytic
 
 ### Attack stat multipliers with move-selection drawback
 
-- [ ] Hustle
-- [ ] Gorilla Tactics
+- [x] Hustle
+- [x] Gorilla Tactics
 
 ### Specific attack type power boost
 
-- [ ] Fire Mane
+- [x] Fire Mane
 - [x] Dragon's Maw
 - [x] Rocky Payload
 - [x] Steelworker
@@ -623,12 +624,12 @@ Currently implemented named effects:
 
 ### Switched-in target damage multiplier
 
-- [ ] Stakeout
+- [x] Stakeout
 
 ### Status-conditioned attack boost
 
-- [ ] Flare Boost
-- [ ] Toxic Boost
+- [x] Flare Boost
+- [x] Toxic Boost
 
 ### Weather-dependent form typing
 
@@ -652,7 +653,7 @@ Currently implemented named effects:
 
 ### Sandstorm type attack boost
 
-- [ ] Sand Force
+- [x] Sand Force
 
 ### Terrain-dependent Defense boost
 

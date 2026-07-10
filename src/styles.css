@@ -760,6 +760,17 @@ select:focus {
   gap: 12px 18px;
 }
 
+.assumption-panel {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.assumption-panel summary {
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
 .final-stat-readout {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

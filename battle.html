@@ -109,6 +109,23 @@
                 </select>
               </label>
             </div>
+            <details class="assumption-panel">
+              <summary>Assumptions</summary>
+              <div class="inline-toggles">
+                <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="attacker" /> Ally has Plus/Minus</label>
+                <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="attacker" /> Switched in this turn</label>
+                <label class="inline-toggle">Rivalry
+                  <select data-kind="rivalry" data-side="attacker">
+                    <option value="off">Off</option>
+                    <option value="same">Same gender</option>
+                    <option value="opposite">Opposite gender</option>
+                  </select>
+                </label>
+                <label class="inline-toggle">Fainted allies
+                  <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="attacker" />
+                </label>
+              </div>
+            </details>
           </section>
 
           <section class="field-card" aria-label="Field conditions">
@@ -259,6 +276,23 @@
                 </select>
               </label>
             </div>
+            <details class="assumption-panel">
+              <summary>Assumptions</summary>
+              <div class="inline-toggles">
+                <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="defender" /> Ally has Plus/Minus</label>
+                <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="defender" /> Switched in this turn</label>
+                <label class="inline-toggle">Rivalry
+                  <select data-kind="rivalry" data-side="defender">
+                    <option value="off">Off</option>
+                    <option value="same">Same gender</option>
+                    <option value="opposite">Opposite gender</option>
+                  </select>
+                </label>
+                <label class="inline-toggle">Fainted allies
+                  <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="defender" />
+                </label>
+              </div>
+            </details>
           </section>
         </div>
 

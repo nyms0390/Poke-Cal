@@ -13,7 +13,7 @@
 // Solid Rock / Prism Armor). Every producer below explicitly gates on `attackerPerspective`
 // so a coincidentally-shared item/ability id on the other side can never double-fire.
 
-import { weatherBlockedByUmbrella } from "./move-effects.js";
+import { abilityTypeConversion, weatherBlockedByUmbrella } from "./move-effects.js";
 import { isGrounded } from "./field.js";
 
 function normalizeId(value) {
@@ -77,8 +77,10 @@ export const RESIST_BERRIES = {
 };
 export const TYPE_POWER_ABILITIES = {
   dragonsmaw: { type: "Dragon", value: 1.5 },
+  firemane: { type: "Fire", value: 1.5 },
   rockypayload: { type: "Rock", value: 1.5 },
   steelworker: { type: "Steel", value: 1.5 },
+  steelyspirit: { type: "Steel", value: 1.5 },
   transistor: { type: "Electric", value: 1.3 },
 };
 export const MOVE_FLAG_POWER_ABILITIES = {
@@ -152,6 +154,12 @@ for (const [itemId, type] of Object.entries(RESIST_BERRIES)) {
 }
 
 export const ABILITY_MODIFIERS = {
+  aerilate: abilityTypeBoostModifier,
+  dragonize: abilityTypeBoostModifier,
+  galvanize: abilityTypeBoostModifier,
+  normalize: abilityTypeBoostModifier,
+  pixilate: abilityTypeBoostModifier,
+  refrigerate: abilityTypeBoostModifier,
   hugepower: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk"
       ? { kind: "attack", value: 2, label: ctx.attackerState.ability.name }
@@ -168,13 +176,72 @@ export const ABILITY_MODIFIERS = {
     ctx.attackerPerspective && ctx.attackerState.status === "burn" && ctx.attackStat === "atk"
       ? { kind: "attack", value: 1.5, label: "Guts" }
       : null,
+  flareboost: (ctx) =>
+    ctx.attackerPerspective && ctx.attackerState.status === "burn" && ctx.attackStat === "spa"
+      ? { kind: "attack", value: 1.5, label: "Flare Boost" }
+      : null,
+  toxicboost: (ctx) =>
+    ctx.attackerPerspective && ["poison", "toxic"].includes(ctx.attackerState.status) && ctx.attackStat === "atk"
+      ? { kind: "attack", value: 1.5, label: "Toxic Boost" }
+      : null,
+  blaze: (ctx) => lowHpTypeBoostModifier(ctx, "Fire", "Blaze"),
+  torrent: (ctx) => lowHpTypeBoostModifier(ctx, "Water", "Torrent"),
+  overgrow: (ctx) => lowHpTypeBoostModifier(ctx, "Grass", "Overgrow"),
+  swarm: (ctx) => lowHpTypeBoostModifier(ctx, "Bug", "Swarm"),
   technician: (ctx) =>
     ctx.attackerPerspective && ctx.move.basePower <= 60 ? { kind: "power", value: 1.5, label: "Technician" } : null,
   adaptability: (ctx) =>
     adaptabilityModifier(ctx),
+  sheerforce: (ctx) =>
+    ctx.attackerPerspective && hasSecondaryEffect(ctx.move)
+      ? { kind: "power", value: 1.3, label: "Sheer Force" }
+      : null,
+  punkrock: (ctx) => {
+    if (!ctx.move.flags?.sound) return null;
+    return ctx.attackerPerspective
+      ? { kind: "power", value: 1.3, label: "Punk Rock" }
+      : { kind: "damage", value: 0.5, label: "Punk Rock" };
+  },
   reckless: (ctx) =>
     ctx.attackerPerspective && (ctx.move.recoil || ctx.move.hasCrashDamage)
       ? { kind: "power", value: 1.2, label: "Reckless" }
+      : null,
+  solarpower: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "spa" && isSun(ctx.field.weather)
+      ? { kind: "attack", value: 1.5, label: "Solar Power" }
+      : null,
+  plus: plusMinusModifier,
+  minus: plusMinusModifier,
+  hustle: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "atk"
+      ? { kind: "attack", value: 1.5, label: "Hustle (accuracy x0.8)" }
+      : null,
+  gorillatactics: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "atk"
+      ? { kind: "attack", value: 1.5, label: "Gorilla Tactics (locked move)" }
+      : null,
+  analytic: (ctx) =>
+    ctx.attackerPerspective && ctx.moveOptions?.targetMoved
+      ? { kind: "power", value: 1.3, label: "Analytic" }
+      : null,
+  rivalry: rivalryModifier,
+  stakeout: (ctx) =>
+    ctx.attackerPerspective && ctx.defenderState.switchedIn
+      ? { kind: "power", value: 2, label: "Stakeout" }
+      : null,
+  supremeoverlord: (ctx) => {
+    const count = Math.max(0, Math.min(5, Math.trunc(Number(ctx.attackerState.faintedAllyCount ?? 0))));
+    return ctx.attackerPerspective && count > 0
+      ? { kind: "power", value: 1 + 0.1 * count, label: `Supreme Overlord +${count}` }
+      : null;
+  },
+  sandforce: (ctx) =>
+    ctx.attackerPerspective && normalizeId(ctx.field.weather) === "sandstorm" && ["Rock", "Ground", "Steel"].includes(ctx.moveType)
+      ? { kind: "power", value: 1.3, label: "Sand Force" }
+      : null,
+  waterbubble: (ctx) =>
+    ctx.attackerPerspective && ctx.moveType === "Water"
+      ? { kind: "power", value: 2, label: "Water Bubble" }
       : null,
   tintedlens: (ctx) =>
     ctx.attackerPerspective && ctx.typeMultiplier < 1 ? { kind: "damage", value: 2, label: "Tinted Lens" } : null,
@@ -285,6 +352,17 @@ function terrainPowerModifier(ctx) {
   return { kind: "power", value: 1.3, label: `${ctx.field.terrain} boost` };
 }
 
+function auraPowerModifier(ctx) {
+  const auraType = ctx.moveType === "Fairy"
+    ? "fairyaura"
+    : ctx.moveType === "Dark"
+      ? "darkaura"
+      : "";
+  if (!auraType) return null;
+  if (!hasAbility(ctx.attackerState, auraType) && !hasAbility(ctx.defenderState, auraType)) return null;
+  return { kind: "power", value: 1.33, label: auraType === "fairyaura" ? "Fairy Aura" : "Dark Aura" };
+}
+
 // Misty Terrain halves Dragon-type damage against grounded targets.
 function mistyTerrainDragonModifier(ctx) {
   if (normalizeId(ctx.field.terrain) !== "mistyterrain") return null;
@@ -347,6 +425,7 @@ const GENERIC_ATTACKER_MODIFIERS = [
   plateModifier,
   superEffectiveMoveModifier,
   terrainPowerModifier,
+  auraPowerModifier,
   mistyTerrainDragonModifier,
   grassyTerrainGroundMoveModifier,
   attackerSideConditionModifiers,
@@ -366,6 +445,45 @@ function adaptabilityModifier(ctx) {
   if (!originalType && !teraMatch) return null;
   const value = originalType && teraMatch ? 2.25 : 2;
   return { kind: "stab", value, label: "Adaptability" };
+}
+
+function abilityTypeBoostModifier(ctx) {
+  if (!ctx.attackerPerspective) return null;
+  const conversion = abilityTypeConversion(ctx);
+  return conversion?.boost ? { kind: "power", value: conversion.boost, label: conversion.label } : null;
+}
+
+function lowHpTypeBoostModifier(ctx, type, label) {
+  return ctx.attackerPerspective && ctx.moveType === type && Number(ctx.attackerState.currentHpFraction ?? 1) <= 1 / 3
+    ? { kind: "attack", value: 1.5, label }
+    : null;
+}
+
+function plusMinusModifier(ctx) {
+  return ctx.attackerPerspective && ctx.attackStat === "spa" && ctx.attackerState.allyPlusMinus
+    ? { kind: "attack", value: 1.5, label: ctx.attackerState.ability.name }
+    : null;
+}
+
+function rivalryModifier(ctx) {
+  if (!ctx.attackerPerspective) return null;
+  if (ctx.attackerState.rivalry === "same") return { kind: "damage", value: 1.25, label: "Rivalry same gender" };
+  if (ctx.attackerState.rivalry === "opposite") return { kind: "damage", value: 0.75, label: "Rivalry opposite gender" };
+  return null;
+}
+
+function hasSecondaryEffect(move) {
+  if (Array.isArray(move.secondaries) && move.secondaries.length > 0) return true;
+  return Boolean(move.secondary && Object.keys(move.secondary).length > 0);
+}
+
+function hasAbility(state, abilityId) {
+  return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
+}
+
+function isSun(weather) {
+  const weatherId = normalizeId(weather);
+  return weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
 export function collectModifiers(ctx) {

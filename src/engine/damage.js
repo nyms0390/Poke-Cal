@@ -4,6 +4,7 @@ import { calculateStat, applyStage } from "./stats.js";
 import { createField } from "./field.js";
 import {
   moveEffect,
+  abilityTypeConversion,
   isPledgeMove,
   currentHp,
   USER_HP_POWER_MOVE_IDS,
@@ -57,8 +58,14 @@ const UNSUPPORTED_MOVE_REASONS = {
   bide: "Requires stored damage taken over prior turns.",
 };
 
-export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}) {
+export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}, attackerState = {}) {
   const moveId = normalizeId(move?.id ?? move?.name);
+  if (hasScrappyBypass(moveType, defenderTypes, attackerState)) {
+    return defenderTypes.reduce((multiplier, defenderType) => {
+      if (defenderType === "Ghost") return multiplier;
+      return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
+    }, 1);
+  }
   if (["smackdown", "thousandarrows"].includes(moveId) && defenderTypes.includes("Flying")) {
     if (defenderState.grounded !== true) return 1;
     return defenderTypes.reduce((multiplier, defenderType) => {
@@ -117,7 +124,7 @@ export function calculateDamage({
   const ctx = { move, attacker, defender, attackerState, defenderState, field: effectiveField, moveOptions };
   const moveType = effectiveMoveType(ctx);
   const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
-  const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState);
+  const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState);
   const defenderMaxHp = calculatePokemonStat(defender, defenderState, "hp");
   const defenderCurrentHp = currentHp(defenderState, defenderMaxHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
@@ -450,7 +457,9 @@ function baseDamageForPower(power, attack, defense) {
 }
 
 function effectiveMoveType(ctx) {
-  return moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).moveType?.(ctx) ?? ctx.move.type;
+  return abilityTypeConversion(ctx)?.to ??
+    moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).moveType?.(ctx) ??
+    ctx.move.type;
 }
 
 function effectiveMovePower(ctx) {
@@ -464,6 +473,11 @@ function hasAbility(state, abilityId) {
 function hasAnyAbility(state, abilityIds) {
   const ability = normalizeId(state.ability?.id ?? state.ability?.name);
   return abilityIds.includes(ability);
+}
+
+function hasScrappyBypass(moveType, defenderTypes, attackerState) {
+  if (!["Normal", "Fighting"].includes(moveType) || !defenderTypes.includes("Ghost")) return false;
+  return hasAnyAbility(attackerState, ["scrappy", "mindseye"]);
 }
 
 function normalizeId(value) {

@@ -77,6 +77,9 @@ const elements = {
   fieldWeatherInputs: document.querySelectorAll('input[name="field-weather"]'),
   fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
+  assumptionInputs: document.querySelectorAll(
+    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], select[data-kind="rivalry"]',
+  ),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
@@ -201,6 +204,10 @@ for (const control of [
   elements.trickRoom,
 ]) {
   control.addEventListener("input", handleFieldControl);
+}
+
+for (const control of elements.assumptionInputs) {
+  control.addEventListener("input", handleDamageControl);
 }
 
 for (const side of ["attacker", "defender"]) {
@@ -373,6 +380,7 @@ function syncSideInputs(side) {
   for (const input of elements[`${side}StageInputs`].querySelectorAll("input")) {
     input.value = state.stages[input.dataset.stat] ?? 0;
   }
+  syncAssumptionInputs(side);
 }
 
 // Updates the module-level fieldState from a Field-card control (format/weather/terrain radio
@@ -473,6 +481,18 @@ function controlFromTarget(target) {
   if (target.dataset.kind === "target-moved") {
     const { side, index } = target.dataset;
     return { kind: "targetMoved", side, index: Number(index), value: target.checked };
+  }
+  if (target.dataset.kind === "ally-plus-minus") {
+    return { kind: "allyPlusMinus", side: target.dataset.side, value: target.checked };
+  }
+  if (target.dataset.kind === "rivalry") {
+    return { kind: "rivalry", side: target.dataset.side, value: target.value };
+  }
+  if (target.dataset.kind === "switched-in") {
+    return { kind: "switchedIn", side: target.dataset.side, value: target.checked };
+  }
+  if (target.dataset.kind === "fainted-allies") {
+    return { kind: "faintedAllyCount", side: target.dataset.side, value: target.value };
   }
   return null;
 }
@@ -683,6 +703,17 @@ function syncCurrentHpInputs(side) {
   elements[`${side}CurrentHp`].value = String(currentHp);
   elements[`${side}MaxHp`].textContent = `/ ${maxHp}`;
   elements[`${side}HpPercent`].value = String(Number(((currentHp / maxHp) * 100).toFixed(1)));
+}
+
+function syncAssumptionInputs(side) {
+  const state = damageState[side];
+  for (const input of elements.assumptionInputs) {
+    if (input.dataset.side !== side) continue;
+    if (input.dataset.kind === "ally-plus-minus") input.checked = Boolean(state.allyPlusMinus);
+    if (input.dataset.kind === "switched-in") input.checked = Boolean(state.switchedIn);
+    if (input.dataset.kind === "rivalry") input.value = state.rivalry ?? "off";
+    if (input.dataset.kind === "fainted-allies") input.value = String(state.faintedAllyCount ?? 0);
+  }
 }
 
 function finalStat(state, stat) {

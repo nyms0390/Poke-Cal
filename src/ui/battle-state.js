@@ -41,6 +41,10 @@ export function createSideState(pokemon, usageDefaults) {
     selectedHitCounts: [null, null, null, null],
     targetMovedOverrides: [null, null, null, null],
     singleTargetMoves: [false, false, false, false],
+    allyPlusMinus: false,
+    rivalry: "off",
+    switchedIn: false,
+    faintedAllyCount: 0,
     speedMultiplier: 1,
     tailwind: false,
   };
@@ -76,6 +80,14 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, teraType: state.teraType ? value : "" };
     case "currentHpFraction":
       return { ...state, currentHpFraction: clampCurrentHpFraction(value, maxHp) };
+    case "allyPlusMinus":
+      return { ...state, allyPlusMinus: Boolean(value) };
+    case "rivalry":
+      return { ...state, rivalry: ["same", "opposite"].includes(value) ? value : "off" };
+    case "switchedIn":
+      return { ...state, switchedIn: Boolean(value) };
+    case "faintedAllyCount":
+      return { ...state, faintedAllyCount: clampInteger(value, 0, 5) };
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":

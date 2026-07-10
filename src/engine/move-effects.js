@@ -52,6 +52,15 @@ const USER_HP_POWER_MOVE_IDS = new Set(["dragonenergy", "eruption", "waterspout"
 const TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["grassknot", "lowkick"]);
 const USER_TARGET_WEIGHT_POWER_MOVE_IDS = new Set(["heatcrash", "heavyslam"]);
 const BOOSTABLE_STAGE_KEYS = ["atk", "def", "spa", "spd", "spe"];
+const ABILITY_TYPE_CONVERSIONS = {
+  aerilate: { from: "Normal", to: "Flying", boost: 1.2, label: "Aerilate" },
+  dragonize: { from: "Normal", to: "Dragon", boost: 1.2, label: "Dragonize" },
+  galvanize: { from: "Normal", to: "Electric", boost: 1.2, label: "Galvanize" },
+  liquidvoice: { flag: "sound", to: "Water", label: "Liquid Voice" },
+  normalize: { to: "Normal", boost: 1.2, label: "Normalize" },
+  pixilate: { from: "Normal", to: "Fairy", boost: 1.2, label: "Pixilate" },
+  refrigerate: { from: "Normal", to: "Ice", boost: 1.2, label: "Refrigerate" },
+};
 
 export function isPledgeMove(move) {
   return PLEDGE_MOVE_IDS.has(normalizeId(move.id ?? move.name));
@@ -62,6 +71,15 @@ export function weatherBlockedByUmbrella(weather, item) {
   if (normalizeId(item?.id ?? item?.name) !== "utilityumbrella") return false;
   return weatherId === "raindance" || weatherId === "primordialsea" ||
     weatherId === "sunnyday" || weatherId === "desolateland";
+}
+
+export function abilityTypeConversion(ctx) {
+  const abilityId = normalizeId(ctx.attackerState?.ability?.id ?? ctx.attackerState?.ability?.name);
+  const conversion = ABILITY_TYPE_CONVERSIONS[abilityId];
+  if (!conversion) return null;
+  if (conversion.flag && !ctx.move.flags?.[conversion.flag]) return null;
+  if (conversion.from && ctx.move.type !== conversion.from) return null;
+  return conversion;
 }
 
 function beatUpBasePower(attacker, attackerState) {

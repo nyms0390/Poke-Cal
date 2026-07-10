@@ -978,6 +978,226 @@ test("uses user form, primary type, and Berry metadata for dynamic move type and
   assert.equal(gift.notes.includes("Natural Gift power 80"), true);
 });
 
+test("converts move type from offensive abilities before damage modifiers", () => {
+  const fairyUser = {
+    id: "fairyvoice",
+    name: "Fairyvoice",
+    types: ["Fairy"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const darkTarget = {
+    id: "darktarget",
+    name: "Darktarget",
+    types: ["Dark"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const hyperVoice = {
+    id: "hypervoice",
+    name: "Hyper Voice",
+    type: "Normal",
+    category: "Special",
+    basePower: 90,
+    target: "allAdjacentFoes",
+    flags: { sound: 1 },
+  };
+  // Bulbapedia documents Pixilate-style abilities as Normal-type conversion plus a 1.2x power boost.
+  const pixilate = calculateDamage({
+    attacker: fairyUser,
+    defender: darkTarget,
+    move: hyperVoice,
+    attackerState: { ...neutralState, ability: { id: "pixilate", name: "Pixilate" } },
+    defenderState: neutralState,
+  });
+  const reference = calculateDamage({
+    attacker: fairyUser,
+    defender: darkTarget,
+    move: { ...hyperVoice, id: "pixilatereference", name: "Pixilate reference", type: "Fairy", basePower: 108 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const liquidVoice = calculateDamage({
+    attacker: { ...fairyUser, types: ["Water"] },
+    defender: darkTarget,
+    move: hyperVoice,
+    attackerState: { ...neutralState, ability: { id: "liquidvoice", name: "Liquid Voice" } },
+    defenderState: neutralState,
+  });
+  const normalize = calculateDamage({
+    attacker: { ...fairyUser, types: ["Normal"] },
+    defender: darkTarget,
+    move: { ...hyperVoice, type: "Fairy" },
+    attackerState: { ...neutralState, ability: { id: "normalize", name: "Normalize" } },
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual([pixilate.minDamage, pixilate.maxDamage], [reference.minDamage, reference.maxDamage]);
+  assert.equal(pixilate.typeMultiplier, 2);
+  assert.equal(pixilate.notes.includes("Hyper Voice is Fairy type"), true);
+  assert.equal(pixilate.notes.includes("Pixilate"), true);
+  assert.equal(pixilate.notes.includes("Doubles spread move"), true);
+  assert.equal(liquidVoice.notes.includes("Hyper Voice is Water type"), true);
+  assert.equal(liquidVoice.notes.includes("Liquid Voice"), false);
+  assert.equal(normalize.notes.includes("Hyper Voice is Normal type"), true);
+  assert.equal(normalize.notes.includes("Normalize"), true);
+});
+
+test("applies P2-06 offensive ability multipliers from local Showdown data", () => {
+  const attacker = {
+    id: "offenseuser",
+    name: "Offenseuser",
+    types: ["Fire", "Water", "Electric", "Normal", "Dark", "Fairy", "Steel"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 40 },
+  };
+  const defender = {
+    id: "offensetarget",
+    name: "Offensetarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const physical = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 40 };
+  const special = { id: "swift", name: "Swift", type: "Normal", category: "Special", basePower: 60 };
+  const fire = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const water = { id: "surf", name: "Surf", type: "Water", category: "Special", basePower: 90, target: "allAdjacentFoes" };
+  const dark = { id: "darkpulse", name: "Dark Pulse", type: "Dark", category: "Special", basePower: 80 };
+  const fairy = { id: "moonblast", name: "Moonblast", type: "Fairy", category: "Special", basePower: 95, secondary: { chance: 30 } };
+  const steel = { id: "flashcannon", name: "Flash Cannon", type: "Steel", category: "Special", basePower: 80, secondary: { chance: 10 } };
+  const sound = { id: "snarl", name: "Snarl", type: "Dark", category: "Special", basePower: 55, flags: { sound: 1 }, target: "allAdjacentFoes" };
+
+  const cases = [
+    // Bulbapedia and Pokemon Showdown list Blaze/Torrent/Overgrow/Swarm as 1.5x matching-type boosts at 1/3 HP.
+    ["Blaze", fire, { ability: { id: "blaze", name: "Blaze" }, currentHpFraction: 0.3 }, {}, createField()],
+    ["Torrent", water, { ability: { id: "torrent", name: "Torrent" }, currentHpFraction: 0.3 }, {}, createField()],
+    ["Solar Power", special, { ability: { id: "solarpower", name: "Solar Power" } }, {}, createField({ weather: "SunnyDay" })],
+    ["Plus", special, { ability: { id: "plus", name: "Plus" }, allyPlusMinus: true }, {}, createField()],
+    ["Minus", special, { ability: { id: "minus", name: "Minus" }, allyPlusMinus: true }, {}, createField()],
+    ["Hustle (accuracy x0.8)", physical, { ability: { id: "hustle", name: "Hustle" } }, {}, createField()],
+    ["Gorilla Tactics (locked move)", physical, { ability: { id: "gorillatactics", name: "Gorilla Tactics" } }, {}, createField()],
+    ["Flare Boost", special, { ability: { id: "flareboost", name: "Flare Boost" }, status: "burn" }, {}, createField()],
+    ["Toxic Boost", physical, { ability: { id: "toxicboost", name: "Toxic Boost" }, status: "poison" }, {}, createField()],
+    ["Analytic", special, { ability: { id: "analytic", name: "Analytic" } }, { targetMoved: true }, createField()],
+    ["Rivalry same gender", physical, { ability: { id: "rivalry", name: "Rivalry" }, rivalry: "same" }, {}, createField()],
+    ["Stakeout", special, { ability: { id: "stakeout", name: "Stakeout" } }, {}, createField(), { switchedIn: true }],
+    ["Sand Force", steel, { ability: { id: "sandforce", name: "Sand Force" } }, {}, createField({ weather: "Sandstorm" })],
+    ["Fire Mane", fire, { ability: { id: "firemane", name: "Fire Mane" } }, {}, createField()],
+    ["Fairy Aura", fairy, { ability: { id: "fairyaura", name: "Fairy Aura" } }, {}, createField()],
+    ["Dark Aura", dark, { ability: { id: "darkaura", name: "Dark Aura" } }, {}, createField()],
+    ["Water Bubble", water, { ability: { id: "waterbubble", name: "Water Bubble" } }, {}, createField()],
+    ["Sheer Force", fairy, { ability: { id: "sheerforce", name: "Sheer Force" } }, {}, createField()],
+    ["Punk Rock", sound, { ability: { id: "punkrock", name: "Punk Rock" } }, {}, createField()],
+  ];
+
+  for (const [label, move, statePatch, moveOptions, field, defenderPatch = {}] of cases) {
+    const boosted = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: { ...neutralState, ...statePatch },
+      defenderState: { ...neutralState, ...defenderPatch },
+      field,
+      moveOptions,
+    });
+    const baseline = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: neutralState,
+      defenderState: { ...neutralState, ...defenderPatch },
+      field,
+      moveOptions,
+    });
+
+    assert.equal(boosted.notes.includes(label), true, label);
+    assert.equal(boosted.maxDamage > baseline.maxDamage, true, `${label} increases damage`);
+  }
+
+  const supremeOverlord = calculateDamage({
+    attacker,
+    defender,
+    move: physical,
+    attackerState: { ...neutralState, ability: { id: "supremeoverlord", name: "Supreme Overlord" }, faintedAllyCount: 2 },
+    defenderState: neutralState,
+  });
+  const supremeReference = calculateDamage({
+    attacker,
+    defender,
+    move: { ...physical, id: "supremeoverlordreference", name: "Supreme Overlord reference", basePower: 48 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([supremeOverlord.minDamage, supremeOverlord.maxDamage], [supremeReference.minDamage, supremeReference.maxDamage]);
+  assert.equal(supremeOverlord.notes.includes("Supreme Overlord +2"), true);
+});
+
+test("applies Scrappy and Mind's Eye immunity bypass plus incoming Punk Rock reduction", () => {
+  const normalUser = {
+    id: "normaluser",
+    name: "Normaluser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const ghostTarget = {
+    id: "ghosttarget",
+    name: "Ghosttarget",
+    types: ["Ghost"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const fakeOut = { id: "fakeout", name: "Fake Out", type: "Normal", category: "Physical", basePower: 40 };
+  const closeCombat = { id: "closecombat", name: "Close Combat", type: "Fighting", category: "Physical", basePower: 120 };
+  const snarl = {
+    id: "snarl",
+    name: "Snarl",
+    type: "Dark",
+    category: "Special",
+    basePower: 55,
+    flags: { sound: 1 },
+    target: "allAdjacentFoes",
+  };
+
+  const immune = calculateDamage({
+    attacker: normalUser,
+    defender: ghostTarget,
+    move: fakeOut,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const scrappy = calculateDamage({
+    attacker: normalUser,
+    defender: ghostTarget,
+    move: fakeOut,
+    attackerState: { ...neutralState, ability: { id: "scrappy", name: "Scrappy" } },
+    defenderState: neutralState,
+  });
+  const mindsEye = calculateDamage({
+    attacker: normalUser,
+    defender: ghostTarget,
+    move: closeCombat,
+    attackerState: { ...neutralState, ability: { id: "mindseye", name: "Mind's Eye" } },
+    defenderState: neutralState,
+  });
+  const soundNormal = calculateDamage({
+    attacker: normalUser,
+    defender: ghostTarget,
+    move: snarl,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const soundReduced = calculateDamage({
+    attacker: normalUser,
+    defender: ghostTarget,
+    move: snarl,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "punkrock", name: "Punk Rock" } },
+  });
+
+  assert.deepEqual([immune.minDamage, immune.maxDamage], [0, 0]);
+  assert.equal(scrappy.typeMultiplier, 1);
+  assert.equal(scrappy.minDamage > 0, true);
+  assert.equal(mindsEye.typeMultiplier, 1);
+  assert.equal(mindsEye.minDamage > 0, true);
+  assert.equal(soundReduced.notes.includes("Punk Rock"), true);
+  assert.equal(soundReduced.maxDamage < soundNormal.maxDamage, true);
+});
+
 test("uses form, weather, and terrain context for dynamic move type and power", () => {
   const ogerponHearthflame = {
     id: "ogerponhearthflame",

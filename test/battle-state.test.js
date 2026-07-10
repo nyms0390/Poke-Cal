@@ -40,6 +40,10 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.deepEqual(state.selectedHitCounts, [null, null, null, null]);
   assert.deepEqual(state.targetMovedOverrides, [null, null, null, null]);
   assert.deepEqual(state.singleTargetMoves, [false, false, false, false]);
+  assert.equal(state.allyPlusMinus, false);
+  assert.equal(state.rivalry, "off");
+  assert.equal(state.switchedIn, false);
+  assert.equal(state.faintedAllyCount, 0);
   assert.equal(state.speedMultiplier, 1);
   assert.equal(state.tailwind, false);
 });
@@ -152,6 +156,15 @@ test("applyControl toggles Tera and keeps the selected Tera type", () => {
   assert.equal(active.teraType, "Fire");
   assert.equal(applyControl(active, { kind: "teraType", value: "Water" }).teraType, "Water");
   assert.equal(applyControl(active, { kind: "tera", value: { enabled: false, type: "Water" } }).teraType, "");
+});
+
+test("applyControl stores offensive ability assumptions", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  assert.equal(applyControl(state, { kind: "allyPlusMinus", value: true }).allyPlusMinus, true);
+  assert.equal(applyControl(state, { kind: "rivalry", value: "same" }).rivalry, "same");
+  assert.equal(applyControl(state, { kind: "rivalry", value: "unknown" }).rivalry, "off");
+  assert.equal(applyControl(state, { kind: "switchedIn", value: true }).switchedIn, true);
+  assert.equal(applyControl(state, { kind: "faintedAllyCount", value: "9" }).faintedAllyCount, 5);
 });
 
 test("applyControl returns the same state for an unknown kind", () => {
