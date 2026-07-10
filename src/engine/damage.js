@@ -11,6 +11,7 @@ import {
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
 } from "./move-effects.js";
 import { collectModifiers } from "./modifiers.js";
+import { koChance, koText } from "./ko-chance.js";
 
 export { NATURES, natureMultiplier, natureOptionLabel };
 export { calculateStat, applyStage };
@@ -75,6 +76,10 @@ export function unsupportedMoveReason(move) {
   return "";
 }
 
+/**
+ * @param {object} input
+ * @param {{singleTarget?: boolean}} [input.moveOptions] Override spread targeting for this move.
+ */
 export function calculateDamage({
   attacker,
   defender,
@@ -83,12 +88,13 @@ export function calculateDamage({
   defenderState,
   field = createField(),
   critical = false,
+  moveOptions = {},
 }) {
   const { format: battleFormat, pledgeCombo = false } = field;
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
-  const ctx = { move, attacker, defender, attackerState, defenderState, field };
+  const ctx = { move, attacker, defender, attackerState, defenderState, field, moveOptions };
   const moveType = effectiveMoveType(ctx);
   const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
   const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState);
@@ -99,9 +105,10 @@ export function calculateDamage({
   ctx.attackerMaxHp = attackerMaxHp;
   const effectiveCritical = critical && (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
+    const rolls = DAMAGE_ROLLS.map(() => 0);
     return {
       supported: true,
-      rolls: DAMAGE_ROLLS.map(() => 0),
+      rolls,
       minDamage: 0,
       maxDamage: 0,
       minPercent: 0,
@@ -109,6 +116,7 @@ export function calculateDamage({
       defenderHp,
       defenderCurrentHp,
       typeMultiplier,
+      ko: koSummaryForRolls(rolls, defenderCurrentHp),
       notes: ["Immune", ...teraNotes(attackerState, defenderState)],
     };
   }
@@ -127,6 +135,7 @@ export function calculateDamage({
       defenderHp,
       defenderCurrentHp,
       typeMultiplier,
+      ko: koSummaryForRolls(rolls, defenderCurrentHp),
       notes: ["Fixed damage", ...teraNotes(attackerState, defenderState)],
     };
   }
@@ -213,7 +222,7 @@ export function calculateDamage({
   const burnModifier =
     attackerState.status === "burn" && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
   const spreadModifier =
-    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
+    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");
   const hitCounts = hitCountRange(ctx);
   if (hitPowers.length === 1 && (hitCounts.min > 1 || hitCounts.max > 1)) {
@@ -222,23 +231,27 @@ export function calculateDamage({
       : `${move.name} hits ${hitCounts.min}-${hitCounts.max} times`);
   }
 
+  const damageForHit = (hitPower, roll) => {
+    let hitDamage = baseDamageForPower(hitPower, modifiedAttack, defense);
+    hitDamage = Math.floor(hitDamage * criticalModifier);
+    hitDamage = Math.floor(hitDamage * roll / 100);
+    hitDamage = Math.floor(hitDamage * stab);
+    hitDamage = Math.floor(hitDamage * typeMultiplier);
+    hitDamage = Math.floor(hitDamage * burnModifier);
+    hitDamage = Math.floor(hitDamage * spreadModifier);
+    hitDamage = Math.floor(hitDamage * damageModifier);
+    return Math.max(1, hitDamage);
+  };
   const damageForRoll = (roll) =>
-    hitPowers.reduce((total, hitPower) => {
-      let hitDamage = baseDamageForPower(hitPower, modifiedAttack, defense);
-      hitDamage = Math.floor(hitDamage * criticalModifier);
-      hitDamage = Math.floor(hitDamage * roll / 100);
-      hitDamage = Math.floor(hitDamage * stab);
-      hitDamage = Math.floor(hitDamage * typeMultiplier);
-      hitDamage = Math.floor(hitDamage * burnModifier);
-      hitDamage = Math.floor(hitDamage * spreadModifier);
-      hitDamage = Math.floor(hitDamage * damageModifier);
-      return total + Math.max(1, hitDamage);
-    }, 0);
+    hitPowers.reduce((total, hitPower) => total + damageForHit(hitPower, roll), 0);
   const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.min);
   const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.max);
   const rolls = hitCounts.min === hitCounts.max
     ? minHitRolls
     : [minHitRolls[0], ...maxHitRolls.slice(1)];
+  const rollDistribution = hitCounts.min === hitCounts.max
+    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit)
+    : null;
 
   return {
     supported: true,
@@ -250,8 +263,43 @@ export function calculateDamage({
     defenderHp,
     defenderCurrentHp,
     typeMultiplier,
+    ko: rollDistribution
+      ? koSummaryForRolls(rolls, defenderCurrentHp, rollDistribution)
+      : unavailableKoSummary("KO chance unavailable for variable hit count"),
     notes,
   };
+}
+
+function koSummaryForRolls(rolls, targetHp, rollDistribution) {
+  const chances = koChance({ rolls, rollDistribution, targetHp });
+  const firstKo = chances.find(({ chance }) => chance > 0);
+  return {
+    hits: firstKo?.hits ?? null,
+    chance: firstKo?.chance ?? 0,
+    text: koText(chances),
+  };
+}
+
+function unavailableKoSummary(text) {
+  return { hits: null, chance: null, text };
+}
+
+function fullMoveDistribution(hitPowers, hitCount, damageForHit) {
+  const powers = hitPowers.length > 1
+    ? hitPowers
+    : Array.from({ length: hitCount }, () => hitPowers[0]);
+  let distribution = new Map([[0, 1]]);
+  for (const power of powers) {
+    const next = new Map();
+    for (const [total, probability] of distribution) {
+      for (const roll of DAMAGE_ROLLS) {
+        const damage = total + damageForHit(power, roll);
+        next.set(damage, (next.get(damage) ?? 0) + probability / DAMAGE_ROLLS.length);
+      }
+    }
+    distribution = next;
+  }
+  return [...distribution].map(([damage, chance]) => ({ damage, chance }));
 }
 
 function stabMultiplier(attacker, attackerState, moveType) {
@@ -278,7 +326,7 @@ export function koSummary({ minDamage, maxDamage, defenderHp, defenderCurrentHp 
 
 export function formatDamageResult(result) {
   if (!result.supported) return result.reason ?? "No direct damage";
-  return `${result.minPercent}% - ${result.maxPercent}%`;
+  return `${result.minDamage}–${result.maxDamage} (${result.minPercent}–${result.maxPercent}%)`;
 }
 
 function calculatePokemonStat(pokemon, state, stat, { ignoreStage = false, stagePolicy = sameStage } = {}) {

@@ -1,6 +1,6 @@
 # P1-07 — Spread targeting toggle
 
-Status: TODO
+Status: Done
 Depends on: P1-01
 Phase: 1 (calculator foundations)
 

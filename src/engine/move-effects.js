@@ -20,6 +20,8 @@
 //                                                     read move.damage, not a moveId)
 //   offensiveStat(ctx) -> "atk" | "spa"              (Photon Geyser)
 
+import { isGrounded } from "./field.js";
+
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
@@ -161,12 +163,12 @@ export const MOVE_EFFECTS = {
   },
   terrainpulse: {
     moveType: (ctx) => {
-      if (ctx.attackerState.grounded === false) return undefined;
+      if (!isGrounded(ctx.attacker, ctx.attackerState, ctx.field)) return undefined;
       return TERRAIN_PULSE_TYPES[normalizeId(ctx.field.terrain)];
     },
     basePower: (ctx) => {
       if (!TERRAIN_PULSE_TYPES[normalizeId(ctx.field.terrain)]) return undefined;
-      if (ctx.attackerState.grounded === false) return undefined;
+      if (!isGrounded(ctx.attacker, ctx.attackerState, ctx.field)) return undefined;
       return ctx.move.basePower * 2;
     },
   },
@@ -174,13 +176,13 @@ export const MOVE_EFFECTS = {
   // -- other terrain/weather power boosts ---------------------------------
   expandingforce: {
     basePower: (ctx) => {
-      if (normalizeId(ctx.field.terrain) !== "psychicterrain" || ctx.attackerState.grounded === false) return undefined;
+      if (normalizeId(ctx.field.terrain) !== "psychicterrain" || !isGrounded(ctx.attacker, ctx.attackerState, ctx.field)) return undefined;
       return Math.floor(ctx.move.basePower * 1.5);
     },
   },
   risingvoltage: {
     basePower: (ctx) => {
-      if (normalizeId(ctx.field.terrain) !== "electricterrain" || ctx.defenderState.grounded === false) return undefined;
+      if (normalizeId(ctx.field.terrain) !== "electricterrain" || !isGrounded(ctx.defender, ctx.defenderState, ctx.field)) return undefined;
       return ctx.move.basePower * 2;
     },
   },

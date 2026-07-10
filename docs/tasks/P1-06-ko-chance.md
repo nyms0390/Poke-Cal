@@ -1,6 +1,6 @@
 # P1-06 — Exact KO-chance engine + golden test harness
 
-Status: TODO
+Status: Done
 Depends on: P1-04
 Phase: 1 (calculator foundations)
 

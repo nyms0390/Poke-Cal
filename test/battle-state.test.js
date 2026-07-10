@@ -37,6 +37,7 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.equal(state.teraType, "");
   assert.equal(state.currentHpFraction, 1);
   assert.deepEqual(state.selectedMoveIds, ["thunderbolt", "voltswitch", "protect", "nastyplot"]);
+  assert.deepEqual(state.singleTargetMoves, [false, false, false, false]);
   assert.equal(state.speedMultiplier, 1);
   assert.equal(state.tailwind, false);
 });
@@ -86,6 +87,16 @@ test("applyControl normalizes and replaces one selected move by index", () => {
   const updated = applyControl(state, { kind: "move", index: 1, value: "Iron Tail" });
   assert.deepEqual(updated.selectedMoveIds, ["thunderbolt", "irontail", "protect", "nastyplot"]);
   assert.deepEqual(state.selectedMoveIds, ["thunderbolt", "voltswitch", "protect", "nastyplot"]);
+});
+
+test("applyControl toggles one-target mode by move slot and resets it when the move changes", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const toggled = applyControl(state, { kind: "singleTarget", index: 1, value: true });
+  assert.deepEqual(toggled.singleTargetMoves, [false, true, false, false]);
+  assert.deepEqual(state.singleTargetMoves, [false, false, false, false]);
+
+  const replaced = applyControl(toggled, { kind: "move", index: 1, value: "Iron Tail" });
+  assert.deepEqual(replaced.singleTargetMoves, [false, false, false, false]);
 });
 
 test("applyControl applies a valid usage spread and ignores an invalid one", () => {

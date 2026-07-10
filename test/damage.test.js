@@ -163,6 +163,46 @@ test("defaults to doubles spread-move damage", () => {
   assert.equal(doubles.notes.includes("Doubles spread move"), true);
 });
 
+test("allows a doubles spread move to target one Pokémon", () => {
+  const heatWave = {
+    id: "heatwave",
+    name: "Heat Wave",
+    type: "Fire",
+    category: "Special",
+    basePower: 95,
+    target: "allAdjacentFoes",
+  };
+  const doubles = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: heatWave,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const oneTarget = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: heatWave,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    moveOptions: { singleTarget: true },
+  });
+  const singles = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: heatWave,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ format: "singles" }),
+  });
+
+  assert.deepEqual([doubles.minDamage, doubles.maxDamage], [11, 13]);
+  assert.deepEqual([oneTarget.minDamage, oneTarget.maxDamage], [15, 18]);
+  assert.deepEqual([oneTarget.minDamage, oneTarget.maxDamage], [singles.minDamage, singles.maxDamage]);
+  assert.equal(doubles.notes.includes("Doubles spread move"), true);
+  assert.equal(oneTarget.notes.includes("Doubles spread move"), false);
+});
+
 test("supports numeric fixed-damage moves and type immunities", () => {
   const dragonRage = {
     id: "dragonrage",
@@ -1130,6 +1170,53 @@ test("applies Tera STAB and defender typing", () => {
   assert.equal(adaptableTeraAttacker.maxDamage > teraAttacker.maxDamage, true);
   assert.equal(teraDefender.typeMultiplier, 2);
   assert.equal(teraDefender.notes.includes("Tera (Fire)"), true);
+});
+
+test("preserves Adaptability across all Tera STAB cases", () => {
+  const attacker = {
+    id: "adaptabilityuser",
+    name: "Adaptabilityuser",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "adaptabilitytarget",
+    name: "Adaptabilitytarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 100, spe: 50 },
+  };
+  const flamethrower = {
+    id: "flamethrower",
+    name: "Flamethrower",
+    type: "Fire",
+    category: "Special",
+    basePower: 90,
+  };
+  const adaptability = { id: "adaptability", name: "Adaptability" };
+  const originalType = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: { ...neutralState, ability: adaptability },
+    defenderState: neutralState,
+  });
+  const sameTypeTera = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: { ...neutralState, ability: adaptability, teraType: "Fire" },
+    defenderState: neutralState,
+  });
+  const differentTypeTera = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: { ...neutralState, ability: adaptability, teraType: "Water" },
+    defenderState: neutralState,
+  });
+
+  assert.equal(sameTypeTera.maxDamage > originalType.maxDamage, true);
+  assert.deepEqual(differentTypeTera.rolls, originalType.rolls);
 });
 
 test("supports Tera Blast with Tera typing and the stronger offensive stat", () => {
@@ -2123,6 +2210,50 @@ test("doubles displayed damage for fixed two-hit moves", () => {
   }
 });
 
+test("uses independent damage rolls for fixed multi-hit KO chances", () => {
+  const attacker = {
+    id: "twohituser",
+    name: "Twohituser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "twohittarget",
+    name: "Twohittarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const singleHitMove = {
+    id: "doublehitsingle",
+    name: "Double Hit Single",
+    type: "Normal",
+    category: "Physical",
+    basePower: 35,
+  };
+  const twoHitMove = { ...singleHitMove, id: "doublehit", name: "Double Hit", multihit: 2 };
+  const singleHit = calculateDamage({
+    attacker,
+    defender,
+    move: singleHitMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const targetHp = singleHit.minDamage + singleHit.maxDamage;
+  const expectedChance = singleHit.rolls
+    .flatMap((first) => singleHit.rolls.map((second) => first + second))
+    .filter((damage) => damage >= targetHp).length / (16 * 16);
+  const twoHit = calculateDamage({
+    attacker,
+    defender,
+    move: twoHitMove,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, currentHpFraction: targetHp / 155 },
+  });
+
+  assert.equal(twoHit.defenderCurrentHp, targetHp);
+  assert.equal(twoHit.ko.chance, expectedChance);
+});
+
 test("sums successive-hit base-power damage", () => {
   const tripleHitUser = {
     id: "triplehituser",
@@ -2227,6 +2358,8 @@ test("displays Population Bomb's accuracy-chained hit damage range", () => {
     [singleHitResult.minDamage, singleHitResult.maxDamage * 10],
   );
   assert.equal(standard.notes.includes("Population Bomb hits 1-10 times"), true);
+  assert.equal(standard.ko.chance, null);
+  assert.equal(standard.ko.text, "KO chance unavailable for variable hit count");
   assert.deepEqual(
     [loadedDice.minDamage, loadedDice.maxDamage],
     [singleHitResult.minDamage * 4, singleHitResult.maxDamage * 10],
@@ -2840,6 +2973,72 @@ test("golden: Electric Terrain gives grounded Electric moves a x1.3 boost, not u
   assert.equal(groundedInTerrain.notes.includes("Electric Terrain boost"), true);
   // An ungrounded attacker (Levitate, Flying, etc.) does not get the terrain boost.
   assert.deepEqual([ungroundedInTerrain.minDamage, ungroundedInTerrain.maxDamage], [58, 69]);
+});
+
+test("infers airborne terrain immunity and lets Gravity ground the user", () => {
+  const attacker = {
+    id: "flyingattacker",
+    name: "Flyingattacker",
+    types: ["Electric", "Flying"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "terrain-target",
+    name: "Terrain target",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 100, spe: 50 },
+  };
+  const thunderbolt = {
+    id: "thunderbolt",
+    name: "Thunderbolt",
+    type: "Electric",
+    category: "Special",
+    basePower: 90,
+  };
+  const noTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const electricTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+  const gravityTerrain = calculateDamage({
+    attacker,
+    defender,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain", gravity: true }),
+  });
+  const levitateTerrain = calculateDamage({
+    attacker: { ...attacker, types: ["Electric"] },
+    defender,
+    move: thunderbolt,
+    attackerState: { ...neutralState, ability: { id: "levitate", name: "Levitate" } },
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+  const airBalloonTerrain = calculateDamage({
+    attacker: { ...attacker, types: ["Electric"] },
+    defender,
+    move: thunderbolt,
+    attackerState: { ...neutralState, item: { id: "airballoon", name: "Air Balloon" } },
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+
+  assert.deepEqual(electricTerrain.rolls, noTerrain.rolls);
+  assert.equal(gravityTerrain.maxDamage > noTerrain.maxDamage, true);
+  assert.deepEqual(levitateTerrain.rolls, noTerrain.rolls);
+  assert.deepEqual(airBalloonTerrain.rolls, noTerrain.rolls);
 });
 
 test("golden: Misty Terrain halves Dragon damage into grounded targets only", () => {

@@ -712,6 +712,10 @@ select:focus {
   gap: 8px;
 }
 
+.damage-move-picks label[hidden] {
+  display: none;
+}
+
 .stat-inputs {
   grid-template-columns: repeat(3, 1fr);
 }

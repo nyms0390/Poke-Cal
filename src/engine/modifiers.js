@@ -14,6 +14,7 @@
 // so a coincidentally-shared item/ability id on the other side can never double-fire.
 
 import { weatherBlockedByUmbrella } from "./move-effects.js";
+import { isGrounded } from "./field.js";
 
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -122,11 +123,7 @@ export const ABILITY_MODIFIERS = {
   technician: (ctx) =>
     ctx.attackerPerspective && ctx.move.basePower <= 60 ? { kind: "power", value: 1.5, label: "Technician" } : null,
   adaptability: (ctx) =>
-    ctx.attackerPerspective && (ctx.attackerState.teraType
-      ? ctx.attackerState.teraType === ctx.moveType
-      : ctx.attacker.types.includes(ctx.moveType))
-      ? { kind: "stab", value: 2, label: "Adaptability" }
-      : null,
+    adaptabilityModifier(ctx),
   reckless: (ctx) =>
     ctx.attackerPerspective && (ctx.move.recoil || ctx.move.hasCrashDamage)
       ? { kind: "power", value: 1.2, label: "Reckless" }
@@ -202,14 +199,6 @@ function superEffectiveMoveModifier(ctx) {
 }
 
 // -- Terrain basics (field.js task P1-01) ----------------------------------------------------
-// A Pokémon's `state.grounded` defaults to "auto" (undefined), which every existing terrain/
-// gravity check in this codebase already treats as grounded — only an explicit `false`
-// (Flying-type, Levitate, Air Balloon, etc.) opts a side out. Mirrored here for consistency.
-
-function isGrounded(state) {
-  return state?.grounded !== false;
-}
-
 // Electric/Grassy/Psychic Terrain boost matching-type moves ×1.3 for the grounded user.
 // Misty Terrain has no offensive boost of its own (only the Dragon reduction below).
 const TERRAIN_BOOST_TYPES = {
@@ -221,7 +210,7 @@ const TERRAIN_BOOST_TYPES = {
 function terrainPowerModifier(ctx) {
   const boostType = TERRAIN_BOOST_TYPES[normalizeId(ctx.field.terrain)];
   if (!boostType || boostType !== ctx.moveType) return null;
-  if (!isGrounded(ctx.attackerState)) return null;
+  if (!isGrounded(ctx.attacker, ctx.attackerState, ctx.field)) return null;
   return { kind: "power", value: 1.3, label: `${ctx.field.terrain} boost` };
 }
 
@@ -229,7 +218,7 @@ function terrainPowerModifier(ctx) {
 function mistyTerrainDragonModifier(ctx) {
   if (normalizeId(ctx.field.terrain) !== "mistyterrain") return null;
   if (ctx.moveType !== "Dragon") return null;
-  if (!isGrounded(ctx.defenderState)) return null;
+  if (!isGrounded(ctx.defender, ctx.defenderState, ctx.field)) return null;
   return { kind: "damage", value: 0.5, label: "Misty Terrain weakens Dragon moves" };
 }
 
@@ -239,7 +228,7 @@ const GRASSY_TERRAIN_HALVED_MOVE_IDS = new Set(["earthquake", "bulldoze", "magni
 function grassyTerrainGroundMoveModifier(ctx) {
   if (normalizeId(ctx.field.terrain) !== "grassyterrain") return null;
   if (!GRASSY_TERRAIN_HALVED_MOVE_IDS.has(normalizeId(ctx.move.id ?? ctx.move.name))) return null;
-  if (!isGrounded(ctx.defenderState)) return null;
+  if (!isGrounded(ctx.defender, ctx.defenderState, ctx.field)) return null;
   return { kind: "damage", value: 0.5, label: "Grassy Terrain weakens ground-shaking moves" };
 }
 
@@ -297,6 +286,15 @@ const GENERIC_DEFENDER_MODIFIERS = [defenderSideConditionModifiers];
 function toList(result) {
   if (!result) return [];
   return Array.isArray(result) ? result : [result];
+}
+
+function adaptabilityModifier(ctx) {
+  if (!ctx.attackerPerspective) return null;
+  const originalType = ctx.attacker.types.includes(ctx.moveType);
+  const teraMatch = ctx.attackerState.teraType === ctx.moveType;
+  if (!originalType && !teraMatch) return null;
+  const value = originalType && teraMatch ? 2.25 : 2;
+  return { kind: "stab", value, label: "Adaptability" };
 }
 
 export function collectModifiers(ctx) {

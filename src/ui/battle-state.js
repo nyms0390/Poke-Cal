@@ -38,6 +38,7 @@ export function createSideState(pokemon, usageDefaults) {
     teraType: "",
     currentHpFraction: 1,
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeId(usageDefaults.moves[index]?.id)),
+    singleTargetMoves: [false, false, false, false],
     speedMultiplier: 1,
     tailwind: false,
   };
@@ -81,6 +82,14 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return {
         ...state,
         selectedMoveIds: state.selectedMoveIds.map((id, i) => (i === index ? normalizeId(value) : id)),
+        singleTargetMoves: (state.singleTargetMoves ?? [false, false, false, false])
+          .map((singleTarget, i) => (i === index ? false : singleTarget)),
+      };
+    case "singleTarget":
+      return {
+        ...state,
+        singleTargetMoves: (state.singleTargetMoves ?? [false, false, false, false])
+          .map((singleTarget, i) => (i === index ? Boolean(value) : singleTarget)),
       };
     default:
       return state;

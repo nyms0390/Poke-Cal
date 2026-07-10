@@ -10,7 +10,6 @@ import {
   calculateDamage,
   calculateStat,
   formatDamageResult,
-  koSummary,
   NATURES,
   natureOptionLabel,
 } from "../engine/damage.js";
@@ -88,6 +87,7 @@ const elements = {
 const SP_STATS = STAT_KEYS;
 const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
 const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"];
+const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -379,8 +379,11 @@ function handleFieldControl(event) {
   if (dataset.kind === "field-side") {
     const { side, key } = dataset;
     fieldState = { ...fieldState, [side]: { ...fieldState[side], [key]: checked } };
-  } else if (name === "field-format") fieldState = { ...fieldState, format: value };
-  else if (name === "field-weather") fieldState = { ...fieldState, weather: value };
+  } else if (name === "field-format") {
+    fieldState = { ...fieldState, format: value };
+    renderDamageMovePickers("attacker");
+    renderDamageMovePickers("defender");
+  } else if (name === "field-weather") fieldState = { ...fieldState, weather: value };
   else if (name === "field-terrain") fieldState = { ...fieldState, terrain: value };
   else if (id === "field-gravity") fieldState = { ...fieldState, gravity: checked };
   else if (id === "trick-room") fieldState = { ...fieldState, trickRoom: checked };
@@ -397,6 +400,7 @@ function handleDamageControl(event) {
     if (state) {
       damageState[control.side] = applyControl(state, control);
       if (control.kind === "spread") syncSideInputs(control.side);
+      if (control.kind === "move") renderDamageMovePickers(control.side);
       if (control.kind === "sp" || control.kind === "stage") {
         const key = control.kind === "stage" ? "stages" : "sp";
         event.target.value = damageState[control.side][key][control.stat];
@@ -430,6 +434,10 @@ function controlFromTarget(target) {
   if (target.dataset.kind === "damage-move") {
     const { side, index } = target.dataset;
     return { kind: "move", side, index: Number(index), value: target.value };
+  }
+  if (target.dataset.kind === "single-target") {
+    const { side, index } = target.dataset;
+    return { kind: "singleTarget", side, index: Number(index), value: target.checked };
   }
   return null;
 }
@@ -473,6 +481,20 @@ function renderDamageMovePickers(side) {
       select.value = state.selectedMoveIds[index] ?? moves[index]?.id ?? "";
       select.addEventListener("input", handleDamageControl);
       label.append(select);
+
+      const selectedMove = moves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(select.value));
+      const singleTargetLabel = document.createElement("label");
+      singleTargetLabel.className = "inline-toggle";
+      singleTargetLabel.hidden = fieldState.format !== "doubles" || !SPREAD_MOVE_TARGETS.has(selectedMove?.target);
+      const singleTarget = document.createElement("input");
+      singleTarget.type = "checkbox";
+      singleTarget.dataset.kind = "single-target";
+      singleTarget.dataset.side = side;
+      singleTarget.dataset.index = String(index);
+      singleTarget.checked = Boolean(state.singleTargetMoves?.[index]);
+      singleTarget.addEventListener("input", handleDamageControl);
+      singleTargetLabel.append(singleTarget, " 1 target");
+      label.append(singleTargetLabel);
       return label;
     }),
   );
@@ -503,11 +525,15 @@ function renderDamage() {
     `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
     `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
 
-  const attackerRows = selectedDamageMoves("attacker").map((move, index) =>
-    renderDamageCard(move, "attacker", index === 0, calcInput),
+  const attackerRows = selectedDamageMoves("attacker").map(({ move, index }, rowIndex) =>
+    renderDamageCard(move, "attacker", rowIndex === 0, calcInput, {
+      singleTarget: damageState.attacker.singleTargetMoves?.[index],
+    }),
   );
-  const defenderRows = selectedDamageMoves("defender").map((move, index) =>
-    renderDamageCard(move, "defender", index === 0, calcInput),
+  const defenderRows = selectedDamageMoves("defender").map(({ move, index }, rowIndex) =>
+    renderDamageCard(move, "defender", rowIndex === 0, calcInput, {
+      singleTarget: damageState.defender.singleTargetMoves?.[index],
+    }),
   );
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = `${rows.length} moves`;
@@ -572,7 +598,7 @@ function damageColumn(title, cards) {
   return column;
 }
 
-function renderDamageCard(move, sourceSide, selected, calcInput) {
+function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {}) {
   const isDefenderSource = sourceSide === "defender";
   const result = calculateDamage({
     attacker: isDefenderSource ? calcInput.defender : calcInput.attacker,
@@ -585,6 +611,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput) {
     // battle-state.js's buildCalcInput doc comment.
     field: isDefenderSource ? calcInput.reverseField : calcInput.field,
     critical: calcInput.critical,
+    moveOptions,
   });
 
   const card = document.createElement("article");
@@ -619,7 +646,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput) {
 
   const ko = document.createElement("span");
   ko.className = "damage-ko";
-  ko.textContent = result.supported ? koSummary(result) : formatDamageResult(result);
+  ko.textContent = result.supported ? result.ko.text : formatDamageResult(result);
   card.append(heading, meta, ko);
 
   if (result.supported && result.notes?.length) {
@@ -633,8 +660,10 @@ function renderDamageCard(move, sourceSide, selected, calcInput) {
 }
 
 function renderMoveOrder(field) {
-  const [attackerMove] = selectedDamageMoves("attacker");
-  const [defenderMove] = selectedDamageMoves("defender");
+  const [attackerEntry] = selectedDamageMoves("attacker");
+  const [defenderEntry] = selectedDamageMoves("defender");
+  const attackerMove = attackerEntry?.move;
+  const defenderMove = defenderEntry?.move;
   if (!attackerMove || !defenderMove) {
     elements.moveOrder.textContent = "Select one move on each side to compare move order.";
     return;
@@ -653,7 +682,10 @@ function renderMoveOrder(field) {
 function selectedDamageMoves(side) {
   const movesById = new Map(damageMovesForSide(side).map((move) => [normalizeDamageId(move.id), move]));
   return damageState[side].selectedMoveIds
-    .map((id) => movesById.get(normalizeDamageId(id)))
+    .map((id, index) => {
+      const move = movesById.get(normalizeDamageId(id));
+      return move ? { move, index } : null;
+    })
     .filter(Boolean);
 }
 
