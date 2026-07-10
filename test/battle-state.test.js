@@ -39,8 +39,6 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.deepEqual(state.selectedMoveIds, ["thunderbolt", "voltswitch", "protect", "nastyplot"]);
   assert.equal(state.speedMultiplier, 1);
   assert.equal(state.tailwind, false);
-  assert.equal(state.paralyzed, false);
-  assert.equal(state.burned, false);
 });
 
 test("createSideState normalizes fewer than four usage moves without throwing", () => {
@@ -100,13 +98,13 @@ test("applyControl applies a valid usage spread and ignores an invalid one", () 
   assert.equal(untouched, state);
 });
 
-test("applyControl toggles nature, speed multiplier, and battle-condition booleans", () => {
+test("applyControl updates nature, speed multiplier, tailwind, and status", () => {
   const state = createSideState(pikachu, usageDefaults);
   assert.equal(applyControl(state, { kind: "nature", value: "Adamant" }).nature, "Adamant");
   assert.equal(applyControl(state, { kind: "speedMultiplier", value: "1.5" }).speedMultiplier, 1.5);
   assert.equal(applyControl(state, { kind: "tailwind", value: true }).tailwind, true);
-  assert.equal(applyControl(state, { kind: "paralyzed", value: true }).paralyzed, true);
-  assert.equal(applyControl(state, { kind: "burned", value: true }).burned, true);
+  assert.equal(applyControl(state, { kind: "status", value: "paralysis" }).status, "paralysis");
+  assert.equal(applyControl(state, { kind: "status", value: "burn" }).status, "burn");
 });
 
 test("applyControl returns the same state for an unknown kind", () => {

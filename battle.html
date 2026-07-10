@@ -85,8 +85,17 @@
             <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
             <div class="inline-toggles">
               <label class="inline-toggle"><input id="attacker-tailwind" type="checkbox" /> Tailwind</label>
-              <label class="inline-toggle"><input id="attacker-paralyzed" type="checkbox" /> Paralyzed</label>
-              <label class="inline-toggle"><input id="attacker-burned" type="checkbox" /> Burned</label>
+              <label class="inline-toggle">Status
+                <select id="attacker-status">
+                  <option value="">Healthy</option>
+                  <option value="burn">Burned</option>
+                  <option value="poison">Poisoned</option>
+                  <option value="toxic">Badly Poisoned</option>
+                  <option value="paralysis">Paralyzed</option>
+                  <option value="sleep">Asleep</option>
+                  <option value="freeze">Frozen</option>
+                </select>
+              </label>
             </div>
           </section>
 
@@ -214,8 +223,17 @@
             <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
             <div class="inline-toggles">
               <label class="inline-toggle"><input id="defender-tailwind" type="checkbox" /> Tailwind</label>
-              <label class="inline-toggle"><input id="defender-paralyzed" type="checkbox" /> Paralyzed</label>
-              <label class="inline-toggle"><input id="defender-burned" type="checkbox" /> Burned</label>
+              <label class="inline-toggle">Status
+                <select id="defender-status">
+                  <option value="">Healthy</option>
+                  <option value="burn">Burned</option>
+                  <option value="poison">Poisoned</option>
+                  <option value="toxic">Badly Poisoned</option>
+                  <option value="paralysis">Paralyzed</option>
+                  <option value="sleep">Asleep</option>
+                  <option value="freeze">Frozen</option>
+                </select>
+              </label>
             </div>
           </section>
         </div>

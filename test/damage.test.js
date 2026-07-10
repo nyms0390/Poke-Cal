@@ -91,7 +91,7 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
     attacker: pikachu,
     defender: squirtle,
     move: physical,
-    attackerState: { ...neutralState, burned: true },
+    attackerState: { ...neutralState, status: "burn" },
     defenderState: neutralState,
   });
   const critical = calculateDamage({
@@ -413,7 +413,7 @@ test("applies curated item and ability modifiers", () => {
     ["Adaptability", { ability: { id: "adaptability", name: "Adaptability" } }, special],
     ["Huge Power", { ability: { id: "hugepower", name: "Huge Power" } }, physical],
     ["Pure Power", { ability: { id: "purepower", name: "Pure Power" } }, physical],
-    ["Guts", { ability: { id: "guts", name: "Guts" }, burned: true }, physical],
+    ["Guts", { ability: { id: "guts", name: "Guts" }, status: "burn" }, physical],
     ["Technician", { ability: { id: "technician", name: "Technician" } }, physical],
   ];
 

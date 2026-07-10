@@ -32,7 +32,7 @@ test("applies Tailwind and paralysis to the staged Speed", () => {
     baseSpeed: 90,
     sp: 20,
     tailwind: true,
-    paralyzed: true,
+    status: "paralysis",
   });
 
   assert.equal(result.natureSpeed, 130);
@@ -74,7 +74,7 @@ test("calculates final Speed from the battle calculator state shape", () => {
     stages: { spe: 1 },
     item: { id: "choicescarf", name: "Choice Scarf" },
     tailwind: true,
-    paralyzed: true,
+    status: "paralysis",
   };
 
   assert.equal(finalSpeed(side), 375);

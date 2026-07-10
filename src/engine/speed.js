@@ -6,7 +6,7 @@ export function calculateSpeed({
   nature = "Hardy",
   stage = 0,
   tailwind = false,
-  paralyzed = false,
+  status = "",
   speedMultiplier = 1,
   trickRoom = false,
 }) {
@@ -20,7 +20,7 @@ export function calculateSpeed({
   modifiedSpeed = Math.floor(modifiedSpeed * speedMultiplier);
 
   if (tailwind) modifiedSpeed *= 2;
-  if (paralyzed) modifiedSpeed = Math.floor(modifiedSpeed / 2);
+  if (status === "paralysis") modifiedSpeed = Math.floor(modifiedSpeed / 2);
 
   modifiedSpeed = Math.max(1, Math.min(10000, modifiedSpeed));
 
@@ -46,7 +46,7 @@ export function finalSpeed(state) {
     stage: state.stages?.spe ?? 0,
     speedMultiplier,
     tailwind: state.tailwind,
-    paralyzed: state.paralyzed,
+    status: state.status,
   }).modifiedSpeed;
 }
 

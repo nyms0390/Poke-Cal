@@ -207,7 +207,7 @@ export function calculateDamage({
     ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
     : 1;
   const burnModifier =
-    attackerState.burned && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
+    attackerState.status === "burn" && isPhysical && !hasAbility(attackerState, "guts") ? 0.5 : 1;
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) ? 0.75 : 1;
   if (spreadModifier !== 1) notes.push("Doubles spread move");

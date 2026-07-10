@@ -1,6 +1,6 @@
 # P1-03 — Full status model (replace burned/paralyzed booleans)
 
-Status: TODO
+Status: Done
 Depends on: P0-07
 Phase: 1 (calculator foundations)
 

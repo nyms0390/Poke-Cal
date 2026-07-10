@@ -14,11 +14,10 @@ function clampInteger(value, minimum, maximum) {
 }
 
 // Builds the canonical per-side battle state for `pokemon` from its Champions usage defaults
-// (or Limitless/ranked fallback — see usage-defaults.js). `status`/`teraType`/`currentHpFraction`
-// are added now per ROADMAP.md's side-state shape but are otherwise unused until Phase 1.
-// speedMultiplier/tailwind/paralyzed/burned default to their neutral values here; battle-page.js
-// overrides them from the existing battle-condition controls when seeding a side, so switching
-// Pokémon on one side doesn't reset the other side's battle conditions.
+// (or Limitless/ranked fallback — see usage-defaults.js). speedMultiplier/tailwind/status default
+// to their neutral values here; battle-page.js overrides them from the existing battle-condition
+// controls when seeding a side, so switching Pokémon on one side doesn't reset the other side's
+// battle conditions.
 export function createSideState(pokemon, usageDefaults) {
   return {
     pokemon,
@@ -33,8 +32,6 @@ export function createSideState(pokemon, usageDefaults) {
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeId(usageDefaults.moves[index]?.id)),
     speedMultiplier: 1,
     tailwind: false,
-    paralyzed: false,
-    burned: false,
   };
 }
 
@@ -60,10 +57,8 @@ export function applyControl(state, { kind, stat, index, value }) {
       return { ...state, speedMultiplier: Number(value) };
     case "tailwind":
       return { ...state, tailwind: Boolean(value) };
-    case "paralyzed":
-      return { ...state, paralyzed: Boolean(value) };
-    case "burned":
-      return { ...state, burned: Boolean(value) };
+    case "status":
+      return { ...state, status: value };
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":

@@ -57,10 +57,8 @@ const elements = {
   defenderSpeedMultiplier: document.querySelector("#defender-speed-multiplier"),
   attackerTailwind: document.querySelector("#attacker-tailwind"),
   defenderTailwind: document.querySelector("#defender-tailwind"),
-  attackerParalyzed: document.querySelector("#attacker-paralyzed"),
-  defenderParalyzed: document.querySelector("#defender-paralyzed"),
-  attackerBurned: document.querySelector("#attacker-burned"),
-  defenderBurned: document.querySelector("#defender-burned"),
+  attackerStatus: document.querySelector("#attacker-status"),
+  defenderStatus: document.querySelector("#defender-status"),
   trickRoom: document.querySelector("#trick-room"),
   fieldGravity: document.querySelector("#field-gravity"),
   fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
@@ -89,8 +87,7 @@ const ID_CONTROL_KINDS = {
   item: "item",
   "speed-multiplier": "speedMultiplier",
   tailwind: "tailwind",
-  paralyzed: "paralyzed",
-  burned: "burned",
+  status: "status",
 };
 
 let pokemon = [];
@@ -164,10 +161,8 @@ for (const control of [
   elements.defenderSpeedMultiplier,
   elements.attackerTailwind,
   elements.defenderTailwind,
-  elements.attackerParalyzed,
-  elements.defenderParalyzed,
-  elements.attackerBurned,
-  elements.defenderBurned,
+  elements.attackerStatus,
+  elements.defenderStatus,
   elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
@@ -291,8 +286,7 @@ function seedDamageSide(side, entry) {
   const state = createSideState(entry, defaults);
   state.speedMultiplier = Number(elements[`${side}SpeedMultiplier`]?.value ?? 1);
   state.tailwind = elements[`${side}Tailwind`]?.checked ?? false;
-  state.paralyzed = elements[`${side}Paralyzed`]?.checked ?? false;
-  state.burned = elements[`${side}Burned`]?.checked ?? false;
+  state.status = elements[`${side}Status`]?.value ?? "";
   damageState[side] = state;
 
   elements[`${side}Pokemon`].value = entry.id;
@@ -338,6 +332,7 @@ function syncSideInputs(side) {
   const state = damageState[side];
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
+  elements[`${side}Status`].value = state.status;
   for (const input of elements[`${side}SpInputs`].querySelectorAll("input")) {
     input.value = state.sp[input.dataset.stat] ?? 0;
   }
@@ -382,7 +377,7 @@ function handleDamageControl(event) {
 }
 
 function controlFromTarget(target) {
-  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|paralyzed|burned)$/.exec(
+  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status)$/.exec(
     target.id ?? "",
   );
   if (idMatch) {
@@ -402,7 +397,7 @@ function controlFromTarget(target) {
 }
 
 function controlValue(kind, target) {
-  if (kind === "tailwind" || kind === "paralyzed" || kind === "burned") return target.checked;
+  if (kind === "tailwind") return target.checked;
   if (kind === "ability") return selectedOptionEntry(target, abilityLookup);
   if (kind === "item") return selectedOptionEntry(target, itemLookup);
   return target.value;

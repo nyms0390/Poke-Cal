@@ -116,7 +116,7 @@ export const ABILITY_MODIFIERS = {
       ? { kind: "attack", value: 2, label: ctx.attackerState.ability.name }
       : null,
   guts: (ctx) =>
-    ctx.attackerPerspective && ctx.attackerState.burned && ctx.attackStat === "atk"
+    ctx.attackerPerspective && ctx.attackerState.status === "burn" && ctx.attackStat === "atk"
       ? { kind: "attack", value: 1.5, label: "Guts" }
       : null,
   technician: (ctx) =>
