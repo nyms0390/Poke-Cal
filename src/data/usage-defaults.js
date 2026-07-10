@@ -34,6 +34,7 @@ export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLooku
   const nature = topUsageEntry(usage?.natures)?.name;
   const ability = resolveUsageEntry(topUsageEntry(usage?.abilities), abilityLookup);
   const item = resolveUsageEntry(topUsageEntry(usage?.items), itemLookup);
+  const teraType = topUsageEntry(usage?.teras)?.name ?? "";
   const topMoves = (usage?.moves ?? []).slice(0, 4).map((move) => resolveUsageEntry(move, moveLookup));
 
   return {
@@ -43,6 +44,7 @@ export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLooku
     sp: { ...spread.sp },
     ability,
     item,
+    teraType,
     moves: topMoves.length > 0 ? topMoves : (entry?.moves ?? []).map((id) => ({ id, name: id })),
   };
 }

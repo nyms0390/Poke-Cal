@@ -1116,6 +1116,36 @@ test("uses current defender HP for KO labels while keeping damage percent at max
   assert.equal(koSummary(result), "Guaranteed 1HKO");
 });
 
+test("applies Tera STAB and defender typing", () => {
+  const firePunch = { id: "firepunch", name: "Fire Punch", type: "Fire", category: "Physical", basePower: 75 };
+  const attacker = { id: "grassattacker", name: "Grassattacker", types: ["Grass"], baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 } };
+  const target = { id: "fireflyingtarget", name: "Fireflyingtarget", types: ["Fire", "Flying"], baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 } };
+  const noTera = calculateDamage({ attacker, defender: target, move: firePunch, attackerState: neutralState, defenderState: neutralState });
+  const teraAttacker = calculateDamage({ attacker, defender: target, move: firePunch, attackerState: { ...neutralState, teraType: "Fire" }, defenderState: neutralState });
+  const adaptableTeraAttacker = calculateDamage({ attacker, defender: target, move: firePunch, attackerState: { ...neutralState, teraType: "Fire", ability: { id: "adaptability", name: "Adaptability" } }, defenderState: neutralState });
+  const teraDefender = calculateDamage({ attacker: { ...attacker, types: ["Ground"] }, defender: target, move: { ...firePunch, type: "Ground", id: "earthquake", name: "Earthquake", basePower: 100 }, attackerState: neutralState, defenderState: { ...neutralState, teraType: "Fire" } });
+
+  assert.equal(teraAttacker.notes.includes("Tera (Fire)"), true);
+  assert.equal(teraAttacker.maxDamage > noTera.maxDamage, true);
+  assert.equal(adaptableTeraAttacker.maxDamage > teraAttacker.maxDamage, true);
+  assert.equal(teraDefender.typeMultiplier, 2);
+  assert.equal(teraDefender.notes.includes("Tera (Fire)"), true);
+});
+
+test("supports Tera Blast with Tera typing and the stronger offensive stat", () => {
+  const attacker = { id: "terablastuser", name: "Terablastuser", types: ["Normal"], baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 } };
+  const defender = { ...squirtle, types: ["Normal"] };
+  const teraBlast = { id: "terablast", name: "Tera Blast", type: "Normal", category: "Special", basePower: 80 };
+  const normal = calculateDamage({ attacker, defender, move: teraBlast, attackerState: neutralState, defenderState: neutralState });
+  const tera = calculateDamage({ attacker, defender, move: teraBlast, attackerState: { ...neutralState, teraType: "Fighting" }, defenderState: neutralState });
+
+  assert.equal(normal.supported, true);
+  assert.equal(tera.supported, true);
+  assert.equal(tera.notes.includes("Tera (Fighting)"), true);
+  assert.equal(tera.notes.includes("Tera Blast is Fighting type"), true);
+  assert.equal(tera.maxDamage > normal.maxDamage, true);
+});
+
 test("applies combined Pledge base power and forced STAB", () => {
   const neutralUser = {
     id: "neutraluser",

@@ -1,6 +1,6 @@
 # P1-05 — Terastallization (engine + UI + usage data)
 
-Status: TODO
+Status: Done
 Depends on: P1-03
 Phase: 1 (calculator foundations)
 

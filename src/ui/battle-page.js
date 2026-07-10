@@ -59,6 +59,10 @@ const elements = {
   defenderTailwind: document.querySelector("#defender-tailwind"),
   attackerStatus: document.querySelector("#attacker-status"),
   defenderStatus: document.querySelector("#defender-status"),
+  attackerTera: document.querySelector("#attacker-tera"),
+  defenderTera: document.querySelector("#defender-tera"),
+  attackerTeraType: document.querySelector("#attacker-tera-type"),
+  defenderTeraType: document.querySelector("#defender-tera-type"),
   attackerCurrentHp: document.querySelector("#attacker-current-hp"),
   defenderCurrentHp: document.querySelector("#defender-current-hp"),
   attackerMaxHp: document.querySelector("#attacker-max-hp"),
@@ -83,6 +87,7 @@ const elements = {
 
 const SP_STATS = STAT_KEYS;
 const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
+const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"];
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -94,6 +99,8 @@ const ID_CONTROL_KINDS = {
   "speed-multiplier": "speedMultiplier",
   tailwind: "tailwind",
   status: "status",
+  tera: "tera",
+  "tera-type": "teraType",
 };
 
 let pokemon = [];
@@ -169,6 +176,10 @@ for (const control of [
   elements.defenderTailwind,
   elements.attackerStatus,
   elements.defenderStatus,
+  elements.attackerTera,
+  elements.defenderTera,
+  elements.attackerTeraType,
+  elements.defenderTeraType,
   elements.attackerCurrentHp,
   elements.defenderCurrentHp,
   elements.attackerHpPercent,
@@ -312,6 +323,7 @@ function renderSideSelects(side, defaults) {
   const natureSelect = elements[`${side}Nature`];
   const abilitySelect = elements[`${side}Ability`];
   const itemSelect = elements[`${side}Item`];
+  const teraTypeSelect = elements[`${side}TeraType`];
   const usage = damageState[side].pokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities);
   const rankedItems = rankByUsage(items, usage?.items);
@@ -335,6 +347,11 @@ function renderSideSelects(side, defaults) {
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
   itemSelect.value = damageState[side].item?.id ?? "";
+  teraTypeSelect.replaceChildren(...TYPE_OPTIONS.map((type) => optionElement(type, type)));
+  const defaultTeraType = TYPE_OPTIONS.includes(defaults.teraType)
+    ? defaults.teraType
+    : damageState[side].pokemon.types?.find((type) => TYPE_OPTIONS.includes(type)) ?? TYPE_OPTIONS[0];
+  teraTypeSelect.value = defaultTeraType;
   renderDamageMovePickers(side);
 }
 
@@ -343,6 +360,8 @@ function syncSideInputs(side) {
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
   elements[`${side}Status`].value = state.status;
+  elements[`${side}Tera`].checked = Boolean(state.teraType);
+  if (state.teraType) elements[`${side}TeraType`].value = state.teraType;
   syncCurrentHpInputs(side);
   for (const input of elements[`${side}SpInputs`].querySelectorAll("input")) {
     input.value = state.sp[input.dataset.stat] ?? 0;
@@ -388,12 +407,15 @@ function handleDamageControl(event) {
 }
 
 function controlFromTarget(target) {
-  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status|current-hp|hp-percent)$/.exec(
+  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status|tera|tera-type|current-hp|hp-percent)$/.exec(
     target.id ?? "",
   );
   if (idMatch) {
     const [, side, key] = idMatch;
     const kind = ID_CONTROL_KINDS[key];
+    if (key === "tera") {
+      return { kind, side, value: { enabled: target.checked, type: elements[`${side}TeraType`].value } };
+    }
     if (key === "current-hp" || key === "hp-percent") {
       const maxHp = finalStat(damageState[side], "hp");
       const value = key === "current-hp" ? Number(target.value) / maxHp : Number(target.value) / 100;

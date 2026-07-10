@@ -115,6 +115,10 @@ export const MOVE_EFFECTS = {
   judgment: { moveType: (ctx) => ctx.attackerState.item?.onPlate },
   multiattack: { moveType: (ctx) => ctx.attackerState.item?.onMemory },
   technoblast: { moveType: (ctx) => ctx.attackerState.item?.onDrive },
+  terablast: {
+    moveType: (ctx) => ctx.attackerState.teraType || "Normal",
+    offensiveStat: (ctx) => ctx.attackerState.teraType && ctx.physicalAttack > ctx.specialAttack ? "atk" : "spa",
+  },
   revelationdance: {
     moveType: (ctx) => ctx.attacker.types.find((type) => type !== "Typeless") ?? ctx.move.type,
   },

@@ -41,7 +41,6 @@ const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
   "nightshade",
   "electroball",
-  "terablast",
 ]);
 
 export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}) {
@@ -91,7 +90,8 @@ export function calculateDamage({
 
   const ctx = { move, attacker, defender, attackerState, defenderState, field };
   const moveType = effectiveMoveType(ctx);
-  const typeMultiplier = typeEffectiveness(moveType, defender.types, move, defenderState);
+  const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
+  const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState);
   const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
   const defenderCurrentHp = currentHp(defenderState, defenderHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
@@ -109,7 +109,7 @@ export function calculateDamage({
       defenderHp,
       defenderCurrentHp,
       typeMultiplier,
-      notes: ["Immune"],
+      notes: ["Immune", ...teraNotes(attackerState, defenderState)],
     };
   }
 
@@ -127,7 +127,7 @@ export function calculateDamage({
       defenderHp,
       defenderCurrentHp,
       typeMultiplier,
-      notes: ["Fixed damage"],
+      notes: ["Fixed damage", ...teraNotes(attackerState, defenderState)],
     };
   }
 
@@ -167,7 +167,7 @@ export function calculateDamage({
     ignoreStage: move.ignoreDefensive,
     stagePolicy: criticalStagePolicy("defense", effectiveCritical),
   });
-  const notes = [];
+  const notes = [...teraNotes(attackerState, defenderState)];
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
   let power = dynamicPower ?? move.basePower;
   ctx.power = power;
@@ -181,7 +181,7 @@ export function calculateDamage({
   let attackModifier = 1;
   const powerModifiers = [];
   let damageModifier = 1;
-  let stab = attacker.types.includes(moveType) ? 1.5 : 1;
+  let stab = stabMultiplier(attacker, attackerState, moveType);
   if (pledgeCombo && isPledgeMove(move)) {
     stab = Math.max(stab, 1.5);
     notes.push("Pledge combo STAB");
@@ -252,6 +252,20 @@ export function calculateDamage({
     typeMultiplier,
     notes,
   };
+}
+
+function stabMultiplier(attacker, attackerState, moveType) {
+  const teraType = attackerState.teraType;
+  const originalType = attacker.types.includes(moveType);
+  if (!teraType) return originalType ? 1.5 : 1;
+  if (moveType === teraType) return originalType ? 2 : 1.5;
+  return originalType ? 1.5 : 1;
+}
+
+function teraNotes(attackerState, defenderState) {
+  return [attackerState.teraType, defenderState.teraType]
+    .filter(Boolean)
+    .map((type) => `Tera (${type})`);
 }
 
 export function koSummary({ minDamage, maxDamage, defenderHp, defenderCurrentHp = defenderHp }) {

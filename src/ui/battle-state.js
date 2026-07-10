@@ -67,6 +67,10 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, tailwind: Boolean(value) };
     case "status":
       return { ...state, status: value };
+    case "tera":
+      return { ...state, teraType: value?.enabled ? value.type : "" };
+    case "teraType":
+      return { ...state, teraType: state.teraType ? value : "" };
     case "currentHpFraction":
       return { ...state, currentHpFraction: clampCurrentHpFraction(value, maxHp) };
     case "sp":

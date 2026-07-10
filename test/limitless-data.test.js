@@ -18,6 +18,7 @@ test("aggregates Limitless standings into usage rates", () => {
               ability: "Lightning Rod",
               attacks: ["Fake Out", "Zap Cannon", "Protect", "Focus Blast"],
               nature: "Timid",
+              tera: "Electric",
             },
             {
               id: "sneasler",
@@ -26,6 +27,7 @@ test("aggregates Limitless standings into usage rates", () => {
               ability: "Unburden",
               attacks: ["Fake Out", "Dire Claw", "Close Combat", "Protect"],
               nature: "Jolly",
+              tera: "Water",
             },
           ],
         },
@@ -38,6 +40,7 @@ test("aggregates Limitless standings into usage rates", () => {
               ability: "Lightning Rod",
               attacks: ["Fake Out", "Zap Cannon", "Grass Knot", "Protect"],
               nature: "Modest",
+              tera: "Fire",
             },
           ],
         },
@@ -75,6 +78,10 @@ test("aggregates Limitless standings into usage rates", () => {
       ["protect", 2],
     ],
   );
+  assert.deepEqual(
+    usage.pokemon[0].usage.teras.map(({ id, usageCount, usagePercent }) => [id, usageCount, usagePercent]),
+    [["electric", 1, 50], ["fire", 1, 50]],
+  );
 });
 
 test("merges Limitless usage without keeping old catalog-source metadata", () => {
@@ -90,6 +97,7 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
           items: [{ id: "raichunitey", name: "Raichunite Y", usageCount: 2, usagePercent: 100 }],
           moves: [{ id: "fakeout", name: "Fake Out", usageCount: 2, usagePercent: 100 }],
           natures: [{ id: "timid", name: "Timid", usageCount: 2, usagePercent: 100 }],
+          teras: [{ id: "fire", name: "Fire", usageCount: 2, usagePercent: 100 }],
         },
       },
     ],
@@ -123,6 +131,7 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
   assert.equal(merged.pokemon[1].champions.catalogSource, undefined);
   assert.equal(merged.pokemon[1].champions.usageCount, 2);
   assert.equal(merged.pokemon[1].champions.usage.items[0].id, "raichunitey");
+  assert.equal(merged.pokemon[1].champions.usage.teras[0].id, "fire");
   assert.equal(merged.pokemon[0].champions.source, undefined);
   assert.equal(merged.pokemon[0].champions.usageCount, undefined);
   assert.equal(merged.pokemon[0].champions.catalogSource, undefined);

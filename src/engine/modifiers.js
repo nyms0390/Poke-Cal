@@ -122,7 +122,9 @@ export const ABILITY_MODIFIERS = {
   technician: (ctx) =>
     ctx.attackerPerspective && ctx.move.basePower <= 60 ? { kind: "power", value: 1.5, label: "Technician" } : null,
   adaptability: (ctx) =>
-    ctx.attackerPerspective && ctx.attacker.types.includes(ctx.moveType)
+    ctx.attackerPerspective && (ctx.attackerState.teraType
+      ? ctx.attackerState.teraType === ctx.moveType
+      : ctx.attacker.types.includes(ctx.moveType))
       ? { kind: "stab", value: 2, label: "Adaptability" }
       : null,
   reckless: (ctx) =>

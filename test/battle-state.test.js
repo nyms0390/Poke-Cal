@@ -114,6 +114,14 @@ test("applyControl clamps current HP as a fraction of the supplied maximum", () 
   assert.equal(applyControl(state, { kind: "currentHpFraction", value: 0, maxHp: 110 }).currentHpFraction, 1 / 110);
 });
 
+test("applyControl toggles Tera and keeps the selected Tera type", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const active = applyControl(state, { kind: "tera", value: { enabled: true, type: "Fire" } });
+  assert.equal(active.teraType, "Fire");
+  assert.equal(applyControl(active, { kind: "teraType", value: "Water" }).teraType, "Water");
+  assert.equal(applyControl(active, { kind: "tera", value: { enabled: false, type: "Water" } }).teraType, "");
+});
+
 test("applyControl returns the same state for an unknown kind", () => {
   const state = createSideState(pikachu, usageDefaults);
   assert.equal(applyControl(state, { kind: "unknown", value: "x" }), state);
