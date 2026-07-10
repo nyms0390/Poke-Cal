@@ -322,26 +322,26 @@ test("uses the attacker's current HP as Final Gambit damage", () => {
     attackerState: neutralState,
     defenderState: neutralState,
   });
-  const currentHp = calculateDamage({
+  const reducedHp = calculateDamage({
     attacker: pikachu,
     defender: squirtle,
     move: finalGambit,
-    attackerState: { ...neutralState, currentHp: 83 },
+    attackerState: { ...neutralState, currentHpFraction: 83 / 110 },
     defenderState: neutralState,
   });
   const immune = calculateDamage({
     attacker: pikachu,
     defender: { ...squirtle, types: ["Ghost"] },
     move: finalGambit,
-    attackerState: { ...neutralState, currentHp: 83 },
+    attackerState: { ...neutralState, currentHpFraction: 83 / 110 },
     defenderState: neutralState,
   });
 
   assert.deepEqual([fullHp.minDamage, fullHp.maxDamage], [110, 110]);
   assert.deepEqual([fullHp.minPercent, fullHp.maxPercent], [92.4, 92.4]);
   assert.equal(fullHp.notes.includes("Fixed damage"), true);
-  assert.deepEqual([currentHp.minDamage, currentHp.maxDamage], [83, 83]);
-  assert.deepEqual([currentHp.minPercent, currentHp.maxPercent], [69.7, 69.7]);
+  assert.deepEqual([reducedHp.minDamage, reducedHp.maxDamage], [83, 83]);
+  assert.deepEqual([reducedHp.minPercent, reducedHp.maxPercent], [69.7, 69.7]);
   assert.deepEqual([immune.minDamage, immune.maxDamage, immune.minPercent], [0, 0, 0]);
 });
 
@@ -1059,7 +1059,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     attacker: fireUser,
     defender: neutralTarget,
     move: eruption,
-    attackerState: { ...neutralState, currentHp: 77 },
+    attackerState: { ...neutralState, currentHpFraction: 0.5 },
     defenderState: neutralState,
     field: createField({ format: "singles" }),
   });
@@ -1067,7 +1067,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     attacker: fireUser,
     defender: neutralTarget,
     move: eruption,
-    attackerState: { ...neutralState, currentHp: 1 },
+    attackerState: { ...neutralState, currentHpFraction: 1 / 155 },
     defenderState: neutralState,
     field: createField({ format: "singles" }),
   });
@@ -1075,7 +1075,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     attacker: waterUser,
     defender: neutralTarget,
     move: waterSpout,
-    attackerState: { ...neutralState, currentHp: 77 },
+    attackerState: { ...neutralState, currentHpFraction: 0.5 },
     defenderState: neutralState,
     field: createField({ format: "singles" }),
   });
@@ -1083,21 +1083,37 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
     attacker: dragonUser,
     defender: neutralTarget,
     move: dragonEnergy,
-    attackerState: { ...neutralState, currentHp: 77 },
+    attackerState: { ...neutralState, currentHpFraction: 0.5 },
     defenderState: neutralState,
     field: createField({ format: "singles" }),
   });
 
   assert.equal(fullHp.notes.includes("Eruption power 150"), true);
   assert.deepEqual([fullHp.minDamage, fullHp.maxDamage], [118, 141]);
-  assert.equal(halfHp.notes.includes("Eruption power 74"), true);
-  assert.deepEqual([halfHp.minDamage, halfHp.maxDamage], [58, 70]);
+  assert.equal(halfHp.notes.includes("Eruption power 75"), true);
+  assert.deepEqual([halfHp.minDamage, halfHp.maxDamage], [60, 72]);
   assert.equal(oneHp.notes.includes("Eruption power 1"), true);
   assert.deepEqual([oneHp.minDamage, oneHp.maxDamage], [1, 3]);
-  assert.equal(waterSpoutHalfHp.notes.includes("Water Spout power 74"), true);
-  assert.deepEqual([waterSpoutHalfHp.minDamage, waterSpoutHalfHp.maxDamage], [58, 70]);
-  assert.equal(dragonEnergyHalfHp.notes.includes("Dragon Energy power 74"), true);
-  assert.deepEqual([dragonEnergyHalfHp.minDamage, dragonEnergyHalfHp.maxDamage], [58, 70]);
+  assert.equal(waterSpoutHalfHp.notes.includes("Water Spout power 75"), true);
+  assert.deepEqual([waterSpoutHalfHp.minDamage, waterSpoutHalfHp.maxDamage], [60, 72]);
+  assert.equal(dragonEnergyHalfHp.notes.includes("Dragon Energy power 75"), true);
+  assert.deepEqual([dragonEnergyHalfHp.minDamage, dragonEnergyHalfHp.maxDamage], [60, 72]);
+});
+
+test("uses current defender HP for KO labels while keeping damage percent at max HP", () => {
+  const thunderbolt = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
+  const result = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: thunderbolt,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, currentHpFraction: 0.5 },
+  });
+
+  assert.deepEqual([result.minPercent, result.maxPercent], [72.2, 87.3]);
+  assert.equal(result.defenderHp, 119);
+  assert.equal(result.defenderCurrentHp, 60);
+  assert.equal(koSummary(result), "Guaranteed 1HKO");
 });
 
 test("applies combined Pledge base power and forced STAB", () => {

@@ -72,10 +72,10 @@ function eligibleBeatUpPartyCount(attackerState) {
   return Math.min(6, Math.max(1, Math.floor(count)));
 }
 
-function currentHp(state, maxHp) {
-  const hp = state.currentHp ?? state.currentHP;
-  if (!Number.isFinite(hp)) return maxHp;
-  return Math.min(maxHp, Math.max(1, Math.floor(hp)));
+export function currentHp(state, maxHp) {
+  const fraction = Number(state.currentHpFraction ?? 1);
+  if (!Number.isFinite(fraction)) return maxHp;
+  return Math.min(maxHp, Math.max(1, Math.round(maxHp * fraction)));
 }
 
 function userHpScaledBasePower(basePower, attacker, attackerState, maxHp) {

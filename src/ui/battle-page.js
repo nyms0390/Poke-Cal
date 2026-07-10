@@ -59,6 +59,12 @@ const elements = {
   defenderTailwind: document.querySelector("#defender-tailwind"),
   attackerStatus: document.querySelector("#attacker-status"),
   defenderStatus: document.querySelector("#defender-status"),
+  attackerCurrentHp: document.querySelector("#attacker-current-hp"),
+  defenderCurrentHp: document.querySelector("#defender-current-hp"),
+  attackerMaxHp: document.querySelector("#attacker-max-hp"),
+  defenderMaxHp: document.querySelector("#defender-max-hp"),
+  attackerHpPercent: document.querySelector("#attacker-hp-percent"),
+  defenderHpPercent: document.querySelector("#defender-hp-percent"),
   trickRoom: document.querySelector("#trick-room"),
   fieldGravity: document.querySelector("#field-gravity"),
   fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
@@ -163,6 +169,10 @@ for (const control of [
   elements.defenderTailwind,
   elements.attackerStatus,
   elements.defenderStatus,
+  elements.attackerCurrentHp,
+  elements.defenderCurrentHp,
+  elements.attackerHpPercent,
+  elements.defenderHpPercent,
   elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
@@ -333,6 +343,7 @@ function syncSideInputs(side) {
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
   elements[`${side}Status`].value = state.status;
+  syncCurrentHpInputs(side);
   for (const input of elements[`${side}SpInputs`].querySelectorAll("input")) {
     input.value = state.sp[input.dataset.stat] ?? 0;
   }
@@ -377,12 +388,17 @@ function handleDamageControl(event) {
 }
 
 function controlFromTarget(target) {
-  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status)$/.exec(
+  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status|current-hp|hp-percent)$/.exec(
     target.id ?? "",
   );
   if (idMatch) {
     const [, side, key] = idMatch;
     const kind = ID_CONTROL_KINDS[key];
+    if (key === "current-hp" || key === "hp-percent") {
+      const maxHp = finalStat(damageState[side], "hp");
+      const value = key === "current-hp" ? Number(target.value) / maxHp : Number(target.value) / 100;
+      return { kind: "currentHpFraction", side, value, maxHp };
+    }
     return { kind, side, value: controlValue(kind, target) };
   }
   if (target.dataset.kind === "sp" || target.dataset.kind === "stage") {
@@ -452,6 +468,8 @@ function renderDamage() {
   elements.defenderSummary.textContent = sideSummary(defender);
   renderFinalStats(elements.attackerFinalStats, attacker);
   renderFinalStats(elements.defenderFinalStats, defender);
+  syncCurrentHpInputs("attacker");
+  syncCurrentHpInputs("defender");
 
   const calcInput = buildCalcInput(damageState, {
     ...fieldState,
@@ -496,6 +514,18 @@ function renderFinalStats(container, state) {
       return entry;
     }),
   );
+}
+
+function syncCurrentHpInputs(side) {
+  const state = damageState[side];
+  if (!state?.pokemon) return;
+  const maxHp = finalStat(state, "hp");
+  const currentHp = Math.min(maxHp, Math.max(1, Math.round(maxHp * state.currentHpFraction)));
+  elements[`${side}CurrentHp`].min = "1";
+  elements[`${side}CurrentHp`].max = String(maxHp);
+  elements[`${side}CurrentHp`].value = String(currentHp);
+  elements[`${side}MaxHp`].textContent = `/ ${maxHp}`;
+  elements[`${side}HpPercent`].value = String(Number(((currentHp / maxHp) * 100).toFixed(1)));
 }
 
 function finalStat(state, stat) {

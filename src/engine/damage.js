@@ -5,6 +5,7 @@ import { createField } from "./field.js";
 import {
   moveEffect,
   isPledgeMove,
+  currentHp,
   USER_HP_POWER_MOVE_IDS,
   TARGET_WEIGHT_POWER_MOVE_IDS,
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
@@ -92,8 +93,9 @@ export function calculateDamage({
   const moveType = effectiveMoveType(ctx);
   const typeMultiplier = typeEffectiveness(moveType, defender.types, move, defenderState);
   const defenderHp = calculatePokemonStat(defender, defenderState, "hp");
+  const defenderCurrentHp = currentHp(defenderState, defenderHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
-  ctx.defenderHp = defenderHp;
+  ctx.defenderHp = defenderCurrentHp;
   ctx.attackerMaxHp = attackerMaxHp;
   const effectiveCritical = critical && (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
@@ -105,6 +107,7 @@ export function calculateDamage({
       minPercent: 0,
       maxPercent: 0,
       defenderHp,
+      defenderCurrentHp,
       typeMultiplier,
       notes: ["Immune"],
     };
@@ -122,6 +125,7 @@ export function calculateDamage({
       minPercent: percent(damage, defenderHp),
       maxPercent: percent(damage, defenderHp),
       defenderHp,
+      defenderCurrentHp,
       typeMultiplier,
       notes: ["Fixed damage"],
     };
@@ -244,16 +248,17 @@ export function calculateDamage({
     minPercent: percent(Math.min(...rolls), defenderHp),
     maxPercent: percent(Math.max(...rolls), defenderHp),
     defenderHp,
+    defenderCurrentHp,
     typeMultiplier,
     notes,
   };
 }
 
-export function koSummary({ minDamage, maxDamage, defenderHp }) {
-  if (minDamage >= defenderHp) return "Guaranteed 1HKO";
-  if (maxDamage >= defenderHp) return "Possible 1HKO";
-  if (minDamage * 2 >= defenderHp) return "Guaranteed 2HKO";
-  if (maxDamage * 2 >= defenderHp) return "Possible 2HKO";
+export function koSummary({ minDamage, maxDamage, defenderHp, defenderCurrentHp = defenderHp }) {
+  if (minDamage >= defenderCurrentHp) return "Guaranteed 1HKO";
+  if (maxDamage >= defenderCurrentHp) return "Possible 1HKO";
+  if (minDamage * 2 >= defenderCurrentHp) return "Guaranteed 2HKO";
+  if (maxDamage * 2 >= defenderCurrentHp) return "Possible 2HKO";
   return "3HKO+";
 }
 

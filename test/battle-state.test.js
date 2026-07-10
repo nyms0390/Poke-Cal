@@ -107,6 +107,13 @@ test("applyControl updates nature, speed multiplier, tailwind, and status", () =
   assert.equal(applyControl(state, { kind: "status", value: "burn" }).status, "burn");
 });
 
+test("applyControl clamps current HP as a fraction of the supplied maximum", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  assert.equal(applyControl(state, { kind: "currentHpFraction", value: 0.5, maxHp: 110 }).currentHpFraction, 0.5);
+  assert.equal(applyControl(state, { kind: "currentHpFraction", value: 2, maxHp: 110 }).currentHpFraction, 1);
+  assert.equal(applyControl(state, { kind: "currentHpFraction", value: 0, maxHp: 110 }).currentHpFraction, 1 / 110);
+});
+
 test("applyControl returns the same state for an unknown kind", () => {
   const state = createSideState(pikachu, usageDefaults);
   assert.equal(applyControl(state, { kind: "unknown", value: "x" }), state);

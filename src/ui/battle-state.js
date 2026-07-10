@@ -13,6 +13,14 @@ function clampInteger(value, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, Math.trunc(number)));
 }
 
+function clampCurrentHpFraction(value, maxHp) {
+  const fraction = Number(value);
+  const maximumHp = Number(maxHp);
+  if (!Number.isFinite(fraction)) return 1;
+  const minimum = Number.isFinite(maximumHp) && maximumHp > 0 ? 1 / maximumHp : 0;
+  return Math.max(minimum, Math.min(1, fraction));
+}
+
 // Builds the canonical per-side battle state for `pokemon` from its Champions usage defaults
 // (or Limitless/ranked fallback — see usage-defaults.js). speedMultiplier/tailwind/status default
 // to their neutral values here; battle-page.js overrides them from the existing battle-condition
@@ -41,7 +49,7 @@ export function createSideState(pokemon, usageDefaults) {
 // a <select>'s chosen option against the ability/item lookup requires the DOM element itself
 // (to read its selected option's display text as a fallback name), so that resolution stays in
 // battle-page.js and only the resolved value crosses into this pure function.
-export function applyControl(state, { kind, stat, index, value }) {
+export function applyControl(state, { kind, stat, index, value, maxHp }) {
   switch (kind) {
     case "spread": {
       const spread = parseUsageSpread(value);
@@ -59,6 +67,8 @@ export function applyControl(state, { kind, stat, index, value }) {
       return { ...state, tailwind: Boolean(value) };
     case "status":
       return { ...state, status: value };
+    case "currentHpFraction":
+      return { ...state, currentHpFraction: clampCurrentHpFraction(value, maxHp) };
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":
