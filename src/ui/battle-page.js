@@ -17,6 +17,7 @@ import {
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove } from "../engine/move-effects.js";
 import { resultDescription } from "../engine/result-text.js";
+import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -82,6 +83,13 @@ const elements = {
     'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], select[data-kind="rivalry"]',
   ),
   damageCritical: document.querySelector("#damage-critical"),
+  setPaste: document.querySelector("#set-paste"),
+  setPasteStatus: document.querySelector("#set-paste-status"),
+  setPasteWarnings: document.querySelector("#set-paste-warnings"),
+  importAttackerSet: document.querySelector("#import-attacker-set"),
+  importDefenderSet: document.querySelector("#import-defender-set"),
+  exportAttackerSet: document.querySelector("#export-attacker-set"),
+  exportDefenderSet: document.querySelector("#export-defender-set"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
   attackerFinalStats: document.querySelector("#attacker-final-stats"),
@@ -111,10 +119,12 @@ const ID_CONTROL_KINDS = {
 };
 
 let pokemon = [];
+let abilities = [];
 let abilityLookup = new Map();
 let itemLookup = new Map();
 let moveLookup = new Map();
 let items = [];
+let moves = [];
 let damageState = {
   attacker: null,
   defender: null,
@@ -161,10 +171,12 @@ async function initialize() {
   });
   if (!data) return;
   pokemon = data.pokemon;
+  abilities = data.abilities;
   abilityLookup = data.abilityLookup;
   itemLookup = data.itemLookup;
   moveLookup = data.moveLookup;
   items = data.items;
+  moves = data.moves;
   renderDamageShell();
 }
 
@@ -210,6 +222,11 @@ for (const control of [
 for (const control of elements.assumptionInputs) {
   control.addEventListener("input", handleDamageControl);
 }
+
+elements.importAttackerSet.addEventListener("click", () => importSetPaste("attacker"));
+elements.importDefenderSet.addEventListener("click", () => importSetPaste("defender"));
+elements.exportAttackerSet.addEventListener("click", () => exportSetPaste("attacker"));
+elements.exportDefenderSet.addEventListener("click", () => exportSetPaste("defender"));
 
 for (const side of ["attacker", "defender"]) {
   const input = elements[`${side}PokemonSearch`];
@@ -469,6 +486,54 @@ function syncRadioGroup(inputs, value) {
   for (const input of inputs) {
     input.checked = input.value === value;
   }
+}
+
+function importSetPaste(side) {
+  const parsed = parseSetPaste(elements.setPaste.value, setPasteCatalogs());
+  if (parsed.pokemon) seedDamageSide(side, parsed.pokemon);
+  const state = damageState[side];
+  if (state) {
+    damageState[side] = {
+      ...state,
+      ability: parsed.ability ?? state.ability,
+      item: parsed.item ?? state.item,
+      teraType: parsed.teraType || state.teraType,
+      nature: parsed.nature || state.nature,
+      sp: parsed.hasSpread ? parsed.sp : state.sp,
+      selectedMoveIds: parsed.selectedMoveIds.length
+        ? [0, 1, 2, 3].map((index) => parsed.selectedMoveIds[index] ?? "")
+        : state.selectedMoveIds,
+    };
+    renderSideSelects(side, { spreadName: "", teraType: damageState[side].teraType });
+    syncSideInputs(side);
+    applyAbilityImpliedField(damageState[side].ability);
+    applyAbilityImpliedStages();
+    syncSideInputs("attacker");
+    syncSideInputs("defender");
+    renderDamage();
+  }
+  setSetPasteStatus(parsed.warnings);
+}
+
+function exportSetPaste(side) {
+  const state = damageState[side];
+  if (!state) return;
+  const text = formatSetPaste(state, { moves: damageMovesForSide(side) });
+  elements.setPaste.value = text;
+  navigator.clipboard?.writeText(text);
+  setSetPasteStatus([]);
+}
+
+function setPasteCatalogs() {
+  return { pokemon, abilities, items, moves };
+}
+
+function setSetPasteStatus(warnings) {
+  elements.setPasteStatus.textContent = warnings.length
+    ? `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`
+    : "Ready";
+  elements.setPasteWarnings.hidden = warnings.length === 0;
+  elements.setPasteWarnings.textContent = warnings.join(" · ");
 }
 
 function controlFromTarget(target) {

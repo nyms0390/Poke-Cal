@@ -639,6 +639,61 @@ select:focus {
     #080d1c;
 }
 
+.set-paste-panel {
+  display: grid;
+  gap: 12px;
+  padding: 18px clamp(18px, 4vw, 42px);
+  border-top: 1px solid #18243e;
+  background: #080d1c;
+}
+
+.set-paste-panel textarea {
+  width: 100%;
+  min-height: 170px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #334267;
+  border-radius: 4px;
+  outline: none;
+  background: #080d1d;
+  color: #f4f7ff;
+  font: 0.9rem/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.set-paste-panel textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgb(25 230 255 / 12%);
+}
+
+.set-paste-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.set-paste-actions button {
+  padding: 9px 12px;
+  border: 1px solid #344769;
+  border-radius: 4px;
+  background: #111a33;
+  color: #dbe3f7;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.set-paste-actions button:hover,
+.set-paste-actions button:focus-visible {
+  border-color: #19e6ff;
+  color: #f4f7ff;
+}
+
+.set-paste-warnings {
+  margin: 0;
+  color: #ffd166;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
 .field-card {
   display: grid;
   align-content: start;

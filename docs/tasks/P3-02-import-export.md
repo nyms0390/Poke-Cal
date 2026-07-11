@@ -1,6 +1,6 @@
 # P3-02 — Set import/export (paste format)
 
-Status: TODO
+Status: Done
 Depends on: P1-05
 Phase: 3 (calculator UX parity)
 

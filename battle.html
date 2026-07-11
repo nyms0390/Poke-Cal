@@ -302,6 +302,26 @@
           </section>
         </div>
 
+        <section class="set-paste-panel" aria-label="Set import and export">
+          <div class="panel-heading">
+            <span>Set paste</span>
+            <strong id="set-paste-status">—</strong>
+          </div>
+          <textarea
+            id="set-paste"
+            rows="9"
+            spellcheck="false"
+            placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;Tera Type: Electric&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
+          ></textarea>
+          <div class="set-paste-actions">
+            <button id="import-attacker-set" type="button">Import left</button>
+            <button id="import-defender-set" type="button">Import right</button>
+            <button id="export-attacker-set" type="button">Export left</button>
+            <button id="export-defender-set" type="button">Export right</button>
+          </div>
+          <p id="set-paste-warnings" class="set-paste-warnings" hidden></p>
+        </section>
+
         <fieldset class="damage-field">
           <legend>Battle conditions</legend>
           <label class="inline-toggle"><input id="damage-critical" type="checkbox" /> Critical hit</label>
