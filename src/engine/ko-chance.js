@@ -24,10 +24,11 @@ export function convolveDistributions(distributions) {
 
 /**
  * Calculate exact KO probabilities from either uniform damage rolls or a weighted
- * full-move damage distribution. hitsPerTurn is for callers whose input represents
+ * full-move damage distribution. firstRollDistribution can model a one-time first-turn
+ * effect such as Sturdy or Ice Face. hitsPerTurn is for callers whose input represents
  * one hit rather than one complete move.
  */
-export function koChance({ rolls, rollDistribution, targetHp, maxHits = 5, hitsPerTurn = 1 }) {
+export function koChance({ rolls, rollDistribution, firstRollDistribution, targetHp, maxHits = 5, hitsPerTurn = 1 }) {
   const moveDistribution = Array.isArray(rollDistribution) && rollDistribution.length > 0
     ? rollDistribution
     : (rolls ?? []).map((damage) => ({ damage, chance: 1 / rolls.length }));
@@ -36,17 +37,22 @@ export function koChance({ rolls, rollDistribution, targetHp, maxHits = 5, hitsP
   let totals = new Map([[0, 1]]);
   const results = [];
   const rollsPerTurn = Math.max(1, Math.floor(hitsPerTurn));
+  let convolutionCount = 0;
 
   for (let hits = 1; hits <= maxHits; hits += 1) {
     for (let roll = 0; roll < rollsPerTurn; roll += 1) {
+      const activeDistribution = convolutionCount === 0 && firstRollDistribution?.length
+        ? firstRollDistribution
+        : moveDistribution;
       const next = new Map();
       for (const [total, probability] of totals) {
-        for (const entry of moveDistribution) {
+        for (const entry of activeDistribution) {
           const nextTotal = total + entry.damage;
           next.set(nextTotal, (next.get(nextTotal) ?? 0) + probability * entry.chance);
         }
       }
       totals = next;
+      convolutionCount += 1;
     }
 
     const chance = normalizeChance([...totals]

@@ -1,11 +1,17 @@
 import { formatMovePriority } from "../data/catalog.js";
 import { finalSpeed } from "./speed.js";
 
-export function compareMoveOrder({ attacker, defender, attackerMove, defenderMove, trickRoom = false }) {
+export function compareMoveOrder({ attacker, defender, attackerMove, defenderMove, field = {}, trickRoom = field.trickRoom ?? false }) {
   const attackerPriority = Number(attackerMove?.priority ?? 0);
   const defenderPriority = Number(defenderMove?.priority ?? 0);
-  const attackerSpeed = finalSpeed(attacker);
-  const defenderSpeed = finalSpeed(defender);
+  const neutralizingGasActive = hasAbility(attacker, "neutralizinggas") || hasAbility(defender, "neutralizinggas");
+  const weatherSuppressed = !neutralizingGasActive && (
+    hasWeatherSuppressingAbility(attacker) || hasWeatherSuppressingAbility(defender)
+  );
+  const speedField = weatherSuppressed ? { ...field, weather: "" } : field;
+  const speedOptions = { suppressAbility: neutralizingGasActive };
+  const attackerSpeed = finalSpeed(attacker, speedField, speedOptions);
+  const defenderSpeed = finalSpeed(defender, speedField, speedOptions);
 
   if (attackerPriority !== defenderPriority) {
     const firstSide = attackerPriority > defenderPriority ? "attacker" : "defender";
@@ -44,6 +50,18 @@ export function compareMoveOrder({ attacker, defender, attackerMove, defenderMov
       ? `${sideName(firstSide)} moves first in Trick Room (${Math.min(attackerSpeed, defenderSpeed)} Speed).`
       : `${sideName(firstSide)} moves first by Speed (${Math.max(attackerSpeed, defenderSpeed)} Speed).`,
   };
+}
+
+function hasAbility(state, abilityId) {
+  return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
+}
+
+function hasWeatherSuppressingAbility(state) {
+  return ["cloudnine", "airlock"].includes(normalizeId(state?.ability?.id ?? state?.ability?.name));
+}
+
+function normalizeId(value) {
+  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function sideName(side) {

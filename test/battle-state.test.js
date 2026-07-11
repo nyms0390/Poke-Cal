@@ -45,6 +45,7 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.equal(state.switchedIn, false);
   assert.equal(state.faintedAllyCount, 0);
   assert.equal(state.boosterEnergy, false);
+  assert.equal(state.iceFaceIntact, true);
   assert.equal(state.speedMultiplier, 1);
   assert.equal(state.tailwind, false);
 });
@@ -167,6 +168,7 @@ test("applyControl stores offensive ability assumptions", () => {
   assert.equal(applyControl(state, { kind: "switchedIn", value: true }).switchedIn, true);
   assert.equal(applyControl(state, { kind: "faintedAllyCount", value: "9" }).faintedAllyCount, 5);
   assert.equal(applyControl(state, { kind: "boosterEnergy", value: true }).boosterEnergy, true);
+  assert.equal(applyControl(state, { kind: "iceFaceIntact", value: false }).iceFaceIntact, false);
 });
 
 test("applyControl returns the same state for an unknown kind", () => {

@@ -69,3 +69,55 @@ test("does not double-count Choice Scarf and the equivalent manual speed modifie
   assert.equal(finalSpeed({ ...scarfedSide, speedMultiplier: 1 }), 180);
   assert.equal(finalSpeed({ ...scarfedSide, speedMultiplier: 1.5 }), 180);
 });
+
+test("uses field-activated Paradox Speed for move order and suppresses it with Neutralizing Gas", () => {
+  const paradoxSide = {
+    pokemon: { baseStats: { atk: 50, def: 50, spa: 50, spd: 50, spe: 100 } },
+    sp: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+    nature: "Hardy",
+    stages: { spe: 0 },
+    ability: { id: "protosynthesis", name: "Protosynthesis" },
+  };
+  const slightlyFasterSide = {
+    pokemon: { baseStats: { spe: 130 } },
+    sp: { spe: 0 },
+    nature: "Hardy",
+    stages: { spe: 0 },
+  };
+  const moves = {
+    attackerMove: { name: "Tackle", priority: 0 },
+    defenderMove: { name: "Water Gun", priority: 0 },
+  };
+
+  const inSun = compareMoveOrder({
+    attacker: paradoxSide,
+    defender: slightlyFasterSide,
+    ...moves,
+    field: { weather: "SunnyDay" },
+  });
+  const suppressed = compareMoveOrder({
+    attacker: paradoxSide,
+    defender: {
+      ...slightlyFasterSide,
+      ability: { id: "neutralizinggas", name: "Neutralizing Gas" },
+    },
+    ...moves,
+    field: { weather: "SunnyDay" },
+  });
+  const weatherSuppressed = compareMoveOrder({
+    attacker: paradoxSide,
+    defender: {
+      ...slightlyFasterSide,
+      ability: { id: "cloudnine", name: "Cloud Nine" },
+    },
+    ...moves,
+    field: { weather: "SunnyDay" },
+  });
+
+  assert.equal(inSun.firstSide, "attacker");
+  assert.equal(inSun.attackerSpeed, 180);
+  assert.equal(suppressed.firstSide, "defender");
+  assert.equal(suppressed.attackerSpeed, 120);
+  assert.equal(weatherSuppressed.firstSide, "defender");
+  assert.equal(weatherSuppressed.attackerSpeed, 120);
+});

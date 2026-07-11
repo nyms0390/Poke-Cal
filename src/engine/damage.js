@@ -126,6 +126,10 @@ export function calculateDamage({
     weather: weatherSuppressed ? "" : field.weather,
     weatherSuppressed,
   };
+  const megaSolActive = !suppressAttackerAbility && !weatherSuppressed && hasAbility(attackerState, "megasol");
+  const moveField = megaSolActive
+    ? { ...effectiveField, weather: "SunnyDay", megaSolActive: true }
+    : effectiveField;
   const { format: battleFormat, pledgeCombo = false } = effectiveField;
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
@@ -136,7 +140,8 @@ export function calculateDamage({
     defender,
     attackerState,
     defenderState,
-    field: effectiveField,
+    field: moveField,
+    ambientField: effectiveField,
     moveOptions,
     suppressAttackerAbility,
     suppressDefenderAbility,
@@ -185,27 +190,23 @@ export function calculateDamage({
     };
   }
 
-  if (!suppressDefenderAbility && move.category === "Physical" && hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false) {
-    const rolls = DAMAGE_ROLLS.map(() => 0);
-    return {
-      supported: true,
-      rolls,
-      minDamage: 0,
-      maxDamage: 0,
-      minPercent: 0,
-      maxPercent: 0,
-      defenderHp: defenderMaxHp,
-      defenderCurrentHp,
-      typeMultiplier,
-      ko: koSummaryForRolls(rolls, defenderCurrentHp),
-      notes: ["Ice Face intact", ...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)],
-    };
-  }
+  const iceFaceActive = !suppressDefenderAbility && move.category === "Physical" &&
+    hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false;
+  const sturdyActive = isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
 
   const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
-    const damage = Math.max(0, fixedDamage);
+    const rawDamage = Math.max(0, fixedDamage);
+    const damage = iceFaceActive ? 0 : rawDamage;
     const rolls = DAMAGE_ROLLS.map(() => damage);
+    const baseDistribution = [{ damage: rawDamage, chance: 1 }];
+    const firstDistribution = [{
+      damage: iceFaceActive ? 0 : sturdyActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
+      chance: 1,
+    }];
+    const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
+      ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
+      : null;
     return {
       supported: true,
       rolls,
@@ -216,9 +217,15 @@ export function calculateDamage({
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
-      ko: sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) ??
-        koSummaryForRolls(rolls, defenderCurrentHp),
-      notes: ["Fixed damage", ...fieldNotes(effectiveField, attackerState, defenderState), moveEffect(moveId).note?.(ctx), ...teraNotes(attackerState, defenderState)].filter(Boolean),
+      ko: sturdyText ?? koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
+      notes: [
+        "Fixed damage",
+        iceFaceActive ? "Ice Face intact (first hit negated)" : null,
+        megaSolActive ? "Mega Sol treats this move as Sunny Day" : null,
+        ...fieldNotes(effectiveField, attackerState, defenderState),
+        moveEffect(moveId).note?.(ctx),
+        ...teraNotes(attackerState, defenderState),
+      ].filter(Boolean),
     };
   }
 
@@ -272,6 +279,8 @@ export function calculateDamage({
     ...forecastNotes(defender, defenderState, defenderTypes, suppressDefenderAbility),
     ...teraNotes(attackerState, defenderState),
   ];
+  if (iceFaceActive) notes.push("Ice Face intact (first hit negated)");
+  if (megaSolActive) notes.push("Mega Sol treats this move as Sunny Day");
   if (teraShell !== null) notes.push("Tera Shell");
   if (attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
   if (attackerHasUnaware || defenderHasUnaware) notes.push("Unaware");
@@ -364,18 +373,33 @@ export function calculateDamage({
     hitDamage = Math.floor(hitDamage * damageModifier);
     return Math.max(1, hitDamage);
   };
-  const damageForRoll = (roll) =>
-    hitPowers.reduce((total, hitPower) => total + damageForHit(hitPower, roll), 0);
-  const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.min);
-  const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRoll(roll) * hitCounts.max);
-  const rollDistribution = hitCounts.min === hitCounts.max
+  const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {
+    const powers = hitPowers.length > 1
+      ? hitPowers
+      : Array.from({ length: hitCount }, () => hitPowers[0]);
+    return powers.reduce((total, hitPower, index) =>
+      total + (negateFirstHit && index === 0 ? 0 : damageForHit(hitPower, roll)), 0);
+  };
+  const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, iceFaceActive));
+  const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, iceFaceActive));
+  const baseRollDistribution = hitCounts.min === hitCounts.max
     ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit)
     : null;
+  const firstRollDistribution = hitCounts.min === hitCounts.max && (iceFaceActive || sturdyActive)
+    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit, {
+      negateFirstHit: iceFaceActive,
+      firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
+    })
+    : baseRollDistribution;
   const rolls = hitCounts.min === hitCounts.max && hitCounts.min > 1
-    ? rollDistribution.map(({ damage }) => damage)
+    ? firstRollDistribution.map(({ damage }) => damage)
     : hitCounts.min === hitCounts.max
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
+  const actualHitCount = hitPowers.length > 1 ? hitPowers.length : hitCounts.min;
+  const sturdyText = sturdyActive && actualHitCount === 1 && Math.min(...minHitRolls) >= defenderMaxHp
+    ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
+    : null;
 
   return {
     supported: true,
@@ -387,9 +411,9 @@ export function calculateDamage({
     defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
-    ko: sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) ??
-      (rollDistribution
-        ? koSummaryForRolls(rolls, defenderCurrentHp, rollDistribution)
+    ko: sturdyText ??
+      (baseRollDistribution
+        ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution)
         : unavailableKoSummary("KO chance unavailable for variable hit count")),
     notes,
   };
@@ -423,15 +447,12 @@ function teraShellTypeMultiplier(typeMultiplier, defenderState, suppressDefender
   return 0.5;
 }
 
-function sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
-  if (suppressDefenderAbility || !hasAbility(defenderState, "sturdy")) return null;
-  if (defenderCurrentHp !== defenderMaxHp) return null;
-  if (Math.min(...rolls) < defenderMaxHp) return null;
-  return { hits: null, chance: 0, text: "survives with Sturdy at full HP" };
+function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
+  return !suppressDefenderAbility && hasAbility(defenderState, "sturdy") && defenderCurrentHp === defenderMaxHp;
 }
 
-function koSummaryForRolls(rolls, targetHp, rollDistribution) {
-  const chances = koChance({ rolls, rollDistribution, targetHp });
+function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribution) {
+  const chances = koChance({ rolls, rollDistribution, firstRollDistribution, targetHp });
   const firstKo = chances.find(({ chance }) => chance > 0);
   return {
     hits: firstKo?.hits ?? null,
@@ -444,12 +465,16 @@ function unavailableKoSummary(text) {
   return { hits: null, chance: null, text };
 }
 
-function fullMoveDistribution(hitPowers, hitCount, damageForHit) {
+function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHit = false, firstHitCap = null } = {}) {
   const powers = hitPowers.length > 1
     ? hitPowers
     : Array.from({ length: hitCount }, () => hitPowers[0]);
-  return convolveDistributions(powers.map((power) => DAMAGE_ROLLS.map((roll) => ({
-    damage: damageForHit(power, roll),
+  return convolveDistributions(powers.map((power, index) => DAMAGE_ROLLS.map((roll) => ({
+    damage: negateFirstHit && index === 0
+      ? 0
+      : index === 0 && Number.isFinite(firstHitCap)
+        ? Math.min(damageForHit(power, roll), firstHitCap)
+        : damageForHit(power, roll),
     chance: 1 / DAMAGE_ROLLS.length,
   }))));
 }

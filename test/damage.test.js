@@ -1537,7 +1537,7 @@ test("maps field-implying abilities to the UI field values", () => {
   assert.deepEqual(impliedField("Snow Warning"), { weather: "Snowscape" });
   assert.deepEqual(impliedField("Sand Spit"), { weather: "Sandstorm" });
   assert.deepEqual(impliedField("Hadron Engine"), { terrain: "Electric Terrain" });
-  assert.deepEqual(impliedField("Mega Sol"), { weather: "SunnyDay" });
+  assert.deepEqual(impliedField("Mega Sol"), {});
   assert.deepEqual(impliedField("Levitate"), {});
 });
 
@@ -4839,7 +4839,7 @@ test("P2-07 applies Sturdy, Ice Face, and Heavy Metal defensive mechanics", () =
   assert.equal(sturdy.ko.text, "survives with Sturdy at full HP");
   assert.notEqual(chippedSturdy.ko.text, "survives with Sturdy at full HP");
   assert.deepEqual([iceFace.minDamage, iceFace.maxDamage], [0, 0]);
-  assert.equal(iceFace.notes.includes("Ice Face intact"), true);
+  assert.equal(iceFace.notes.includes("Ice Face intact (first hit negated)"), true);
   assert.equal(brokenIceFace.minDamage > 0, true);
   assert.equal(lightTargetLowKick.notes.includes("Low Kick power 40"), true);
   assert.equal(heavyMetalLowKick.notes.includes("Low Kick power 60"), true);
@@ -5136,4 +5136,149 @@ test("P2-08 applies Forecast typing and Parental Bond second-hit damage", () => 
   assert.equal(defenderForecast.notes.includes("Forecast Fire type"), true);
   assert.equal(parentalBond.notes.includes("Parental Bond"), true);
   assert.equal(parentalBond.notes.includes("Mega Punch hits 2 times at 80/20"), true);
+});
+
+test("Sturdy removes partial single-hit OHKO odds without hiding the raw damage range", () => {
+  const attacker = {
+    name: "Sturdy breaker",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const defender = {
+    name: "Sturdy target",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const move = { id: "sturdyedge", name: "Sturdy Edge", type: "Normal", category: "Physical", basePower: 194 };
+  const result = calculateDamage({
+    attacker,
+    defender,
+    move,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "sturdy", name: "Sturdy" } },
+  });
+
+  assert.deepEqual([result.minDamage, result.maxDamage, result.defenderHp], [132, 156, 155]);
+  assert.equal(result.ko.text.includes("OHKO"), false);
+});
+
+test("Ice Face negates only the first physical hit", () => {
+  const attacker = {
+    name: "Ice Face breaker",
+    types: ["Grass"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const defender = {
+    name: "Ice Face target",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const bulletSeed = { id: "bulletseed", name: "Bullet Seed", type: "Grass", category: "Physical", basePower: 25 };
+  const intact = calculateDamage({
+    attacker,
+    defender,
+    move: bulletSeed,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "iceface", name: "Ice Face" }, iceFaceIntact: true },
+    moveOptions: { hitCount: 3 },
+  });
+  const broken = calculateDamage({
+    attacker,
+    defender,
+    move: bulletSeed,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "iceface", name: "Ice Face" }, iceFaceIntact: false },
+    moveOptions: { hitCount: 3 },
+  });
+
+  assert.equal(intact.minDamage > 0, true);
+  assert.equal(intact.maxDamage < broken.maxDamage, true);
+  assert.equal(intact.notes.includes("Ice Face intact (first hit negated)"), true);
+});
+
+test("Mega Sol applies Sunny Day behavior only to its holder's move", () => {
+  const megaSolUser = {
+    name: "Mega Sol user",
+    types: ["Fire"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 80 },
+  };
+  const target = {
+    name: "Mega Sol target",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 100, spd: 80, spe: 80 },
+  };
+  const fireMove = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const waterMove = { id: "surf", name: "Surf", type: "Water", category: "Special", basePower: 90 };
+  const megaSolState = { ...neutralState, ability: { id: "megasol", name: "Mega Sol" } };
+
+  const holderMove = calculateDamage({
+    attacker: megaSolUser,
+    defender: target,
+    move: fireMove,
+    attackerState: megaSolState,
+    defenderState: neutralState,
+  });
+  const explicitSun = calculateDamage({
+    attacker: megaSolUser,
+    defender: target,
+    move: fireMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const opponentMove = calculateDamage({
+    attacker: target,
+    defender: megaSolUser,
+    move: waterMove,
+    attackerState: neutralState,
+    defenderState: megaSolState,
+  });
+  const neutralOpponentMove = calculateDamage({
+    attacker: target,
+    defender: megaSolUser,
+    move: waterMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.deepEqual([holderMove.minDamage, holderMove.maxDamage], [explicitSun.minDamage, explicitSun.maxDamage]);
+  assert.deepEqual(
+    [opponentMove.minDamage, opponentMove.maxDamage],
+    [neutralOpponentMove.minDamage, neutralOpponentMove.maxDamage],
+  );
+  assert.deepEqual(impliedField("Mega Sol"), {});
+});
+
+test("Neutralizing Gas suppresses Paradox Speed in speed-scaled move power", () => {
+  const attacker = {
+    name: "Paradox attacker",
+    types: ["Electric"],
+    baseStats: { hp: 80, atk: 50, def: 50, spa: 100, spd: 50, spe: 200 },
+  };
+  const defender = {
+    name: "Gas defender",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 90 },
+  };
+  const electroBall = { id: "electroball", name: "Electro Ball", type: "Electric", category: "Special", basePower: 0 };
+  const attackerState = {
+    ...neutralState,
+    pokemon: attacker,
+    ability: { id: "protosynthesis", name: "Protosynthesis" },
+  };
+  const defenderState = {
+    ...neutralState,
+    pokemon: defender,
+    ability: { id: "neutralizinggas", name: "Neutralizing Gas" },
+  };
+  const result = calculateDamage({
+    attacker,
+    defender,
+    move: electroBall,
+    attackerState,
+    defenderState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+
+  assert.equal(result.notes.includes("Electro Ball power 80"), true);
 });

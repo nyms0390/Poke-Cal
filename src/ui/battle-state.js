@@ -46,6 +46,7 @@ export function createSideState(pokemon, usageDefaults) {
     switchedIn: false,
     faintedAllyCount: 0,
     boosterEnergy: false,
+    iceFaceIntact: true,
     speedMultiplier: 1,
     tailwind: false,
   };
@@ -91,6 +92,8 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, faintedAllyCount: clampInteger(value, 0, 5) };
     case "boosterEnergy":
       return { ...state, boosterEnergy: Boolean(value) };
+    case "iceFaceIntact":
+      return { ...state, iceFaceIntact: Boolean(value) };
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":

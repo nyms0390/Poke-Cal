@@ -41,17 +41,17 @@ export function calculateSpeed({
   };
 }
 
-export function finalSpeed(state) {
-  return finalSpeedInField(state);
+export function finalSpeed(state, field = {}, options = {}) {
+  return finalSpeedInField(state, field, options);
 }
 
-export function finalSpeedInField(state, field = {}) {
+export function finalSpeedInField(state, field = {}, { suppressAbility = false } = {}) {
   if (!state?.pokemon) return 0;
   const manualSpeedMultiplier = Number(state.speedMultiplier ?? 1);
   const speedMultiplier = hasItem(state, "choicescarf") && manualSpeedMultiplier !== 1.5
     ? manualSpeedMultiplier * 1.5
     : manualSpeedMultiplier;
-  const paradox = paradoxBoost(state.pokemon, state, field);
+  const paradox = paradoxBoost(state.pokemon, state, field, { suppressAbility });
 
   const speed = calculateSpeed({
     baseSpeed: state.pokemon.baseStats?.spe ?? state.pokemon.baseSpeed,
@@ -65,7 +65,8 @@ export function finalSpeedInField(state, field = {}) {
   return paradox?.stat === "spe" ? Math.floor(speed * paradox.value) : speed;
 }
 
-export function paradoxBoost(pokemon, state = {}, field = {}) {
+export function paradoxBoost(pokemon, state = {}, field = {}, { suppressAbility = false } = {}) {
+  if (suppressAbility) return null;
   const abilityId = normalizeId(state.ability?.id ?? state.ability?.name);
   const abilityName = state.ability?.name ?? state.ability?.id;
   const boosterEnergy = Boolean(state.boosterEnergy) || hasItem(state, "boosterenergy");

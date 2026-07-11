@@ -78,7 +78,7 @@ const elements = {
   fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   assumptionInputs: document.querySelectorAll(
-    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], select[data-kind="rivalry"]',
+    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], select[data-kind="rivalry"]',
   ),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
@@ -522,6 +522,9 @@ function controlFromTarget(target) {
   if (target.dataset.kind === "booster-energy") {
     return { kind: "boosterEnergy", side: target.dataset.side, value: target.checked };
   }
+  if (target.dataset.kind === "ice-face-intact") {
+    return { kind: "iceFaceIntact", side: target.dataset.side, value: target.checked };
+  }
   return null;
 }
 
@@ -639,8 +642,9 @@ function renderDamage() {
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
-  renderFinalStats(elements.attackerFinalStats, attacker);
-  renderFinalStats(elements.defenderFinalStats, defender);
+  const speedContext = finalSpeedContext();
+  renderFinalStats(elements.attackerFinalStats, attacker, speedContext.field, speedContext.options);
+  renderFinalStats(elements.defenderFinalStats, defender, speedContext.field, speedContext.options);
   syncCurrentHpInputs("attacker");
   syncCurrentHpInputs("defender");
 
@@ -650,10 +654,6 @@ function renderDamage() {
   });
 
   renderMoveOrder(calcInput.field);
-  elements.speedSummary.textContent =
-    `${attacker.pokemon.name} Speed ${finalSpeed(attacker)} vs ` +
-    `${defender.pokemon.name} Speed ${finalSpeed(defender)}`;
-
   const attackerRows = selectedDamageMoves("attacker").map(({ move, index }, rowIndex) =>
     renderDamageCard(move, "attacker", rowIndex === 0, calcInput, moveOptionsForDamage("attacker", index, move)),
   );
@@ -686,6 +686,7 @@ function targetMovedForMove(side, index, move) {
     attackerMove: move,
     defenderMove: opponentMove,
     trickRoom: fieldState.trickRoom,
+    field: fieldState,
   });
   return order.firstSide === "defender";
 }
@@ -700,7 +701,7 @@ function moveOptionsForDamage(side, index, move) {
   };
 }
 
-function renderFinalStats(container, state) {
+function renderFinalStats(container, state, field = {}, speedOptions = {}) {
   const nature = NATURES[state.nature] ?? {};
   container.replaceChildren(
     ...SP_STATS.map((stat) => {
@@ -711,7 +712,7 @@ function renderFinalStats(container, state) {
       label.textContent = STAT_LABELS[stat];
 
       const value = document.createElement("strong");
-      value.textContent = String(finalStat(state, stat));
+      value.textContent = String(finalStat(state, stat, field, speedOptions));
       if (nature.up === stat) value.classList.add("increase");
       if (nature.down === stat) value.classList.add("decrease");
 
@@ -742,11 +743,12 @@ function syncAssumptionInputs(side) {
     if (input.dataset.kind === "rivalry") input.value = state.rivalry ?? "off";
     if (input.dataset.kind === "fainted-allies") input.value = String(state.faintedAllyCount ?? 0);
     if (input.dataset.kind === "booster-energy") input.checked = Boolean(state.boosterEnergy);
+    if (input.dataset.kind === "ice-face-intact") input.checked = state.iceFaceIntact !== false;
   }
 }
 
-function finalStat(state, stat) {
-  if (stat === "spe") return finalSpeed(state);
+function finalStat(state, stat, field = {}, speedOptions = {}) {
+  if (stat === "spe") return finalSpeed(state, field, speedOptions);
   return calculateStat({
     base: state.pokemon.baseStats[stat],
     stat,
@@ -844,8 +846,29 @@ function renderMoveOrder(field) {
     attackerMove,
     defenderMove,
     trickRoom: field.trickRoom,
+    field,
   });
   elements.moveOrder.textContent = result.reason;
+  elements.speedSummary.textContent =
+    `${damageState.attacker.pokemon.name} Speed ${result.attackerSpeed} vs ` +
+    `${damageState.defender.pokemon.name} Speed ${result.defenderSpeed}`;
+}
+
+function neutralizingGasActive() {
+  return [damageState.attacker, damageState.defender]
+    .some((state) => normalizeDamageId(state?.ability?.id ?? state?.ability?.name) === "neutralizinggas");
+}
+
+function finalSpeedContext() {
+  const neutralizingGas = neutralizingGasActive();
+  const weatherSuppressed = !neutralizingGas && [damageState.attacker, damageState.defender]
+    .some((state) => ["cloudnine", "airlock"].includes(
+      normalizeDamageId(state?.ability?.id ?? state?.ability?.name),
+    ));
+  return {
+    field: weatherSuppressed ? { ...fieldState, weather: "" } : fieldState,
+    options: { suppressAbility: neutralizingGas },
+  };
 }
 
 function selectedDamageMoves(side) {

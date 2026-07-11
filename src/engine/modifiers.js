@@ -105,7 +105,6 @@ const IMPLIED_FIELDS = {
   psychicsurge: { terrain: "Psychic Terrain" },
   orichalcumpulse: { weather: "SunnyDay" },
   hadronengine: { terrain: "Electric Terrain" },
-  megasol: { weather: "SunnyDay" },
 };
 
 export function impliedField(ability) {
@@ -476,7 +475,7 @@ function attackerSideConditionModifiers(ctx) {
   if (side.steelySpirit && ctx.moveType === "Steel") {
     modifiers.push({ kind: "power", value: 1.5, label: "Steely Spirit" });
   }
-  if (side.flowerGift && isSun(ctx.field.weather) && ctx.attackStat === "atk") {
+  if (side.flowerGift && isSun((ctx.ambientField ?? ctx.field).weather) && ctx.attackStat === "atk") {
     modifiers.push({ kind: "attack", value: 1.5, label: "Flower Gift" });
   }
   return modifiers;
@@ -499,7 +498,7 @@ function defenderSideConditionModifiers(ctx) {
     }
   }
   if (side.friendGuard) modifiers.push({ kind: "damage", value: 0.75, label: "Friend Guard" });
-  if (side.flowerGift && isSun(ctx.field.weather) && ctx.defenseStat === "spd") {
+  if (side.flowerGift && isSun((ctx.ambientField ?? ctx.field).weather) && ctx.defenseStat === "spd") {
     modifiers.push({ kind: "defense", value: 1.5, label: "Flower Gift" });
   }
   return modifiers;
@@ -560,7 +559,7 @@ function rivalryModifier(ctx) {
 function paradoxAbilityModifier(ctx) {
   const pokemon = ctx.attackerPerspective ? ctx.attacker : ctx.defender;
   const state = ctx.attackerPerspective ? ctx.attackerState : ctx.defenderState;
-  const boost = paradoxBoost(pokemon, state, ctx.field);
+  const boost = paradoxBoost(pokemon, state, ctx.ambientField ?? ctx.field);
   if (!boost) return null;
   if (ctx.attackerPerspective && boost.stat === ctx.attackStat) {
     return { kind: "attack", value: boost.value, label: boost.label };
@@ -572,7 +571,7 @@ function paradoxAbilityModifier(ctx) {
 }
 
 function flowerGiftModifier(ctx) {
-  if (!isSun(ctx.field.weather)) return null;
+  if (!isSun((ctx.ambientField ?? ctx.field).weather)) return null;
   if (ctx.attackerPerspective && ctx.attackStat === "atk") {
     return { kind: "attack", value: 1.5, label: "Flower Gift" };
   }
