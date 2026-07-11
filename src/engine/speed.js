@@ -1,5 +1,14 @@
 import { calculateStat } from "./stats.js";
 
+const PARADOX_STATS = ["atk", "def", "spa", "spd", "spe"];
+const PARADOX_STAT_LABELS = {
+  atk: "Atk",
+  def: "Def",
+  spa: "SpA",
+  spd: "SpD",
+  spe: "Spe",
+};
+
 export function calculateSpeed({
   baseSpeed,
   sp = 0,
@@ -33,13 +42,18 @@ export function calculateSpeed({
 }
 
 export function finalSpeed(state) {
+  return finalSpeedInField(state);
+}
+
+export function finalSpeedInField(state, field = {}) {
   if (!state?.pokemon) return 0;
   const manualSpeedMultiplier = Number(state.speedMultiplier ?? 1);
   const speedMultiplier = hasItem(state, "choicescarf") && manualSpeedMultiplier !== 1.5
     ? manualSpeedMultiplier * 1.5
     : manualSpeedMultiplier;
+  const paradox = paradoxBoost(state.pokemon, state, field);
 
-  return calculateSpeed({
+  const speed = calculateSpeed({
     baseSpeed: state.pokemon.baseStats?.spe ?? state.pokemon.baseSpeed,
     sp: state.sp?.spe ?? 0,
     nature: state.nature,
@@ -48,10 +62,54 @@ export function finalSpeed(state) {
     tailwind: state.tailwind,
     status: state.status,
   }).modifiedSpeed;
+  return paradox?.stat === "spe" ? Math.floor(speed * paradox.value) : speed;
+}
+
+export function paradoxBoost(pokemon, state = {}, field = {}) {
+  const abilityId = normalizeId(state.ability?.id ?? state.ability?.name);
+  const abilityName = state.ability?.name ?? state.ability?.id;
+  const boosterEnergy = Boolean(state.boosterEnergy) || hasItem(state, "boosterenergy");
+  const protosynthesisActive = abilityId === "protosynthesis" && (isSun(field.weather) || boosterEnergy);
+  const quarkDriveActive = abilityId === "quarkdrive" && (normalizeId(field.terrain) === "electricterrain" || boosterEnergy);
+  if (!protosynthesisActive && !quarkDriveActive) return null;
+
+  const stat = highestParadoxStat(pokemon, state);
+  if (!stat) return null;
+  return {
+    stat,
+    value: stat === "spe" ? 1.5 : 1.3,
+    label: `${abilityName} ${PARADOX_STAT_LABELS[stat]}`,
+  };
+}
+
+function highestParadoxStat(pokemon, state) {
+  const baseStats = pokemon?.baseStats ?? {};
+  let winner = "";
+  let winnerValue = -Infinity;
+  for (const stat of PARADOX_STATS) {
+    const base = baseStats[stat];
+    if (!Number.isFinite(base)) continue;
+    const value = calculateStat({
+      base,
+      stat,
+      sp: state.sp?.[stat] ?? 0,
+      nature: state.nature ?? "Hardy",
+    });
+    if (value > winnerValue) {
+      winner = stat;
+      winnerValue = value;
+    }
+  }
+  return winner;
 }
 
 function hasItem(state, itemId) {
   return normalizeId(state.item?.id ?? state.item?.name) === itemId;
+}
+
+function isSun(weather) {
+  const weatherId = normalizeId(weather);
+  return weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
 function normalizeId(value) {

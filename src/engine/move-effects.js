@@ -25,7 +25,7 @@
 //   offensiveStat(ctx) -> "atk" | "spa"              (Photon Geyser)
 
 import { isGrounded } from "./field.js";
-import { finalSpeed } from "./speed.js";
+import { finalSpeedInField } from "./speed.js";
 
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -398,14 +398,14 @@ function userTargetWeightPowerHandler(ctx) {
 }
 
 function gyroBallPower(ctx) {
-  const userSpeed = Math.max(1, finalSpeed(ctx.attackerState));
-  const targetSpeed = finalSpeed(ctx.defenderState);
+  const userSpeed = Math.max(1, finalSpeedInField(ctx.attackerState, ctx.field));
+  const targetSpeed = finalSpeedInField(ctx.defenderState, ctx.field);
   return Math.min(150, Math.floor((25 * targetSpeed) / userSpeed) + 1);
 }
 
 function electroBallPower(ctx) {
-  const userSpeed = finalSpeed(ctx.attackerState);
-  const targetSpeed = Math.max(1, finalSpeed(ctx.defenderState));
+  const userSpeed = finalSpeedInField(ctx.attackerState, ctx.field);
+  const targetSpeed = Math.max(1, finalSpeedInField(ctx.defenderState, ctx.field));
   const ratio = userSpeed / targetSpeed;
   if (ratio >= 4) return 150;
   if (ratio >= 3) return 120;
@@ -423,8 +423,8 @@ function targetMovedForOrder(ctx) {
   const defenderPriority = Number(opponentMove.priority ?? 0);
   if (attackerPriority !== defenderPriority) return defenderPriority > attackerPriority;
 
-  const attackerSpeed = finalSpeed(ctx.attackerState);
-  const defenderSpeed = finalSpeed(ctx.defenderState);
+  const attackerSpeed = finalSpeedInField(ctx.attackerState, ctx.field);
+  const defenderSpeed = finalSpeedInField(ctx.defenderState, ctx.field);
   if (attackerSpeed === defenderSpeed) return false;
   return ctx.field.trickRoom ? defenderSpeed < attackerSpeed : defenderSpeed > attackerSpeed;
 }

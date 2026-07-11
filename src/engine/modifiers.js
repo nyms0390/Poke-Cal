@@ -15,6 +15,7 @@
 
 import { abilityTypeConversion, weatherBlockedByUmbrella } from "./move-effects.js";
 import { isGrounded } from "./field.js";
+import { paradoxBoost } from "./speed.js";
 
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -112,6 +113,14 @@ export function impliedField(ability) {
   return IMPLIED_FIELDS[abilityId] ?? {};
 }
 
+export function impliedStageDefaults({ ownAbility, opposingAbility, stages = {} } = {}) {
+  if ((stages.atk ?? 0) !== 0) return {};
+  let atk = 0;
+  if (normalizeId(ownAbility?.id ?? ownAbility?.name ?? ownAbility) === "intrepidsword") atk += 1;
+  if (normalizeId(opposingAbility?.id ?? opposingAbility?.name ?? opposingAbility) === "intimidate") atk -= 1;
+  return atk === 0 ? {} : { atk };
+}
+
 export const ITEM_MODIFIERS = {
   choiceband: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk" ? { kind: "attack", value: 1.5, label: "Choice Band" } : null,
@@ -149,7 +158,8 @@ for (const [itemId, type] of Object.entries(RESIST_BERRIES)) {
   ITEM_MODIFIERS[itemId] = (ctx) => {
     if (ctx.attackerPerspective || type !== ctx.moveType) return null;
     if (itemId !== "chilanberry" && ctx.typeMultiplier <= 1) return null;
-    return { kind: "damage", value: 0.5, label: ctx.defenderState.item.name };
+    const ripen = hasActiveAbility(ctx.defenderState, "ripen", ctx.suppressDefenderAbility);
+    return { kind: "damage", value: ripen ? 0.25 : 0.5, label: ripen ? "Ripen" : ctx.defenderState.item.name };
   };
 }
 
@@ -298,6 +308,37 @@ export const ABILITY_MODIFIERS = {
     !ctx.attackerPerspective && ctx.isPhysical && normalizeId(ctx.field.terrain) === "grassyterrain"
       ? { kind: "defense", value: 1.5, label: "Grass Pelt" }
       : null,
+  tabletsofruin: (ctx) =>
+    !ctx.attackerPerspective && ctx.attackStat === "atk"
+      ? { kind: "attack", value: 0.75, label: "Tablets of Ruin" }
+      : null,
+  vesselofruin: (ctx) =>
+    !ctx.attackerPerspective && ctx.attackStat === "spa"
+      ? { kind: "attack", value: 0.75, label: "Vessel of Ruin" }
+      : null,
+  swordofruin: (ctx) =>
+    ctx.attackerPerspective && ctx.defenseStat === "def"
+      ? { kind: "defense", value: 0.75, label: "Sword of Ruin" }
+      : null,
+  beadsofruin: (ctx) =>
+    ctx.attackerPerspective && ctx.defenseStat === "spd"
+      ? { kind: "defense", value: 0.75, label: "Beads of Ruin" }
+      : null,
+  protosynthesis: paradoxAbilityModifier,
+  quarkdrive: paradoxAbilityModifier,
+  defeatist: (ctx) =>
+    ctx.attackerPerspective && ["atk", "spa"].includes(ctx.attackStat) && Number(ctx.attackerState.currentHpFraction ?? 1) <= 0.5
+      ? { kind: "attack", value: 0.5, label: "Defeatist" }
+      : null,
+  flowergift: flowerGiftModifier,
+  dryskin: (ctx) =>
+    !ctx.attackerPerspective && ctx.moveType === "Fire"
+      ? { kind: "damage", value: 1.25, label: "Dry Skin" }
+      : null,
+  parentalbond: (ctx) =>
+    ctx.attackerPerspective && ctx.hitCountRange?.min === 1 && ctx.hitCountRange?.max === 1
+      ? { kind: "hitPowerMultipliers", value: [1, 0.25], label: "Parental Bond" }
+      : null,
 };
 
 export function resolveHitCountRange(range, { move, attackerState }) {
@@ -435,6 +476,9 @@ function attackerSideConditionModifiers(ctx) {
   if (side.steelySpirit && ctx.moveType === "Steel") {
     modifiers.push({ kind: "power", value: 1.5, label: "Steely Spirit" });
   }
+  if (side.flowerGift && isSun(ctx.field.weather) && ctx.attackStat === "atk") {
+    modifiers.push({ kind: "attack", value: 1.5, label: "Flower Gift" });
+  }
   return modifiers;
 }
 
@@ -455,6 +499,9 @@ function defenderSideConditionModifiers(ctx) {
     }
   }
   if (side.friendGuard) modifiers.push({ kind: "damage", value: 0.75, label: "Friend Guard" });
+  if (side.flowerGift && isSun(ctx.field.weather) && ctx.defenseStat === "spd") {
+    modifiers.push({ kind: "defense", value: 1.5, label: "Flower Gift" });
+  }
   return modifiers;
 }
 
@@ -507,6 +554,31 @@ function rivalryModifier(ctx) {
   if (!ctx.attackerPerspective) return null;
   if (ctx.attackerState.rivalry === "same") return { kind: "damage", value: 1.25, label: "Rivalry same gender" };
   if (ctx.attackerState.rivalry === "opposite") return { kind: "damage", value: 0.75, label: "Rivalry opposite gender" };
+  return null;
+}
+
+function paradoxAbilityModifier(ctx) {
+  const pokemon = ctx.attackerPerspective ? ctx.attacker : ctx.defender;
+  const state = ctx.attackerPerspective ? ctx.attackerState : ctx.defenderState;
+  const boost = paradoxBoost(pokemon, state, ctx.field);
+  if (!boost) return null;
+  if (ctx.attackerPerspective && boost.stat === ctx.attackStat) {
+    return { kind: "attack", value: boost.value, label: boost.label };
+  }
+  if (!ctx.attackerPerspective && boost.stat === ctx.defenseStat) {
+    return { kind: "defense", value: boost.value, label: boost.label };
+  }
+  return null;
+}
+
+function flowerGiftModifier(ctx) {
+  if (!isSun(ctx.field.weather)) return null;
+  if (ctx.attackerPerspective && ctx.attackStat === "atk") {
+    return { kind: "attack", value: 1.5, label: "Flower Gift" };
+  }
+  if (!ctx.attackerPerspective && ctx.defenseStat === "spd") {
+    return { kind: "defense", value: 1.5, label: "Flower Gift" };
+  }
   return null;
 }
 

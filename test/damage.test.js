@@ -11,7 +11,7 @@ import {
   unsupportedMoveReason,
 } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
-import { impliedField } from "../src/engine/modifiers.js";
+import { impliedField, impliedStageDefaults } from "../src/engine/modifiers.js";
 
 const pikachu = {
   id: "pikachu",
@@ -1539,6 +1539,31 @@ test("maps field-implying abilities to the UI field values", () => {
   assert.deepEqual(impliedField("Hadron Engine"), { terrain: "Electric Terrain" });
   assert.deepEqual(impliedField("Mega Sol"), { weather: "SunnyDay" });
   assert.deepEqual(impliedField("Levitate"), {});
+});
+
+test("maps switch-in abilities to user-overridable stage defaults", () => {
+  const neutralStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+
+  assert.deepEqual(impliedStageDefaults({
+    ownAbility: "Intrepid Sword",
+    opposingAbility: null,
+    stages: neutralStages,
+  }), { atk: 1 });
+  assert.deepEqual(impliedStageDefaults({
+    ownAbility: null,
+    opposingAbility: "Intimidate",
+    stages: neutralStages,
+  }), { atk: -1 });
+  assert.deepEqual(impliedStageDefaults({
+    ownAbility: "Intrepid Sword",
+    opposingAbility: "Intimidate",
+    stages: neutralStages,
+  }), {});
+  assert.deepEqual(impliedStageDefaults({
+    ownAbility: "Intrepid Sword",
+    opposingAbility: "Intimidate",
+    stages: { ...neutralStages, atk: 2 },
+  }), {});
 });
 
 test("applies weather and terrain ability boosts only in their active fields", () => {
@@ -4820,4 +4845,295 @@ test("P2-07 applies Sturdy, Ice Face, and Heavy Metal defensive mechanics", () =
   assert.equal(heavyMetalLowKick.notes.includes("Low Kick power 60"), true);
   assert.equal(lightTargetHeavySlam.notes.includes("Heavy Slam power 120"), true);
   assert.equal(heavyMetalHeavySlam.notes.includes("Heavy Slam power 60"), true);
+});
+
+test("P2-08 applies global ruin stat modifiers without self-debuffing", () => {
+  const attacker = {
+    id: "ruinuser",
+    name: "Ruinuser",
+    types: ["Normal", "Psychic"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "ruintarget",
+    name: "Ruintarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 100, spa: 80, spd: 100, spe: 50 },
+  };
+  const slash = { id: "slash", name: "Slash", type: "Normal", category: "Physical", basePower: 70 };
+  const psychic = { id: "psychic", name: "Psychic", type: "Psychic", category: "Special", basePower: 90 };
+  const baselinePhysical = calculateDamage({ attacker, defender, move: slash, attackerState: neutralState, defenderState: neutralState });
+  const baselineSpecial = calculateDamage({ attacker, defender, move: psychic, attackerState: neutralState, defenderState: neutralState });
+
+  const tablets = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "tabletsofruin", name: "Tablets of Ruin" } },
+  });
+  const vessel = calculateDamage({
+    attacker,
+    defender,
+    move: psychic,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "vesselofruin", name: "Vessel of Ruin" } },
+  });
+  const sword = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "swordofruin", name: "Sword of Ruin" } },
+    defenderState: neutralState,
+  });
+  const beads = calculateDamage({
+    attacker,
+    defender,
+    move: psychic,
+    attackerState: { ...neutralState, ability: { id: "beadsofruin", name: "Beads of Ruin" } },
+    defenderState: neutralState,
+  });
+  const ownTablets = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "tabletsofruin", name: "Tablets of Ruin" } },
+    defenderState: neutralState,
+  });
+
+  assert.equal(tablets.maxDamage < baselinePhysical.maxDamage, true);
+  assert.equal(vessel.maxDamage < baselineSpecial.maxDamage, true);
+  assert.equal(sword.minDamage > baselinePhysical.minDamage, true);
+  assert.equal(beads.minDamage > baselineSpecial.minDamage, true);
+  assert.deepEqual([ownTablets.minDamage, ownTablets.maxDamage], [baselinePhysical.minDamage, baselinePhysical.maxDamage]);
+  for (const [result, label] of [[tablets, "Tablets of Ruin"], [vessel, "Vessel of Ruin"], [sword, "Sword of Ruin"], [beads, "Beads of Ruin"]]) {
+    assert.equal(result.notes.includes(label), true, label);
+  }
+});
+
+test("P2-08 applies paradox boosts from weather terrain or Booster Energy", () => {
+  const flutterMane = {
+    id: "fluttermane",
+    name: "Flutter Mane",
+    types: ["Ghost", "Fairy"],
+    baseStats: { hp: 55, atk: 55, def: 55, spa: 135, spd: 135, spe: 135 },
+  };
+  const ironHands = {
+    id: "ironhands",
+    name: "Iron Hands",
+    types: ["Fighting", "Electric"],
+    baseStats: { hp: 154, atk: 140, def: 108, spa: 50, spd: 68, spe: 50 },
+  };
+  const target = {
+    id: "paradoxtarget",
+    name: "Paradoxtarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const moonblast = { id: "moonblast", name: "Moonblast", type: "Fairy", category: "Special", basePower: 95 };
+  const drainPunch = { id: "drainpunch", name: "Drain Punch", type: "Fighting", category: "Physical", basePower: 75 };
+
+  const normalFlutter = calculateDamage({ attacker: flutterMane, defender: target, move: moonblast, attackerState: neutralState, defenderState: neutralState });
+  const sunFlutter = calculateDamage({
+    attacker: flutterMane,
+    defender: target,
+    move: moonblast,
+    attackerState: { ...neutralState, ability: { id: "protosynthesis", name: "Protosynthesis" } },
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const boosterFlutter = calculateDamage({
+    attacker: flutterMane,
+    defender: target,
+    move: moonblast,
+    attackerState: { ...neutralState, ability: { id: "protosynthesis", name: "Protosynthesis" }, boosterEnergy: true },
+    defenderState: neutralState,
+  });
+  const normalHands = calculateDamage({ attacker: ironHands, defender: target, move: drainPunch, attackerState: neutralState, defenderState: neutralState });
+  const electricHands = calculateDamage({
+    attacker: ironHands,
+    defender: target,
+    move: drainPunch,
+    attackerState: { ...neutralState, ability: { id: "quarkdrive", name: "Quark Drive" } },
+    defenderState: neutralState,
+    field: createField({ terrain: "Electric Terrain" }),
+  });
+
+  assert.equal(sunFlutter.maxDamage > normalFlutter.maxDamage, true);
+  assert.equal(boosterFlutter.maxDamage > normalFlutter.maxDamage, true);
+  assert.equal(electricHands.maxDamage > normalHands.maxDamage, true);
+  assert.equal(sunFlutter.notes.includes("Protosynthesis SpA"), true);
+  assert.equal(boosterFlutter.notes.includes("Protosynthesis SpA"), true);
+  assert.equal(electricHands.notes.includes("Quark Drive Atk"), true);
+});
+
+test("P2-08 applies Defeatist Flower Gift Dry Skin and Ripen damage modifiers", () => {
+  const attacker = {
+    id: "p2abilityuser",
+    name: "P2abilityuser",
+    types: ["Fire", "Water", "Grass"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "p2abilitytarget",
+    name: "P2abilitytarget",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 120, spe: 50 },
+  };
+  const firePunch = { id: "firepunch", name: "Fire Punch", type: "Fire", category: "Physical", basePower: 75 };
+  const flamethrower = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const hydroPump = { id: "hydropump", name: "Hydro Pump", type: "Water", category: "Special", basePower: 110 };
+  const leafBlade = { id: "leafblade", name: "Leaf Blade", type: "Grass", category: "Physical", basePower: 90 };
+
+  const normalPhysical = calculateDamage({ attacker, defender, move: firePunch, attackerState: neutralState, defenderState: neutralState });
+  const defeatist = calculateDamage({
+    attacker,
+    defender,
+    move: firePunch,
+    attackerState: { ...neutralState, ability: { id: "defeatist", name: "Defeatist" }, currentHpFraction: 0.5 },
+    defenderState: neutralState,
+  });
+  const flowerGiftAttack = calculateDamage({
+    attacker,
+    defender,
+    move: firePunch,
+    attackerState: { ...neutralState, ability: { id: "flowergift", name: "Flower Gift" } },
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const normalSpecial = calculateDamage({ attacker, defender, move: flamethrower, attackerState: neutralState, defenderState: neutralState });
+  const sunSpecial = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const flowerGiftDefense = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "flowergift", name: "Flower Gift" } },
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const drySkinFire = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "dryskin", name: "Dry Skin" } },
+  });
+  const drySkinWater = calculateDamage({
+    attacker,
+    defender,
+    move: hydroPump,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "dryskin", name: "Dry Skin" } },
+  });
+  const berry = calculateDamage({
+    attacker,
+    defender,
+    move: leafBlade,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, item: { id: "rindoberry", name: "Rindo Berry" } },
+  });
+  const ripenBerry = calculateDamage({
+    attacker,
+    defender,
+    move: leafBlade,
+    attackerState: neutralState,
+    defenderState: {
+      ...neutralState,
+      ability: { id: "ripen", name: "Ripen" },
+      item: { id: "rindoberry", name: "Rindo Berry" },
+    },
+  });
+
+  assert.equal(defeatist.maxDamage < normalPhysical.maxDamage, true);
+  assert.equal(flowerGiftAttack.maxDamage > normalPhysical.maxDamage, true);
+  assert.equal(flowerGiftDefense.maxDamage < sunSpecial.maxDamage, true);
+  assert.equal(drySkinFire.minDamage > normalSpecial.minDamage, true);
+  assert.deepEqual([drySkinWater.minDamage, drySkinWater.maxDamage], [0, 0]);
+  assert.equal(ripenBerry.maxDamage < berry.maxDamage, true);
+  for (const [result, label] of [[defeatist, "Defeatist"], [flowerGiftAttack, "Flower Gift"], [flowerGiftDefense, "Flower Gift"], [drySkinFire, "Dry Skin"], [ripenBerry, "Ripen"]]) {
+    assert.equal(result.notes.includes(label), true, label);
+  }
+});
+
+test("P2-08 applies Forecast typing and Parental Bond second-hit damage", () => {
+  const castform = {
+    id: "castform",
+    name: "Castform",
+    types: ["Normal"],
+    baseStats: { hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70 },
+  };
+  const kangaskhan = {
+    id: "kangaskhan",
+    name: "Kangaskhan",
+    types: ["Normal"],
+    baseStats: { hp: 105, atk: 95, def: 80, spa: 40, spd: 80, spe: 90 },
+  };
+  const target = {
+    id: "forecasttarget",
+    name: "Forecasttarget",
+    types: ["Grass"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const waterGun = { id: "watergun", name: "Water Gun", type: "Water", category: "Special", basePower: 40 };
+  const flamethrower = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const megaPunch = { id: "megapunch", name: "Mega Punch", type: "Normal", category: "Physical", basePower: 80 };
+
+  const waterNoForecast = calculateDamage({ attacker: castform, defender: target, move: waterGun, attackerState: neutralState, defenderState: neutralState, field: createField({ weather: "RainDance" }) });
+  const waterForecast = calculateDamage({
+    attacker: castform,
+    defender: target,
+    move: waterGun,
+    attackerState: { ...neutralState, ability: { id: "forecast", name: "Forecast" } },
+    defenderState: neutralState,
+    field: createField({ weather: "RainDance" }),
+  });
+  const defenderNoForecast = calculateDamage({
+    attacker: target,
+    defender: castform,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const defenderForecast = calculateDamage({
+    attacker: target,
+    defender: castform,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "forecast", name: "Forecast" } },
+    field: createField({ weather: "SunnyDay" }),
+  });
+  const singleHit = calculateDamage({ attacker: kangaskhan, defender: target, move: megaPunch, attackerState: neutralState, defenderState: neutralState });
+  const parentalBond = calculateDamage({
+    attacker: kangaskhan,
+    defender: target,
+    move: megaPunch,
+    attackerState: { ...neutralState, ability: { id: "parentalbond", name: "Parental Bond" } },
+    defenderState: neutralState,
+  });
+  const expectedSecondHit = calculateDamage({
+    attacker: kangaskhan,
+    defender: target,
+    move: { ...megaPunch, id: "megapunchsecondhit", basePower: 20 },
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(waterForecast.maxDamage > waterNoForecast.maxDamage, true);
+  assert.equal(defenderForecast.maxDamage < defenderNoForecast.maxDamage, true);
+  assert.deepEqual(
+    [parentalBond.minDamage, parentalBond.maxDamage],
+    [singleHit.minDamage + expectedSecondHit.minDamage, singleHit.maxDamage + expectedSecondHit.maxDamage],
+  );
+  assert.equal(waterForecast.notes.includes("Forecast Water type"), true);
+  assert.equal(defenderForecast.notes.includes("Forecast Fire type"), true);
+  assert.equal(parentalBond.notes.includes("Parental Bond"), true);
+  assert.equal(parentalBond.notes.includes("Mega Punch hits 2 times at 80/20"), true);
 });

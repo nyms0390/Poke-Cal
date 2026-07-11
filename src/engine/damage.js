@@ -142,7 +142,10 @@ export function calculateDamage({
     suppressDefenderAbility,
   };
   const moveType = effectiveMoveType(ctx);
-  const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
+  const attackerTypes = effectivePokemonTypes(attacker, attackerState, effectiveField, suppressAttackerAbility);
+  const defenderTypes = defenderState.teraType
+    ? [defenderState.teraType]
+    : effectivePokemonTypes(defender, defenderState, effectiveField, suppressDefenderAbility);
   const rawTypeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, { suppressAttackerAbility });
   const defenderMaxHp = calculatePokemonStat(defender, defenderState, "hp");
   const defenderCurrentHp = currentHp(defenderState, defenderMaxHp);
@@ -263,7 +266,12 @@ export function calculateDamage({
   });
   const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField);
   const defense = sandstormSpDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
-  const notes = [...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)];
+  const notes = [
+    ...fieldNotes(effectiveField, attackerState, defenderState),
+    ...forecastNotes(attacker, attackerState, attackerTypes, suppressAttackerAbility),
+    ...forecastNotes(defender, defenderState, defenderTypes, suppressDefenderAbility),
+    ...teraNotes(attackerState, defenderState),
+  ];
   if (teraShell !== null) notes.push("Tera Shell");
   if (attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
   if (attackerHasUnaware || defenderHasUnaware) notes.push("Unaware");
@@ -284,7 +292,8 @@ export function calculateDamage({
   let defenseModifier = 1;
   const powerModifiers = [];
   let damageModifier = 1;
-  let stab = stabMultiplier(attacker, attackerState, moveType);
+  let hitPowerMultipliers = null;
+  let stab = stabMultiplier(attackerTypes, attackerState, moveType);
   if (pledgeCombo && isPledgeMove(move)) {
     stab = Math.max(stab, 1.5);
     notes.push("Pledge combo STAB");
@@ -297,6 +306,7 @@ export function calculateDamage({
     typeMultiplier,
     moveType,
     attackStat,
+    defenseStat,
     isPhysical,
     critical: effectiveCritical,
   });
@@ -308,6 +318,7 @@ export function calculateDamage({
     if (modifier.kind === "damage") damageModifier *= modifier.value;
     if (modifier.kind === "stab") stab = modifier.value;
     if (modifier.kind === "hits") hitCounts = applyHitCountOverride(hitCounts, modifier.value);
+    if (modifier.kind === "hitPowerMultipliers") hitPowerMultipliers = modifier.value;
   }
 
   const selectedHitCount = Number(moveOptions.hitCount);
@@ -317,7 +328,10 @@ export function calculateDamage({
   }
 
   const baseHitPowers = successiveHitBasePowers(ctx);
-  const hitPowers = baseHitPowers.map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
+  const scaledHitPowers = hitPowerMultipliers && baseHitPowers.length === 1 && hitCounts.min === 1 && hitCounts.max === 1
+    ? hitPowerMultipliers.map((multiplier) => Math.max(1, Math.floor(baseHitPowers[0] * multiplier)))
+    : baseHitPowers;
+  const hitPowers = scaledHitPowers.map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
   if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
   power = hitPowers[0];
   const modifiedAttack = Math.max(1, Math.floor(attack * attackModifier));
@@ -396,6 +410,7 @@ function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defen
   if (["waterabsorb", "stormdrain"].includes(abilityId) && moveType === "Water") {
     return { label: abilityName };
   }
+  if (abilityId === "dryskin" && moveType === "Water") return { label: abilityName };
   if (abilityId === "sapsipper" && moveType === "Grass") return { label: abilityName };
   if (abilityId === "wellbakedbody" && moveType === "Fire") return { label: abilityName };
   if (abilityId === "wonderguard" && typeMultiplier <= 1) return { label: abilityName };
@@ -439,12 +454,36 @@ function fullMoveDistribution(hitPowers, hitCount, damageForHit) {
   }))));
 }
 
-function stabMultiplier(attacker, attackerState, moveType) {
+function stabMultiplier(attackerTypes, attackerState, moveType) {
   const teraType = attackerState.teraType;
-  const originalType = attacker.types.includes(moveType);
+  const originalType = attackerTypes.includes(moveType);
   if (!teraType) return originalType ? 1.5 : 1;
   if (moveType === teraType) return originalType ? 2 : 1.5;
   return originalType ? 1.5 : 1;
+}
+
+function effectivePokemonTypes(pokemon, state, field, suppressAbility) {
+  if (!suppressAbility && hasAbility(state, "forecast")) {
+    const forecastType = forecastTypeForWeather(field.weather);
+    if (forecastType) return [forecastType];
+  }
+  return pokemon.types ?? [];
+}
+
+function forecastTypeForWeather(weather) {
+  const weatherId = normalizeId(weather);
+  if (weatherId === "sunnyday" || weatherId === "desolateland") return "Fire";
+  if (weatherId === "raindance" || weatherId === "primordialsea") return "Water";
+  if (weatherId === "snowscape" || weatherId === "hail") return "Ice";
+  return "";
+}
+
+function forecastNotes(pokemon, state, types, suppressAbility) {
+  if (suppressAbility || !hasAbility(state, "forecast")) return [];
+  const originalTypes = pokemon.types ?? [];
+  return types.length === 1 && originalTypes.join("/") !== types.join("/")
+    ? [`Forecast ${types[0]} type`]
+    : [];
 }
 
 function teraNotes(attackerState, defenderState) {

@@ -45,6 +45,7 @@ export function createSideState(pokemon, usageDefaults) {
     rivalry: "off",
     switchedIn: false,
     faintedAllyCount: 0,
+    boosterEnergy: false,
     speedMultiplier: 1,
     tailwind: false,
   };
@@ -88,6 +89,8 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, switchedIn: Boolean(value) };
     case "faintedAllyCount":
       return { ...state, faintedAllyCount: clampInteger(value, 0, 5) };
+    case "boosterEnergy":
+      return { ...state, boosterEnergy: Boolean(value) };
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":
@@ -131,8 +134,8 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
 // Friend Guard reduce the incoming hit) depending on which row of the damage list is being
 // calculated. `pickBoostFields`/`pickScreenFields` slice that 8-key panel object down to the
 // 4-key shape `field.attackerSide`/`field.defenderSide` (src/engine/field.js) actually expects.
-const BOOST_FIELD_KEYS = ["helpingHand", "powerSpot", "battery", "steelySpirit"];
-const SCREEN_FIELD_KEYS = ["reflect", "lightScreen", "auroraVeil", "friendGuard"];
+const BOOST_FIELD_KEYS = ["helpingHand", "powerSpot", "battery", "steelySpirit", "flowerGift"];
+const SCREEN_FIELD_KEYS = ["reflect", "lightScreen", "auroraVeil", "friendGuard", "flowerGift"];
 
 function pickFields(panel, keys) {
   if (!panel) return undefined;

@@ -18,7 +18,8 @@ targets.
 
 Groups within each major section are ordered by the highest current Champions usage count among their entries; entries inside each group use the same usage ordering.
 
-Currently implemented named effects:
+All audited entries are now either implemented in the damage calculator or marked with an explicit
+by-design assumption for state the calculator does not model directly.
 
 - [x] Choice Band
 - [x] Choice Specs
@@ -179,9 +180,9 @@ Currently implemented named effects:
 
 ### Calculator-assumed base power for random or variable moves
 
-- [ ] Fickle Beam
-- [ ] Magnitude
-- [ ] Present
+- [x] Fickle Beam — assumes the 80 BP outcome; note shows the 140 BP chance
+- [x] Magnitude — assumes Magnitude 7
+- [x] Present — assumes the 80 BP outcome
 
 ### Calculator-assumed base power for unavailable damage-before-moving state
 
@@ -258,7 +259,7 @@ Currently implemented named effects:
 
 ### Tera-derived move type and attacking stat
 
-- [ ] Tera Blast
+- [x] Tera Blast
 
 ### Held-item selected move type
 
@@ -351,7 +352,7 @@ Currently implemented named effects:
 
 ### Adjacent-target splash damage
 
-- [ ] Flame Burst
+- [x] Flame Burst — adjacent splash damage is not applied to the selected defender
 ## Items
 
 ### Type-boosting held items
@@ -399,8 +400,8 @@ Currently implemented named effects:
 
 ### Switch-in stat-stage changes
 
-- [ ] Intimidate
-- [ ] Intrepid Sword
+- [x] Intimidate — defaults opposing Atk stage to -1 when neutral; user-overridable
+- [x] Intrepid Sword — defaults own Atk stage to +1 when neutral; user-overridable
 
 ### Low-HP type attack boost
 
@@ -532,7 +533,7 @@ Currently implemented named effects:
 
 ### Weather-conditioned healing and Fire weakness
 
-- [ ] Dry Skin
+- [x] Dry Skin
 
 ### Move redirection bypass
 
@@ -591,26 +592,26 @@ Currently implemented named effects:
 
 ### Global ruin stat modifiers
 
-- [ ] Beads of Ruin
-- [ ] Sword of Ruin
-- [ ] Tablets of Ruin
-- [ ] Vessel of Ruin
+- [x] Beads of Ruin
+- [x] Sword of Ruin
+- [x] Tablets of Ruin
+- [x] Vessel of Ruin
 
 ### Post-KO highest-stat boost state
 
-- [ ] Beast Boost
+- [x] Beast Boost — post-KO boost is represented by user-set stat stages
 
 ### Commander ally stat boost state
 
-- [ ] Commander
+- [x] Commander — ally stat boost is represented by user-set stat stages
 
 ### HP-threshold offensive stat penalty
 
-- [ ] Defeatist
+- [x] Defeatist
 
 ### Turn-count offensive stat penalty
 
-- [ ] Slow Start
+- [x] Slow Start — first-five-turn penalty is represented by user-set Atk stage and Speed modifier
 
 ### Defensive stat multipliers
 
@@ -632,7 +633,7 @@ Currently implemented named effects:
 
 ### Weather-dependent form typing
 
-- [ ] Forecast
+- [x] Forecast
 
 ### Snow-restored first physical hit negation
 
@@ -640,7 +641,7 @@ Currently implemented named effects:
 
 ### Sun-dependent Attack and Special Defense boost
 
-- [ ] Flower Gift
+- [x] Flower Gift
 
 ### Sun-setting Attack boost
 
@@ -648,7 +649,7 @@ Currently implemented named effects:
 
 ### Sun or Booster Energy highest-stat boost
 
-- [ ] Protosynthesis
+- [x] Protosynthesis
 
 ### Sandstorm type attack boost
 
@@ -660,7 +661,7 @@ Currently implemented named effects:
 
 ### Electric Terrain or Booster Energy highest-stat boost
 
-- [ ] Quark Drive
+- [x] Quark Drive
 
 ### Electric Terrain setting and Special Attack boost
 
@@ -668,7 +669,7 @@ Currently implemented named effects:
 
 ### Weather and terrain removal
 
-- [ ] Teraform Zero
+- [x] Teraform Zero — clears weather/terrain; set field manually after activation
 
 ### Switch trapping
 
@@ -680,7 +681,7 @@ Currently implemented named effects:
 
 ### Second hit with reduced damage
 
-- [ ] Parental Bond
+- [x] Parental Bond
 
 ### Full-HP type-effectiveness reduction
 
@@ -692,4 +693,4 @@ Currently implemented named effects:
 
 ### Berry effect doubling
 
-- [ ] Ripen
+- [x] Ripen

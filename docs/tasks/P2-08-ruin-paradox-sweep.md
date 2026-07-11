@@ -1,6 +1,6 @@
 # P2-08 — Ruin abilities, paradox boosts, Intimidate, Parental Bond, final sweep
 
-Status: TODO
+Status: Done
 Depends on: P2-05, P2-06, P2-07
 Phase: 2 (mechanics burn-down)
 
@@ -57,3 +57,11 @@ plus anything still unticked after P2-01…07: Hex-family leftovers, Skill Link 
 ```sh
 npm run test:damage && npm test
 ```
+
+## Completion notes
+- Added ruin stat modifiers, Protosynthesis/Quark Drive boosts, Defeatist, Dry Skin, Flower Gift,
+  Forecast typing, Parental Bond second-hit scaling, Ripen resist-berry strengthening, and
+  Intimidate/Intrepid Sword stage defaults.
+- Added Booster Energy and Flower Gift controls to `battle.html`.
+- Completed the final checklist sweep; remaining non-direct-damage state is annotated as
+  user-set stages, manual field settings, or unsupported adjacent splash/state.

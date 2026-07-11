@@ -44,6 +44,7 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.equal(state.rivalry, "off");
   assert.equal(state.switchedIn, false);
   assert.equal(state.faintedAllyCount, 0);
+  assert.equal(state.boosterEnergy, false);
   assert.equal(state.speedMultiplier, 1);
   assert.equal(state.tailwind, false);
 });
@@ -165,6 +166,7 @@ test("applyControl stores offensive ability assumptions", () => {
   assert.equal(applyControl(state, { kind: "rivalry", value: "unknown" }).rivalry, "off");
   assert.equal(applyControl(state, { kind: "switchedIn", value: true }).switchedIn, true);
   assert.equal(applyControl(state, { kind: "faintedAllyCount", value: "9" }).faintedAllyCount, 5);
+  assert.equal(applyControl(state, { kind: "boosterEnergy", value: true }).boosterEnergy, true);
 });
 
 test("applyControl returns the same state for an unknown kind", () => {
@@ -180,7 +182,13 @@ test("buildCalcInput assembles both sides and a Field from raw control values", 
   );
   const damageState = { attacker, defender };
 
-  const input = buildCalcInput(damageState, { format: "singles", trickRoom: true, critical: true });
+  const input = buildCalcInput(damageState, {
+    format: "singles",
+    trickRoom: true,
+    critical: true,
+    attackerSide: { flowerGift: true },
+    defenderSide: { flowerGift: true },
+  });
 
   assert.equal(input.attacker, attacker.pokemon);
   assert.equal(input.defender, defender.pokemon);
@@ -188,6 +196,10 @@ test("buildCalcInput assembles both sides and a Field from raw control values", 
   assert.equal(input.defenderState, defender);
   assert.equal(input.field.format, "singles");
   assert.equal(input.field.trickRoom, true);
+  assert.equal(input.field.attackerSide.flowerGift, true);
+  assert.equal(input.field.defenderSide.flowerGift, true);
+  assert.equal(input.reverseField.attackerSide.flowerGift, true);
+  assert.equal(input.reverseField.defenderSide.flowerGift, true);
   assert.equal(input.critical, true);
 });
 

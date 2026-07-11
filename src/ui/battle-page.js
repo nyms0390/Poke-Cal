@@ -14,7 +14,7 @@ import {
   NATURES,
   natureOptionLabel,
 } from "../engine/damage.js";
-import { impliedField, resolveHitCountRange } from "../engine/modifiers.js";
+import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove } from "../engine/move-effects.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
@@ -78,7 +78,7 @@ const elements = {
   fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   assumptionInputs: document.querySelectorAll(
-    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], select[data-kind="rivalry"]',
+    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], select[data-kind="rivalry"]',
   ),
   damageCritical: document.querySelector("#damage-critical"),
   moveOrder: document.querySelector("#move-order"),
@@ -326,6 +326,9 @@ function seedDamageSide(side, entry) {
   renderSideSelects(side, defaults);
   syncSideInputs(side);
   applyAbilityImpliedField(damageState[side].ability);
+  applyAbilityImpliedStages();
+  syncSideInputs("attacker");
+  syncSideInputs("defender");
   renderDamage();
 }
 
@@ -412,7 +415,12 @@ function handleDamageControl(event) {
     if (state) {
       damageState[control.side] = applyControl(state, control);
       if (control.kind === "spread") syncSideInputs(control.side);
-      if (control.kind === "ability") applyAbilityImpliedField(damageState[control.side].ability);
+      if (control.kind === "ability") {
+        applyAbilityImpliedField(damageState[control.side].ability);
+        applyAbilityImpliedStages();
+        syncSideInputs("attacker");
+        syncSideInputs("defender");
+      }
       if (["move", "hitCount", "targetMoved", "ability", "item"].includes(control.kind)) {
         renderDamageMovePickers(control.side);
       }
@@ -437,6 +445,23 @@ function applyAbilityImpliedField(ability) {
     syncRadioGroup(elements.fieldTerrainInputs, implied.terrain);
   }
   fieldState = nextFieldState;
+}
+
+function applyAbilityImpliedStages() {
+  for (const side of ["attacker", "defender"]) {
+    const opposingSide = side === "attacker" ? "defender" : "attacker";
+    const state = damageState[side];
+    const opposingState = damageState[opposingSide];
+    if (!state || !opposingState) continue;
+    const implied = impliedStageDefaults({
+      ownAbility: state.ability,
+      opposingAbility: opposingState.ability,
+      stages: state.stages,
+    });
+    if (Object.keys(implied).length > 0) {
+      damageState[side] = { ...state, stages: { ...state.stages, ...implied } };
+    }
+  }
 }
 
 function syncRadioGroup(inputs, value) {
@@ -493,6 +518,9 @@ function controlFromTarget(target) {
   }
   if (target.dataset.kind === "fainted-allies") {
     return { kind: "faintedAllyCount", side: target.dataset.side, value: target.value };
+  }
+  if (target.dataset.kind === "booster-energy") {
+    return { kind: "boosterEnergy", side: target.dataset.side, value: target.checked };
   }
   return null;
 }
@@ -713,6 +741,7 @@ function syncAssumptionInputs(side) {
     if (input.dataset.kind === "switched-in") input.checked = Boolean(state.switchedIn);
     if (input.dataset.kind === "rivalry") input.value = state.rivalry ?? "off";
     if (input.dataset.kind === "fainted-allies") input.value = String(state.faintedAllyCount ?? 0);
+    if (input.dataset.kind === "booster-energy") input.checked = Boolean(state.boosterEnergy);
   }
 }
 

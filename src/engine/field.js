@@ -18,6 +18,7 @@ export function createField(overrides = {}) {
       lightScreen: false,
       auroraVeil: false,
       friendGuard: false,
+      flowerGift: false,
       tailwind: false,
     },
     ...overrides,
