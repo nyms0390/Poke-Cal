@@ -16,6 +16,7 @@ import {
 } from "../engine/damage.js";
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove } from "../engine/move-effects.js";
+import { resultDescription } from "../engine/result-text.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -784,6 +785,13 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     critical: calcInput.critical,
     moveOptions,
   });
+  const description = resultDescription({
+    attackerState: isDefenderSource ? calcInput.defenderState : calcInput.attackerState,
+    defenderState: isDefenderSource ? calcInput.attackerState : calcInput.defenderState,
+    move,
+    field: isDefenderSource ? calcInput.reverseField : calcInput.field,
+    result,
+  });
 
   const card = document.createElement("article");
   card.className = `damage-result-card${selected ? " selected" : ""}`;
@@ -819,6 +827,22 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   ko.className = "damage-ko";
   ko.textContent = result.supported ? result.ko.text : formatDamageResult(result);
   card.append(heading, meta, ko);
+
+  if (result.supported) {
+    const line = document.createElement("p");
+    line.className = "damage-result-line";
+    line.textContent = description;
+
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "damage-copy-button";
+    copy.textContent = "Copy";
+    copy.addEventListener("click", () => {
+      navigator.clipboard?.writeText(description);
+    });
+
+    card.append(line, copy);
+  }
 
   if (result.supported && result.notes?.length) {
     const notes = document.createElement("p");

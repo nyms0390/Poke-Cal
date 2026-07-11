@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 
 import { calculateDamage } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
+import { resultDescription } from "../src/engine/result-text.js";
 
 const neutralStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 const aegislashState = {
@@ -78,7 +79,12 @@ const GOLDEN_CASES = [
       attackerState: { ...aegislashState, item: { id: "spelltag", name: "Spell Tag" } },
       defenderState: aegislashState,
     },
-    expected: { min: 104, max: 126, koText: "guaranteed 2HKO" },
+    expected: {
+      min: 104,
+      max: 126,
+      koText: "guaranteed 2HKO",
+      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash: 104-126 (62.2 - 75.4%) -- guaranteed 2HKO",
+    },
   },
   {
     name: "doubles spread move",
@@ -121,7 +127,12 @@ const GOLDEN_CASES = [
       defenderState: aegislashState,
       field: createField({ defenderSide: { reflect: true } }),
     },
-    expected: { min: 69, max: 84, koText: "0.4% chance to 2HKO" },
+    expected: {
+      min: 69,
+      max: 84,
+      koText: "0.4% chance to 2HKO",
+      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash through Reflect: 69-84 (41.3 - 50.2%) -- 0.4% chance to 2HKO",
+    },
   },
   {
     name: "Choice Specs plus Tera STAB",
@@ -379,6 +390,19 @@ test("P1-06 golden damage and KO cases", () => {
     assert.equal(result.supported, true, `${name}: supported`);
     assert.deepEqual([result.minDamage, result.maxDamage], [expected.min, expected.max], name);
     assert.equal(result.ko.text, expected.koText, `${name}: KO text`);
+    if (expected.description) {
+      assert.equal(
+        resultDescription({
+          attackerState: { ...input.attackerState, pokemon: input.attacker },
+          defenderState: { ...input.defenderState, pokemon: input.defender },
+          move: input.move,
+          field: input.field,
+          result,
+        }),
+        expected.description,
+        `${name}: result description`,
+      );
+    }
   }
 });
 

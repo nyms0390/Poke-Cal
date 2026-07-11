@@ -1,6 +1,6 @@
 # P3-01 — NCP-style result description line
 
-Status: TODO
+Status: Done
 Depends on: P1-06
 Phase: 3 (calculator UX parity)
 

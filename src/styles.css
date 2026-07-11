@@ -883,6 +883,32 @@ select:focus {
   line-height: 1.35;
 }
 
+.damage-result-line {
+  margin: 0;
+  color: #dbe3f7;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.damage-copy-button {
+  justify-self: start;
+  padding: 5px 9px;
+  border: 1px solid #344769;
+  border-radius: 4px;
+  background: #111a33;
+  color: #dbe3f7;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.damage-copy-button:hover,
+.damage-copy-button:focus-visible {
+  border-color: #19e6ff;
+  color: #f4f7ff;
+}
+
 .damage-notes {
   margin: 0;
   color: #6d7ba0;

@@ -180,6 +180,7 @@ export function calculateDamage({
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
+      critical: effectiveCritical,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
       notes: [
         abilityImmunity ? "Immune (ability)" : "Immune",
@@ -217,6 +218,7 @@ export function calculateDamage({
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
+      critical: effectiveCritical,
       ko: sturdyText ?? koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
       notes: [
         "Fixed damage",
@@ -411,6 +413,9 @@ export function calculateDamage({
     defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
+    attackStat,
+    defenseStat,
+    critical: effectiveCritical,
     ko: sturdyText ??
       (baseRollDistribution
         ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution)
