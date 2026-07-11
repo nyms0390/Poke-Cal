@@ -74,6 +74,7 @@ export function weatherBlockedByUmbrella(weather, item) {
 }
 
 export function abilityTypeConversion(ctx) {
+  if (ctx.suppressAttackerAbility) return null;
   const abilityId = normalizeId(ctx.attackerState?.ability?.id ?? ctx.attackerState?.ability?.name);
   const conversion = ABILITY_TYPE_CONVERSIONS[abilityId];
   if (!conversion) return null;
@@ -123,14 +124,20 @@ function positiveStageCount(state) {
   return BOOSTABLE_STAGE_KEYS.reduce((total, key) => total + Math.max(0, state.stages?.[key] ?? 0), 0);
 }
 
-function targetWeightKg(defender, defenderState) {
+function targetWeightKg(defender, defenderState, suppressAbility = false) {
   const weight = defenderState.weightkg ?? defenderState.weightKg ?? defender?.weightkg ?? defender?.weightKg;
-  return Number.isFinite(weight) && weight > 0 ? weight : null;
+  if (!Number.isFinite(weight) || weight <= 0) return null;
+  return modifiedWeightKg(weight, defenderState, suppressAbility);
 }
 
-function pokemonWeightKg(pokemon, state) {
+function pokemonWeightKg(pokemon, state, suppressAbility = false) {
   const weight = state.weightkg ?? state.weightKg ?? pokemon?.weightkg ?? pokemon?.weightKg;
-  return Number.isFinite(weight) && weight > 0 ? weight : null;
+  if (!Number.isFinite(weight) || weight <= 0) return null;
+  return modifiedWeightKg(weight, state, suppressAbility);
+}
+
+function modifiedWeightKg(weight, state, suppressAbility) {
+  return !suppressAbility && normalizeId(state?.ability?.id ?? state?.ability?.name) === "heavymetal" ? weight * 2 : weight;
 }
 
 function targetWeightBasePower(weightKg) {
@@ -378,13 +385,13 @@ function userHpPowerHandler(ctx) {
 }
 
 function targetWeightPowerHandler(ctx) {
-  const weight = targetWeightKg(ctx.defender, ctx.defenderState);
+  const weight = targetWeightKg(ctx.defender, ctx.defenderState, ctx.suppressDefenderAbility);
   return weight === null ? null : targetWeightBasePower(weight);
 }
 
 function userTargetWeightPowerHandler(ctx) {
-  const attackerWeight = pokemonWeightKg(ctx.attacker, ctx.attackerState);
-  const defenderWeight = pokemonWeightKg(ctx.defender, ctx.defenderState);
+  const attackerWeight = pokemonWeightKg(ctx.attacker, ctx.attackerState, ctx.suppressAttackerAbility);
+  const defenderWeight = pokemonWeightKg(ctx.defender, ctx.defenderState, ctx.suppressDefenderAbility);
   return attackerWeight === null || defenderWeight === null
     ? null
     : userTargetWeightBasePower(attackerWeight, defenderWeight);

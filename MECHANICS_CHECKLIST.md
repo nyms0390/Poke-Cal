@@ -429,8 +429,8 @@ Currently implemented named effects:
 
 ### Redirected attack immunity and stat boost
 
-- [ ] Lightning Rod
-- [ ] Storm Drain
+- [x] Lightning Rod
+- [x] Storm Drain
 
 ### Sun-dependent Special Attack boost
 
@@ -454,12 +454,12 @@ Currently implemented named effects:
 
 ### Full-HP damage reduction
 
-- [ ] Multiscale
-- [ ] Shadow Shield
+- [x] Multiscale
+- [x] Shadow Shield
 
 ### Ignore stat stages during damage
 
-- [ ] Unaware
+- [x] Unaware
 
 ### Sound move type conversion
 
@@ -467,20 +467,20 @@ Currently implemented named effects:
 
 ### Type-specific incoming offensive-stat halving
 
-- [ ] Thick Fat
-- [ ] Heatproof
-- [ ] Purifying Salt
+- [x] Thick Fat
+- [x] Heatproof
+- [x] Purifying Salt
 
 ### Ability ignore or suppression
 
-- [ ] Mold Breaker
-- [ ] Neutralizing Gas
-- [ ] Teravolt
-- [ ] Turboblaze
+- [x] Mold Breaker
+- [x] Neutralizing Gas
+- [x] Teravolt
+- [x] Turboblaze
 
 ### Status move reflection
 
-- [ ] Magic Bounce
+- [x] Magic Bounce — no damage-range effect; excluded by design
 
 ### Aura field type power boost
 
@@ -489,7 +489,7 @@ Currently implemented named effects:
 
 ### Full-HP survival from lethal hit
 
-- [ ] Sturdy
+- [x] Sturdy
 
 ### Supereffective damage reduction
 
@@ -498,8 +498,7 @@ Currently implemented named effects:
 
 ### Water damage boost and Fire damage reduction
 
-- [ ] Water Bubble — Water attack boost implemented; incoming Fire reduction remains
-  in P2-07
+- [x] Water Bubble
 
 ### Weather effect suppression
 
@@ -508,11 +507,11 @@ Currently implemented named effects:
 
 ### Type immunity with stat boost or healing
 
-- [ ] Volt Absorb
-- [ ] Water Absorb
-- [ ] Motor Drive
-- [ ] Sap Sipper
-- [ ] Well-Baked Body
+- [x] Volt Absorb
+- [x] Water Absorb
+- [x] Motor Drive
+- [x] Sap Sipper
+- [x] Well-Baked Body
 
 ### Critical-hit damage amplification
 
@@ -524,7 +523,7 @@ Currently implemented named effects:
 
 ### Powder, weather, and Effect Spore immunity
 
-- [ ] Overcoat
+- [x] Overcoat — no damage-range effect; excluded by design
 
 ### Ally-paired Special Attack multiplier
 
@@ -537,8 +536,8 @@ Currently implemented named effects:
 
 ### Move redirection bypass
 
-- [ ] Stalwart
-- [ ] Propeller Tail
+- [x] Stalwart — no damage-range effect; excluded by design
+- [x] Propeller Tail — no damage-range effect; excluded by design
 
 ### Gender-based damage modifier
 
@@ -615,12 +614,12 @@ Currently implemented named effects:
 
 ### Defensive stat multipliers
 
-- [ ] Fur Coat
-- [ ] Marvel Scale
+- [x] Fur Coat
+- [x] Marvel Scale
 
 ### Weight modification
 
-- [ ] Heavy Metal
+- [x] Heavy Metal
 
 ### Switched-in target damage multiplier
 
@@ -637,7 +636,7 @@ Currently implemented named effects:
 
 ### Snow-restored first physical hit negation
 
-- [ ] Ice Face
+- [x] Ice Face
 
 ### Sun-dependent Attack and Special Defense boost
 
@@ -657,7 +656,7 @@ Currently implemented named effects:
 
 ### Terrain-dependent Defense boost
 
-- [ ] Grass Pelt
+- [x] Grass Pelt
 
 ### Electric Terrain or Booster Energy highest-stat boost
 
@@ -673,11 +672,11 @@ Currently implemented named effects:
 
 ### Switch trapping
 
-- [ ] Magnet Pull
+- [x] Magnet Pull — no damage-range effect; excluded by design
 
 ### Super-effective-only damage filter
 
-- [ ] Wonder Guard
+- [x] Wonder Guard
 
 ### Second hit with reduced damage
 
@@ -685,7 +684,7 @@ Currently implemented named effects:
 
 ### Full-HP type-effectiveness reduction
 
-- [ ] Tera Shell
+- [x] Tera Shell
 
 ### Not-very-effective damage amplification
 

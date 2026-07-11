@@ -4401,3 +4401,423 @@ test("golden: a critical hit ignores all three screens but not Friend Guard, whi
   // Reflect discount (x2/3) times Friend Guard (x0.75) is exactly x0.5: floor(58*0.5)=29, floor(69*0.5)=34.
   assert.deepEqual([friendGuardAndReflect.minDamage, friendGuardAndReflect.maxDamage], [29, 34]);
 });
+
+test("P2-07 applies full-HP defensive ability damage reductions", () => {
+  const attacker = {
+    id: "defenseabilityuser",
+    name: "Defenseabilityuser",
+    types: ["Dragon", "Fire", "Ghost"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "defenseabilitytarget",
+    name: "Defenseabilitytarget",
+    types: ["Dragon"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const dragonClaw = { id: "dragonclaw", name: "Dragon Claw", type: "Dragon", category: "Physical", basePower: 80 };
+  const dragonPulse = { id: "dragonpulse", name: "Dragon Pulse", type: "Dragon", category: "Special", basePower: 85 };
+
+  const normal = calculateDamage({ attacker, defender, move: dragonClaw, attackerState: neutralState, defenderState: neutralState });
+  const multiscale = calculateDamage({
+    attacker,
+    defender,
+    move: dragonClaw,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "multiscale", name: "Multiscale" } },
+  });
+  const chippedMultiscale = calculateDamage({
+    attacker,
+    defender,
+    move: dragonClaw,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "multiscale", name: "Multiscale" }, currentHpFraction: 0.99 },
+  });
+  const shadowShield = calculateDamage({
+    attacker,
+    defender,
+    move: dragonPulse,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "shadowshield", name: "Shadow Shield" } },
+  });
+  const teraShell = calculateDamage({
+    attacker,
+    defender,
+    move: dragonClaw,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "terashell", name: "Tera Shell" } },
+  });
+  const chippedTeraShell = calculateDamage({
+    attacker,
+    defender,
+    move: dragonClaw,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "terashell", name: "Tera Shell" }, currentHpFraction: 0.99 },
+  });
+
+  assert.equal(multiscale.notes.includes("Multiscale"), true);
+  assert.equal(shadowShield.notes.includes("Shadow Shield"), true);
+  assert.equal(multiscale.maxDamage < normal.maxDamage, true);
+  assert.deepEqual([chippedMultiscale.minDamage, chippedMultiscale.maxDamage], [normal.minDamage, normal.maxDamage]);
+  assert.equal(teraShell.typeMultiplier, 0.5);
+  assert.equal(teraShell.notes.includes("Tera Shell"), true);
+  assert.equal(teraShell.maxDamage < normal.maxDamage, true);
+  assert.deepEqual([chippedTeraShell.minDamage, chippedTeraShell.maxDamage], [normal.minDamage, normal.maxDamage]);
+});
+
+test("P2-07 applies defensive stat and incoming-type ability modifiers", () => {
+  const attacker = {
+    id: "defensivemodifieruser",
+    name: "Defensivemodifieruser",
+    types: ["Fire", "Ghost", "Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "defensivemodifiertarget",
+    name: "Defensivemodifiertarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const flamethrower = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const shadowBall = { id: "shadowball", name: "Shadow Ball", type: "Ghost", category: "Special", basePower: 80 };
+  const quickAttack = { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40 };
+
+  const fire = calculateDamage({ attacker, defender, move: flamethrower, attackerState: neutralState, defenderState: neutralState });
+  const thickFat = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "thickfat", name: "Thick Fat" } },
+  });
+  const heatproof = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "heatproof", name: "Heatproof" } },
+  });
+  const waterBubble = calculateDamage({
+    attacker,
+    defender,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "waterbubble", name: "Water Bubble" } },
+  });
+  const ghostTarget = { ...defender, types: ["Psychic"] };
+  const ghost = calculateDamage({ attacker, defender: ghostTarget, move: shadowBall, attackerState: neutralState, defenderState: neutralState });
+  const purifyingSalt = calculateDamage({
+    attacker,
+    defender: ghostTarget,
+    move: shadowBall,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "purifyingsalt", name: "Purifying Salt" } },
+  });
+  const physical = calculateDamage({ attacker, defender, move: quickAttack, attackerState: neutralState, defenderState: neutralState });
+  const furCoat = calculateDamage({
+    attacker,
+    defender,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "furcoat", name: "Fur Coat" } },
+  });
+  const marvelScale = calculateDamage({
+    attacker,
+    defender,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "marvelscale", name: "Marvel Scale" }, status: "burn" },
+  });
+  const grassPelt = calculateDamage({
+    attacker,
+    defender,
+    move: quickAttack,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "grasspelt", name: "Grass Pelt" } },
+    field: createField({ terrain: "Grassy Terrain" }),
+  });
+
+  for (const [result, label, baseline] of [
+    [thickFat, "Thick Fat", fire],
+    [heatproof, "Heatproof", fire],
+    [waterBubble, "Water Bubble", fire],
+    [purifyingSalt, "Purifying Salt", ghost],
+    [furCoat, "Fur Coat", physical],
+    [marvelScale, "Marvel Scale", physical],
+    [grassPelt, "Grass Pelt", physical],
+  ]) {
+    assert.equal(result.notes.includes(label), true, label);
+    assert.equal(result.maxDamage < baseline.maxDamage, true, label);
+  }
+});
+
+test("P2-07 applies Unaware in the correct damage directions", () => {
+  const attacker = {
+    id: "unawareuser",
+    name: "Unawareuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "unawaretarget",
+    name: "Unawaretarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const slash = { id: "slash", name: "Slash", type: "Normal", category: "Physical", basePower: 70 };
+  const neutral = calculateDamage({ attacker, defender, move: slash, attackerState: neutralState, defenderState: neutralState });
+  const boostedAttacker = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, atk: 4 } },
+    defenderState: neutralState,
+  });
+  const defenderUnaware = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, stages: { ...neutralState.stages, atk: 4 } },
+    defenderState: { ...neutralState, ability: { id: "unaware", name: "Unaware" } },
+  });
+  const boostedDefender = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, def: 4 } },
+  });
+  const attackerUnaware = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "unaware", name: "Unaware" } },
+    defenderState: { ...neutralState, stages: { ...neutralState.stages, def: 4 } },
+  });
+
+  assert.equal(boostedAttacker.maxDamage > neutral.maxDamage, true);
+  assert.deepEqual([defenderUnaware.minDamage, defenderUnaware.maxDamage], [neutral.minDamage, neutral.maxDamage]);
+  assert.equal(boostedDefender.maxDamage < neutral.maxDamage, true);
+  assert.deepEqual([attackerUnaware.minDamage, attackerUnaware.maxDamage], [neutral.minDamage, neutral.maxDamage]);
+  assert.equal(defenderUnaware.notes.includes("Unaware"), true);
+  assert.equal(attackerUnaware.notes.includes("Unaware"), true);
+});
+
+test("P2-07 applies defensive ability immunities and ability suppression", () => {
+  const attacker = {
+    id: "abilityimmunityuser",
+    name: "Abilityimmunityuser",
+    types: ["Electric", "Ground", "Fire", "Grass", "Water"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "abilityimmunitytarget",
+    name: "Abilityimmunitytarget",
+    types: ["Water"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const thunderbolt = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
+  const earthquake = { id: "earthquake", name: "Earthquake", type: "Ground", category: "Physical", basePower: 100 };
+  const flamethrower = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const leafBlade = { id: "leafblade", name: "Leaf Blade", type: "Grass", category: "Physical", basePower: 90 };
+  const waterPulse = { id: "waterpulse", name: "Water Pulse", type: "Water", category: "Special", basePower: 60 };
+  const immunityCases = [
+    [thunderbolt, "voltabsorb", "Volt Absorb"],
+    [thunderbolt, "motordrive", "Motor Drive"],
+    [thunderbolt, "lightningrod", "Lightning Rod"],
+    [waterPulse, "waterabsorb", "Water Absorb"],
+    [waterPulse, "stormdrain", "Storm Drain"],
+    [leafBlade, "sapsipper", "Sap Sipper"],
+    [flamethrower, "wellbakedbody", "Well-Baked Body"],
+  ];
+
+  for (const [move, id, name] of immunityCases) {
+    const result = calculateDamage({
+      attacker,
+      defender,
+      move,
+      attackerState: neutralState,
+      defenderState: { ...neutralState, ability: { id, name } },
+    });
+    assert.deepEqual([result.minDamage, result.maxDamage], [0, 0], name);
+    assert.equal(result.notes.includes("Immune (ability)"), true, name);
+    assert.equal(result.notes.includes(name), true, name);
+  }
+
+  const shedinja = { ...defender, id: "shedinja", name: "Shedinja", types: ["Bug", "Ghost"] };
+  const wonderGuardNeutral = calculateDamage({
+    attacker,
+    defender: shedinja,
+    move: leafBlade,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "wonderguard", name: "Wonder Guard" } },
+  });
+  const wonderGuardSuperEffective = calculateDamage({
+    attacker,
+    defender: shedinja,
+    move: flamethrower,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "wonderguard", name: "Wonder Guard" } },
+  });
+  const levitate = calculateDamage({
+    attacker,
+    defender,
+    move: earthquake,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "levitate", name: "Levitate" } },
+  });
+  const moldBreaker = calculateDamage({
+    attacker,
+    defender,
+    move: earthquake,
+    attackerState: { ...neutralState, ability: { id: "moldbreaker", name: "Mold Breaker" } },
+    defenderState: { ...neutralState, ability: { id: "levitate", name: "Levitate" } },
+  });
+
+  assert.deepEqual([wonderGuardNeutral.minDamage, wonderGuardNeutral.maxDamage], [0, 0]);
+  assert.equal(wonderGuardNeutral.notes.includes("Wonder Guard"), true);
+  assert.equal(wonderGuardSuperEffective.minDamage > 0, true);
+  assert.deepEqual([levitate.minDamage, levitate.maxDamage], [0, 0]);
+  assert.equal(moldBreaker.minDamage > 0, true);
+  assert.equal(moldBreaker.notes.includes("Mold Breaker"), true);
+});
+
+test("P2-07 Neutralizing Gas suppresses attacker and defender ability modifiers", () => {
+  const attacker = {
+    id: "neutralizinggasuser",
+    name: "Neutralizinggasuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 120, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "neutralizinggastarget",
+    name: "Neutralizinggastarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const slash = { id: "slash", name: "Slash", type: "Normal", category: "Physical", basePower: 70 };
+  const normal = calculateDamage({ attacker, defender, move: slash, attackerState: neutralState, defenderState: neutralState });
+  const hugePower = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "hugepower", name: "Huge Power" } },
+    defenderState: neutralState,
+  });
+  const hugePowerSuppressed = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "hugepower", name: "Huge Power" } },
+    defenderState: { ...neutralState, ability: { id: "neutralizinggas", name: "Neutralizing Gas" } },
+  });
+  const multiscale = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ability: { id: "multiscale", name: "Multiscale" } },
+  });
+  const multiscaleSuppressed = calculateDamage({
+    attacker,
+    defender,
+    move: slash,
+    attackerState: { ...neutralState, ability: { id: "neutralizinggas", name: "Neutralizing Gas" } },
+    defenderState: { ...neutralState, ability: { id: "multiscale", name: "Multiscale" } },
+  });
+
+  assert.equal(hugePower.maxDamage > normal.maxDamage, true);
+  assert.deepEqual([hugePowerSuppressed.minDamage, hugePowerSuppressed.maxDamage], [normal.minDamage, normal.maxDamage]);
+  assert.equal(hugePowerSuppressed.notes.includes("Huge Power"), false);
+  assert.equal(multiscale.maxDamage < normal.maxDamage, true);
+  assert.deepEqual([multiscaleSuppressed.minDamage, multiscaleSuppressed.maxDamage], [normal.minDamage, normal.maxDamage]);
+  assert.equal(multiscaleSuppressed.notes.includes("Multiscale"), false);
+});
+
+test("P2-07 applies Sturdy, Ice Face, and Heavy Metal defensive mechanics", () => {
+  const attacker = {
+    id: "defenseutilityuser",
+    name: "Defenseutilityuser",
+    types: ["Normal", "Fighting", "Steel"],
+    weightkg: 100,
+    baseStats: { hp: 80, atk: 180, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "defenseutilitytarget",
+    name: "Defenseutilitytarget",
+    types: ["Normal"],
+    weightkg: 20,
+    baseStats: { hp: 1, atk: 80, def: 1, spa: 80, spd: 80, spe: 50 },
+  };
+  const targetState = { ...neutralState, sp: { ...neutralState.sp, hp: 0, def: 0 } };
+  const gigaImpact = { id: "gigaimpact", name: "Giga Impact", type: "Normal", category: "Physical", basePower: 150 };
+  const lowKick = { id: "lowkick", name: "Low Kick", type: "Fighting", category: "Physical", basePower: 0 };
+  const heavySlam = { id: "heavyslam", name: "Heavy Slam", type: "Steel", category: "Physical", basePower: 0 };
+
+  const sturdy = calculateDamage({
+    attacker,
+    defender,
+    move: gigaImpact,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "sturdy", name: "Sturdy" } },
+  });
+  const chippedSturdy = calculateDamage({
+    attacker,
+    defender,
+    move: gigaImpact,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "sturdy", name: "Sturdy" }, currentHpFraction: 0.99 },
+  });
+  const iceFace = calculateDamage({
+    attacker,
+    defender,
+    move: gigaImpact,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "iceface", name: "Ice Face" } },
+  });
+  const brokenIceFace = calculateDamage({
+    attacker,
+    defender,
+    move: gigaImpact,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "iceface", name: "Ice Face" }, iceFaceIntact: false },
+  });
+  const lightTargetLowKick = calculateDamage({
+    attacker,
+    defender,
+    move: lowKick,
+    attackerState: neutralState,
+    defenderState: targetState,
+  });
+  const heavyMetalLowKick = calculateDamage({
+    attacker,
+    defender,
+    move: lowKick,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "heavymetal", name: "Heavy Metal" } },
+  });
+  const lightTargetHeavySlam = calculateDamage({
+    attacker,
+    defender,
+    move: heavySlam,
+    attackerState: neutralState,
+    defenderState: targetState,
+  });
+  const heavyMetalHeavySlam = calculateDamage({
+    attacker,
+    defender,
+    move: heavySlam,
+    attackerState: neutralState,
+    defenderState: { ...targetState, ability: { id: "heavymetal", name: "Heavy Metal" } },
+  });
+
+  assert.equal(sturdy.ko.text, "survives with Sturdy at full HP");
+  assert.notEqual(chippedSturdy.ko.text, "survives with Sturdy at full HP");
+  assert.deepEqual([iceFace.minDamage, iceFace.maxDamage], [0, 0]);
+  assert.equal(iceFace.notes.includes("Ice Face intact"), true);
+  assert.equal(brokenIceFace.minDamage > 0, true);
+  assert.equal(lightTargetLowKick.notes.includes("Low Kick power 40"), true);
+  assert.equal(heavyMetalLowKick.notes.includes("Low Kick power 60"), true);
+  assert.equal(lightTargetHeavySlam.notes.includes("Heavy Slam power 120"), true);
+  assert.equal(heavyMetalHeavySlam.notes.includes("Heavy Slam power 60"), true);
+});

@@ -1,6 +1,6 @@
 # P2-07 — Defensive abilities and ability suppression
 
-Status: TODO
+Status: Done
 Depends on: P1-04, P1-05
 Phase: 2 (mechanics burn-down)
 
@@ -56,3 +56,13 @@ suppression" (Mold Breaker, Teravolt, Turboblaze, Neutralizing Gas) · "Weight m
 ```sh
 npm run test:damage && npm test
 ```
+
+## Completion notes
+
+- Added suppression-aware defensive ability handling for Multiscale, Shadow Shield, Tera Shell,
+  Thick Fat, Heatproof, Purifying Salt, Fur Coat, Marvel Scale, Grass Pelt, Water Bubble,
+  Unaware, Wonder Guard, Volt/Water Absorb-style immunities, Lightning Rod, Storm Drain,
+  Levitate, Sturdy, Ice Face, Heavy Metal, Mold Breaker, Teravolt, Turboblaze, and Neutralizing Gas.
+- Marked note-only abilities (Overcoat, Stalwart, Propeller Tail, Magic Bounce, Magnet Pull) as
+  excluded by design because they do not change the displayed damage range.
+- Verified with `npm run test:damage`.

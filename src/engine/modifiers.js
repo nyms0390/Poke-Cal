@@ -239,10 +239,15 @@ export const ABILITY_MODIFIERS = {
     ctx.attackerPerspective && normalizeId(ctx.field.weather) === "sandstorm" && ["Rock", "Ground", "Steel"].includes(ctx.moveType)
       ? { kind: "power", value: 1.3, label: "Sand Force" }
       : null,
-  waterbubble: (ctx) =>
-    ctx.attackerPerspective && ctx.moveType === "Water"
-      ? { kind: "power", value: 2, label: "Water Bubble" }
-      : null,
+  waterbubble: (ctx) => {
+    if (ctx.attackerPerspective && ctx.moveType === "Water") {
+      return { kind: "power", value: 2, label: "Water Bubble" };
+    }
+    if (!ctx.attackerPerspective && ctx.moveType === "Fire") {
+      return { kind: "damage", value: 0.5, label: "Water Bubble" };
+    }
+    return null;
+  },
   tintedlens: (ctx) =>
     ctx.attackerPerspective && ctx.typeMultiplier < 1 ? { kind: "damage", value: 2, label: "Tinted Lens" } : null,
   prismarmor: (ctx) =>
@@ -260,6 +265,38 @@ export const ABILITY_MODIFIERS = {
   hadronengine: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "spa" && normalizeId(ctx.field.terrain) === "electricterrain"
       ? { kind: "attack", value: FIELD_ABILITY_BOOST, label: ctx.attackerState.ability.name }
+      : null,
+  multiscale: (ctx) =>
+    !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
+      ? { kind: "damage", value: 0.5, label: "Multiscale" }
+      : null,
+  shadowshield: (ctx) =>
+    !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
+      ? { kind: "damage", value: 0.5, label: "Shadow Shield" }
+      : null,
+  thickfat: (ctx) =>
+    !ctx.attackerPerspective && (ctx.moveType === "Fire" || ctx.moveType === "Ice")
+      ? { kind: "attack", value: 0.5, label: "Thick Fat" }
+      : null,
+  heatproof: (ctx) =>
+    !ctx.attackerPerspective && ctx.moveType === "Fire"
+      ? { kind: "damage", value: 0.5, label: "Heatproof" }
+      : null,
+  purifyingsalt: (ctx) =>
+    !ctx.attackerPerspective && ctx.moveType === "Ghost"
+      ? { kind: "attack", value: 0.5, label: "Purifying Salt" }
+      : null,
+  furcoat: (ctx) =>
+    !ctx.attackerPerspective && ctx.isPhysical
+      ? { kind: "defense", value: 2, label: "Fur Coat" }
+      : null,
+  marvelscale: (ctx) =>
+    !ctx.attackerPerspective && ctx.isPhysical && ctx.defenderState.status
+      ? { kind: "defense", value: 1.5, label: "Marvel Scale" }
+      : null,
+  grasspelt: (ctx) =>
+    !ctx.attackerPerspective && ctx.isPhysical && normalizeId(ctx.field.terrain) === "grassyterrain"
+      ? { kind: "defense", value: 1.5, label: "Grass Pelt" }
       : null,
 };
 
@@ -359,7 +396,8 @@ function auraPowerModifier(ctx) {
       ? "darkaura"
       : "";
   if (!auraType) return null;
-  if (!hasAbility(ctx.attackerState, auraType) && !hasAbility(ctx.defenderState, auraType)) return null;
+  if (!hasActiveAbility(ctx.attackerState, auraType, ctx.suppressAttackerAbility) &&
+    !hasActiveAbility(ctx.defenderState, auraType, ctx.suppressDefenderAbility)) return null;
   return { kind: "power", value: 1.33, label: auraType === "fairyaura" ? "Fairy Aura" : "Dark Aura" };
 }
 
@@ -481,15 +519,21 @@ function hasAbility(state, abilityId) {
   return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
 }
 
+function hasActiveAbility(state, abilityId, suppressed) {
+  return !suppressed && hasAbility(state, abilityId);
+}
+
 function isSun(weather) {
   const weatherId = normalizeId(weather);
   return weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
 export function collectModifiers(ctx) {
-  const attackerAbilityId = normalizeId(ctx.attackerState.ability?.id ?? ctx.attackerState.ability?.name);
+  const attackerAbilityId = ctx.suppressAttackerAbility
+    ? ""
+    : normalizeId(ctx.attackerState.ability?.id ?? ctx.attackerState.ability?.name);
   const attackerItemId = normalizeId(ctx.attackerState.item?.id ?? ctx.attackerState.item?.name);
-  const defenderAbilityId = ctx.move.ignoreAbility
+  const defenderAbilityId = ctx.suppressDefenderAbility || ctx.move.ignoreAbility
     ? ""
     : normalizeId(ctx.defenderState.ability?.id ?? ctx.defenderState.ability?.name);
   const defenderItemId = normalizeId(ctx.defenderState.item?.id ?? ctx.defenderState.item?.name);

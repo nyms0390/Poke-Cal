@@ -19,6 +19,7 @@ export { calculateStat, applyStage };
 
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
+const ABILITY_SUPPRESSING_ATTACKER_ABILITIES = new Set(["moldbreaker", "teravolt", "turboblaze"]);
 const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "echoedvoice",
   "furycutter",
@@ -58,9 +59,9 @@ const UNSUPPORTED_MOVE_REASONS = {
   bide: "Requires stored damage taken over prior turns.",
 };
 
-export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}, attackerState = {}) {
+export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}, attackerState = {}, options = {}) {
   const moveId = normalizeId(move?.id ?? move?.name);
-  if (hasScrappyBypass(moveType, defenderTypes, attackerState)) {
+  if (!options.suppressAttackerAbility && hasScrappyBypass(moveType, defenderTypes, attackerState)) {
     return defenderTypes.reduce((multiplier, defenderType) => {
       if (defenderType === "Ghost") return multiplier;
       return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
@@ -110,8 +111,16 @@ export function calculateDamage({
   critical = false,
   moveOptions = {},
 }) {
-  const weatherSuppressed = hasAnyAbility(attackerState, ["cloudnine", "airlock"]) ||
-    hasAnyAbility(defenderState, ["cloudnine", "airlock"]);
+  const neutralizingGasActive = hasAnyAbility(attackerState, ["neutralizinggas"]) ||
+    hasAnyAbility(defenderState, ["neutralizinggas"]);
+  const suppressAttackerAbility = neutralizingGasActive;
+  const suppressDefenderAbility = neutralizingGasActive ||
+    move.ignoreAbility ||
+    attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility);
+  const weatherSuppressed = !neutralizingGasActive && (
+    hasAnyAbility(attackerState, ["cloudnine", "airlock"]) ||
+    hasAnyAbility(defenderState, ["cloudnine", "airlock"])
+  );
   const effectiveField = {
     ...field,
     weather: weatherSuppressed ? "" : field.weather,
@@ -121,10 +130,20 @@ export function calculateDamage({
   const unsupported = unsupportedMoveReason(move);
   if (unsupported) return { supported: false, reason: unsupported };
 
-  const ctx = { move, attacker, defender, attackerState, defenderState, field: effectiveField, moveOptions };
+  const ctx = {
+    move,
+    attacker,
+    defender,
+    attackerState,
+    defenderState,
+    field: effectiveField,
+    moveOptions,
+    suppressAttackerAbility,
+    suppressDefenderAbility,
+  };
   const moveType = effectiveMoveType(ctx);
   const defenderTypes = defenderState.teraType ? [defenderState.teraType] : defender.types;
-  const typeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState);
+  const rawTypeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, { suppressAttackerAbility });
   const defenderMaxHp = calculatePokemonStat(defender, defenderState, "hp");
   const defenderCurrentHp = currentHp(defenderState, defenderMaxHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
@@ -135,8 +154,12 @@ export function calculateDamage({
   ctx.attackerMaxHp = attackerMaxHp;
   const moveId = normalizeId(move.id ?? move.name);
   const alwaysCritical = moveEffect(moveId).alwaysCrit === true;
+  const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderState, suppressDefenderAbility });
+  const teraShell = teraShellTypeMultiplier(rawTypeMultiplier, defenderState, suppressDefenderAbility);
+  const typeMultiplier = abilityImmunity ? 0 : teraShell ?? rawTypeMultiplier;
+  ctx.typeMultiplier = typeMultiplier;
   const effectiveCritical = (critical || alwaysCritical) &&
-    (move.ignoreAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
+    (suppressDefenderAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
   if (typeMultiplier === 0) {
     const rolls = DAMAGE_ROLLS.map(() => 0);
     return {
@@ -150,7 +173,29 @@ export function calculateDamage({
       defenderCurrentHp,
       typeMultiplier,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
-      notes: ["Immune", ...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)],
+      notes: [
+        abilityImmunity ? "Immune (ability)" : "Immune",
+        abilityImmunity?.label,
+        ...fieldNotes(effectiveField, attackerState, defenderState),
+        ...teraNotes(attackerState, defenderState),
+      ].filter(Boolean),
+    };
+  }
+
+  if (!suppressDefenderAbility && move.category === "Physical" && hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false) {
+    const rolls = DAMAGE_ROLLS.map(() => 0);
+    return {
+      supported: true,
+      rolls,
+      minDamage: 0,
+      maxDamage: 0,
+      minPercent: 0,
+      maxPercent: 0,
+      defenderHp: defenderMaxHp,
+      defenderCurrentHp,
+      typeMultiplier,
+      ko: koSummaryForRolls(rolls, defenderCurrentHp),
+      notes: ["Ice Face intact", ...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)],
     };
   }
 
@@ -168,7 +213,8 @@ export function calculateDamage({
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
-      ko: koSummaryForRolls(rolls, defenderCurrentHp),
+      ko: sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) ??
+        koSummaryForRolls(rolls, defenderCurrentHp),
       notes: ["Fixed damage", ...fieldNotes(effectiveField, attackerState, defenderState), moveEffect(moveId).note?.(ctx), ...teraNotes(attackerState, defenderState)].filter(Boolean),
     };
   }
@@ -187,12 +233,16 @@ export function calculateDamage({
   let isPhysical = move.category === "Physical";
   let attackStat = move.overrideOffensiveStat ?? (isPhysical ? "atk" : "spa");
   let defenseStat = move.overrideDefensiveStat ?? (isPhysical ? "def" : "spd");
+  const attackerHasUnaware = !suppressAttackerAbility && hasAbility(attackerState, "unaware");
+  const defenderHasUnaware = !suppressDefenderAbility && hasAbility(defenderState, "unaware");
   const offensiveStatHandler = moveEffect(moveId).offensiveStat;
   if (offensiveStatHandler) {
     ctx.physicalAttack = calculatePokemonStat(attacker, attackerState, "atk", {
+      ignoreStage: defenderHasUnaware,
       stagePolicy: criticalStagePolicy("attack", effectiveCritical),
     });
     ctx.specialAttack = calculatePokemonStat(attacker, attackerState, "spa", {
+      ignoreStage: defenderHasUnaware,
       stagePolicy: criticalStagePolicy("attack", effectiveCritical),
     });
     attackStat = offensiveStatHandler(ctx);
@@ -202,16 +252,21 @@ export function calculateDamage({
   const attackSource = move.overrideOffensivePokemon === "target"
     ? { pokemon: defender, state: defenderState }
     : { pokemon: attacker, state: attackerState };
+  const attackIgnoresStage = move.overrideOffensivePokemon === "target" ? attackerHasUnaware : defenderHasUnaware;
   const attack = calculatePokemonStat(attackSource.pokemon, attackSource.state, attackStat, {
+    ignoreStage: attackIgnoresStage,
     stagePolicy: criticalStagePolicy("attack", effectiveCritical),
   });
   const baseDefense = calculatePokemonStat(defender, defenderState, defenseStat, {
-    ignoreStage: move.ignoreDefensive,
+    ignoreStage: move.ignoreDefensive || attackerHasUnaware,
     stagePolicy: criticalStagePolicy("defense", effectiveCritical),
   });
   const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField);
   const defense = sandstormSpDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
   const notes = [...fieldNotes(effectiveField, attackerState, defenderState), ...teraNotes(attackerState, defenderState)];
+  if (teraShell !== null) notes.push("Tera Shell");
+  if (attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
+  if (attackerHasUnaware || defenderHasUnaware) notes.push("Unaware");
   if (sandstormSpDefenseBoost) notes.push("Sandstorm Rock SpD boost");
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
   const moveNote = moveEffect(moveId).note?.(ctx);
@@ -226,6 +281,7 @@ export function calculateDamage({
     notes.push(`${move.name} power ${power}`);
   }
   let attackModifier = 1;
+  let defenseModifier = 1;
   const powerModifiers = [];
   let damageModifier = 1;
   let stab = stabMultiplier(attacker, attackerState, moveType);
@@ -247,6 +303,7 @@ export function calculateDamage({
   for (const modifier of modifiers) {
     notes.push(modifier.label);
     if (modifier.kind === "attack") attackModifier *= modifier.value;
+    if (modifier.kind === "defense") defenseModifier *= modifier.value;
     if (modifier.kind === "power") powerModifiers.push(modifier.value);
     if (modifier.kind === "damage") damageModifier *= modifier.value;
     if (modifier.kind === "stab") stab = modifier.value;
@@ -264,11 +321,13 @@ export function calculateDamage({
   if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
   power = hitPowers[0];
   const modifiedAttack = Math.max(1, Math.floor(attack * attackModifier));
+  const modifiedDefense = Math.max(1, Math.floor(defense * defenseModifier));
   const criticalModifier = effectiveCritical
-    ? hasAbility(attackerState, "sniper") ? 2.25 : 1.5
+    ? !suppressAttackerAbility && hasAbility(attackerState, "sniper") ? 2.25 : 1.5
     : 1;
   const burnModifier =
-    attackerState.status === "burn" && isPhysical && !hasAbility(attackerState, "guts") && !moveEffect(moveId).ignoreBurn
+    attackerState.status === "burn" && isPhysical &&
+      (suppressAttackerAbility || !hasAbility(attackerState, "guts")) && !moveEffect(moveId).ignoreBurn
       ? 0.5
       : 1;
   const spreadModifier =
@@ -281,7 +340,7 @@ export function calculateDamage({
   }
 
   const damageForHit = (hitPower, roll) => {
-    let hitDamage = baseDamageForPower(hitPower, modifiedAttack, defense);
+    let hitDamage = baseDamageForPower(hitPower, modifiedAttack, modifiedDefense);
     hitDamage = Math.floor(hitDamage * criticalModifier);
     hitDamage = Math.floor(hitDamage * roll / 100);
     hitDamage = Math.floor(hitDamage * stab);
@@ -314,11 +373,46 @@ export function calculateDamage({
     defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
-    ko: rollDistribution
-      ? koSummaryForRolls(rolls, defenderCurrentHp, rollDistribution)
-      : unavailableKoSummary("KO chance unavailable for variable hit count"),
+    ko: sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) ??
+      (rollDistribution
+        ? koSummaryForRolls(rolls, defenderCurrentHp, rollDistribution)
+        : unavailableKoSummary("KO chance unavailable for variable hit count")),
     notes,
   };
+}
+
+function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderState, suppressDefenderAbility }) {
+  if (suppressDefenderAbility) return null;
+  const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
+  const abilityName = defenderState.ability?.name ?? defenderState.ability?.id;
+  const moveId = normalizeId(move?.id ?? move?.name);
+  const types = defenderState.teraType ? [defenderState.teraType] : defender?.types ?? [];
+  if (abilityId === "levitate" && moveType === "Ground" && defenderState.grounded !== true && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
+    return { label: abilityName };
+  }
+  if (["voltabsorb", "motordrive", "lightningrod"].includes(abilityId) && moveType === "Electric") {
+    return { label: abilityName };
+  }
+  if (["waterabsorb", "stormdrain"].includes(abilityId) && moveType === "Water") {
+    return { label: abilityName };
+  }
+  if (abilityId === "sapsipper" && moveType === "Grass") return { label: abilityName };
+  if (abilityId === "wellbakedbody" && moveType === "Fire") return { label: abilityName };
+  if (abilityId === "wonderguard" && typeMultiplier <= 1) return { label: abilityName };
+  return null;
+}
+
+function teraShellTypeMultiplier(typeMultiplier, defenderState, suppressDefenderAbility) {
+  if (suppressDefenderAbility || !hasAbility(defenderState, "terashell")) return null;
+  if (Number(defenderState.currentHpFraction ?? 1) !== 1 || typeMultiplier <= 1) return null;
+  return 0.5;
+}
+
+function sturdySummary(rolls, defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
+  if (suppressDefenderAbility || !hasAbility(defenderState, "sturdy")) return null;
+  if (defenderCurrentHp !== defenderMaxHp) return null;
+  if (Math.min(...rolls) < defenderMaxHp) return null;
+  return { hits: null, chance: 0, text: "survives with Sturdy at full HP" };
 }
 
 function koSummaryForRolls(rolls, targetHp, rollDistribution) {
@@ -473,6 +567,12 @@ function hasAbility(state, abilityId) {
 function hasAnyAbility(state, abilityIds) {
   const ability = normalizeId(state.ability?.id ?? state.ability?.name);
   return abilityIds.includes(ability);
+}
+
+function attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility) {
+  if (suppressAttackerAbility) return false;
+  const ability = normalizeId(attackerState.ability?.id ?? attackerState.ability?.name);
+  return ABILITY_SUPPRESSING_ATTACKER_ABILITIES.has(ability);
 }
 
 function hasScrappyBypass(moveType, defenderTypes, attackerState) {
