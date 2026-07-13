@@ -11,18 +11,21 @@
       "適應力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 539,
-      "usagePercent": 4.015794963492773
+      "usageCount": 1389,
+      "usagePercent": 3.7685170112322965
     }
   },
   {
-    "id": "adaptibility",
-    "name": "Adaptibility",
+    "id": "adaptablilty",
+    "name": "Adaptablilty",
     "champions": {
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -32,7 +35,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -51,7 +54,10 @@
     },
     "aliases": [
       "飛行皮膚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "aftermath",
@@ -65,7 +71,10 @@
     "damage": "  [POKEMON] was hurt!",
     "aliases": [
       "引爆"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "airlock",
@@ -78,7 +87,10 @@
     "start": "  The effects of the weather disappeared.",
     "aliases": [
       "氣閘"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "analytic",
@@ -93,8 +105,11 @@
       "分析"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -114,10 +129,11 @@
       "憤怒穴位"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 5,
+      "usagePercent": 0.013565575994356722
     }
   },
   {
@@ -130,7 +146,10 @@
     "shortDesc": "At 1/2 or less of this Pokemon's max HP: +1 Atk, Sp. Atk, Spe, and -1 Def, Sp. Def.",
     "aliases": [
       "憤怒甲殼"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "anticipation",
@@ -149,7 +168,10 @@
     "activate": "  [POKEMON] shuddered!",
     "aliases": [
       "危險預知"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "arenatrap",
@@ -173,7 +195,10 @@
     },
     "aliases": [
       "沙穴"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "armortail",
@@ -190,10 +215,11 @@
       "尾甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 534,
-      "usagePercent": 3.9785426911041575
+      "usageCount": 1380,
+      "usagePercent": 3.744098974442455
     }
   },
   {
@@ -211,10 +237,11 @@
       "芳香幕"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 19,
+      "usagePercent": 0.051549188778555535
     }
   },
   {
@@ -234,7 +261,10 @@
     "shortDesc": "Combination of the Unnerve and Chilling Neigh Abilities.",
     "aliases": [
       "人馬一體"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "asonespectrier",
@@ -253,7 +283,10 @@
     "shortDesc": "Combination of the Unnerve and Grim Neigh Abilities.",
     "aliases": [
       "人馬一體"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "aurabreak",
@@ -268,7 +301,10 @@
     "start": "  [POKEMON] reversed all other Pokémon's auras!",
     "aliases": [
       "氣場破壞"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "baddreams",
@@ -291,7 +327,10 @@
     "damage": "  [POKEMON] is tormented!",
     "aliases": [
       "夢魘"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "ballfetch",
@@ -302,7 +341,10 @@
     "shortDesc": "No competitive use.",
     "aliases": [
       "撿球"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "battery",
@@ -314,7 +356,10 @@
     "shortDesc": "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
     "aliases": [
       "蓄電池"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "battlearmor",
@@ -330,10 +375,11 @@
       "戰鬥盔甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -360,7 +406,10 @@
     "transform": "[POKEMON] became Ash-Greninja!",
     "aliases": [
       "牽絆變身"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "beadsofruin",
@@ -372,7 +421,10 @@
     "start": "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "beastboost",
@@ -384,7 +436,10 @@
     "shortDesc": "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
     "aliases": [
       "異獸提升"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "berserk",
@@ -398,10 +453,11 @@
       "怒火沖天"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 10,
+      "usagePercent": 0.027131151988713444
     }
   },
   {
@@ -417,10 +473,11 @@
       "健壯胸肌"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -441,10 +498,21 @@
       "猛火"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 729,
-      "usagePercent": 5.43138131426017
+      "usageCount": 2021,
+      "usagePercent": 5.483205816918987
+    }
+  },
+  {
+    "id": "bold",
+    "name": "Bold",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -460,10 +528,11 @@
       "防彈"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 18,
+      "usagePercent": 0.04883607357968419
     }
   },
   {
@@ -481,10 +550,11 @@
       "頰囊"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -497,16 +567,9 @@
     "shortDesc": "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
     "aliases": [
       "蒼白嘶鳴"
-    ]
-  },
-  {
-    "id": "chlirophyll",
-    "name": "Chlirophyll",
+    ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": true
     }
   },
   {
@@ -524,10 +587,31 @@
       "葉綠素"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 306,
-      "usagePercent": 2.2798390701832814
+      "usageCount": 786,
+      "usagePercent": 2.1325085463128763
+    }
+  },
+  {
+    "id": "chrolophyl",
+    "name": "Chrolophyl",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
+  },
+  {
+    "id": "chrolophyll",
+    "name": "Chrolophyll",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -543,10 +627,11 @@
       "恆淨之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 225,
-      "usagePercent": 1.676352257487707
+      "usageCount": 542,
+      "usagePercent": 1.4705084377882685
     }
   },
   {
@@ -562,10 +647,11 @@
       "無關天氣"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 27,
-      "usagePercent": 0.2011622708985248
+      "usageCount": 83,
+      "usagePercent": 0.22518856150632155
     }
   },
   {
@@ -581,7 +667,10 @@
     },
     "aliases": [
       "變色"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "comatose",
@@ -601,7 +690,10 @@
     "start": "  [POKEMON] is drowsing!",
     "aliases": [
       "絕對睡眠"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "commander",
@@ -621,7 +713,10 @@
     "activate": "  [POKEMON] was swallowed by [TARGET] and became [TARGET]'s commander!",
     "aliases": [
       "發號施令"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "competitive",
@@ -635,10 +730,11 @@
       "好勝"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 131,
-      "usagePercent": 0.9760095365817315
+      "usageCount": 391,
+      "usagePercent": 1.0608280427586956
     }
   },
   {
@@ -653,10 +749,11 @@
       "複眼"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 44,
-      "usagePercent": 0.32781999701981823
+      "usageCount": 124,
+      "usagePercent": 0.33642628466004665
     }
   },
   {
@@ -678,10 +775,11 @@
       "唱反調"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 20,
-      "usagePercent": 0.14900908955446282
+      "usageCount": 46,
+      "usagePercent": 0.12480329914808183
     }
   },
   {
@@ -693,7 +791,14 @@
     "shortDesc": "This Pokemon can poison or badly poison a Pokemon regardless of its typing.",
     "aliases": [
       "腐蝕"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
+    }
   },
   {
     "id": "costar",
@@ -705,7 +810,10 @@
     "shortDesc": "On switch-in, this Pokemon copies all of its ally's stat stage changes.",
     "aliases": [
       "同台共演"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "cottondown",
@@ -717,7 +825,10 @@
     "shortDesc": "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
     "aliases": [
       "棉絮"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "cudchew",
@@ -732,10 +843,11 @@
       "反芻"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -749,8 +861,11 @@
       "怪藥"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -765,10 +880,11 @@
       "詛咒之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 184,
-      "usagePercent": 1.370883623901058
+      "usageCount": 492,
+      "usagePercent": 1.3348526778447012
     }
   },
   {
@@ -790,10 +906,11 @@
       "迷人之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.07450454477723141
+      "usageCount": 18,
+      "usagePercent": 0.04883607357968419
     }
   },
   {
@@ -823,10 +940,11 @@
       "濕氣"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 90,
-      "usagePercent": 0.6705409029950827
+      "usageCount": 285,
+      "usagePercent": 0.773237831678333
     }
   },
   {
@@ -839,7 +957,10 @@
     "shortDesc": "After another Pokemon uses a dance move, this Pokemon uses the same move.",
     "aliases": [
       "舞者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "darkaura",
@@ -853,7 +974,10 @@
     "start": "  [POKEMON] is radiating a dark aura!",
     "aliases": [
       "暗黑氣場"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "dauntlessshield",
@@ -867,7 +991,10 @@
     },
     "aliases": [
       "不屈之盾"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "dazzling",
@@ -882,7 +1009,10 @@
     "block": "#damp",
     "aliases": [
       "鮮艷之軀"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "defeatist",
@@ -896,7 +1026,10 @@
     "shortDesc": "While this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
     "aliases": [
       "軟弱"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "defiant",
@@ -910,10 +1043,11 @@
       "不服輸"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 759,
-      "usagePercent": 5.654894948591864
+      "usageCount": 2207,
+      "usagePercent": 5.987845243909056
     }
   },
   {
@@ -926,7 +1060,10 @@
     "shortDesc": "On switch-in, strong winds begin until this Ability is not active in battle.",
     "aliases": [
       "德爾塔氣流"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "desolateland",
@@ -938,7 +1075,10 @@
     "shortDesc": "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
     "aliases": [
       "終結之地"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "disguise",
@@ -968,10 +1108,11 @@
       "畫皮"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1266577261212934
+      "usageCount": 47,
+      "usagePercent": 0.12751641434695316
     }
   },
   {
@@ -984,7 +1125,10 @@
     "shortDesc": "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
     "aliases": [
       "下載"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "dragonsmaw",
@@ -997,11 +1141,14 @@
     "shortDesc": "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
     "aliases": [
       "龍顎"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "dragonize",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "onModifyTypePriority": -1,
     "onBasePowerPriority": 23,
     "flags": {},
@@ -1009,7 +1156,10 @@
     "rating": 4,
     "num": 312,
     "desc": "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-    "shortDesc": "This Pokemon's Normal-type moves become Dragon type and have 1.2x power."
+    "shortDesc": "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "drizzle",
@@ -1022,10 +1172,11 @@
       "降雨"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 384,
-      "usagePercent": 2.860974519445686
+      "usageCount": 990,
+      "usagePercent": 2.6859840468826306
     }
   },
   {
@@ -1039,10 +1190,11 @@
       "日照"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 240,
-      "usagePercent": 1.7881090746535537
+      "usageCount": 511,
+      "usagePercent": 1.3864018666232567
     }
   },
   {
@@ -1064,10 +1216,11 @@
       "乾燥皮膚"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 17,
+      "usagePercent": 0.046122958380812845
     }
   },
   {
@@ -1079,7 +1232,14 @@
     "shortDesc": "This Pokemon's sleep counter drops by 2 instead of 1.",
     "aliases": [
       "早起"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "eartheater",
@@ -1095,15 +1255,16 @@
       "食土"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 13,
+      "usagePercent": 0.03527049758532747
     }
   },
   {
     "id": "eelevate",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "flags": {
       "breakable": 1
     },
@@ -1113,8 +1274,11 @@
     "desc": "This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity. Thousand Arrows can hit this Pokemon as if it did not have this Ability. This Pokemon's highest stat is raised by 1 stage if it attacks and knocks out another Pokemon. Stat stage changes are not considered. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order.",
     "shortDesc": "This Pokemon is immune to Ground; +1 to highest stat if it KOes another Pokemon.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -1136,8 +1300,11 @@
       "孢子"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
     }
   },
   {
@@ -1151,10 +1318,11 @@
       "電氣製造者"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -1170,10 +1338,11 @@
       "電力轉換"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.15645954403218598
+      "usageCount": 26,
+      "usagePercent": 0.07054099517065494
     }
   },
   {
@@ -1193,7 +1362,10 @@
     "boost": "  The Cornerstone Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Defense rose!",
     "aliases": [
       "太晶變形"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "embodyaspecthearthflame",
@@ -1212,7 +1384,10 @@
     "boost": "  The Hearthflame Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Attack rose!",
     "aliases": [
       "面影輝映"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "embodyaspectteal",
@@ -1231,7 +1406,10 @@
     "boost": "  The Teal Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Speed rose!",
     "aliases": [
       "款待"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "embodyaspectwellspring",
@@ -1250,7 +1428,10 @@
     "boost": "  The Wellspring Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Sp. Def rose!",
     "aliases": [
       "毒鎖鏈"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "emergencyexit",
@@ -1262,7 +1443,10 @@
     "shortDesc": "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
     "aliases": [
       "危險迴避"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "fairyaura",
@@ -1278,10 +1462,11 @@
       "妖精氣場"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 23,
+      "usagePercent": 0.062401649574040916
     }
   },
   {
@@ -1295,11 +1480,18 @@
     "shortDesc": "This Pokemon receives 3/4 damage from supereffective attacks.",
     "aliases": [
       "過濾"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "firemane",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "onModifyAtkPriority": 5,
     "onModifySpAPriority": 5,
     "flags": {},
@@ -1308,8 +1500,7 @@
     "num": 316,
     "shortDesc": "This Pokemon's offensive stat is multiplied by 1.5 while using a Fire-type attack.",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": true
     }
   },
   {
@@ -1330,10 +1521,11 @@
       "火焰之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1266577261212934
+      "usageCount": 72,
+      "usagePercent": 0.19534429431873676
     }
   },
   {
@@ -1347,7 +1539,10 @@
     "shortDesc": "While this Pokemon is burned, its special attacks have 1.5x power.",
     "aliases": [
       "受熱激升"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "flashfire",
@@ -1375,10 +1570,11 @@
       "引火"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 125,
-      "usagePercent": 0.9313068097153926
+      "usageCount": 377,
+      "usagePercent": 1.0228444299744965
     }
   },
   {
@@ -1407,7 +1603,30 @@
     },
     "aliases": [
       "花之禮"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
+  },
+  {
+    "id": "flowerguard",
+    "name": "Flower Guard",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
+  },
+  {
+    "id": "flowervail",
+    "name": "Flower vail",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "flowerveil",
@@ -1424,10 +1643,11 @@
       "花幕"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 341,
-      "usagePercent": 2.540604976903591
+      "usageCount": 806,
+      "usagePercent": 2.1867708502903036
     }
   },
   {
@@ -1442,7 +1662,14 @@
     "shortDesc": "This Pokemon takes 1/2 damage from contact moves, 2x damage from Fire moves.",
     "aliases": [
       "毛茸茸"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "forecast",
@@ -1465,10 +1692,11 @@
       "陰晴不定"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -1486,7 +1714,10 @@
     "activateNoTarget": "  [POKEMON]'s Forewarn alerted it to [MOVE]!",
     "aliases": [
       "預知夢"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "friendguard",
@@ -1501,10 +1732,11 @@
       "友情防守"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 112,
-      "usagePercent": 0.8344509015049918
+      "usageCount": 269,
+      "usagePercent": 0.7298279884963916
     }
   },
   {
@@ -1523,10 +1755,11 @@
       "察覺"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 36,
+      "usagePercent": 0.09767214715936838
     }
   },
   {
@@ -1538,7 +1771,10 @@
     "shortDesc": "Prevents other Pokemon from lowering this Pokemon's stat stages.",
     "aliases": [
       "金屬防護"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "furcoat",
@@ -1554,10 +1790,11 @@
       "毛皮大衣"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -1574,10 +1811,11 @@
       "疾風之翼"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 65,
-      "usagePercent": 0.4842795410520042
+      "usageCount": 240,
+      "usagePercent": 0.6511476477291226
     }
   },
   {
@@ -1592,7 +1830,10 @@
     "shortDesc": "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
     "aliases": [
       "電氣皮膚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "gluttony",
@@ -1606,10 +1847,11 @@
       "貪吃鬼"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -1625,10 +1867,11 @@
       "黃金之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 184,
-      "usagePercent": 1.370883623901058
+      "usageCount": 496,
+      "usagePercent": 1.3457051386401866
     }
   },
   {
@@ -1642,8 +1885,11 @@
       "黏滑"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
     }
   },
   {
@@ -1657,7 +1903,10 @@
     "shortDesc": "This Pokemon's Attack is 1.5x, but it can only select the first move it executes.",
     "aliases": [
       "一猩一意"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "grasspelt",
@@ -1671,7 +1920,10 @@
     "shortDesc": "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
     "aliases": [
       "草之毛皮"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "grassysurge",
@@ -1682,7 +1934,10 @@
     "shortDesc": "On switch-in, this Pokemon summons Grassy Terrain.",
     "aliases": [
       "青草製造者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "grimneigh",
@@ -1694,7 +1949,10 @@
     "shortDesc": "This Pokemon's Sp. Atk is raised by 1 stage if it attacks and KOes another Pokemon.",
     "aliases": [
       "漆黑嘶鳴"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "guarddog",
@@ -1710,7 +1968,10 @@
     "shortDesc": "Immune to Intimidate. Intimidated: +1 Attack. Cannot be forced to switch out.",
     "aliases": [
       "看門犬"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "gulpmissile",
@@ -1725,7 +1986,10 @@
     "shortDesc": "When hit after Surf/Dive, attacker takes 1/4 max HP and -1 Defense or paralysis.",
     "aliases": [
       "一口飛彈"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "guts",
@@ -1740,10 +2004,11 @@
       "毅力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
     }
   },
   {
@@ -1758,7 +2023,10 @@
     "activate": "  [POKEMON] used the Electric Terrain to energize its futuristic engine!",
     "aliases": [
       "強子引擎"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "harvest",
@@ -1775,10 +2043,11 @@
       "收穫"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -1789,15 +2058,16 @@
     "name": "Healer",
     "rating": 0,
     "num": 131,
-    "desc": "30% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
-    "shortDesc": "30% chance this Pokemon's ally has its status cured at the end of each turn.",
+    "desc": "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
+    "shortDesc": "50% chance this Pokemon's ally has its status cured at the end of each turn.",
     "champions": {
       "desc": "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
       "shortDesc": "50% chance this Pokemon's ally has its status cured at the end of each turn.",
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
     },
     "gen6": {
       "desc": "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
@@ -1827,10 +2097,11 @@
       "耐熱"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 11,
+      "usagePercent": 0.02984426718758479
     }
   },
   {
@@ -1848,10 +2119,11 @@
       "重金屬"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 13,
+      "usagePercent": 0.03527049758532747
     }
   },
   {
@@ -1863,7 +2135,10 @@
     "shortDesc": "No competitive use.",
     "aliases": [
       "採蜜"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "hospitality",
@@ -1878,10 +2153,11 @@
       "心眼"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 626,
-      "usagePercent": 4.663984503054686
+      "usageCount": 1807,
+      "usagePercent": 4.9025991643605185
     }
   },
   {
@@ -1896,10 +2172,11 @@
       "大力士"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.1415586350767397
+      "usageCount": 37,
+      "usagePercent": 0.10038526235823973
     }
   },
   {
@@ -1922,10 +2199,11 @@
       "飽了又餓"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -1942,8 +2220,11 @@
       "活力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -1961,7 +2242,10 @@
     },
     "aliases": [
       "濕潤之軀"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "hypercutter",
@@ -1976,10 +2260,11 @@
       "怪力鉗"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 94,
-      "usagePercent": 0.7003427209059753
+      "usageCount": 236,
+      "usagePercent": 0.6402951869336372
     }
   },
   {
@@ -1998,10 +2283,11 @@
       "冰凍之軀"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2029,7 +2315,10 @@
     },
     "aliases": [
       "結凍頭"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "icescales",
@@ -2042,7 +2331,10 @@
     "shortDesc": "This Pokemon receives 1/2 damage from special attacks.",
     "aliases": [
       "冰鱗粉"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "illuminate",
@@ -2062,10 +2354,11 @@
       "發光"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -2087,10 +2380,11 @@
       "幻覺"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 27,
-      "usagePercent": 0.2011622708985248
+      "usageCount": 83,
+      "usagePercent": 0.22518856150632155
     }
   },
   {
@@ -2104,7 +2398,14 @@
     "shortDesc": "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
     "aliases": [
       "免疫"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
+    }
   },
   {
     "id": "imposter",
@@ -2123,10 +2424,11 @@
       "變身者"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 15,
+      "usagePercent": 0.04069672798307016
     }
   },
   {
@@ -2149,10 +2451,11 @@
       "穿透"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 30,
+      "usagePercent": 0.08139345596614032
     }
   },
   {
@@ -2167,7 +2470,10 @@
     "damage": "#aftermath",
     "aliases": [
       "飛出的內在物"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "innerfocus",
@@ -2187,10 +2493,11 @@
       "精神力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 63,
-      "usagePercent": 0.4693786320965579
+      "usageCount": 181,
+      "usagePercent": 0.49107385099571327
     }
   },
   {
@@ -2206,20 +2513,21 @@
       "不眠"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 9,
+      "usagePercent": 0.024418036789842095
     }
   },
   {
-    "id": "intimidaci",
-    "name": "Intimidaci",
+    "id": "intimidade",
+    "name": "Intimidade",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2248,20 +2556,21 @@
       "威嚇"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1133,
-      "usagePercent": 8.44136492326032
+      "usageCount": 3337,
+      "usagePercent": 9.053665418633674
     }
   },
   {
-    "id": "intimidiate",
-    "name": "intimidiate",
+    "id": "intimidation",
+    "name": "Intimidation",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2276,7 +2585,10 @@
     },
     "aliases": [
       "不撓之劍"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "ironbarbs",
@@ -2290,7 +2602,10 @@
     "damage": "#roughskin",
     "aliases": [
       "鐵刺"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "ironfist",
@@ -2305,10 +2620,11 @@
       "鐵拳"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 25,
+      "usagePercent": 0.0678278799717836
     }
   },
   {
@@ -2322,10 +2638,11 @@
       "正義之心"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -2346,10 +2663,11 @@
       "銳利目光"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 13,
+      "usagePercent": 0.03527049758532747
     }
   },
   {
@@ -2365,10 +2683,11 @@
       "笨拙"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2392,10 +2711,21 @@
       "葉子防守"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.09685590821040083
+      "usageCount": 32,
+      "usagePercent": 0.086819686363883
+    }
+  },
+  {
+    "id": "levetate",
+    "name": "levetate",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2423,10 +2753,11 @@
       "飄浮"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 344,
-      "usagePercent": 2.5629563403367603
+      "usageCount": 848,
+      "usagePercent": 2.3007216886429
     }
   },
   {
@@ -2436,7 +2767,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2453,7 +2784,10 @@
     },
     "aliases": [
       "自由者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "lightmetal",
@@ -2467,7 +2801,24 @@
     "shortDesc": "This Pokemon's weight is halved.",
     "aliases": [
       "輕金屬"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
+  },
+  {
+    "id": "lightingrod",
+    "name": "lighting rod",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
+    }
   },
   {
     "id": "lightlingrod",
@@ -2475,8 +2826,8 @@
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -2502,10 +2853,11 @@
       "避雷針"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 177,
-      "usagePercent": 1.318730442556996
+      "usageCount": 606,
+      "usagePercent": 1.6441478105160345
     }
   },
   {
@@ -2521,10 +2873,11 @@
       "柔軟"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 38,
+      "usagePercent": 0.10309837755711107
     }
   },
   {
@@ -2541,7 +2894,10 @@
     "changeAbility": "  A lingering aroma clings to [TARGET]!",
     "aliases": [
       "甩不掉的氣味"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "liquidooze",
@@ -2556,7 +2912,10 @@
     "damage": "  [POKEMON] sucked up the liquid ooze!",
     "aliases": [
       "污泥漿"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "liquidvoice",
@@ -2571,10 +2930,11 @@
       "濕潤之聲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 46,
-      "usagePercent": 0.3427209059752645
+      "usageCount": 153,
+      "usagePercent": 0.41510662542731563
     }
   },
   {
@@ -2586,7 +2946,14 @@
     "shortDesc": "This Pokemon's attacks do not make contact with the target.",
     "aliases": [
       "遠隔"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "magicbounce",
@@ -2607,10 +2974,11 @@
       "魔法鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.18626136194307852
+      "usageCount": 47,
+      "usagePercent": 0.12751641434695316
     }
   },
   {
@@ -2629,10 +2997,11 @@
       "魔法防守"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 20,
+      "usagePercent": 0.05426230397742689
     }
   },
   {
@@ -2647,10 +3016,11 @@
       "魔術師"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 28,
+      "usagePercent": 0.07596722556839763
     }
   },
   {
@@ -2666,8 +3036,11 @@
       "熔岩鎧甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -2696,7 +3069,10 @@
     },
     "aliases": [
       "磁力"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "marvelscale",
@@ -2710,7 +3086,14 @@
     "shortDesc": "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5.",
     "aliases": [
       "神奇鱗片"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 10,
+      "usagePercent": 0.027131151988713444
+    }
   },
   {
     "id": "megalauncher",
@@ -2725,15 +3108,16 @@
       "超級發射器"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08195499925495456
+      "usageCount": 20,
+      "usagePercent": 0.05426230397742689
     }
   },
   {
     "id": "megasol",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "onWeatherModifyDamagePriority": 1,
     "flags": {},
     "name": "Mega Sol",
@@ -2741,8 +3125,11 @@
     "num": 315,
     "shortDesc": "This Pokemon's moves are used as if the effects of Sunny Day were active.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -2756,10 +3143,11 @@
       "不仁不義"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -2774,7 +3162,10 @@
     "activate": "  [POKEMON] returned to its original type!",
     "aliases": [
       "擬態"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "mindseye",
@@ -2789,7 +3180,10 @@
     "shortDesc": "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
     "aliases": [
       "甘露之蜜"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "minus",
@@ -2810,7 +3204,10 @@
     },
     "aliases": [
       "負電"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "mirrorarmor",
@@ -2826,10 +3223,11 @@
       "鏡甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 39,
-      "usagePercent": 0.2905677246312025
+      "usageCount": 113,
+      "usagePercent": 0.3065820174724619
     }
   },
   {
@@ -2841,7 +3239,20 @@
     "shortDesc": "On switch-in, this Pokemon summons Misty Terrain.",
     "aliases": [
       "薄霧製造者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
+  },
+  {
+    "id": "modest",
+    "name": "Modest",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "moldbreaker",
@@ -2871,10 +3282,11 @@
       "破格"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 77,
+      "usagePercent": 0.20890987031309347
     }
   },
   {
@@ -2895,10 +3307,11 @@
       "心情不定"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.37252272388615704
+      "usageCount": 130,
+      "usagePercent": 0.35270497585327476
     }
   },
   {
@@ -2915,8 +3328,11 @@
       "電氣引擎"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -2928,7 +3344,10 @@
     "name": "Mountaineer",
     "rating": 3,
     "num": -1,
-    "shortDesc": "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock."
+    "shortDesc": "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "moxie",
@@ -2942,10 +3361,11 @@
       "自信過度"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.09685590821040083
+      "usageCount": 32,
+      "usagePercent": 0.086819686363883
     }
   },
   {
@@ -2961,10 +3381,11 @@
       "多重鱗片"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 48,
-      "usagePercent": 0.35762181493071077
+      "usageCount": 132,
+      "usagePercent": 0.3581312062510174
     }
   },
   {
@@ -2992,7 +3413,10 @@
     },
     "aliases": [
       "多屬性"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "mummy",
@@ -3019,10 +3443,11 @@
       "木乃伊"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 17,
+      "usagePercent": 0.046122958380812845
     }
   },
   {
@@ -3036,7 +3461,10 @@
     "shortDesc": "This Pokemon's Status moves go last in their priority bracket and ignore Abilities.",
     "aliases": [
       "菌絲之力"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "naturalcure",
@@ -3050,10 +3478,11 @@
       "自然回復"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1266577261212934
+      "usageCount": 31,
+      "usagePercent": 0.08410657116501166
     }
   },
   {
@@ -3066,7 +3495,10 @@
     "shortDesc": "This Pokemon's attacks that are super effective against the target do 1.25x damage.",
     "aliases": [
       "腦核之力"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "neutralizinggas",
@@ -3091,7 +3523,10 @@
     "end": "  The effects of the neutralizing gas wore off!",
     "aliases": [
       "化學變化氣體"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "noability",
@@ -3102,10 +3537,7 @@
     "num": 0,
     "shortDesc": "Does nothing.",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": false
     }
   },
   {
@@ -3120,18 +3552,11 @@
       "無防守"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.18626136194307852
-    }
-  },
-  {
-    "id": "none",
-    "name": "None",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "usageCount": 23,
+      "usagePercent": 0.062401649574040916
     }
   },
   {
@@ -3153,7 +3578,10 @@
     },
     "aliases": [
       "一般皮膚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "oblivious",
@@ -3177,10 +3605,11 @@
       "遲鈍"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.37252272388615704
+      "usageCount": 183,
+      "usagePercent": 0.4965000813934559
     }
   },
   {
@@ -3196,8 +3625,7 @@
       "跟風"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": true
     }
   },
   {
@@ -3212,7 +3640,10 @@
     "activate": "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
     "aliases": [
       "緋紅脈動"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "overcoat",
@@ -3237,10 +3668,11 @@
       "防塵"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 23,
+      "usagePercent": 0.062401649574040916
     }
   },
   {
@@ -3261,10 +3693,11 @@
       "茂盛"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.37252272388615704
+      "usageCount": 158,
+      "usagePercent": 0.4286722014216724
     }
   },
   {
@@ -3285,10 +3718,11 @@
       "我行我素"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 6,
+      "usagePercent": 0.016278691193228063
     }
   },
   {
@@ -3311,7 +3745,14 @@
     },
     "aliases": [
       "親子愛"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "pastelveil",
@@ -3325,7 +3766,10 @@
     "shortDesc": "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies.",
     "aliases": [
       "粉彩護幕"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "perishbody",
@@ -3338,7 +3782,10 @@
     "start": "  Both Pokémon will faint in three turns!",
     "aliases": [
       "滅亡之軀"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "persistent",
@@ -3349,7 +3796,10 @@
     "num": -3,
     "desc": "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
     "shortDesc": "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
-    "activate": "  [POKEMON] extends [MOVE] by 2 turns!"
+    "activate": "  [POKEMON] extends [MOVE] by 2 turns!",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pickpocket",
@@ -3363,10 +3813,11 @@
       "順手牽羊"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 43,
+      "usagePercent": 0.11666395355146779
     }
   },
   {
@@ -3389,11 +3840,14 @@
     "addItem": "#recycle",
     "aliases": [
       "撿拾"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "piercingdrill",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "flags": {},
     "name": "Piercing Drill",
     "rating": 1,
@@ -3401,7 +3855,10 @@
     "shortDesc": "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
     "aliases": [
       "辣椒噴發"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "pixilate",
@@ -3421,10 +3878,21 @@
       "妖精皮膚"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 443,
-      "usagePercent": 3.300551333631351
+      "usageCount": 1123,
+      "usagePercent": 3.0468283683325192
+    }
+  },
+  {
+    "id": "pixxilate",
+    "name": "Pixxilate",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -3448,10 +3916,7 @@
       "正電"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "legal": true
     }
   },
   {
@@ -3467,10 +3932,11 @@
       "毒療"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -3491,10 +3957,11 @@
       "毒刺"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 9,
+      "usagePercent": 0.024418036789842095
     }
   },
   {
@@ -3513,7 +3980,10 @@
     "shortDesc": "Pecharunt: If this Pokemon poisons a target, the target also becomes confused.",
     "aliases": [
       "超級日光"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "poisontouch",
@@ -3527,10 +3997,11 @@
       "毒手"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 202,
-      "usagePercent": 1.5049918045000745
+      "usageCount": 621,
+      "usagePercent": 1.6848445384991046
     }
   },
   {
@@ -3553,7 +4024,10 @@
     "transform": "[POKEMON] transformed into its Complete Forme!",
     "aliases": [
       "群聚變形"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "powerofalchemy",
@@ -3577,7 +4051,10 @@
     "changeAbility": "#receiver",
     "aliases": [
       "化學之力"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "powerspot",
@@ -3590,7 +4067,10 @@
     "shortDesc": "This Pokemon's allies have the power of their moves multiplied by 1.3.",
     "aliases": [
       "能量點"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "prankster",
@@ -3608,10 +4088,11 @@
       "惡作劇之心"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 885,
-      "usagePercent": 6.5936522127849795
+      "usageCount": 2459,
+      "usagePercent": 6.671550274024635
     }
   },
   {
@@ -3637,10 +4118,11 @@
       "壓迫感"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 33,
-      "usagePercent": 0.24586499776486367
+      "usageCount": 57,
+      "usagePercent": 0.15464756633566662
     }
   },
   {
@@ -3653,7 +4135,10 @@
     "shortDesc": "On switch-in, heavy rain begins until this Ability is not active in battle.",
     "aliases": [
       "始源之海"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "prismarmor",
@@ -3664,7 +4149,10 @@
     "shortDesc": "This Pokemon receives 3/4 damage from supereffective attacks.",
     "aliases": [
       "稜鏡裝甲"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "propellertail",
@@ -3676,7 +4164,10 @@
     "shortDesc": "This Pokemon's moves cannot be redirected to a different target by any effect.",
     "aliases": [
       "螺旋尾鰭"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "protean",
@@ -3694,10 +4185,11 @@
       "變幻自如"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 38,
-      "usagePercent": 0.2831172701534794
+      "usageCount": 115,
+      "usagePercent": 0.31200824787020454
     }
   },
   {
@@ -3729,7 +4221,10 @@
     "end": "  The effects of [POKEMON]'s Protosynthesis wore off!",
     "aliases": [
       "古代活性"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "psychicsurge",
@@ -3740,7 +4235,10 @@
     "shortDesc": "On switch-in, this Pokemon summons Psychic Terrain.",
     "aliases": [
       "精神製造者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "punkrock",
@@ -3755,7 +4253,10 @@
     "shortDesc": "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3x power.",
     "aliases": [
       "龐克搖滾"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "purepower",
@@ -3769,10 +4270,11 @@
       "瑜伽之力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -3791,8 +4293,11 @@
       "潔淨之鹽"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.02170492159097075
     }
   },
   {
@@ -3824,7 +4329,10 @@
     "end": "  The effects of [POKEMON]'s Quark Drive wore off!",
     "aliases": [
       "夸克充能"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "queenlymajesty",
@@ -3841,10 +4349,11 @@
       "女王的威嚴"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 45,
-      "usagePercent": 0.33527045149754137
+      "usageCount": 154,
+      "usagePercent": 0.41781974062618693
     }
   },
   {
@@ -3860,10 +4369,11 @@
       "速擊"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -3881,10 +4391,11 @@
       "飛毛腿"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -3902,10 +4413,11 @@
       "雨盤"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 109,
-      "usagePercent": 0.8120995380718223
+      "usageCount": 389,
+      "usagePercent": 1.055401812360953
     }
   },
   {
@@ -3922,7 +4434,10 @@
     },
     "aliases": [
       "膽怯"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "rebound",
@@ -3936,7 +4451,10 @@
     "num": -2,
     "desc": "On switch-in, this Pokemon blocks certain status moves and instead uses the move against the original user.",
     "shortDesc": "On switch-in, blocks certain status moves and bounces them back to the user.",
-    "move": "#magiccoat"
+    "move": "#magiccoat",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "receiver",
@@ -3962,10 +4480,11 @@
       "接球手"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -3981,10 +4500,11 @@
       "捨身"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 19,
+      "usagePercent": 0.051549188778555535
     }
   },
   {
@@ -4005,10 +4525,11 @@
       "冰凍皮膚"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -4022,10 +4543,11 @@
       "再生力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 96,
-      "usagePercent": 0.7152436298614215
+      "usageCount": 271,
+      "usagePercent": 0.7352542188941342
     }
   },
   {
@@ -4040,7 +4562,10 @@
     "shortDesc": "When this Pokemon eats certain Berries, the effects are doubled.",
     "aliases": [
       "熟成"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "rivalry",
@@ -4055,10 +4580,11 @@
       "鬥爭心"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -4077,7 +4603,10 @@
     "shortDesc": "If this Pokemon is a Silvally, its type changes to match its held Memory.",
     "aliases": [
       "ＡＲ系統"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "rockhead",
@@ -4095,10 +4624,11 @@
       "堅硬腦袋"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.18626136194307852
+      "usageCount": 87,
+      "usagePercent": 0.2360410223018069
     }
   },
   {
@@ -4112,7 +4642,10 @@
     "shortDesc": "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack.",
     "aliases": [
       "搬岩"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "roughskin",
@@ -4135,10 +4668,11 @@
       "粗糙皮膚"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 800,
-      "usagePercent": 5.960363582178513
+      "usageCount": 2184,
+      "usagePercent": 5.925443594335015
     }
   },
   {
@@ -4150,7 +4684,10 @@
     "shortDesc": "No competitive use.",
     "aliases": [
       "逃跑"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "sandforce",
@@ -4165,10 +4702,11 @@
       "沙之力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -4183,10 +4721,11 @@
       "撥沙"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 86,
-      "usagePercent": 0.6407390850841901
+      "usageCount": 275,
+      "usagePercent": 0.7461066796896196
     }
   },
   {
@@ -4201,7 +4740,10 @@
     },
     "aliases": [
       "吐沙"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "sandstream",
@@ -4214,10 +4756,21 @@
       "揚沙"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 133,
-      "usagePercent": 0.9909104455371777
+      "usageCount": 378,
+      "usagePercent": 1.025557545173368
+    }
+  },
+  {
+    "id": "sandstresn",
+    "name": "sand stresn",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -4235,10 +4788,11 @@
       "沙隱"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.22351363433169422
+      "usageCount": 58,
+      "usagePercent": 0.15736068153453794
     }
   },
   {
@@ -4256,20 +4810,11 @@
       "食草"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
-    }
-  },
-  {
-    "id": "sassy",
-    "name": "Sassy",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 8,
+      "usagePercent": 0.02170492159097075
     }
   },
   {
@@ -4293,7 +4838,10 @@
     "transformEnd": "[POKEMON] stopped schooling!",
     "aliases": [
       "魚群"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "scrappy",
@@ -4312,10 +4860,11 @@
       "膽量"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 77,
-      "usagePercent": 0.5736849947846819
+      "usageCount": 179,
+      "usagePercent": 0.48564762059797056
     }
   },
   {
@@ -4329,10 +4878,11 @@
       "除障"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 12,
+      "usagePercent": 0.03255738238645613
     }
   },
   {
@@ -4344,7 +4894,10 @@
     "shortDesc": "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
     "aliases": [
       "掉出種子"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "serenegrace",
@@ -4360,7 +4913,10 @@
     },
     "aliases": [
       "天恩"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "shadowshield",
@@ -4371,7 +4927,10 @@
     "shortDesc": "If this Pokemon is at full HP, damage taken from attacks is halved.",
     "aliases": [
       "幻影防守"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "shadowtag",
@@ -4400,10 +4959,11 @@
       "踩影"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 20,
+      "usagePercent": 0.05426230397742689
     }
   },
   {
@@ -4418,10 +4978,11 @@
       "鋒銳"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 59,
-      "usagePercent": 0.43957681418566535
+      "usageCount": 194,
+      "usagePercent": 0.5263443485810407
     }
   },
   {
@@ -4438,10 +4999,11 @@
       "蛻皮"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -4466,10 +5028,11 @@
       "強行"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11175681716584711
+      "usageCount": 37,
+      "usagePercent": 0.10038526235823973
     }
   },
   {
@@ -4486,10 +5049,11 @@
       "硬殼盔甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 15,
+      "usagePercent": 0.04069672798307016
     }
   },
   {
@@ -4521,10 +5085,11 @@
       "鱗粉"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 3,
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -4548,7 +5113,10 @@
     "transformEnd": "Shields Down activated!\n([POKEMON] stopped shielding itself.)",
     "aliases": [
       "界限盾殼"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "simple",
@@ -4571,7 +5139,10 @@
     },
     "aliases": [
       "單純"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "skilllink",
@@ -4591,10 +5162,11 @@
       "連續攻擊"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -4617,7 +5189,10 @@
     "end": "  [POKEMON] finally got its act together!",
     "aliases": [
       "慢啟動"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "slushrush",
@@ -4633,10 +5208,11 @@
       "撥雪"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     }
   },
   {
@@ -4650,10 +5226,11 @@
       "狙擊手"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -4675,10 +5252,11 @@
       "雪隱"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.22351363433169422
+      "usageCount": 78,
+      "usagePercent": 0.21162298551196485
     }
   },
   {
@@ -4695,10 +5273,11 @@
       "降雪"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 147,
-      "usagePercent": 1.0952168082253018
+      "usageCount": 402,
+      "usagePercent": 1.0906723099462803
     }
   },
   {
@@ -4717,10 +5296,11 @@
       "太陽之力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 102,
-      "usagePercent": 0.7599463567277605
+      "usageCount": 296,
+      "usagePercent": 0.8030820988659179
     }
   },
   {
@@ -4736,10 +5316,11 @@
       "堅硬岩石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17136045298763225
+      "usageCount": 62,
+      "usagePercent": 0.16821314233002332
     }
   },
   {
@@ -4752,7 +5333,10 @@
     "shortDesc": "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints.",
     "aliases": [
       "魂心"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "soundproof",
@@ -4776,10 +5360,11 @@
       "隔音"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.15645954403218598
+      "usageCount": 71,
+      "usagePercent": 0.19263117911986544
     }
   },
   {
@@ -4796,25 +5381,27 @@
       "加速"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 108,
-      "usagePercent": 0.8046490835940991
+      "usageCount": 273,
+      "usagePercent": 0.7406804492918769
     }
   },
   {
     "id": "spicyspray",
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "flags": {},
     "name": "Spicy Spray",
     "rating": 3,
     "num": 318,
     "shortDesc": "If this Pokemon is hit by an attack, the attacker becomes burned.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -4828,7 +5415,10 @@
     "shortDesc": "This Pokemon's offensive stat is doubled against a target that switched in this turn.",
     "aliases": [
       "監視"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "stall",
@@ -4842,10 +5432,7 @@
       "慢出"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": true
     }
   },
   {
@@ -4860,10 +5447,11 @@
       "堅毅"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 26,
+      "usagePercent": 0.07054099517065494
     }
   },
   {
@@ -4877,10 +5465,11 @@
       "持久力"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 325,
-      "usagePercent": 2.421397705260021
+      "usageCount": 779,
+      "usagePercent": 2.1135167399207773
     }
   },
   {
@@ -4908,10 +5497,11 @@
       "戰鬥切換"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17136045298763225
+      "usageCount": 53,
+      "usagePercent": 0.14379510554018124
     }
   },
   {
@@ -4932,10 +5522,11 @@
       "靜電"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13410818059901655
+      "usageCount": 38,
+      "usagePercent": 0.10309837755711107
     }
   },
   {
@@ -4949,10 +5540,11 @@
       "不屈之心"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -4965,7 +5557,10 @@
     "shortDesc": "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
     "aliases": [
       "蒸汽機"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "steelworker",
@@ -4978,7 +5573,10 @@
     "shortDesc": "This Pokemon's offensive stat is multiplied by 1.5 while using a Steel-type attack.",
     "aliases": [
       "鋼能力者"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "steelyspirit",
@@ -4991,7 +5589,10 @@
     "shortDesc": "This Pokemon and its allies' Steel-type moves have their power multiplied by 1.5.",
     "aliases": [
       "鋼之意志"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "stench",
@@ -5008,7 +5609,10 @@
     },
     "aliases": [
       "惡臭"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "stickyhold",
@@ -5026,7 +5630,10 @@
     "block": "  [POKEMON]'s item cannot be removed!",
     "aliases": [
       "黏著"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "stormdrain",
@@ -5045,7 +5652,10 @@
     "activate": "#lightningrod",
     "aliases": [
       "引水"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "strongjaw",
@@ -5058,7 +5668,14 @@
     "shortDesc": "This Pokemon's bite-based attacks have 1.5x power. Bug Bite is not boosted.",
     "aliases": [
       "強壯之顎"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
+    }
   },
   {
     "id": "sturdy",
@@ -5080,10 +5697,11 @@
       "結實"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.1415586350767397
+      "usageCount": 80,
+      "usagePercent": 0.21704921590970755
     }
   },
   {
@@ -5099,7 +5717,10 @@
     "block": "  [POKEMON] is anchored in place with its suction cups!",
     "aliases": [
       "吸盤"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "superluck",
@@ -5112,10 +5733,11 @@
       "超幸運"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5130,10 +5752,11 @@
       "歸零化境"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 7,
+      "usagePercent": 0.01899180639209941
     }
   },
   {
@@ -5150,10 +5773,11 @@
       "大將"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.1415586350767397
+      "usageCount": 38,
+      "usagePercent": 0.10309837755711107
     }
   },
   {
@@ -5167,10 +5791,11 @@
       "衝浪之尾"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 4,
+      "usagePercent": 0.010852460795485375
     }
   },
   {
@@ -5191,10 +5816,11 @@
       "蟲之預感"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 8,
+      "usagePercent": 0.02170492159097075
     }
   },
   {
@@ -5212,8 +5838,11 @@
       "甜幕"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5231,10 +5860,11 @@
       "悠游自如"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.37252272388615704
+      "usageCount": 139,
+      "usagePercent": 0.3771230126431169
     }
   },
   {
@@ -5247,7 +5877,10 @@
     "start": "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
     "aliases": [
       "災禍之劍"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "symbiosis",
@@ -5268,10 +5901,11 @@
       "共生"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 8,
+      "usagePercent": 0.02170492159097075
     }
   },
   {
@@ -5289,10 +5923,11 @@
       "同步"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 17,
+      "usagePercent": 0.046122958380812845
     }
   },
   {
@@ -5305,7 +5940,10 @@
     "start": "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "tangledfeet",
@@ -5319,7 +5957,10 @@
     "shortDesc": "This Pokemon's evasiveness is doubled as long as it is confused.",
     "aliases": [
       "蹣跚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "tanglinghair",
@@ -5330,7 +5971,10 @@
     "shortDesc": "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
     "aliases": [
       "捲髮"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "techiician",
@@ -5339,7 +5983,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5359,10 +6003,11 @@
       "技術高手"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 39,
-      "usagePercent": 0.2905677246312025
+      "usageCount": 147,
+      "usagePercent": 0.39882793423408763
     }
   },
   {
@@ -5379,10 +6024,11 @@
       "心靈感應"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11175681716584711
+      "usageCount": 58,
+      "usagePercent": 0.15736068153453794
     }
   },
   {
@@ -5403,7 +6049,10 @@
     "activate": "  [POKEMON] made its shell gleam! It's distorting type matchups!",
     "aliases": [
       "貫穿鑽"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "terashift",
@@ -5424,7 +6073,10 @@
     "transform": "[POKEMON] transformed!",
     "aliases": [
       "毒傀儡"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "teraformzero",
@@ -5441,7 +6093,10 @@
     "shortDesc": "Terapagos: Terastallizing ends the effects of weather and terrain. Once per battle.",
     "aliases": [
       "龍皮膚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "teravolt",
@@ -5469,7 +6124,10 @@
     "start": "  [POKEMON] is radiating a bursting aura!",
     "aliases": [
       "兆級電壓"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "thermalexchange",
@@ -5483,7 +6141,10 @@
     "shortDesc": "This Pokemon's Attack is raised by 1 when damaged by Fire moves; can't be burned.",
     "aliases": [
       "熱交換"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "thickfat",
@@ -5509,10 +6170,21 @@
       "厚脂肪"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.23096408880941738
+      "usageCount": 59,
+      "usagePercent": 0.1600737967334093
+    }
+  },
+  {
+    "id": "timid",
+    "name": "Timid",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5524,7 +6196,10 @@
     "shortDesc": "This Pokemon's attacks that are not very effective on a target deal double damage.",
     "aliases": [
       "有色眼鏡"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "torrent",
@@ -5544,18 +6219,11 @@
       "激流"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 210,
-      "usagePercent": 1.5645954403218598
-    }
-  },
-  {
-    "id": "torrente",
-    "name": "torrente",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "usageCount": 485,
+      "usagePercent": 1.3158608714526019
     }
   },
   {
@@ -5570,10 +6238,11 @@
       "硬爪"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 65,
-      "usagePercent": 0.4842795410520042
+      "usageCount": 171,
+      "usagePercent": 0.46394269900699986
     }
   },
   {
@@ -5583,7 +6252,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5597,7 +6266,10 @@
     "shortDesc": "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
     "aliases": [
       "中毒激升"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "toxicchain",
@@ -5609,7 +6281,10 @@
     "shortDesc": "This Pokemon's attacks have a 30% chance of badly poisoning.",
     "aliases": [
       "太晶甲殼"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "toxicdebris",
@@ -5622,20 +6297,21 @@
       "毒滿地"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 39,
-      "usagePercent": 0.2905677246312025
+      "usageCount": 164,
+      "usagePercent": 0.44495089261490045
     }
   },
   {
     "id": "toxictouch",
-    "name": "toxic touch",
+    "name": "Toxic Touch",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.0027131151988713438
     }
   },
   {
@@ -5674,10 +6350,11 @@
       "複製"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 28,
-      "usagePercent": 0.20861272537624795
+      "usageCount": 80,
+      "usagePercent": 0.21704921590970755
     }
   },
   {
@@ -5694,7 +6371,10 @@
     },
     "aliases": [
       "電晶體"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "triage",
@@ -5705,7 +6385,10 @@
     "shortDesc": "This Pokemon's healing moves have their priority increased by 3.",
     "aliases": [
       "先行治療"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "truant",
@@ -5722,7 +6405,10 @@
     "cant": "[POKEMON] is loafing around!",
     "aliases": [
       "懶惰"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "turboblaze",
@@ -5750,7 +6436,10 @@
     "start": "  [POKEMON] is radiating a blazing aura!",
     "aliases": [
       "渦輪火焰"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "unaware",
@@ -5766,10 +6455,11 @@
       "純樸"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.15645954403218598
+      "usageCount": 59,
+      "usagePercent": 0.1600737967334093
     }
   },
   {
@@ -5785,18 +6475,11 @@
       "輕裝"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 301,
-      "usagePercent": 2.2425867977946656
-    }
-  },
-  {
-    "id": "unerve",
-    "name": "Unerve",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "usageCount": 813,
+      "usagePercent": 2.2057626566824027
     }
   },
   {
@@ -5813,10 +6496,11 @@
       "緊張感"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 379,
-      "usagePercent": 2.8237222470570704
+      "usageCount": 1109,
+      "usagePercent": 3.0088447555483206
     }
   },
   {
@@ -5825,13 +6509,14 @@
     "name": "Unseen Fist",
     "rating": 2,
     "num": 260,
-    "shortDesc": "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+    "shortDesc": "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
     "champions": {
       "shortDesc": "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 2,
+      "usagePercent": 0.0054262303977426875
     },
     "aliases": [
       "無形拳"
@@ -5847,7 +6532,10 @@
     "start": "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "victorystar",
@@ -5859,7 +6547,10 @@
     "shortDesc": "This Pokemon and its allies' moves have their accuracy multiplied by 1.1.",
     "aliases": [
       "勝利之星"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "vitalspirit",
@@ -5874,10 +6565,7 @@
       "幹勁"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": true
     }
   },
   {
@@ -5898,10 +6586,11 @@
       "蓄電"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 22,
+      "usagePercent": 0.05968853437516958
     }
   },
   {
@@ -5920,10 +6609,11 @@
       "遊魂"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 9,
+      "usagePercent": 0.024418036789842095
     }
   },
   {
@@ -5940,10 +6630,11 @@
       "儲水"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 8,
+      "usagePercent": 0.02170492159097075
     }
   },
   {
@@ -5962,10 +6653,11 @@
       "水泡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13410818059901655
+      "usageCount": 69,
+      "usagePercent": 0.18720494872212273
     }
   },
   {
@@ -5977,7 +6669,10 @@
     "shortDesc": "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
     "aliases": [
       "遇水凝固"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "waterveil",
@@ -5990,7 +6685,10 @@
     "shortDesc": "This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
     "aliases": [
       "水幕"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "weakarmor",
@@ -6008,10 +6706,11 @@
       "碎裂鎧甲"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 19,
+      "usagePercent": 0.051549188778555535
     }
   },
   {
@@ -6026,7 +6725,10 @@
     "shortDesc": "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
     "aliases": [
       "焦香之軀"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "whitesmoke",
@@ -6041,10 +6743,11 @@
       "白色煙霧"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usagePercent": 0.008139345596614032
     }
   },
   {
@@ -6057,7 +6760,10 @@
     "shortDesc": "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
     "aliases": [
       "躍躍欲逃"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "windpower",
@@ -6071,7 +6777,10 @@
     "start": "#electromorphosis",
     "aliases": [
       "風力發電"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "windrider",
@@ -6085,7 +6794,10 @@
     "shortDesc": "Attack raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
     "aliases": [
       "乘風"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "wonderguard",
@@ -6108,7 +6820,10 @@
     },
     "aliases": [
       "神奇守護"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "wonderskin",
@@ -6123,7 +6838,10 @@
     "shortDesc": "Status moves with accuracy checks are 50% accurate when used on this Pokemon.",
     "aliases": [
       "奇跡皮膚"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "zenmode",
@@ -6152,7 +6870,10 @@
     "transformEnd": "Zen Mode ended!",
     "aliases": [
       "達摩模式"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "zerotohero",
@@ -6174,10 +6895,11 @@
       "全能變身"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 20,
-      "usagePercent": 0.14900908955446282
+      "usageCount": 41,
+      "usagePercent": 0.11123772315372511
     }
   }
 ]
