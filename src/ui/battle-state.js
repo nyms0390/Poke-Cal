@@ -13,6 +13,11 @@ export function createTeamsState() {
   return { attacker: createTeamState(), defender: createTeamState() };
 }
 
+export function swapTeamsState(teams) {
+  if (!teams?.attacker || !teams?.defender) return teams;
+  return { ...teams, attacker: teams.defender, defender: teams.attacker };
+}
+
 export function setTeamSlot(teams, side, index, state) {
   const team = teams?.[side];
   if (!team || !Number.isInteger(index) || index < 0 || index >= team.slots.length) return teams;

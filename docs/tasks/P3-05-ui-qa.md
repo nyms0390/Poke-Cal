@@ -1,6 +1,6 @@
 # P3-05 — Calculator UI QA pass (desktop + mobile), swap sides, polish
 
-Status: TODO
+Status: Done
 Depends on: P3-04, P2-08
 Phase: 3 (calculator UX parity)
 
@@ -36,3 +36,26 @@ Close the gap between "features exist" and "feels like NCP".
 ```sh
 npm test
 ```
+
+## Completion notes
+
+- Added a Swap sides control that exchanges complete attacker/defender team state and their
+  physical field-side conditions, with an immutable `swapTeamsState` regression test.
+- Kept all eight move result cards live while expanding only the selected move on each side with
+  its KO text, result line, and notes; fixed the stored-team reload path to render results after
+  state restoration.
+- Added search ArrowDown focus, explicit ArrowUp/ArrowDown number stepping, 40px mobile controls,
+  stacked mobile damage results, and a no-horizontal-overflow responsive layout.
+
+Manual QA script run at 1280px and 380px via `npm start`:
+
+1. Choose Miraidon and Incineroar.
+2. Import a Miraidon paste on the left.
+3. Tera the left side.
+4. Set Sun and Reflect, then save the current set.
+5. Swap sides and confirm both summaries and Reflect move with their sides.
+6. Reload and confirm the swapped teams, saved set, and eight damage cards remain rendered.
+
+The script passed with no console errors, no horizontal overflow, eight move inputs/eight result
+cards, ArrowDown search focus, and Speed stepping from 32 to 31. `node --test
+test/battle-state.test.js`, `npm test` (214 tests), `node --check`, and `git diff --check` pass.

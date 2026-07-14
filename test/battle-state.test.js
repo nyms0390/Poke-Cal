@@ -9,6 +9,7 @@ import {
   createSideState,
   createTeamsState,
   setTeamSlot,
+  swapTeamsState,
   updateActiveTeamSlot,
 } from "../src/ui/battle-state.js";
 import { calculateDamage } from "../src/engine/damage.js";
@@ -53,6 +54,15 @@ test("team slots activate, clear, and edit only the active slot", () => {
   assert.equal(cleared.attacker.activeIndex, 0);
   assert.equal(cleared.attacker.slots[1], null);
   assert.equal(cleared.attacker.slots[0], firstState);
+});
+
+test("swapTeamsState exchanges complete attacker and defender teams", () => {
+  const attacker = { slots: ["attacker"], activeIndex: 0 };
+  const defender = { slots: ["defender"], activeIndex: 1 };
+  const teams = { attacker, defender };
+
+  assert.deepEqual(swapTeamsState(teams), { attacker: defender, defender: attacker });
+  assert.deepEqual(teams, { attacker, defender });
 });
 
 test("createSideState builds the canonical side-state shape with neutral battle-condition defaults", () => {

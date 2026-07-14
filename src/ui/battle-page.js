@@ -29,6 +29,7 @@ import {
   clearTeamSlot as clearTeamSlotState,
   createSideState,
   createTeamsState,
+  swapTeamsState,
   TEAM_SIZE,
   updateActiveTeamSlot,
 } from "./battle-state.js";
@@ -92,6 +93,7 @@ const elements = {
   attackerHpPercent: document.querySelector("#attacker-hp-percent"),
   defenderHpPercent: document.querySelector("#defender-hp-percent"),
   trickRoom: document.querySelector("#trick-room"),
+  swapSides: document.querySelector("#swap-sides"),
   fieldGravity: document.querySelector("#field-gravity"),
   fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
   fieldWeatherInputs: document.querySelectorAll('input[name="field-weather"]'),
@@ -248,6 +250,9 @@ for (const control of elements.assumptionInputs) {
   control.addEventListener("input", handleDamageControl);
 }
 
+elements.swapSides.addEventListener("click", swapSides);
+document.addEventListener("keydown", handleKeyboardControl);
+
 elements.importAttackerSet.addEventListener("click", () => importSetPaste("attacker"));
 elements.importDefenderSet.addEventListener("click", () => importSetPaste("defender"));
 elements.exportAttackerSet.addEventListener("click", () => exportSetPaste("attacker"));
@@ -287,6 +292,24 @@ function renderDamageShell() {
     if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
     else seedDamageSide(side, defaultPokemonForSide(side));
   }
+  renderDamage();
+}
+
+function swapSides() {
+  teams = swapTeamsState(teams);
+  fieldState = {
+    ...fieldState,
+    attackerSide: fieldState.defenderSide,
+    defenderSide: fieldState.attackerSide,
+  };
+  persistTeams();
+  renderActiveTeamSlot("attacker");
+  renderActiveTeamSlot("defender");
+  syncFieldInputs();
+  applyAbilityImpliedStages();
+  syncSideInputs("attacker");
+  syncSideInputs("defender");
+  renderDamage();
 }
 
 function defaultPokemonForSide(side) {
@@ -320,6 +343,14 @@ function handlePokemonSearchKeydown(event, side) {
     hidePokemonSearchResults(side);
     return;
   }
+  if (event.key === "ArrowDown") {
+    const firstResult = results.querySelector(".search-result");
+    if (firstResult) {
+      event.preventDefault();
+      firstResult.focus();
+    }
+    return;
+  }
   if (event.key !== "Enter") return;
 
   const [firstResult] = searchPokemon(pokemon, elements[`${side}PokemonSearch`].value, {
@@ -332,6 +363,24 @@ function handlePokemonSearchKeydown(event, side) {
   event.preventDefault();
   results.hidden = true;
   seedDamageSide(side, firstResult);
+}
+
+function handleKeyboardControl(event) {
+  const input = event.target;
+  if (input?.tagName !== "INPUT" || input.type !== "number") return;
+  if (!["ArrowUp", "ArrowDown"].includes(event.key)) return;
+
+  const step = Number(input.step);
+  const minimum = Number(input.min);
+  const maximum = Number(input.max);
+  const amount = Number.isFinite(step) && step > 0 ? step : 1;
+  const current = Number(input.value);
+  const base = Number.isFinite(current) ? current : Number.isFinite(minimum) ? minimum : 0;
+  const next = base + (event.key === "ArrowUp" ? amount : -amount);
+  const bounded = Number.isFinite(minimum) ? Math.max(minimum, next) : next;
+  input.value = String(Number.isFinite(maximum) ? Math.min(maximum, bounded) : bounded);
+  event.preventDefault();
+  input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 function hidePokemonSearchResults(side) {
@@ -636,6 +685,17 @@ function applyAbilityImpliedStages() {
 function syncRadioGroup(inputs, value) {
   for (const input of inputs) {
     input.checked = input.value === value;
+  }
+}
+
+function syncFieldInputs() {
+  syncRadioGroup(elements.fieldFormatInputs, fieldState.format);
+  syncRadioGroup(elements.fieldWeatherInputs, fieldState.weather);
+  syncRadioGroup(elements.fieldTerrainInputs, fieldState.terrain);
+  elements.fieldGravity.checked = fieldState.gravity;
+  elements.trickRoom.checked = fieldState.trickRoom;
+  for (const input of elements.fieldSideInputs) {
+    input.checked = Boolean(fieldState[input.dataset.side]?.[input.dataset.key]);
   }
 }
 
@@ -1108,9 +1168,10 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   const ko = document.createElement("span");
   ko.className = "damage-ko";
   ko.textContent = result.supported ? result.ko.text : formatDamageResult(result);
-  card.append(heading, meta, ko);
+  card.append(heading, meta);
+  if (selected) card.append(ko);
 
-  if (result.supported) {
+  if (selected && result.supported) {
     const line = document.createElement("p");
     line.className = "damage-result-line";
     line.textContent = description;
@@ -1126,7 +1187,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     card.append(line, copy);
   }
 
-  if (result.supported && result.notes?.length) {
+  if (selected && result.supported && result.notes?.length) {
     const notes = document.createElement("p");
     notes.className = "damage-notes";
     notes.textContent = result.notes.join(" · ");

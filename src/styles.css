@@ -522,6 +522,24 @@ select:focus {
   font-size: 1.05rem;
 }
 
+.panel-heading button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #344769;
+  border-radius: 4px;
+  background: #111a33;
+  color: #dbe3f7;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.panel-heading button:hover,
+.panel-heading button:focus-visible {
+  border-color: var(--cyan);
+  outline: none;
+  color: #f4f7ff;
+}
+
 .ability-list,
 .item-list {
   display: grid;
@@ -1366,6 +1384,13 @@ footer {
     padding-left: 14px;
   }
 
+  .battle-tool button,
+  .battle-tool select,
+  .battle-tool input[type="search"],
+  .battle-tool input[type="number"] {
+    min-height: 40px;
+  }
+
   .control-grid,
   .move-filters,
   .damage-controls,
@@ -1373,6 +1398,10 @@ footer {
   .damage-move-picks,
   .saved-set-controls,
   .result-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .damage-results {
     grid-template-columns: 1fr;
   }
 
