@@ -18,6 +18,7 @@ import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../eng
 import { isOrderConditionalMove } from "../engine/move-effects.js";
 import { resultDescription } from "../engine/result-text.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
+import { createSavedSetStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -43,6 +44,12 @@ const elements = {
   defenderPokemonSearch: document.querySelector("#defender-pokemon-search"),
   attackerPokemonResults: document.querySelector("#attacker-pokemon-results"),
   defenderPokemonResults: document.querySelector("#defender-pokemon-results"),
+  attackerSavedSet: document.querySelector("#attacker-saved-set"),
+  defenderSavedSet: document.querySelector("#defender-saved-set"),
+  attackerSaveSet: document.querySelector("#attacker-save-set"),
+  defenderSaveSet: document.querySelector("#defender-save-set"),
+  attackerDeleteSet: document.querySelector("#attacker-delete-set"),
+  defenderDeleteSet: document.querySelector("#defender-delete-set"),
   attackerSpread: document.querySelector("#attacker-spread"),
   defenderSpread: document.querySelector("#defender-spread"),
   attackerNature: document.querySelector("#attacker-nature"),
@@ -103,6 +110,7 @@ const SP_STATS = STAT_KEYS;
 const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
 const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
+const savedSetStore = createSavedSetStore(browserStorage());
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -230,6 +238,9 @@ elements.exportDefenderSet.addEventListener("click", () => exportSetPaste("defen
 
 for (const side of ["attacker", "defender"]) {
   const input = elements[`${side}PokemonSearch`];
+  elements[`${side}SavedSet`].addEventListener("input", () => applySavedSet(side));
+  elements[`${side}SaveSet`].addEventListener("click", () => saveCurrentSet(side));
+  elements[`${side}DeleteSet`].addEventListener("click", () => deleteCurrentSet(side));
   input.addEventListener("input", () => renderPokemonSearchResults(side));
   input.addEventListener("focus", () => renderPokemonSearchResults(side));
   input.addEventListener("keydown", (event) => handlePokemonSearchKeydown(event, side));
@@ -385,6 +396,18 @@ function renderSideSelects(side, defaults) {
     : damageState[side].pokemon.types?.find((type) => TYPE_OPTIONS.includes(type)) ?? TYPE_OPTIONS[0];
   teraTypeSelect.value = defaultTeraType;
   renderDamageMovePickers(side);
+  renderSavedSetSelect(side);
+}
+
+function renderSavedSetSelect(side, selectedName = "") {
+  const state = damageState[side];
+  const sets = savedSetStore.listSets(state?.pokemon?.id);
+  elements[`${side}SavedSet`].replaceChildren(
+    optionElement("", "Champions default"),
+    ...sets.map((set) => optionElement(set.name, set.name)),
+  );
+  elements[`${side}SavedSet`].value = sets.some((set) => set.name === selectedName) ? selectedName : "";
+  elements[`${side}DeleteSet`].disabled = !elements[`${side}SavedSet`].value;
 }
 
 function syncSideInputs(side) {
@@ -490,6 +513,62 @@ function syncRadioGroup(inputs, value) {
 
 function importSetPaste(side) {
   const parsed = parseSetPaste(elements.setPaste.value, setPasteCatalogs());
+  applyParsedSet(side, parsed);
+  setSetPasteStatus(parsed.warnings);
+}
+
+function applySavedSet(side) {
+  const selectedName = elements[`${side}SavedSet`].value;
+  if (!selectedName) {
+    seedDamageSide(side, damageState[side]?.pokemon);
+    setSetPasteStatus([]);
+    return;
+  }
+
+  const saved = savedSetStore
+    .listSets(damageState[side]?.pokemon?.id)
+    .find((set) => set.name === selectedName);
+  if (!saved) {
+    renderSavedSetSelect(side);
+    return;
+  }
+
+  elements.setPaste.value = saved.text;
+  const parsed = parseSetPaste(saved.text, setPasteCatalogs());
+  applyParsedSet(side, parsed);
+  renderSavedSetSelect(side, selectedName);
+  setSetPasteStatus(parsed.warnings);
+}
+
+function saveCurrentSet(side) {
+  const state = damageState[side];
+  if (!state?.pokemon) return;
+  const name = window.prompt("Save set name", state.pokemon.name);
+  if (!name?.trim()) return;
+
+  const stateForPaste = {
+    ...state,
+    moves: selectedDamageMoves(side).map(({ move }) => move),
+  };
+  const saved = savedSetStore.saveSet(state.pokemon.id, name, stateForPaste);
+  if (!saved) return;
+  elements.setPaste.value = saved.text;
+  renderSavedSetSelect(side, saved.name);
+  setSetPasteStatus([]);
+}
+
+function deleteCurrentSet(side) {
+  const selectedName = elements[`${side}SavedSet`].value;
+  const pokemonId = damageState[side]?.pokemon?.id;
+  if (!pokemonId || !selectedName) return;
+  if (!window.confirm(`Delete saved set "${selectedName}"?`)) return;
+
+  savedSetStore.deleteSet(pokemonId, selectedName);
+  renderSavedSetSelect(side);
+  setSetPasteStatus([]);
+}
+
+function applyParsedSet(side, parsed) {
   if (parsed.pokemon) seedDamageSide(side, parsed.pokemon);
   const state = damageState[side];
   if (state) {
@@ -512,7 +591,6 @@ function importSetPaste(side) {
     syncSideInputs("defender");
     renderDamage();
   }
-  setSetPasteStatus(parsed.warnings);
 }
 
 function exportSetPaste(side) {
@@ -991,4 +1069,12 @@ function sideSummary(state) {
 
 function normalizeDamageId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function browserStorage() {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
 }

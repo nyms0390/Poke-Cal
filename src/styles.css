@@ -671,6 +671,19 @@ select:focus {
   gap: 10px;
 }
 
+.saved-set-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.saved-set-controls label {
+  display: grid;
+  gap: 8px;
+}
+
+.saved-set-controls button,
 .set-paste-actions button {
   padding: 9px 12px;
   border: 1px solid #344769;
@@ -681,10 +694,17 @@ select:focus {
   cursor: pointer;
 }
 
+.saved-set-controls button:hover,
+.saved-set-controls button:focus-visible,
 .set-paste-actions button:hover,
 .set-paste-actions button:focus-visible {
   border-color: #19e6ff;
   color: #f4f7ff;
+}
+
+.saved-set-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .set-paste-warnings {
@@ -1299,6 +1319,7 @@ footer {
   .damage-controls,
   .damage-picks,
   .damage-move-picks,
+  .saved-set-controls,
   .result-panel {
     grid-template-columns: 1fr;
   }
