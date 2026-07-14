@@ -18,7 +18,7 @@ import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../eng
 import { isOrderConditionalMove } from "../engine/move-effects.js";
 import { resultDescription } from "../engine/result-text.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
-import { createSavedSetStore } from "../data/saved-sets.js";
+import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -125,8 +125,11 @@ const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fi
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const savedSetStore = createSavedSetStore(browserStorage());
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
-let teamStorage = browserStorage();
-let teamMemoryBlob = null;
+const teamStore = createStorageStore(browserStorage(), {
+  key: TEAM_STORAGE_KEY,
+  createEmpty: () => ({ version: 1, teams: {} }),
+  isValid: (value) => value?.version === 1 && value.teams,
+});
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -1272,29 +1275,11 @@ function normalizeDamageId(value) {
 }
 
 function loadStoredTeams() {
-  if (!teamStorage) return teamMemoryBlob?.teams ?? null;
-  try {
-    const parsed = JSON.parse(teamStorage.getItem(TEAM_STORAGE_KEY) || "null");
-    if (parsed?.version === 1 && parsed.teams) {
-      teamMemoryBlob = parsed;
-      return parsed.teams;
-    }
-    return null;
-  } catch {
-    teamStorage = null;
-    return teamMemoryBlob?.teams ?? null;
-  }
+  return teamStore.read().teams;
 }
 
 function persistTeams() {
-  const blob = { version: 1, teams };
-  teamMemoryBlob = blob;
-  if (!teamStorage) return;
-  try {
-    teamStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(blob));
-  } catch {
-    teamStorage = null;
-  }
+  teamStore.write({ version: 1, teams });
 }
 
 function restoreTeams(storedTeams) {

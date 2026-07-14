@@ -19,39 +19,57 @@ function cloneBlob(blob) {
   };
 }
 
-export function createSavedSetStore(storage = null) {
-  let useMemory = !storage;
-  let memoryBlob = emptyBlob();
+function cloneJson(value) {
+  return JSON.parse(JSON.stringify(value));
+}
 
-  function readBlob() {
-    if (useMemory) return cloneBlob(memoryBlob);
+export function createStorageStore(
+  storage,
+  { key, createEmpty, clone = cloneJson, isValid = () => true },
+) {
+  let useMemory = !storage;
+  let memoryValue = createEmpty();
+
+  function read() {
+    if (useMemory) return clone(memoryValue);
     try {
-      const parsed = JSON.parse(storage.getItem(SAVED_SETS_STORAGE_KEY) || "null");
-      return parsed?.version === 1 && parsed.sets ? cloneBlob(parsed) : emptyBlob();
+      const parsed = JSON.parse(storage.getItem(key) || "null");
+      return isValid(parsed) ? clone(parsed) : createEmpty();
     } catch {
       useMemory = true;
-      return cloneBlob(memoryBlob);
+      return clone(memoryValue);
     }
   }
 
-  function writeBlob(blob) {
-    const nextBlob = cloneBlob(blob);
+  function write(value) {
+    const nextValue = clone(value);
     if (useMemory) {
-      memoryBlob = nextBlob;
+      memoryValue = nextValue;
       return;
     }
     try {
-      storage.setItem(SAVED_SETS_STORAGE_KEY, JSON.stringify(nextBlob));
+      storage.setItem(key, JSON.stringify(nextValue));
     } catch {
       useMemory = true;
-      memoryBlob = nextBlob;
+      memoryValue = nextValue;
     }
   }
+
+  return { read, write };
+}
+
+export function createSavedSetStore(storage = null) {
+  const storageStore = createStorageStore(storage, {
+    key: SAVED_SETS_STORAGE_KEY,
+    createEmpty: emptyBlob,
+    clone: cloneBlob,
+    isValid: (value) => value?.version === 1 && value.sets,
+  });
 
   function listSets(pokemonId) {
     const id = normalizeId(pokemonId);
     if (!id) return [];
-    const sets = readBlob().sets[id] ?? {};
+    const sets = storageStore.read().sets[id] ?? {};
     return Object.entries(sets)
       .map(([name, text]) => ({ name, text }))
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -62,9 +80,9 @@ export function createSavedSetStore(storage = null) {
     const setName = String(name ?? "").trim();
     if (!id || !setName) return null;
 
-    const blob = readBlob();
+    const blob = storageStore.read();
     blob.sets[id] = { ...(blob.sets[id] ?? {}), [setName]: formatSetPaste(sideState) };
-    writeBlob(blob);
+    storageStore.write(blob);
     return { name: setName, text: blob.sets[id][setName] };
   }
 
@@ -73,11 +91,11 @@ export function createSavedSetStore(storage = null) {
     const setName = String(name ?? "").trim();
     if (!id || !setName) return false;
 
-    const blob = readBlob();
+    const blob = storageStore.read();
     if (!blob.sets[id] || !(setName in blob.sets[id])) return false;
     delete blob.sets[id][setName];
     if (Object.keys(blob.sets[id]).length === 0) delete blob.sets[id];
-    writeBlob(blob);
+    storageStore.write(blob);
     return true;
   }
 

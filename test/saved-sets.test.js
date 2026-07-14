@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { createSavedSetStore, SAVED_SETS_STORAGE_KEY } from "../src/data/saved-sets.js";
+import {
+  createSavedSetStore,
+  createStorageStore,
+  SAVED_SETS_STORAGE_KEY,
+} from "../src/data/saved-sets.js";
 
 const pokemon = { id: "miraidon", name: "Miraidon" };
 const ability = { id: "hadronengine", name: "Hadron Engine" };
@@ -79,6 +83,37 @@ test("falls back to in-memory storage when persistent storage throws", () => {
 
   store.saveSet("miraidon", "Private", sideState);
   assert.deepEqual(store.listSets("miraidon").map((set) => set.name), ["Private"]);
+});
+
+test("generic storage wrapper persists versioned JSON and falls back to memory", () => {
+  const storage = memoryStorage();
+  const store = createStorageStore(storage, {
+    key: "pokecal.test.v1",
+    createEmpty: () => ({ version: 1, teams: {} }),
+    isValid: (value) => value?.version === 1 && value.teams,
+  });
+
+  store.write({ version: 1, teams: { attacker: { activeIndex: 0 } } });
+  assert.deepEqual(store.read(), { version: 1, teams: { attacker: { activeIndex: 0 } } });
+
+  const failingStore = createStorageStore(
+    {
+      getItem() {
+        throw new Error("private browsing");
+      },
+      setItem() {
+        throw new Error("private browsing");
+      },
+    },
+    {
+      key: "pokecal.test.v1",
+      createEmpty: () => ({ version: 1, teams: {} }),
+      isValid: (value) => value?.version === 1 && value.teams,
+    },
+  );
+
+  failingStore.write({ version: 1, teams: { defender: { activeIndex: 1 } } });
+  assert.deepEqual(failingStore.read(), { version: 1, teams: { defender: { activeIndex: 1 } } });
 });
 
 test("ignores blank pokemon ids and set names", () => {
