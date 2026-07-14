@@ -50,6 +50,9 @@ test("saves, lists, and deletes named sets as paste text", () => {
     sets: { miraidon: { Specs: saved.text } },
   });
 
+  const reloadedStore = createSavedSetStore(storage);
+  assert.deepEqual(reloadedStore.listSets("miraidon"), [{ name: "Specs", text: saved.text }]);
+
   assert.equal(store.deleteSet("miraidon", "Specs"), true);
   assert.deepEqual(store.listSets("miraidon"), []);
 });

@@ -1,6 +1,6 @@
 # P3-03 — Saved sets (localStorage) and usage-default sets
 
-Status: TODO
+Status: Done
 Depends on: P3-02
 Phase: 3 (calculator UX parity)
 
@@ -38,3 +38,13 @@ them from the set dropdown next to usage defaults.
 ```sh
 node --test test/saved-sets.test.js && npm test
 ```
+
+## Completion notes
+
+- Added versioned `pokecal.sets.v1` storage with per-Pokémon named paste text, reload persistence,
+  deletion, and an in-memory fallback when storage access fails.
+- Added per-side Champions-default/saved-set dropdowns, save-name prompt, and delete controls;
+  saved sets apply through the P3-02 paste parser.
+- `node --test test/saved-sets.test.js` and `npm test` pass. Desktop browser QA confirmed the
+  controls render and default state; the in-app browser does not support native `prompt()`, so
+  name-entry/reload was covered by the storage reload test instead.
