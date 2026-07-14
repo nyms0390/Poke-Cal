@@ -1589,3 +1589,495 @@ footer {
     flex-direction: column;
   }
 }
+
+/* Kraken visual system */
+:root {
+  color-scheme: light;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #f7f8fb;
+  color: #101114;
+  --kraken-purple: #7132f5;
+  --kraken-purple-dark: #5741d8;
+  --kraken-purple-deep: #5b1ecf;
+  --kraken-purple-soft: rgb(133 91 251 / 16%);
+  --kraken-ink: #101114;
+  --kraken-muted: #686b82;
+  --kraken-subtle: #9497a9;
+  --kraken-line: #dedee5;
+  --kraken-surface: #ffffff;
+  --kraken-surface-soft: #fafafd;
+  --kraken-surface-tint: #f1f0ff;
+  --kraken-success: #149e61;
+  --kraken-success-dark: #026b3f;
+  --cyan: var(--kraken-purple);
+  --magenta: var(--kraken-purple-dark);
+  --panel: var(--kraken-surface);
+  --panel-raised: var(--kraken-surface-soft);
+  --line: var(--kraken-line);
+  --muted: var(--kraken-muted);
+  --border: var(--kraken-line);
+}
+
+body {
+  background:
+    radial-gradient(circle at 92% 0%, rgb(113 50 245 / 7%), transparent 30rem),
+    #f7f8fb;
+  color: var(--kraken-ink);
+}
+
+main {
+  padding-top: 48px;
+}
+
+header {
+  max-width: 880px;
+  margin-bottom: 32px;
+}
+
+header::before {
+  width: 4px;
+  background: var(--kraken-purple);
+  box-shadow: none;
+}
+
+.page-nav {
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.page-nav a {
+  border-color: var(--kraken-line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: var(--kraken-muted);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.page-nav a:hover,
+.page-nav a:focus-visible,
+.page-nav a.active {
+  border-color: var(--kraken-purple);
+  outline: none;
+  color: var(--kraken-purple);
+  background: var(--kraken-purple-soft);
+}
+
+.eyebrow,
+label,
+legend,
+.result-panel span,
+.panel-heading span,
+.base-stat-total span {
+  color: var(--kraken-muted);
+  letter-spacing: 0.08em;
+}
+
+.eyebrow {
+  color: var(--kraken-purple);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--kraken-ink);
+  font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 10px 0 12px;
+  font-size: clamp(2.8rem, 7vw, 4.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+  text-shadow: none;
+}
+
+.intro {
+  color: var(--kraken-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.calculator {
+  border-color: var(--kraken-line);
+  border-radius: 12px;
+  background: var(--kraken-surface);
+  box-shadow: 0 4px 24px rgb(16 17 20 / 3%);
+}
+
+.calculator::before {
+  height: 4px;
+  background: var(--kraken-purple);
+  box-shadow: none;
+}
+
+.search-panel,
+.controls-panel,
+.catalog-panel,
+.damage-side,
+.field-card,
+.set-paste-panel {
+  background: var(--kraken-surface);
+}
+
+.search-panel,
+.calculator > .form-field {
+  border-color: var(--kraken-line);
+  background: var(--kraken-surface-soft);
+}
+
+.lookup-tool > .tool-page,
+.battle-tool,
+.damage-controls {
+  background: var(--kraken-line);
+}
+
+.usage-source {
+  border-color: var(--kraken-line);
+  background: var(--kraken-surface-tint);
+  color: var(--kraken-purple-dark);
+}
+
+#pokemon-search,
+#move-search,
+.pokemon-combobox input[type="search"],
+select,
+.stat-inputs input,
+.stage-inputs input,
+.set-paste-panel textarea {
+  border-color: var(--kraken-line);
+  border-radius: 6px;
+  background: var(--kraken-surface);
+  color: var(--kraken-ink);
+  box-shadow: 0 1px 4px rgb(16 24 40 / 4%);
+}
+
+#pokemon-search:focus,
+#move-search:focus,
+.pokemon-combobox input[type="search"]:focus,
+select:focus,
+.stat-inputs input:focus,
+.stage-inputs input:focus,
+.set-paste-panel textarea:focus {
+  border-color: var(--kraken-purple);
+  box-shadow: 0 0 0 3px rgb(113 50 245 / 14%);
+}
+
+.search-results {
+  border-color: var(--kraken-line);
+  border-radius: 10px;
+  background: var(--kraken-surface);
+  box-shadow: 0 4px 24px rgb(16 17 20 / 10%);
+}
+
+.search-result {
+  border-left-color: transparent;
+}
+
+.search-result:hover,
+.search-result:focus-visible {
+  border-left-color: var(--kraken-purple);
+  background: var(--kraken-purple-soft);
+}
+
+.search-result small,
+.alias,
+.search-result strong,
+.form-card-abilities small,
+.form-card-stats small {
+  color: var(--kraken-muted);
+}
+
+.search-result strong,
+.base-stat-total strong,
+.panel-heading strong,
+.ability-heading span,
+.item-heading span,
+.spread-row span {
+  color: var(--kraken-purple);
+}
+
+.pokemon-card h2 {
+  color: var(--kraken-ink);
+}
+
+.base-stat-total strong {
+  text-shadow: none;
+}
+
+.form-card,
+.ability-card,
+.item-card,
+.spread-row,
+.team-slot,
+.final-stat-readout,
+.damage-result-card,
+.damage-result-summary,
+.move-table-wrap,
+.move-table tr {
+  border-color: var(--kraken-line);
+  border-radius: 8px;
+  background: var(--kraken-surface);
+  box-shadow: 0 1px 4px rgb(16 24 40 / 4%);
+}
+
+.form-card {
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.form-card::after {
+  background: var(--kraken-line);
+}
+
+.form-card:hover,
+.form-card:focus-visible {
+  border-color: var(--kraken-purple-dark);
+  box-shadow: 0 4px 16px rgb(16 17 20 / 6%);
+}
+
+.form-card.active {
+  border-color: var(--kraken-purple);
+  background: var(--kraken-purple-soft);
+  box-shadow: 0 0 0 1px rgb(113 50 245 / 14%) inset;
+}
+
+.form-card.active::after {
+  background: var(--kraken-purple);
+  box-shadow: none;
+}
+
+.form-card-heading strong,
+.form-card-stats strong,
+.ability-heading strong,
+.item-heading strong,
+.damage-result-heading strong,
+.damage-result-column h3 {
+  color: var(--kraken-ink);
+}
+
+.form-card-abilities strong,
+.playstyle-summary,
+.ability-card p,
+.item-card p,
+.empty-catalog,
+.damage-ko,
+.damage-result-line,
+.damage-result-summary p {
+  color: var(--kraken-muted);
+}
+
+.form-card-stats .speed-stat strong,
+.field output {
+  color: var(--kraken-purple);
+  text-shadow: none;
+}
+
+.panel-heading button,
+.saved-set-controls button,
+.set-paste-actions button,
+.damage-copy-button {
+  border-color: var(--kraken-purple-dark);
+  border-radius: 12px;
+  background: var(--kraken-surface);
+  color: var(--kraken-purple-dark);
+  box-shadow: 0 1px 4px rgb(16 24 40 / 4%);
+}
+
+.panel-heading button:hover,
+.panel-heading button:focus-visible,
+.saved-set-controls button:hover,
+.saved-set-controls button:focus-visible,
+.set-paste-actions button:hover,
+.set-paste-actions button:focus-visible,
+.damage-copy-button:hover,
+.damage-copy-button:focus-visible {
+  border-color: var(--kraken-purple);
+  outline: none;
+  color: var(--kraken-purple);
+  background: var(--kraken-purple-soft);
+}
+
+button:disabled,
+.saved-set-controls button:disabled {
+  color: var(--kraken-subtle);
+}
+
+.item-list {
+  scrollbar-color: var(--kraken-purple) var(--kraken-surface-soft);
+}
+
+.damage-side {
+  background:
+    linear-gradient(180deg, rgb(113 50 245 / 3%), transparent 45%),
+    var(--kraken-surface);
+}
+
+.field-card {
+  background:
+    linear-gradient(180deg, rgb(113 50 245 / 4%), transparent 45%),
+    var(--kraken-surface-soft);
+}
+
+.team-slot.active {
+  border-color: var(--kraken-purple);
+  box-shadow: 0 0 0 1px rgb(113 50 245 / 12%) inset;
+}
+
+.team-slot,
+.team-slot button,
+.team-slot-clear {
+  color: var(--kraken-muted);
+}
+
+.team-slot.active .team-slot-button,
+.team-slot button:hover,
+.team-slot button:focus-visible {
+  color: var(--kraken-ink);
+}
+
+.radio-option,
+.inline-toggle,
+fieldset label {
+  color: var(--kraken-ink);
+}
+
+.radio-option input,
+fieldset input,
+.condition-row input,
+#sp {
+  accent-color: var(--kraken-purple);
+}
+
+fieldset,
+.assumption-panel {
+  border-color: var(--kraken-line);
+  background: var(--kraken-surface-soft);
+}
+
+.assumption-panel {
+  border-top-color: var(--kraken-line);
+}
+
+.final-stat-readout {
+  background: var(--kraken-surface-soft);
+}
+
+.final-stat span,
+.damage-notes,
+.field p,
+.result-panel small,
+.move-table td small {
+  color: var(--kraken-subtle);
+}
+
+.final-stat strong,
+.damage-result-line {
+  color: var(--kraken-ink);
+}
+
+.final-stat strong.increase {
+  color: #c23b3b;
+}
+
+.final-stat strong.decrease {
+  color: #2675b8;
+}
+
+.damage-field {
+  border-color: var(--kraken-line);
+  background: var(--kraken-surface-soft);
+}
+
+.damage-result-card.selected {
+  border-color: var(--kraken-purple);
+  background: var(--kraken-purple-soft);
+}
+
+.damage-percent {
+  color: var(--damage-percent-color, var(--kraken-success));
+}
+
+.damage-result-summary {
+  background: var(--kraken-surface-soft);
+}
+
+.move-table-wrap {
+  background: var(--kraken-surface);
+}
+
+.move-table th,
+.move-table td {
+  border-color: var(--kraken-line);
+}
+
+.move-table th {
+  background: var(--kraken-surface-tint);
+  color: var(--kraken-muted);
+}
+
+.move-table tbody tr:hover {
+  background: var(--kraken-purple-soft);
+}
+
+.numeric-cell {
+  color: var(--kraken-ink);
+}
+
+.effect-cell {
+  color: var(--kraken-muted);
+}
+
+.move-priority-badge {
+  border-color: var(--kraken-line);
+  border-radius: 8px;
+  background: var(--kraken-surface-tint);
+  color: var(--kraken-muted);
+}
+
+.move-priority-badge.positive {
+  border-color: var(--kraken-purple);
+  color: var(--kraken-purple);
+}
+
+.move-priority-badge.negative {
+  border-color: #c23b3b;
+  color: #c23b3b;
+}
+
+.type-badge {
+  border-color: var(--kraken-surface);
+  box-shadow: 0 0 0 1px rgb(16 17 20 / 12%) inset;
+}
+
+.footer,
+footer {
+  color: var(--kraken-subtle);
+}
+
+@media (max-width: 720px) {
+  main {
+    padding-top: 32px;
+  }
+
+  h1 {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+
+  .move-table tr {
+    background: var(--kraken-surface);
+  }
+
+  .move-table td {
+    border-color: var(--kraken-line);
+  }
+
+  .move-table td::before {
+    color: var(--kraken-muted);
+  }
+}
