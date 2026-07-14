@@ -68,7 +68,7 @@ function clampCurrentHpFraction(value, maxHp) {
 }
 
 // Builds the canonical per-side battle state for `pokemon` from its Champions usage defaults
-// (or Limitless/ranked fallback — see usage-defaults.js). speedMultiplier/tailwind/status default
+// (or Limitless/ranked fallback — see usage-defaults.js). speedMultiplier/status default
 // to their neutral values here; battle-page.js overrides them from the existing battle-condition
 // controls when seeding a side, so switching Pokémon on one side doesn't reset the other side's
 // battle conditions.
@@ -81,11 +81,12 @@ export function createSideState(pokemon, usageDefaults) {
     ability: usageDefaults.ability,
     item: usageDefaults.item,
     status: "",
-    teraType: "",
     currentHpFraction: 1,
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeId(usageDefaults.moves[index]?.id)),
     selectedHitCounts: [null, null, null, null],
     targetMovedOverrides: [null, null, null, null],
+    critMoves: [false, false, false, false],
+    conditionOverrides: [null, null, null, null],
     singleTargetMoves: [false, false, false, false],
     allyPlusMinus: false,
     rivalry: "off",
@@ -94,7 +95,6 @@ export function createSideState(pokemon, usageDefaults) {
     boosterEnergy: false,
     iceFaceIntact: true,
     speedMultiplier: 1,
-    tailwind: false,
   };
 }
 
@@ -118,14 +118,8 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, item: value };
     case "speedMultiplier":
       return { ...state, speedMultiplier: Number(value) };
-    case "tailwind":
-      return { ...state, tailwind: Boolean(value) };
     case "status":
       return { ...state, status: value };
-    case "tera":
-      return { ...state, teraType: value?.enabled ? value.type : "" };
-    case "teraType":
-      return { ...state, teraType: state.teraType ? value : "" };
     case "currentHpFraction":
       return { ...state, currentHpFraction: clampCurrentHpFraction(value, maxHp) };
     case "allyPlusMinus":
@@ -152,6 +146,10 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
           .map((singleTarget, i) => (i === index ? false : singleTarget)),
         targetMovedOverrides: (state.targetMovedOverrides ?? [null, null, null, null])
           .map((targetMoved, i) => (i === index ? null : targetMoved)),
+        critMoves: (state.critMoves ?? [false, false, false, false])
+          .map((critical, i) => (i === index ? false : critical)),
+        conditionOverrides: (state.conditionOverrides ?? [null, null, null, null])
+          .map((condition, i) => (i === index ? null : condition)),
       };
     case "hitCount":
       return {
@@ -163,7 +161,21 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return {
         ...state,
         targetMovedOverrides: (state.targetMovedOverrides ?? [null, null, null, null])
-          .map((targetMoved, i) => (i === index ? Boolean(value) : targetMoved)),
+          .map((targetMoved, i) => (i === index
+            ? value === null || value === "auto" ? null : value === "yes" || value === true
+            : targetMoved)),
+      };
+    case "crit":
+      return {
+        ...state,
+        critMoves: (state.critMoves ?? [false, false, false, false])
+          .map((critical, i) => (i === index ? Boolean(value) : critical)),
+      };
+    case "moveCondition":
+      return {
+        ...state,
+        conditionOverrides: (state.conditionOverrides ?? [null, null, null, null])
+          .map((condition, i) => (i === index ? (value === null ? null : value === "yes" || value === true) : condition)),
       };
     case "singleTarget":
       return {
@@ -176,15 +188,15 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
   }
 }
 
-// A field-card side panel tracks all 8 side-condition checkboxes for one physical side of the
+// A field-card side panel tracks six side-condition checkboxes for one physical side of the
 // field (see battle-page.js's "Attacker's side"/"Defender's side" panels), because whichever
-// Pokémon stands there can either be the one attacking (its Helping Hand/Power Spot/Battery/
-// Steely Spirit boost its own move) or the one defending (its Reflect/Light Screen/Aurora Veil/
+// Pokémon stands there can either be the one attacking (its Helping Hand boosts its own move)
+// or the one defending (its Reflect/Light Screen/Aurora Veil/
 // Friend Guard reduce the incoming hit) depending on which row of the damage list is being
-// calculated. `pickBoostFields`/`pickScreenFields` slice that 8-key panel object down to the
+// calculated. `pickFields` slices that panel object down to the
 // 4-key shape `field.attackerSide`/`field.defenderSide` (src/engine/field.js) actually expects.
-const BOOST_FIELD_KEYS = ["helpingHand", "powerSpot", "battery", "steelySpirit", "flowerGift"];
-const SCREEN_FIELD_KEYS = ["reflect", "lightScreen", "auroraVeil", "friendGuard", "flowerGift"];
+const BOOST_FIELD_KEYS = ["helpingHand"];
+const SCREEN_FIELD_KEYS = ["reflect", "lightScreen", "auroraVeil", "friendGuard"];
 
 function pickFields(panel, keys) {
   if (!panel) return undefined;
@@ -195,7 +207,7 @@ function pickFields(panel, keys) {
 
 // Assembles the pieces shared by every damage calculation in one render pass: both sides'
 // Pokémon/state and the Field object(s) built from the raw battle-condition control values
-// (`fieldInputs = { format, weather, terrain, gravity, trickRoom, critical, attackerSide,
+// (`fieldInputs = { format, weather, terrain, gravity, trickRoom, attackerSide,
 // defenderSide }`). `attackerSide`/`defenderSide` are the two field-card panel objects, keyed by
 // physical side rather than by calculation direction. `field` is for the attacker-as-source
 // damage rows; `reverseField` swaps which panel supplies the boosts vs. the screens, for the
@@ -217,12 +229,20 @@ export function buildCalcInput(damageState, fieldInputs = {}) {
   const attackerScreens = pickFields(attackerPanel, SCREEN_FIELD_KEYS);
   const defenderBoosts = pickFields(defenderPanel, BOOST_FIELD_KEYS);
   const defenderScreens = pickFields(defenderPanel, SCREEN_FIELD_KEYS);
+  const attackerState = {
+    ...damageState.attacker,
+    tailwind: Boolean(attackerPanel?.tailwind),
+  };
+  const defenderState = {
+    ...damageState.defender,
+    tailwind: Boolean(defenderPanel?.tailwind),
+  };
 
   return {
     attacker: damageState.attacker.pokemon,
     defender: damageState.defender.pokemon,
-    attackerState: damageState.attacker,
-    defenderState: damageState.defender,
+    attackerState,
+    defenderState,
     field: createField({
       ...fieldOverrides,
       ...(attackerBoosts ? { attackerSide: attackerBoosts } : {}),
@@ -233,6 +253,5 @@ export function buildCalcInput(damageState, fieldInputs = {}) {
       ...(defenderBoosts ? { attackerSide: defenderBoosts } : {}),
       ...(attackerScreens ? { defenderSide: attackerScreens } : {}),
     }),
-    critical: Boolean(fieldInputs.critical),
   };
 }

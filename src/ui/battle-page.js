@@ -1,6 +1,6 @@
 import {
   formatMovePriority,
-  formatChampionsUsage,
+  filterMoves,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
@@ -15,7 +15,7 @@ import {
   natureOptionLabel,
 } from "../engine/damage.js";
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
-import { isOrderConditionalMove } from "../engine/move-effects.js";
+import { isOrderConditionalMove, moveCondition, moveEffect } from "../engine/move-effects.js";
 import { resultDescription } from "../engine/result-text.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
@@ -37,9 +37,9 @@ import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
   optionElement,
+  attachCombobox,
   searchResultButton,
-  spInput,
-  stageInput,
+  statEditorRow,
   STAT_LABELS,
   typeBadge,
 } from "./components.js";
@@ -72,26 +72,20 @@ const elements = {
   defenderItem: document.querySelector("#defender-item"),
   attackerMovePicks: document.querySelector("#attacker-move-picks"),
   defenderMovePicks: document.querySelector("#defender-move-picks"),
-  attackerSpInputs: document.querySelector("#attacker-sp-inputs"),
-  defenderSpInputs: document.querySelector("#defender-sp-inputs"),
-  attackerStageInputs: document.querySelector("#attacker-stage-inputs"),
-  defenderStageInputs: document.querySelector("#defender-stage-inputs"),
+  attackerStatEditor: document.querySelector("#attacker-stat-editor"),
+  defenderStatEditor: document.querySelector("#defender-stat-editor"),
   attackerSpeedMultiplier: document.querySelector("#attacker-speed-multiplier"),
   defenderSpeedMultiplier: document.querySelector("#defender-speed-multiplier"),
-  attackerTailwind: document.querySelector("#attacker-tailwind"),
-  defenderTailwind: document.querySelector("#defender-tailwind"),
   attackerStatus: document.querySelector("#attacker-status"),
   defenderStatus: document.querySelector("#defender-status"),
-  attackerTera: document.querySelector("#attacker-tera"),
-  defenderTera: document.querySelector("#defender-tera"),
-  attackerTeraType: document.querySelector("#attacker-tera-type"),
-  defenderTeraType: document.querySelector("#defender-tera-type"),
   attackerCurrentHp: document.querySelector("#attacker-current-hp"),
   defenderCurrentHp: document.querySelector("#defender-current-hp"),
   attackerMaxHp: document.querySelector("#attacker-max-hp"),
   defenderMaxHp: document.querySelector("#defender-max-hp"),
   attackerHpPercent: document.querySelector("#attacker-hp-percent"),
   defenderHpPercent: document.querySelector("#defender-hp-percent"),
+  attackerSpeedReadout: document.querySelector("#attacker-speed-readout"),
+  defenderSpeedReadout: document.querySelector("#defender-speed-readout"),
   trickRoom: document.querySelector("#trick-room"),
   swapSides: document.querySelector("#swap-sides"),
   fieldGravity: document.querySelector("#field-gravity"),
@@ -102,7 +96,6 @@ const elements = {
   assumptionInputs: document.querySelectorAll(
     'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], select[data-kind="rivalry"]',
   ),
-  damageCritical: document.querySelector("#damage-critical"),
   setPaste: document.querySelector("#set-paste"),
   setPasteStatus: document.querySelector("#set-paste-status"),
   setPasteWarnings: document.querySelector("#set-paste-warnings"),
@@ -112,16 +105,12 @@ const elements = {
   exportDefenderSet: document.querySelector("#export-defender-set"),
   moveOrder: document.querySelector("#move-order"),
   speedSummary: document.querySelector("#speed-summary"),
-  attackerFinalStats: document.querySelector("#attacker-final-stats"),
-  defenderFinalStats: document.querySelector("#defender-final-stats"),
   damageCount: document.querySelector("#damage-count"),
   damageList: document.querySelector("#damage-list"),
   status: document.querySelector("#status"),
 };
 
 const SP_STATS = STAT_KEYS;
-const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
-const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const savedSetStore = createSavedSetStore(browserStorage());
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
@@ -139,10 +128,7 @@ const ID_CONTROL_KINDS = {
   ability: "ability",
   item: "item",
   "speed-multiplier": "speedMultiplier",
-  tailwind: "tailwind",
   status: "status",
-  tera: "tera",
-  "tera-type": "teraType",
 };
 
 let pokemon = [];
@@ -157,18 +143,16 @@ let damageState = {
   attacker: null,
   defender: null,
 };
+const moveComboboxCleanups = { attacker: [], defender: [] };
 
 // One field-card panel's worth of side conditions — see battle-state.js's buildCalcInput doc
-// comment for why this is 8 keys (both boost- and screen-type) rather than the engine's two
-// separate 4-key attackerSide/defenderSide shapes.
+// comment for why this combines boost- and screen-type keys.
 function neutralFieldSidePanel() {
   return {
     helpingHand: false,
-    powerSpot: false,
-    battery: false,
-    steelySpirit: false,
-    reflect: false,
+    tailwind: false,
     lightScreen: false,
+    reflect: false,
     auroraVeil: false,
     friendGuard: false,
   };
@@ -221,19 +205,12 @@ for (const control of [
   elements.defenderItem,
   elements.attackerSpeedMultiplier,
   elements.defenderSpeedMultiplier,
-  elements.attackerTailwind,
-  elements.defenderTailwind,
   elements.attackerStatus,
   elements.defenderStatus,
-  elements.attackerTera,
-  elements.defenderTera,
-  elements.attackerTeraType,
-  elements.defenderTeraType,
   elements.attackerCurrentHp,
   elements.defenderCurrentHp,
   elements.attackerHpPercent,
   elements.defenderHpPercent,
-  elements.damageCritical,
 ]) {
   control.addEventListener("input", handleDamageControl);
 }
@@ -266,20 +243,19 @@ for (const side of ["attacker", "defender"]) {
   elements[`${side}SavedSet`].addEventListener("input", () => applySavedSet(side));
   elements[`${side}SaveSet`].addEventListener("click", () => saveCurrentSet(side));
   elements[`${side}DeleteSet`].addEventListener("click", () => deleteCurrentSet(side));
-  input.addEventListener("input", () => renderPokemonSearchResults(side));
-  input.addEventListener("focus", () => renderPokemonSearchResults(side));
-  input.addEventListener("keydown", (event) => handlePokemonSearchKeydown(event, side));
+  attachCombobox({
+    input,
+    resultsEl: elements[`${side}PokemonResults`],
+    getMatches: (query) => searchPokemon(pokemon, query, {
+      abilityLookup,
+      moveLookup,
+      itemLookup,
+      limit: 8,
+    }),
+    onSelect: (picked) => seedDamageSide(side, picked),
+    renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
+  });
 }
-
-document.addEventListener("click", (event) => {
-  for (const side of ["attacker", "defender"]) {
-    const input = elements[`${side}PokemonSearch`];
-    const results = elements[`${side}PokemonResults`];
-    if (!input.contains(event.target) && !results.contains(event.target)) {
-      hidePokemonSearchResults(side);
-    }
-  }
-});
 
 function renderDamageShell() {
   const natureOptions = Object.keys(NATURES).map((nature) =>
@@ -320,54 +296,6 @@ function defaultPokemonForSide(side) {
   return pokemon.find(({ id }) => id === "blastoise") ?? pokemon.find(({ id }) => id !== "pikachu") ?? pokemon[0];
 }
 
-function renderPokemonSearchResults(side) {
-  const input = elements[`${side}PokemonSearch`];
-  const results = elements[`${side}PokemonResults`];
-  const matches = searchPokemon(pokemon, input.value, {
-    abilityLookup,
-    moveLookup,
-    itemLookup,
-    limit: 8,
-  });
-
-  results.replaceChildren(
-    ...matches.map((entry) =>
-      searchResultButton(entry, (picked) => seedDamageSide(side, picked), { preventBlur: true }),
-    ),
-  );
-  const isOpen = matches.length > 0;
-  results.hidden = !isOpen;
-  input.setAttribute("aria-expanded", String(isOpen));
-}
-
-function handlePokemonSearchKeydown(event, side) {
-  const results = elements[`${side}PokemonResults`];
-  if (event.key === "Escape") {
-    hidePokemonSearchResults(side);
-    return;
-  }
-  if (event.key === "ArrowDown") {
-    const firstResult = results.querySelector(".search-result");
-    if (firstResult) {
-      event.preventDefault();
-      firstResult.focus();
-    }
-    return;
-  }
-  if (event.key !== "Enter") return;
-
-  const [firstResult] = searchPokemon(pokemon, elements[`${side}PokemonSearch`].value, {
-    abilityLookup,
-    moveLookup,
-    itemLookup,
-    limit: 1,
-  });
-  if (!firstResult) return;
-  event.preventDefault();
-  results.hidden = true;
-  seedDamageSide(side, firstResult);
-}
-
 function handleKeyboardControl(event) {
   const input = event.target;
   if (input?.tagName !== "INPUT" || input.type !== "number") return;
@@ -392,16 +320,7 @@ function hidePokemonSearchResults(side) {
 }
 
 function renderSideInputs(side) {
-  const spContainer = elements[`${side}SpInputs`];
-  const stageContainer = elements[`${side}StageInputs`];
-
-  spContainer.replaceChildren(
-    ...SP_STATS.map((stat) => spInput({ stat, side, onChange: handleDamageControl })),
-  );
-
-  stageContainer.replaceChildren(
-    ...STAGE_STATS.map((stat) => stageInput({ stat, side, onChange: handleDamageControl })),
-  );
+  elements[`${side}StatEditor`].replaceChildren();
 }
 
 function seedDamageSide(side, entry) {
@@ -417,7 +336,6 @@ function seedDamageSide(side, entry) {
   // this side are preserved rather than reset, same as before the battle-state.js extraction.
   const state = createSideState(entry, defaults);
   state.speedMultiplier = existingState ? Number(elements[`${side}SpeedMultiplier`]?.value ?? 1) : 1;
-  state.tailwind = existingState ? elements[`${side}Tailwind`]?.checked ?? false : false;
   state.status = existingState ? elements[`${side}Status`]?.value ?? "" : "";
   writeActiveTeamState(side, state);
   renderActiveTeamSlot(side);
@@ -511,7 +429,7 @@ function writeActiveTeamState(side, state, { persist = true } = {}) {
 function setSideControlsDisabled(side, disabled) {
   for (const key of [
     "SavedSet", "SaveSet", "DeleteSet", "Spread", "Nature", "Ability", "Item", "SpeedMultiplier",
-    "Tailwind", "Status", "Tera", "TeraType", "CurrentHp", "HpPercent",
+    "Status", "CurrentHp", "HpPercent",
   ]) {
     elements[`${side}${key}`].disabled = disabled;
   }
@@ -519,6 +437,7 @@ function setSideControlsDisabled(side, disabled) {
 }
 
 function renderEmptySide(side) {
+  clearMoveComboboxes(side);
   setSideControlsDisabled(side, true);
   elements[`${side}Pokemon`].value = "";
   elements[`${side}PokemonSearch`].value = "";
@@ -527,7 +446,7 @@ function renderEmptySide(side) {
   elements[`${side}Nature`].replaceChildren(optionElement("", "Choose a Pokémon first"));
   elements[`${side}Ability`].replaceChildren(optionElement("", "Choose a Pokémon first"));
   elements[`${side}Item`].replaceChildren(optionElement("", "Choose a Pokémon first"));
-  elements[`${side}TeraType`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}StatEditor`].replaceChildren();
   elements[`${side}MovePicks`].replaceChildren();
   hidePokemonSearchResults(side);
 }
@@ -537,7 +456,6 @@ function renderSideSelects(side, defaults) {
   const natureSelect = elements[`${side}Nature`];
   const abilitySelect = elements[`${side}Ability`];
   const itemSelect = elements[`${side}Item`];
-  const teraTypeSelect = elements[`${side}TeraType`];
   const usage = damageState[side].pokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities);
   const rankedItems = rankByUsage(items, usage?.items);
@@ -550,22 +468,17 @@ function renderSideSelects(side, defaults) {
   abilitySelect.replaceChildren(
     optionElement("", "No ability modifier"),
     ...abilities.map((ability) =>
-      optionElement(ability.id, `${ability.name} · ${formatChampionsUsage(ability)}`),
+      optionElement(ability.id, ability.name),
     ),
   );
   itemSelect.replaceChildren(
     optionElement("", "No item modifier"),
     ...rankedItems.map((item) =>
-      optionElement(item.id, `${item.name} · ${formatChampionsUsage(item)}`),
+      optionElement(item.id, item.name),
     ),
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
   itemSelect.value = damageState[side].item?.id ?? "";
-  teraTypeSelect.replaceChildren(...TYPE_OPTIONS.map((type) => optionElement(type, type)));
-  const defaultTeraType = TYPE_OPTIONS.includes(defaults.teraType)
-    ? defaults.teraType
-    : damageState[side].pokemon.types?.find((type) => TYPE_OPTIONS.includes(type)) ?? TYPE_OPTIONS[0];
-  teraTypeSelect.value = defaultTeraType;
   renderDamageMovePickers(side);
   renderSavedSetSelect(side);
 }
@@ -586,15 +499,12 @@ function syncSideInputs(side) {
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
   elements[`${side}SpeedMultiplier`].value = String(state.speedMultiplier);
-  elements[`${side}Tailwind`].checked = state.tailwind;
   elements[`${side}Status`].value = state.status;
-  elements[`${side}Tera`].checked = Boolean(state.teraType);
-  if (state.teraType) elements[`${side}TeraType`].value = state.teraType;
   syncCurrentHpInputs(side);
-  for (const input of elements[`${side}SpInputs`].querySelectorAll("input")) {
+  for (const input of elements[`${side}StatEditor`].querySelectorAll('input[data-kind="sp"]')) {
     input.value = state.sp[input.dataset.stat] ?? 0;
   }
-  for (const input of elements[`${side}StageInputs`].querySelectorAll("input")) {
+  for (const input of elements[`${side}StatEditor`].querySelectorAll('select[data-kind="stage"]')) {
     input.value = state.stages[input.dataset.stat] ?? 0;
   }
   syncAssumptionInputs(side);
@@ -635,7 +545,7 @@ function handleDamageControl(event) {
         syncSideInputs("attacker");
         syncSideInputs("defender");
       }
-      if (["move", "hitCount", "targetMoved", "ability", "item"].includes(control.kind)) {
+      if (["move", "hitCount", "targetMoved", "crit", "moveCondition", "ability", "item"].includes(control.kind)) {
         renderDamageMovePickers(control.side);
       }
       if (control.kind === "sp" || control.kind === "stage") {
@@ -767,14 +677,13 @@ function applyParsedSet(side, parsed) {
       ...state,
       ability: parsed.ability ?? state.ability,
       item: parsed.item ?? state.item,
-      teraType: parsed.teraType || state.teraType,
       nature: parsed.nature || state.nature,
       sp: parsed.hasSpread ? parsed.sp : state.sp,
       selectedMoveIds: parsed.selectedMoveIds.length
         ? [0, 1, 2, 3].map((index) => parsed.selectedMoveIds[index] ?? "")
         : state.selectedMoveIds,
     });
-    renderSideSelects(side, { spreadName: "", teraType: damageState[side].teraType });
+    renderSideSelects(side, { spreadName: "" });
     syncSideInputs(side);
     applyAbilityImpliedField(damageState[side].ability);
     applyAbilityImpliedStages();
@@ -806,15 +715,12 @@ function setSetPasteStatus(warnings) {
 }
 
 function controlFromTarget(target) {
-  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|tailwind|status|tera|tera-type|current-hp|hp-percent)$/.exec(
+  const idMatch = /^(attacker|defender)-(spread|nature|ability|item|speed-multiplier|status|current-hp|hp-percent)$/.exec(
     target.id ?? "",
   );
   if (idMatch) {
     const [, side, key] = idMatch;
     const kind = ID_CONTROL_KINDS[key];
-    if (key === "tera") {
-      return { kind, side, value: { enabled: target.checked, type: elements[`${side}TeraType`].value } };
-    }
     if (key === "current-hp" || key === "hp-percent") {
       const maxHp = finalStat(damageState[side], "hp");
       const value = key === "current-hp" ? Number(target.value) / maxHp : Number(target.value) / 100;
@@ -840,7 +746,15 @@ function controlFromTarget(target) {
   }
   if (target.dataset.kind === "target-moved") {
     const { side, index } = target.dataset;
-    return { kind: "targetMoved", side, index: Number(index), value: target.checked };
+    return { kind: "targetMoved", side, index: Number(index), value: target.value === "auto" ? null : target.value };
+  }
+  if (target.dataset.kind === "crit") {
+    const { side, index } = target.dataset;
+    return { kind: "crit", side, index: Number(index), value: target.getAttribute("aria-pressed") === "true" };
+  }
+  if (target.dataset.kind === "move-condition") {
+    const { side, index } = target.dataset;
+    return { kind: "moveCondition", side, index: Number(index), value: target.value === "auto" ? null : target.value };
   }
   if (target.dataset.kind === "ally-plus-minus") {
     return { kind: "allyPlusMinus", side: target.dataset.side, value: target.checked };
@@ -864,7 +778,6 @@ function controlFromTarget(target) {
 }
 
 function controlValue(kind, target) {
-  if (kind === "tailwind") return target.checked;
   if (kind === "ability") return selectedOptionEntry(target, abilityLookup);
   if (kind === "item") return selectedOptionEntry(target, itemLookup);
   return target.value;
@@ -880,34 +793,81 @@ function selectedOptionEntry(select, lookup) {
 
 function renderDamageMovePickers(side) {
   const state = damageState[side];
-  if (!state?.pokemon) return;
-  const moves = damageMovesForSide(side);
+  if (!state?.pokemon) {
+    clearMoveComboboxes(side);
+    return;
+  }
+  const sideMoves = damageMovesForSide(side);
+  clearMoveComboboxes(side);
 
   elements[`${side}MovePicks`].replaceChildren(
     ...[0, 1, 2, 3].map((index) => {
-      const label = document.createElement("label");
-      label.textContent = `Move ${index + 1}`;
-      const select = document.createElement("select");
-      select.dataset.kind = "damage-move";
-      select.dataset.side = side;
-      select.dataset.index = String(index);
-      select.replaceChildren(
-        ...moves.map((move) =>
-          optionElement(
-            move.id,
-            `${move.name} · ${formatChampionsUsage(move)} · ${move.type ?? "—"}`,
-          ),
-        ),
-      );
-      select.value = state.selectedMoveIds[index] ?? moves[index]?.id ?? "";
-      select.addEventListener("input", handleDamageControl);
-      label.append(select);
+      const row = document.createElement("div");
+      row.className = "damage-move-row";
+      const moveLabel = document.createElement("span");
+      moveLabel.className = "damage-move-number";
+      moveLabel.textContent = `Move ${index + 1}`;
 
-      const selectedMove = moves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(select.value));
+      const combobox = document.createElement("div");
+      combobox.className = "move-combobox";
+      const selectedId = state.selectedMoveIds[index] ?? sideMoves[index]?.id ?? "";
+      const selectedMove = sideMoves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(selectedId));
+      const hidden = document.createElement("input");
+      hidden.type = "hidden";
+      hidden.value = selectedMove?.id ?? selectedId;
+      hidden.dataset.kind = "damage-move";
+      hidden.dataset.side = side;
+      hidden.dataset.index = String(index);
+      const search = document.createElement("input");
+      search.type = "search";
+      search.autocomplete = "off";
+      search.role = "combobox";
+      search.placeholder = selectedMove?.name ?? "Choose a move";
+      search.setAttribute("aria-label", `Move ${index + 1}`);
+      const results = document.createElement("div");
+      results.className = "search-results move-search-results";
+      results.hidden = true;
+      combobox.append(hidden, search, results);
+      const moveCombobox = attachCombobox({
+        input: search,
+        resultsEl: results,
+        getMatches: (query) => filterMoves(sideMoves, { query }),
+        onSelect: (picked) => {
+          hidden.value = picked.id;
+          search.value = picked.name;
+          search.placeholder = picked.name;
+          handleDamageControl({ target: hidden });
+        },
+        renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
+          preventBlur: true,
+          small: `${move.type ?? "—"} · ${move.category ?? "—"}`,
+          strong: move.basePower ?? "—",
+        }),
+      });
+      moveComboboxCleanups[side].push(moveCombobox.destroy);
+      row.append(moveLabel, combobox);
+
+      const crit = document.createElement("button");
+      crit.type = "button";
+      crit.className = "move-toggle";
+      crit.textContent = "Crit";
+      crit.dataset.kind = "crit";
+      crit.dataset.side = side;
+      crit.dataset.index = String(index);
+      const alwaysCrit = selectedMove && moveEffect(normalizeDamageId(selectedMove.id)).alwaysCrit === true;
+      crit.disabled = Boolean(alwaysCrit);
+      crit.setAttribute("aria-pressed", String(alwaysCrit || Boolean(state.critMoves?.[index])));
+      crit.addEventListener("click", () => {
+        crit.setAttribute("aria-pressed", String(crit.getAttribute("aria-pressed") !== "true"));
+        handleDamageControl({ target: crit });
+      });
+      row.append(crit);
+
       const hitRange = selectedMove ? moveHitCountRange(selectedMove, state) : null;
       if (hitRange && hitRange.min !== hitRange.max) {
         const hitCountLabel = document.createElement("label");
-        hitCountLabel.textContent = "Hits";
+        hitCountLabel.className = "move-inline-control";
+        hitCountLabel.textContent = "× hits";
         const hitCount = document.createElement("select");
         hitCount.dataset.kind = "hit-count";
         hitCount.dataset.side = side;
@@ -915,26 +875,44 @@ function renderDamageMovePickers(side) {
         hitCount.replaceChildren(
           ...Array.from({ length: hitRange.max - hitRange.min + 1 }, (_, offset) => {
             const count = hitRange.min + offset;
-            return optionElement(count, `${count} hits`);
+            return optionElement(count, String(count));
           }),
         );
         hitCount.value = String(selectedHitCountFor(side, index, hitRange));
         hitCount.addEventListener("input", handleDamageControl);
         hitCountLabel.append(hitCount);
-        label.append(hitCountLabel);
+        row.append(hitCountLabel);
       }
       if (selectedMove && isOrderConditionalMove(selectedMove)) {
         const assumptionLabel = document.createElement("label");
-        assumptionLabel.className = "inline-toggle";
-        const assumption = document.createElement("input");
-        assumption.type = "checkbox";
+        assumptionLabel.className = "move-inline-control";
+        assumptionLabel.textContent = "Target moved";
+        const assumption = document.createElement("select");
         assumption.dataset.kind = "target-moved";
         assumption.dataset.side = side;
         assumption.dataset.index = String(index);
-        assumption.checked = targetMovedForMove(side, index, selectedMove);
+        assumption.replaceChildren(optionElement("auto", "Auto"), optionElement("yes", "Yes"), optionElement("no", "No"));
+        const movedOverride = state.targetMovedOverrides?.[index];
+        assumption.value = movedOverride === null || movedOverride === undefined ? "auto" : movedOverride ? "yes" : "no";
         assumption.addEventListener("input", handleDamageControl);
-        assumptionLabel.append(assumption, " Target already moved");
-        label.append(assumptionLabel);
+        assumptionLabel.append(assumption);
+        row.append(assumptionLabel);
+      }
+      const condition = selectedMove ? moveCondition(selectedMove) : null;
+      if (condition) {
+        const conditionLabel = document.createElement("label");
+        conditionLabel.className = "move-inline-control";
+        conditionLabel.textContent = condition.label;
+        const select = document.createElement("select");
+        select.dataset.kind = "move-condition";
+        select.dataset.side = side;
+        select.dataset.index = String(index);
+        select.replaceChildren(optionElement("auto", "Auto"), optionElement("yes", "Yes"), optionElement("no", "No"));
+        const override = state.conditionOverrides?.[index];
+        select.value = override === null || override === undefined ? "auto" : override ? "yes" : "no";
+        select.addEventListener("input", handleDamageControl);
+        conditionLabel.append(select);
+        row.append(conditionLabel);
       }
       const singleTargetLabel = document.createElement("label");
       singleTargetLabel.className = "inline-toggle";
@@ -947,10 +925,15 @@ function renderDamageMovePickers(side) {
       singleTarget.checked = Boolean(state.singleTargetMoves?.[index]);
       singleTarget.addEventListener("input", handleDamageControl);
       singleTargetLabel.append(singleTarget, " 1 target");
-      label.append(singleTargetLabel);
-      return label;
+      row.append(singleTargetLabel);
+      return row;
     }),
   );
+}
+
+function clearMoveComboboxes(side) {
+  for (const cleanup of moveComboboxCleanups[side]) cleanup();
+  moveComboboxCleanups[side] = [];
 }
 
 function moveHitCountRange(move, state) {
@@ -974,8 +957,8 @@ function renderDamage() {
     elements.damageSource.textContent = "Select one Pokémon on each side to calculate damage.";
     elements.attackerSummary.textContent = attacker ? sideSummary(attacker) : "—";
     elements.defenderSummary.textContent = defender ? sideSummary(defender) : "—";
-    elements.attackerFinalStats.replaceChildren();
-    elements.defenderFinalStats.replaceChildren();
+    elements.attackerStatEditor.replaceChildren();
+    elements.defenderStatEditor.replaceChildren();
     elements.moveOrder.textContent = "Select one Pokémon on each side to compare move order.";
     elements.speedSummary.textContent = "";
     elements.damageCount.textContent = "—";
@@ -989,17 +972,14 @@ function renderDamage() {
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
   const speedContext = finalSpeedContext();
-  renderFinalStats(elements.attackerFinalStats, attacker, speedContext.field, speedContext.options);
-  renderFinalStats(elements.defenderFinalStats, defender, speedContext.field, speedContext.options);
+  renderStatEditor("attacker", speedContext.field, speedContext.options);
+  renderStatEditor("defender", speedContext.field, speedContext.options);
   syncCurrentHpInputs("attacker");
   syncCurrentHpInputs("defender");
 
-  const calcInput = buildCalcInput(damageState, {
-    ...fieldState,
-    critical: elements.damageCritical.checked,
-  });
+  const calcInput = buildCalcInput(damageState, fieldState);
 
-  renderMoveOrder(calcInput.field);
+  renderMoveOrder(calcInput.field, calcInput);
   const attackerRows = selectedDamageMoves("attacker").map(({ move, index }, rowIndex) =>
     renderDamageCard(move, "attacker", rowIndex === 0, calcInput, moveOptionsForDamage("attacker", index, move)),
   );
@@ -1026,9 +1006,17 @@ function targetMovedForMove(side, index, move) {
   if (!damageState[otherSide]?.pokemon) return false;
   const opponentMove = selectedDamageMoves(otherSide)[0]?.move;
   if (!opponentMove) return false;
+  const sideState = {
+    ...damageState[side],
+    tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
+  };
+  const otherState = {
+    ...damageState[otherSide],
+    tailwind: Boolean(fieldState[`${otherSide}Side`]?.tailwind),
+  };
   const order = compareMoveOrder({
-    attacker: damageState[side],
-    defender: damageState[otherSide],
+    attacker: sideState,
+    defender: otherState,
     attackerMove: move,
     defenderMove: opponentMove,
     trickRoom: fieldState.trickRoom,
@@ -1042,28 +1030,48 @@ function moveOptionsForDamage(side, index, move) {
   return {
     singleTarget: damageState[side].singleTargetMoves?.[index],
     hitCount: selectedHitCountForMove(side, index, move),
+    critical: Boolean(damageState[side].critMoves?.[index]),
+    conditionOverride: damageState[side].conditionOverrides?.[index] ?? null,
     opponentMove: selectedDamageMoves(otherSide)[0]?.move,
     targetMoved: targetMovedForMove(side, index, move),
   };
 }
 
-function renderFinalStats(container, state, field = {}, speedOptions = {}) {
+function renderStatEditor(side, field = {}, speedOptions = {}) {
+  const state = damageState[side];
+  const container = elements[`${side}StatEditor`];
+  if (!state?.pokemon) {
+    container.replaceChildren();
+    return;
+  }
   const nature = NATURES[state.nature] ?? {};
+  const fieldStateForSide = {
+    ...state,
+    tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
+  };
+  elements[`${side}SpeedReadout`].textContent = `Speed ${finalSpeed(fieldStateForSide, field, speedOptions)}`;
+  const header = document.createElement("div");
+  header.className = "battle-stat-editor-header";
+  for (const label of ["Stat", "Base", "SP", "Final", "Stage"]) {
+    const cell = document.createElement("span");
+    cell.textContent = label;
+    header.append(cell);
+  }
   container.replaceChildren(
+    header,
     ...SP_STATS.map((stat) => {
-      const entry = document.createElement("span");
-      entry.className = "final-stat";
-
-      const label = document.createElement("span");
-      label.textContent = STAT_LABELS[stat];
-
-      const value = document.createElement("strong");
-      value.textContent = String(finalStat(state, stat, field, speedOptions));
-      if (nature.up === stat) value.classList.add("increase");
-      if (nature.down === stat) value.classList.add("decrease");
-
-      entry.append(label, value);
-      return entry;
+      const row = statEditorRow(stat, {
+        side,
+        base: state.pokemon.baseStats[stat],
+        sp: state.sp[stat] ?? 0,
+        final: finalStat(fieldStateForSide, stat, field, speedOptions),
+        stage: state.stages[stat] ?? 0,
+        onChange: handleDamageControl,
+      });
+      const final = row.querySelector(".stat-cell-final");
+      if (nature.up === stat) final.classList.add("increase");
+      if (nature.down === stat) final.classList.add("decrease");
+      return row;
     }),
   );
 }
@@ -1127,7 +1135,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     // this row (and the Attacker's side conditions become the incoming screens) — see
     // battle-state.js's buildCalcInput doc comment.
     field: isDefenderSource ? calcInput.reverseField : calcInput.field,
-    critical: calcInput.critical,
+    critical: moveOptions.critical,
     moveOptions,
   });
   const description = resultDescription({
@@ -1200,7 +1208,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   return card;
 }
 
-function renderMoveOrder(field) {
+function renderMoveOrder(field, calcInput) {
   const [attackerEntry] = selectedDamageMoves("attacker");
   const [defenderEntry] = selectedDamageMoves("defender");
   const attackerMove = attackerEntry?.move;
@@ -1211,8 +1219,8 @@ function renderMoveOrder(field) {
   }
 
   const result = compareMoveOrder({
-    attacker: damageState.attacker,
-    defender: damageState.defender,
+    attacker: calcInput.attackerState,
+    defender: calcInput.defenderState,
     attackerMove,
     defenderMove,
     trickRoom: field.trickRoom,
@@ -1303,12 +1311,13 @@ function restoreSideState(storedState) {
 
   const defaults = championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items });
   const base = createSideState(entry, defaults);
+  const { teraType: _ignoredTeraType, tailwind: _ignoredTailwind, ...stored } = storedState;
   const selectedMoveIds = Array.isArray(storedState.selectedMoveIds)
     ? Array.from({ length: 4 }, (_, index) => normalizeDamageId(storedState.selectedMoveIds[index]))
     : base.selectedMoveIds;
   return {
     ...base,
-    ...storedState,
+    ...stored,
     pokemon: entry,
     ability: storedState.ability ? resolveStoredEntry(storedState.ability, abilityLookup) : null,
     item: storedState.item ? resolveStoredEntry(storedState.item, itemLookup) : null,
@@ -1317,6 +1326,8 @@ function restoreSideState(storedState) {
     selectedMoveIds,
     selectedHitCounts: Array.from({ length: 4 }, (_, index) => storedState.selectedHitCounts?.[index] ?? null),
     targetMovedOverrides: Array.from({ length: 4 }, (_, index) => storedState.targetMovedOverrides?.[index] ?? null),
+    critMoves: Array.from({ length: 4 }, (_, index) => Boolean(storedState.critMoves?.[index])),
+    conditionOverrides: Array.from({ length: 4 }, (_, index) => storedState.conditionOverrides?.[index] ?? null),
     singleTargetMoves: Array.from({ length: 4 }, (_, index) => Boolean(storedState.singleTargetMoves?.[index])),
   };
 }

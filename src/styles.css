@@ -11,6 +11,7 @@
   --panel: #0b1022;
   --panel-raised: #101831;
   --line: #263353;
+  --border: #263353;
   --muted: #8390aa;
 }
 
@@ -830,8 +831,7 @@ select:focus {
 
 .damage-side > label,
 .damage-picks label,
-.stat-inputs label,
-.stage-inputs label {
+.stat-inputs label {
   display: grid;
   gap: 8px;
   align-content: start;
@@ -839,8 +839,7 @@ select:focus {
 
 .damage-picks,
 .damage-move-picks,
-.stat-inputs,
-.stage-inputs {
+.stat-inputs {
   display: grid;
   gap: 12px;
 }
@@ -871,10 +870,6 @@ select:focus {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.stage-inputs {
-  grid-template-columns: repeat(5, 1fr);
-}
-
 .hp-inputs {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -897,13 +892,12 @@ select:focus {
 
 .damage-side select,
 .damage-move-picks select,
-.stat-inputs input,
-.stage-inputs input {
+.stat-inputs input {
   min-width: 0;
 }
 
 .stat-inputs input,
-.stage-inputs input {
+.battle-stat-editor input {
   width: 100%;
   padding: 10px;
   border: 1px solid #334267;
@@ -914,7 +908,7 @@ select:focus {
 }
 
 .stat-inputs input:focus,
-.stage-inputs input:focus {
+.battle-stat-editor input:focus {
   border-color: var(--cyan);
   box-shadow: 0 0 0 2px rgb(25 230 255 / 12%);
 }
@@ -938,25 +932,6 @@ select:focus {
   gap: 12px 18px;
 }
 
-/* Rows pairing a checkbox toggle with a labelled select (Tera, Status). */
-.condition-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  align-items: end;
-}
-
-.condition-row > label {
-  display: grid;
-  gap: 8px;
-  align-content: start;
-}
-
-.condition-row > .inline-toggle {
-  display: flex;
-  min-height: 45px;
-}
-
 .assumption-panel {
   border-top: 1px solid var(--border);
   padding-top: 12px;
@@ -966,51 +941,6 @@ select:focus {
   cursor: pointer;
   font-weight: 700;
   letter-spacing: 0;
-}
-
-.final-stat-readout {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid #293758;
-  border-radius: 4px;
-  background: #0b1125;
-}
-
-.final-stat {
-  min-width: 0;
-}
-
-.final-stat span {
-  display: block;
-  color: #9eacce;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.final-stat strong {
-  display: block;
-  margin-top: 4px;
-  color: #f4f7ff;
-  font-size: 1rem;
-}
-
-.final-stat strong.increase {
-  color: #ff6868;
-}
-
-.final-stat strong.decrease {
-  color: #58a6ff;
-}
-
-.damage-field {
-  margin: 0;
-  border-right: 0;
-  border-left: 0;
-  border-radius: 0;
 }
 
 .damage-results {
@@ -1465,14 +1395,6 @@ footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .final-stat-readout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .stage-inputs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .damage-side,
   .field-card {
     min-width: 0;
@@ -1480,8 +1402,7 @@ footer {
 
   .damage-side select,
   .damage-move-picks select,
-  .stat-inputs input,
-  .stage-inputs input {
+  .stat-inputs input {
     min-width: 0;
   }
 
@@ -1745,7 +1666,6 @@ h1 {
 .pokemon-combobox input[type="search"],
 select,
 .stat-inputs input,
-.stage-inputs input,
 .set-paste-panel textarea {
   border-color: var(--kraken-line);
   border-radius: 6px;
@@ -1759,7 +1679,6 @@ select,
 .pokemon-combobox input[type="search"]:focus,
 select:focus,
 .stat-inputs input:focus,
-.stage-inputs input:focus,
 .set-paste-panel textarea:focus {
   border-color: var(--kraken-purple);
   box-shadow: 0 0 0 3px rgb(113 50 245 / 14%);
@@ -1812,7 +1731,6 @@ select:focus,
 .item-card,
 .spread-row,
 .team-slot,
-.final-stat-readout,
 .damage-result-card,
 .damage-result-summary,
 .move-table-wrap,
@@ -1949,7 +1867,6 @@ fieldset label {
 
 .radio-option input,
 fieldset input,
-.condition-row input,
 #sp {
   accent-color: var(--kraken-purple);
 }
@@ -1964,11 +1881,6 @@ fieldset,
   border-top-color: var(--kraken-line);
 }
 
-.final-stat-readout {
-  background: var(--kraken-surface-soft);
-}
-
-.final-stat span,
 .damage-notes,
 .field p,
 .result-panel small,
@@ -1976,22 +1888,223 @@ fieldset,
   color: var(--kraken-subtle);
 }
 
-.final-stat strong,
 .damage-result-line {
   color: var(--kraken-ink);
 }
 
-.final-stat strong.increase {
-  color: #c23b3b;
+.field-grid {
+  display: grid;
+  gap: 16px;
 }
 
-.final-stat strong.decrease {
-  color: #2675b8;
+.field-grid > .radio-group,
+.field-grid > .inline-toggles {
+  grid-column: 1 / -1;
 }
 
-.damage-field {
-  border-color: var(--kraken-line);
-  background: var(--kraken-surface-soft);
+.segmented-tag .radio-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+}
+
+.segmented-tag .radio-option {
+  justify-content: center;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  background: var(--panel-raised);
+}
+
+.segmented-tag .radio-option + .radio-option {
+  border-left: 0;
+}
+
+.segmented-tag .radio-option:has(input:checked) {
+  border-color: var(--cyan);
+  background: rgb(25 230 255 / 10%);
+  color: var(--cyan);
+}
+
+.field-side-panel {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--panel-raised);
+}
+
+.field-grid > .field-side-panel {
+  display: grid;
+  grid-column: auto;
+  grid-template-columns: 1fr;
+}
+
+.battle-stat-editor {
+  display: grid;
+  grid-template-columns: auto repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+}
+
+.battle-stat-editor-header,
+.battle-stat-editor-row {
+  display: contents;
+}
+
+.battle-stat-editor-header > span,
+.battle-stat-editor-row > span {
+  min-width: 0;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.battle-stat-editor-header > span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.battle-stat-editor-row:last-child > span {
+  border-bottom: 0;
+}
+
+.stat-cell-label {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.stat-cell-base,
+.stat-cell-final,
+.stat-cell-stage {
+  color: inherit;
+  text-align: center;
+}
+
+.stat-cell-final.increase {
+  color: #ff6868;
+  font-weight: 800;
+}
+
+.stat-cell-final.decrease {
+  color: #58a6ff;
+  font-weight: 800;
+}
+
+.battle-stat-editor input,
+.battle-stat-editor select {
+  width: 100%;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--panel);
+  color: inherit;
+  text-align: center;
+}
+
+.damage-move-picks {
+  grid-template-columns: 1fr;
+}
+
+.damage-move-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.damage-move-number {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.move-combobox {
+  position: relative;
+  min-width: 0;
+}
+
+.move-combobox input[type="search"] {
+  width: 100%;
+  min-width: 0;
+}
+
+.move-search-results {
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.move-inline-control {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.move-inline-control select {
+  width: auto;
+  min-width: 66px;
+}
+
+.move-toggle {
+  min-width: 48px;
+  padding: 8px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-raised);
+  color: inherit;
+  cursor: pointer;
+}
+
+.move-toggle[aria-pressed="true"] {
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+
+.move-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.speed-row output {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: inherit;
+  font-weight: 800;
+}
+
+@media (min-width: 721px) {
+  .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .battle-stat-editor-header > span,
+  .battle-stat-editor-row > span {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .damage-move-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .damage-move-row .move-inline-control,
+  .damage-move-row > .inline-toggle {
+    grid-column: 2 / -1;
+  }
 }
 
 .damage-result-card.selected {

@@ -50,8 +50,8 @@ test("maps all named natures to stat multipliers", () => {
 });
 
 test("formats nature dropdown labels with stat effects", () => {
-  assert.equal(natureOptionLabel("Adamant"), "Adamant +Atk -SpA");
-  assert.equal(natureOptionLabel("Jolly"), "Jolly +Spe -SpA");
+  assert.equal(natureOptionLabel("Adamant"), "Adamant (+Atk, -SpA)");
+  assert.equal(natureOptionLabel("Jolly"), "Jolly (+Spe, -SpA)");
   assert.equal(natureOptionLabel("Hardy"), "Hardy");
 });
 
@@ -163,6 +163,32 @@ test("doubles target-status move power only for the required status", () => {
     assert.deepEqual([matching.minDamage, matching.maxDamage], [doubledPower.minDamage, doubledPower.maxDamage], name);
     assert.deepEqual([other.minDamage, other.maxDamage], [baseline.minDamage, baseline.maxDamage], `${name} non-match`);
   }
+});
+
+test("condition overrides take precedence over derived move state", () => {
+  const attacker = {
+    id: "overrideuser",
+    name: "Overrideuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 50 },
+  };
+  const defender = {
+    id: "overridetarget",
+    name: "Overridetarget",
+    types: ["Fairy"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
+  };
+  const hex = { id: "hex", name: "Hex", type: "Ghost", category: "Special", basePower: 65 };
+  const healthy = calculateDamage({ attacker, defender, move: hex, attackerState: neutralState, defenderState: neutralState });
+  const forced = calculateDamage({
+    attacker,
+    defender,
+    move: hex,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    moveOptions: { conditionOverride: true },
+  });
+  assert.equal(forced.maxDamage > healthy.maxDamage, true);
 });
 
 test("Facade doubles for user status and ignores the physical burn penalty", () => {

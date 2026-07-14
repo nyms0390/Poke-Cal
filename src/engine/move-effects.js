@@ -280,7 +280,10 @@ export const MOVE_EFFECTS = {
   punishment: { basePower: (ctx) => Math.min(200, 60 + 20 * positiveStageCount(ctx.defenderState)) },
 
   // -- context assumptions / item-derived power ----------------------------
-  acrobatics: { basePower: (ctx) => !ctx.attackerState.item ? ctx.move.basePower * 2 : undefined },
+  acrobatics: {
+    condition: { label: "No item" },
+    basePower: (ctx) => conditionMet(ctx, () => !ctx.attackerState.item) ? ctx.move.basePower * 2 : undefined,
+  },
   fling: { basePower: (ctx) => ctx.attackerState.item?.fling?.basePower ?? null },
   return: { basePower: () => 102, note: () => "Assumes maximum friendship (102 BP)" },
   frustration: { basePower: () => 102, note: () => "Assumes minimum friendship (102 BP)" },
@@ -315,14 +318,15 @@ export const MOVE_EFFECTS = {
   revenge: { orderCondition: "history", basePower: orderConditionalPower, note: orderAssumptionNote },
 
   // -- status-conditional power --------------------------------------------
-  hex: { basePower: (ctx) => ctx.defenderState.status ? ctx.move.basePower * 2 : undefined },
-  venoshock: { basePower: (ctx) => ["poison", "toxic"].includes(ctx.defenderState.status) ? ctx.move.basePower * 2 : undefined },
-  barbbarrage: { basePower: (ctx) => ["poison", "toxic"].includes(ctx.defenderState.status) ? ctx.move.basePower * 2 : undefined },
-  infernalparade: { basePower: (ctx) => ctx.defenderState.status ? ctx.move.basePower * 2 : undefined },
-  smellingsalts: { basePower: (ctx) => ctx.defenderState.status === "paralysis" ? ctx.move.basePower * 2 : undefined },
-  wakeupslap: { basePower: (ctx) => ctx.defenderState.status === "sleep" ? ctx.move.basePower * 2 : undefined },
+  hex: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => Boolean(ctx.defenderState.status)) ? ctx.move.basePower * 2 : undefined },
+  venoshock: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => ["poison", "toxic"].includes(ctx.defenderState.status)) ? ctx.move.basePower * 2 : undefined },
+  barbbarrage: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => ["poison", "toxic"].includes(ctx.defenderState.status)) ? ctx.move.basePower * 2 : undefined },
+  infernalparade: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => Boolean(ctx.defenderState.status)) ? ctx.move.basePower * 2 : undefined },
+  smellingsalts: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => ctx.defenderState.status === "paralysis") ? ctx.move.basePower * 2 : undefined },
+  wakeupslap: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => ctx.defenderState.status === "sleep") ? ctx.move.basePower * 2 : undefined },
   facade: {
-    basePower: (ctx) => ["burn", "poison", "toxic", "paralysis"].includes(ctx.attackerState.status)
+    condition: { label: "User statused" },
+    basePower: (ctx) => conditionMet(ctx, () => ["burn", "poison", "toxic", "paralysis"].includes(ctx.attackerState.status))
       ? ctx.move.basePower * 2
       : undefined,
     ignoreBurn: true,
@@ -452,12 +456,22 @@ function orderAssumptionNote(ctx) {
   return `Assumes target ${targetMovedForOrder(ctx) ? "already moved" : "has not moved"}`;
 }
 
+function conditionMet(ctx, derive) {
+  return typeof ctx.moveOptions?.conditionOverride === "boolean"
+    ? ctx.moveOptions.conditionOverride
+    : derive();
+}
+
 export function moveEffect(moveId) {
   return MOVE_EFFECTS[moveId] ?? {};
 }
 
 export function isOrderConditionalMove(move) {
   return Boolean(moveEffect(normalizeId(move?.id ?? move?.name)).orderCondition);
+}
+
+export function moveCondition(move) {
+  return moveEffect(normalizeId(move?.id ?? move?.name)).condition ?? null;
 }
 
 export { USER_HP_POWER_MOVE_IDS, TARGET_WEIGHT_POWER_MOVE_IDS, USER_TARGET_WEIGHT_POWER_MOVE_IDS };

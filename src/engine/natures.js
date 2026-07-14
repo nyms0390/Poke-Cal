@@ -44,5 +44,5 @@ export function natureMultiplier(natureName, stat) {
 export function natureOptionLabel(natureName) {
   const nature = NATURES[natureName] ?? NATURES.Hardy;
   if (!nature.up || !nature.down) return natureName;
-  return `${natureName} +${NATURE_STAT_LABELS[nature.up]} -${NATURE_STAT_LABELS[nature.down]}`;
+  return `${natureName} (+${NATURE_STAT_LABELS[nature.up]}, -${NATURE_STAT_LABELS[nature.down]})`;
 }

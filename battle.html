@@ -56,16 +56,17 @@
               </label>
               <button id="attacker-save-set" type="button">Save set…</button>
               <button id="attacker-delete-set" type="button">Delete</button>
+              <label>
+                Spread
+                <select id="attacker-spread"></select>
+              </label>
             </div>
-            <label>
-              Spread
-              <select id="attacker-spread"></select>
-            </label>
-            <label>
-              Nature
-              <select id="attacker-nature"></select>
-            </label>
+            <div id="attacker-stat-editor" class="battle-stat-editor" aria-label="Attacker stats"></div>
             <div class="damage-picks">
+              <label>
+                Nature
+                <select id="attacker-nature"></select>
+              </label>
               <label>
                 Ability
                 <select id="attacker-ability"></select>
@@ -74,39 +75,8 @@
                 Item
                 <select id="attacker-item"></select>
               </label>
-            </div>
-            <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
-
-            <div class="damage-picks">
               <label>
-                Speed modifier
-                <select id="attacker-speed-multiplier">
-                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                  <option value="1" selected>None ×1.0</option>
-                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                  <option value="2">Swift Swim or equivalent ×2.0</option>
-                </select>
-              </label>
-              <div id="attacker-final-stats" class="final-stat-readout" aria-label="Attacker final stats"></div>
-            </div>
-
-            <div id="attacker-sp-inputs" class="stat-inputs" aria-label="Attacker SP"></div>
-            <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
-            <div class="stat-inputs hp-inputs" aria-label="Attacker current HP">
-              <label>Current HP
-                <span><input id="attacker-current-hp" type="number" step="1" /><span id="attacker-max-hp"> / —</span></span>
-              </label>
-              <label>Current HP %<input id="attacker-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
-            </div>
-            <div class="inline-toggles condition-row">
-              <label class="inline-toggle"><input id="attacker-tera" type="checkbox" /> Terastallize</label>
-              <label>Tera type
-                <select id="attacker-tera-type"></select>
-              </label>
-            </div>
-            <div class="inline-toggles condition-row">
-              <label class="inline-toggle"><input id="attacker-tailwind" type="checkbox" /> Tailwind</label>
-              <label>Status
+                Status
                 <select id="attacker-status">
                   <option value="">Healthy</option>
                   <option value="burn">Burned</option>
@@ -117,6 +87,25 @@
                   <option value="freeze">Frozen</option>
                 </select>
               </label>
+            </div>
+            <div class="stat-inputs hp-inputs" aria-label="Attacker current HP">
+              <label>Current HP
+                <span><input id="attacker-current-hp" type="number" step="1" /><span id="attacker-max-hp"> / —</span></span>
+              </label>
+              <label>Current HP %<input id="attacker-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
+            </div>
+            <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
+            <div class="damage-picks speed-row">
+              <label>
+                Speed modifier
+                <select id="attacker-speed-multiplier">
+                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                  <option value="1" selected>None ×1.0</option>
+                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                  <option value="2">Swift Swim or equivalent ×2.0</option>
+                </select>
+              </label>
+              <output id="attacker-speed-readout" aria-label="Attacker final Speed">Speed —</output>
             </div>
             <details class="assumption-panel">
               <summary>Assumptions</summary>
@@ -145,7 +134,8 @@
               <button id="swap-sides" type="button" title="Swap attacker and defender sides">⇄ Swap sides</button>
             </div>
 
-            <fieldset class="radio-group">
+            <div class="field-grid">
+            <fieldset class="radio-group segmented-tag">
               <legend>Format</legend>
               <div class="radio-options">
                 <label class="radio-option"><input type="radio" name="field-format" value="doubles" checked /> Doubles</label>
@@ -180,14 +170,11 @@
               <label class="inline-toggle"><input id="trick-room" type="checkbox" /> Trick Room</label>
             </div>
 
-            <fieldset class="radio-group">
+            <fieldset class="radio-group field-side-panel">
               <legend>Attacker's side</legend>
               <div class="inline-toggles">
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="helpingHand" /> Helping Hand</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="powerSpot" /> Power Spot</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="battery" /> Battery</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="steelySpirit" /> Steely Spirit</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="flowerGift" /> Flower Gift</label>
+                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="tailwind" /> Tailwind</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="reflect" /> Reflect</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="lightScreen" /> Light Screen</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="auroraVeil" /> Aurora Veil</label>
@@ -195,20 +182,18 @@
               </div>
             </fieldset>
 
-            <fieldset class="radio-group">
+            <fieldset class="radio-group field-side-panel">
               <legend>Defender's side</legend>
               <div class="inline-toggles">
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="helpingHand" /> Helping Hand</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="powerSpot" /> Power Spot</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="battery" /> Battery</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="steelySpirit" /> Steely Spirit</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="flowerGift" /> Flower Gift</label>
+                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="tailwind" /> Tailwind</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="reflect" /> Reflect</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="lightScreen" /> Light Screen</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="auroraVeil" /> Aurora Veil</label>
                 <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="friendGuard" /> Friend Guard</label>
               </div>
             </fieldset>
+            </div>
           </section>
 
           <section class="damage-side" aria-label="Defender">
@@ -238,16 +223,17 @@
               </label>
               <button id="defender-save-set" type="button">Save set…</button>
               <button id="defender-delete-set" type="button">Delete</button>
+              <label>
+                Spread
+                <select id="defender-spread"></select>
+              </label>
             </div>
-            <label>
-              Spread
-              <select id="defender-spread"></select>
-            </label>
-            <label>
-              Nature
-              <select id="defender-nature"></select>
-            </label>
+            <div id="defender-stat-editor" class="battle-stat-editor" aria-label="Defender stats"></div>
             <div class="damage-picks">
+              <label>
+                Nature
+                <select id="defender-nature"></select>
+              </label>
               <label>
                 Ability
                 <select id="defender-ability"></select>
@@ -256,38 +242,8 @@
                 Item
                 <select id="defender-item"></select>
               </label>
-            </div>
-
-            <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
-            <div class="damage-picks">
               <label>
-                Speed modifier
-                <select id="defender-speed-multiplier">
-                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                  <option value="1" selected>None ×1.0</option>
-                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                  <option value="2">Swift Swim or equivalent ×2.0</option>
-                </select>
-              </label>
-              <div id="defender-final-stats" class="final-stat-readout" aria-label="Defender final stats"></div>
-            </div>
-            <div id="defender-sp-inputs" class="stat-inputs" aria-label="Defender SP"></div>
-            <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
-            <div class="stat-inputs hp-inputs" aria-label="Defender current HP">
-              <label>Current HP
-                <span><input id="defender-current-hp" type="number" step="1" /><span id="defender-max-hp"> / —</span></span>
-              </label>
-              <label>Current HP %<input id="defender-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
-            </div>
-            <div class="inline-toggles condition-row">
-              <label class="inline-toggle"><input id="defender-tera" type="checkbox" /> Terastallize</label>
-              <label>Tera type
-                <select id="defender-tera-type"></select>
-              </label>
-            </div>
-            <div class="inline-toggles condition-row">
-              <label class="inline-toggle"><input id="defender-tailwind" type="checkbox" /> Tailwind</label>
-              <label>Status
+                Status
                 <select id="defender-status">
                   <option value="">Healthy</option>
                   <option value="burn">Burned</option>
@@ -298,6 +254,25 @@
                   <option value="freeze">Frozen</option>
                 </select>
               </label>
+            </div>
+            <div class="stat-inputs hp-inputs" aria-label="Defender current HP">
+              <label>Current HP
+                <span><input id="defender-current-hp" type="number" step="1" /><span id="defender-max-hp"> / —</span></span>
+              </label>
+              <label>Current HP %<input id="defender-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
+            </div>
+            <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
+            <div class="damage-picks speed-row">
+              <label>
+                Speed modifier
+                <select id="defender-speed-multiplier">
+                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                  <option value="1" selected>None ×1.0</option>
+                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                  <option value="2">Swift Swim or equivalent ×2.0</option>
+                </select>
+              </label>
+              <output id="defender-speed-readout" aria-label="Defender final Speed">Speed —</output>
             </div>
             <details class="assumption-panel">
               <summary>Assumptions</summary>
@@ -330,7 +305,7 @@
             id="set-paste"
             rows="9"
             spellcheck="false"
-            placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;Tera Type: Electric&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
+            placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
           ></textarea>
           <div class="set-paste-actions">
             <button id="import-attacker-set" type="button">Import left</button>
@@ -340,11 +315,6 @@
           </div>
           <p id="set-paste-warnings" class="set-paste-warnings" hidden></p>
         </section>
-
-        <fieldset class="damage-field">
-          <legend>Battle conditions</legend>
-          <label class="inline-toggle"><input id="damage-critical" type="checkbox" /> Critical hit</label>
-        </fieldset>
 
         <section class="catalog-panel" aria-label="Damage ranges">
           <div class="panel-heading">

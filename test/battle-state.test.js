@@ -75,11 +75,12 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.deepEqual(state.ability, usageDefaults.ability);
   assert.deepEqual(state.item, usageDefaults.item);
   assert.equal(state.status, "");
-  assert.equal(state.teraType, "");
   assert.equal(state.currentHpFraction, 1);
   assert.deepEqual(state.selectedMoveIds, ["thunderbolt", "voltswitch", "protect", "nastyplot"]);
   assert.deepEqual(state.selectedHitCounts, [null, null, null, null]);
   assert.deepEqual(state.targetMovedOverrides, [null, null, null, null]);
+  assert.deepEqual(state.critMoves, [false, false, false, false]);
+  assert.deepEqual(state.conditionOverrides, [null, null, null, null]);
   assert.deepEqual(state.singleTargetMoves, [false, false, false, false]);
   assert.equal(state.allyPlusMinus, false);
   assert.equal(state.rivalry, "off");
@@ -88,7 +89,8 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.equal(state.boosterEnergy, false);
   assert.equal(state.iceFaceIntact, true);
   assert.equal(state.speedMultiplier, 1);
-  assert.equal(state.tailwind, false);
+  assert.equal("teraType" in state, false);
+  assert.equal("tailwind" in state, false);
 });
 
 test("createSideState normalizes fewer than four usage moves without throwing", () => {
@@ -157,6 +159,18 @@ test("applyControl stores and resets a target-moved override by move slot", () =
   );
 });
 
+test("applyControl stores per-move crit and condition overrides and resets them on move change", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const crit = applyControl(state, { kind: "crit", index: 1, value: true });
+  const condition = applyControl(crit, { kind: "moveCondition", index: 1, value: "yes" });
+
+  assert.deepEqual(condition.critMoves, [false, true, false, false]);
+  assert.deepEqual(condition.conditionOverrides, [null, true, null, null]);
+  const replaced = applyControl(condition, { kind: "move", index: 1, value: "Iron Tail" });
+  assert.deepEqual(replaced.critMoves, [false, false, false, false]);
+  assert.deepEqual(replaced.conditionOverrides, [null, null, null, null]);
+});
+
 test("applyControl toggles one-target mode by move slot and resets it when the move changes", () => {
   const state = createSideState(pikachu, usageDefaults);
   const toggled = applyControl(state, { kind: "singleTarget", index: 1, value: true });
@@ -177,11 +191,10 @@ test("applyControl applies a valid usage spread and ignores an invalid one", () 
   assert.equal(untouched, state);
 });
 
-test("applyControl updates nature, speed multiplier, tailwind, and status", () => {
+test("applyControl updates nature, speed multiplier, and status", () => {
   const state = createSideState(pikachu, usageDefaults);
   assert.equal(applyControl(state, { kind: "nature", value: "Adamant" }).nature, "Adamant");
   assert.equal(applyControl(state, { kind: "speedMultiplier", value: "1.5" }).speedMultiplier, 1.5);
-  assert.equal(applyControl(state, { kind: "tailwind", value: true }).tailwind, true);
   assert.equal(applyControl(state, { kind: "status", value: "paralysis" }).status, "paralysis");
   assert.equal(applyControl(state, { kind: "status", value: "burn" }).status, "burn");
 });
@@ -191,14 +204,6 @@ test("applyControl clamps current HP as a fraction of the supplied maximum", () 
   assert.equal(applyControl(state, { kind: "currentHpFraction", value: 0.5, maxHp: 110 }).currentHpFraction, 0.5);
   assert.equal(applyControl(state, { kind: "currentHpFraction", value: 2, maxHp: 110 }).currentHpFraction, 1);
   assert.equal(applyControl(state, { kind: "currentHpFraction", value: 0, maxHp: 110 }).currentHpFraction, 1 / 110);
-});
-
-test("applyControl toggles Tera and keeps the selected Tera type", () => {
-  const state = createSideState(pikachu, usageDefaults);
-  const active = applyControl(state, { kind: "tera", value: { enabled: true, type: "Fire" } });
-  assert.equal(active.teraType, "Fire");
-  assert.equal(applyControl(active, { kind: "teraType", value: "Water" }).teraType, "Water");
-  assert.equal(applyControl(active, { kind: "tera", value: { enabled: false, type: "Water" } }).teraType, "");
 });
 
 test("applyControl stores offensive ability assumptions", () => {
@@ -228,31 +233,30 @@ test("buildCalcInput assembles both sides and a Field from raw control values", 
   const input = buildCalcInput(damageState, {
     format: "singles",
     trickRoom: true,
-    critical: true,
-    attackerSide: { flowerGift: true },
-    defenderSide: { flowerGift: true },
+    attackerSide: { tailwind: true },
+    defenderSide: { tailwind: false },
   });
 
   assert.equal(input.attacker, attacker.pokemon);
   assert.equal(input.defender, defender.pokemon);
-  assert.equal(input.attackerState, attacker);
-  assert.equal(input.defenderState, defender);
+  assert.equal(input.attackerState.pokemon, attacker.pokemon);
+  assert.equal(input.defenderState.pokemon, defender.pokemon);
+  assert.equal(input.attackerState.tailwind, true);
+  assert.equal(input.defenderState.tailwind, false);
   assert.equal(input.field.format, "singles");
   assert.equal(input.field.trickRoom, true);
-  assert.equal(input.field.attackerSide.flowerGift, true);
-  assert.equal(input.field.defenderSide.flowerGift, true);
-  assert.equal(input.reverseField.attackerSide.flowerGift, true);
-  assert.equal(input.reverseField.defenderSide.flowerGift, true);
-  assert.equal(input.critical, true);
+  assert.equal(input.field.attackerSide.helpingHand, false);
+  assert.equal(input.reverseField.attackerSide.helpingHand, false);
 });
 
-test("buildCalcInput defaults critical to false and format/trickRoom to Field defaults", () => {
+test("buildCalcInput defaults format/trickRoom and field-side Tailwind", () => {
   const damageState = {
     attacker: createSideState(pikachu, usageDefaults),
     defender: createSideState(pikachu, usageDefaults),
   };
   const input = buildCalcInput(damageState, {});
-  assert.equal(input.critical, false);
+  assert.equal(input.attackerState.tailwind, false);
+  assert.equal(input.defenderState.tailwind, false);
   assert.equal(input.field.format, "doubles");
   assert.equal(input.field.trickRoom, false);
 });
@@ -281,7 +285,7 @@ test("buildCalcInput's field boosts the attacker-as-source row from the attacker
     defender: createSideState(pikachu, usageDefaults),
   };
   const input = buildCalcInput(damageState, {
-    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false },
+    attackerSide: { helpingHand: true },
     defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
   });
 
@@ -295,7 +299,7 @@ test("buildCalcInput's reverseField swaps which panel supplies boosts vs. screen
     defender: createSideState(pikachu, usageDefaults),
   };
   const input = buildCalcInput(damageState, {
-    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false, reflect: true },
+    attackerSide: { helpingHand: true, reflect: true },
     defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
   });
 
@@ -326,7 +330,7 @@ test("buildCalcInput direction handling changes calculated damage: side A's Help
     defender: createSideState(defenderPokemon, { ...usageDefaults, ability: null, item: null }),
   };
   const input = buildCalcInput(damageState, {
-    attackerSide: { helpingHand: true, powerSpot: false, battery: false, steelySpirit: false },
+    attackerSide: { helpingHand: true },
     defenderSide: { reflect: false, lightScreen: false, auroraVeil: false, friendGuard: false },
   });
 

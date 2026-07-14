@@ -103,22 +103,90 @@ export function textCell(text, className = "", label = "") {
 // battle page's attacker/defender search. `onSelect` receives the chosen entry.
 // `preventBlur: true` (battle page only) keeps the search input focused across the click by
 // stopping the pointerdown from blurring it before the click handler runs.
-export function searchResultButton(entry, onSelect, { preventBlur = false } = {}) {
+export function searchResultButton(entry, onSelect, {
+  preventBlur = false,
+  small = entry.searchMatch || (entry.aliases ?? []).join(" · ") || entry.baseSpecies,
+  strong = entry.baseSpeed,
+} = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "search-result";
   button.innerHTML = `
     <span>${entry.name}</span>
-    <small>${entry.searchMatch || entry.aliases.join(" · ") || entry.baseSpecies}</small>
-    <strong>${entry.baseSpeed}</strong>
+    <small>${small ?? ""}</small>
+    <strong>${strong ?? ""}</strong>
   `;
   if (preventBlur) button.addEventListener("pointerdown", (event) => event.preventDefault());
   button.addEventListener("click", () => onSelect(entry));
   return button;
 }
 
-// Shared SP / stat-stage number inputs for the battle page's attacker/defender columns.
-export function spInput({ stat, side, value = 0, onChange }) {
+export function attachCombobox({ input, resultsEl, getMatches, onSelect, renderRow }) {
+  function hide() {
+    resultsEl.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+  }
+
+  function render() {
+    const matches = getMatches(input.value) ?? [];
+    resultsEl.replaceChildren(
+      ...matches.map((entry) => renderRow(entry, (selected) => {
+        hide();
+        onSelect(selected);
+      })),
+    );
+    const isOpen = matches.length > 0;
+    resultsEl.hidden = !isOpen;
+    input.setAttribute("aria-expanded", String(isOpen));
+    return matches;
+  }
+
+  input.addEventListener("input", render);
+  input.addEventListener("focus", render);
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      hide();
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      const first = resultsEl.querySelector(".search-result");
+      if (first) {
+        event.preventDefault();
+        first.focus();
+      }
+      return;
+    }
+    if (event.key !== "Enter") return;
+    const [first] = getMatches(input.value) ?? [];
+    if (!first) return;
+    event.preventDefault();
+    hide();
+    onSelect(first);
+  });
+
+  resultsEl.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    hide();
+    input.focus();
+  });
+
+  const outsideClick = (event) => {
+    if (!input.contains(event.target) && !resultsEl.contains(event.target)) hide();
+  };
+  document.addEventListener("click", outsideClick);
+
+  return {
+    render,
+    hide,
+    destroy() {
+      document.removeEventListener("click", outsideClick);
+    },
+  };
+}
+
+// Stat editor controls shared by the battle page's attacker/defender columns.
+function spInput({ stat, side, value = 0, onChange }) {
   return statNumberInput({
     stat,
     side,
@@ -131,17 +199,51 @@ export function spInput({ stat, side, value = 0, onChange }) {
   });
 }
 
-export function stageInput({ stat, side, value = 0, onChange }) {
-  return statNumberInput({
-    stat,
-    side,
-    value,
-    onChange,
-    kind: "stage",
-    label: `${STAT_LABELS[stat]} stage`,
-    min: -6,
-    max: 6,
-  });
+export function statEditorRow(stat, { side, base, sp, final, stage, onChange }) {
+  const row = document.createElement("div");
+  row.className = "battle-stat-editor-row";
+
+  const label = document.createElement("span");
+  label.className = "stat-cell-label";
+  label.textContent = STAT_LABELS[stat];
+
+  const baseCell = document.createElement("span");
+  baseCell.className = "stat-cell-base";
+  baseCell.textContent = String(base ?? "—");
+
+  const spCell = document.createElement("span");
+  spCell.className = "stat-cell-sp";
+  const spControl = spInput({ stat, side, value: sp, onChange }).querySelector("input");
+  spControl.setAttribute("aria-label", `${STAT_LABELS[stat]} SP`);
+  spCell.append(spControl);
+
+  const finalCell = document.createElement("span");
+  finalCell.className = "stat-cell-final";
+  finalCell.textContent = String(final ?? "—");
+
+  const stageCell = document.createElement("span");
+  stageCell.className = "stat-cell-stage";
+  if (stat === "hp") {
+    stageCell.textContent = "—";
+  } else {
+    const select = document.createElement("select");
+    select.dataset.side = side;
+    select.dataset.kind = "stage";
+    select.dataset.stat = stat;
+    select.setAttribute("aria-label", `${STAT_LABELS[stat]} stage`);
+    select.replaceChildren(
+      ...Array.from({ length: 13 }, (_, index) => {
+        const value = index - 6;
+        return optionElement(value, value > 0 ? `+${value}` : String(value));
+      }),
+    );
+    select.value = String(stage ?? 0);
+    if (onChange) select.addEventListener("input", onChange);
+    stageCell.append(select);
+  }
+
+  row.append(label, baseCell, spCell, finalCell, stageCell);
+  return row;
 }
 
 function statNumberInput({ stat, side, value, onChange, kind, label: labelText, min, max }) {
