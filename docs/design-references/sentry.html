@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PokéCal — Sentry reference</title>
+    <link rel="stylesheet" href="./reference.css" />
+  </head>
+  <body class="theme-sentry">
+    <main class="reference-page">
+      <nav class="reference-nav" aria-label="Design references">
+        <a href="./linear.html">Linear</a>
+        <a href="./sentry.html" aria-current="page">Sentry</a>
+        <a href="./kraken.html">Kraken</a>
+      </nav>
+      <header class="reference-header">
+        <p class="eyebrow">PokéCal // Sentry direction</p>
+        <h1>Read the signal.</h1>
+        <p>A more expressive midnight-violet direction where battle states feel like live telemetry.</p>
+      </header>
+      <section class="app-frame" aria-label="Sentry-inspired battle calculator reference">
+        <div class="app-topbar">
+          <div class="app-title"><strong>POKÉCAL</strong><small>Signal board / 07</small></div>
+          <div class="top-actions"><span class="status-pill">Live calculation</span><button>Reset</button><button class="primary">Run damage</button></div>
+        </div>
+        <div class="workspace">
+          <section class="side-panel">
+            <div class="panel-heading"><div><p class="panel-kicker">Source Pokémon</p><strong>Raging Bolt</strong></div><span class="panel-meta">Ready</span></div>
+            <div class="pokemon-field"><div class="pokemon-mark">R</div><div><strong>Raging Bolt</strong><span class="helper">Protosynthesis · Booster Energy</span></div></div>
+            <div class="field-grid"><label class="field-label">Ability<select><option>Protosynthesis</option></select></label><label class="field-label">Item<select><option>Booster Energy</option></select></label></div>
+            <p class="field-label">Attack sequence</p>
+            <div class="move-list"><div class="move-chip"><b>Thunderclap</b><span>Priority +1</span></div><div class="move-chip"><b>Draco Meteor</b><span>Power 130</span></div></div>
+            <div class="condition-row"><label><input type="checkbox" checked /> Booster active</label><span>SpA × 1.3</span></div>
+          </section>
+          <section class="side-panel">
+            <div class="panel-heading"><div><p class="panel-kicker">Target Pokémon</p><strong>Urshifu-Rapid-Strike</strong></div><span class="panel-meta">Alert</span></div>
+            <div class="pokemon-field"><div class="pokemon-mark">U</div><div><strong>Urshifu-Rapid-Strike</strong><span class="helper">Unseen Fist · Focus Sash</span></div></div>
+            <div class="field-grid"><label class="field-label">Current HP<input value="175 / 175" readonly /></label><label class="field-label">Status<select><option>Healthy</option></select></label></div>
+            <p class="field-label">Field assumptions</p>
+            <div class="move-list"><div class="move-chip"><b>Weather</b><span>Clear</span></div><div class="move-chip"><b>Terrain</b><span>Electric</span></div></div>
+            <div class="condition-row"><label><input type="checkbox" /> Tera Water</label><span>SpD 120</span></div>
+          </section>
+          <section class="result-panel">
+            <div class="result-heading"><div><p class="result-kicker">Event summary</p><strong>Thunderclap connected</strong></div><span class="status-pill">Critical window</span></div>
+            <div class="result-meta"><span>Damage event #01</span><span>Electric terrain boost</span><span>Priority +1</span></div>
+            <div class="range-row"><strong>44–52%</strong><div class="damage-bar"><span></span></div><strong>77–91</strong></div>
+            <p class="helper">Not a KO · Focus Sash remains relevant · Next event: Draco Meteor</p>
+          </section>
+        </div>
+      </section>
+      <p class="footer-note">Reference only · Sentry-inspired expressive accents without decorative mascots</p>
+    </main>
+  </body>
+</html>
