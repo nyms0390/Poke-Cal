@@ -1,15 +1,5 @@
 [
   {
-    "id": "",
-    "name": "-",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
-    }
-  },
-  {
     "id": "abilityshield",
     "name": "Ability Shield",
     "spritenum": 746,
@@ -23,7 +13,11 @@
     "block": "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
     "aliases": [
       "特性护具"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "abomasite",
@@ -37,16 +31,17 @@
     ],
     "num": 674,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "暴雪王進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 20,
+      "usagePercent": 0.05426377621618689
     }
   },
   {
@@ -61,16 +56,13 @@
     ],
     "num": 677,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol in battle.",
     "aliases": [
       "阿勃梭魯進化石"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "legal": true
     }
   },
   {
@@ -86,7 +78,10 @@
     "num": 2638,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle."
+    "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "absorbbulb",
@@ -103,7 +98,11 @@
     "shortDesc": "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
     "aliases": [
       "球根"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "adamantcrystal",
@@ -119,7 +118,11 @@
     "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
     "aliases": [
       "大金刚宝玉"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "adamantorb",
@@ -137,7 +140,11 @@
     "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
     "aliases": [
       "金剛寶珠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "adrenalineorb",
@@ -154,14 +161,10 @@
     "shortDesc": "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use.",
     "aliases": [
       "膽怯球"
-    ]
-  },
-  {
-    "id": "aereodactylite",
-    "name": "Aereodactylite",
+    ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -176,16 +179,17 @@
     ],
     "num": 672,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Aerodactyl, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "化石翼龍進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 232,
-      "usagePercent": 1.7285054388317689
+      "usageCount": 686,
+      "usagePercent": 1.86124752421521
     }
   },
   {
@@ -200,16 +204,17 @@
     ],
     "num": 667,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Aggron, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "波士可多拉進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.07450454477723141
+      "usageCount": 36,
+      "usagePercent": 0.09767479718913638
     }
   },
   {
@@ -232,7 +237,11 @@
     },
     "aliases": [
       "樂芭果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "airballoon",
@@ -248,7 +257,11 @@
     "end": "  [POKEMON]'s Air Balloon popped!",
     "aliases": [
       "氣球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "alakazite",
@@ -262,16 +275,17 @@
     ],
     "num": 679,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "胡地進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 7,
+      "usagePercent": 0.01899232167566541
     }
   },
   {
@@ -287,7 +301,10 @@
     "num": 803,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer."
+    "shortDesc": "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "altarianite",
@@ -301,16 +318,17 @@
     ],
     "num": 755,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Altaria, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "七夕青鳥進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 19,
+      "usagePercent": 0.05155058740537754
     }
   },
   {
@@ -325,16 +343,17 @@
     ],
     "num": 658,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "電龍進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05960363582178513
+      "usageCount": 20,
+      "usagePercent": 0.05426377621618689
     }
   },
   {
@@ -351,7 +370,11 @@
     "shortDesc": "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
     "aliases": [
       "杏仔果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "armorfossil",
@@ -366,7 +389,10 @@
     "shortDesc": "Can be revived into Shieldon.",
     "aliases": [
       "盾甲化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "aspearberry",
@@ -382,7 +408,10 @@
     "shortDesc": "Holder is cured if it is frozen. Single use.",
     "aliases": [
       "利木果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "assaultvest",
@@ -398,11 +427,9 @@
     "aliases": [
       "突擊背心"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": false
     }
   },
   {
@@ -417,16 +444,17 @@
     ],
     "num": 757,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by an Audino, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "差不多娃娃進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
     }
   },
   {
@@ -441,7 +469,11 @@
     "shortDesc": "Evolves Charcadet into Armarouge when used.",
     "aliases": [
       "庆祝之铠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "babiriberry",
@@ -459,10 +491,11 @@
       "霹霹果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 18,
+      "usagePercent": 0.04883739859456819
     }
   },
   {
@@ -477,16 +510,17 @@
     ],
     "num": 668,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Banette, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "詛咒娃娃進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
     }
   },
   {
@@ -501,13 +535,14 @@
     ],
     "num": 2581,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 8,
+      "usagePercent": 0.021705510486474754
     }
   },
   {
@@ -523,7 +558,10 @@
     "num": 2648,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Baxcalibur, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Baxcalibur, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "beastball",
@@ -535,7 +573,11 @@
     "shortDesc": "A special Poke Ball designed to catch Ultra Beasts.",
     "aliases": [
       "究極球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "beedrillite",
@@ -549,16 +591,17 @@
     ],
     "num": 770,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Beedrill, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "大針蜂進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 6,
+      "usagePercent": 0.016279132864856063
     }
   },
   {
@@ -577,7 +620,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "靛莓果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "berry",
@@ -595,7 +641,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use."
+    "shortDesc": "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "berryjuice",
@@ -610,7 +659,10 @@
     "shortDesc": "Restores 20 HP when at 1/2 max HP or less. Single use.",
     "aliases": [
       "樹果汁"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "berrysweet",
@@ -624,7 +676,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "野莓糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "berserkgene",
@@ -639,7 +695,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use."
+    "shortDesc": "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "bignugget",
@@ -653,7 +712,11 @@
     "shortDesc": "A big nugget of pure gold that gives off a lustrous gleam.",
     "aliases": [
       "巨大金珠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "bigroot",
@@ -673,10 +736,11 @@
       "大根莖"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 29,
+      "usagePercent": 0.07868247551347099
     }
   },
   {
@@ -691,7 +755,11 @@
     "shortDesc": "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8.",
     "aliases": [
       "緊綁束帶"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "bitterberry",
@@ -708,7 +776,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder is cured if it is confused. Single use."
+    "shortDesc": "(Gen 2) Holder is cured if it is confused. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "blackbelt",
@@ -728,10 +799,11 @@
       "黑帶"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 9,
+      "usagePercent": 0.024418699297284095
     }
   },
   {
@@ -752,10 +824,11 @@
       "黑色眼鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 337,
-      "usagePercent": 2.5108031589926987
+      "usageCount": 884,
+      "usagePercent": 2.3984589087554604
     }
   },
   {
@@ -773,7 +846,11 @@
     "heal": "  [POKEMON] restored a little HP using its Black Sludge!",
     "aliases": [
       "黑色污泥"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "blastoisinite",
@@ -787,16 +864,27 @@
     ],
     "num": 661,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "水箭龜進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 140,
-      "usagePercent": 1.0430636268812399
+      "usageCount": 465,
+      "usagePercent": 1.2616327970263452
+    }
+  },
+  {
+    "id": "blastoisnite",
+    "name": "Blastoisnite",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -811,16 +899,17 @@
     ],
     "num": 664,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "火焰雞進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 82,
-      "usagePercent": 0.6109372671732975
+      "usageCount": 182,
+      "usagePercent": 0.4938003635673006
     }
   },
   {
@@ -838,7 +927,10 @@
     "shortDesc": "If held by a Kyogre, this item triggers its Primal Reversion in battle.",
     "aliases": [
       "靛藍色寶珠"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "blukberry",
@@ -856,7 +948,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "墨莓果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "blunderpolicy",
@@ -870,7 +965,11 @@
     "shortDesc": "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
     "aliases": [
       "打空保險"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "boosterenergy",
@@ -885,7 +984,11 @@
     "shortDesc": "Activates the Protosynthesis or Quark Drive Abilities. Single use.",
     "aliases": [
       "驱劲能量"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "bottlecap",
@@ -899,7 +1002,11 @@
     "shortDesc": "Used for Hyper Training. One of a Pokemon's stats is calculated with an IV of 31.",
     "aliases": [
       "銀色王冠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "brightpowder",
@@ -919,10 +1026,11 @@
       "光粉"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.1415586350767397
+      "usageCount": 63,
+      "usagePercent": 0.1709308950809887
     }
   },
   {
@@ -939,7 +1047,10 @@
     },
     "aliases": [
       "蟲之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "bugmemory",
@@ -956,7 +1067,10 @@
     "shortDesc": "Holder's Multi-Attack is Bug type.",
     "aliases": [
       "蟲子記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "buginiumz",
@@ -970,7 +1084,10 @@
     "num": 787,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Bug move, this item allows it to use a Bug Z-Move."
+    "shortDesc": "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "burndrive",
@@ -987,7 +1104,10 @@
     "shortDesc": "Holder's Techno Blast is Fire type.",
     "aliases": [
       "火焰卡帶"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "burntberry",
@@ -1004,7 +1124,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder is cured if it is frozen. Single use."
+    "shortDesc": "(Gen 2) Holder is cured if it is frozen. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "cameruptite",
@@ -1018,16 +1141,17 @@
     ],
     "num": 767,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Camerupt, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "噴火駝進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.16390999850990912
+      "usageCount": 61,
+      "usagePercent": 0.16550451745937
     }
   },
   {
@@ -1045,7 +1169,11 @@
     "shortDesc": "Raises holder's Attack by 1 if hit by an Electric-type attack. Single use.",
     "aliases": [
       "充電電池"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "chandelurite",
@@ -1059,13 +1187,14 @@
     ],
     "num": 2574,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Chandelure, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 33,
+      "usagePercent": 0.08953523075670837
     }
   },
   {
@@ -1086,20 +1215,11 @@
       "木炭"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 204,
-      "usagePercent": 1.519892713455521
-    }
-  },
-  {
-    "id": "charizardite",
-    "name": "Charizardite",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 478,
+      "usagePercent": 1.2969042515668665
     }
   },
   {
@@ -1114,16 +1234,17 @@
     ],
     "num": 660,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard X.",
     "aliases": [
       "噴火龍進化石Ｘ"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 42,
+      "usagePercent": 0.11395393005399244
     }
   },
   {
@@ -1138,16 +1259,17 @@
     ],
     "num": 678,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard Y.",
     "aliases": [
       "噴火龍進化石Ｙ"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 609,
-      "usagePercent": 4.537326776933393
+      "usageCount": 1642,
+      "usagePercent": 4.4550560273489435
     }
   },
   {
@@ -1166,10 +1288,11 @@
       "草蠶果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 19,
+      "usagePercent": 0.05155058740537754
     }
   },
   {
@@ -1186,7 +1309,10 @@
     "shortDesc": "Holder cures itself if it is paralyzed. Single use.",
     "aliases": [
       "櫻子果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "cherishball",
@@ -1199,7 +1325,10 @@
     "shortDesc": "A rare Poke Ball that has been crafted to commemorate an occasion.",
     "aliases": [
       "貴重球"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "chesnaughtite",
@@ -1213,13 +1342,14 @@
     ],
     "num": 2575,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Chesnaught, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -1238,10 +1368,11 @@
       "零餘果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 3,
+      "usagePercent": 0.008139566432428032
     }
   },
   {
@@ -1258,7 +1389,10 @@
     "shortDesc": "Halves damage taken from a Normal-type attack. Single use.",
     "aliases": [
       "燈漿果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "chilldrive",
@@ -1275,7 +1409,10 @@
     "shortDesc": "Holder's Techno Blast is Ice type.",
     "aliases": [
       "冰凍卡帶"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "chimechite",
@@ -1289,11 +1426,14 @@
     ],
     "num": 2637,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.008139566432428032
     }
   },
   {
@@ -1308,7 +1448,11 @@
     "shortDesc": "Evolves Sinistea-Antique into Polteageist-Antique when used.",
     "aliases": [
       "缺損的茶壺"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "choiceband",
@@ -1324,7 +1468,11 @@
     "shortDesc": "Holder's Attack is 1.5x, but it can only select the first move it executes.",
     "aliases": [
       "講究頭帶"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "choicescarf",
@@ -1341,10 +1489,21 @@
       "講究圍巾"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 636,
-      "usagePercent": 4.7384890478319175
+      "usageCount": 1698,
+      "usagePercent": 4.606994600754266
+    }
+  },
+  {
+    "id": "choicescraft",
+    "name": "Choice Scraft",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -1362,9 +1521,9 @@
     "aliases": [
       "講究眼鏡"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -1383,10 +1542,11 @@
       "蓮蒲果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 268,
-      "usagePercent": 1.9967218000298017
+      "usageCount": 697,
+      "usagePercent": 1.8910926011341131
     }
   },
   {
@@ -1402,7 +1562,10 @@
     "shortDesc": "Can be revived into Anorith.",
     "aliases": [
       "爪子化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "clearamulet",
@@ -1418,7 +1581,11 @@
     "block": "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
     "aliases": [
       "清净坠饰"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "clefablite",
@@ -1432,13 +1599,14 @@
     ],
     "num": 2559,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Clefable, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 7,
+      "usagePercent": 0.01899232167566541
     }
   },
   {
@@ -1453,7 +1621,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "幸運草糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "cobaberry",
@@ -1471,10 +1643,21 @@
       "稜瓜果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 81,
-      "usagePercent": 0.6034868126955745
+      "usageCount": 164,
+      "usagePercent": 0.4449629649727324
+    }
+  },
+  {
+    "id": "colbur",
+    "name": "Colbur",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -1493,10 +1676,11 @@
       "刺耳果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 281,
-      "usagePercent": 2.0935777082402027
+      "usageCount": 745,
+      "usagePercent": 2.0213256640529615
     }
   },
   {
@@ -1513,7 +1697,11 @@
     ],
     "num": 2406,
     "gen": 9,
-    "shortDesc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect."
+    "shortDesc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "cornnberry",
@@ -1531,7 +1719,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "玉黍果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "coverfossil",
@@ -1546,7 +1737,10 @@
     "shortDesc": "Can be revived into Tirtouga.",
     "aliases": [
       "背蓋化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "covertcloak",
@@ -1561,7 +1755,11 @@
     "shortDesc": "Holder is not affected by the secondary effect of another Pokemon's attack.",
     "aliases": [
       "密探斗篷"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "crabominite",
@@ -1575,13 +1773,14 @@
     ],
     "num": 2644,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Crabominable, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05215318134406199
+      "usageCount": 26,
+      "usagePercent": 0.07054290908104295
     }
   },
   {
@@ -1596,7 +1795,11 @@
     "shortDesc": "Evolves Sinistea into Polteageist when used.",
     "aliases": [
       "破裂的茶壺"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "crucibellite",
@@ -1611,7 +1814,10 @@
     "num": -1,
     "gen": 6,
     "isNonstandard": "CAP",
-    "shortDesc": "If held by a Crucibelle, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "custapberry",
@@ -1629,7 +1835,11 @@
     "activate": "  [POKEMON] can act faster than normal, thanks to its Custap Berry!",
     "aliases": [
       "釋陀果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "damprock",
@@ -1645,10 +1855,11 @@
       "潮濕岩石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.23096408880941738
+      "usageCount": 114,
+      "usagePercent": 0.3093035244322652
     }
   },
   {
@@ -1665,7 +1876,10 @@
     },
     "aliases": [
       "惡之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "darkmemory",
@@ -1682,7 +1896,10 @@
     "shortDesc": "Holder's Multi-Attack is Dark type.",
     "aliases": [
       "黑暗記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "darkiniumz",
@@ -1696,7 +1913,10 @@
     "num": 791,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Dark move, this item allows it to use a Dark Z-Move."
+    "shortDesc": "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "darkranite",
@@ -1710,8 +1930,11 @@
     ],
     "num": 2568,
     "gen": 9,
-    "isNonstandard": "Future",
-    "shortDesc": "If held by a Darkrai, this item allows it to Mega Evolve in battle."
+    "isNonstandard": "Past",
+    "shortDesc": "If held by a Darkrai, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dawnstone",
@@ -1726,7 +1949,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "覺醒之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "decidiumz",
@@ -1741,7 +1968,10 @@
     "num": 798,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid."
+    "shortDesc": "If held by a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "deepseascale",
@@ -1761,7 +1991,10 @@
     "shortDesc": "If held by a Clamperl, its Sp. Def is doubled.",
     "aliases": [
       "深海鱗片"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "deepseatooth",
@@ -1781,7 +2014,10 @@
     "shortDesc": "If held by a Clamperl, its Sp. Atk is doubled.",
     "aliases": [
       "深海之牙"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "delphoxite",
@@ -1795,13 +2031,14 @@
     ],
     "num": 2576,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Delphox, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 221,
-      "usagePercent": 1.6465504395768142
+      "usageCount": 643,
+      "usagePercent": 1.7445804053504081
     }
   },
   {
@@ -1817,7 +2054,11 @@
     "shortDesc": "If holder becomes infatuated, the other Pokemon also becomes infatuated.",
     "aliases": [
       "紅線"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "diancite",
@@ -1835,7 +2076,10 @@
     "shortDesc": "If held by a Diancie, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "蒂安希進化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "diveball",
@@ -1847,7 +2091,11 @@
     "shortDesc": "A Poke Ball that works especially well on Pokemon that live underwater.",
     "aliases": [
       "潛水球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "domefossil",
@@ -1862,7 +2110,10 @@
     "shortDesc": "Can be revived into Kabuto.",
     "aliases": [
       "甲殼化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dousedrive",
@@ -1879,7 +2130,10 @@
     "shortDesc": "Holder's Techno Blast is Water type.",
     "aliases": [
       "水流卡帶"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dracoplate",
@@ -1893,7 +2147,11 @@
     "shortDesc": "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
     "aliases": [
       "龍之石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dragalgite",
@@ -1907,13 +2165,14 @@
     ],
     "num": 2582,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Dragalge, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11175681716584711
+      "usageCount": 53,
+      "usagePercent": 0.14379900697289524
     }
   },
   {
@@ -1937,10 +2196,11 @@
       "龍之牙"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 24,
-      "usagePercent": 0.17881090746535538
+      "usageCount": 36,
+      "usagePercent": 0.09767479718913638
     }
   },
   {
@@ -1957,7 +2217,10 @@
     },
     "aliases": [
       "龍之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dragonmemory",
@@ -1974,7 +2237,10 @@
     "shortDesc": "Holder's Multi-Attack is Dragon type.",
     "aliases": [
       "龍記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dragonscale",
@@ -1991,7 +2257,11 @@
     },
     "aliases": [
       "龍之鱗片"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dragoninite",
@@ -2005,13 +2275,24 @@
     ],
     "num": 2562,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 121,
+      "usagePercent": 0.32829584610793067
+    }
+  },
+  {
+    "id": "dragonitite",
+    "name": "Dragonitite",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 29,
-      "usagePercent": 0.2160631798539711
+      "usageCount": 2,
+      "usagePercent": 0.005426377621618688
     }
   },
   {
@@ -2026,7 +2307,10 @@
     "num": 790,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Dragon move, this item allows it to use a Dragon Z-Move."
+    "shortDesc": "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "drampanite",
@@ -2040,13 +2324,14 @@
     ],
     "num": 2585,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Drampa, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.11920727164357026
+      "usageCount": 42,
+      "usagePercent": 0.11395393005399244
     }
   },
   {
@@ -2061,7 +2346,11 @@
     "shortDesc": "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
     "aliases": [
       "惡顏石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dreamball",
@@ -2076,7 +2365,11 @@
     },
     "aliases": [
       "夢境球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "dubiousdisc",
@@ -2090,7 +2383,11 @@
     "shortDesc": "Evolves Porygon2 into Porygon-Z when traded.",
     "aliases": [
       "可疑修正檔"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "durinberry",
@@ -2108,7 +2405,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "金枕果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "duskball",
@@ -2120,7 +2420,11 @@
     "shortDesc": "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
     "aliases": [
       "黑暗球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "duskstone",
@@ -2135,7 +2439,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "暗之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "earthplate",
@@ -2149,14 +2457,10 @@
     "shortDesc": "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
     "aliases": [
       "大地石板"
-    ]
-  },
-  {
-    "id": "ecopelens",
-    "name": "Ecope lens",
+    ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -2171,13 +2475,14 @@
     ],
     "num": 2573,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 27,
-      "usagePercent": 0.2011622708985248
+      "usageCount": 81,
+      "usagePercent": 0.2197682936755569
     }
   },
   {
@@ -2193,7 +2498,10 @@
     "num": 805,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Eevee with Last Resort, it can use Extreme Evoboost."
+    "shortDesc": "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ejectbutton",
@@ -2209,7 +2517,11 @@
     "end": "  [POKEMON] is switched out with the Eject Button!",
     "aliases": [
       "逃脫按鍵"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ejectpack",
@@ -2226,7 +2538,11 @@
     "end": "  [POKEMON] is switched out by the Eject Pack!",
     "aliases": [
       "避難背包"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "electirizer",
@@ -2240,7 +2556,11 @@
     "shortDesc": "Evolves Electabuzz into Electivire when traded.",
     "aliases": [
       "電力增幅器"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "electricgem",
@@ -2256,7 +2576,10 @@
     },
     "aliases": [
       "電之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "electricmemory",
@@ -2273,7 +2596,10 @@
     "shortDesc": "Holder's Multi-Attack is Electric type.",
     "aliases": [
       "電子記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "electricseed",
@@ -2291,7 +2617,11 @@
     "shortDesc": "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use.",
     "aliases": [
       "電氣種子"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "electriumz",
@@ -2305,7 +2635,10 @@
     "num": 779,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has an Electric move, this item allows it to use an Electric Z-Move."
+    "shortDesc": "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "emboarite",
@@ -2319,13 +2652,14 @@
     ],
     "num": 2569,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 5,
+      "usagePercent": 0.013565944054046722
     }
   },
   {
@@ -2345,7 +2679,11 @@
     },
     "aliases": [
       "謎芝果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "eviolite",
@@ -2361,7 +2699,11 @@
     "shortDesc": "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
     "aliases": [
       "進化奇石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "excadrite",
@@ -2375,13 +2717,14 @@
     ],
     "num": 2570,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by an Excadrill, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 8,
+      "usagePercent": 0.021705510486474754
     }
   },
   {
@@ -2398,10 +2741,11 @@
       "達人帶"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 47,
-      "usagePercent": 0.35017136045298763
+      "usageCount": 156,
+      "usagePercent": 0.42325745448625773
     }
   },
   {
@@ -2416,7 +2760,10 @@
     "num": 793,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Fairy move, this item allows it to use a Fairy Z-Move."
+    "shortDesc": "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fairyfeather",
@@ -2430,10 +2777,11 @@
     "gen": 9,
     "shortDesc": "Holder's Fairy-type attacks have 1.2x power.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 439,
-      "usagePercent": 3.270749515720459
+      "usageCount": 1131,
+      "usagePercent": 3.0686165450253684
     }
   },
   {
@@ -2447,7 +2795,10 @@
     "shortDesc": "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
     "aliases": [
       "妖精寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fairymemory",
@@ -2464,7 +2815,10 @@
     "shortDesc": "Holder's Multi-Attack is Fairy type.",
     "aliases": [
       "妖精記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "falinksite",
@@ -2478,13 +2832,14 @@
     ],
     "num": 2587,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -2497,7 +2852,11 @@
     "shortDesc": "A Poke Ball that makes it easier to catch Pokemon which are quick to run away.",
     "aliases": [
       "速度球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "feraligite",
@@ -2511,13 +2870,14 @@
     ],
     "num": 2564,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Feraligatr, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 12,
+      "usagePercent": 0.03255826572971213
     }
   },
   {
@@ -2534,7 +2894,10 @@
     },
     "aliases": [
       "格鬥寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fightingmemory",
@@ -2551,7 +2914,10 @@
     "shortDesc": "Holder's Multi-Attack is Fighting type.",
     "aliases": [
       "戰鬥記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fightiniumz",
@@ -2565,7 +2931,10 @@
     "num": 782,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Fighting move, this item allows it to use a Fighting Z-Move."
+    "shortDesc": "If holder has a Fighting move, this item allows it to use a Fighting Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "figyberry",
@@ -2587,7 +2956,11 @@
     },
     "aliases": [
       "勿花果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "firegem",
@@ -2603,7 +2976,10 @@
     },
     "aliases": [
       "火之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "firememory",
@@ -2620,7 +2996,10 @@
     "shortDesc": "Holder's Multi-Attack is Fire type.",
     "aliases": [
       "火焰記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "firestone",
@@ -2635,7 +3014,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "火之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "firiumz",
@@ -2649,7 +3032,10 @@
     "num": 777,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Fire move, this item allows it to use a Fire Z-Move."
+    "shortDesc": "If holder has a Fire move, this item allows it to use a Fire Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fistplate",
@@ -2663,7 +3049,11 @@
     "shortDesc": "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
     "aliases": [
       "拳頭石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "flameorb",
@@ -2680,7 +3070,11 @@
     "shortDesc": "At the end of every turn, this item attempts to burn the holder.",
     "aliases": [
       "火焰寶珠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "flameplate",
@@ -2694,7 +3088,11 @@
     "shortDesc": "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
     "aliases": [
       "火球石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "floatstone",
@@ -2708,7 +3106,21 @@
     "shortDesc": "Holder's weight is halved.",
     "aliases": [
       "輕石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "floetite",
+    "name": "Floetite",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
   },
   {
     "id": "floettite",
@@ -2722,13 +3134,14 @@
     ],
     "num": 2579,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 355,
-      "usagePercent": 2.6449113395917148
+      "usageCount": 835,
+      "usagePercent": 2.2655126570258024
     }
   },
   {
@@ -2743,7 +3156,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "花朵糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "flyinggem",
@@ -2759,7 +3176,10 @@
     },
     "aliases": [
       "飛行寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "flyingmemory",
@@ -2776,7 +3196,10 @@
     "shortDesc": "Holder's Multi-Attack is Flying type.",
     "aliases": [
       "飛翔記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "flyiniumz",
@@ -2790,7 +3213,20 @@
     "num": 785,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Flying move, this item allows it to use a Flying Z-Move."
+    "shortDesc": "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "focusash",
+    "name": "Focu Sash",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
   },
   {
     "id": "focusband",
@@ -2811,10 +3247,11 @@
       "氣勢頭帶"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -2836,18 +3273,31 @@
       "氣勢披帶"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1654,
-      "usagePercent": 12.323051706154075
+      "usageCount": 4640,
+      "usagePercent": 12.589196082155357
     }
   },
   {
-    "id": "fokusslash",
-    "name": "Fokus Slash",
+    "id": "focusslash",
+    "name": "Focus Slash",
     "champions": {
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
+  },
+  {
+    "id": "focushshas",
+    "name": "focush shas",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -2863,7 +3313,10 @@
     "shortDesc": "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Dino.",
     "aliases": [
       "化石鳥"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fossilizeddino",
@@ -2878,7 +3331,10 @@
     "shortDesc": "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Bird.",
     "aliases": [
       "化石海獸"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fossilizeddrake",
@@ -2893,7 +3349,10 @@
     "shortDesc": "Can revive into Dracozolt with Fossilized Bird or Dracovish with Fossilized Fish.",
     "aliases": [
       "化石龍"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "fossilizedfish",
@@ -2908,7 +3367,10 @@
     "shortDesc": "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Dino.",
     "aliases": [
       "化石魚"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "friendball",
@@ -2920,7 +3382,11 @@
     "shortDesc": "A Poke Ball that makes caught Pokemon more friendly.",
     "aliases": [
       "友友球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "froslassite",
@@ -2934,13 +3400,14 @@
     ],
     "num": 2566,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Froslass, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 121,
-      "usagePercent": 0.9015049918045
+      "usageCount": 312,
+      "usagePercent": 0.8465149089725155
     }
   },
   {
@@ -2957,7 +3424,10 @@
     "shortDesc": "Holder moves last in its priority bracket.",
     "aliases": [
       "飽腹薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "galaricacuff",
@@ -2971,7 +3441,11 @@
     "shortDesc": "Evolves Galarian Slowpoke into Galarian Slowbro when used.",
     "aliases": [
       "伽勒荳蔻手環"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "galaricawreath",
@@ -2985,7 +3459,11 @@
     "shortDesc": "Evolves Galarian Slowpoke into Galarian Slowking when used.",
     "aliases": [
       "伽勒荳蔻花圈"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "galladite",
@@ -2999,16 +3477,17 @@
     ],
     "num": 756,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Gallade, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "艾路雷朵進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -3025,7 +3504,11 @@
     "shortDesc": "Raises holder's Defense by 1 stage when at 1/4 max HP or less. Single use.",
     "aliases": [
       "龍睛果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "garchompite",
@@ -3039,16 +3522,17 @@
     ],
     "num": 683,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp.",
     "aliases": [
       "烈咬陸鯊進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.16390999850990912
+      "usageCount": 42,
+      "usagePercent": 0.11395393005399244
     }
   },
   {
@@ -3064,7 +3548,10 @@
     "num": 2640,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z."
+    "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "gardevoirite",
@@ -3078,16 +3565,17 @@
     ],
     "num": 657,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "沙奈朵進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 36,
-      "usagePercent": 0.2682163611980331
+      "usageCount": 121,
+      "usagePercent": 0.32829584610793067
     }
   },
   {
@@ -3102,16 +3590,17 @@
     ],
     "num": 656,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Gengar, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "耿鬼進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 85,
-      "usagePercent": 0.6332886306064669
+      "usageCount": 242,
+      "usagePercent": 0.6565916922158613
     }
   },
   {
@@ -3128,7 +3617,10 @@
     },
     "aliases": [
       "幽靈寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ghostmemory",
@@ -3145,7 +3637,10 @@
     "shortDesc": "Holder's Multi-Attack is Ghost type.",
     "aliases": [
       "幽靈記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ghostiumz",
@@ -3159,7 +3654,10 @@
     "num": 789,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Ghost move, this item allows it to use a Ghost Z-Move."
+    "shortDesc": "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "glalitite",
@@ -3173,16 +3671,13 @@
     ],
     "num": 763,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Glalie, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "冰鬼護進化石"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": true
     }
   },
   {
@@ -3197,13 +3692,24 @@
     ],
     "num": 2650,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Glimmora, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 78,
+      "usagePercent": 0.21162872724312887
+    }
+  },
+  {
+    "id": "glimmorite",
+    "name": "Glimmorite",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.11920727164357026
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -3222,7 +3728,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use."
+    "shortDesc": "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "goldbottlecap",
@@ -3236,7 +3745,11 @@
     "shortDesc": "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
     "aliases": [
       "金色王冠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "golisopite",
@@ -3250,8 +3763,11 @@
     ],
     "num": 2645,
     "gen": 9,
-    "isNonstandard": "Future",
-    "shortDesc": "If held by a Golisopod, this item allows it to Mega Evolve in battle."
+    "isNonstandard": "Past",
+    "shortDesc": "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "golurkite",
@@ -3265,13 +3781,14 @@
     ],
     "num": 2642,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Golurk, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.15645954403218598
+      "usageCount": 24,
+      "usagePercent": 0.06511653145942425
     }
   },
   {
@@ -3288,7 +3805,10 @@
     },
     "aliases": [
       "草之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "grassmemory",
@@ -3305,7 +3825,10 @@
     "shortDesc": "Holder's Multi-Attack is Grass type.",
     "aliases": [
       "青草記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "grassiumz",
@@ -3319,7 +3842,10 @@
     "num": 780,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Grass move, this item allows it to use a Grass Z-Move."
+    "shortDesc": "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "grassyseed",
@@ -3337,7 +3863,11 @@
     "shortDesc": "If the terrain is Grassy Terrain, raises holder's Defense by 1 stage. Single use.",
     "aliases": [
       "青草種子"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "greatball",
@@ -3349,7 +3879,11 @@
     "shortDesc": "A high-performance Ball that provides a higher catch rate than a Poke Ball.",
     "aliases": [
       "超級球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "greninjite",
@@ -3363,13 +3897,14 @@
     ],
     "num": 2577,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Greninja, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.07450454477723141
+      "usageCount": 23,
+      "usagePercent": 0.06240334264861492
     }
   },
   {
@@ -3387,7 +3922,11 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "萄葡果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "gripclaw",
@@ -3401,7 +3940,11 @@
     "shortDesc": "Holder's partial-trapping moves always last 7 turns.",
     "aliases": [
       "緊纏鉤爪"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "griseouscore",
@@ -3417,7 +3960,11 @@
     "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
     "aliases": [
       "大白金宝玉"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "griseousorb",
@@ -3438,7 +3985,11 @@
     },
     "aliases": [
       "白金寶珠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "groundgem",
@@ -3454,7 +4005,10 @@
     },
     "aliases": [
       "地面寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "groundmemory",
@@ -3471,7 +4025,10 @@
     "shortDesc": "Holder's Multi-Attack is Ground type.",
     "aliases": [
       "大地記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "groundiumz",
@@ -3485,7 +4042,10 @@
     "num": 784,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Ground move, this item allows it to use a Ground Z-Move."
+    "shortDesc": "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "gyaradosite",
@@ -3499,16 +4059,17 @@
     ],
     "num": 676,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Gyarados, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "暴鯉龍進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 48,
+      "usagePercent": 0.1302330629188485
     }
   },
   {
@@ -3527,10 +4088,11 @@
       "莓榴果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 40,
+      "usagePercent": 0.10852755243237378
     }
   },
   {
@@ -3551,10 +4113,11 @@
       "硬石頭"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 9,
+      "usagePercent": 0.024418699297284095
     }
   },
   {
@@ -3569,13 +4132,14 @@
     ],
     "num": 2583,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Hawlucha, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -3588,7 +4152,11 @@
     "shortDesc": "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
     "aliases": [
       "治癒球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "hearthflamemask",
@@ -3604,7 +4172,11 @@
     ],
     "num": 2408,
     "gen": 9,
-    "shortDesc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect."
+    "shortDesc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "heatrock",
@@ -3620,10 +4192,11 @@
       "熾熱岩石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05960363582178513
+      "usageCount": 31,
+      "usagePercent": 0.08410885313508967
     }
   },
   {
@@ -3638,8 +4211,11 @@
     ],
     "num": 2567,
     "gen": 9,
-    "isNonstandard": "Future",
-    "shortDesc": "If held by a Heatran, this item allows it to Mega Evolve in battle."
+    "isNonstandard": "Past",
+    "shortDesc": "If held by a Heatran, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "heavyball",
@@ -3651,7 +4227,11 @@
     "shortDesc": "A Poke Ball for catching very heavy Pokemon.",
     "aliases": [
       "沉重球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "heavydutyboots",
@@ -3665,7 +4245,11 @@
     "shortDesc": "When switching in, the holder is unaffected by hazards on its side of the field.",
     "aliases": [
       "厚底靴"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "helixfossil",
@@ -3680,7 +4264,10 @@
     "shortDesc": "Can be revived into Omanyte.",
     "aliases": [
       "貝殼化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "heracronite",
@@ -3694,16 +4281,17 @@
     ],
     "num": 680,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Heracross, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "赫拉克羅斯進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.037252272388615705
+      "usageCount": 16,
+      "usagePercent": 0.04341102097294951
     }
   },
   {
@@ -3721,7 +4309,11 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "哈密果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "houndoominite",
@@ -3735,16 +4327,17 @@
     ],
     "num": 666,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "黑魯加進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 6,
+      "usagePercent": 0.016279132864856063
     }
   },
   {
@@ -3767,7 +4360,11 @@
     },
     "aliases": [
       "芭亞果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "iceberry",
@@ -3784,7 +4381,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder is cured if it is burned. Single use."
+    "shortDesc": "(Gen 2) Holder is cured if it is burned. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "icegem",
@@ -3800,7 +4400,10 @@
     },
     "aliases": [
       "冰之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "icememory",
@@ -3817,7 +4420,10 @@
     "shortDesc": "Holder's Multi-Attack is Ice type.",
     "aliases": [
       "冰雪記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "icestone",
@@ -3835,7 +4441,11 @@
     },
     "aliases": [
       "冰之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "icicleplate",
@@ -3849,7 +4459,11 @@
     "shortDesc": "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
     "aliases": [
       "冰柱石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "iciumz",
@@ -3863,7 +4477,10 @@
     "num": 781,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has an Ice move, this item allows it to use an Ice Z-Move."
+    "shortDesc": "If holder has an Ice move, this item allows it to use an Ice Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "icyrock",
@@ -3882,10 +4499,11 @@
       "冰冷岩石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 2,
+      "usagePercent": 0.005426377621618688
     }
   },
   {
@@ -3901,7 +4519,10 @@
     "num": 799,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault."
+    "shortDesc": "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "insectplate",
@@ -3915,7 +4536,11 @@
     "shortDesc": "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
     "aliases": [
       "玉蟲石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ironball",
@@ -3934,10 +4559,11 @@
       "黑色鐵球"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1266577261212934
+      "usageCount": 48,
+      "usagePercent": 0.1302330629188485
     }
   },
   {
@@ -3952,7 +4578,21 @@
     "shortDesc": "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
     "aliases": [
       "鋼鐵石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "itemless",
+    "name": "Itemless",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
   },
   {
     "id": "jabocaberry",
@@ -3969,9 +4609,9 @@
     "aliases": [
       "嘉珍果"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -3987,7 +4627,10 @@
     "shortDesc": "Can be revived into Tyrunt.",
     "aliases": [
       "顎之化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "kangaskhanite",
@@ -4001,16 +4644,27 @@
     ],
     "num": 675,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "袋獸進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.18626136194307852
+      "usageCount": 70,
+      "usagePercent": 0.1899232167566541
+    }
+  },
+  {
+    "id": "kasibbeery",
+    "name": "kasib beery",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -4029,10 +4683,11 @@
       "佛柑果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 203,
-      "usagePercent": 1.5124422589777977
+      "usageCount": 654,
+      "usagePercent": 1.7744254822693113
     }
   },
   {
@@ -4051,10 +4706,11 @@
       "通通果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -4071,7 +4727,11 @@
     "shortDesc": "Raises holder's Defense by 1 stage after it is hit by a physical attack. Single use.",
     "aliases": [
       "亞開果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "kelpsyberry",
@@ -4088,7 +4748,21 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "藻根果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "king",
+    "name": "King",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.005426377621618688
+    }
   },
   {
     "id": "kingsrock",
@@ -4107,10 +4781,11 @@
       "王者之證"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.07450454477723141
+      "usageCount": 36,
+      "usagePercent": 0.09767479718913638
     }
   },
   {
@@ -4127,7 +4802,10 @@
     "num": 926,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Kommo-o with Clanging Scales, it can use Clangorous Soulblaze."
+    "shortDesc": "If held by a Kommo-o with Clanging Scales, it can use Clangorous Soulblaze.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "laggingtail",
@@ -4142,7 +4820,11 @@
     "shortDesc": "Holder moves last in its priority bracket.",
     "aliases": [
       "後攻之尾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lansatberry",
@@ -4158,7 +4840,11 @@
     "shortDesc": "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use.",
     "aliases": [
       "蘭薩果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "latiasite",
@@ -4176,7 +4862,10 @@
     "shortDesc": "If held by a Latias, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "拉帝亞斯進化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "latiosite",
@@ -4194,7 +4883,10 @@
     "shortDesc": "If held by a Latios, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "拉帝歐斯進化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "laxincense",
@@ -4213,7 +4905,10 @@
     },
     "aliases": [
       "悠閒薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "leafstone",
@@ -4231,7 +4926,11 @@
     },
     "aliases": [
       "葉之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "leek",
@@ -4248,7 +4947,30 @@
     "num": 259,
     "gen": 8,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Farfetch’d or Sirfetch’d, its critical hit ratio is raised by 2 stages."
+    "shortDesc": "If held by a Farfetch’d or Sirfetch’d, its critical hit ratio is raised by 2 stages.",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "leftlover",
+    "name": "left lover",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
+  },
+  {
+    "id": "leftover",
+    "name": "Leftover",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
+    }
   },
   {
     "id": "leftovers",
@@ -4267,10 +4989,11 @@
       "吃剩的東西"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 839,
-      "usagePercent": 6.250931306809715
+      "usageCount": 2198,
+      "usagePercent": 5.963589006158938
     }
   },
   {
@@ -4288,7 +5011,10 @@
     "activate": "  [POKEMON] restored PP to its move [MOVE] using its Leppa Berry!",
     "aliases": [
       "蘋野果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "levelball",
@@ -4300,7 +5026,11 @@
     "shortDesc": "A Poke Ball for catching Pokemon that are a lower level than your own.",
     "aliases": [
       "等級球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "liechiberry",
@@ -4316,7 +5046,11 @@
     "shortDesc": "Raises holder's Attack by 1 stage when at 1/4 max HP or less. Single use.",
     "aliases": [
       "枝荔果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lifeorb",
@@ -4333,10 +5067,11 @@
       "生命寶珠"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1217,
-      "usagePercent": 9.067203099389062
+      "usageCount": 3449,
+      "usagePercent": 9.357788208481429
     }
   },
   {
@@ -4380,10 +5115,11 @@
       "電氣球"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 5,
+      "usagePercent": 0.013565944054046722
     }
   },
   {
@@ -4403,10 +5139,11 @@
       "光之黏土"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 314,
-      "usagePercent": 2.3394427060050664
+      "usageCount": 831,
+      "usagePercent": 2.2546599017825653
     }
   },
   {
@@ -4422,7 +5159,11 @@
     "shortDesc": "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
     "aliases": [
       "机变骰子"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lopunnite",
@@ -4436,16 +5177,17 @@
     ],
     "num": 768,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "長耳兔進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.07450454477723141
+      "usageCount": 41,
+      "usagePercent": 0.1112407412431831
     }
   },
   {
@@ -4458,7 +5200,11 @@
     "shortDesc": "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon.",
     "aliases": [
       "甜蜜球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lovesweet",
@@ -4472,7 +5218,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "愛心糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lucarionite",
@@ -4486,16 +5236,17 @@
     ],
     "num": 673,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario in battle.",
     "aliases": [
       "路卡利歐進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 23,
+      "usagePercent": 0.06240334264861492
     }
   },
   {
@@ -4511,7 +5262,10 @@
     "num": 2641,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle."
+    "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "luckypunch",
@@ -4532,7 +5286,10 @@
     },
     "aliases": [
       "吉利拳"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lumberry",
@@ -4551,10 +5308,11 @@
       "木子果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 34,
-      "usagePercent": 0.2533154522425868
+      "usageCount": 87,
+      "usagePercent": 0.23604742654041297
     }
   },
   {
@@ -4572,7 +5330,11 @@
     "shortDesc": "Raises holder's Sp. Def by 1 stage if hit by a Water-type attack. Single use.",
     "aliases": [
       "光苔"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lunaliumz",
@@ -4588,7 +5350,10 @@
     "num": 922,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move."
+    "shortDesc": "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lureball",
@@ -4600,7 +5365,11 @@
     "shortDesc": "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
     "aliases": [
       "誘餌球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lustrousglobe",
@@ -4616,7 +5385,11 @@
     "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
     "aliases": [
       "大白宝玉"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lustrousorb",
@@ -4634,7 +5407,11 @@
     "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
     "aliases": [
       "白玉寶珠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "luxuryball",
@@ -4646,7 +5423,11 @@
     "shortDesc": "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.",
     "aliases": [
       "豪華球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "lycaniumz",
@@ -4663,7 +5444,10 @@
     "num": 925,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Lycanroc forme with Stone Edge, it can use Splintered Stormshards."
+    "shortDesc": "If held by a Lycanroc forme with Stone Edge, it can use Splintered Stormshards.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "machobrace",
@@ -4679,7 +5463,10 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "強制鍛鍊器"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "magearnite",
@@ -4696,7 +5483,10 @@
     "num": 2646,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Magearna, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Magearna, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "magmarizer",
@@ -4710,7 +5500,11 @@
     "shortDesc": "Evolves Magmar into Magmortar when traded.",
     "aliases": [
       "熔岩增幅器"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "magnet",
@@ -4730,10 +5524,11 @@
       "磁鐵"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 37,
-      "usagePercent": 0.27566681567575624
+      "usageCount": 104,
+      "usagePercent": 0.2821716363241718
     }
   },
   {
@@ -4756,7 +5551,11 @@
     },
     "aliases": [
       "芒芒果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "magostberry",
@@ -4774,7 +5573,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "岳竹果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mail",
@@ -4783,7 +5585,10 @@
     "num": 137,
     "gen": 2,
     "isNonstandard": "Past",
-    "shortDesc": "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief."
+    "shortDesc": "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "malamarite",
@@ -4797,13 +5602,14 @@
     ],
     "num": 2580,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Malamar, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 20,
+      "usagePercent": 0.05426377621618689
     }
   },
   {
@@ -4818,7 +5624,11 @@
     "shortDesc": "Evolves Charcadet into Ceruledge when used.",
     "aliases": [
       "咒术之铠"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "manectite",
@@ -4832,16 +5642,17 @@
     ],
     "num": 682,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Manectric, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "雷電獸進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -4858,7 +5669,11 @@
     "shortDesc": "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
     "aliases": [
       "香羅果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "marshadiumz",
@@ -4873,7 +5688,10 @@
     "num": 802,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike."
+    "shortDesc": "If held by Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "masterball",
@@ -4885,7 +5703,11 @@
     "shortDesc": "The best Ball with the ultimate performance. It will catch any wild Pokemon.",
     "aliases": [
       "大師球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "masterpieceteacup",
@@ -4896,7 +5718,11 @@
     },
     "num": 2404,
     "gen": 9,
-    "shortDesc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used."
+    "shortDesc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mawilite",
@@ -4910,16 +5736,17 @@
     ],
     "num": 681,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Mawile, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "大嘴娃進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 154,
-      "usagePercent": 1.1473699895693639
+      "usageCount": 409,
+      "usagePercent": 1.1096942236210219
     }
   },
   {
@@ -4934,7 +5761,11 @@
     "shortDesc": "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
     "aliases": [
       "碧綠石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "medichamite",
@@ -4948,16 +5779,27 @@
     ],
     "num": 665,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Medicham, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "恰雷姆進化石"
     ],
     "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 6,
+      "usagePercent": 0.016279132864856063
+    }
+  },
+  {
+    "id": "megaxstone",
+    "name": "mega x stone",
+    "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -4972,13 +5814,14 @@
     ],
     "num": 2563,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Meganium, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17136045298763225
+      "usageCount": 73,
+      "usagePercent": 0.19806278318908213
     }
   },
   {
@@ -4998,10 +5841,11 @@
       "心靈香草"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 67,
-      "usagePercent": 0.4991804500074504
+      "usageCount": 213,
+      "usagePercent": 0.5779092167023903
     }
   },
   {
@@ -5018,8 +5862,15 @@
     ],
     "num": 2643,
     "gen": 9,
-    "isNonstandard": "Future",
-    "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle."
+    "isNonstandard": null,
+    "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
+    }
   },
   {
     "id": "metagrossite",
@@ -5033,16 +5884,17 @@
     ],
     "num": 758,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Metagross, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "巨金怪進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 222,
-      "usagePercent": 1.6540008940545372
+      "usageCount": 506,
+      "usagePercent": 1.3728735382695283
     }
   },
   {
@@ -5051,7 +5903,11 @@
     "spritenum": 761,
     "num": 2482,
     "gen": 9,
-    "shortDesc": "Evolves Duraludon into Archaludon when used."
+    "shortDesc": "Evolves Duraludon into Archaludon when used.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "metalcoat",
@@ -5073,10 +5929,11 @@
       "金屬膜"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 29,
-      "usagePercent": 0.2160631798539711
+      "usageCount": 67,
+      "usagePercent": 0.18178365032422605
     }
   },
   {
@@ -5099,7 +5956,10 @@
     },
     "aliases": [
       "金屬粉"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "metronome",
@@ -5121,10 +5981,11 @@
       "節拍器"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 7,
+      "usagePercent": 0.01899232167566541
     }
   },
   {
@@ -5140,7 +6001,10 @@
     "num": 806,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Mew with Psychic, it can use Genesis Supernova."
+    "shortDesc": "If held by a Mew with Psychic, it can use Genesis Supernova.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mewtwonitex",
@@ -5158,7 +6022,10 @@
     "shortDesc": "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo X in battle.",
     "aliases": [
       "超夢進化石Ｘ"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mewtwonitey",
@@ -5176,7 +6043,10 @@
     "shortDesc": "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo Y in battle.",
     "aliases": [
       "超夢進化石Ｙ"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "micleberry",
@@ -5195,7 +6065,11 @@
     "shortDesc": "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
     "aliases": [
       "奇秘果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mimikiumz",
@@ -5213,7 +6087,10 @@
     "num": 924,
     "isNonstandard": "Past",
     "gen": 7,
-    "shortDesc": "If held by a Mimikyu with Play Rough, it can use Let's Snuggle Forever."
+    "shortDesc": "If held by a Mimikyu with Play Rough, it can use Let's Snuggle Forever.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mindplate",
@@ -5227,7 +6104,11 @@
     "shortDesc": "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
     "aliases": [
       "神奇石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mintberry",
@@ -5244,7 +6125,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder wakes up if it is asleep. Single use."
+    "shortDesc": "(Gen 2) Holder wakes up if it is asleep. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "miracleberry",
@@ -5261,7 +6145,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use."
+    "shortDesc": "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "miracleseed",
@@ -5281,10 +6168,11 @@
       "奇跡種子"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05960363582178513
+      "usageCount": 28,
+      "usagePercent": 0.07596928670266163
     }
   },
   {
@@ -5302,7 +6190,11 @@
     "activate": "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
     "aliases": [
       "模仿香草"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mistyseed",
@@ -5320,7 +6212,11 @@
     "shortDesc": "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use.",
     "aliases": [
       "薄霧種子"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "moonball",
@@ -5332,7 +6228,11 @@
     "shortDesc": "A Poke Ball for catching Pokemon that evolve using the Moon Stone.",
     "aliases": [
       "月亮球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "moonstone",
@@ -5347,7 +6247,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "月之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "muscleband",
@@ -5364,10 +6268,11 @@
       "力量頭帶"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 28,
+      "usagePercent": 0.07596928670266163
     }
   },
   {
@@ -5386,7 +6291,10 @@
     ],
     "isNonstandard": "Past",
     "shortDesc": "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
-    "activate": "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!"
+    "activate": "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "mysticwater",
@@ -5406,10 +6314,11 @@
       "神秘水滴"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 203,
-      "usagePercent": 1.5124422589777977
+      "usageCount": 546,
+      "usagePercent": 1.481401090701902
     }
   },
   {
@@ -5428,7 +6337,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "蕉香果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "nestball",
@@ -5440,7 +6352,11 @@
     "shortDesc": "A Poke Ball that works especially well on weaker Pokemon in the wild.",
     "aliases": [
       "巢穴球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "netball",
@@ -5452,7 +6368,11 @@
     "shortDesc": "A Poke Ball that works especially well on Water- and Bug-type Pokemon.",
     "aliases": [
       "捕網球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "nevermeltice",
@@ -5472,10 +6392,11 @@
       "不融冰"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 54,
-      "usagePercent": 0.4023245417970496
+      "usageCount": 179,
+      "usagePercent": 0.4856607971348726
     }
   },
   {
@@ -5484,8 +6405,8 @@
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 46,
+      "usagePercent": 0.12480668529722984
     }
   },
   {
@@ -5504,16 +6425,19 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "檬檸果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "none",
-    "name": "None",
+    "name": "none",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 3,
+      "usagePercent": 0.008139566432428032
     }
   },
   {
@@ -5529,7 +6453,11 @@
     },
     "aliases": [
       "一般寶石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "normaliumz",
@@ -5541,7 +6469,10 @@
     "num": 776,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Normal move, this item allows it to use a Normal Z-Move."
+    "shortDesc": "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "nothing",
@@ -5549,8 +6480,8 @@
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -5569,10 +6500,11 @@
       "巧可果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 118,
-      "usagePercent": 0.8791536283713307
+      "usageCount": 371,
+      "usagePercent": 1.0065930488102666
     }
   },
   {
@@ -5589,7 +6521,10 @@
     "shortDesc": "Holder's Psychic-type attacks have 1.2x power.",
     "aliases": [
       "奇異薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "oldamber",
@@ -5604,7 +6539,10 @@
     "shortDesc": "Can be revived into Aerodactyl.",
     "aliases": [
       "秘密琥珀"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "oranberry",
@@ -5620,7 +6558,10 @@
     "shortDesc": "Restores 10 HP when at 1/2 max HP or less. Single use.",
     "aliases": [
       "橙橙果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "ovalstone",
@@ -5634,7 +6575,11 @@
     "shortDesc": "Evolves Happiny into Chansey when held and leveled up during the day.",
     "aliases": [
       "渾圓之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pamtreberry",
@@ -5652,7 +6597,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "椰木果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "parkball",
@@ -5661,11 +6609,14 @@
     "num": 500,
     "gen": 4,
     "isPokeball": true,
-    "isNonstandard": "Unobtainable",
+    "isNonstandard": "Past",
     "shortDesc": "A special Poke Ball for the Pal Park.",
     "aliases": [
       "公園球"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "passhoberry",
@@ -5683,10 +6634,11 @@
       "千香果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 106,
-      "usagePercent": 0.789748174638653
+      "usageCount": 266,
+      "usagePercent": 0.7217082236752855
     }
   },
   {
@@ -5703,7 +6655,14 @@
     "shortDesc": "Halves damage taken from a supereffective Psychic-type attack. Single use.",
     "aliases": [
       "福祿果"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
   },
   {
     "id": "pechaberry",
@@ -5719,7 +6678,10 @@
     "shortDesc": "Holder is cured if it is poisoned. Single use.",
     "aliases": [
       "桃桃果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "persimberry",
@@ -5735,7 +6697,10 @@
     "shortDesc": "Holder is cured if it is confused. Single use.",
     "aliases": [
       "柿仔果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "petayaberry",
@@ -5751,7 +6716,11 @@
     "shortDesc": "Raises holder's Sp. Atk by 1 stage when at 1/4 max HP or less. Single use.",
     "aliases": [
       "龍火果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pidgeotite",
@@ -5765,16 +6734,17 @@
     ],
     "num": 762,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Pidgeot, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "大比鳥進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 5,
+      "usagePercent": 0.013565944054046722
     }
   },
   {
@@ -5790,7 +6760,10 @@
     "num": 794,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Pikachu with Volt Tackle, it can use Catastropika."
+    "shortDesc": "If held by a Pikachu with Volt Tackle, it can use Catastropika.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pikashuniumz",
@@ -5811,7 +6784,10 @@
     "num": 836,
     "isNonstandard": "Past",
     "gen": 7,
-    "shortDesc": "If held by cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt."
+    "shortDesc": "If held by cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pinapberry",
@@ -5829,7 +6805,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "凰梨果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pinkbow",
@@ -5841,7 +6820,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power."
+    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pinsirite",
@@ -5855,16 +6837,17 @@
     ],
     "num": 671,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Pinsir, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "凱羅斯進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 3,
+      "usagePercent": 0.008139566432428032
     }
   },
   {
@@ -5880,9 +6863,9 @@
     "aliases": [
       "妖精石板"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -5898,7 +6881,10 @@
     "shortDesc": "Can be revived into Archen.",
     "aliases": [
       "羽毛化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "poisonbarb",
@@ -5919,8 +6905,11 @@
       "毒針"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -5937,7 +6926,10 @@
     },
     "aliases": [
       "毒之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "poisonmemory",
@@ -5954,7 +6946,10 @@
     "shortDesc": "Holder's Multi-Attack is Poison type.",
     "aliases": [
       "毒記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "poisoniumz",
@@ -5968,7 +6963,10 @@
     "num": 783,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Poison move, this item allows it to use a Poison Z-Move."
+    "shortDesc": "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pokeball",
@@ -5980,7 +6978,11 @@
     "shortDesc": "A device for catching wild Pokemon. It is designed as a capsule system.",
     "aliases": [
       "精靈球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "polkadotbow",
@@ -5992,7 +6994,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power."
+    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pomegberry",
@@ -6009,7 +7014,11 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "榴石果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "poweranklet",
@@ -6024,7 +7033,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量護踝"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerband",
@@ -6039,7 +7052,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量束帶"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerbelt",
@@ -6054,7 +7071,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量腰帶"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerbracer",
@@ -6069,7 +7090,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量護腕"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerherb",
@@ -6084,7 +7109,11 @@
     "end": "  [POKEMON] became fully charged due to its Power Herb!",
     "aliases": [
       "強力香草"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerlens",
@@ -6099,7 +7128,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量鏡"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "powerweight",
@@ -6114,7 +7147,11 @@
     "shortDesc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
     "aliases": [
       "力量負重"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "premierball",
@@ -6126,7 +7163,11 @@
     "shortDesc": "A rare Poke Ball that has been crafted to commemorate an event.",
     "aliases": [
       "紀念球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "prettyfeather",
@@ -6137,7 +7178,11 @@
     },
     "num": 571,
     "gen": 5,
-    "shortDesc": "Though this feather is beautiful, it's just a regular feather and has no effect."
+    "shortDesc": "Though this feather is beautiful, it's just a regular feather and has no effect.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "primariumz",
@@ -6152,7 +7197,10 @@
     "num": 800,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta."
+    "shortDesc": "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "prismscale",
@@ -6166,7 +7214,11 @@
     "shortDesc": "Evolves Feebas into Milotic when traded.",
     "aliases": [
       "美麗鱗片"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "protectivepads",
@@ -6181,7 +7233,11 @@
     "block": "  [POKEMON] protected itself with its Protective Pads!",
     "aliases": [
       "部位護具"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "protector",
@@ -6195,7 +7251,11 @@
     "shortDesc": "Evolves Rhydon into Rhyperior when traded.",
     "aliases": [
       "護具"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "przcureberry",
@@ -6212,7 +7272,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder cures itself if it is paralyzed. Single use."
+    "shortDesc": "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "psncureberry",
@@ -6229,7 +7292,10 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder is cured if it is poisoned. Single use."
+    "shortDesc": "(Gen 2) Holder is cured if it is poisoned. Single use.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "psychicgem",
@@ -6245,7 +7311,10 @@
     },
     "aliases": [
       "超能力寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "psychicmemory",
@@ -6262,7 +7331,10 @@
     "shortDesc": "Holder's Multi-Attack is Psychic type.",
     "aliases": [
       "精神記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "psychicseed",
@@ -6280,7 +7352,11 @@
     "shortDesc": "If the terrain is Psychic Terrain, raises holder's Sp. Def by 1 stage. Single use.",
     "aliases": [
       "精神種子"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "psychiumz",
@@ -6294,7 +7370,10 @@
     "num": 786,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Psychic move, this item allows it to use a Psychic Z-Move."
+    "shortDesc": "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "punchingglove",
@@ -6310,7 +7389,11 @@
     "shortDesc": "Holder's punch-based attacks have 1.1x power and do not make contact.",
     "aliases": [
       "拳击手套"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "pyroarite",
@@ -6324,13 +7407,14 @@
     ],
     "num": 2578,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Pyroar, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 66,
-      "usagePercent": 0.49172999552972735
+      "usageCount": 138,
+      "usagePercent": 0.3744200558916895
     }
   },
   {
@@ -6348,7 +7432,11 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "比巴果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "quickball",
@@ -6360,7 +7448,11 @@
     "shortDesc": "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
     "aliases": [
       "先機球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "quickclaw",
@@ -6381,10 +7473,11 @@
       "先制之爪"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.23096408880941738
+      "usageCount": 68,
+      "usagePercent": 0.1844968391350354
     }
   },
   {
@@ -6403,7 +7496,10 @@
     "shortDesc": "If held by a Ditto that hasn't Transformed, its Speed is doubled.",
     "aliases": [
       "速度粉"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rabutaberry",
@@ -6421,7 +7517,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "茸丹果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "raichunitex",
@@ -6435,13 +7534,14 @@
     ],
     "num": 2635,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13410818059901655
+      "usageCount": 53,
+      "usagePercent": 0.14379900697289524
     }
   },
   {
@@ -6456,13 +7556,14 @@
     ],
     "num": 2636,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 159,
-      "usagePercent": 1.1846222619579794
+      "usageCount": 523,
+      "usagePercent": 1.418997748053287
     }
   },
   {
@@ -6477,7 +7578,11 @@
     "shortDesc": "No competitive use other than when used with Fling.",
     "aliases": [
       "貴重骨頭"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rawstberry",
@@ -6495,10 +7600,7 @@
       "莓莓果"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": true
     }
   },
   {
@@ -6514,7 +7616,11 @@
     "shortDesc": "Holder's critical hit ratio is raised by 1 stage.",
     "aliases": [
       "銳利之爪"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "razorfang",
@@ -6531,7 +7637,11 @@
     "shortDesc": "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
     "aliases": [
       "銳利之牙"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "razzberry",
@@ -6549,7 +7659,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "蔓莓果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "reapercloth",
@@ -6563,7 +7676,11 @@
     "shortDesc": "Evolves Dusclops into Dusknoir when traded.",
     "aliases": [
       "靈界之布"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "redcard",
@@ -6578,7 +7695,11 @@
     "end": "  [POKEMON] held up its Red Card against [TARGET]!",
     "aliases": [
       "紅牌"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "redorb",
@@ -6595,7 +7716,10 @@
     "shortDesc": "If held by a Groudon, this item triggers its Primal Reversion in battle.",
     "aliases": [
       "朱紅色寶珠"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "repeatball",
@@ -6607,7 +7731,11 @@
     "shortDesc": "A Poke Ball that works well on Pokemon species that were previously caught.",
     "aliases": [
       "重複球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ribbonsweet",
@@ -6621,7 +7749,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "蝴蝶結糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rindoberry",
@@ -6639,10 +7771,11 @@
       "羅子果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.044702726866338846
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -6658,7 +7791,11 @@
     "shortDesc": "The holder's type immunities granted solely by its typing are negated.",
     "aliases": [
       "標靶"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rockgem",
@@ -6674,7 +7811,10 @@
     },
     "aliases": [
       "岩石寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rockincense",
@@ -6690,7 +7830,10 @@
     "shortDesc": "Holder's Rock-type attacks have 1.2x power.",
     "aliases": [
       "岩石薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rockmemory",
@@ -6707,7 +7850,10 @@
     "shortDesc": "Holder's Multi-Attack is Rock type.",
     "aliases": [
       "岩石記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rockiumz",
@@ -6721,7 +7867,10 @@
     "num": 788,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Rock move, this item allows it to use a Rock Z-Move."
+    "shortDesc": "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rockyhelmet",
@@ -6737,7 +7886,11 @@
     "damage": "  [POKEMON] was hurt by the Rocky Helmet!",
     "aliases": [
       "凸凸頭盔"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "roomservice",
@@ -6755,7 +7908,11 @@
     "shortDesc": "If Trick Room is active, the holder's Speed is lowered by 1 stage. Single use.",
     "aliases": [
       "客房服務"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rootfossil",
@@ -6770,7 +7927,10 @@
     "shortDesc": "Can be revived into Lileep.",
     "aliases": [
       "根狀化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "roseincense",
@@ -6786,7 +7946,10 @@
     "shortDesc": "Holder's Grass-type attacks have 1.2x power.",
     "aliases": [
       "花朵薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "roseliberry",
@@ -6804,10 +7967,11 @@
       "洛玫果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 148,
-      "usagePercent": 1.102667262703025
+      "usageCount": 286,
+      "usagePercent": 0.7759719998914725
     }
   },
   {
@@ -6824,7 +7988,11 @@
     "shortDesc": "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
     "aliases": [
       "霧蓮果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rustedshield",
@@ -6838,7 +8006,11 @@
     "shortDesc": "If held by a Zamazenta, this item changes its forme to Crowned Shield.",
     "aliases": [
       "腐朽的盾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "rustedsword",
@@ -6852,7 +8024,11 @@
     "shortDesc": "If held by a Zacian, this item changes its forme to Crowned Sword.",
     "aliases": [
       "腐朽的劍"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "sablenite",
@@ -6866,16 +8042,17 @@
     ],
     "num": 754,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Sableye, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "勾魂眼進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 13,
+      "usagePercent": 0.035271454540521475
     }
   },
   {
@@ -6891,7 +8068,10 @@
     "shortDesc": "Evolves Spritzee into Aromatisse when traded.",
     "aliases": [
       "香袋"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "safariball",
@@ -6903,7 +8083,11 @@
     "shortDesc": "A special Poke Ball that is used only in the Safari Zone and Great Marsh.",
     "aliases": [
       "狩獵球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "safetygoggles",
@@ -6918,7 +8102,11 @@
     "block": "  [POKEMON] is not affected by [MOVE] thanks to its Safety Goggles!",
     "aliases": [
       "防塵護目鏡"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "sailfossil",
@@ -6933,7 +8121,10 @@
     "shortDesc": "Can be revived into Amaura.",
     "aliases": [
       "鰭之化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "salacberry",
@@ -6949,7 +8140,11 @@
     "shortDesc": "Raises holder's Speed by 1 stage when at 1/4 max HP or less. Single use.",
     "aliases": [
       "沙鱗果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "salamencite",
@@ -6967,7 +8162,10 @@
     "shortDesc": "If held by a Salamence, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "暴飛龍進化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "sceptilite",
@@ -6981,16 +8179,17 @@
     ],
     "num": 753,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "蜥蜴王進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.23096408880941738
+      "usageCount": 89,
+      "usagePercent": 0.24147380416203162
     }
   },
   {
@@ -7005,16 +8204,27 @@
     ],
     "num": 670,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Scizor, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "巨鉗螳螂進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13410818059901655
+      "usageCount": 48,
+      "usagePercent": 0.1302330629188485
+    }
+  },
+  {
+    "id": "scolipidite",
+    "name": "Scolipidite",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -7029,13 +8239,14 @@
     ],
     "num": 2571,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Scolipede, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08940545373267769
+      "usageCount": 29,
+      "usagePercent": 0.07868247551347099
     }
   },
   {
@@ -7052,10 +8263,11 @@
       "焦點鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08195499925495456
+      "usageCount": 36,
+      "usagePercent": 0.09767479718913638
     }
   },
   {
@@ -7070,13 +8282,14 @@
     ],
     "num": 2647,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Scovillain, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 65,
-      "usagePercent": 0.4842795410520042
+      "usageCount": 154,
+      "usagePercent": 0.417831076864639
     }
   },
   {
@@ -7091,13 +8304,14 @@
     ],
     "num": 2572,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Scrafty, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 74,
-      "usagePercent": 0.5513336313515125
+      "usageCount": 161,
+      "usagePercent": 0.4368233985403044
     }
   },
   {
@@ -7107,7 +8321,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -7127,7 +8341,10 @@
     },
     "aliases": [
       "海潮薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "sharpbeak",
@@ -7147,10 +8364,11 @@
       "銳利鳥嘴"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 45,
-      "usagePercent": 0.33527045149754137
+      "usageCount": 132,
+      "usagePercent": 0.3581409230268335
     }
   },
   {
@@ -7165,11 +8383,18 @@
     ],
     "num": 759,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Sharpedo, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "巨牙鯊進化石"
-    ]
+    ],
+    "champions": {
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.013565944054046722
+    }
   },
   {
     "id": "shedshell",
@@ -7187,8 +8412,7 @@
       "美麗空殼"
     ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": true
     }
   },
   {
@@ -7207,10 +8431,11 @@
       "貝殼之鈴"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -7226,7 +8451,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "光之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "shockdrive",
@@ -7243,7 +8472,10 @@
     "shortDesc": "Holder's Techno Blast is Electric type.",
     "aliases": [
       "閃電卡帶"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "shucaberry",
@@ -7261,10 +8493,11 @@
       "腰木果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.22351363433169422
+      "usageCount": 95,
+      "usagePercent": 0.25775293702688773
     }
   },
   {
@@ -7285,10 +8518,11 @@
       "絲綢圍巾"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 34,
-      "usagePercent": 0.2533154522425868
+      "usageCount": 75,
+      "usagePercent": 0.20348916081070084
     }
   },
   {
@@ -7309,8 +8543,21 @@
       "銀粉"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
+  },
+  {
+    "id": "sitrisberry",
+    "name": "Sitris Berry",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
     }
   },
   {
@@ -7332,10 +8579,11 @@
       "文柚果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1551,
-      "usagePercent": 11.555654894948592
+      "usageCount": 4341,
+      "usagePercent": 11.777952627723364
     }
   },
   {
@@ -7350,13 +8598,14 @@
     ],
     "num": 2565,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Skarmory, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 18,
+      "usagePercent": 0.04883739859456819
     }
   },
   {
@@ -7372,7 +8621,10 @@
     "shortDesc": "Can be revived into Cranidos.",
     "aliases": [
       "頭蓋化石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "skyplate",
@@ -7386,7 +8638,11 @@
     "shortDesc": "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
     "aliases": [
       "藍天石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "slowbronite",
@@ -7400,14 +8656,15 @@
     ],
     "num": 760,
     "gen": 6,
-    "isNonstandard": "Past",
-    "shortDesc": "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+    "isNonstandard": null,
+    "shortDesc": "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
     "champions": {
       "shortDesc": "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
     },
     "aliases": [
       "呆殼獸進化石"
@@ -7427,8 +8684,11 @@
       "沙沙岩石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.005426377621618688
     }
   },
   {
@@ -7444,7 +8704,10 @@
     "num": 804,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Snorlax with Giga Impact, it can use Pulverizing Pancake."
+    "shortDesc": "If held by a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "snowball",
@@ -7461,7 +8724,11 @@
     "shortDesc": "Raises holder's Attack by 1 if hit by an Ice-type attack. Single use.",
     "aliases": [
       "雪球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "softsand",
@@ -7481,10 +8748,11 @@
       "柔軟沙子"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -7501,7 +8769,10 @@
     "num": 921,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move."
+    "shortDesc": "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "souldew",
@@ -7523,7 +8794,11 @@
     },
     "aliases": [
       "心之水滴"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "spelltag",
@@ -7542,11 +8817,13 @@
     "aliases": [
       "詛咒之符"
     ],
+    "isNonstandard": null,
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 29,
-      "usagePercent": 0.2160631798539711
+      "usageCount": 90,
+      "usagePercent": 0.244186992972841
     }
   },
   {
@@ -7565,7 +8842,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "刺角果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "splashplate",
@@ -7579,7 +8859,11 @@
     "shortDesc": "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
     "aliases": [
       "水滴石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "spookyplate",
@@ -7593,7 +8877,11 @@
     "shortDesc": "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
     "aliases": [
       "妖怪石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "sportball",
@@ -7605,7 +8893,11 @@
     "shortDesc": "A special Poke Ball for the Bug-Catching Contest.",
     "aliases": [
       "競賽球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "starsweet",
@@ -7619,7 +8911,11 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "星星糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "staraptite",
@@ -7633,31 +8929,24 @@
     ],
     "num": 2639,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Staraptor, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 150,
-      "usagePercent": 1.117568171658471
+      "usageCount": 507,
+      "usagePercent": 1.3755867270803377
     }
   },
   {
-    "id": "staraptorita",
-    "name": "Staraptorita",
+    "id": "staraptorite",
+    "name": "Staraptorite",
     "champions": {
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
-    }
-  },
-  {
-    "id": "staraptornite",
-    "name": "Staraptornite",
-    "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "usageCount": 4,
+      "usagePercent": 0.010852755243237377
     }
   },
   {
@@ -7674,7 +8963,11 @@
     "shortDesc": "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use.",
     "aliases": [
       "星桃果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "starminite",
@@ -7688,13 +8981,14 @@
     ],
     "num": 2561,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Starmie, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10430636268812397
+      "usageCount": 26,
+      "usagePercent": 0.07054290908104295
     }
   },
   {
@@ -7711,7 +9005,10 @@
     },
     "aliases": [
       "鋼之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "steelmemory",
@@ -7728,7 +9025,10 @@
     "shortDesc": "Holder's Multi-Attack is Steel type.",
     "aliases": [
       "鋼鐵記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "steeliumz",
@@ -7742,7 +9042,10 @@
     "num": 792,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Steel move, this item allows it to use a Steel Z-Move."
+    "shortDesc": "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "steelixite",
@@ -7756,16 +9059,17 @@
     ],
     "num": 761,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Steelix, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "大鋼蛇進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -7787,7 +9091,10 @@
     },
     "aliases": [
       "大蔥"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "stickybarb",
@@ -7803,7 +9110,11 @@
     "shortDesc": "Each turn, holder loses 1/8 max HP. An attacker making contact can receive it.",
     "aliases": [
       "附著針"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "stoneplate",
@@ -7817,7 +9128,11 @@
     "shortDesc": "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
     "aliases": [
       "岩石石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "strangeball",
@@ -7826,11 +9141,14 @@
     "num": 1785,
     "gen": 8,
     "isPokeball": true,
-    "isNonstandard": "Unobtainable",
+    "isNonstandard": "Past",
     "shortDesc": "Placeholder if caught in Poke Ball not in current game.",
     "aliases": [
       "奇异球"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "strawberrysweet",
@@ -7844,7 +9162,21 @@
     "shortDesc": "Evolves Milcery into Alcremie when held and spun around.",
     "aliases": [
       "草莓糖飾"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
+  },
+  {
+    "id": "striusberry",
+    "name": "strius berry",
+    "champions": {
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.002713188810809344
+    }
   },
   {
     "id": "sunstone",
@@ -7859,7 +9191,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "日之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "swampertite",
@@ -7873,16 +9209,17 @@
     ],
     "num": 752,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Swampert, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "巨沼怪進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 268,
-      "usagePercent": 1.9967218000298017
+      "usageCount": 682,
+      "usagePercent": 1.8503947689719729
     }
   },
   {
@@ -7897,7 +9234,11 @@
     "shortDesc": "Evolves Applin into Appletun when used.",
     "aliases": [
       "甜甜蘋果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "syrupyapple",
@@ -7908,7 +9249,11 @@
     },
     "num": 2402,
     "gen": 9,
-    "shortDesc": "Evolves Applin into Dipplin when used."
+    "shortDesc": "Evolves Applin into Dipplin when used.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tamatoberry",
@@ -7925,7 +9270,11 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "茄番果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tangaberry",
@@ -7941,7 +9290,10 @@
     "shortDesc": "Halves damage taken from a supereffective Bug-type attack. Single use.",
     "aliases": [
       "扁櫻果"
-    ]
+    ],
+    "champions": {
+      "legal": true
+    }
   },
   {
     "id": "tapuniumz",
@@ -7959,7 +9311,10 @@
     "num": 801,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If held by a Tapu with Nature's Madness, it can use Guardian of Alola."
+    "shortDesc": "If held by a Tapu with Nature's Madness, it can use Guardian of Alola.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tartapple",
@@ -7973,7 +9328,11 @@
     "shortDesc": "Evolves Applin into Flapple when used.",
     "aliases": [
       "酸酸蘋果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tatsugirinite",
@@ -7992,7 +9351,10 @@
     "num": 2649,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Tatsugiri, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Tatsugiri, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "terrainextender",
@@ -8006,7 +9368,11 @@
     "shortDesc": "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
     "aliases": [
       "大地膜"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "thickclub",
@@ -8028,7 +9394,10 @@
     "shortDesc": "If held by a Cubone or a Marowak, its Attack is doubled.",
     "aliases": [
       "粗骨頭"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "throatspray",
@@ -8045,7 +9414,11 @@
     "shortDesc": "Raises holder's Special Attack by 1 stage after it uses a sound move. Single use.",
     "aliases": [
       "爽喉噴霧"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "thunderstone",
@@ -8063,7 +9436,11 @@
     },
     "aliases": [
       "雷之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "timerball",
@@ -8075,7 +9452,11 @@
     "shortDesc": "A Poke Ball that becomes better the more turns there are in a battle.",
     "aliases": [
       "計時球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "toxicorb",
@@ -8093,11 +9474,9 @@
     "aliases": [
       "劇毒寶珠"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.007450454477723141
+      "legal": false
     }
   },
   {
@@ -8112,7 +9491,11 @@
     "shortDesc": "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
     "aliases": [
       "劇毒石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr00",
@@ -8127,7 +9510,10 @@
     "shortDesc": "Teaches certain Pokemon the move Swords Dance. One use.",
     "aliases": [
       "招式紀錄００"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr01",
@@ -8142,7 +9528,10 @@
     "shortDesc": "Teaches certain Pokemon the move Body Slam. One use.",
     "aliases": [
       "招式紀錄０１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr02",
@@ -8157,7 +9546,10 @@
     "shortDesc": "Teaches certain Pokemon the move Flamethrower. One use.",
     "aliases": [
       "招式紀錄０２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr03",
@@ -8172,7 +9564,10 @@
     "shortDesc": "Teaches certain Pokemon the move Hydro Pump. One use.",
     "aliases": [
       "招式紀錄０３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr04",
@@ -8187,7 +9582,10 @@
     "shortDesc": "Teaches certain Pokemon the move Surf. One use.",
     "aliases": [
       "招式紀錄０４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr05",
@@ -8202,7 +9600,10 @@
     "shortDesc": "Teaches certain Pokemon the move Ice Beam. One use.",
     "aliases": [
       "招式紀錄０５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr06",
@@ -8217,7 +9618,10 @@
     "shortDesc": "Teaches certain Pokemon the move Blizzard. One use.",
     "aliases": [
       "招式紀錄０６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr07",
@@ -8232,7 +9636,10 @@
     "shortDesc": "Teaches certain Pokemon the move Low Kick. One use.",
     "aliases": [
       "招式紀錄０７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr08",
@@ -8247,7 +9654,10 @@
     "shortDesc": "Teaches certain Pokemon the move Thunderbolt. One use.",
     "aliases": [
       "招式紀錄０８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr09",
@@ -8262,7 +9672,10 @@
     "shortDesc": "Teaches certain Pokemon the move Thunder. One use.",
     "aliases": [
       "招式紀錄０９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr10",
@@ -8277,7 +9690,10 @@
     "shortDesc": "Teaches certain Pokemon the move Earthquake. One use.",
     "aliases": [
       "招式紀錄１０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr11",
@@ -8292,7 +9708,10 @@
     "shortDesc": "Teaches certain Pokemon the move Psychic. One use.",
     "aliases": [
       "招式紀錄１１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr12",
@@ -8307,7 +9726,10 @@
     "shortDesc": "Teaches certain Pokemon the move Agility. One use.",
     "aliases": [
       "招式紀錄１２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr13",
@@ -8322,7 +9744,10 @@
     "shortDesc": "Teaches certain Pokemon the move Focus Energy. One use.",
     "aliases": [
       "招式紀錄１３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr14",
@@ -8337,7 +9762,10 @@
     "shortDesc": "Teaches certain Pokemon the move Metronome. One use.",
     "aliases": [
       "招式紀錄１４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr15",
@@ -8352,7 +9780,10 @@
     "shortDesc": "Teaches certain Pokemon the move Fire Blast. One use.",
     "aliases": [
       "招式紀錄１５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr16",
@@ -8367,7 +9798,10 @@
     "shortDesc": "Teaches certain Pokemon the move Waterfall. One use.",
     "aliases": [
       "招式紀錄１６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr17",
@@ -8382,7 +9816,10 @@
     "shortDesc": "Teaches certain Pokemon the move Amnesia. One use.",
     "aliases": [
       "招式紀錄１７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr18",
@@ -8397,7 +9834,10 @@
     "shortDesc": "Teaches certain Pokemon the move Leech Life. One use.",
     "aliases": [
       "招式紀錄１８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr19",
@@ -8412,7 +9852,10 @@
     "shortDesc": "Teaches certain Pokemon the move Tri Attack. One use.",
     "aliases": [
       "招式紀錄１９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr20",
@@ -8427,7 +9870,10 @@
     "shortDesc": "Teaches certain Pokemon the move Substitute. One use.",
     "aliases": [
       "招式紀錄２０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr21",
@@ -8442,7 +9888,10 @@
     "shortDesc": "Teaches certain Pokemon the move Reversal. One use.",
     "aliases": [
       "招式紀錄２１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr22",
@@ -8457,7 +9906,10 @@
     "shortDesc": "Teaches certain Pokemon the move Sludge Bomb. One use.",
     "aliases": [
       "招式紀錄２２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr23",
@@ -8472,7 +9924,10 @@
     "shortDesc": "Teaches certain Pokemon the move Spikes. One use.",
     "aliases": [
       "招式紀錄２３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr24",
@@ -8487,7 +9942,10 @@
     "shortDesc": "Teaches certain Pokemon the move Outrage. One use.",
     "aliases": [
       "招式紀錄２４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr25",
@@ -8502,7 +9960,10 @@
     "shortDesc": "Teaches certain Pokemon the move Psyshock. One use.",
     "aliases": [
       "招式紀錄２５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr26",
@@ -8517,7 +9978,10 @@
     "shortDesc": "Teaches certain Pokemon the move Endure. One use.",
     "aliases": [
       "招式紀錄２６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr27",
@@ -8532,7 +9996,10 @@
     "shortDesc": "Teaches certain Pokemon the move Sleep Talk. One use.",
     "aliases": [
       "招式紀錄２７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr28",
@@ -8547,7 +10014,10 @@
     "shortDesc": "Teaches certain Pokemon the move Megahorn. One use.",
     "aliases": [
       "招式紀錄２８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr29",
@@ -8562,7 +10032,10 @@
     "shortDesc": "Teaches certain Pokemon the move Baton Pass. One use.",
     "aliases": [
       "招式紀錄２９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr30",
@@ -8577,7 +10050,10 @@
     "shortDesc": "Teaches certain Pokemon the move Encore. One use.",
     "aliases": [
       "招式紀錄３０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr31",
@@ -8592,7 +10068,10 @@
     "shortDesc": "Teaches certain Pokemon the move Iron Tail. One use.",
     "aliases": [
       "招式紀錄３１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr32",
@@ -8607,7 +10086,10 @@
     "shortDesc": "Teaches certain Pokemon the move Crunch. One use.",
     "aliases": [
       "招式紀錄３２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr33",
@@ -8622,7 +10104,10 @@
     "shortDesc": "Teaches certain Pokemon the move Shadow Ball. One use.",
     "aliases": [
       "招式紀錄３３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr34",
@@ -8637,7 +10122,10 @@
     "shortDesc": "Teaches certain Pokemon the move Future Sight. One use.",
     "aliases": [
       "招式紀錄３４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr35",
@@ -8652,7 +10140,10 @@
     "shortDesc": "Teaches certain Pokemon the move Uproar. One use.",
     "aliases": [
       "招式紀錄３５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr36",
@@ -8667,7 +10158,10 @@
     "shortDesc": "Teaches certain Pokemon the move Heat Wave. One use.",
     "aliases": [
       "招式紀錄３６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr37",
@@ -8682,7 +10176,10 @@
     "shortDesc": "Teaches certain Pokemon the move Taunt. One use.",
     "aliases": [
       "招式紀錄３７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr38",
@@ -8697,7 +10194,10 @@
     "shortDesc": "Teaches certain Pokemon the move Trick. One use.",
     "aliases": [
       "招式紀錄３８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr39",
@@ -8712,7 +10212,10 @@
     "shortDesc": "Teaches certain Pokemon the move Superpower. One use.",
     "aliases": [
       "招式紀錄３９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr40",
@@ -8727,7 +10230,10 @@
     "shortDesc": "Teaches certain Pokemon the move Skill Swap. One use.",
     "aliases": [
       "招式紀錄４０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr41",
@@ -8742,7 +10248,10 @@
     "shortDesc": "Teaches certain Pokemon the move Blaze Kick. One use.",
     "aliases": [
       "招式紀錄４１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr42",
@@ -8757,7 +10266,10 @@
     "shortDesc": "Teaches certain Pokemon the move Hyper Voice. One use.",
     "aliases": [
       "招式紀錄４２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr43",
@@ -8772,7 +10284,10 @@
     "shortDesc": "Teaches certain Pokemon the move Overheat. One use.",
     "aliases": [
       "招式紀錄４３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr44",
@@ -8787,7 +10302,10 @@
     "shortDesc": "Teaches certain Pokemon the move Cosmic Power. One use.",
     "aliases": [
       "招式紀錄４４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr45",
@@ -8802,7 +10320,10 @@
     "shortDesc": "Teaches certain Pokemon the move Muddy Water. One use.",
     "aliases": [
       "招式紀錄４５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr46",
@@ -8817,7 +10338,10 @@
     "shortDesc": "Teaches certain Pokemon the move Iron Defense. One use.",
     "aliases": [
       "招式紀錄４６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr47",
@@ -8832,7 +10356,10 @@
     "shortDesc": "Teaches certain Pokemon the move Dragon Claw. One use.",
     "aliases": [
       "招式紀錄４７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr48",
@@ -8847,7 +10374,10 @@
     "shortDesc": "Teaches certain Pokemon the move Bulk Up. One use.",
     "aliases": [
       "招式紀錄４８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr49",
@@ -8862,7 +10392,10 @@
     "shortDesc": "Teaches certain Pokemon the move Calm Mind. One use.",
     "aliases": [
       "招式紀錄４９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr50",
@@ -8877,7 +10410,10 @@
     "shortDesc": "Teaches certain Pokemon the move Leaf Blade. One use.",
     "aliases": [
       "招式紀錄５０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr51",
@@ -8892,7 +10428,10 @@
     "shortDesc": "Teaches certain Pokemon the move Dragon Dance. One use.",
     "aliases": [
       "招式紀錄５１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr52",
@@ -8907,7 +10446,10 @@
     "shortDesc": "Teaches certain Pokemon the move Gyro Ball. One use.",
     "aliases": [
       "招式紀錄５２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr53",
@@ -8922,7 +10464,10 @@
     "shortDesc": "Teaches certain Pokemon the move Close Combat. One use.",
     "aliases": [
       "招式紀錄５３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr54",
@@ -8937,7 +10482,10 @@
     "shortDesc": "Teaches certain Pokemon the move Toxic Spikes. One use.",
     "aliases": [
       "招式紀錄５４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr55",
@@ -8952,7 +10500,10 @@
     "shortDesc": "Teaches certain Pokemon the move Flare Blitz. One use.",
     "aliases": [
       "招式紀錄５５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr56",
@@ -8967,7 +10518,10 @@
     "shortDesc": "Teaches certain Pokemon the move Aura Sphere. One use.",
     "aliases": [
       "招式紀錄５６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr57",
@@ -8982,7 +10536,10 @@
     "shortDesc": "Teaches certain Pokemon the move Poison Jab. One use.",
     "aliases": [
       "招式紀錄５７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr58",
@@ -8997,7 +10554,10 @@
     "shortDesc": "Teaches certain Pokemon the move Dark Pulse. One use.",
     "aliases": [
       "招式紀錄５８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr59",
@@ -9012,7 +10572,10 @@
     "shortDesc": "Teaches certain Pokemon the move Seed Bomb. One use.",
     "aliases": [
       "招式紀錄５９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr60",
@@ -9027,7 +10590,10 @@
     "shortDesc": "Teaches certain Pokemon the move X-Scissor. One use.",
     "aliases": [
       "招式紀錄６０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr61",
@@ -9042,7 +10608,10 @@
     "shortDesc": "Teaches certain Pokemon the move Bug Buzz. One use.",
     "aliases": [
       "招式紀錄６１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr62",
@@ -9057,7 +10626,10 @@
     "shortDesc": "Teaches certain Pokemon the move Dragon Pulse. One use.",
     "aliases": [
       "招式紀錄６２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr63",
@@ -9072,7 +10644,10 @@
     "shortDesc": "Teaches certain Pokemon the move Power Gem. One use.",
     "aliases": [
       "招式紀錄６３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr64",
@@ -9087,7 +10662,10 @@
     "shortDesc": "Teaches certain Pokemon the move Focus Blast. One use.",
     "aliases": [
       "招式紀錄６４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr65",
@@ -9102,7 +10680,10 @@
     "shortDesc": "Teaches certain Pokemon the move Energy Ball. One use.",
     "aliases": [
       "招式紀錄６５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr66",
@@ -9117,7 +10698,10 @@
     "shortDesc": "Teaches certain Pokemon the move Brave Bird. One use.",
     "aliases": [
       "招式紀錄６６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr67",
@@ -9132,7 +10716,10 @@
     "shortDesc": "Teaches certain Pokemon the move Earth Power. One use.",
     "aliases": [
       "招式紀錄６７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr68",
@@ -9147,7 +10734,10 @@
     "shortDesc": "Teaches certain Pokemon the move Nasty Plot. One use.",
     "aliases": [
       "招式紀錄６８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr69",
@@ -9162,7 +10752,10 @@
     "shortDesc": "Teaches certain Pokemon the move Zen Headbutt. One use.",
     "aliases": [
       "招式紀錄６９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr70",
@@ -9177,7 +10770,10 @@
     "shortDesc": "Teaches certain Pokemon the move Flash Cannon. One use.",
     "aliases": [
       "招式紀錄７０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr71",
@@ -9192,7 +10788,10 @@
     "shortDesc": "Teaches certain Pokemon the move Leaf Storm. One use.",
     "aliases": [
       "招式紀錄７１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr72",
@@ -9207,7 +10806,10 @@
     "shortDesc": "Teaches certain Pokemon the move Power Whip. One use.",
     "aliases": [
       "招式紀錄７２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr73",
@@ -9222,7 +10824,10 @@
     "shortDesc": "Teaches certain Pokemon the move Gunk Shot. One use.",
     "aliases": [
       "招式紀錄７３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr74",
@@ -9237,7 +10842,10 @@
     "shortDesc": "Teaches certain Pokemon the move Iron Head. One use.",
     "aliases": [
       "招式紀錄７４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr75",
@@ -9252,7 +10860,10 @@
     "shortDesc": "Teaches certain Pokemon the move Stone Edge. One use.",
     "aliases": [
       "招式紀錄７５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr76",
@@ -9267,7 +10878,10 @@
     "shortDesc": "Teaches certain Pokemon the move Stealth Rock. One use.",
     "aliases": [
       "招式紀錄７６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr77",
@@ -9282,7 +10896,10 @@
     "shortDesc": "Teaches certain Pokemon the move Grass Knot. One use.",
     "aliases": [
       "招式紀錄７７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr78",
@@ -9297,7 +10914,10 @@
     "shortDesc": "Teaches certain Pokemon the move Sludge Wave. One use.",
     "aliases": [
       "招式紀錄７８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr79",
@@ -9312,7 +10932,10 @@
     "shortDesc": "Teaches certain Pokemon the move Heavy Slam. One use.",
     "aliases": [
       "招式紀錄７９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr80",
@@ -9327,7 +10950,10 @@
     "shortDesc": "Teaches certain Pokemon the move Electro Ball. One use.",
     "aliases": [
       "招式紀錄８０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr81",
@@ -9342,7 +10968,10 @@
     "shortDesc": "Teaches certain Pokemon the move Foul Play. One use.",
     "aliases": [
       "招式紀錄８１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr82",
@@ -9357,7 +10986,10 @@
     "shortDesc": "Teaches certain Pokemon the move Stored Power. One use.",
     "aliases": [
       "招式紀錄８２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr83",
@@ -9372,7 +11004,10 @@
     "shortDesc": "Teaches certain Pokemon the move Ally Switch. One use.",
     "aliases": [
       "招式紀錄８３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr84",
@@ -9387,7 +11022,10 @@
     "shortDesc": "Teaches certain Pokemon the move Scald. One use.",
     "aliases": [
       "招式紀錄８４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr85",
@@ -9402,7 +11040,10 @@
     "shortDesc": "Teaches certain Pokemon the move Work Up. One use.",
     "aliases": [
       "招式紀錄８５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr86",
@@ -9417,7 +11058,10 @@
     "shortDesc": "Teaches certain Pokemon the move Wild Charge. One use.",
     "aliases": [
       "招式紀錄８６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr87",
@@ -9432,7 +11076,10 @@
     "shortDesc": "Teaches certain Pokemon the move Drill Run. One use.",
     "aliases": [
       "招式紀錄８７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr88",
@@ -9447,7 +11094,10 @@
     "shortDesc": "Teaches certain Pokemon the move Heat Crash. One use.",
     "aliases": [
       "招式紀錄８８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr89",
@@ -9462,7 +11112,10 @@
     "shortDesc": "Teaches certain Pokemon the move Hurricane. One use.",
     "aliases": [
       "招式紀錄８９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr90",
@@ -9477,7 +11130,10 @@
     "shortDesc": "Teaches certain Pokemon the move Play Rough. One use.",
     "aliases": [
       "招式紀錄９０"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr91",
@@ -9492,7 +11148,10 @@
     "shortDesc": "Teaches certain Pokemon the move Venom Drench. One use.",
     "aliases": [
       "招式紀錄９１"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr92",
@@ -9507,7 +11166,10 @@
     "shortDesc": "Teaches certain Pokemon the move Dazzling Gleam. One use.",
     "aliases": [
       "招式紀錄９２"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr93",
@@ -9522,7 +11184,10 @@
     "shortDesc": "Teaches certain Pokemon the move Darkest Lariat. One use.",
     "aliases": [
       "招式紀錄９３"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr94",
@@ -9537,7 +11202,10 @@
     "shortDesc": "Teaches certain Pokemon the move High Horsepower. One use.",
     "aliases": [
       "招式紀錄９４"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr95",
@@ -9552,7 +11220,10 @@
     "shortDesc": "Teaches certain Pokemon the move Throat Chop. One use.",
     "aliases": [
       "招式紀錄９５"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr96",
@@ -9567,7 +11238,10 @@
     "shortDesc": "Teaches certain Pokemon the move Pollen Puff. One use.",
     "aliases": [
       "招式紀錄９６"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr97",
@@ -9582,7 +11256,10 @@
     "shortDesc": "Teaches certain Pokemon the move Psychic Fangs. One use.",
     "aliases": [
       "招式紀錄９７"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr98",
@@ -9597,7 +11274,10 @@
     "shortDesc": "Teaches certain Pokemon the move Liquidation. One use.",
     "aliases": [
       "招式紀錄９８"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "tr99",
@@ -9612,7 +11292,10 @@
     "shortDesc": "Teaches certain Pokemon the move Body Press. One use.",
     "aliases": [
       "招式紀錄９９"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "twistedspoon",
@@ -9632,10 +11315,11 @@
       "彎曲的湯匙"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 14,
+      "usagePercent": 0.03798464335133082
     }
   },
   {
@@ -9650,16 +11334,17 @@
     ],
     "num": 669,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "班基拉斯進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 0.6630904485173595
+      "usageCount": 271,
+      "usagePercent": 0.7352741677293323
     }
   },
   {
@@ -9672,7 +11357,11 @@
     "shortDesc": "An ultra-performance Ball that provides a higher catch rate than a Great Ball.",
     "aliases": [
       "高級球"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "ultranecroziumz",
@@ -9689,7 +11378,10 @@
     "isNonstandard": "Past",
     "shortDesc": "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
     "transform": "  Bright light is about to burst out of [POKEMON]!",
-    "activate": "[POKEMON] regained its true power through Ultra Burst!"
+    "activate": "[POKEMON] regained its true power through Ultra Burst!",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "unremarkableteacup",
@@ -9700,7 +11392,11 @@
     },
     "num": 2403,
     "gen": 9,
-    "shortDesc": "Evolves Poltchageist into Sinistcha when used."
+    "shortDesc": "Evolves Poltchageist into Sinistcha when used.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "upgrade",
@@ -9714,7 +11410,11 @@
     "shortDesc": "Evolves Porygon into Porygon2 when traded.",
     "aliases": [
       "升級資料"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "utilityumbrella",
@@ -9732,7 +11432,11 @@
     },
     "aliases": [
       "萬能傘"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "venusaurite",
@@ -9746,16 +11450,17 @@
     ],
     "num": 659,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "妙蛙花進化石"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 141,
-      "usagePercent": 1.0505140813589628
+      "usageCount": 364,
+      "usagePercent": 0.9876007271346012
     }
   },
   {
@@ -9770,13 +11475,14 @@
     ],
     "num": 2560,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Victreebel, this item allows it to Mega Evolve in battle.",
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.014900908955446282
+      "usageCount": 5,
+      "usagePercent": 0.013565944054046722
     }
   },
   {
@@ -9794,7 +11500,10 @@
     "num": -2,
     "gen": 8,
     "isNonstandard": "CAP",
-    "shortDesc": "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power."
+    "shortDesc": "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "wacanberry",
@@ -9812,10 +11521,11 @@
       "燭木果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 15,
+      "usagePercent": 0.04069783216214016
     }
   },
   {
@@ -9832,7 +11542,10 @@
     },
     "aliases": [
       "水之寶石"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "watermemory",
@@ -9849,7 +11562,10 @@
     "shortDesc": "Holder's Multi-Attack is Water type.",
     "aliases": [
       "清水記憶碟"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "waterstone",
@@ -9864,7 +11580,11 @@
     "shortDesc": "Evolves certain species of Pokemon when used.",
     "aliases": [
       "水之石"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "wateriumz",
@@ -9878,7 +11598,10 @@
     "num": 778,
     "gen": 7,
     "isNonstandard": "Past",
-    "shortDesc": "If holder has a Water move, this item allows it to use a Water Z-Move."
+    "shortDesc": "If holder has a Water move, this item allows it to use a Water Z-Move.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "watmelberry",
@@ -9896,7 +11619,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "瓜西果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "waveincense",
@@ -9912,7 +11638,10 @@
     "shortDesc": "Holder's Water-type attacks have 1.2x power.",
     "aliases": [
       "漣漪薰香"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "weaknesspolicy",
@@ -9931,9 +11660,9 @@
     "aliases": [
       "弱點保險"
     ],
+    "isNonstandard": "Past",
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -9950,7 +11679,11 @@
     ],
     "num": 2407,
     "gen": 9,
-    "shortDesc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect."
+    "shortDesc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "wepearberry",
@@ -9968,7 +11701,10 @@
     "shortDesc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
     "aliases": [
       "西梨果"
-    ]
+    ],
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "whippeddream",
@@ -9983,14 +11719,9 @@
     "shortDesc": "Evolves Swirlix into Slurpuff when traded.",
     "aliases": [
       "泡沫奶油"
-    ]
-  },
-  {
-    "id": "whitehearb",
-    "name": "White Hearb",
+    ],
     "champions": {
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": false
     }
   },
   {
@@ -10010,10 +11741,11 @@
       "白色香草"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 285,
-      "usagePercent": 2.123379526151095
+      "usageCount": 868,
+      "usagePercent": 2.355047887782511
     }
   },
   {
@@ -10031,10 +11763,11 @@
       "廣角鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 82,
-      "usagePercent": 0.6109372671732975
+      "usageCount": 239,
+      "usagePercent": 0.6484521257834333
     }
   },
   {
@@ -10057,7 +11790,11 @@
     },
     "aliases": [
       "異奇果"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "wiseglasses",
@@ -10074,10 +11811,11 @@
       "博識眼鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06705409029950828
+      "usageCount": 25,
+      "usagePercent": 0.06782972027023361
     }
   },
   {
@@ -10096,10 +11834,11 @@
       "番荔果"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.029801817910892564
+      "usageCount": 30,
+      "usagePercent": 0.08139566432428032
     }
   },
   {
@@ -10114,7 +11853,11 @@
     "shortDesc": "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
     "aliases": [
       "雷電石板"
-    ]
+    ],
+    "isNonstandard": "Past",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "zeraorite",
@@ -10129,7 +11872,10 @@
     "num": 2586,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Zeraora, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Zeraora, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   },
   {
     "id": "zoomlens",
@@ -10146,10 +11892,11 @@
       "對焦鏡"
     ],
     "champions": {
+      "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.022351363433169423
+      "usageCount": 10,
+      "usagePercent": 0.027131888108093444
     }
   },
   {
@@ -10165,6 +11912,9 @@
     "num": 2584,
     "gen": 9,
     "isNonstandard": "Future",
-    "shortDesc": "If held by a Zygarde in Complete Forme, this item allows it to Mega Evolve in battle."
+    "shortDesc": "If held by a Zygarde in Complete Forme, this item allows it to Mega Evolve in battle.",
+    "champions": {
+      "legal": false
+    }
   }
 ]
