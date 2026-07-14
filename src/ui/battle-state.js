@@ -3,6 +3,47 @@
 import { createField } from "../engine/field.js";
 import { parseUsageSpread } from "../data/usage-defaults.js";
 
+export const TEAM_SIZE = 6;
+
+export function createTeamState(size = TEAM_SIZE) {
+  return { slots: Array.from({ length: size }, () => null), activeIndex: 0 };
+}
+
+export function createTeamsState() {
+  return { attacker: createTeamState(), defender: createTeamState() };
+}
+
+export function setTeamSlot(teams, side, index, state) {
+  const team = teams?.[side];
+  if (!team || !Number.isInteger(index) || index < 0 || index >= team.slots.length) return teams;
+  return {
+    ...teams,
+    [side]: { ...team, slots: team.slots.map((slot, slotIndex) => slotIndex === index ? state : slot) },
+  };
+}
+
+export function updateActiveTeamSlot(teams, side, state) {
+  const team = teams?.[side];
+  return team ? setTeamSlot(teams, side, team.activeIndex, state) : teams;
+}
+
+export function activateTeamSlot(teams, side, index) {
+  const team = teams?.[side];
+  if (!team || !Number.isInteger(index) || index < 0 || index >= team.slots.length) return teams;
+  return { ...teams, [side]: { ...team, activeIndex: index } };
+}
+
+export function clearTeamSlot(teams, side, index) {
+  const team = teams?.[side];
+  if (!team || !Number.isInteger(index) || index < 0 || index >= team.slots.length) return teams;
+
+  const slots = team.slots.map((slot, slotIndex) => slotIndex === index ? null : slot);
+  const activeIndex = team.activeIndex === index
+    ? Math.max(0, slots.findIndex(Boolean))
+    : team.activeIndex;
+  return { ...teams, [side]: { ...team, slots, activeIndex } };
+}
+
 function normalizeId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }

@@ -1,7 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { applyControl, buildCalcInput, createSideState } from "../src/ui/battle-state.js";
+import {
+  activateTeamSlot,
+  applyControl,
+  buildCalcInput,
+  clearTeamSlot,
+  createSideState,
+  createTeamsState,
+  setTeamSlot,
+  updateActiveTeamSlot,
+} from "../src/ui/battle-state.js";
 import { calculateDamage } from "../src/engine/damage.js";
 
 const pikachu = {
@@ -23,6 +32,28 @@ const usageDefaults = {
     { id: "nastyplot", name: "Nasty Plot" },
   ],
 };
+
+test("team slots activate, clear, and edit only the active slot", () => {
+  const secondPokemon = { ...pikachu, id: "squirtle", name: "Squirtle" };
+  const firstState = createSideState(pikachu, usageDefaults);
+  const secondState = createSideState(secondPokemon, usageDefaults);
+  let teams = createTeamsState();
+
+  assert.equal(teams.attacker.slots.length, 6);
+  teams = setTeamSlot(teams, "attacker", 0, firstState);
+  teams = setTeamSlot(teams, "attacker", 1, secondState);
+  teams = activateTeamSlot(teams, "attacker", 1);
+  assert.equal(teams.attacker.activeIndex, 1);
+
+  const editedSecond = updateActiveTeamSlot(teams, "attacker", { ...secondState, nature: "Adamant" });
+  assert.equal(editedSecond.attacker.slots[1].nature, "Adamant");
+  assert.equal(editedSecond.attacker.slots[0], firstState);
+
+  const cleared = clearTeamSlot(editedSecond, "attacker", 1);
+  assert.equal(cleared.attacker.activeIndex, 0);
+  assert.equal(cleared.attacker.slots[1], null);
+  assert.equal(cleared.attacker.slots[0], firstState);
+});
 
 test("createSideState builds the canonical side-state shape with neutral battle-condition defaults", () => {
   const state = createSideState(pikachu, usageDefaults);

@@ -1,6 +1,6 @@
 # P3-04 — Team slots (up to 6 Pokémon per side)
 
-Status: TODO
+Status: Done
 Depends on: P3-03
 Phase: 3 (calculator UX parity)
 
@@ -37,3 +37,15 @@ NCP workflow for practice sessions.
 ```sh
 npm run test:catalog && npm test
 ```
+
+## Completion notes
+
+- Added immutable six-slot team state transitions with per-side active indices, active-slot
+  views for the calculator, and isolated edit/clear behavior.
+- Added responsive slot bars with `+` empty slots, active highlighting, and per-slot clear
+  buttons; switching slots re-renders the full saved configuration.
+- Persisted teams under `pokecal.teams.v1` with catalog rehydration on reload and an in-memory
+  fallback when storage access fails.
+- `npm run test:catalog`, `npm test`, `node --check`, and local HTTP serving checks pass. The
+  browser plugin could not initialize in this environment, so interactive reload/mobile QA
+  remains an environment limitation rather than an unverified code claim.

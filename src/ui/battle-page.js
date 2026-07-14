@@ -22,7 +22,16 @@ import { createSavedSetStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
-import { applyControl, buildCalcInput, createSideState } from "./battle-state.js";
+import {
+  activateTeamSlot as activateTeamSlotState,
+  applyControl,
+  buildCalcInput,
+  clearTeamSlot as clearTeamSlotState,
+  createSideState,
+  createTeamsState,
+  TEAM_SIZE,
+  updateActiveTeamSlot,
+} from "./battle-state.js";
 import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
@@ -44,6 +53,8 @@ const elements = {
   defenderPokemonSearch: document.querySelector("#defender-pokemon-search"),
   attackerPokemonResults: document.querySelector("#attacker-pokemon-results"),
   defenderPokemonResults: document.querySelector("#defender-pokemon-results"),
+  attackerTeamSlots: document.querySelector("#attacker-team-slots"),
+  defenderTeamSlots: document.querySelector("#defender-team-slots"),
   attackerSavedSet: document.querySelector("#attacker-saved-set"),
   defenderSavedSet: document.querySelector("#defender-saved-set"),
   attackerSaveSet: document.querySelector("#attacker-save-set"),
@@ -111,6 +122,9 @@ const STAGE_STATS = STAT_KEYS.filter((stat) => stat !== "hp");
 const TYPE_OPTIONS = ["Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const savedSetStore = createSavedSetStore(browserStorage());
+const TEAM_STORAGE_KEY = "pokecal.teams.v1";
+let teamStorage = browserStorage();
+let teamMemoryBlob = null;
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -133,6 +147,7 @@ let itemLookup = new Map();
 let moveLookup = new Map();
 let items = [];
 let moves = [];
+let teams = createTeamsState();
 let damageState = {
   attacker: null,
   defender: null,
@@ -185,6 +200,8 @@ async function initialize() {
   moveLookup = data.moveLookup;
   items = data.items;
   moves = data.moves;
+  const storedTeams = loadStoredTeams();
+  teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
   renderDamageShell();
 }
 
@@ -266,13 +283,15 @@ function renderDamageShell() {
   renderSideInputs("attacker");
   renderSideInputs("defender");
 
-  seedDamageSide("attacker", pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0]);
-  seedDamageSide(
-    "defender",
-    pokemon.find(({ id }) => id === "blastoise") ??
-      pokemon.find(({ id }) => id !== "pikachu") ??
-      pokemon[0],
-  );
+  for (const side of ["attacker", "defender"]) {
+    if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
+    else seedDamageSide(side, defaultPokemonForSide(side));
+  }
+}
+
+function defaultPokemonForSide(side) {
+  if (side === "attacker") return pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0];
+  return pokemon.find(({ id }) => id === "blastoise") ?? pokemon.find(({ id }) => id !== "pikachu") ?? pokemon[0];
 }
 
 function renderPokemonSearchResults(side) {
@@ -335,6 +354,7 @@ function renderSideInputs(side) {
 
 function seedDamageSide(side, entry) {
   if (!entry) return;
+  const existingState = damageState[side];
   const defaults = championsDefaultsForPokemon(entry, {
     abilityLookup,
     moveLookup,
@@ -344,21 +364,120 @@ function seedDamageSide(side, entry) {
   // createSideState gives the pure/default shape; the existing battle-condition controls for
   // this side are preserved rather than reset, same as before the battle-state.js extraction.
   const state = createSideState(entry, defaults);
-  state.speedMultiplier = Number(elements[`${side}SpeedMultiplier`]?.value ?? 1);
-  state.tailwind = elements[`${side}Tailwind`]?.checked ?? false;
-  state.status = elements[`${side}Status`]?.value ?? "";
-  damageState[side] = state;
-
-  elements[`${side}Pokemon`].value = entry.id;
-  elements[`${side}PokemonSearch`].value = entry.name;
-  hidePokemonSearchResults(side);
-  renderSideSelects(side, defaults);
-  syncSideInputs(side);
+  state.speedMultiplier = existingState ? Number(elements[`${side}SpeedMultiplier`]?.value ?? 1) : 1;
+  state.tailwind = existingState ? elements[`${side}Tailwind`]?.checked ?? false : false;
+  state.status = existingState ? elements[`${side}Status`]?.value ?? "" : "";
+  writeActiveTeamState(side, state);
+  renderActiveTeamSlot(side);
   applyAbilityImpliedField(damageState[side].ability);
   applyAbilityImpliedStages();
   syncSideInputs("attacker");
   syncSideInputs("defender");
   renderDamage();
+}
+
+function renderActiveTeamSlot(side) {
+  const state = teams[side].slots[teams[side].activeIndex];
+  damageState[side] = state;
+  renderTeamSlots(side);
+  if (!state) {
+    renderEmptySide(side);
+    renderDamage();
+    return;
+  }
+
+  const defaults = championsDefaultsForPokemon(state.pokemon, {
+    abilityLookup,
+    moveLookup,
+    items,
+  });
+  setSideControlsDisabled(side, false);
+  elements[`${side}Pokemon`].value = state.pokemon.id;
+  elements[`${side}PokemonSearch`].value = state.pokemon.name;
+  hidePokemonSearchResults(side);
+  renderSideSelects(side, defaults);
+  syncSideInputs(side);
+}
+
+function renderTeamSlots(side) {
+  const container = elements[`${side}TeamSlots`];
+  if (!container) return;
+  const team = teams[side];
+  container.replaceChildren(
+    ...team.slots.map((state, index) => {
+      const slot = document.createElement("div");
+      slot.className = "team-slot";
+      if (index === team.activeIndex) slot.classList.add("active");
+
+      const activate = document.createElement("button");
+      activate.type = "button";
+      activate.className = "team-slot-button";
+      activate.textContent = state?.pokemon?.name ?? "+";
+      activate.setAttribute("aria-label", state ? `Use ${state.pokemon.name}, slot ${index + 1}` : `Add Pokémon to slot ${index + 1}`);
+      activate.addEventListener("click", () => activateTeamSlot(side, index));
+
+      const clear = document.createElement("button");
+      clear.type = "button";
+      clear.className = "team-slot-clear";
+      clear.textContent = "×";
+      clear.disabled = !state;
+      clear.setAttribute("aria-label", `Clear slot ${index + 1}`);
+      clear.addEventListener("click", () => clearTeamSlot(side, index));
+
+      slot.append(activate, clear);
+      return slot;
+    }),
+  );
+}
+
+function activateTeamSlot(side, index) {
+  teams = activateTeamSlotState(teams, side, index);
+  persistTeams();
+  renderActiveTeamSlot(side);
+  applyAbilityImpliedStages();
+  syncSideInputs("attacker");
+  syncSideInputs("defender");
+  renderDamage();
+}
+
+function clearTeamSlot(side, index) {
+  teams = clearTeamSlotState(teams, side, index);
+  persistTeams();
+  renderActiveTeamSlot(side);
+  applyAbilityImpliedStages();
+  syncSideInputs("attacker");
+  syncSideInputs("defender");
+  renderDamage();
+}
+
+function writeActiveTeamState(side, state, { persist = true } = {}) {
+  damageState[side] = state;
+  teams = updateActiveTeamSlot(teams, side, state);
+  if (persist) persistTeams();
+}
+
+function setSideControlsDisabled(side, disabled) {
+  for (const key of [
+    "SavedSet", "SaveSet", "DeleteSet", "Spread", "Nature", "Ability", "Item", "SpeedMultiplier",
+    "Tailwind", "Status", "Tera", "TeraType", "CurrentHp", "HpPercent",
+  ]) {
+    elements[`${side}${key}`].disabled = disabled;
+  }
+  for (const input of document.querySelectorAll(`[data-side="${side}"]`)) input.disabled = disabled;
+}
+
+function renderEmptySide(side) {
+  setSideControlsDisabled(side, true);
+  elements[`${side}Pokemon`].value = "";
+  elements[`${side}PokemonSearch`].value = "";
+  elements[`${side}SavedSet`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}Spread`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}Nature`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}Ability`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}Item`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}TeraType`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}MovePicks`].replaceChildren();
+  hidePokemonSearchResults(side);
 }
 
 function renderSideSelects(side, defaults) {
@@ -414,6 +533,8 @@ function syncSideInputs(side) {
   const state = damageState[side];
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
+  elements[`${side}SpeedMultiplier`].value = String(state.speedMultiplier);
+  elements[`${side}Tailwind`].checked = state.tailwind;
   elements[`${side}Status`].value = state.status;
   elements[`${side}Tera`].checked = Boolean(state.teraType);
   if (state.teraType) elements[`${side}TeraType`].value = state.teraType;
@@ -454,7 +575,7 @@ function handleDamageControl(event) {
   if (control) {
     const state = damageState[control.side];
     if (state) {
-      damageState[control.side] = applyControl(state, control);
+      writeActiveTeamState(control.side, applyControl(state, control));
       if (control.kind === "spread") syncSideInputs(control.side);
       if (control.kind === "ability") {
         applyAbilityImpliedField(damageState[control.side].ability);
@@ -489,6 +610,7 @@ function applyAbilityImpliedField(ability) {
 }
 
 function applyAbilityImpliedStages() {
+  let changed = false;
   for (const side of ["attacker", "defender"]) {
     const opposingSide = side === "attacker" ? "defender" : "attacker";
     const state = damageState[side];
@@ -500,9 +622,15 @@ function applyAbilityImpliedStages() {
       stages: state.stages,
     });
     if (Object.keys(implied).length > 0) {
-      damageState[side] = { ...state, stages: { ...state.stages, ...implied } };
+      writeActiveTeamState(
+        side,
+        { ...state, stages: { ...state.stages, ...implied } },
+        { persist: false },
+      );
+      changed = true;
     }
   }
+  if (changed) persistTeams();
 }
 
 function syncRadioGroup(inputs, value) {
@@ -572,7 +700,7 @@ function applyParsedSet(side, parsed) {
   if (parsed.pokemon) seedDamageSide(side, parsed.pokemon);
   const state = damageState[side];
   if (state) {
-    damageState[side] = {
+    writeActiveTeamState(side, {
       ...state,
       ability: parsed.ability ?? state.ability,
       item: parsed.item ?? state.item,
@@ -582,7 +710,7 @@ function applyParsedSet(side, parsed) {
       selectedMoveIds: parsed.selectedMoveIds.length
         ? [0, 1, 2, 3].map((index) => parsed.selectedMoveIds[index] ?? "")
         : state.selectedMoveIds,
-    };
+    });
     renderSideSelects(side, { spreadName: "", teraType: damageState[side].teraType });
     syncSideInputs(side);
     applyAbilityImpliedField(damageState[side].ability);
@@ -779,7 +907,18 @@ function selectedHitCountFor(side, index, range) {
 function renderDamage() {
   const attacker = damageState.attacker;
   const defender = damageState.defender;
-  if (!attacker?.pokemon || !defender?.pokemon) return;
+  if (!attacker?.pokemon || !defender?.pokemon) {
+    elements.damageSource.textContent = "Select one Pokémon on each side to calculate damage.";
+    elements.attackerSummary.textContent = attacker ? sideSummary(attacker) : "—";
+    elements.defenderSummary.textContent = defender ? sideSummary(defender) : "—";
+    elements.attackerFinalStats.replaceChildren();
+    elements.defenderFinalStats.replaceChildren();
+    elements.moveOrder.textContent = "Select one Pokémon on each side to compare move order.";
+    elements.speedSummary.textContent = "";
+    elements.damageCount.textContent = "—";
+    elements.damageList.replaceChildren();
+    return;
+  }
 
   elements.damageSource.textContent =
     "Limitless Champions defaults · ranked ability, item, moves, and nature · neutral 0 SP";
@@ -1069,6 +1208,75 @@ function sideSummary(state) {
 
 function normalizeDamageId(value) {
   return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function loadStoredTeams() {
+  if (!teamStorage) return teamMemoryBlob?.teams ?? null;
+  try {
+    const parsed = JSON.parse(teamStorage.getItem(TEAM_STORAGE_KEY) || "null");
+    if (parsed?.version === 1 && parsed.teams) {
+      teamMemoryBlob = parsed;
+      return parsed.teams;
+    }
+    return null;
+  } catch {
+    teamStorage = null;
+    return teamMemoryBlob?.teams ?? null;
+  }
+}
+
+function persistTeams() {
+  const blob = { version: 1, teams };
+  teamMemoryBlob = blob;
+  if (!teamStorage) return;
+  try {
+    teamStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(blob));
+  } catch {
+    teamStorage = null;
+  }
+}
+
+function restoreTeams(storedTeams) {
+  const restored = createTeamsState();
+  for (const side of ["attacker", "defender"]) {
+    const source = storedTeams?.[side];
+    if (!source) continue;
+    const slots = Array.from({ length: TEAM_SIZE }, (_, index) => restoreSideState(source.slots?.[index]));
+    const activeIndex = Number.isInteger(source.activeIndex) && source.activeIndex >= 0 && source.activeIndex < TEAM_SIZE
+      ? source.activeIndex
+      : 0;
+    restored[side] = { slots, activeIndex };
+  }
+  return restored;
+}
+
+function restoreSideState(storedState) {
+  if (!storedState?.pokemon?.id) return null;
+  const entry = pokemon.find(({ id }) => normalizeDamageId(id) === normalizeDamageId(storedState.pokemon.id));
+  if (!entry) return null;
+
+  const defaults = championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items });
+  const base = createSideState(entry, defaults);
+  const selectedMoveIds = Array.isArray(storedState.selectedMoveIds)
+    ? Array.from({ length: 4 }, (_, index) => normalizeDamageId(storedState.selectedMoveIds[index]))
+    : base.selectedMoveIds;
+  return {
+    ...base,
+    ...storedState,
+    pokemon: entry,
+    ability: storedState.ability ? resolveStoredEntry(storedState.ability, abilityLookup) : null,
+    item: storedState.item ? resolveStoredEntry(storedState.item, itemLookup) : null,
+    sp: { ...base.sp, ...(storedState.sp ?? {}) },
+    stages: { ...base.stages, ...(storedState.stages ?? {}) },
+    selectedMoveIds,
+    selectedHitCounts: Array.from({ length: 4 }, (_, index) => storedState.selectedHitCounts?.[index] ?? null),
+    targetMovedOverrides: Array.from({ length: 4 }, (_, index) => storedState.targetMovedOverrides?.[index] ?? null),
+    singleTargetMoves: Array.from({ length: 4 }, (_, index) => Boolean(storedState.singleTargetMoves?.[index])),
+  };
+}
+
+function resolveStoredEntry(storedEntry, lookup) {
+  return lookup.get(normalizeDamageId(storedEntry.id ?? storedEntry.name)) ?? storedEntry;
 }
 
 function browserStorage() {
