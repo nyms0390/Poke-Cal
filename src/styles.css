@@ -834,6 +834,7 @@ select:focus {
 .stage-inputs label {
   display: grid;
   gap: 8px;
+  align-content: start;
 }
 
 .damage-picks,
@@ -855,6 +856,11 @@ select:focus {
 .damage-move-picks label {
   display: grid;
   gap: 8px;
+  align-content: start;
+}
+
+.damage-move-picks .inline-toggle {
+  display: inline-flex;
 }
 
 .damage-move-picks label[hidden] {
@@ -867,6 +873,26 @@ select:focus {
 
 .stage-inputs {
   grid-template-columns: repeat(5, 1fr);
+}
+
+.hp-inputs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hp-inputs label > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hp-inputs label > span input {
+  width: auto;
+  flex: 1;
+  min-width: 0;
+}
+
+.hp-inputs label > span span {
+  white-space: nowrap;
 }
 
 .damage-side select,
@@ -894,15 +920,41 @@ select:focus {
 }
 
 .inline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: #dbe3f7;
   letter-spacing: 0;
   text-transform: none;
+}
+
+.inline-toggle select {
+  width: auto;
 }
 
 .inline-toggles {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 18px;
+}
+
+/* Rows pairing a checkbox toggle with a labelled select (Tera, Status). */
+.condition-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+.condition-row > label {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.condition-row > .inline-toggle {
+  display: flex;
+  min-height: 45px;
 }
 
 .assumption-panel {

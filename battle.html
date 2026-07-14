@@ -92,21 +92,21 @@
 
             <div id="attacker-sp-inputs" class="stat-inputs" aria-label="Attacker SP"></div>
             <div id="attacker-stage-inputs" class="stage-inputs" aria-label="Attacker stages"></div>
-            <div class="stat-inputs" aria-label="Attacker current HP">
+            <div class="stat-inputs hp-inputs" aria-label="Attacker current HP">
               <label>Current HP
                 <span><input id="attacker-current-hp" type="number" step="1" /><span id="attacker-max-hp"> / —</span></span>
               </label>
               <label>Current HP %<input id="attacker-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
             </div>
-            <div class="inline-toggles">
+            <div class="inline-toggles condition-row">
               <label class="inline-toggle"><input id="attacker-tera" type="checkbox" /> Terastallize</label>
-              <label class="inline-toggle">Tera type
+              <label>Tera type
                 <select id="attacker-tera-type"></select>
               </label>
             </div>
-            <div class="inline-toggles">
+            <div class="inline-toggles condition-row">
               <label class="inline-toggle"><input id="attacker-tailwind" type="checkbox" /> Tailwind</label>
-              <label class="inline-toggle">Status
+              <label>Status
                 <select id="attacker-status">
                   <option value="">Healthy</option>
                   <option value="burn">Burned</option>
@@ -273,21 +273,21 @@
             </div>
             <div id="defender-sp-inputs" class="stat-inputs" aria-label="Defender SP"></div>
             <div id="defender-stage-inputs" class="stage-inputs" aria-label="Defender stages"></div>
-            <div class="stat-inputs" aria-label="Defender current HP">
+            <div class="stat-inputs hp-inputs" aria-label="Defender current HP">
               <label>Current HP
                 <span><input id="defender-current-hp" type="number" step="1" /><span id="defender-max-hp"> / —</span></span>
               </label>
               <label>Current HP %<input id="defender-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
             </div>
-            <div class="inline-toggles">
+            <div class="inline-toggles condition-row">
               <label class="inline-toggle"><input id="defender-tera" type="checkbox" /> Terastallize</label>
-              <label class="inline-toggle">Tera type
+              <label>Tera type
                 <select id="defender-tera-type"></select>
               </label>
             </div>
-            <div class="inline-toggles">
+            <div class="inline-toggles condition-row">
               <label class="inline-toggle"><input id="defender-tailwind" type="checkbox" /> Tailwind</label>
-              <label class="inline-toggle">Status
+              <label>Status
                 <select id="defender-status">
                   <option value="">Healthy</option>
                   <option value="burn">Burned</option>
