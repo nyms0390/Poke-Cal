@@ -111,7 +111,6 @@ const elements = {
 };
 
 const SP_STATS = STAT_KEYS;
-const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const savedSetStore = createSavedSetStore(browserStorage());
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
 const teamStore = createStorageStore(browserStorage(), {
@@ -914,18 +913,6 @@ function renderDamageMovePickers(side) {
         conditionLabel.append(select);
         row.append(conditionLabel);
       }
-      const singleTargetLabel = document.createElement("label");
-      singleTargetLabel.className = "inline-toggle";
-      singleTargetLabel.hidden = fieldState.format !== "doubles" || !SPREAD_MOVE_TARGETS.has(selectedMove?.target);
-      const singleTarget = document.createElement("input");
-      singleTarget.type = "checkbox";
-      singleTarget.dataset.kind = "single-target";
-      singleTarget.dataset.side = side;
-      singleTarget.dataset.index = String(index);
-      singleTarget.checked = Boolean(state.singleTargetMoves?.[index]);
-      singleTarget.addEventListener("input", handleDamageControl);
-      singleTargetLabel.append(singleTarget, " 1 target");
-      row.append(singleTargetLabel);
       return row;
     }),
   );
