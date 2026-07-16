@@ -112,12 +112,22 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
         {
           id: "raichu",
           name: "Raichu",
-          champions: { source: "Legacy Catalog", sourceUrl: "https://example.test/raichu", usageCount: 418 },
+          champions: {
+            legal: true,
+            source: "Legacy Catalog",
+            sourceUrl: "https://example.test/raichu",
+            usageCount: 418,
+          },
         },
         {
           id: "pikachu",
           name: "Pikachu",
-          champions: { source: "Legacy Catalog", sourceUrl: "https://example.test/pikachu", usageCount: 8 },
+          champions: {
+            legal: true,
+            source: "Legacy Catalog",
+            sourceUrl: "https://example.test/pikachu",
+            usageCount: 8,
+          },
         },
       ],
       abilities: [{ id: "lightningrod", name: "Lightning Rod" }],
@@ -127,6 +137,7 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
     usage,
   );
 
+  assert.deepEqual(merged.pokemon.map(({ id }) => id), ["pikachu", "raichu"]);
   assert.equal(merged.pokemon[1].champions.source, "Limitless");
   assert.equal(merged.pokemon[1].champions.catalogSource, undefined);
   assert.equal(merged.pokemon[1].champions.usageCount, 2);
@@ -135,6 +146,71 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
   assert.equal(merged.pokemon[0].champions.source, undefined);
   assert.equal(merged.pokemon[0].champions.usageCount, undefined);
   assert.equal(merged.pokemon[0].champions.catalogSource, undefined);
+});
+
+test("drops unmatched usage rows and malformed nested catalog usage", () => {
+  const merged = mergeLimitlessUsage(
+    {
+      pokemon: [
+        { id: "raichu", name: "Raichu", champions: { legal: true } },
+        { id: "stale", name: "Stale", champions: { source: "Limitless", usageCount: 1 } },
+      ],
+      abilities: [{ id: "lightningrod", name: "Lightning Rod", champions: { legal: true } }],
+      items: [{ id: "raichunitey", name: "Raichunite Y", champions: { legal: true } }],
+      moves: [
+        { id: "fakeout", name: "Fake Out", champions: { legal: true } },
+        { id: "illegalmove", name: "Illegal Move", champions: { legal: false } },
+      ],
+    },
+    {
+      pokemon: [
+        {
+          id: "raichu",
+          name: "Raichu",
+          usageCount: 2,
+          usagePercent: 100,
+          usage: {
+            abilities: [
+              { id: "lightningrod", name: "Lightning Rod", usageCount: 2, usagePercent: 100 },
+              { id: "typoability", name: "Typo Ability", usageCount: 1, usagePercent: 50 },
+            ],
+            items: [
+              { id: "raichunitey", name: "Raichunite Y", usageCount: 2, usagePercent: 100 },
+              { id: "typoitem", name: "Typo Item", usageCount: 1, usagePercent: 50 },
+            ],
+            moves: [
+              { id: "fakeout", name: "Fake Out", usageCount: 2, usagePercent: 100 },
+              { id: "typomove", name: "Typo Move", usageCount: 1, usagePercent: 50 },
+              { id: "illegalmove", name: "Illegal Move", usageCount: 1, usagePercent: 50 },
+            ],
+          },
+        },
+        { id: "unknownpokemon", name: "Unknown Pokémon", usageCount: 1, usagePercent: 50, usage: {} },
+      ],
+      abilities: [
+        { id: "lightningrod", name: "Lightning Rod", usageCount: 2, usagePercent: 100 },
+        { id: "typoability", name: "Typo Ability", usageCount: 1, usagePercent: 50 },
+      ],
+      items: [
+        { id: "raichunitey", name: "Raichunite Y", usageCount: 2, usagePercent: 100 },
+        { id: "typoitem", name: "Typo Item", usageCount: 1, usagePercent: 50 },
+      ],
+      moves: [
+        { id: "fakeout", name: "Fake Out", usageCount: 2, usagePercent: 100 },
+        { id: "typomove", name: "Typo Move", usageCount: 1, usagePercent: 50 },
+        { id: "illegalmove", name: "Illegal Move", usageCount: 1, usagePercent: 50 },
+      ],
+    },
+  );
+
+  assert.deepEqual(merged.pokemon.map(({ id }) => id), ["raichu"]);
+  assert.deepEqual(merged.abilities.map(({ id }) => id), ["lightningrod"]);
+  assert.deepEqual(merged.items.map(({ id }) => id), ["raichunitey"]);
+  assert.deepEqual(merged.moves.map(({ id }) => id), ["fakeout", "illegalmove"]);
+  assert.deepEqual(merged.pokemon[0].champions.usage.abilities.map(({ id }) => id), ["lightningrod"]);
+  assert.deepEqual(merged.pokemon[0].champions.usage.items.map(({ id }) => id), ["raichunitey"]);
+  assert.deepEqual(merged.pokemon[0].champions.usage.moves.map(({ id }) => id), ["fakeout"]);
+  assert.equal(merged.moves.find(({ id }) => id === "illegalmove").champions.usageCount, undefined);
 });
 
 test("keeps Smogon SP spreads when merging or clearing Limitless usage", () => {

@@ -58,7 +58,7 @@ export function resolvePokemonMoves(entry, lookup) {
 
 export function resolveChampionsPokemonMoves(entry, lookup) {
   const moves = resolvePokemonMoves(entry, lookup);
-  const championsMoves = moves.filter((move) => move.champions);
+  const championsMoves = moves.filter((move) => move.champions?.legal === true);
   return championsMoves.length > 0 ? championsMoves : moves;
 }
 

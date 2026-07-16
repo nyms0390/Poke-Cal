@@ -39,6 +39,9 @@ export async function loadPokemonData() {
 }
 
 function championsEntries(entries) {
+  const hasLegality = entries.some((entry) => typeof entry.champions?.legal === "boolean");
+  if (hasLegality) return entries.filter((entry) => entry.champions?.legal === true);
+
   const filtered = entries.filter((entry) => entry.champions);
   return filtered.length > 0 ? filtered : entries;
 }
@@ -51,7 +54,9 @@ function includeMegaFamilies(entries, allPokemon) {
   return allPokemon.filter(
     (entry) =>
       retainedIds.has(entry.id) ||
-      (retainedBaseSpecies.has(entry.baseSpecies) && entry.name.includes("-Mega")),
+      (retainedBaseSpecies.has(entry.baseSpecies) &&
+        entry.name.includes("-Mega") &&
+        entry.champions?.legal !== false),
   );
 }
 

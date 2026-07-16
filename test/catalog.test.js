@@ -83,11 +83,12 @@ test("prefers Champions-available moves when catalog metadata exists", () => {
     {
       id: "thunderbolt",
       name: "Thunderbolt",
-      champions: { usageCount: 50 },
+      champions: { legal: true, usageCount: 50 },
     },
     {
       id: "hiddenpower",
       name: "Hidden Power",
+      champions: { legal: false, usageCount: 50 },
     },
   ]);
 
@@ -97,7 +98,7 @@ test("prefers Champions-available moves when catalog metadata exists", () => {
       {
         id: "thunderbolt",
         name: "Thunderbolt",
-        champions: { usageCount: 50 },
+        champions: { legal: true, usageCount: 50 },
       },
     ],
   );

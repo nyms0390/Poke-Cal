@@ -37,12 +37,26 @@ export function buildLimitlessUsage(tournaments, standingsByTournament) {
 }
 
 export function mergeLimitlessUsage(data, usage) {
+  const catalogs = {
+    pokemon: canonicalCatalogEntries(data.pokemon),
+    abilities: canonicalCatalogEntries(data.abilities),
+    moves: canonicalCatalogEntries(data.moves),
+    items: canonicalCatalogEntries(data.items),
+  };
+  const usageCatalogs = {
+    pokemon: usageCatalogEntries(catalogs.pokemon),
+    abilities: usageCatalogEntries(catalogs.abilities),
+    moves: usageCatalogEntries(catalogs.moves),
+    items: usageCatalogEntries(catalogs.items),
+  };
+  const normalizedUsage = normalizeUsage(usage, usageCatalogs);
+
   return {
     ...data,
-    pokemon: mergeUsageEntries(data.pokemon, usage.pokemon, mergePokemonUsage),
-    abilities: mergeUsageEntries(data.abilities, usage.abilities, mergeCatalogUsage),
-    moves: mergeUsageEntries(data.moves, usage.moves, mergeCatalogUsage),
-    items: mergeUsageEntries(data.items, usage.items, mergeCatalogUsage),
+    pokemon: mergeUsageEntries(catalogs.pokemon, normalizedUsage.pokemon, mergePokemonUsage),
+    abilities: mergeUsageEntries(catalogs.abilities, normalizedUsage.abilities, mergeCatalogUsage),
+    moves: mergeUsageEntries(catalogs.moves, normalizedUsage.moves, mergeCatalogUsage),
+    items: mergeUsageEntries(catalogs.items, normalizedUsage.items, mergeCatalogUsage),
   };
 }
 
@@ -124,20 +138,53 @@ function totalCount(map) {
 
 function mergeUsageEntries(entries, usageEntries, mergeEntry) {
   const usageById = usageLookup(usageEntries);
-  const usedIds = new Set();
   const merged = entries.map((entry) => {
     const usage = usageById.get(normalizeId(entry.id)) ?? usageById.get(normalizeId(entry.name));
     if (!usage) return clearUsage(entry);
-    usedIds.add(usage.id);
     return mergeEntry(entry, usage);
   });
 
-  for (const usage of usageEntries) {
-    if (usedIds.has(usage.id)) continue;
-    merged.push(mergeEntry({ id: usage.id, name: usage.name }, usage));
-  }
-
   return merged.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function canonicalCatalogEntries(entries) {
+  return entries.filter(
+    (entry) => !(entry.champions?.source === "Limitless" && typeof entry.champions.legal !== "boolean"),
+  );
+}
+
+function usageCatalogEntries(entries) {
+  const hasLegality = entries.some((entry) => typeof entry.champions?.legal === "boolean");
+  return hasLegality ? entries.filter((entry) => entry.champions.legal === true) : entries;
+}
+
+function normalizeUsage(usage, catalogs) {
+  return {
+    pokemon: normalizePokemonUsage(usage.pokemon, catalogs),
+    abilities: normalizeCatalogUsage(usage.abilities, catalogs.abilities),
+    moves: normalizeCatalogUsage(usage.moves, catalogs.moves),
+    items: normalizeCatalogUsage(usage.items, catalogs.items),
+  };
+}
+
+function normalizePokemonUsage(entries, catalogs) {
+  return normalizeCatalogUsage(entries, catalogs.pokemon).map((entry) => ({
+    ...entry,
+    usage: {
+      ...(entry.usage ?? {}),
+      abilities: normalizeCatalogUsage(entry.usage?.abilities, catalogs.abilities),
+      items: normalizeCatalogUsage(entry.usage?.items, catalogs.items),
+      moves: normalizeCatalogUsage(entry.usage?.moves, catalogs.moves),
+    },
+  }));
+}
+
+function normalizeCatalogUsage(entries = [], catalog) {
+  const lookup = usageLookup(catalog);
+  return entries.flatMap((entry) => {
+    const canonical = lookup.get(normalizeId(entry.id)) ?? lookup.get(normalizeId(entry.name));
+    return canonical ? [{ ...entry, id: canonical.id, name: canonical.name }] : [];
+  });
 }
 
 function usageLookup(entries) {

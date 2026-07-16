@@ -13,7 +13,7 @@ test("keeps Mega forms for Champions-used base Pokémon", async () => {
           name: "Charizard",
           baseSpecies: "Charizard",
           abilities: ["Blaze"],
-          champions: { usageCount: 5 },
+          champions: { legal: true, usageCount: 5 },
         },
         {
           id: "charizardmegax",
@@ -22,19 +22,30 @@ test("keeps Mega forms for Champions-used base Pokémon", async () => {
           abilities: ["Tough Claws"],
         },
         {
+          id: "charizardmegaz",
+          name: "Charizard-Mega-Z",
+          baseSpecies: "Charizard",
+          champions: { legal: false },
+        },
+        {
           id: "pikachu",
           name: "Pikachu",
           baseSpecies: "Pikachu",
           abilities: ["Static"],
+          champions: { source: "Limitless", usageCount: 1 },
         },
       ],
       "./public/abilities.json": [
-        { id: "blaze", name: "Blaze", champions: { usageCount: 5 } },
+        { id: "blaze", name: "Blaze", champions: { legal: true, usageCount: 5 } },
         { id: "toughclaws", name: "Tough Claws", shortDesc: "Powers up contact moves." },
-        { id: "static", name: "Static" },
+        { id: "static", name: "Static", champions: { legal: false } },
       ],
-      "./public/moves.json": [],
-      "./public/items.json": [],
+      "./public/moves.json": [
+        { id: "fakeout", name: "Fake Out", champions: { legal: false } },
+      ],
+      "./public/items.json": [
+        { id: "leftovers", name: "Leftovers", champions: { legal: false } },
+      ],
     };
 
     return {
@@ -51,6 +62,9 @@ test("keeps Mega forms for Champions-used base Pokémon", async () => {
       ["charizard", "charizardmegax"],
     );
     assert.equal(data.abilityLookup.get("toughclaws").name, "Tough Claws");
+    assert.equal(data.abilityLookup.has("static"), false);
+    assert.equal(data.moveLookup.has("fakeout"), false);
+    assert.equal(data.itemLookup.has("leftovers"), false);
   } finally {
     globalThis.fetch = originalFetch;
   }
