@@ -8,6 +8,13 @@ const PRESETS = [
   { key: "slow", label: "Slow", sourceLabel: "min (-spe 0)", nature: "Brave", sp: 0 },
 ];
 
+export function popularOpponentPool(popularOpponents = [], manualOpponents = [], count = 10) {
+  const limit = [10, 20, 30, 40, 50].includes(Number(count)) ? Number(count) : 10;
+  const popular = popularOpponents.slice(0, limit);
+  const popularIds = new Set(popular.map(({ pokemon }) => pokemon.id));
+  return [...popular, ...manualOpponents.filter(({ pokemon }) => !popularIds.has(pokemon.id))];
+}
+
 export function speedTiers(user, opponents, options = {}) {
   if (!user?.pokemon) return [];
   const mode = options.mode === "base" ? "base" : "battle";

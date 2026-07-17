@@ -27,13 +27,13 @@ test("creates an empty builder with the default threat count", () => {
   assert.deepEqual(createBuilderState(), { user: null, threatCount: 20 });
 });
 
-test("creates one canonical side state with the usage-backed Tera type", () => {
+test("creates one canonical side state without activating the usage-backed Tera type", () => {
   const state = createBuilderState(pikachu, usageDefaults, { threatCount: 12 });
 
   assert.equal(state.user.pokemon, pikachu);
   assert.equal(state.user.nature, "Timid");
   assert.deepEqual(state.user.sp, usageDefaults.sp);
-  assert.equal(state.user.teraType, "Electric");
+  assert.equal(state.user.teraType, "");
   assert.deepEqual(state.user.selectedMoveIds, [
     "thunderbolt",
     "voltswitch",

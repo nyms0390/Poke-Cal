@@ -18,7 +18,7 @@ Electro Drift" style answers.
 
 ## Definitions (implement exactly)
 - **Attack scenario**: one threat + one of its damaging moves (from `threats.js`), threat at
-  `spPresets.offense`, its most-used item/ability/tera, neutral field (no weather/terrain/
+  `spPresets.offense`, its most-used item/ability, no active Tera, neutral field (no weather/terrain/
   screens — field toggles can come later; note the assumption in the UI).
 - **Survives**: `maxDamage < your max HP` (guaranteed survival, 16/16 rolls).
 - **Bulk point**: a `(hpSp, defSp)` or `(hpSp, spdSp)` allocation where the KO tier improves

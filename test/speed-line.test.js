@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { speedTiers, nextBreakpoints } from "../src/data/speed-line.js";
+import { nextBreakpoints, popularOpponentPool, speedTiers } from "../src/data/speed-line.js";
 import { calculateSpeed } from "../src/engine/speed.js";
 
 const userPokemon = pokemon("user", "Yourmon", 100);
@@ -143,6 +143,22 @@ test("recomputing modes and filters does not mutate manually supplied opponents"
   assert.deepEqual(opponents, [
     { pokemon: slowPokemon, likelyPresetLabel: "uninvested", manual: true },
   ]);
+});
+
+test("selects popular opponents in ten-Pokémon steps and preserves manual additions", () => {
+  const popular = Array.from({ length: 50 }, (_, index) => ({
+    pokemon: pokemon(`popular-${index + 1}`, `Popular ${index + 1}`, 100 - index),
+  }));
+  const manual = [{ pokemon: pokemon("manual", "Manual", 75), manual: true }];
+
+  for (const count of [10, 20, 30, 40, 50]) {
+    const pool = popularOpponentPool(popular, manual, count);
+    assert.equal(pool.length, count + 1);
+    assert.equal(pool[count - 1].pokemon.id, `popular-${count}`);
+    assert.equal(pool.at(-1), manual[0]);
+  }
+  assert.equal(popular.length, 50);
+  assert.deepEqual(manual, [{ pokemon: pokemon("manual", "Manual", 75), manual: true }]);
 });
 
 function pokemon(id, name, spe) {

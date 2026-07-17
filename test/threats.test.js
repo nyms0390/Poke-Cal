@@ -28,7 +28,7 @@ test("builds deterministic top-usage threats from Champions defaults", () => {
   assert.equal(threats[0].natureShare, 70);
   assert.equal(threats[0].ability.name, "Pressure");
   assert.equal(threats[0].item.name, "Life Orb");
-  assert.equal(threats[0].teraType, "Fire");
+  assert.equal(threats[0].teraType, "");
   assert.deepEqual(threats[0].moves.map(({ id }) => id), [
     "quickattack",
     "tackle",

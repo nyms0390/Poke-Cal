@@ -26,7 +26,7 @@ threatList(pokemonCatalog, { count = 20 } = {})
   usagePercent,
   nature,                        // most-used nature
   natureShare,                   // its usagePercent (confidence signal)
-  item, ability, teraType,       // most-used each
+  item, ability, teraType,       // most-used item/ability; Tera inactive by default
   moves,                         // top 4 damaging + priority-relevant moves (keep Protect out:
                                  //   filter to move.category !== "Status")
   spPresets: {

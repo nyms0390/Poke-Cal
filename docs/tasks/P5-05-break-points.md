@@ -16,7 +16,7 @@ turns a 3HKO into a 2HKO, or a roll into a guaranteed OHKO?
 
 ## Definitions
 - **Defense scenario**: threat as DEFENDER at `spPresets.bulk` (uninvested — documented
-  assumption from P5-01), most-used item/ability/tera; neutral field.
+  assumption from P5-01), most-used item/ability, no active Tera; neutral field.
 - **Break point**: smallest Atk (or SpA — whichever your move uses) SP at which the KO tier
   improves versus your current SP: tiers ordered
   `no KO ≤5 < 5HKO < … < 2HKO (x%) < 2HKO guaranteed < OHKO (x%) < OHKO guaranteed`.

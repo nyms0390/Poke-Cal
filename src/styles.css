@@ -2193,6 +2193,12 @@ button:disabled {
   grid-template-columns: minmax(0, 180px);
 }
 
+.speed-popularity-control {
+  display: grid;
+  max-width: 180px;
+  gap: 5px;
+}
+
 .speed-mods {
   align-items: center;
 }

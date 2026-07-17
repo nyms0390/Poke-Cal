@@ -80,7 +80,7 @@ function threatFromPokemon(pokemon, moveLookup) {
     natureShare: natureEntry?.usagePercent ?? 0,
     item: defaults.item,
     ability: defaults.ability,
-    teraType: defaults.teraType ?? "",
+    teraType: "",
     moves: threatMoves(usage?.moves, moveLookup),
     spPresets: {
       offense: { atk: 32, spa: 32 },

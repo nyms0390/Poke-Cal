@@ -171,7 +171,7 @@ function render() {
   elements.tera.value = user.teraType ?? "";
   elements.summary.textContent = `${user.nature} · ${user.teraType ? `Tera ${user.teraType}` : "No Tera"}`;
   elements.source.textContent =
-    "Limitless Champions defaults · ranked ability, item, moves, nature, and Tera type";
+    "Limitless Champions defaults · ranked ability, item, moves, and nature · no active Tera";
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
 
   elements.stats.replaceChildren(...STAT_KEYS.map((stat) => statRow(stat, user, stats)));

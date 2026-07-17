@@ -71,7 +71,17 @@
           </section>
 
           <section class="speed-control-panel" aria-label="Opponent Speed settings">
-            <div class="panel-heading"><span>Opponents</span><strong>Top 10 + yours</strong></div>
+            <div class="panel-heading"><span>Opponents</span><strong id="speed-popular-summary">Top 10 + yours</strong></div>
+            <label class="speed-popularity-control">
+              Popular Pokémon
+              <select id="speed-popular-count">
+                <option value="10">Top 10</option>
+                <option value="20">Top 20</option>
+                <option value="30">Top 30</option>
+                <option value="40">Top 40</option>
+                <option value="50">Top 50</option>
+              </select>
+            </label>
             <label class="pokemon-search-label" for="speed-opponent-search">Add Pokémon</label>
             <div class="pokemon-combobox">
               <input

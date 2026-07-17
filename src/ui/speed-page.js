@@ -1,6 +1,6 @@
 import { normalizeId } from "../data/catalog.js";
 import { searchPokemon } from "../data/pokemon.js";
-import { nextBreakpoints, speedTiers } from "../data/speed-line.js";
+import { nextBreakpoints, popularOpponentPool, speedTiers } from "../data/speed-line.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -15,6 +15,8 @@ const elements = {
   pokemonResults: document.querySelector("#speed-pokemon-results"),
   opponentSearch: document.querySelector("#speed-opponent-search"),
   opponentResults: document.querySelector("#speed-opponent-results"),
+  popularCount: document.querySelector("#speed-popular-count"),
+  popularSummary: document.querySelector("#speed-popular-summary"),
   manualOpponents: document.querySelector("#speed-manual-opponents"),
   nature: document.querySelector("#speed-nature"),
   sp: document.querySelector("#speed-sp"),
@@ -65,7 +67,7 @@ async function initialize() {
   }
 
   popularOpponents = threatList(catalogs.pokemon, {
-    count: 10,
+    count: 50,
     moveLookup: catalogs.moveLookup,
   }).map((threat) => ({
     pokemon: threat.pokemon,
@@ -100,6 +102,7 @@ async function initialize() {
     elements.opponentTailwind,
     elements.opponentParalysis,
     elements.opponentScarf,
+    elements.popularCount,
     ...elements.presetInputs,
   ]) input.addEventListener("input", handleControl);
 
@@ -136,7 +139,7 @@ function seedUser(pokemon) {
 
 function addOpponent(pokemon) {
   if (!pokemon) return;
-  const alreadyPresent = [...popularOpponents, ...manualOpponents]
+  const alreadyPresent = selectedOpponents()
     .some((entry) => normalizeId(entry.pokemon.id) === normalizeId(pokemon.id));
   if (!alreadyPresent) {
     manualOpponents = [...manualOpponents, {
@@ -180,8 +183,10 @@ function render() {
   elements.userSummary.textContent = battle
     ? `${user.nature} · ${user.spe} SP`
     : `Base ${user.pokemon.baseStats.spe}`;
+  const popularCount = Number(elements.popularCount.value);
+  elements.popularSummary.textContent = `Top ${popularCount} + yours`;
   elements.source.textContent = battle
-    ? "Limitless Champions top-10 threats · four explicit Speed presets per opponent"
+    ? `Limitless Champions top-${popularCount} threats · four explicit Speed presets per opponent`
     : "Catalog base Speed · no nature, SP, stage, item, status, or field modifiers";
   renderManualOpponents();
 
@@ -192,7 +197,7 @@ function render() {
     userMods: modsFromControls("user"),
     opponentMods: modsFromControls("opponent"),
   };
-  const rows = speedTiers(user, [...popularOpponents, ...manualOpponents], options);
+  const rows = speedTiers(user, selectedOpponents(), options);
   elements.rowCount.textContent = `${rows.length} tiers`;
   elements.axis.replaceChildren(...rows.map(renderSpeedRow));
 
@@ -205,6 +210,10 @@ function render() {
         : [emptyText("No higher tier is reachable with this build.")]),
     );
   }
+}
+
+function selectedOpponents() {
+  return popularOpponentPool(popularOpponents, manualOpponents, elements.popularCount.value);
 }
 
 function modsFromControls(side) {

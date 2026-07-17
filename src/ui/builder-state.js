@@ -8,7 +8,7 @@ export function createBuilderState(pokemon, usageDefaults, { threatCount = 20 } 
   return {
     user: {
       ...createSideState(pokemon, usageDefaults),
-      teraType: usageDefaults.teraType ?? "",
+      teraType: "",
     },
     threatCount,
   };
