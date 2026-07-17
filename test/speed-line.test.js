@@ -161,6 +161,36 @@ test("selects popular opponents in ten-Pokémon steps and preserves manual addit
   assert.deepEqual(manual, [{ pokemon: pokemon("manual", "Manual", 75), manual: true }]);
 });
 
+test("adds Mega forms for popular Pokémon without consuming popularity slots", () => {
+  const charizard = { ...pokemon("charizard", "Charizard", 100), baseSpecies: "Charizard" };
+  const megaX = { ...pokemon("charizardmegax", "Charizard-Mega-X", 130), baseSpecies: "Charizard" };
+  const megaY = { ...pokemon("charizardmegay", "Charizard-Mega-Y", 140), baseSpecies: "Charizard" };
+  const gmax = { ...pokemon("charizardgmax", "Charizard-Gmax", 100), baseSpecies: "Charizard" };
+  const popular = [
+    { pokemon: charizard, likelyPresetLabel: "max (neutral 32)" },
+    ...Array.from({ length: 9 }, (_, index) => ({
+      pokemon: pokemon(`popular-${index + 2}`, `Popular ${index + 2}`, 100 - index),
+    })),
+  ];
+  const manual = [
+    { pokemon: megaX, manual: true },
+    { pokemon: pokemon("manual", "Manual", 75), manual: true },
+  ];
+
+  const pool = popularOpponentPool(popular, manual, 10, [charizard, megaX, megaY, gmax]);
+
+  assert.deepEqual(pool.slice(0, 3).map(({ pokemon: entry }) => entry.id), [
+    "charizard",
+    "charizardmegax",
+    "charizardmegay",
+  ]);
+  assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardgmax"), undefined);
+  assert.equal(pool.filter(({ pokemon: entry }) => entry.id === "charizardmegax").length, 1);
+  assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardmegay").likelyPresetLabel, "max (neutral 32)");
+  assert.equal(pool.length, 13);
+  assert.equal(manual.length, 2);
+});
+
 function pokemon(id, name, spe) {
   return {
     id,

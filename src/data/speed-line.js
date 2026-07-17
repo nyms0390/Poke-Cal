@@ -1,5 +1,6 @@
 import { NATURES } from "../engine/natures.js";
 import { calculateSpeed } from "../engine/speed.js";
+import { megaFamily } from "./pokemon.js";
 
 const PRESETS = [
   { key: "max", label: "Max", sourceLabel: "max (+spe 32)", nature: "Timid", sp: 32 },
@@ -8,9 +9,16 @@ const PRESETS = [
   { key: "slow", label: "Slow", sourceLabel: "min (-spe 0)", nature: "Brave", sp: 0 },
 ];
 
-export function popularOpponentPool(popularOpponents = [], manualOpponents = [], count = 10) {
+export function popularOpponentPool(
+  popularOpponents = [],
+  manualOpponents = [],
+  count = 10,
+  pokemonCatalog = [],
+) {
   const limit = [10, 20, 30, 40, 50].includes(Number(count)) ? Number(count) : 10;
-  const popular = popularOpponents.slice(0, limit);
+  const popular = popularOpponents.slice(0, limit).flatMap((opponent) =>
+    (pokemonCatalog.length > 0 ? megaFamily(pokemonCatalog, opponent.pokemon) : [opponent.pokemon])
+      .map((pokemon) => ({ ...opponent, pokemon })));
   const popularIds = new Set(popular.map(({ pokemon }) => pokemon.id));
   return [...popular, ...manualOpponents.filter(({ pokemon }) => !popularIds.has(pokemon.id))];
 }

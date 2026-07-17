@@ -61,8 +61,9 @@ multiplier/Trick Room order) — hand-compute nothing in this module.
 2. `speed.html` + `src/ui/speed-page.js` (bootstrap conventions, `?pokemon=<id>` param):
    - Chosen-Pokémon panel: search, nature, Speed SP input, its mod toggles.
    - Opponents panel: defaults to top-10 usage (`threatList`) with a Top 10/20/30/40/50
-     selector; search-to-add any Pokémon as removable chips; preset filter chips (default:
-     all 4, `likely` preset marked ●); one shared mod-toggle group for the opposing side.
+     selector; legal Mega forms for those ranked Pokémon are included without consuming
+     popularity slots; search-to-add any Pokémon as removable chips; preset filter chips
+     (default: all 4, `likely` preset marked ●); one shared mod-toggle group for the opposing side.
    - Mode switch **Base | Battle** at the top; Base grays out both toggle groups, SP,
      and presets. Global Trick Room toggle (battle only).
    - The axis: Smogon-style rows `speed · stage · preset · icons+names`, your row

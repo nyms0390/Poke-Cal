@@ -184,10 +184,10 @@ function render() {
     ? `${user.nature} · ${user.spe} SP`
     : `Base ${user.pokemon.baseStats.spe}`;
   const popularCount = Number(elements.popularCount.value);
-  elements.popularSummary.textContent = `Top ${popularCount} + yours`;
+  elements.popularSummary.textContent = `Top ${popularCount} + Megas + yours`;
   elements.source.textContent = battle
-    ? `Limitless Champions top-${popularCount} threats · four explicit Speed presets per opponent`
-    : "Catalog base Speed · no nature, SP, stage, item, status, or field modifiers";
+    ? `Limitless Champions top-${popularCount} threats + legal Mega forms · four explicit Speed presets per opponent`
+    : `Catalog base Speed · top-${popularCount} threats + legal Mega forms · no battle modifiers`;
   renderManualOpponents();
 
   const options = {
@@ -213,7 +213,12 @@ function render() {
 }
 
 function selectedOpponents() {
-  return popularOpponentPool(popularOpponents, manualOpponents, elements.popularCount.value);
+  return popularOpponentPool(
+    popularOpponents,
+    manualOpponents,
+    elements.popularCount.value,
+    catalogs.pokemon,
+  );
 }
 
 function modsFromControls(side) {
