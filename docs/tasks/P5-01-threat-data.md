@@ -1,6 +1,6 @@
 # P5-01 — Threat-list module (top-usage sets with SP presets)
 
-Status: TODO
+Status: Done
 Depends on: P1-05 (tera usage), P2-08 (engine complete enough to trust numbers)
 Phase: 5 (builder utility)
 
