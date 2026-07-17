@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Champions team builder with live stats, defensive bulk points, and offensive break points."
+    />
+    <title>PokéCal — Builder</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a class="active" href="./builder.html">Builder</a>
+          <a href="./speed.html">Speed Tiers</a>
+        </nav>
+        <p class="eyebrow">PokéCal // Builder</p>
+        <h1>Turn matchups into useful SP targets.</h1>
+        <p class="intro">
+          Configure one Pokémon, then compare defensive bulk and offensive break points
+          against the most-used Champions threats.
+        </p>
+      </header>
+
+      <section class="calculator builder-tool" aria-label="Pokémon builder">
+        <p id="builder-source" class="usage-source">Champions defaults loading…</p>
+
+        <div class="builder-layout">
+          <section class="builder-editor" aria-label="Your Pokémon">
+            <div class="panel-heading">
+              <span>Your Pokémon</span>
+              <strong id="builder-summary">—</strong>
+            </div>
+
+            <label class="pokemon-search-label" for="builder-pokemon-search">Pokémon</label>
+            <div class="pokemon-combobox">
+              <input
+                id="builder-pokemon-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="builder-pokemon-results"
+                aria-expanded="false"
+              />
+              <div id="builder-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
+
+            <div class="builder-picks">
+              <label>
+                Nature
+                <select id="builder-nature"></select>
+              </label>
+              <label>
+                Ability
+                <select id="builder-ability"></select>
+              </label>
+              <label>
+                Item
+                <select id="builder-item"></select>
+              </label>
+              <label>
+                Tera
+                <select id="builder-tera"></select>
+              </label>
+            </div>
+
+            <div class="builder-stat-heading" aria-hidden="true">
+              <span>Stat</span><span>Base</span><span>SP</span><span>Final</span>
+            </div>
+            <div id="builder-stats" class="builder-stats" aria-label="Live final stats"></div>
+            <p id="builder-sp-budget" class="builder-sp-budget">—</p>
+
+            <section class="builder-moves" aria-label="Selected moves">
+              <div class="panel-heading">
+                <span>Your moves</span>
+                <strong>4 slots</strong>
+              </div>
+              <div id="builder-move-picks" class="builder-move-picks"></div>
+            </section>
+
+            <a id="builder-speed-link" class="common-build-calculator" href="./speed.html">
+              Open full speed tiers →
+            </a>
+          </section>
+
+          <div class="builder-results">
+            <section class="catalog-panel" aria-label="Bulk points">
+              <div class="panel-heading">
+                <span>Bulk points</span>
+                <strong id="bulk-count">—</strong>
+              </div>
+              <p class="builder-assumption">
+                Threats use usage-backed items, abilities, Tera types, max offense, and a neutral field.
+              </p>
+              <div id="bulk-points" class="builder-scenarios">
+                <p>Select a Pokémon to calculate defensive targets.</p>
+              </div>
+            </section>
+
+            <section class="catalog-panel" aria-label="Break points">
+              <div class="panel-heading">
+                <span>Break points</span>
+                <strong id="break-count">—</strong>
+              </div>
+              <p class="builder-assumption">
+                Threats use uninvested bulk with their usage-backed item, ability, and Tera type.
+              </p>
+              <div id="break-points" class="builder-breakpoints">
+                <p>Select a damaging move to calculate offensive targets.</p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span>Limitless usage assumptions · Level 50 · 31 IV · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/builder-page.js"></script>
+  </body>
+</html>

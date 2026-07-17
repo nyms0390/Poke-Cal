@@ -1,6 +1,6 @@
 # P5-03 — Speed tiers page (`speed.html`, dedicated tab)
 
-Status: TODO
+Status: Done
 Depends on: P5-01 (threat sets/presets). NOT on P5-02 anymore — this is its own page.
 Phase: 5 (builder utility)
 

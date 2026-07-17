@@ -1,6 +1,6 @@
 # P5-02 — builder.html page skeleton with live stats
 
-Status: TODO
+Status: Done
 Depends on: P5-01
 Phase: 5 (builder utility)
 

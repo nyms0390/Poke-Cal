@@ -121,6 +121,10 @@ export function impliedStageDefaults({ ownAbility, opposingAbility, stages = {} 
 }
 
 export const ITEM_MODIFIERS = {
+  assaultvest: (ctx) =>
+    !ctx.attackerPerspective && ctx.defenseStat === "spd"
+      ? { kind: "defense", value: 1.5, label: "Assault Vest" }
+      : null,
   choiceband: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk" ? { kind: "attack", value: 1.5, label: "Choice Band" } : null,
   choicespecs: (ctx) =>

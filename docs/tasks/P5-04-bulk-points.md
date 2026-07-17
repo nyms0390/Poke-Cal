@@ -1,6 +1,6 @@
 # P5-04 — Builder: bulk points (defensive breakpoints)
 
-Status: TODO
+Status: Done
 Depends on: P5-02
 Phase: 5 (builder utility)
 

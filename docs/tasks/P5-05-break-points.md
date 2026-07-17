@@ -1,6 +1,6 @@
 # P5-05 — Builder: break points (offensive breakpoints)
 
-Status: TODO
+Status: Done
 Depends on: P5-04 (shares patterns and scenario plumbing)
 Phase: 5 (builder utility)
 

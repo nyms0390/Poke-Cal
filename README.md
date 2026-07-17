@@ -1,10 +1,10 @@
 # PokéCal
 
-A compact, dependency-free competitive Pokémon toolkit: quick species lookup with Champions tournament usage, plus a two-Pokémon battle calculator.
+A compact, dependency-free competitive Pokémon toolkit: quick species lookup with Champions tournament usage, a two-Pokémon battle calculator, a matchup-driven SP builder, and interactive Speed tiers.
 
 ## Overview
 
-PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows base stats, forms, abilities, moves, and items with Limitless Champions usage rates. The battle calculator (`battle.html`) configures two Pokémon (moves, SP, natures, stat stages, abilities, items, status) and computes move order and damage ranges. All catalog data is generated into `public/*.json` by sync scripts that pull from Pokémon Showdown, Limitless, and PokeAPI.
+PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows base stats, forms, abilities, moves, and items with Limitless Champions usage rates. The battle calculator (`battle.html`) configures two Pokémon and computes move order and damage ranges. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, while the Speed tiers page (`speed.html`) compares base or final Speed across fixed opponent presets. All catalog data is generated into `public/*.json` by sync scripts that pull from Pokémon Showdown, Limitless, and PokeAPI.
 
 ## Project Structure
 
@@ -12,6 +12,8 @@ PokéCal is a browser-first ES-module web app with no build step and no npm depe
 PokéCal/
 ├── index.html                 # Lookup page (loads src/ui/lookup-page.js)
 ├── battle.html                # Battle calculator page (loads src/ui/battle-page.js)
+├── builder.html               # SP builder (loads src/ui/builder-page.js)
+├── speed.html                 # Speed tiers (loads src/ui/speed-page.js)
 ├── src/
 │   ├── engine/                 # Pure battle math — no DOM, no fetch
 │   │   ├── constants.js        # LEVEL, STAT_KEYS
@@ -32,13 +34,20 @@ PokéCal/
 │   │   ├── champions-data.js    # Champions mod overlay (legality, learnsets, balance)
 │   │   ├── limitless-data.js    # Limitless Champions usage building/merging
 │   │   ├── smogon-data.js       # Smogon ladder stats parsing (SP spreads)
-│   │   └── usage-defaults.js    # Default move/item/ability seeding from usage
+│   │   ├── usage-defaults.js    # Default move/item/ability seeding from usage
+│   │   ├── threats.js           # Usage-backed threat sets and SP presets
+│   │   ├── speed-line.js        # Pure Speed-tier rows and breakpoints
+│   │   ├── bulk-points.js       # Defensive SP frontier search
+│   │   └── break-points.js      # Offensive SP breakpoint search
 │   ├── ui/                     # DOM only — build inputs for the engine, render outputs
 │   │   ├── components.js        # Shared DOM factories (search results, SP/stage inputs, STAT_LABELS)
 │   │   ├── bootstrap.js         # Shared page init / catalog loading / usage ranking
 │   │   ├── battle-state.js      # Pure battle-page state helpers (no DOM)
+│   │   ├── builder-state.js     # Pure builder state and final stats
 │   │   ├── lookup-page.js       # Lookup page controller
-│   │   └── battle-page.js       # Battle calculator page controller
+│   │   ├── battle-page.js       # Battle calculator page controller
+│   │   ├── builder-page.js      # SP builder controller
+│   │   └── speed-page.js        # Speed tiers controller
 │   └── styles.css              # Shared styles
 ├── public/                    # Generated catalogs (pokemon/abilities/moves/items .json)
 ├── scripts/
@@ -75,7 +84,7 @@ Generated catalogs are committed, so syncing is only needed to refresh data.
 npm start
 ```
 
-Then open <http://127.0.0.1:4173> for lookup or <http://127.0.0.1:4173/battle.html> for the battle calculator. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
+Then open <http://127.0.0.1:4173> for lookup, `/battle.html` for the calculator, `/builder.html` for bulk/break points, or `/speed.html` for interactive Speed tiers. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
 
 ## Data Sources
 

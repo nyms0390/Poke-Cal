@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive Champions Speed tiers with spreads, stages, Tailwind, paralysis, Choice Scarf, and Trick Room."
+    />
+    <title>PokéCal — Speed Tiers</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a href="./builder.html">Builder</a>
+          <a class="active" href="./speed.html">Speed Tiers</a>
+        </nav>
+        <p class="eyebrow">PokéCal // Speed tiers</p>
+        <h1>See the whole Speed field at once.</h1>
+        <p class="intro">
+          Compare one build against popular Champions Pokémon at fixed spreads, then apply
+          battle-wide Speed control without losing manually added opponents.
+        </p>
+      </header>
+
+      <section class="calculator speed-tool" aria-label="Speed tiers">
+        <p id="speed-source" class="usage-source">Champions threats loading…</p>
+
+        <section class="speed-toolbar" aria-label="Speed mode">
+          <fieldset class="radio-group segmented-tag">
+            <legend>Mode</legend>
+            <div class="radio-options">
+              <label class="radio-option"><input type="radio" name="speed-mode" value="base" /> Base</label>
+              <label class="radio-option"><input type="radio" name="speed-mode" value="battle" checked /> Battle</label>
+            </div>
+          </fieldset>
+          <label class="inline-toggle speed-trick-room">
+            <input id="speed-trick-room" type="checkbox" data-battle-only /> Trick Room
+          </label>
+        </section>
+
+        <div class="speed-controls">
+          <section class="speed-control-panel" aria-label="Your Speed settings">
+            <div class="panel-heading"><span>Your Pokémon</span><strong id="speed-user-summary">—</strong></div>
+            <label class="pokemon-search-label" for="speed-pokemon-search">Pokémon</label>
+            <div class="pokemon-combobox">
+              <input
+                id="speed-pokemon-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="speed-pokemon-results"
+                aria-expanded="false"
+              />
+              <div id="speed-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
+            <div class="speed-spread-controls">
+              <label>Nature<select id="speed-nature" data-battle-only></select></label>
+              <label>Speed SP<input id="speed-sp" type="number" min="0" max="32" step="1" data-battle-only /></label>
+              <label>Stage<select id="speed-user-stage" data-battle-only></select></label>
+            </div>
+            <div class="inline-toggles speed-mods">
+              <label class="inline-toggle"><input id="speed-user-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
+              <label class="inline-toggle"><input id="speed-user-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
+              <label class="inline-toggle"><input id="speed-user-scarf" type="checkbox" data-battle-only /> Choice Scarf</label>
+            </div>
+          </section>
+
+          <section class="speed-control-panel" aria-label="Opponent Speed settings">
+            <div class="panel-heading"><span>Opponents</span><strong>Top 10 + yours</strong></div>
+            <label class="pokemon-search-label" for="speed-opponent-search">Add Pokémon</label>
+            <div class="pokemon-combobox">
+              <input
+                id="speed-opponent-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="speed-opponent-results"
+                aria-expanded="false"
+              />
+              <div id="speed-opponent-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
+            <div id="speed-manual-opponents" class="speed-opponent-chips" aria-label="Manually added opponents"></div>
+            <fieldset class="speed-preset-filter" data-battle-group>
+              <legend>Fixed presets</legend>
+              <div class="inline-toggles">
+                <label class="inline-toggle"><input type="checkbox" value="max" data-preset data-battle-only checked /> Max</label>
+                <label class="inline-toggle"><input type="checkbox" value="fast" data-preset data-battle-only checked /> Fast</label>
+                <label class="inline-toggle"><input type="checkbox" value="neutral" data-preset data-battle-only checked /> Neutral</label>
+                <label class="inline-toggle"><input type="checkbox" value="slow" data-preset data-battle-only checked /> Slow</label>
+              </div>
+            </fieldset>
+            <div class="speed-spread-controls opponent">
+              <label>Shared stage<select id="speed-opponent-stage" data-battle-only></select></label>
+            </div>
+            <div class="inline-toggles speed-mods">
+              <label class="inline-toggle"><input id="speed-opponent-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
+              <label class="inline-toggle"><input id="speed-opponent-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
+              <label class="inline-toggle"><input id="speed-opponent-scarf" type="checkbox" data-battle-only /> Choice Scarf</label>
+            </div>
+          </section>
+        </div>
+
+        <section class="catalog-panel speed-axis-panel" aria-label="Ranked Speed axis">
+          <div class="panel-heading"><span>Speed axis</span><strong id="speed-row-count">—</strong></div>
+          <div class="speed-axis-wrap">
+            <div class="speed-axis-header" aria-hidden="true">
+              <span>Spe</span><span>Stage</span><span>Preset</span><span>Pokémon</span><span>Order</span>
+            </div>
+            <div id="speed-axis" class="speed-axis"></div>
+          </div>
+        </section>
+
+        <section id="speed-breakpoint-panel" class="catalog-panel" aria-label="Speed breakpoints">
+          <div class="panel-heading"><span>Next breakpoints</span><strong id="speed-breakpoint-count">—</strong></div>
+          <div id="speed-breakpoints" class="speed-breakpoints"></div>
+        </section>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span>Limitless usage presets · Level 50 · 31 IV · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/speed-page.js"></script>
+  </body>
+</html>
