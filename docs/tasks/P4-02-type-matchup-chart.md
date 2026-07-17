@@ -1,6 +1,6 @@
 # P4-02 — Snapshot: defensive type-matchup chart
 
-Status: TODO
+Status: Done
 Depends on: P0-07
 Phase: 4 (snapshot polish)
 

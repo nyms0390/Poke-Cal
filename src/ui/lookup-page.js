@@ -10,6 +10,7 @@ import {
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
+import { defensiveMatchups } from "../engine/type-chart.js";
 import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
@@ -37,6 +38,9 @@ const elements = {
   commonBuildSource: document.querySelector("#common-build-source"),
   commonBuildFacts: document.querySelector("#common-build-facts"),
   commonBuildCalculator: document.querySelector("#common-build-calculator"),
+  typeMatchupCard: document.querySelector("#type-matchup-card"),
+  typeMatchupList: document.querySelector("#type-matchup-list"),
+  typeMatchupNote: document.querySelector("#type-matchup-note"),
   playstyleSummary: document.querySelector("#playstyle-summary"),
   spreadCount: document.querySelector("#spread-count"),
   spreadList: document.querySelector("#spread-list"),
@@ -185,6 +189,7 @@ function selectForm(entry, options = {}) {
 function renderCatalog() {
   renderUsageSource();
   renderCommonBuild();
+  renderDefensiveMatchups();
 
   const usage = selectedPokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
@@ -280,6 +285,47 @@ function commonBuildMoves(moves) {
 
 function formatUsagePercent(value) {
   return Number.isFinite(value) ? `${value.toFixed(1)}%` : "—";
+}
+
+function renderDefensiveMatchups() {
+  const types = selectedPokemon?.types ?? [];
+  if (types.length === 0) {
+    elements.typeMatchupCard.hidden = true;
+    return;
+  }
+
+  const labels = {
+    x4: "4×",
+    x2: "2×",
+    x1: "1×",
+    x05: "½×",
+    x025: "¼×",
+    x0: "0×",
+  };
+  const matchups = defensiveMatchups(types);
+  elements.typeMatchupList.replaceChildren(
+    ...Object.entries(matchups)
+      .filter(([, entries]) => entries.length > 0)
+      .map(([bucket, entries]) => matchupRow(labels[bucket], entries)),
+  );
+
+  const hasLevitate = resolvePokemonAbilities(selectedPokemon, abilityLookup)
+    .some(({ name }) => name === "Levitate");
+  elements.typeMatchupNote.textContent = hasLevitate ? "Levitate: immune to Ground" : "";
+  elements.typeMatchupNote.hidden = !hasLevitate;
+  elements.typeMatchupCard.hidden = false;
+}
+
+function matchupRow(labelText, types) {
+  const row = document.createElement("div");
+  row.className = "type-matchup-row";
+  const label = document.createElement("strong");
+  label.textContent = labelText;
+  const badges = document.createElement("div");
+  badges.className = "type-badges";
+  badges.append(...types.map(typeBadge));
+  row.append(label, badges);
+  return row;
 }
 
 function renderPlaystyle(abilities, rankedItems) {

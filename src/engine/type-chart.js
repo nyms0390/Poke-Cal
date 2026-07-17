@@ -52,3 +52,26 @@ export const TYPE_EFFECTIVENESS = {
   Steel: { Fire: 0.5, Water: 0.5, Electric: 0.5, Ice: 2, Rock: 2, Steel: 0.5, Fairy: 2 },
   Fairy: { Fire: 0.5, Fighting: 2, Poison: 0.5, Dragon: 2, Dark: 2, Steel: 0.5 },
 };
+
+export function defensiveMatchups(defenderTypes) {
+  const matchups = { x4: [], x2: [], x1: [], x05: [], x025: [], x0: [] };
+  const bucketByMultiplier = new Map([
+    [4, "x4"],
+    [2, "x2"],
+    [1, "x1"],
+    [0.5, "x05"],
+    [0.25, "x025"],
+    [0, "x0"],
+  ]);
+
+  for (const attackingType of Object.keys(TYPE_EFFECTIVENESS)) {
+    const multiplier = defenderTypes.reduce(
+      (total, defenderType) =>
+        total * (TYPE_EFFECTIVENESS[attackingType][defenderType] ?? 1),
+      1,
+    );
+    matchups[bucketByMultiplier.get(multiplier)].push(attackingType);
+  }
+
+  return matchups;
+}

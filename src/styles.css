@@ -709,6 +709,37 @@ button:disabled {
   text-decoration: underline;
 }
 
+.type-matchup-list {
+  display: grid;
+  gap: 10px;
+}
+
+.type-matchup-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.type-matchup-row > strong {
+  color: var(--accent);
+  font-size: var(--text-lg);
+  line-height: 1.35;
+}
+
+.type-matchup-row .type-badges {
+  justify-content: flex-start;
+}
+
+.type-matchup-note {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-tint);
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+}
+
 .spread-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
