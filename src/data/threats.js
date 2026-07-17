@@ -30,6 +30,43 @@ export function speedPresets({ baseSpe, nature = "Hardy" }) {
   ];
 }
 
+export function speedTierSummary(pokemon, threats) {
+  if (!pokemon || threats.length === 0) return [];
+  const comparedThreats = [...threats]
+    .sort(
+      (a, b) =>
+        b.usagePercent - a.usagePercent || a.pokemon.name.localeCompare(b.pokemon.name),
+    )
+    .slice(0, 10)
+    .flatMap((threat) => {
+      const likely = threat.spPresets.speed.find((preset) => preset.likely);
+      return likely ? [{ name: threat.pokemon.name, speed: likely.value }] : [];
+    });
+  if (comparedThreats.length === 0) return [];
+
+  const baseSpe = pokemon.baseStats?.spe ?? pokemon.baseSpeed;
+  const presets = [
+    { label: "Max (+Spe, 32 SP)", sp: 32, nature: "Timid" },
+    { label: "Fast (neutral, 32 SP)", sp: 32, nature: "Hardy" },
+    { label: "Uninvested (neutral, 0 SP)", sp: 0, nature: "Hardy" },
+    { label: "Min (−Spe, 0 SP)", sp: 0, nature: "Brave" },
+  ];
+
+  return presets.map(({ label, sp, nature }) => {
+    const value = calculateStat({ base: baseSpe, stat: "spe", sp, nature });
+    const outspeedNames = comparedThreats
+      .filter(({ speed }) => value > speed)
+      .map(({ name }) => name);
+    return {
+      label,
+      value,
+      outspeedCount: outspeedNames.length,
+      threatCount: comparedThreats.length,
+      outspeedNames,
+    };
+  });
+}
+
 function threatFromPokemon(pokemon, moveLookup) {
   const usage = pokemon.champions.usage;
   const natureEntry = topUsageEntry(usage?.natures);

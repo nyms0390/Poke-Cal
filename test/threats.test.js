@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildMoveLookup } from "../src/data/catalog.js";
-import { speedPresets, threatList } from "../src/data/threats.js";
+import { speedPresets, speedTierSummary, threatList } from "../src/data/threats.js";
 
 const moveLookup = buildMoveLookup([
   { id: "protect", name: "Protect", category: "Status" },
@@ -57,6 +57,54 @@ test("computes hand-checked Speed presets and marks nature-likely rows", () => {
   assert.equal(slow.find(({ likely }) => likely)?.label, "min (-spe 0)");
   const neutral = speedPresets({ baseSpe: 100, nature: "Modest" });
   assert.equal(neutral.find(({ likely }) => likely)?.label, "max (neutral 32)");
+});
+
+test("summarizes strict outspeeds against each threat's likely preset", () => {
+  const threats = threatList(fixtureCatalog, { moveLookup });
+  const summary = speedTierSummary(fixtureCatalog[0], threats);
+
+  // The selected Pokémon also has base 100 Speed: 167 / 152 / 120 / 108. The three likely
+  // threat speeds are Alpha 167, Zeta 108, and Beta 152, so equal values never count.
+  assert.deepEqual(
+    summary.map(({ label, value, outspeedCount, threatCount, outspeedNames }) => ({
+      label,
+      value,
+      outspeedCount,
+      threatCount,
+      outspeedNames,
+    })),
+    [
+      {
+        label: "Max (+Spe, 32 SP)",
+        value: 167,
+        outspeedCount: 2,
+        threatCount: 3,
+        outspeedNames: ["Zeta", "Beta"],
+      },
+      {
+        label: "Fast (neutral, 32 SP)",
+        value: 152,
+        outspeedCount: 1,
+        threatCount: 3,
+        outspeedNames: ["Zeta"],
+      },
+      {
+        label: "Uninvested (neutral, 0 SP)",
+        value: 120,
+        outspeedCount: 1,
+        threatCount: 3,
+        outspeedNames: ["Zeta"],
+      },
+      {
+        label: "Min (−Spe, 0 SP)",
+        value: 108,
+        outspeedCount: 0,
+        threatCount: 3,
+        outspeedNames: [],
+      },
+    ],
+  );
+  assert.deepEqual(speedTierSummary(fixtureCatalog[0], []), []);
 });
 
 function pokemonFixture({ id, name, usagePercent, nature }) {

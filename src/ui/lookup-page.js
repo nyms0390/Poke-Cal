@@ -8,6 +8,7 @@ import {
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
+import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
 import { defensiveMatchups } from "../engine/type-chart.js";
@@ -41,6 +42,8 @@ const elements = {
   typeMatchupCard: document.querySelector("#type-matchup-card"),
   typeMatchupList: document.querySelector("#type-matchup-list"),
   typeMatchupNote: document.querySelector("#type-matchup-note"),
+  speedTierCard: document.querySelector("#speed-tier-card"),
+  speedTierList: document.querySelector("#speed-tier-list"),
   playstyleSummary: document.querySelector("#playstyle-summary"),
   spreadCount: document.querySelector("#spread-count"),
   spreadList: document.querySelector("#spread-list"),
@@ -61,6 +64,7 @@ let abilityLookup = new Map();
 let moveLookup = new Map();
 let itemLookup = new Map();
 let items = [];
+let threats = [];
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
@@ -79,6 +83,7 @@ async function initialize() {
   moveLookup = data.moveLookup;
   itemLookup = data.itemLookup;
   items = data.items;
+  threats = threatList(pokemon, { count: 10, moveLookup });
   selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
     syncSearch: false,
   });
@@ -190,6 +195,7 @@ function renderCatalog() {
   renderUsageSource();
   renderCommonBuild();
   renderDefensiveMatchups();
+  renderSpeedTiers();
 
   const usage = selectedPokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
@@ -326,6 +332,39 @@ function matchupRow(labelText, types) {
   badges.append(...types.map(typeBadge));
   row.append(label, badges);
   return row;
+}
+
+function renderSpeedTiers() {
+  const summary = speedTierSummary(selectedPokemon, threats);
+  if (summary.length === 0) {
+    elements.speedTierCard.hidden = true;
+    elements.speedTierList.replaceChildren();
+    return;
+  }
+
+  elements.speedTierList.replaceChildren(...summary.map(speedTierRow));
+  elements.speedTierCard.hidden = false;
+}
+
+function speedTierRow(entry) {
+  const details = document.createElement("details");
+  details.className = "speed-tier-row";
+  const summary = document.createElement("summary");
+  const label = document.createElement("span");
+  label.textContent = entry.label;
+  const speed = document.createElement("strong");
+  speed.textContent = String(entry.value);
+  const count = document.createElement("span");
+  count.textContent = `Outspeeds ${entry.outspeedCount}/${entry.threatCount} top threats`;
+  count.title = entry.outspeedNames.join(", ") || "No top threats";
+  summary.append(label, speed, count);
+
+  const names = document.createElement("p");
+  names.textContent = entry.outspeedNames.length > 0
+    ? entry.outspeedNames.join(" · ")
+    : "No top threats at this Speed.";
+  details.append(summary, names);
+  return details;
 }
 
 function renderPlaystyle(abilities, rankedItems) {
