@@ -1,6 +1,6 @@
 # P4-01 — Snapshot: common-build card from Champions usage
 
-Status: TODO
+Status: Done
 Depends on: P0-07 (paths), P1-05 (tera usage data)
 Phase: 4 (snapshot polish)
 

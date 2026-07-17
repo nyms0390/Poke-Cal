@@ -190,7 +190,11 @@ async function initialize() {
   moves = data.moves;
   const storedTeams = loadStoredTeams();
   teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
-  renderDamageShell();
+  const requestedLeftId = new URLSearchParams(globalThis.location?.search ?? "").get("left");
+  const requestedLeft = pokemon.find(
+    ({ id }) => normalizeDamageId(id) === normalizeDamageId(requestedLeftId),
+  );
+  renderDamageShell({ requestedLeft });
 }
 
 for (const control of [
@@ -256,7 +260,7 @@ for (const side of ["attacker", "defender"]) {
   });
 }
 
-function renderDamageShell() {
+function renderDamageShell({ requestedLeft } = {}) {
   const natureOptions = Object.keys(NATURES).map((nature) =>
     optionElement(nature, natureOptionLabel(nature)),
   );
@@ -267,7 +271,8 @@ function renderDamageShell() {
   renderSideInputs("defender");
 
   for (const side of ["attacker", "defender"]) {
-    if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
+    if (side === "attacker" && requestedLeft) seedDamageSide(side, requestedLeft);
+    else if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
     else seedDamageSide(side, defaultPokemonForSide(side));
   }
   renderDamage();

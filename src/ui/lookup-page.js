@@ -8,6 +8,7 @@ import {
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
+import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
 import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
@@ -31,6 +32,11 @@ const elements = {
   formField: document.querySelector("#form-field"),
   form: document.querySelector("#form"),
   usageSource: document.querySelector("#usage-source"),
+  commonBuildCard: document.querySelector("#common-build-card"),
+  commonBuildHeadline: document.querySelector("#common-build-headline"),
+  commonBuildSource: document.querySelector("#common-build-source"),
+  commonBuildFacts: document.querySelector("#common-build-facts"),
+  commonBuildCalculator: document.querySelector("#common-build-calculator"),
   playstyleSummary: document.querySelector("#playstyle-summary"),
   spreadCount: document.querySelector("#spread-count"),
   spreadList: document.querySelector("#spread-list"),
@@ -178,6 +184,7 @@ function selectForm(entry, options = {}) {
 
 function renderCatalog() {
   renderUsageSource();
+  renderCommonBuild();
 
   const usage = selectedPokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
@@ -194,6 +201,85 @@ function renderCatalog() {
 
 function renderUsageSource() {
   elements.usageSource.textContent = "Limitless Champions tournament usage";
+}
+
+function renderCommonBuild() {
+  const champions = selectedPokemon?.champions;
+  const usage = champions?.usage;
+  if (!usage || !Number.isFinite(champions.usageCount)) {
+    elements.commonBuildCard.hidden = true;
+    elements.commonBuildFacts.replaceChildren();
+    return;
+  }
+
+  const defaults = championsDefaultsForPokemon(selectedPokemon, {
+    abilityLookup,
+    moveLookup,
+    items,
+  });
+  const nature = topUsageEntry(usage.natures);
+  const tera = topUsageEntry(usage.teras);
+  const moves = defaults.moves.slice(0, 4);
+
+  elements.commonBuildHeadline.textContent =
+    `${formatUsagePercent(champions.usagePercent)} usage · ` +
+    `${champions.usageCount.toLocaleString("en-US")} team samples`;
+  elements.commonBuildSource.textContent =
+    "Limitless Champions usage (last 50 tournaments)";
+  elements.commonBuildFacts.replaceChildren(
+    commonBuildFact("Ability", defaults.ability),
+    commonBuildFact("Item", defaults.item),
+    commonBuildFact("Nature", nature ?? { name: defaults.nature }),
+    commonBuildFact("Tera", tera ?? { name: defaults.teraType || "—" }),
+    commonBuildMoves(moves),
+  );
+  elements.commonBuildCalculator.href =
+    `./battle.html?left=${encodeURIComponent(selectedPokemon.id)}`;
+  elements.commonBuildCard.hidden = false;
+}
+
+function commonBuildFact(labelText, entry) {
+  const row = document.createElement("div");
+  row.className = "common-build-fact";
+
+  const label = document.createElement("span");
+  label.textContent = labelText;
+  const value = document.createElement("strong");
+  value.textContent = entry?.name ?? "—";
+  if (Number.isFinite(entry?.usagePercent)) {
+    const usage = document.createElement("small");
+    usage.textContent = formatUsagePercent(entry.usagePercent);
+    value.append(usage);
+  }
+  row.append(label, value);
+  return row;
+}
+
+function commonBuildMoves(moves) {
+  const row = document.createElement("div");
+  row.className = "common-build-fact common-build-moves";
+  const label = document.createElement("span");
+  label.textContent = "Moves";
+  const list = document.createElement("div");
+  list.className = "common-build-move-list";
+  list.append(
+    ...moves.map((move) => {
+      const item = document.createElement("span");
+      item.textContent = move.name;
+      if (Number.isFinite(move.usagePercent)) {
+        const usage = document.createElement("small");
+        usage.textContent = formatUsagePercent(move.usagePercent);
+        item.append(usage);
+      }
+      return item;
+    }),
+  );
+  row.append(label, list);
+  return row;
+}
+
+function formatUsagePercent(value) {
+  return Number.isFinite(value) ? `${value.toFixed(1)}%` : "—";
 }
 
 function renderPlaystyle(abilities, rankedItems) {
