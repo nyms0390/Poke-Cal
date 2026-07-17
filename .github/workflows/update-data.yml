@@ -35,6 +35,9 @@ jobs:
       - name: Sync Smogon Champions SP spreads
         run: npm run sync-champions-spreads
 
+      - name: Sync NCP Champions curated sets
+        run: npm run sync-ncp-spreads
+
       - name: Run tests
         run: npm test
 
@@ -47,5 +50,5 @@ jobs:
             echo "No data changes."
             exit 0
           fi
-          git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage, Smogon SP spreads)"
+          git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage, Smogon SP spreads, NCP sets)"
           git push

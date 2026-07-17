@@ -31,9 +31,10 @@ results area that P5-03/04/05 fill in.
 3. `src/ui/builder-page.js`: bootstrap catalogs; Pokémon search (shared component); editors
    for nature, item, ability, tera, SP per stat with a live "remaining SP" indicator if
    Champions has a total-SP budget — check the format rule: if unclear, show plain per-stat
-   totals and no budget (leave a `TODO(P5-03)` comment referencing the rule source).
-4. Live final-stats table updates on every input. Empty tabs/sections labeled
-   "Speed line", "Bulk points", "Break points" with placeholder text.
+   totals and no budget (leave a `TODO(P5-04)` comment referencing the rule source).
+4. Live final-stats table updates on every input. Empty sections labeled
+   "Bulk points" and "Break points" with placeholder text. NO speed section — link to
+   `speed.html?pokemon=<id>` instead (the speed tiers tab, P5-03, owns all speed UI).
 5. Seed from champions defaults on Pokémon select; accept `?pokemon=<id>` query param.
 
 ## Acceptance criteria

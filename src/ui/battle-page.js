@@ -464,8 +464,16 @@ function renderSideSelects(side, defaults) {
   const abilities = rankByUsage(resolvePokemonAbilities(damageState[side].pokemon, abilityLookup), usage?.abilities);
   const rankedItems = rankByUsage(items, usage?.items);
 
+  const usageSpreads = usage?.spreads ?? [];
+  const ncpSets = damageState[side].pokemon?.champions?.ncp?.sets ?? [];
   spreadSelect.replaceChildren(
-    optionElement("", "No Champions spread source"),
+    optionElement(
+      "",
+      usageSpreads.length > 0 || ncpSets.length > 0
+        ? "Custom spread"
+        : "No Champions spread source",
+    ),
+    ...spreadOptionGroups(usageSpreads, ncpSets),
   );
   spreadSelect.value = defaults.spreadName;
   natureSelect.value = damageState[side].nature;
@@ -485,6 +493,41 @@ function renderSideSelects(side, defaults) {
   itemSelect.value = damageState[side].item?.id ?? "";
   renderDamageMovePickers(side);
   renderSavedSetSelect(side);
+}
+
+function spreadOptionGroups(usageSpreads, ncpSets) {
+  const groups = [];
+  if (usageSpreads.length > 0) {
+    groups.push(
+      optionGroup(
+        "Smogon ladder SP spreads",
+        usageSpreads.map((spread) =>
+          optionElement(
+            spread.name,
+            Number.isFinite(spread.usagePercent)
+              ? `${spread.name} (${spread.usagePercent}%)`
+              : spread.name,
+          ),
+        ),
+      ),
+    );
+  }
+  if (ncpSets.length > 0) {
+    groups.push(
+      optionGroup(
+        "NCP curated sets",
+        ncpSets.map((set) => optionElement(set.spreadName, `${set.name} — ${set.spreadName}`)),
+      ),
+    );
+  }
+  return groups;
+}
+
+function optionGroup(label, options) {
+  const group = document.createElement("optgroup");
+  group.label = label;
+  group.append(...options);
+  return group;
 }
 
 function renderSavedSetSelect(side, selectedName = "") {

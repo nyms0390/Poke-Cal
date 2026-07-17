@@ -386,11 +386,73 @@ function topName(entries, fallback) {
 }
 
 function renderSpreads() {
-  elements.spreadCount.textContent = "0";
-  const empty = document.createElement("p");
-  empty.className = "empty-catalog";
-  empty.textContent = "No Champions spread source is available.";
-  elements.spreadList.replaceChildren(empty);
+  const usageSpreads = selectedPokemon?.champions?.usage?.spreads ?? [];
+  const ncpSets = selectedPokemon?.champions?.ncp?.sets ?? [];
+  elements.spreadCount.textContent = String(usageSpreads.length + ncpSets.length);
+
+  if (usageSpreads.length === 0 && ncpSets.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty-catalog";
+    empty.textContent = "No Champions spread source is available.";
+    elements.spreadList.replaceChildren(empty);
+    return;
+  }
+
+  elements.spreadList.replaceChildren(
+    ...usageSpreads.map(renderUsageSpreadRow),
+    ...ncpSets.map(renderNcpSetCard),
+    renderSpreadSource(usageSpreads.length > 0, ncpSets.length > 0),
+  );
+}
+
+function renderUsageSpreadRow(spread) {
+  const row = document.createElement("div");
+  row.className = "spread-row";
+
+  const name = document.createElement("strong");
+  name.textContent = spread.name;
+
+  const usage = document.createElement("span");
+  usage.textContent = Number.isFinite(spread.usagePercent) ? `${spread.usagePercent}%` : "—";
+
+  row.append(name, usage);
+  return row;
+}
+
+function renderNcpSetCard(set) {
+  const card = document.createElement("article");
+  card.className = "spread-card";
+
+  const heading = document.createElement("div");
+  heading.className = "spread-card-heading";
+  const name = document.createElement("strong");
+  name.textContent = set.name;
+  const spread = document.createElement("span");
+  spread.textContent = set.spreadName;
+  heading.append(name, spread);
+
+  const build = document.createElement("p");
+  build.textContent = [set.ability, set.item].filter(Boolean).join(" · ") || "—";
+
+  const moves = document.createElement("p");
+  moves.textContent = set.moves.join(" / ");
+
+  card.append(heading, build, moves);
+  return card;
+}
+
+function renderSpreadSource(hasUsageSpreads, hasNcpSets) {
+  const meta = selectedPokemon?.champions?.spreadsMeta;
+  const source = document.createElement("p");
+  source.className = "usage-source spread-source";
+  source.textContent = [
+    hasUsageSpreads &&
+      `Smogon ladder SP spreads${meta?.month ? ` (${meta.month}, cutoff ${meta.cutoff})` : ""}`,
+    hasNcpSets && "NCP curated sets (Nimbasa City Post)",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return source;
 }
 
 function renderAbilities(abilities) {

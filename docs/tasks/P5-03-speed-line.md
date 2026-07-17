@@ -1,45 +1,84 @@
-# P5-03 — Builder: speed line vs popular Pokémon
+# P5-03 — Speed tiers page (`speed.html`, dedicated tab)
 
 Status: TODO
-Depends on: P5-02
+Depends on: P5-01 (threat sets/presets). NOT on P5-02 anymore — this is its own page.
 Phase: 5 (builder utility)
 
+Reference for the presentation: Smogon's
+[Champions OU Speed Tiers thread](http://www.smogon.com/forums/threads/champions-ou-speed-tiers.3780503/)
+— a single descending list `Spe | +/- | EVs | Pokémon`, ties comma-merged on one row,
+boosted rows interleaved purely by numeric speed. We build the interactive version of that.
+
 ## Files to read
-- `src/data/threats.js` (`speedPresets`, `likely` flag), `src/engine/speed.js`
-- `src/ui/builder-state.js`
+- `src/engine/speed.js` (`calculateSpeed`, `finalSpeedInField` — already handles stage,
+  tailwind, paralysis, scarf, Trick Room order; do not add speed math anywhere else)
+- `src/data/threats.js` (`threatList`, `speedPresets`, `likely` flag)
+- `src/ui/battle-page.js` + `src/ui/components.js` (search, SP inputs, bootstrap patterns)
 
 ## Files to create
+- `speed.html`, `src/ui/speed-page.js`
 - `src/data/speed-line.js`, `test/speed-line.test.js`
 
 ## Files to change
-- `src/ui/builder-page.js`, `src/styles.css`
+- Nav links in `index.html`, `battle.html` (and `builder.html`/`duel.html` if they exist),
+  `src/styles.css`
 
 ## Goal
-The classic speed-tier sheet, personalized: one sorted column of speed values — yours
-(with your exact SP/nature/item) interleaved with every threat's speed presets — so you can
-see exactly whom you outspeed, tie, or underspeed, and what SP gets you past the next tier.
+A dedicated speed-tiers tab: one **vertical axis** (descending final speed) ranking the
+popular Pokémon — plus any manually added ones — against **one chosen Pokémon**. Two modes:
+
+- **Base** — rank by raw base Speed stat only. All toggles and spreads disabled/hidden.
+- **Battle** — final speed from the engine. Your side: full nature + Speed SP control.
+  Opposing side: NO spread control — each opponent appears at 4 fixed presets
+  (**Max** +Spe 32 · **Fast** neutral 32 · **Neutral** 0 · **Slow** −Spe 0 — relabel
+  `speedPresets` output, same math). Speed-control toggles exist on BOTH sides.
+
+## Design (pure module `src/data/speed-line.js`)
+```js
+speedTiers(user, opponents, options)
+// user:      { pokemon, nature, spe /* SP */, mods }
+// opponents: [{ pokemon, likelyPresetLabel }]   — from threatList + manual additions
+// options:   { mode: "base" | "battle", trickRoom: false,
+//              presetFilter: ["max","fast","neutral","slow"],
+//              userMods: { tailwind, paralysis, choiceScarf, stage },
+//              opponentMods: { tailwind, paralysis, choiceScarf, stage } /* applies to all */ }
+// → rows sorted by speed desc, ties merged:
+//   { speed, entries: [{ id, name, presetLabel, likely, isUser }],
+//     stage, actsBefore /* vs user, Trick Room-aware */ }
+// Base mode: speed = baseStats.spe, one entry per Pokémon, no presets/mods.
+nextBreakpoints(user, rows)   // battle mode only — minimum Speed SP (and +Spe-nature
+// variant when 32 isn't enough) to strictly exceed each not-yet-beaten tier above you:
+// [{ tierSpeed, names, requiredSp, requiresPlusNature }]
+```
+All battle-mode numbers must come from `calculateSpeed` (stage/tailwind/paralysis/
+multiplier/Trick Room order) — hand-compute nothing in this module.
 
 ## Steps
-1. `src/data/speed-line.js` (pure):
-   - `speedLine(userState, threats, { tailwind = false, trickRoom = false })` →
-     sorted array of `{ speed, owner: "you" | threatName, label, likely }` using
-     `finalSpeed` for the user (so Choice Scarf/paralysis/tailwind apply) and
-     `speedPresets` values for threats.
-   - `nextBreakpoints(userState, threats)` → for each beatable-but-not-yet-beaten tier above
-     the user's current speed, the minimum Speed SP (and, if 32 SP is not enough, the
-     +Spe-nature variant) that strictly exceeds it: iterate sp 0…32 with `calculateStat`,
-     find the smallest sp with speed > tier value. Return
-     `[{ threatName, presetLabel, tierSpeed, requiredSp, requiresPlusNature }]`.
-2. UI "Speed line" section: vertical sorted list, your row highlighted; threat rows show the
-   preset label and a dot when it's the `likely` preset; toggles for Tailwind (yours) and
-   Trick Room (reverses the comparison arrow, not the sort). Below: "breakpoints" list —
-   "+3 SP → outspeed max(neutral 32) Chien-Pao" style lines, click applies the SP.
-3. Tests: hand-computed three-threat fixture; tie handling (equal speed = tie, not outspeed);
-   Trick Room reversal; breakpoint minimality (sp−1 fails, sp succeeds).
+1. Implement `speedTiers` + `nextBreakpoints` with tests first (fixture of 3 opponents):
+   tie merging; preset interleaving order; Trick Room flips `actsBefore` but NOT the sort;
+   paralysis+tailwind stacking matches `calculateSpeed`; stage −1/+1/+2; breakpoint
+   minimality (sp−1 fails, sp succeeds); base mode ignores every mod.
+2. `speed.html` + `src/ui/speed-page.js` (bootstrap conventions, `?pokemon=<id>` param):
+   - Chosen-Pokémon panel: search, nature, Speed SP input, its mod toggles.
+   - Opponents panel: defaults to top-10 usage (`threatList`); search-to-add any Pokémon
+     as removable chips; preset filter chips (default: all 4, `likely` preset marked ●);
+     one shared mod-toggle group for the opposing side.
+   - Mode switch **Base | Battle** at the top; Base grays out both toggle groups, SP,
+     and presets. Global Trick Room toggle (battle only).
+   - The axis: Smogon-style rows `speed · stage · preset · icons+names`, your row
+     highlighted with an "acts before / after you" divider line at your speed; equal speed
+     = speed tie (never "outspeeds"). Reuse the minisprite approach from P6-03.
+   - Breakpoints list under the axis (battle mode): "+3 SP → outspeed Fast Chien-Pao";
+     clicking applies the SP to your input and the axis re-sorts.
+3. Builder note: builder.html gets NO speed section — it links here
+   (`speed.html?pokemon=<id>`). P5-02's placeholder list drops "Speed line".
+4. Manual QA desktop + mobile; long lists scroll within the axis, header stays visible.
 
 ## Acceptance criteria
-- Clicking a breakpoint updates the SP input and the line re-sorts consistently.
-- All arithmetic tested without DOM; UI only renders module output.
+- Zero speed math in the UI layer; `speed-line.js` fully tested without DOM.
+- Base mode shows raw base stats identical to catalog values; Battle mode row for a
+  Scarf+Tailwind+paralyzed case verified by hand against `calculateSpeed` in a test comment.
+- Toggling any mod/preset/mode never loses manually added opponents.
 
 ## Tests
 ```sh

@@ -1426,6 +1426,58 @@
             "usagePercent": 3.46
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Spell Tag Physical",
+            "spreadName": "Brave:32/32/0/0/2/0",
+            "nature": "Brave",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Spell Tag",
+            "moves": [
+              "Poltergeist",
+              "Shadow Sneak",
+              "Iron Head",
+              "Sacred Sword"
+            ]
+          },
+          {
+            "name": "Lefties Wide Guard Special",
+            "spreadName": "Quiet:32/0/0/32/2/0",
+            "nature": "Quiet",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Shadow Ball",
+              "Flash Cannon",
+              "Wide Guard",
+              "King's Shield"
+            ]
+          }
+        ]
       }
     }
   },
@@ -2065,6 +2117,58 @@
             "name": "Jolly:32/2/0/0/0/32",
             "usageCount": 10.4,
             "usagePercent": 1.78
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash Tailwind Support",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Rock Slide",
+              "Dual Wingbeat",
+              "Tailwind",
+              "Taunt"
+            ]
+          },
+          {
+            "name": "Offensive Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Aerodactylite",
+            "moves": [
+              "Rock Slide",
+              "Dual Wingbeat",
+              "Ice Fang",
+              "Iron Head"
+            ]
           }
         ]
       }
@@ -5512,6 +5616,58 @@
             "usagePercent": 1.6
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Bulk Up Lefties",
+            "spreadName": "Adamant:24/25/8/0/7/2",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 24,
+              "atk": 25,
+              "def": 8,
+              "spa": 0,
+              "spd": 7,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Rage Fist",
+              "Drain Punch",
+              "Bulk Up",
+              "Protect"
+            ]
+          },
+          {
+            "name": "Scarf Offense",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Shadow Claw",
+              "Close Combat",
+              "U-turn",
+              "Rock Slide"
+            ]
+          }
+        ]
       }
     }
   },
@@ -7271,6 +7427,58 @@
             "name": "Jolly:0/32/0/0/2/32",
             "usageCount": 7.2,
             "usagePercent": 3.44
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Full Offense",
+            "spreadName": "Adamant:1/32/0/0/1/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 1,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 1,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Flare Blitz",
+              "Rock Slide",
+              "Extreme Speed",
+              "Head Smash"
+            ]
+          },
+          {
+            "name": "Jolly Sash Rock Head",
+            "spreadName": "Jolly:1/32/0/0/1/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 1,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 1,
+              "spe": 32
+            },
+            "ability": "Rock Head",
+            "item": "Focus Sash",
+            "moves": [
+              "Flare Blitz",
+              "Rock Slide",
+              "Extreme Speed",
+              "Head Smash"
+            ]
           }
         ]
       }
@@ -11405,6 +11613,58 @@
             "usagePercent": 2.19
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Bulky Stamina Lefties",
+            "spreadName": "Modest:32/0/1/5/25/3",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 1,
+              "spa": 5,
+              "spd": 25,
+              "spe": 3
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Electro Shot",
+              "Flash Cannon",
+              "Draco Meteor",
+              "Dragon Pulse"
+            ]
+          },
+          {
+            "name": "Fast Stamina Chople",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Chople Berry",
+            "moves": [
+              "Electro Shot",
+              "Flash Cannon",
+              "Dragon Pulse",
+              "Aura Sphere"
+            ]
+          }
+        ]
       }
     }
   },
@@ -12068,6 +12328,37 @@
             "name": "Impish:32/0/32/0/2/0",
             "usageCount": 0.3,
             "usagePercent": 4.88
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "FedeCampo's GC 1st Sitrus Support",
+            "spreadName": "Impish:31/0/20/0/15/0",
+            "nature": "Impish",
+            "sps": {
+              "hp": 31,
+              "atk": 0,
+              "def": 20,
+              "spa": 0,
+              "spd": 15,
+              "spe": 0
+            },
+            "ability": "Insomnia",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Knock Off",
+              "Rage Powder",
+              "String Shot",
+              "Protect"
+            ]
           }
         ]
       }
@@ -16608,6 +16899,121 @@
             "usagePercent": 2.92
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Adaptability",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Adaptability",
+            "item": "Choice Scarf",
+            "moves": [
+              "Last Respects",
+              "Wave Crash",
+              "Flip Turn",
+              "Aqua Jet"
+            ]
+          },
+          {
+            "name": "Sash Liqudation",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Adaptability",
+            "item": "Focus Sash",
+            "moves": [
+              "Last Respects",
+              "Liquidation",
+              "Aqua Jet",
+              "Protect"
+            ]
+          },
+          {
+            "name": "shinde_klefki's PJCS Top 8 Sitrus",
+            "spreadName": "Adamant:6/8/11/0/23/18",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 6,
+              "atk": 8,
+              "def": 11,
+              "spa": 0,
+              "spd": 23,
+              "spe": 18
+            },
+            "ability": "Adaptability",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Wave Crash",
+              "Last Respects",
+              "Aqua Jet",
+              "Protect"
+            ]
+          },
+          {
+            "name": "Life Orb Adaptability",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Adaptability",
+            "item": "Life Orb",
+            "moves": [
+              "Last Respects",
+              "Wave Crash",
+              "Aqua Jet",
+              "Protect"
+            ]
+          },
+          {
+            "name": "Life Orb Swift Swim",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Life Orb",
+            "moves": [
+              "Last Respects",
+              "Wave Crash",
+              "Flip Turn",
+              "Aqua Jet"
+            ]
+          }
+        ]
       }
     }
   },
@@ -20197,6 +20603,37 @@
             "usagePercent": 2.53
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Mega Attacker under Tailwind",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Rain Dish",
+            "item": "Blastoisinite",
+            "moves": [
+              "Water Spout",
+              "Aura Sphere",
+              "Dark Pulse",
+              "Ice Beam"
+            ]
+          }
+        ]
       }
     }
   },
@@ -20953,6 +21390,58 @@
             "name": "Naive:0/32/0/2/0/32",
             "usageCount": 3.3,
             "usagePercent": 3.81
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Physical Offense Mega",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Blazikenite",
+            "moves": [
+              "Flare Blitz",
+              "Close Combat",
+              "Rock Slide",
+              "Detect"
+            ]
+          },
+          {
+            "name": "Special Coaching Sash",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Heat Wave",
+              "Aura Sphere",
+              "Overheat",
+              "Coaching"
+            ]
           }
         ]
       }
@@ -24891,6 +25380,37 @@
           }
         ],
         "teras": []
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "TR Offense Mega",
+            "spreadName": "Quiet:32/0/2/32/0/0",
+            "nature": "Quiet",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 32,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Cameruptite",
+            "moves": [
+              "Earth Power",
+              "Heat Wave",
+              "Eruption",
+              "Ancient Power"
+            ]
+          }
+        ]
       }
     }
   },
@@ -26850,6 +27370,37 @@
             "usagePercent": 2.59
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Dawei Si's NAIC T8 Colbur Bulk Up",
+            "spreadName": "Adamant:27/20/18/0/1/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 27,
+              "atk": 20,
+              "def": 18,
+              "spa": 0,
+              "spd": 1,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Colbur Berry",
+            "moves": [
+              "Bitter Blade",
+              "Shadow Sneak",
+              "Bulk Up",
+              "Protect"
+            ]
+          }
+        ]
       }
     }
   },
@@ -28214,6 +28765,58 @@
             "name": "Modest:32/0/2/32/0/0",
             "usageCount": 0.2,
             "usagePercent": 3.6
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Fast Offense Mega Y",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Solar Power",
+            "item": "Charizardite Y",
+            "moves": [
+              "Heat Wave",
+              "Weather Ball",
+              "Solar Beam",
+              "Air Slash"
+            ]
+          },
+          {
+            "name": "DD Mega X",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Blaze",
+            "item": "Charizardite X",
+            "moves": [
+              "Flare Blitz",
+              "Dragon Claw",
+              "Thunder Punch",
+              "Dragon Dance"
+            ]
           }
         ]
       }
@@ -32312,6 +32915,37 @@
             "usagePercent": 2.68
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Physically Defensive Sitrus",
+            "spreadName": "Bold:32/0/32/0/2/0",
+            "nature": "Bold",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 32,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "Unaware",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Moonblast",
+              "Icy Wind",
+              "Follow Me",
+              "Helping Hand"
+            ]
+          }
+        ]
       }
     }
   },
@@ -35133,6 +35767,58 @@
             "name": "Adamant:32/13/7/0/5/9",
             "usageCount": 6.7,
             "usagePercent": 2.62
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Full Bulk TW Support",
+            "spreadName": "Impish:32/0/32/0/2/0",
+            "nature": "Impish",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 32,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Brave Bird",
+              "Body Press",
+              "Roost",
+              "Tailwind"
+            ]
+          },
+          {
+            "name": "Bulk Up Sitrus",
+            "spreadName": "Adamant:20/24/3/0/1/18",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 20,
+              "atk": 24,
+              "def": 3,
+              "spa": 0,
+              "spd": 1,
+              "spe": 18
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Brave Bird",
+              "Body Press",
+              "Iron Head",
+              "Bulk Up"
+            ]
           }
         ]
       }
@@ -40611,6 +41297,37 @@
             "usagePercent": 0.15822784810126583
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Fast Offensive Mega",
+            "spreadName": "Timid:1/0/1/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Blaze",
+            "item": "Delphoxite",
+            "moves": [
+              "Heat Wave",
+              "Psychic",
+              "Psyshock",
+              "Dazzling Gleam"
+            ]
+          }
+        ]
       }
     }
   },
@@ -44729,6 +45446,37 @@
             "usagePercent": 1.64
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Physical Sash Wisp",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Dragon Darts",
+              "Phantom Force",
+              "Psychic Fangs",
+              "Will-O-Wisp"
+            ]
+          }
+        ]
       }
     }
   },
@@ -45494,6 +46242,79 @@
             "name": "Adamant:32/32/0/0/0/2",
             "usageCount": 6.8,
             "usagePercent": 2.87
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Special Coverage Mega",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Dragoninite",
+            "moves": [
+              "Dragon Pulse",
+              "Thunderbolt",
+              "Heat Wave",
+              "Ice Beam"
+            ]
+          },
+          {
+            "name": "Special Rain Mega",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Dragoninite",
+            "moves": [
+              "Draco Meteor",
+              "Hurricane",
+              "Extreme Speed",
+              "Thunder"
+            ]
+          },
+          {
+            "name": "Dragon Fang Physical Offense",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Dragon Fang",
+            "moves": [
+              "Dragon Claw",
+              "Low Kick",
+              "Extreme Speed",
+              "Scale Shot"
+            ]
           }
         ]
       }
@@ -53752,6 +54573,58 @@
             "usagePercent": 1.92
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Max Attack Sand Offense",
+            "spreadName": "Adamant:0/32/2/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 0,
+              "atk": 32,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "High Horsepower",
+              "Iron Head",
+              "Rock Slide",
+              "Earthquake"
+            ]
+          },
+          {
+            "name": "Max Speed Mega Option",
+            "spreadName": "Jolly:0/32/2/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 0,
+              "atk": 32,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Excadrite",
+            "moves": [
+              "High Horsepower",
+              "Iron Head",
+              "Rock Slide",
+              "Earthquake"
+            ]
+          }
+        ]
       }
     }
   },
@@ -55512,6 +56385,58 @@
             "name": "Bold:29/0/20/0/17/0",
             "usageCount": 51.3,
             "usagePercent": 1.67
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offensive TR Sitrus",
+            "spreadName": "Quiet:32/0/2/32/0/0",
+            "nature": "Quiet",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 32,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "Armor Tail",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Psychic",
+              "Twin Beam",
+              "Thunderbolt",
+              "Trick Room"
+            ]
+          },
+          {
+            "name": "Bulky Colbur",
+            "spreadName": "Bold:32/0/22/0/12/0",
+            "nature": "Bold",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 22,
+              "spa": 0,
+              "spd": 12,
+              "spe": 0
+            },
+            "ability": "Armor Tail",
+            "item": "Colbur Berry",
+            "moves": [
+              "Psychic",
+              "Thunderbolt",
+              "Twin Beam",
+              "Trick Room"
+            ]
           }
         ]
       }
@@ -58407,6 +59332,58 @@
             "usagePercent": 2.82
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Max Speed Mega Attacker",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Floettite",
+            "moves": [
+              "Moonblast",
+              "Dazzling Gleam",
+              "Light of Ruin",
+              "Protect"
+            ]
+          },
+          {
+            "name": "Calm Mind Mega Sweeper",
+            "spreadName": "Modest:26/0/2/25/0/13",
+            "nature": "Modest",
+            "sps": {
+              "hp": 26,
+              "atk": 0,
+              "def": 2,
+              "spa": 25,
+              "spd": 0,
+              "spe": 13
+            },
+            "ability": "",
+            "item": "Floettite",
+            "moves": [
+              "Moonblast",
+              "Dazzling Gleam",
+              "Draining Kiss",
+              "Calm Mind"
+            ]
+          }
+        ]
       }
     }
   },
@@ -60233,6 +61210,37 @@
             "usagePercent": 5.21
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offensive Veil Mega",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Cursed Body",
+            "item": "Froslassite",
+            "moves": [
+              "Blizzard",
+              "Shadow Ball",
+              "Thunderbolt",
+              "Aurora Veil"
+            ]
+          }
+        ]
       }
     }
   },
@@ -61404,6 +62412,37 @@
             "usagePercent": 2.98
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash TR Offense",
+            "spreadName": "Brave:32/32/2/0/0/0",
+            "nature": "Brave",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Sacred Sword",
+              "Psycho Cut",
+              "Wide Guard",
+              "Trick Room"
+            ]
+          }
+        ]
       }
     }
   },
@@ -62444,6 +63483,58 @@
             "usagePercent": 1.93
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Offense",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Earthquake",
+              "Dragon Claw",
+              "Rock Slide",
+              "Stomping Tantrum"
+            ]
+          },
+          {
+            "name": "Max Speed LOrb",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Life Orb",
+            "moves": [
+              "Earthquake",
+              "Dragon Claw",
+              "Rock Slide",
+              "Stomping Tantrum"
+            ]
+          }
+        ]
       }
     }
   },
@@ -63161,6 +64252,58 @@
             "name": "Quiet:32/0/0/32/2/0",
             "usageCount": 0.4,
             "usagePercent": 1.59
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Bulky TR Mega",
+            "spreadName": "Modest:32/0/2/32/0/0",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 32,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Gardevoirite",
+            "moves": [
+              "Hyper Voice",
+              "Psyshock",
+              "Psychic",
+              "Trick Room"
+            ]
+          },
+          {
+            "name": "Timid Scarf",
+            "spreadName": "Timid:0/0/2/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 0,
+              "atk": 0,
+              "def": 2,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Moonblast",
+              "Psyshock",
+              "Dazzling Gleam",
+              "Icy Wind"
+            ]
           }
         ]
       }
@@ -64830,6 +65973,79 @@
             "usagePercent": 3.3
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offensive Mega",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Gengarite",
+            "moves": [
+              "Shadow Ball",
+              "Sludge Bomb",
+              "Icy Wind",
+              "Protect"
+            ]
+          },
+          {
+            "name": "Bulkier Perish Mega",
+            "spreadName": "Timid:32/0/9/1/1/23",
+            "nature": "Timid",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 9,
+              "spa": 1,
+              "spd": 1,
+              "spe": 23
+            },
+            "ability": "",
+            "item": "Gengarite",
+            "moves": [
+              "Shadow Ball",
+              "Sludge Bomb",
+              "Perish Song",
+              "Disable"
+            ]
+          },
+          {
+            "name": "Sash Offense",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Shadow Ball",
+              "Sludge Bomb",
+              "Icy Wind",
+              "Protect"
+            ]
+          }
+        ]
       }
     }
   },
@@ -65781,6 +66997,58 @@
             "name": "Modest:21/0/1/17/0/27",
             "usageCount": 28.1,
             "usagePercent": 1.57
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Life Orb Modest",
+            "spreadName": "Modest:7/0/0/27/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 7,
+              "atk": 0,
+              "def": 0,
+              "spa": 27,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Life Orb",
+            "moves": [
+              "Make It Rain",
+              "Shadow Ball",
+              "Thunderbolt",
+              "Nasty Plot"
+            ]
+          },
+          {
+            "name": "Timid Scarf",
+            "spreadName": "Timid:1/0/0/32/1/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 1,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Make It Rain",
+              "Shadow Ball",
+              "Power Gem",
+              "Steel Beam"
+            ]
           }
         ]
       }
@@ -67735,6 +69003,58 @@
             "usagePercent": 3.02
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Modest Sash",
+            "spreadName": "Modest:1/0/0/32/1/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 1,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Power Gem",
+              "Sludge Bomb",
+              "Earth Power",
+              "Energy Ball"
+            ]
+          },
+          {
+            "name": "Fast Offense Mega",
+            "spreadName": "Timid:1/0/0/32/1/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 1,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Glimmoranite",
+            "moves": [
+              "Power Gem",
+              "Sludge Bomb",
+              "Sludge Wave",
+              "Earth Power"
+            ]
+          }
+        ]
       }
     }
   },
@@ -69666,6 +70986,37 @@
             "name": "Jolly:2/32/0/0/0/32",
             "usageCount": 0.1,
             "usagePercent": 1.14
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "TR Offense Mega",
+            "spreadName": "Brave:32/32/0/0/2/0",
+            "nature": "Brave",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "No Guard",
+            "item": "Golurkite",
+            "moves": [
+              "Headlong Rush",
+              "Poltergeist",
+              "Ice Punch",
+              "Drain Punch"
+            ]
           }
         ]
       }
@@ -73965,6 +75316,37 @@
             "usagePercent": 2.18
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Screens Clay Support",
+            "spreadName": "Careful:32/0/13/0/21/0",
+            "nature": "Careful",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 13,
+              "spa": 0,
+              "spd": 21,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Light Clay",
+            "moves": [
+              "Reflect",
+              "Light Screen",
+              "Spirit Break",
+              "Foul Play"
+            ]
+          }
+        ]
       }
     }
   },
@@ -76000,6 +77382,58 @@
             "usagePercent": 3.58
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Max Speed DD Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Gyaradosite",
+            "moves": [
+              "Waterfall",
+              "Lash Out",
+              "Earthquake",
+              "Dragon Dance"
+            ]
+          },
+          {
+            "name": "Sitrus Disruption",
+            "spreadName": "Adamant:32/32/2/0/0/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Waterfall",
+              "Ice Fang",
+              "Taunt",
+              "Thunder Wave"
+            ]
+          }
+        ]
       }
     }
   },
@@ -76933,6 +78367,37 @@
             "name": "Modest:32/0/2/32/0/0",
             "usageCount": 2.3,
             "usagePercent": 1.97
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Fairy Feather Trick Room",
+            "spreadName": "Quiet:32/0/2/32/0/0",
+            "nature": "Quiet",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 32,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Fairy Feather",
+            "moves": [
+              "Psychic",
+              "Dazzling Gleam",
+              "Mystical Fire",
+              "Trick Room"
+            ]
           }
         ]
       }
@@ -82423,6 +83888,37 @@
             "usagePercent": 1.75
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Coverage Offense",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Dark Pulse",
+              "Draco Meteor",
+              "Earth Power",
+              "Flamethrower"
+            ]
+          }
+        ]
       }
     }
   },
@@ -83540,6 +85036,37 @@
             "name": "Sassy:32/0/14/0/20/0",
             "usageCount": 97.9,
             "usagePercent": 1.79
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Balanced Bulk Sitrus",
+            "spreadName": "Careful:32/0/14/0/20/0",
+            "nature": "Careful",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 14,
+              "spa": 0,
+              "spd": 20,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Flare Blitz",
+              "Darkest Lariat",
+              "Fake Out",
+              "Parting Shot"
+            ]
           }
         ]
       }
@@ -87346,6 +88873,77 @@
             "usagePercent": 4.84
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Silk Scarf Last Resort",
+            "spreadName": "Adamant:32/32/2/0/0/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Silk Scarf",
+            "moves": [
+              "Fake Out",
+              "Last Resort"
+            ]
+          },
+          {
+            "name": "Fast Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Kangaskhanite",
+            "moves": [
+              "Fake Out",
+              "Double-Edge",
+              "Sucker Punch",
+              "Drain Punch"
+            ]
+          },
+          {
+            "name": "Bulky Max Attack Mega",
+            "spreadName": "Adamant:32/32/0/0/0/2",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Kangaskhanite",
+            "moves": [
+              "Fake Out",
+              "Double-Edge",
+              "Sucker Punch",
+              "Drain Punch"
+            ]
+          }
+        ]
       }
     }
   },
@@ -88549,6 +90147,58 @@
             "usagePercent": 3.7
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Black Glasses Offense",
+            "spreadName": "Adamant:32/32/0/0/2/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Black Glasses",
+            "moves": [
+              "Kowtow Cleave",
+              "Iron Head",
+              "Sucker Punch",
+              "Low Kick"
+            ]
+          },
+          {
+            "name": "Speedy Sash",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Kowtow Cleave",
+              "Iron Head",
+              "Sucker Punch",
+              "Low Kick"
+            ]
+          }
+        ]
       }
     }
   },
@@ -89523,6 +91173,58 @@
             "name": "Jolly:31/0/0/0/32/3",
             "usageCount": 1.5,
             "usagePercent": 2.24
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Offense",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Stone Axe",
+              "Close Combat",
+              "Rock Slide",
+              "U-turn"
+            ]
+          },
+          {
+            "name": "Sash Adamant",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Stone Axe",
+              "Close Combat",
+              "Feint",
+              "X-Scissor"
+            ]
           }
         ]
       }
@@ -90632,6 +92334,58 @@
             "name": "Modest:26/0/1/30/0/9",
             "usageCount": 7.8,
             "usagePercent": 2.79
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Omni Boost Lefties Sweeper",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Clanging Scales",
+              "Aura Sphere",
+              "Vacuum Wave",
+              "Clangorous Soul"
+            ]
+          },
+          {
+            "name": "Iron Defense Body Press",
+            "spreadName": "Bold:32/0/32/0/0/2",
+            "nature": "Bold",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 32,
+              "spa": 0,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Body Press",
+              "Flamethrower",
+              "Draco Meteor",
+              "Iron Defense"
+            ]
           }
         ]
       }
@@ -99367,6 +101121,37 @@
             "usagePercent": 8.68
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Adamant Sash",
+            "spreadName": "Adamant:1/32/1/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 1,
+              "atk": 32,
+              "def": 1,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Rock Slide",
+              "Close Combat",
+              "Accelerock",
+              "Psychic Fangs"
+            ]
+          }
+        ]
       }
     }
   },
@@ -102682,6 +104467,37 @@
             "usagePercent": 4.24
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash Oblivious Offense",
+            "spreadName": "Adamant:0/32/0/0/2/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 0,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 32
+            },
+            "ability": "Oblivious",
+            "item": "Focus Sash",
+            "moves": [
+              "Ice Shard",
+              "High Horsepower",
+              "Icicle Crash",
+              "Rock Slide"
+            ]
+          }
+        ]
       }
     }
   },
@@ -105358,6 +107174,37 @@
             "usagePercent": 3.54
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Chople Support",
+            "spreadName": "Jolly:32/0/2/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Friend Guard",
+            "item": "Chople Berry",
+            "moves": [
+              "Super Fang",
+              "Feint",
+              "Follow Me",
+              "Taunt"
+            ]
+          }
+        ]
       }
     }
   },
@@ -105440,7 +107287,38 @@
     ],
     "champions": {
       "legal": true,
-      "tier": "UU"
+      "tier": "UU",
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Chople Support",
+            "spreadName": "Jolly:32/0/2/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Friend Guard",
+            "item": "Chople Berry",
+            "moves": [
+              "Super Fang",
+              "Feint",
+              "Follow Me",
+              "Taunt"
+            ]
+          }
+        ]
+      }
     }
   },
   {
@@ -105726,6 +107604,58 @@
             "name": "None",
             "usageCount": 1,
             "usagePercent": 0.25252525252525254
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "TR Attacker Mega",
+            "spreadName": "Brave:32/32/0/0/2/0",
+            "nature": "Brave",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Mawilite",
+            "moves": [
+              "Play Rough",
+              "Sucker Punch",
+              "Iron Head",
+              "Rock Slide"
+            ]
+          },
+          {
+            "name": "Tailwind Offense Mega",
+            "spreadName": "Adamant:19/32/0/0/0/15",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 19,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 15
+            },
+            "ability": "Hyper Cutter",
+            "item": "Mawilite",
+            "moves": [
+              "Play Rough",
+              "Sucker Punch",
+              "Iron Head",
+              "Brick Break"
+            ]
           }
         ]
       }
@@ -106685,6 +108615,37 @@
             "name": "Grass",
             "usageCount": 2,
             "usagePercent": 2.7777777777777777
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Bulky Offense Mega",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Meganiumite",
+            "moves": [
+              "Solar Beam",
+              "Dazzling Gleam",
+              "Weather Ball",
+              "Earth Power"
+            ]
           }
         ]
       }
@@ -109646,6 +111607,37 @@
             "usagePercent": 3.67
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Jolly Offense Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Metagrossite",
+            "moves": [
+              "Iron Head",
+              "Psychic Fangs",
+              "Body Press",
+              "Ice Punch"
+            ]
+          }
+        ]
       }
     }
   },
@@ -111826,6 +113818,37 @@
             "name": "Bold:32/0/11/0/18/5",
             "usageCount": 13.2,
             "usagePercent": 1.84
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Lefties Bulk",
+            "spreadName": "Bold:32/0/32/0/2/0",
+            "nature": "Bold",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 32,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Scald",
+              "Icy Wind",
+              "Ice Beam",
+              "Recover"
+            ]
           }
         ]
       }
@@ -118505,6 +120528,37 @@
             "usagePercent": 3.81
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Fake Tears Scarf Offense",
+            "spreadName": "Modest:1/0/1/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Heat Wave",
+              "Solar Beam",
+              "Overheat",
+              "Fake Tears"
+            ]
+          }
+        ]
       }
     }
   },
@@ -118921,6 +120975,58 @@
             "name": "Timid:0/0/2/32/0/32",
             "usageCount": 19.1,
             "usagePercent": 1.97
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Ice Offense",
+            "spreadName": "Timid:1/0/1/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Never-Melt Ice",
+            "moves": [
+              "Blizzard",
+              "Freeze-Dry",
+              "Icy Wind",
+              "Moonblast"
+            ]
+          },
+          {
+            "name": "Sash Veil Encore",
+            "spreadName": "Timid:1/0/1/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Blizzard",
+              "Icy Wind",
+              "Aurora Veil",
+              "Encore"
+            ]
           }
         ]
       }
@@ -123658,6 +125764,58 @@
             "usagePercent": 7.17
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Leftovers Bulk Up",
+            "spreadName": "Adamant:32/32/0/0/0/2",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Jet Punch",
+              "Wave Crash",
+              "Drain Punch",
+              "Bulk Up"
+            ]
+          },
+          {
+            "name": "Mystic Water Offense",
+            "spreadName": "Adamant:32/32/0/0/0/2",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Mystic Water",
+            "moves": [
+              "Wave Crash",
+              "Jet Punch",
+              "Flip Turn",
+              "Close Combat"
+            ]
+          }
+        ]
       }
     }
   },
@@ -126373,6 +128531,79 @@
             "name": "Bold:32/0/32/2/0/0",
             "usageCount": 54.9,
             "usagePercent": 2.01
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash Tailwind Offense",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Weather Ball",
+              "Hurricane",
+              "Muddy Water",
+              "Tailwind"
+            ]
+          },
+          {
+            "name": "Sitrus Offensive Support",
+            "spreadName": "Modest:31/0/1/5/18/11",
+            "nature": "Modest",
+            "sps": {
+              "hp": 31,
+              "atk": 0,
+              "def": 1,
+              "spa": 5,
+              "spd": 18,
+              "spe": 11
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Weather Ball",
+              "Hurricane",
+              "Wide Guard",
+              "Helping Hand"
+            ]
+          },
+          {
+            "name": "Max Speed Scarf",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Weather Ball",
+              "Hurricane",
+              "Icy Wind",
+              "Muddy Water"
+            ]
           }
         ]
       }
@@ -131122,6 +133353,58 @@
             "usagePercent": 3
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Offense",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Weather Ball",
+              "Icy Wind",
+              "Muddy Water",
+              "Ice Beam"
+            ]
+          },
+          {
+            "name": "Bulky Support",
+            "spreadName": "Calm:32/0/32/0/2/0",
+            "nature": "Calm",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 32,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Leftovers",
+            "moves": [
+              "Weather Ball",
+              "Icy Wind",
+              "Helping Hand",
+              "Perish Song"
+            ]
+          }
+        ]
       }
     }
   },
@@ -133112,6 +135395,37 @@
             "usagePercent": 1.92
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Mystic Water Offense",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Mystic Water",
+            "moves": [
+              "Hyper Voice",
+              "Moonblast",
+              "Dazzling Gleam",
+              "Ice Beam"
+            ]
+          }
+        ]
       }
     }
   },
@@ -134639,6 +136953,37 @@
             "name": "Normal",
             "usageCount": 1,
             "usagePercent": 0.7692307692307693
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sun Offense Mega",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Pyroarite",
+            "moves": [
+              "Heat Wave",
+              "Overheat",
+              "Solar Beam",
+              "Protect"
+            ]
           }
         ]
       }
@@ -136754,6 +139099,58 @@
             "name": "Hasty:0/2/0/32/0/32",
             "usageCount": 10.7,
             "usagePercent": 6.14
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "HP/Def Invested Mega Y",
+            "spreadName": "Timid:32/0/11/0/0/23",
+            "nature": "Timid",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 11,
+              "spa": 0,
+              "spd": 0,
+              "spe": 23
+            },
+            "ability": "",
+            "item": "Raichunite Y",
+            "moves": [
+              "Zap Cannon",
+              "Focus Blast",
+              "Fake Out",
+              "Grass Knot"
+            ]
+          },
+          {
+            "name": "Rising Voltage Mega X",
+            "spreadName": "Timid:30/0/1/10/0/25",
+            "nature": "Timid",
+            "sps": {
+              "hp": 30,
+              "atk": 0,
+              "def": 1,
+              "spa": 10,
+              "spd": 0,
+              "spe": 25
+            },
+            "ability": "",
+            "item": "Raichunite X",
+            "moves": [
+              "Rising Voltage",
+              "Volt Tackle",
+              "Fake Out",
+              "Volt Switch"
+            ]
           }
         ]
       }
@@ -142968,6 +145365,58 @@
             "usagePercent": 1.27
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Electroweb",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Overheat",
+              "Electroweb",
+              "Volt Switch",
+              "Trick"
+            ]
+          },
+          {
+            "name": "Wisp Support",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Overheat",
+              "Thunderbolt",
+              "Volt Switch",
+              "Will-O-Wisp"
+            ]
+          }
+        ]
       }
     }
   },
@@ -143205,6 +145654,37 @@
             "name": "Calm:32/0/0/2/32/0",
             "usageCount": 1.1,
             "usagePercent": 2.68
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Electroweb",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Leaf Storm",
+              "Electroweb",
+              "Volt Switch",
+              "Thunderbolt"
+            ]
           }
         ]
       }
@@ -143565,6 +146045,58 @@
             "name": "Bold:32/0/13/11/9/0",
             "usageCount": 10.5,
             "usagePercent": 1.66
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Wisp Support",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Hydro Pump",
+              "Thunderbolt",
+              "Volt Switch",
+              "Will-O-Wisp"
+            ]
+          },
+          {
+            "name": "Scarf Electroweb",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Hydro Pump",
+              "Electroweb",
+              "Volt Switch",
+              "Trick"
+            ]
           }
         ]
       }
@@ -144669,6 +147201,37 @@
             "name": "Careful:32/0/9/0/25/0",
             "usageCount": 23.4,
             "usagePercent": 3.32
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Roseli Disruption",
+            "spreadName": "Careful:32/0/2/0/32/0",
+            "nature": "Careful",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 2,
+              "spa": 0,
+              "spd": 32,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Roseli Berry",
+            "moves": [
+              "Foul Play",
+              "Fake Out",
+              "Encore",
+              "Will-O-Wisp"
+            ]
           }
         ]
       }
@@ -145996,6 +148559,58 @@
             "name": "Adamant:8/32/0/0/0/26",
             "usageCount": 4.6,
             "usagePercent": 4.2
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Jolly Scarf",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Sacred Sword",
+              "Aqua Cutter",
+              "Night Slash",
+              "Flip Turn"
+            ]
+          },
+          {
+            "name": "Adamant Sash",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Sacred Sword",
+              "Aqua Cutter",
+              "Night Slash",
+              "Sucker Punch"
+            ]
           }
         ]
       }
@@ -147687,6 +150302,37 @@
             "usagePercent": 4.52
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offense Mega",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Sceptilite",
+            "moves": [
+              "Leaf Storm",
+              "Dragon Pulse",
+              "Earth Power",
+              "Energy Ball"
+            ]
+          }
+        ]
       }
     }
   },
@@ -148190,6 +150836,37 @@
             "name": "Adamant:32/32/2/0/0/0",
             "usageCount": 1.7,
             "usagePercent": 3.12
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offense Mega on Rain",
+            "spreadName": "Adamant:32/32/0/0/2/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Scizorite",
+            "moves": [
+              "Bullet Punch",
+              "Bug Bite",
+              "Close Combat",
+              "Swords Dance"
+            ]
           }
         ]
       }
@@ -149155,6 +151832,37 @@
             "name": "Bold:32/0/13/0/21/0",
             "usageCount": 0.3,
             "usagePercent": 6.15
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Bulky Moody Mega",
+            "spreadName": "Calm:30/0/18/0/18/0",
+            "nature": "Calm",
+            "sps": {
+              "hp": 30,
+              "atk": 0,
+              "def": 18,
+              "spa": 0,
+              "spd": 18,
+              "spe": 0
+            },
+            "ability": "Moody",
+            "item": "Scovillainite",
+            "moves": [
+              "Overheat",
+              "Giga Drain",
+              "Rage Powder",
+              "Leech Seed"
+            ]
           }
         ]
       }
@@ -156823,6 +159531,37 @@
             "usagePercent": 3.55
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sitrus TR Redirect",
+            "spreadName": "Bold:32/0/14/0/20/0",
+            "nature": "Bold",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 14,
+              "spa": 0,
+              "spd": 20,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Sitrus Berry",
+            "moves": [
+              "Matcha Gotcha",
+              "Shadow Ball",
+              "Rage Powder",
+              "Trick Room"
+            ]
+          }
+        ]
       }
     }
   },
@@ -162003,6 +164742,37 @@
             "usagePercent": 1.67
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Offensive White Herb Unburden",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "White Herb",
+            "moves": [
+              "Close Combat",
+              "Dire Claw",
+              "Fake Out",
+              "Rock Slide"
+            ]
+          }
+        ]
       }
     }
   },
@@ -165805,6 +168575,58 @@
             "usagePercent": 2.14
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Jolly STABs Roost Mega",
+            "spreadName": "Jolly:0/32/0/0/2/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 0,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Staraptite",
+            "moves": [
+              "Close Combat",
+              "Brave Bird",
+              "Dual Wingbeat",
+              "Roost"
+            ]
+          },
+          {
+            "name": "Scarf Final Gambit",
+            "spreadName": "Jolly:32/1/1/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 32,
+              "atk": 1,
+              "def": 1,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Final Gambit",
+              "Close Combat",
+              "Brave Bird",
+              "U-turn"
+            ]
+          }
+        ]
       }
     }
   },
@@ -166476,6 +169298,37 @@
             "usagePercent": 1.24
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Rain Offense Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Natural Cure",
+            "item": "Starminite",
+            "moves": [
+              "Liquidation",
+              "Zen Headbutt",
+              "Ice Spinner",
+              "Aqua Jet"
+            ]
+          }
+        ]
       }
     }
   },
@@ -167006,6 +169859,37 @@
             "name": "Impish:32/2/32/0/0/0",
             "usageCount": 0.2,
             "usagePercent": 3.48
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Specially Defensive Mega",
+            "spreadName": "Brave:32/6/1/0/27/0",
+            "nature": "Brave",
+            "sps": {
+              "hp": 32,
+              "atk": 6,
+              "def": 1,
+              "spa": 0,
+              "spd": 27,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Steelixite",
+            "moves": [
+              "High Horsepower",
+              "Heavy Slam",
+              "Body Press",
+              "Wide Guard"
+            ]
           }
         ]
       }
@@ -169199,6 +172083,37 @@
             "usagePercent": 4.7
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Rain Offense Mega",
+            "spreadName": "Adamant:2/32/0/0/0/32",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Swampertite",
+            "moves": [
+              "Wave Crash",
+              "High Horsepower",
+              "Ice Punch",
+              "Earthquake"
+            ]
+          }
+        ]
       }
     }
   },
@@ -170326,6 +173241,37 @@
             "usagePercent": 2.08
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Fairy Feather Offense",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "",
+            "item": "Fairy Feather",
+            "moves": [
+              "Hyper Voice",
+              "Hyper Beam",
+              "Quick Attack",
+              "Mystical Fire"
+            ]
+          }
+        ]
       }
     }
   },
@@ -170940,6 +173886,79 @@
             "name": "Jolly:6/32/0/0/0/28",
             "usageCount": 9.3,
             "usagePercent": 1.88
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sharp Beak TW Offense",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Sharp Beak",
+            "moves": [
+              "Flare Blitz",
+              "Brave Bird",
+              "Dual Wingbeat",
+              "Tailwind"
+            ]
+          },
+          {
+            "name": "Yurine's Korea Cup 2nd Mixed Charcoal",
+            "spreadName": "Naive:8/1/0/30/0/27",
+            "nature": "Naive",
+            "sps": {
+              "hp": 8,
+              "atk": 1,
+              "def": 0,
+              "spa": 30,
+              "spd": 0,
+              "spe": 27
+            },
+            "ability": "",
+            "item": "Charcoal",
+            "moves": [
+              "Overheat",
+              "Brave Bird",
+              "Protect",
+              "Tailwind"
+            ]
+          },
+          {
+            "name": "Itemless Acrobatics",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "",
+            "moves": [
+              "Flare Blitz",
+              "Acrobatics",
+              "Protect",
+              "Tailwind"
+            ]
           }
         ]
       }
@@ -176340,6 +179359,37 @@
             "usagePercent": 1.46
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "TR Sun Offense",
+            "spreadName": "Quiet:32/0/0/32/2/0",
+            "nature": "Quiet",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Charcoal",
+            "moves": [
+              "Eruption",
+              "Heat Wave",
+              "Weather Ball",
+              "Earth Power"
+            ]
+          }
+        ]
       }
     }
   },
@@ -180732,6 +183782,37 @@
             "usagePercent": 0.95
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Eruption",
+            "spreadName": "Modest:1/0/1/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Eruption",
+              "Shadow Ball",
+              "Heat Wave",
+              "Overheat"
+            ]
+          }
+        ]
       }
     }
   },
@@ -181290,6 +184371,79 @@
             "name": "Adamant:32/32/2/0/0/0",
             "usageCount": 3.2,
             "usagePercent": 2.24
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Offense",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Rock Slide",
+              "Knock Off",
+              "Ice Punch",
+              "Low Kick"
+            ]
+          },
+          {
+            "name": "Bulky Max Attack Mega",
+            "spreadName": "Adamant:32/32/0/0/2/0",
+            "nature": "Adamant",
+            "sps": {
+              "hp": 32,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 2,
+              "spe": 0
+            },
+            "ability": "",
+            "item": "Tyranitarite",
+            "moves": [
+              "Rock Slide",
+              "Knock Off",
+              "High Horsepower",
+              "Low Kick"
+            ]
+          },
+          {
+            "name": "DD Max Speed Mega",
+            "spreadName": "Jolly:2/32/0/0/0/32",
+            "nature": "Jolly",
+            "sps": {
+              "hp": 2,
+              "atk": 32,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Tyranitarite",
+            "moves": [
+              "Rock Slide",
+              "Knock Off",
+              "Dragon Dance",
+              "Protect"
+            ]
           }
         ]
       }
@@ -183654,6 +186808,37 @@
             "usagePercent": 5.59
           }
         ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Ice Offense",
+            "spreadName": "Timid:1/0/1/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Choice Scarf",
+            "moves": [
+              "Blizzard",
+              "Freeze-Dry",
+              "Icy Wind",
+              "Sheer Cold"
+            ]
+          }
+        ]
       }
     }
   },
@@ -184808,6 +187993,58 @@
             "name": "Modest:19/0/0/32/0/15",
             "usageCount": 5.5,
             "usagePercent": 1.07
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sun Sleep Offense",
+            "spreadName": "Modest:2/0/0/32/0/32",
+            "nature": "Modest",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Chlorophyll",
+            "item": "Focus Sash",
+            "moves": [
+              "Leaf Storm",
+              "Sludge Bomb",
+              "Earth Power",
+              "Sleep Powder"
+            ]
+          },
+          {
+            "name": "Bulky Mega Offense",
+            "spreadName": "Modest:32/0/0/32/0/2",
+            "nature": "Modest",
+            "sps": {
+              "hp": 32,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 2
+            },
+            "ability": "Chlorophyll",
+            "item": "Venusaurite",
+            "moves": [
+              "Energy Ball",
+              "Sludge Bomb",
+              "Earth Power",
+              "Giga Drain"
+            ]
           }
         ]
       }
@@ -186872,6 +190109,58 @@
             "name": "Timid:0/0/0/32/2/32",
             "usageCount": 11.2,
             "usagePercent": 4.23
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Scarf Rain Dance Support",
+            "spreadName": "Timid:0/0/24/5/5/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 0,
+              "atk": 0,
+              "def": 24,
+              "spa": 5,
+              "spd": 5,
+              "spe": 32
+            },
+            "ability": "Compound Eyes",
+            "item": "Choice Scarf",
+            "moves": [
+              "Hurricane",
+              "Sleep Powder",
+              "Tailwind",
+              "Rain Dance"
+            ]
+          },
+          {
+            "name": "Sash Rage Powder",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "Compound Eyes",
+            "item": "Focus Sash",
+            "moves": [
+              "Hurricane",
+              "Pollen Puff",
+              "Sleep Powder",
+              "Rage Powder"
+            ]
           }
         ]
       }
@@ -190081,6 +193370,37 @@
             "name": "Timid:32/0/0/2/0/32",
             "usageCount": 85.9,
             "usagePercent": 1.99
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash Tailwind Support",
+            "spreadName": "Timid:2/0/0/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 2,
+              "atk": 0,
+              "def": 0,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Moonblast",
+              "Tailwind",
+              "Encore",
+              "Protect"
+            ]
           }
         ]
       }
@@ -195361,6 +198681,37 @@
             "name": "Timid:0/0/2/32/0/32",
             "usageCount": 2.8,
             "usagePercent": 3.44
+          }
+        ]
+      },
+      "ncp": {
+        "meta": {
+          "source": "NCP",
+          "sourceName": "Nimbasa City Post damage calculator sets",
+          "sourceUrl": "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/",
+          "dataUrl": "https://raw.githubusercontent.com/nerd-of-now/NCP-VGC-Damage-Calculator/main/script_res/setdex_ncp-g10.js"
+        },
+        "sets": [
+          {
+            "name": "Sash Support/Offense",
+            "spreadName": "Timid:1/0/1/32/0/32",
+            "nature": "Timid",
+            "sps": {
+              "hp": 1,
+              "atk": 0,
+              "def": 1,
+              "spa": 32,
+              "spd": 0,
+              "spe": 32
+            },
+            "ability": "",
+            "item": "Focus Sash",
+            "moves": [
+              "Hyper Voice",
+              "Bitter Malice",
+              "Icy Wind",
+              "Psychic"
+            ]
           }
         ]
       }

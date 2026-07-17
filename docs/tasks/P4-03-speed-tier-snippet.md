@@ -1,6 +1,7 @@
 # P4-03 — Snapshot: speed-tier snippet vs top threats
 
-Status: Done
+Status: Done — superseded by P6-03 (horizontal base-speed line replaces this card;
+`speedTierSummary` is deleted there)
 Depends on: P4-01, P5-01 (threat module — do P5-01 first if reaching this task early)
 Phase: 4 (snapshot polish)
 

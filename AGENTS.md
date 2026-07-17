@@ -17,7 +17,8 @@ npm run test:pokemon           # test/pokemon.test.js only
 npm run sync-data              # regenerate public/*.json (Showdown incl. Champions mod + PokeAPI, needs internet)
 npm run sync-champions-data    # overlay Limitless Champions usage (run sync-data first)
 npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run sync-champions-data first)
-npm run sync-all               # all three syncs in order
+npm run sync-ncp-spreads       # overlay NCP curated Champions sets (run sync-data first)
+npm run sync-all               # all four syncs in order
 ```
 
 ## Architecture
@@ -28,7 +29,7 @@ npm run sync-all               # all three syncs in order
 - Battle engine is centralized in `src/engine/damage.js` (damage formula, delegating move-specific behavior to `src/engine/move-effects.js` and ability/item modifiers to `src/engine/modifiers.js`), `src/engine/speed.js` (Speed modifiers: Tailwind, paralysis, items/abilities), and `src/engine/battle-order.js` (priority + Trick Room). Prefer engine helpers over UI-only patches.
 - Shared data helpers: `src/data/catalog.js` (search/sort), `src/data/data.js` (loading), `src/data/pokemon.js`, `src/data/usage-defaults.js` (seeds default moves/items from usage).
 - Shared UI helpers: `src/ui/components.js` (DOM factories: search-result buttons, SP/stage inputs, `STAT_LABELS`), `src/ui/bootstrap.js` (`loadCatalogs`, `rankByUsage`), `src/ui/battle-state.js` (pure battle-page state: `createSideState`, `applyControl`, `buildCalcInput` — no DOM).
-- Data pipeline: `scripts/sync-pokemon-data.mjs` downloads Showdown `.ts` data exports (parsed by `src/data/showdown-data.js`), overlays the Showdown Champions mod (`data/mods/champions`: legality flags in `champions.legal`/`champions.tier`, Champions learnsets, move/item/ability balance changes) via `src/data/champions-data.js`, plus PokeAPI CSVs (Traditional Chinese aliases), and writes `public/pokemon.json`, `abilities.json`, `moves.json`, `items.json`. `scripts/sync-limitless-champions-usage.mjs` merges Limitless Champions tournament usage (VGC / M-B format, 50 tournaments) via `src/data/limitless-data.js`. `scripts/sync-champions-spreads.mjs` merges popular SP spreads from Smogon ladder chaos stats (auto-detects latest month + newest Champions VGC regulation, Bo1+Bo3, cutoff 1760) via `src/data/smogon-data.js` into `champions.usage.spreads`.
+- Data pipeline: `scripts/sync-pokemon-data.mjs` downloads Showdown `.ts` data exports (parsed by `src/data/showdown-data.js`), overlays the Showdown Champions mod (`data/mods/champions`: legality flags in `champions.legal`/`champions.tier`, Champions learnsets, move/item/ability balance changes) via `src/data/champions-data.js`, plus PokeAPI CSVs (Traditional Chinese aliases), and writes `public/pokemon.json`, `abilities.json`, `moves.json`, `items.json`. `scripts/sync-limitless-champions-usage.mjs` merges Limitless Champions tournament usage (VGC / M-B format, 50 tournaments) via `src/data/limitless-data.js`. `scripts/sync-champions-spreads.mjs` merges popular SP spreads from Smogon ladder chaos stats (auto-detects latest month + newest Champions VGC regulation, Bo1+Bo3, cutoff 1760) via `src/data/smogon-data.js` into `champions.usage.spreads`. `scripts/sync-ncp-spreads.mjs` merges hand-curated Champions sets from the NCP (Nimbasa City Post) damage calculator's `setdex_ncp-g10.js` via `src/data/ncp-data.js` into `champions.ncp` (`{meta, sets:[{name, spreadName, nature, sps, ability, item, moves}]}`); both spread sources feed the lookup page's "Champions spreads" panel and the battle page's spread dropdowns.
 - Tests use Node's built-in test runner (`node --test`) in `test/`.
 - Deployment: `.github/workflows/pages.yml` deploys the repo root to GitHub Pages on push to `main`.
 
@@ -44,6 +45,7 @@ npm run sync-all               # all three syncs in order
 - `src/data/champions-data.js` — applies the Showdown Champions mod overlay (`CHAMPIONS_MOD_BASE_URL`).
 - `src/data/limitless-data.js` — builds/merges Limitless usage (`LIMITLESS_API_BASE_URL`).
 - `src/data/smogon-data.js` — parses/merges Smogon ladder SP spreads (`SMOGON_STATS_URL`).
+- `src/data/ncp-data.js` — parses/merges NCP curated Champions sets (`NCP_SETDEX_URL`); the setdex is hand-maintained JS (comments, trailing commas), not strict JSON.
 - `scripts/serve.mjs` — minimal static HTTP server bound to 127.0.0.1:4173.
 - `public/*.json` — generated catalogs; do not hand-edit, fix sync/parser code and regenerate.
 - `MECHANICS_CHECKLIST.md` — battle-calculator accuracy tracker; only mark items done after implementing and verifying with a test or reproducible manual check.
@@ -54,9 +56,9 @@ npm run sync-all               # all three syncs in order
 - Plain JavaScript, ES modules, named exports, immutable array/object transforms. Do not introduce dependencies or a build step.
 - Do not hand-edit `public/*.json` unless the task is explicitly about repairing generated output.
 - Run the narrowest relevant test group first; run the full `node --test` suite before finishing shared logic, generated data, or cross-page UI changes. For visible changes, verify pages at desktop and mobile widths via `npm start`.
-- Label data sources precisely in user-facing copy: Limitless = Champions tournament usage; Smogon ladder stats = SP spreads; Pokémon Showdown = mechanics/catalog seed (incl. Champions mod legality/balance); PokeAPI = Traditional Chinese aliases only.
+- Label data sources precisely in user-facing copy: Limitless = Champions tournament usage; Smogon ladder stats = SP spreads; NCP (Nimbasa City Post) = curated Champions sets; Pokémon Showdown = mechanics/catalog seed (incl. Champions mod legality/balance); PokeAPI = Traditional Chinese aliases only.
 - Default battle mode is doubles; both sides keep four editable moves seeded from top usage when usage data exists.
-- Rebuild order matters: run `sync-data`, then `sync-champions-data`, then `sync-champions-spreads` when regenerating from scratch (`sync-all` does this). The Limitless and Smogon merges each preserve the other's data on re-runs.
-- `.github/workflows/update-data.yml` re-runs all three syncs weekly (Mondays 06:00 UTC), runs tests, and commits `public/` changes.
+- Rebuild order matters: run `sync-data`, then `sync-champions-data`, then `sync-champions-spreads`, then `sync-ncp-spreads` when regenerating from scratch (`sync-all` does this). The Limitless, Smogon, and NCP merges each preserve the others' data on re-runs.
+- `.github/workflows/update-data.yml` re-runs all four syncs weekly (Mondays 06:00 UTC), runs tests, and commits `public/` changes.
 - `data/pokeapi/` holds local CSV snapshots; the sync script downloads from GitHub and does not read them.
 - Repo often has concurrent battle-calculator and data-sync edits; check `git status --short` before editing and do not revert user changes.

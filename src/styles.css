@@ -811,6 +811,39 @@ button:disabled {
   white-space: nowrap;
 }
 
+.spread-card {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  box-shadow: var(--shadow-micro);
+  font-size: var(--text-md);
+}
+
+.spread-card-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.spread-card-heading span {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.spread-card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.spread-source {
+  grid-column: 1 / -1;
+  padding: 0;
+}
+
 /* ---------- Lookup: form select + move filters ---------- */
 
 .form-field {

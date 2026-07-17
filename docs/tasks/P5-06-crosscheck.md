@@ -1,8 +1,8 @@
 # P5-06 — Builder/battle cross-check and release QA
 
 Status: TODO
-Depends on: P5-03, P5-04, P5-05
-Phase: 5 (builder utility) — final task of the roadmap
+Depends on: P5-03, P5-04, P5-05, and all of Phase 6 (P6-01…P6-04) — release close-out
+Phase: 5 (builder utility) — final task of the roadmap, runs after Phases 5 AND 6
 
 ## Files to read
 - `test/golden.test.js`, all three `src/data/*-points.js` / `speed-line.js` modules
@@ -24,9 +24,10 @@ Prove the builder never disagrees with the calculator, then close out the roadma
 2. Re-run the FULL golden suite against the NCP calculator manually — spot-check 5 cases in
    the browser to catch drift since P1-06 (NCP updates its mechanics; note any intentional
    differences in `test/golden.test.js` comments).
-3. Docs: update README.md (three-page overview, builder usage, assumptions section from
-   P5-01), AGENTS.md (new modules, new test groups — also add `test:builder` script to
-   package.json running threats/speed-line/bulk/break/crosscheck suites).
+3. Docs: update README.md (five-page overview: index/battle/builder/speed/duel, builder
+   usage, assumptions section from P5-01/P6-02), AGENTS.md (new modules, new test groups —
+   also add `test:builder` script to package.json running threats/speed-line/bulk/break/
+   duel/crosscheck suites).
 4. Full manual QA: run the P3-05 script plus a builder script (configure a meta Pokémon,
    check one speed breakpoint and one bulk point by hand on battle.html).
 5. Mark all task files `Done`, set the roadmap status line, and note follow-up ideas at the
