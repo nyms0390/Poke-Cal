@@ -39,6 +39,33 @@ test("builds deterministic top-usage threats from Champions defaults", () => {
   assert.deepEqual(threats[0].spPresets.bulk, { hp: 0, def: 0, spd: 0 });
 });
 
+test("adds Mega forms alongside top-usage builder threats", () => {
+  const charizard = {
+    ...pokemonFixture({ id: "charizard", name: "Charizard", usagePercent: 20, nature: "Timid" }),
+    baseSpecies: "Charizard",
+  };
+  const megaX = {
+    id: "charizardmegax",
+    name: "Charizard-Mega-X",
+    baseSpecies: "Charizard",
+    abilities: ["Tough Claws"],
+    baseStats: { hp: 78, atk: 130, def: 111, spa: 130, spd: 85, spe: 100 },
+    champions: { legal: true },
+  };
+
+  const threats = threatList([charizard, megaX], {
+    count: 1,
+    abilityLookup: new Map([["toughclaws", { id: "toughclaws", name: "Tough Claws" }]]),
+    moveLookup,
+    includeMegas: true,
+  });
+
+  assert.deepEqual(threats.map(({ pokemon }) => pokemon.id), ["charizard", "charizardmegax"]);
+  assert.equal(threats[1].pokemon, megaX);
+  assert.equal(threats[1].ability.name, "Tough Claws");
+  assert.deepEqual(threats[1].moves, threats[0].moves);
+});
+
 test("computes hand-checked Speed presets and marks nature-likely rows", () => {
   // Base 100: neutral values are 100 + SP + 20. At 32 SP that is 152;
   // +Spe floors 152 x 1.1 to 167, while -Spe floors 120 x 0.9 to 108.

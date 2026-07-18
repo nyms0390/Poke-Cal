@@ -1,4 +1,5 @@
 import { normalizeId } from "./catalog.js";
+import { megaFamily } from "./pokemon.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "./usage-defaults.js";
 import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
@@ -9,8 +10,11 @@ import { calculateStat } from "../engine/stats.js";
  * presets. These are comparison presets, not claims about the submitted teams' exact spreads.
  */
 
-export function threatList(pokemonCatalog, { count = 20, moveLookup } = {}) {
-  return pokemonCatalog
+export function threatList(
+  pokemonCatalog,
+  { count = 20, abilityLookup, moveLookup, includeMegas = false } = {},
+) {
+  const popularThreats = pokemonCatalog
     .filter(({ champions }) => Number.isFinite(champions?.usagePercent))
     .sort(
       (a, b) =>
@@ -18,6 +22,22 @@ export function threatList(pokemonCatalog, { count = 20, moveLookup } = {}) {
     )
     .slice(0, count)
     .map((pokemon) => threatFromPokemon(pokemon, moveLookup));
+
+  if (!includeMegas) return popularThreats;
+  return popularThreats.flatMap((threat) =>
+    megaFamily(pokemonCatalog, threat.pokemon).map((pokemon) => ({
+      ...threat,
+      pokemon,
+      ability: pokemon.id === threat.pokemon.id
+        ? threat.ability
+        : formAbility(pokemon, abilityLookup) ?? threat.ability,
+    })));
+}
+
+function formAbility(pokemon, abilityLookup) {
+  const name = pokemon.abilities?.[0];
+  if (!name) return null;
+  return abilityLookup?.get(normalizeId(name)) ?? { id: normalizeId(name), name };
 }
 
 export function speedPresets({ baseSpe, nature = "Hardy" }) {

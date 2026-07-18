@@ -19,6 +19,7 @@ import {
   attachCombobox,
   damagePercentColor,
   optionElement,
+  pokemonSpriteUrls,
   searchResultButton,
   STAT_LABELS,
 } from "./components.js";
@@ -87,6 +88,8 @@ async function initialize() {
 
   threats = threatList(catalogs.pokemon, {
     count: state.threatCount,
+    abilityLookup: catalogs.abilityLookup,
+    includeMegas: true,
     moveLookup: catalogs.moveLookup,
   });
 
@@ -171,7 +174,7 @@ function render() {
   elements.tera.value = user.teraType ?? "";
   elements.summary.textContent = `${user.nature} · ${user.teraType ? `Tera ${user.teraType}` : "No Tera"}`;
   elements.source.textContent =
-    "Limitless Champions defaults · ranked ability, item, moves, and nature · no active Tera";
+    `Limitless Champions defaults · top-${state.threatCount} threats + legal Mega forms · no active Tera`;
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
 
   elements.stats.replaceChildren(...STAT_KEYS.map((stat) => statRow(stat, user, stats)));
@@ -445,14 +448,21 @@ function pokemonSprite(pokemon) {
   const image = document.createElement("img");
   image.loading = "lazy";
   image.alt = pokemon.name;
-  image.src = `https://play.pokemonshowdown.com/sprites/gen5/${normalizeId(pokemon.id)}.png`;
+  const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
+  image.src = source;
   const fallback = document.createElement("span");
   fallback.hidden = true;
   fallback.textContent = pokemon.name.slice(0, 1);
+  let nextSource = fallbackSource;
   image.addEventListener("error", () => {
+    if (nextSource) {
+      image.src = nextSource;
+      nextSource = "";
+      return;
+    }
     image.remove();
     fallback.hidden = false;
-  }, { once: true });
+  });
   wrap.append(image, fallback);
   return wrap;
 }
