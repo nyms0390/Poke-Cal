@@ -1,4 +1,5 @@
 import { formatMovePriority } from "../data/catalog.js";
+import { pokemonSpriteId } from "../data/pokemon.js";
 
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
 // space is tight.
@@ -89,6 +90,12 @@ export function damagePercentColor(minPercent, maxPercent = minPercent) {
   const clamped = Math.max(0, Math.min(100, average));
   const hue = Math.round((clamped / 100) * 120);
   return `hsl(${hue} 72% 56%)`;
+}
+
+export function pokemonSpriteUrls(pokemon) {
+  const spriteId = pokemon?.spriteId ?? pokemonSpriteId(pokemon);
+  const baseUrl = "https://play.pokemonshowdown.com/sprites";
+  return [`${baseUrl}/gen5/${spriteId}.png`, `${baseUrl}/ani/${spriteId}.gif`];
 }
 
 export function textCell(text, className = "", label = "") {

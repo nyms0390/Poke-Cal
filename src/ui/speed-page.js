@@ -1,11 +1,11 @@
 import { normalizeId } from "../data/catalog.js";
-import { pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
+import { searchPokemon } from "../data/pokemon.js";
 import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { loadCatalogs } from "./bootstrap.js";
-import { attachCombobox, optionElement, searchResultButton } from "./components.js";
+import { attachCombobox, optionElement, pokemonSpriteUrls, searchResultButton } from "./components.js";
 
 const elements = {
   source: document.querySelector("#speed-source"),
@@ -302,13 +302,20 @@ function sprite(entry) {
   const image = document.createElement("img");
   image.loading = "lazy";
   image.alt = entry.name;
-  image.src = `https://play.pokemonshowdown.com/sprites/gen5/${entry.spriteId ?? pokemonSpriteId(entry)}.png`;
+  const [source, fallbackSource] = pokemonSpriteUrls(entry);
+  image.src = source;
   const fallback = document.createElement("span");
   fallback.textContent = entry.name.slice(0, 1);
+  let nextSource = fallbackSource;
   image.addEventListener("error", () => {
+    if (nextSource) {
+      image.src = nextSource;
+      nextSource = "";
+      return;
+    }
     image.remove();
     fallback.hidden = false;
-  }, { once: true });
+  });
   fallback.hidden = true;
   wrap.append(image, fallback);
   return wrap;
