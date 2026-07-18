@@ -62,3 +62,42 @@ test("reuses rendered rows so a focused input is not replaced during live update
   assert.strictEqual(rows[0], existingRow);
   assert.strictEqual(rows[0].input, focusedInput);
 });
+
+test("rebuilds reusable rows when their locale render key changes", () => {
+  const container = {
+    dataset: {},
+    rows: [],
+    replacements: 0,
+    querySelectorAll() {
+      return this.rows;
+    },
+    replaceChildren(...rows) {
+      this.replacements += 1;
+      this.rows = rows;
+    },
+  };
+
+  const chineseRows = ensureRenderedRows(
+    container,
+    ".stat-row",
+    () => [{ label: "攻擊" }],
+    "zh-TW",
+  );
+  const reusedChineseRows = ensureRenderedRows(
+    container,
+    ".stat-row",
+    () => [{ label: "must not replace" }],
+    "zh-TW",
+  );
+  const englishRows = ensureRenderedRows(
+    container,
+    ".stat-row",
+    () => [{ label: "Atk" }],
+    "en",
+  );
+
+  assert.strictEqual(reusedChineseRows[0], chineseRows[0]);
+  assert.notStrictEqual(englishRows[0], chineseRows[0]);
+  assert.equal(englishRows[0].label, "Atk");
+  assert.equal(container.replacements, 2);
+});

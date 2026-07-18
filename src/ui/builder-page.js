@@ -273,6 +273,7 @@ function renderStats(user, stats) {
     elements.stats,
     ".builder-stat-row",
     () => STAT_KEYS.map((stat) => statRow(stat, user, stats)),
+    getLocale(),
   );
   for (const [index, stat] of STAT_KEYS.entries()) {
     const row = rows[index];

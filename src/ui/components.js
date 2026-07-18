@@ -40,10 +40,13 @@ export function updateSelectOptions(select, emptyLabel, values, displayValue = (
   select.value = sortedValues.includes(selected) ? selected : "";
 }
 
-export function ensureRenderedRows(container, rowSelector, createChildren) {
+export function ensureRenderedRows(container, rowSelector, createChildren, renderKey) {
   let rows = [...container.querySelectorAll(rowSelector)];
-  if (rows.length > 0) return rows;
+  const normalizedKey = renderKey === undefined ? undefined : String(renderKey);
+  const keyChanged = normalizedKey !== undefined && container.dataset.renderKey !== normalizedKey;
+  if (rows.length > 0 && !keyChanged) return rows;
   container.replaceChildren(...createChildren());
+  if (normalizedKey !== undefined) container.dataset.renderKey = normalizedKey;
   rows = [...container.querySelectorAll(rowSelector)];
   return rows;
 }
