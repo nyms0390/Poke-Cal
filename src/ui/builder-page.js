@@ -306,8 +306,9 @@ function bulkScenarioRow(scenario, damage) {
     list.replaceChildren(...(points.length > 0 ? points.map((point) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.textContent = `${point.hpSp} HP / ${point.defSp} ${STAT_LABELS[defenseStat]} · ` +
-        `${point.achieves} · max ${point.maxPct}%`;
+      button.textContent = `${point.totalSp} total SP · ` +
+        `${point.hpSp} HP / ${point.defSp} ${STAT_LABELS[defenseStat]} · ` +
+        `${point.fromKoText} → ${point.koText} · max ${point.maxPct}%`;
       button.addEventListener("click", () => {
         state = {
           ...state,

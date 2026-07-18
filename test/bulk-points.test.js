@@ -36,6 +36,12 @@ const specialMove = {
   basePower: 100,
   target: "normal",
 };
+const ohkoMove = {
+  ...physicalMove,
+  id: "giga-impact",
+  name: "Giga Impact",
+  basePower: 200,
+};
 
 const threat = {
   pokemon: attacker,
@@ -99,7 +105,7 @@ test("more HP and relevant defense SP never increases incoming damage percent", 
 test("returns only frontier points whose tier is unreachable more cheaply", () => {
   const state = userState();
   const scenario = { threat, move: physicalMove };
-  const points = bulkPoints(state, scenario, { budget: 24 });
+  const points = bulkPoints(state, scenario);
 
   assert.equal(points.length > 0, true);
   assert.deepEqual(points.map(({ totalSp }) => totalSp), [...points.map(({ totalSp }) => totalSp)].sort((a, b) => a - b));
@@ -112,6 +118,29 @@ test("returns only frontier points whose tier is unreachable more cheaply", () =
         const cheaperTier = threatDamage(withBulk(state, hpSp, defSp, "def"), scenario).koText;
         assert.equal(compareKoTiers(cheaperTier, pointTier) > 0, true);
       }
+    }
+  }
+});
+
+test("shows the cheapest spread that changes an OHKO into guaranteed survival", () => {
+  const state = userState();
+  const scenario = { threat, move: ohkoMove };
+  const points = bulkPoints(state, scenario);
+
+  assert.deepEqual(points, [{
+    hpSp: 0,
+    defSp: 23,
+    totalSp: 23,
+    fromKoText: "guaranteed OHKO",
+    achieves: "survives 1 hit (guaranteed) · guaranteed 2HKO",
+    koText: "guaranteed 2HKO",
+    maxPct: 99.4,
+  }]);
+
+  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+    for (let defSp = 0; defSp <= 32; defSp += 1) {
+      if (hpSp + defSp >= points[0].totalSp) continue;
+      assert.match(threatDamage(withBulk(state, hpSp, defSp, "def"), scenario).koText, /OHKO/);
     }
   }
 });

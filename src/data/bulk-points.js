@@ -23,7 +23,7 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
 
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
   const maximumBudget = Math.max(0, Math.min(64, Math.trunc(Number(budget) || 0)));
-  let bestCheaper = null;
+  let previousTier = null;
   const frontier = [];
 
   for (let totalSp = 0; totalSp <= maximumBudget; totalSp += 1) {
@@ -42,20 +42,22 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
     const bestAtCost = candidates[0];
     if (!bestAtCost) continue;
 
-    if (bestCheaper === null) {
-      bestCheaper = bestAtCost.damage.koText;
+    if (previousTier === null) {
+      previousTier = bestAtCost.damage;
       continue;
     }
-    if (compareKoTiers(bestAtCost.damage.koText, bestCheaper) >= 0) continue;
+    if (survivalHits(bestAtCost.damage.koText) <= survivalHits(previousTier.koText)) continue;
 
     frontier.push({
       hpSp: bestAtCost.hpSp,
       defSp: bestAtCost.defSp,
       totalSp,
+      fromKoText: previousTier.koText,
       achieves: survivalText(bestAtCost.damage.koText),
+      koText: bestAtCost.damage.koText,
       maxPct: bestAtCost.damage.maxPct,
     });
-    bestCheaper = bestAtCost.damage.koText;
+    previousTier = bestAtCost.damage;
   }
 
   return frontier;
@@ -116,6 +118,15 @@ function koTierValue(text) {
   if (/guaranteed/i.test(value)) return tierBase + 1;
   const chance = Number(/([\d.]+)%/.exec(value)?.[1] ?? 0);
   return tierBase + Math.max(0, Math.min(100, chance)) / 100;
+}
+
+function survivalHits(text) {
+  const value = String(text ?? "");
+  if (/not a KO|survives with/i.test(value)) return 6;
+
+  const label = /(OHKO|([2-5])HKO)/i.exec(value);
+  if (!label) return 0;
+  return label[1].toUpperCase() === "OHKO" ? 1 : Number(label[2]);
 }
 
 function survivalText(koText) {
