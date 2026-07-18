@@ -36,6 +36,7 @@ import {
 import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
+  ensureRenderedRows,
   optionElement,
   attachCombobox,
   searchResultButton,
@@ -1085,6 +1086,32 @@ function renderStatEditor(side, field = {}, speedOptions = {}) {
     tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
   };
   elements[`${side}SpeedReadout`].textContent = `Speed ${finalSpeed(fieldStateForSide, field, speedOptions)}`;
+  const rows = ensureRenderedRows(
+    container,
+    ".battle-stat-editor-row",
+    () => [statEditorHeader(), ...SP_STATS.map((stat) => statEditorRow(stat, {
+      side,
+      base: state.pokemon.baseStats[stat],
+      sp: state.sp[stat] ?? 0,
+      final: finalStat(fieldStateForSide, stat, field, speedOptions),
+      stage: state.stages[stat] ?? 0,
+      onChange: handleDamageControl,
+    }))],
+  );
+  for (const [index, stat] of SP_STATS.entries()) {
+    const row = rows[index];
+    row.querySelector(".stat-cell-base").textContent = String(state.pokemon.baseStats[stat]);
+    row.querySelector('input[data-kind="sp"]').value = String(state.sp[stat] ?? 0);
+    const final = row.querySelector(".stat-cell-final");
+    final.textContent = String(finalStat(fieldStateForSide, stat, field, speedOptions));
+    final.classList.toggle("increase", nature.up === stat);
+    final.classList.toggle("decrease", nature.down === stat);
+    const stage = row.querySelector('select[data-kind="stage"]');
+    if (stage) stage.value = String(state.stages[stat] ?? 0);
+  }
+}
+
+function statEditorHeader() {
   const header = document.createElement("div");
   header.className = "battle-stat-editor-header";
   for (const label of ["Stat", "Base", "SP", "Final", "Stage"]) {
@@ -1092,23 +1119,7 @@ function renderStatEditor(side, field = {}, speedOptions = {}) {
     cell.textContent = label;
     header.append(cell);
   }
-  container.replaceChildren(
-    header,
-    ...SP_STATS.map((stat) => {
-      const row = statEditorRow(stat, {
-        side,
-        base: state.pokemon.baseStats[stat],
-        sp: state.sp[stat] ?? 0,
-        final: finalStat(fieldStateForSide, stat, field, speedOptions),
-        stage: state.stages[stat] ?? 0,
-        onChange: handleDamageControl,
-      });
-      const final = row.querySelector(".stat-cell-final");
-      if (nature.up === stat) final.classList.add("increase");
-      if (nature.down === stat) final.classList.add("decrease");
-      return row;
-    }),
-  );
+  return header;
 }
 
 function syncCurrentHpInputs(side) {

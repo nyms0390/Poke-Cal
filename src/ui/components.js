@@ -39,6 +39,14 @@ export function updateSelectOptions(select, emptyLabel, values) {
   select.value = sortedValues.includes(selected) ? selected : "";
 }
 
+export function ensureRenderedRows(container, rowSelector, createChildren) {
+  let rows = [...container.querySelectorAll(rowSelector)];
+  if (rows.length > 0) return rows;
+  container.replaceChildren(...createChildren());
+  rows = [...container.querySelectorAll(rowSelector)];
+  return rows;
+}
+
 export function moveNameCell(move) {
   const cell = document.createElement("td");
   cell.className = "move-name-cell";

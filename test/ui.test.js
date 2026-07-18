@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { damagePercentColor, pokemonSpriteUrls, typeClassName } from "../src/ui/components.js";
+import {
+  damagePercentColor,
+  ensureRenderedRows,
+  pokemonSpriteUrls,
+  typeClassName,
+} from "../src/ui/components.js";
 
 test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName("Bug"), "type-bug");
@@ -32,4 +37,28 @@ test("provides an animated fallback for Mega sprites missing from the Gen 5 shee
       `https://play.pokemonshowdown.com/sprites/ani/${spriteId}.gif`,
     ]);
   }
+});
+
+test("reuses rendered rows so a focused input is not replaced during live updates", () => {
+  const focusedInput = {};
+  const existingRow = { input: focusedInput };
+  const container = {
+    rows: [existingRow],
+    replacements: 0,
+    querySelectorAll() {
+      return this.rows;
+    },
+    replaceChildren(...rows) {
+      this.replacements += 1;
+      this.rows = rows;
+    },
+  };
+
+  const rows = ensureRenderedRows(container, ".stat-row", () => {
+    throw new Error("existing rows must not be recreated");
+  });
+
+  assert.equal(container.replacements, 0);
+  assert.strictEqual(rows[0], existingRow);
+  assert.strictEqual(rows[0].input, focusedInput);
 });

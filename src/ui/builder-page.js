@@ -24,6 +24,7 @@ import {
 import {
   attachCombobox,
   damagePercentColor,
+  ensureRenderedRows,
   optionElement,
   pokemonSpriteUrls,
   searchResultButton,
@@ -225,7 +226,7 @@ function render() {
     `${customThreats.length} custom · no active Tera`;
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
 
-  elements.stats.replaceChildren(...STAT_KEYS.map((stat) => statRow(stat, user, stats)));
+  renderStats(user, stats);
   const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
   // TODO(P5-04): show a remaining-SP budget only after an authoritative Champions rule
   // source establishes a total cap; current usage-backed spreads can exceed 64 assigned SP.
@@ -236,6 +237,20 @@ function render() {
   renderBreakPoints(threats);
 }
 
+function renderStats(user, stats) {
+  const rows = ensureRenderedRows(
+    elements.stats,
+    ".builder-stat-row",
+    () => STAT_KEYS.map((stat) => statRow(stat, user, stats)),
+  );
+  for (const [index, stat] of STAT_KEYS.entries()) {
+    const row = rows[index];
+    row.querySelector(".builder-stat-base").textContent = String(user.pokemon.baseStats[stat]);
+    row.querySelector("input").value = String(user.sp[stat] ?? 0);
+    row.querySelector(".builder-stat-final").textContent = String(stats[stat]);
+  }
+}
+
 function statRow(stat, user, stats) {
   const row = document.createElement("div");
   row.className = "builder-stat-row";
@@ -243,6 +258,7 @@ function statRow(stat, user, stats) {
   const label = document.createElement("span");
   label.textContent = STAT_LABELS[stat];
   const base = document.createElement("span");
+  base.className = "builder-stat-base";
   base.textContent = String(user.pokemon.baseStats[stat]);
   const input = document.createElement("input");
   input.type = "number";
@@ -254,6 +270,7 @@ function statRow(stat, user, stats) {
   input.dataset.stat = stat;
   input.setAttribute("aria-label", `${STAT_LABELS[stat]} SP`);
   const final = document.createElement("strong");
+  final.className = "builder-stat-final";
   final.textContent = String(stats[stat]);
 
   row.append(label, base, input, final);
