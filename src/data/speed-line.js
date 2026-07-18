@@ -143,6 +143,9 @@ function speedEntry(pokemon, presetLabel, isUser, likely, stage, speed, order = 
   return {
     id: pokemon.id,
     name: pokemon.name,
+    baseSpecies: pokemon.baseSpecies,
+    aliases: pokemon.aliases,
+    localizations: pokemon.localizations,
     spriteId: pokemonSpriteId(pokemon),
     presetLabel,
     likely,

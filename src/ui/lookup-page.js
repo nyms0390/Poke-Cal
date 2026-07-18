@@ -1,6 +1,5 @@
 import {
   filterMoves,
-  formatChampionsUsage,
   formatMoveAccuracy,
   formatMovePower,
   moveEffect,
@@ -12,7 +11,19 @@ import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
 import { defensiveMatchups } from "../engine/type-chart.js";
-import { loadCatalogs, rankByUsage } from "./bootstrap.js";
+import {
+  applyDocumentTranslations,
+  getLocale,
+  initI18n,
+  localizedName,
+  localizedSpreadName,
+  localizedTerm,
+  onLocaleChange,
+  t,
+  toTraditionalChinese,
+} from "../i18n.js";
+import { formatChampionsUsage } from "../i18n-formatters.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
   moveNameCell,
@@ -68,8 +79,18 @@ let threats = [];
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
+let catalogs = null;
 
+initI18n();
 initialize();
+
+onLocaleChange(() => {
+  if (catalogs) elements.status.textContent = catalogLoadedStatus(catalogs);
+  if (!selectedPokemon) return;
+  renderFormOptions();
+  renderFamilyStats();
+  selectForm(selectedPokemon);
+});
 
 async function initialize() {
   const data = await loadCatalogs({
@@ -78,6 +99,7 @@ async function initialize() {
     },
   });
   if (!data) return;
+  catalogs = data;
   pokemon = data.pokemon;
   abilityLookup = data.abilityLookup;
   moveLookup = data.moveLookup;
@@ -133,7 +155,7 @@ function selectPokemon(entry, options = {}) {
 
 function renderFormOptions() {
   elements.form.replaceChildren(
-    ...selectedFamily.map((entry) => optionElement(entry.id, entry.name)),
+    ...selectedFamily.map((entry) => optionElement(entry.id, localizedName(entry))),
   );
   elements.formField.hidden = selectedFamily.length === 1;
 }
@@ -146,11 +168,11 @@ function renderFamilyStats() {
       card.className = "form-card";
       card.dataset.formId = entry.id;
       const abilities = resolvePokemonAbilities(entry, abilityLookup)
-        .map((ability) => ability.name)
+        .map((ability) => localizedName(ability))
         .join(" · ");
       card.innerHTML = `
         <span class="form-card-heading">
-          <strong>${entry.name}</strong>
+          <strong>${localizedName(entry)}</strong>
           <small>BST ${totalBaseStats(entry.baseStats)}</small>
         </span>
         <span class="form-card-abilities">
@@ -162,7 +184,7 @@ function renderFamilyStats() {
             .map(
               ([key, label]) => `
                 <span class="${key === "spe" ? "speed-stat" : ""}">
-                  <small>${label}</small>
+                  <small>${localizedTerm("stat", label)}</small>
                   <strong>${entry.baseStats[key]}</strong>
                 </span>
               `,
@@ -178,10 +200,12 @@ function renderFamilyStats() {
 
 function selectForm(entry, options = {}) {
   selectedPokemon = entry;
-  if (options.syncSearch !== false) elements.search.value = entry.baseSpecies;
-  elements.selectedName.textContent = entry.name;
+  if (options.syncSearch !== false) elements.search.value = localizedName(entry);
+  elements.selectedName.textContent = localizedName(entry);
   elements.selectedTypes.replaceChildren(...(entry.types ?? []).map(typeBadge));
-  elements.selectedAlias.textContent = entry.aliases.join(" · ") || entry.baseSpecies;
+  elements.selectedAlias.textContent = getLocale() === "zh-TW"
+    ? entry.name
+    : entry.aliases.map(toTraditionalChinese).join(" · ") || entry.baseSpecies;
   elements.baseStatTotal.textContent = totalBaseStats(entry.baseStats);
   elements.form.value = entry.id;
 
@@ -208,10 +232,11 @@ function renderCatalog() {
   renderItems(rankedItems);
   renderMoveFilterOptions();
   renderMoveList();
+  applyDocumentTranslations();
 }
 
 function renderUsageSource() {
-  elements.usageSource.textContent = "Limitless Champions tournament usage";
+  elements.usageSource.textContent = t("lookup.usageSource");
 }
 
 function renderCommonBuild() {
@@ -232,16 +257,16 @@ function renderCommonBuild() {
   const tera = topUsageEntry(usage.teras);
   const moves = defaults.moves.slice(0, 4);
 
-  elements.commonBuildHeadline.textContent =
-    `${formatUsagePercent(champions.usagePercent)} usage · ` +
-    `${champions.usageCount.toLocaleString("en-US")} team samples`;
-  elements.commonBuildSource.textContent =
-    "Limitless Champions usage (last 50 tournaments)";
+  elements.commonBuildHeadline.textContent = t("lookup.commonHeadline", {
+    usage: formatUsagePercent(champions.usagePercent),
+    samples: champions.usageCount.toLocaleString(getLocale()),
+  });
+  elements.commonBuildSource.textContent = t("lookup.commonSource");
   elements.commonBuildFacts.replaceChildren(
-    commonBuildFact("Ability", defaults.ability),
-    commonBuildFact("Item", defaults.item),
-    commonBuildFact("Nature", nature ?? { name: defaults.nature }),
-    commonBuildFact("Tera", tera ?? { name: defaults.teraType || "—" }),
+    commonBuildFact(t("label.ability"), defaults.ability),
+    commonBuildFact(t("label.item"), defaults.item),
+    commonBuildFact(t("label.nature"), nature ?? { name: defaults.nature }),
+    commonBuildFact(t("label.tera"), tera ?? { name: defaults.teraType || "—" }),
     commonBuildMoves(moves),
   );
   elements.commonBuildCalculator.href =
@@ -256,7 +281,11 @@ function commonBuildFact(labelText, entry) {
   const label = document.createElement("span");
   label.textContent = labelText;
   const value = document.createElement("strong");
-  value.textContent = entry?.name ?? "—";
+  const rawName = entry?.name;
+  value.textContent = !entry ? "—"
+    : labelText === t("label.nature") ? localizedTerm("nature", rawName)
+    : labelText === t("label.tera") ? localizedTerm("type", rawName)
+    : localizedName(entry);
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");
     usage.textContent = formatUsagePercent(entry.usagePercent);
@@ -270,13 +299,13 @@ function commonBuildMoves(moves) {
   const row = document.createElement("div");
   row.className = "common-build-fact common-build-moves";
   const label = document.createElement("span");
-  label.textContent = "Moves";
+  label.textContent = t("label.moves");
   const list = document.createElement("div");
   list.className = "common-build-move-list";
   list.append(
     ...moves.map((move) => {
       const item = document.createElement("span");
-      item.textContent = move.name;
+      item.textContent = localizedName(move);
       if (Number.isFinite(move.usagePercent)) {
         const usage = document.createElement("small");
         usage.textContent = formatUsagePercent(move.usagePercent);
@@ -317,7 +346,7 @@ function renderDefensiveMatchups() {
 
   const hasLevitate = resolvePokemonAbilities(selectedPokemon, abilityLookup)
     .some(({ name }) => name === "Levitate");
-  elements.typeMatchupNote.textContent = hasLevitate ? "Levitate: immune to Ground" : "";
+  elements.typeMatchupNote.textContent = hasLevitate ? t("lookup.levitate") : "";
   elements.typeMatchupNote.hidden = !hasLevitate;
   elements.typeMatchupCard.hidden = false;
 }
@@ -351,18 +380,18 @@ function speedTierRow(entry) {
   details.className = "speed-tier-row";
   const summary = document.createElement("summary");
   const label = document.createElement("span");
-  label.textContent = entry.label;
+  label.textContent = localizedSpeedTierLabel(entry.label);
   const speed = document.createElement("strong");
   speed.textContent = String(entry.value);
   const count = document.createElement("span");
-  count.textContent = `Outspeeds ${entry.outspeedCount}/${entry.threatCount} top threats`;
-  count.title = entry.outspeedNames.join(", ") || "No top threats";
+  count.textContent = t("lookup.outspeeds", { count: entry.outspeedCount, total: entry.threatCount });
+  count.title = localizedPokemonNames(entry.outspeedNames).join(", ") || t("lookup.noThreats");
   summary.append(label, speed, count);
 
   const names = document.createElement("p");
   names.textContent = entry.outspeedNames.length > 0
-    ? entry.outspeedNames.join(" · ")
-    : "No top threats at this Speed.";
+    ? localizedPokemonNames(entry.outspeedNames).join(" · ")
+    : t("lookup.noThreatsAtSpeed");
   details.append(summary, names);
   return details;
 }
@@ -372,17 +401,21 @@ function renderPlaystyle(abilities, rankedItems) {
   const item = topName(rankedItems, "item");
   const moves = selectedMoves
     .slice(0, 4)
-    .map((move) => move.name)
+    .map((move) => localizedName(move))
     .join(", ");
 
-  elements.playstyleSummary.textContent =
-    `${selectedPokemon.name} can use ${ability}. Popular Champions items include ${item}. ` +
-    `High-count Champions moves include ${moves || "no ranked moves"}.`;
+  elements.playstyleSummary.textContent = t("lookup.playstyle", {
+    pokemon: localizedName(selectedPokemon),
+    ability,
+    item,
+    moves: moves || t("lookup.noRankedMoves"),
+  });
 }
 
 function topName(entries, fallback) {
   const [entry] = rankByUsage(entries);
-  return entry?.name ?? `no common ${fallback}`;
+  if (entry) return localizedName(entry);
+  return t(fallback === "ability" ? "lookup.noCommonAbility" : "lookup.noCommonItem");
 }
 
 function renderSpreads() {
@@ -393,7 +426,7 @@ function renderSpreads() {
   if (usageSpreads.length === 0 && ncpSets.length === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-catalog";
-    empty.textContent = "No Champions spread source is available.";
+    empty.textContent = t("lookup.noSpreads");
     elements.spreadList.replaceChildren(empty);
     return;
   }
@@ -410,7 +443,7 @@ function renderUsageSpreadRow(spread) {
   row.className = "spread-row";
 
   const name = document.createElement("strong");
-  name.textContent = spread.name;
+  name.textContent = localizedSpreadName(spread.name);
 
   const usage = document.createElement("span");
   usage.textContent = Number.isFinite(spread.usagePercent) ? `${spread.usagePercent}%` : "—";
@@ -428,14 +461,17 @@ function renderNcpSetCard(set) {
   const name = document.createElement("strong");
   name.textContent = set.name;
   const spread = document.createElement("span");
-  spread.textContent = set.spreadName;
+  spread.textContent = localizedSpreadName(set.spreadName);
   heading.append(name, spread);
 
   const build = document.createElement("p");
-  build.textContent = [set.ability, set.item].filter(Boolean).join(" · ") || "—";
+  build.textContent = [
+    localizedCatalogValue(set.ability, abilityLookup),
+    localizedCatalogValue(set.item, itemLookup),
+  ].filter(Boolean).join(" · ") || "—";
 
   const moves = document.createElement("p");
-  moves.textContent = set.moves.join(" / ");
+  moves.textContent = set.moves.map((move) => localizedCatalogValue(move, moveLookup)).join(" / ");
 
   card.append(heading, build, moves);
   return card;
@@ -446,9 +482,8 @@ function renderSpreadSource(hasUsageSpreads, hasNcpSets) {
   const source = document.createElement("p");
   source.className = "usage-source spread-source";
   source.textContent = [
-    hasUsageSpreads &&
-      `Smogon ladder SP spreads${meta?.month ? ` (${meta.month}, cutoff ${meta.cutoff})` : ""}`,
-    hasNcpSets && "NCP curated sets (Nimbasa City Post)",
+    hasUsageSpreads && t("lookup.smogonSpreadSource", { month: meta?.month, cutoff: meta?.cutoff }),
+    hasNcpSets && t("lookup.ncpSpreadSource"),
   ]
     .filter(Boolean)
     .join(" · ");
@@ -466,21 +501,22 @@ function renderAbilities(abilities) {
       heading.className = "ability-heading";
 
       const name = document.createElement("strong");
-      name.textContent = ability.name;
+      name.textContent = localizedName(ability);
       heading.append(name);
 
       if (ability.rating !== undefined) {
         const rating = document.createElement("span");
-        rating.textContent = `Rating ${ability.rating}`;
+        rating.textContent = t("lookup.rating", { value: ability.rating });
         heading.append(rating);
       }
 
       const usage = document.createElement("span");
-      usage.textContent = formatChampionsUsage(ability);
+      usage.textContent = formatChampionsUsage(ability, getLocale());
       heading.append(usage);
 
       const description = document.createElement("p");
       description.textContent = ability.shortDesc || ability.desc || "—";
+      description.lang = "en";
 
       card.append(heading, description);
       return card;
@@ -494,7 +530,7 @@ function renderItems(items) {
   if (items.length === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-catalog";
-    empty.textContent = "No Champions item data is available.";
+    empty.textContent = t("lookup.noItems");
     elements.itemList.replaceChildren(empty);
     return;
   }
@@ -508,13 +544,14 @@ function renderItems(items) {
       heading.className = "item-heading";
 
       const name = document.createElement("strong");
-      name.textContent = item.name;
+      name.textContent = localizedName(item);
       const usage = document.createElement("span");
-      usage.textContent = formatChampionsUsage(item);
+      usage.textContent = formatChampionsUsage(item, getLocale());
       heading.append(name, usage);
 
       const description = document.createElement("p");
       description.textContent = item.shortDesc || item.desc || "—";
+      description.lang = "en";
 
       card.append(heading, description);
       return card;
@@ -523,12 +560,12 @@ function renderItems(items) {
 }
 
 function renderMoveFilterOptions() {
-  updateSelectOptions(elements.moveType, "All types", [
+  updateSelectOptions(elements.moveType, t("label.allTypes"), [
     ...new Set(selectedMoves.map(({ type }) => type).filter(Boolean)),
-  ]);
-  updateSelectOptions(elements.moveCategory, "All categories", [
+  ], (value) => localizedTerm("type", value));
+  updateSelectOptions(elements.moveCategory, t("label.allCategories"), [
     ...new Set(selectedMoves.map(({ category }) => category).filter(Boolean)),
-  ]);
+  ], (value) => localizedTerm("category", value));
 }
 
 function renderMoveList() {
@@ -544,7 +581,7 @@ function renderMoveList() {
     const cell = document.createElement("td");
     cell.colSpan = 7;
     cell.className = "empty-moves";
-    cell.textContent = "No moves match the current filters.";
+    cell.textContent = t("lookup.noMoveMatches");
     row.append(cell);
     elements.moveList.replaceChildren(row);
     return;
@@ -557,12 +594,33 @@ function renderMoveRow(move) {
   const row = document.createElement("tr");
   row.append(
     moveNameCell(move),
-    textCell(formatChampionsUsage(move), "numeric-cell", "Champions"),
-    textCell(move.category || "—", "", "Category"),
-    textCell(formatMovePower(move.basePower), "numeric-cell", "Power"),
-    textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", "Acc."),
+    textCell(formatChampionsUsage(move, getLocale()), "numeric-cell", t("label.champions")),
+    textCell(localizedTerm("category", move.category) || "—", "", t("label.category")),
+    textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
+    textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),
     textCell(String(move.pp ?? "—"), "numeric-cell", "PP"),
-    textCell(moveEffect(move), "effect-cell", "Effect"),
+    textCell(moveEffect(move), "effect-cell", t("label.effect")),
   );
+  if (getLocale() === "zh-TW") row.querySelector(".effect-cell").lang = "en";
   return row;
+}
+
+function localizedPokemonNames(names) {
+  const byName = new Map(pokemon.map((entry) => [entry.name, entry]));
+  return names.map((name) => localizedName(byName.get(name) ?? { name }));
+}
+
+function localizedCatalogValue(value, lookup) {
+  if (!value) return "";
+  const entry = lookup.get(String(value).toLowerCase().replace(/[^a-z0-9]/g, ""));
+  return localizedName(entry ?? { name: value });
+}
+
+function localizedSpeedTierLabel(label) {
+  if (getLocale() !== "zh-TW") return label;
+  const match = /^(Max|Fast|Uninvested|Min) \(([^,]+), (\d+) SP\)$/.exec(label);
+  if (!match) return label;
+  const preset = { Max: "極速", Fast: "高速", Uninvested: "無投資", Min: "最慢" }[match[1]];
+  const nature = match[2].replace("+Spe", "+速度").replace("−Spe", "−速度").replace("neutral", "無性格修正");
+  return `${preset}（${nature}, ${match[3]} SP）`;
 }

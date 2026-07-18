@@ -131,6 +131,31 @@ header::before {
   box-shadow: none;
 }
 
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px 6px 4px 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-micro);
+}
+
+.language-switch select {
+  min-height: 30px;
+  border: 0;
+  padding: 2px 24px 2px 4px;
+  background-color: transparent;
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+
+.language-switch > span {
+  white-space: nowrap;
+}
+
 /* Kicker labels: the one deliberately "small caps" voice in the system. */
 .eyebrow,
 label,
@@ -1674,6 +1699,15 @@ button:disabled {
 
   header {
     padding-left: 14px;
+  }
+
+  .language-switch {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .language-switch select {
+    flex: 1;
   }
 
   h1 {

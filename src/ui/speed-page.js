@@ -4,7 +4,17 @@ import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
-import { loadCatalogs } from "./bootstrap.js";
+import {
+  applyDocumentTranslations,
+  getLocale,
+  initI18n,
+  localizedName,
+  localizedNatureOptionLabel,
+  localizedTerm,
+  onLocaleChange,
+  t,
+} from "../i18n.js";
+import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
 import { attachCombobox, optionElement, pokemonSpriteUrls, searchResultButton } from "./components.js";
 
 const elements = {
@@ -42,7 +52,15 @@ let user = null;
 let popularOpponents = [];
 let manualOpponents = [];
 
+initI18n();
 initialize();
+
+onLocaleChange(() => {
+  if (!catalogs) return;
+  elements.status.textContent = catalogLoadedStatus(catalogs);
+  renderNatureOptions();
+  if (user) render();
+});
 
 async function initialize() {
   catalogs = await loadCatalogs({
@@ -52,9 +70,7 @@ async function initialize() {
   });
   if (!catalogs) return;
 
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(nature, natureOptionLabel(nature))),
-  );
+  renderNatureOptions();
   for (const select of [elements.userStage, elements.opponentStage]) {
     select.replaceChildren(...Array.from({ length: 13 }, (_, index) => {
       const stage = index - 6;
@@ -106,6 +122,17 @@ async function initialize() {
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
   seedUser(requested ?? popularOpponents[0]?.pokemon ?? catalogs.pokemon[0]);
+}
+
+function renderNatureOptions() {
+  const selected = elements.nature.value;
+  elements.nature.replaceChildren(
+    ...Object.keys(NATURES).map((nature) => optionElement(
+      nature,
+      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+    )),
+  );
+  if (selected) elements.nature.value = selected;
 }
 
 function pokemonMatches(query) {
@@ -175,15 +202,15 @@ function render() {
   for (const input of elements.battleOnly) input.disabled = !battle;
   for (const group of elements.battleGroups) group.classList.toggle("disabled", !battle);
 
-  elements.pokemonSearch.value = user.pokemon.name;
+  elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.userSummary.textContent = battle
-    ? `${user.nature} · ${user.spe} SP`
-    : `Base ${user.pokemon.baseStats.spe}`;
+    ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
+    : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
   const popularCount = Number(elements.popularCount.value);
-  elements.popularSummary.textContent = `Top ${popularCount} + Megas + yours`;
+  elements.popularSummary.textContent = t("speed.popularSummary", { count: popularCount });
   elements.source.textContent = battle
-    ? `Limitless Champions top-${popularCount} threats + legal Mega forms · four explicit Speed presets per opponent`
-    : `Catalog base Speed · top-${popularCount} threats + legal Mega forms · no battle modifiers`;
+    ? t("speed.battleSource", { count: popularCount })
+    : t("speed.baseSource", { count: popularCount });
   renderManualOpponents();
 
   const options = {
@@ -195,8 +222,9 @@ function render() {
   };
   const rows = speedTiers(user, selectedOpponents(), options);
   const breakpoints = new Map(speedBreakpoints(user, rows).map((point) => [point.tierSpeed, point]));
-  elements.rowCount.textContent = `${rows.length} tiers`;
+  elements.rowCount.textContent = t("speed.tierCount", { count: rows.length });
   elements.axis.replaceChildren(...rows.map((row) => renderSpeedRow(row, breakpoints.get(row.speed))));
+  applyDocumentTranslations();
 }
 
 function selectedOpponents() {
@@ -223,11 +251,11 @@ function renderManualOpponents() {
     chip.className = "speed-opponent-chip";
     chip.append(sprite(pokemon));
     const name = document.createElement("span");
-    name.textContent = pokemon.name;
+    name.textContent = localizedName(pokemon);
     const remove = document.createElement("button");
     remove.type = "button";
     remove.textContent = "×";
-    remove.setAttribute("aria-label", `Remove ${pokemon.name}`);
+    remove.setAttribute("aria-label", t("speed.remove", { name: localizedName(pokemon) }));
     remove.addEventListener("click", () => removeOpponent(pokemon.id));
     chip.append(name, remove);
     return chip;
@@ -249,22 +277,22 @@ function renderSpeedRow(row, breakpoint) {
     chip.className = `speed-axis-entry${entry.isUser ? " user" : ""}`;
     chip.append(sprite(entry));
     const label = document.createElement("span");
-    label.textContent = `${entry.likely ? "● " : ""}${entry.name}`;
+    label.textContent = `${entry.likely ? "● " : ""}${localizedName(entry)}`;
     chip.append(label);
     pokemon.append(chip);
   }
 
   const presets = document.createElement("span");
   const presetLabels = [...new Set(row.entries.map(({ presetLabel }) => presetLabel).filter(Boolean))];
-  presets.textContent = presetLabels.join(" / ") || "Base";
+  presets.textContent = presetLabels.map((label) => localizedTerm("speedPreset", label)).join(" / ") || t("speed.base");
   const stage = document.createElement("span");
-  stage.textContent = row.stage === null ? "mixed" : row.stage > 0 ? `+${row.stage}` : String(row.stage);
+  stage.textContent = row.stage === null ? t("speed.mixed") : row.stage > 0 ? `+${row.stage}` : String(row.stage);
   item.append(speed, pokemon, presets, stage, renderBreakpointChoices(breakpoint));
 
   if (row.entries.some(({ isUser }) => isUser)) {
     const divider = document.createElement("div");
     divider.className = "speed-user-divider";
-    divider.textContent = "Your Speed tier";
+    divider.textContent = t("speed.yourTier");
     item.append(divider);
   }
   return item;
@@ -275,7 +303,7 @@ function renderBreakpointChoices(point) {
   choices.className = "speed-axis-breakpoints";
   if (!point || point.choices.length === 0) {
     const label = document.createElement("span");
-    label.textContent = point ? "Unreachable" : "—";
+    label.textContent = point ? t("speed.unreachable") : "—";
     choices.append(label);
     return choices;
   }
@@ -284,7 +312,7 @@ function renderBreakpointChoices(point) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "speed-breakpoint-choice";
-    button.textContent = `${choice.nature} (${choice.natureLabel}) · ${choice.requiredSp} SP`;
+    button.textContent = `${localizedTerm("nature", choice.nature)} (${localizedTerm("speedClass", choice.natureLabel)}) · ${choice.requiredSp} SP`;
     button.addEventListener("click", () => {
       user = { ...user, spe: choice.requiredSp, nature: choice.nature };
       elements.sp.value = String(user.spe);
@@ -301,11 +329,11 @@ function sprite(entry) {
   wrap.className = "pokemon-minisprite";
   const image = document.createElement("img");
   image.loading = "lazy";
-  image.alt = entry.name;
+  image.alt = localizedName(entry);
   const [source, fallbackSource] = pokemonSpriteUrls(entry);
   image.src = source;
   const fallback = document.createElement("span");
-  fallback.textContent = entry.name.slice(0, 1);
+  fallback.textContent = localizedName(entry).slice(0, 1);
   let nextSource = fallbackSource;
   image.addEventListener("error", () => {
     if (nextSource) {

@@ -1,5 +1,6 @@
 import { applyScopedUsage, sortByChampionsUsage } from "../data/catalog.js";
 import { loadPokemonData } from "../data/data.js";
+import { t } from "../i18n.js";
 
 // Shared catalog-loading boilerplate for both page controllers: fetch the Pokémon/ability/
 // move/item catalogs, report a status line, and surface the "run the sync script" error copy
@@ -8,17 +9,22 @@ import { loadPokemonData } from "../data/data.js";
 export async function loadCatalogs({ onStatus, onLoaded } = {}) {
   try {
     const data = await loadPokemonData();
-    onStatus?.(
-      `${data.pokemon.length} Pokémon/forms, ${data.abilities.length} abilities, ` +
-        `${data.moves.length} moves loaded`,
-    );
+    onStatus?.(catalogLoadedStatus(data));
     onLoaded?.(data);
     return data;
   } catch (error) {
-    onStatus?.("Run npm run sync-data to generate Pokémon data.");
+    onStatus?.(t("catalog.missing"));
     console.error(error);
     return null;
   }
+}
+
+export function catalogLoadedStatus(data) {
+  return t("catalog.loaded", {
+    pokemon: data.pokemon.length,
+    abilities: data.abilities.length,
+    moves: data.moves.length,
+  });
 }
 
 // Shared "rank a catalog list by Champions usage" composition, repeated for abilities, items,

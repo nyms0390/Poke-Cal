@@ -12,8 +12,19 @@ import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
+import {
+  applyDocumentTranslations,
+  getLocale,
+  initI18n,
+  localizedName,
+  localizedNatureOptionLabel,
+  localizedTerm,
+  onLocaleChange,
+  t,
+} from "../i18n.js";
+import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
-import { loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   createBuilderState,
   finalStats,
@@ -61,7 +72,18 @@ let state = createBuilderState();
 let moveComboboxCleanups = [];
 let customThreats = [];
 
+initI18n();
 initialize();
+
+onLocaleChange(() => {
+  if (!catalogs) return;
+  elements.status.textContent = catalogLoadedStatus(catalogs);
+  renderLocaleOptions();
+  if (state.user) {
+    renderPicks();
+    render();
+  }
+});
 
 async function initialize() {
   catalogs = await loadCatalogs({
@@ -71,13 +93,7 @@ async function initialize() {
   });
   if (!catalogs) return;
 
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(nature, natureOptionLabel(nature))),
-  );
-  elements.tera.replaceChildren(
-    optionElement("", "No Tera"),
-    ...Object.keys(TYPE_EFFECTIVENESS).map((type) => optionElement(type, type)),
-  );
+  renderLocaleOptions();
 
   attachCombobox({
     input: elements.pokemonSearch,
@@ -105,6 +121,19 @@ async function initialize() {
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
   const defaultThreat = threatList(catalogs.pokemon, { count: 1, moveLookup: catalogs.moveLookup })[0];
   seedPokemon(requested ?? defaultThreat?.pokemon ?? catalogs.pokemon[0]);
+}
+
+function renderLocaleOptions() {
+  elements.nature.replaceChildren(
+    ...Object.keys(NATURES).map((nature) => optionElement(
+      nature,
+      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+    )),
+  );
+  elements.tera.replaceChildren(
+    optionElement("", t("builder.noTera")),
+    ...Object.keys(TYPE_EFFECTIVENESS).map((type) => optionElement(type, localizedTerm("type", type))),
+  );
 }
 
 function pokemonMatches(query) {
@@ -138,12 +167,12 @@ function renderPicks() {
   const items = rankByUsage(catalogs.items, usage?.items);
 
   elements.ability.replaceChildren(
-    optionElement("", "No ability"),
-    ...abilities.map((ability) => optionElement(ability.id, ability.name)),
+    optionElement("", t("builder.noAbility")),
+    ...abilities.map((ability) => optionElement(ability.id, localizedName(ability))),
   );
   elements.item.replaceChildren(
-    optionElement("", "No item"),
-    ...items.map((item) => optionElement(item.id, item.name)),
+    optionElement("", t("builder.noItem")),
+    ...items.map((item) => optionElement(item.id, localizedName(item))),
   );
   elements.nature.value = user.nature;
   elements.ability.value = user.ability?.id ?? "";
@@ -213,28 +242,30 @@ function render() {
   const user = state.user;
   if (!user) return;
   const stats = finalStats(state);
-  elements.pokemonSearch.value = user.pokemon.name;
+  elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.nature.value = user.nature;
   elements.ability.value = user.ability?.id ?? "";
   elements.item.value = user.item?.id ?? "";
   elements.tera.value = user.teraType ?? "";
   elements.threatCount.value = String(state.threatCount);
-  elements.summary.textContent = `${user.nature} · ${user.teraType ? `Tera ${user.teraType}` : "No Tera"}`;
-  elements.threatSummary.textContent = `Top ${state.threatCount} + ${customThreats.length} custom`;
-  elements.source.textContent =
-    `Limitless Champions defaults · top-${state.threatCount} threats + legal Mega forms + ` +
-    `${customThreats.length} custom · no active Tera`;
+  elements.summary.textContent = t("builder.summary", {
+    nature: localizedTerm("nature", user.nature),
+    tera: user.teraType ? t("builder.tera", { type: localizedTerm("type", user.teraType) }) : t("builder.noTera"),
+  });
+  elements.threatSummary.textContent = t("builder.topCustom", { top: state.threatCount, custom: customThreats.length });
+  elements.source.textContent = t("builder.source", { top: state.threatCount, custom: customThreats.length });
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
 
   renderStats(user, stats);
   const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
   // TODO(P5-04): show a remaining-SP budget only after an authoritative Champions rule
   // source establishes a total cap; current usage-backed spreads can exceed 64 assigned SP.
-  elements.spBudget.textContent = `${spent} SP assigned`;
+  elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
   renderCustomThreats();
   const threats = selectedThreats();
   renderBulkPoints(threats);
   renderBreakPoints(threats);
+  applyDocumentTranslations();
 }
 
 function renderStats(user, stats) {
@@ -256,7 +287,7 @@ function statRow(stat, user, stats) {
   row.className = "builder-stat-row";
 
   const label = document.createElement("span");
-  label.textContent = STAT_LABELS[stat];
+  label.textContent = localizedTerm("stat", STAT_LABELS[stat]);
   const base = document.createElement("span");
   base.className = "builder-stat-base";
   base.textContent = String(user.pokemon.baseStats[stat]);
@@ -268,7 +299,7 @@ function statRow(stat, user, stats) {
   input.value = String(user.sp[stat] ?? 0);
   input.dataset.kind = "builder-sp";
   input.dataset.stat = stat;
-  input.setAttribute("aria-label", `${STAT_LABELS[stat]} SP`);
+  input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
   const final = document.createElement("strong");
   final.className = "builder-stat-final";
   final.textContent = String(stats[stat]);
@@ -293,8 +324,8 @@ function renderMovePicks() {
     input.type = "search";
     input.autocomplete = "off";
     input.role = "combobox";
-    input.value = selected?.name ?? "";
-    input.placeholder = "Choose a move";
+    input.value = selected ? localizedName(selected) : "";
+    input.placeholder = t("label.chooseMove");
     const results = document.createElement("div");
     results.className = "search-results move-search-results";
     results.hidden = true;
@@ -312,7 +343,7 @@ function renderMovePicks() {
       },
       renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
         preventBlur: true,
-        small: `${move.type ?? "—"} · ${move.category ?? "—"}`,
+        small: `${localizedTerm("type", move.type) ?? "—"} · ${localizedTerm("category", move.category) ?? "—"}`,
         strong: move.basePower ?? "—",
       }),
     });
@@ -351,11 +382,11 @@ function renderCustomThreats() {
     chip.className = "builder-threat-chip";
     chip.append(pokemonSprite(pokemon));
     const name = document.createElement("span");
-    name.textContent = pokemon.name;
+    name.textContent = localizedName(pokemon);
     const remove = document.createElement("button");
     remove.type = "button";
     remove.textContent = "×";
-    remove.setAttribute("aria-label", `Remove ${pokemon.name}`);
+    remove.setAttribute("aria-label", t("builder.remove", { name: localizedName(pokemon) }));
     remove.addEventListener("click", () => removeCustomThreat(pokemon.id));
     chip.append(name, remove);
     return chip;
@@ -367,10 +398,10 @@ function renderBulkPoints(threats) {
   const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
   const { primary, detail } = partitionBulkMatchups(matchups);
 
-  elements.bulkCount.textContent = `${spreadCount} spreads · ${matchups.length} matchups`;
+  elements.bulkCount.textContent = t("builder.bulkCount", { spreads: spreadCount, matchups: matchups.length });
   elements.bulkPoints.replaceChildren(
     ...(matchups.length === 0
-      ? [emptyText("No supported threat moves are available.")]
+      ? [emptyText(t("builder.noThreatMoves"))]
       : [
           ...bulkThreatCards(primary),
           ...(detail.length > 0 ? [bulkDetailDisclosure(detail)] : []),
@@ -394,8 +425,8 @@ function bulkDetailDisclosure(matchups) {
   details.className = "builder-more-detail";
   const summary = document.createElement("summary");
   summary.append(
-    textSpan("More detail", "builder-more-detail-title"),
-    textSpan(`${matchups.length} matchups at 3HKO or longer`, "builder-more-detail-count"),
+    textSpan(t("builder.moreDetail"), "builder-more-detail-title"),
+    textSpan(t("builder.longMatchups", { count: matchups.length }), "builder-more-detail-count"),
   );
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
@@ -411,16 +442,16 @@ function bulkMovePanel({ scenario, damage, points }) {
     move: scenario.move,
     damage,
     defensive: true,
-    emptyMessage: "No better survival tier is reachable within 64 SP.",
+    emptyMessage: t("builder.noSurvival"),
     choices: points.map((point) => spreadChoice({
-      label: `${point.totalSp} total SP`,
+      label: t("builder.totalSp", { count: point.totalSp }),
       stats: [
         ["HP", point.hpSp],
-        [STAT_LABELS[defenseStat], point.defSp],
+        [localizedTerm("stat", STAT_LABELS[defenseStat]), point.defSp],
       ],
       fromKoText: point.fromKoText,
       toKoText: point.koText,
-      damageText: `Max damage ${point.maxPct}%`,
+      damageText: t("builder.maxDamage", { value: point.maxPct }),
       onSelect: () => {
         state = {
           ...state,
@@ -441,13 +472,13 @@ function bulkMovePanel({ scenario, damage, points }) {
 
 function renderBreakPoints(threats) {
   const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
-  elements.breakCount.textContent = `${threats.length} Pokémon · ${moves.length} moves`;
+  elements.breakCount.textContent = t("builder.breakCount", { pokemon: threats.length, moves: moves.length });
   if (threats.length === 0) {
-    elements.breakPoints.replaceChildren(emptyText("Add at least one popular or custom Pokémon."));
+    elements.breakPoints.replaceChildren(emptyText(t("builder.addThreat")));
     return;
   }
   if (moves.length === 0) {
-    elements.breakPoints.replaceChildren(emptyText("Choose at least one damaging move."));
+    elements.breakPoints.replaceChildren(emptyText(t("builder.chooseDamageMove")));
     return;
   }
 
@@ -464,7 +495,7 @@ function breakMovePanel(move, threat) {
   return analysisMovePanel({
     move,
     damage,
-    emptyMessage: "No higher KO tier is reachable with this nature.",
+    emptyMessage: t("builder.noHigherKo"),
     loadChoices: () => significantBreakPoints(
       damage.koText,
       breakPoints(state.user, move, { threat }),
@@ -473,14 +504,16 @@ function breakMovePanel(move, threat) {
         ? attackStat === "atk" ? "Adamant" : "Modest"
         : state.user.nature;
       return spreadChoice({
-        label: point.requiresPlusNature ? `${nature} nature` : `${point.sp} ${STAT_LABELS[attackStat]} SP`,
+        label: point.requiresPlusNature
+          ? `${localizedTerm("nature", nature)}${getLocale() === "zh-TW" ? "性格" : " nature"}`
+          : `${point.sp} ${localizedTerm("stat", STAT_LABELS[attackStat])} SP`,
         stats: [
-          ["Nature", nature],
-          [STAT_LABELS[attackStat], point.sp],
+          [t("label.nature"), localizedTerm("nature", nature)],
+          [localizedTerm("stat", STAT_LABELS[attackStat]), point.sp],
         ],
         fromKoText: damage.koText,
         toKoText: point.achieves,
-        damageText: `${point.minPct}–${point.maxPct}% damage`,
+        damageText: t("builder.damage", { min: point.minPct, max: point.maxPct }),
         onSelect: () => {
           state = {
             ...state,
@@ -504,7 +537,7 @@ function analysisCard(threat, movePanels) {
   heading.className = "builder-analysis-heading";
   heading.append(
     pokemonLabel(threat.pokemon),
-    textSpan(`${movePanels.length} ${movePanels.length === 1 ? "move" : "moves"}`, "builder-analysis-count"),
+    textSpan(t("builder.moveCount", { count: movePanels.length }), "builder-analysis-count"),
   );
   const moves = document.createElement("div");
   moves.className = "builder-analysis-moves";
@@ -520,8 +553,8 @@ function analysisMovePanel({ move, damage, defensive = false, choices, loadChoic
   const heading = document.createElement("div");
   heading.className = "builder-analysis-move-heading";
   const name = document.createElement("strong");
-  name.textContent = move.name;
-  heading.append(name, koBadge(damage.koText));
+  name.textContent = localizedName(move);
+  heading.append(name, koBadge(formatKoText(damage.koText, getLocale())));
   const range = document.createElement("div");
   range.className = "builder-damage-range";
   range.append(
@@ -538,16 +571,14 @@ function analysisMovePanel({ move, damage, defensive = false, choices, loadChoic
 
   const summary = document.createElement("summary");
   summary.className = "builder-analysis-move-summary";
-  const prompt = textSpan("View threshold spreads", "builder-spread-prompt");
+  const prompt = textSpan(t("builder.viewThresholds"), "builder-spread-prompt");
   summary.append(heading, range, prompt);
   let loaded = false;
   panel.addEventListener("toggle", () => {
     if (!panel.open || loaded) return;
     const loadedChoices = loadChoices();
     renderSpreadChoices(list, loadedChoices, emptyMessage);
-    prompt.textContent = loadedChoices.length === 1
-      ? "1 threshold spread"
-      : `${loadedChoices.length} threshold spreads`;
+    prompt.textContent = t("builder.thresholdCount", { count: loadedChoices.length });
     loaded = true;
   });
   panel.append(summary, list);
@@ -566,7 +597,7 @@ function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect
   heading.className = "builder-spread-heading";
   heading.append(
     textSpan(label, "builder-spread-label"),
-    textSpan("Apply", "builder-spread-apply"),
+    textSpan(t("builder.apply"), "builder-spread-apply"),
   );
   const statList = document.createElement("span");
   statList.className = "builder-spread-stats";
@@ -577,7 +608,11 @@ function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect
   }));
   const shift = document.createElement("span");
   shift.className = "builder-tier-shift";
-  shift.append(koBadge(fromKoText, { muted: true }), textSpan("→", "builder-tier-arrow"), koBadge(toKoText));
+  shift.append(
+    koBadge(formatKoText(fromKoText, getLocale()), { muted: true }),
+    textSpan("→", "builder-tier-arrow"),
+    koBadge(formatKoText(toKoText, getLocale())),
+  );
   button.append(heading, statList, shift, textSpan(damageText, "builder-spread-damage"));
   button.addEventListener("click", onSelect);
   return button;
@@ -586,8 +621,8 @@ function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect
 function koBadge(koText, { muted = false } = {}) {
   const badge = textSpan(koText, "builder-ko-badge");
   if (muted) badge.classList.add("muted");
-  else if (/OHKO/i.test(koText)) badge.classList.add("danger");
-  else if (/2HKO/i.test(koText)) badge.classList.add("warning");
+  else if (/OHKO|一擊倒下/i.test(koText)) badge.classList.add("danger");
+  else if (/2HKO|兩擊倒下/i.test(koText)) badge.classList.add("warning");
   else badge.classList.add("safe");
   return badge;
 }
@@ -610,7 +645,7 @@ function pokemonLabel(pokemon, { compact = false } = {}) {
   label.className = `builder-pokemon-label${compact ? " compact" : ""}`;
   label.append(pokemonSprite(pokemon));
   const name = document.createElement("span");
-  name.textContent = pokemon.name;
+  name.textContent = localizedName(pokemon);
   label.append(name);
   return label;
 }
@@ -620,12 +655,12 @@ function pokemonSprite(pokemon) {
   wrap.className = "pokemon-minisprite";
   const image = document.createElement("img");
   image.loading = "lazy";
-  image.alt = pokemon.name;
+  image.alt = localizedName(pokemon);
   const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
   image.src = source;
   const fallback = document.createElement("span");
   fallback.hidden = true;
-  fallback.textContent = pokemon.name.slice(0, 1);
+  fallback.textContent = localizedName(pokemon).slice(0, 1);
   let nextSource = fallbackSource;
   image.addEventListener("error", () => {
     if (nextSource) {

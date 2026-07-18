@@ -16,12 +16,30 @@ import {
 } from "../engine/damage.js";
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove, moveCondition, moveEffect } from "../engine/move-effects.js";
-import { resultDescription } from "../engine/result-text.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
+import {
+  applyDocumentTranslations,
+  getLocale,
+  initI18n,
+  localizedName,
+  localizedNatureOptionLabel,
+  localizedSpreadName,
+  localizedTerm,
+  onLocaleChange,
+  t,
+} from "../i18n.js";
+import {
+  formatDamageNote,
+  formatDamageReason,
+  formatKoResult,
+  formatMoveOrderResult,
+  formatResultDescription,
+  formatSetWarning,
+} from "../i18n-formatters.js";
 import {
   activateTeamSlot as activateTeamSlotState,
   applyControl,
@@ -33,7 +51,7 @@ import {
   TEAM_SIZE,
   updateActiveTeamSlot,
 } from "./battle-state.js";
-import { loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
   ensureRenderedRows,
@@ -173,7 +191,14 @@ let fieldState = {
   defenderSide: neutralFieldSidePanel(),
 };
 
+initI18n();
 initialize();
+
+onLocaleChange(() => {
+  if (pokemon.length === 0) return;
+  elements.status.textContent = catalogLoadedStatus({ pokemon, abilities, moves });
+  renderDamageShell();
+});
 
 async function initialize() {
   const data = await loadCatalogs({
@@ -263,7 +288,7 @@ for (const side of ["attacker", "defender"]) {
 
 function renderDamageShell({ requestedLeft } = {}) {
   const natureOptions = Object.keys(NATURES).map((nature) =>
-    optionElement(nature, natureOptionLabel(nature)),
+    optionElement(nature, getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature)),
   );
   elements.attackerNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
   elements.defenderNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
@@ -368,7 +393,7 @@ function renderActiveTeamSlot(side) {
   });
   setSideControlsDisabled(side, false);
   elements[`${side}Pokemon`].value = state.pokemon.id;
-  elements[`${side}PokemonSearch`].value = state.pokemon.name;
+  elements[`${side}PokemonSearch`].value = localizedName(state.pokemon);
   hidePokemonSearchResults(side);
   renderSideSelects(side, defaults);
   syncSideInputs(side);
@@ -387,8 +412,8 @@ function renderTeamSlots(side) {
       const activate = document.createElement("button");
       activate.type = "button";
       activate.className = "team-slot-button";
-      activate.textContent = state?.pokemon?.name ?? "+";
-      activate.setAttribute("aria-label", state ? `Use ${state.pokemon.name}, slot ${index + 1}` : `Add Pokémon to slot ${index + 1}`);
+      activate.textContent = state ? localizedName(state.pokemon) : "+";
+      activate.setAttribute("aria-label", state ? `${localizedName(state.pokemon)}, ${index + 1}` : t("battle.addSlot", { number: index + 1 }));
       activate.addEventListener("click", () => activateTeamSlot(side, index));
 
       const clear = document.createElement("button");
@@ -396,7 +421,7 @@ function renderTeamSlots(side) {
       clear.className = "team-slot-clear";
       clear.textContent = "×";
       clear.disabled = !state;
-      clear.setAttribute("aria-label", `Clear slot ${index + 1}`);
+      clear.setAttribute("aria-label", t("battle.clearSlot", { number: index + 1 }));
       clear.addEventListener("click", () => clearTeamSlot(side, index));
 
       slot.append(activate, clear);
@@ -446,11 +471,11 @@ function renderEmptySide(side) {
   setSideControlsDisabled(side, true);
   elements[`${side}Pokemon`].value = "";
   elements[`${side}PokemonSearch`].value = "";
-  elements[`${side}SavedSet`].replaceChildren(optionElement("", "Choose a Pokémon first"));
-  elements[`${side}Spread`].replaceChildren(optionElement("", "Choose a Pokémon first"));
-  elements[`${side}Nature`].replaceChildren(optionElement("", "Choose a Pokémon first"));
-  elements[`${side}Ability`].replaceChildren(optionElement("", "Choose a Pokémon first"));
-  elements[`${side}Item`].replaceChildren(optionElement("", "Choose a Pokémon first"));
+  elements[`${side}SavedSet`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
+  elements[`${side}Spread`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
+  elements[`${side}Nature`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
+  elements[`${side}Ability`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
+  elements[`${side}Item`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
   elements[`${side}StatEditor`].replaceChildren();
   elements[`${side}MovePicks`].replaceChildren();
   hidePokemonSearchResults(side);
@@ -471,23 +496,23 @@ function renderSideSelects(side, defaults) {
     optionElement(
       "",
       usageSpreads.length > 0 || ncpSets.length > 0
-        ? "Custom spread"
-        : "No Champions spread source",
+        ? t("battle.customSpread")
+        : t("battle.noSpreadSource"),
     ),
     ...spreadOptionGroups(usageSpreads, ncpSets),
   );
   spreadSelect.value = defaults.spreadName;
   natureSelect.value = damageState[side].nature;
   abilitySelect.replaceChildren(
-    optionElement("", "No ability modifier"),
+    optionElement("", t("battle.noAbility")),
     ...abilities.map((ability) =>
-      optionElement(ability.id, ability.name),
+      optionElement(ability.id, localizedName(ability)),
     ),
   );
   itemSelect.replaceChildren(
-    optionElement("", "No item modifier"),
+    optionElement("", t("battle.noItem")),
     ...rankedItems.map((item) =>
-      optionElement(item.id, item.name),
+      optionElement(item.id, localizedName(item)),
     ),
   );
   abilitySelect.value = damageState[side].ability?.id ?? "";
@@ -501,13 +526,13 @@ function spreadOptionGroups(usageSpreads, ncpSets) {
   if (usageSpreads.length > 0) {
     groups.push(
       optionGroup(
-        "Smogon ladder SP spreads",
+        t("battle.smogonSpreadGroup"),
         usageSpreads.map((spread) =>
           optionElement(
             spread.name,
             Number.isFinite(spread.usagePercent)
-              ? `${spread.name} (${spread.usagePercent}%)`
-              : spread.name,
+              ? `${localizedSpreadName(spread.name)} (${spread.usagePercent}%)`
+              : localizedSpreadName(spread.name),
           ),
         ),
       ),
@@ -516,8 +541,8 @@ function spreadOptionGroups(usageSpreads, ncpSets) {
   if (ncpSets.length > 0) {
     groups.push(
       optionGroup(
-        "NCP curated sets",
-        ncpSets.map((set) => optionElement(set.spreadName, `${set.name} — ${set.spreadName}`)),
+        t("battle.ncpSpreadGroup"),
+        ncpSets.map((set) => optionElement(set.spreadName, `${set.name} — ${localizedSpreadName(set.spreadName)}`)),
       ),
     );
   }
@@ -535,7 +560,7 @@ function renderSavedSetSelect(side, selectedName = "") {
   const state = damageState[side];
   const sets = savedSetStore.listSets(state?.pokemon?.id);
   elements[`${side}SavedSet`].replaceChildren(
-    optionElement("", "Champions default"),
+    optionElement("", t("battle.championsDefault")),
     ...sets.map((set) => optionElement(set.name, set.name)),
   );
   elements[`${side}SavedSet`].value = sets.some((set) => set.name === selectedName) ? selectedName : "";
@@ -692,7 +717,7 @@ function applySavedSet(side) {
 function saveCurrentSet(side) {
   const state = damageState[side];
   if (!state?.pokemon) return;
-  const name = window.prompt("Save set name", state.pokemon.name);
+  const name = window.prompt(t("battle.saveName"), localizedName(state.pokemon));
   if (!name?.trim()) return;
 
   const stateForPaste = {
@@ -710,7 +735,7 @@ function deleteCurrentSet(side) {
   const selectedName = elements[`${side}SavedSet`].value;
   const pokemonId = damageState[side]?.pokemon?.id;
   if (!pokemonId || !selectedName) return;
-  if (!window.confirm(`Delete saved set "${selectedName}"?`)) return;
+  if (!window.confirm(t("battle.deleteConfirm", { name: selectedName }))) return;
 
   savedSetStore.deleteSet(pokemonId, selectedName);
   renderSavedSetSelect(side);
@@ -756,10 +781,10 @@ function setPasteCatalogs() {
 
 function setSetPasteStatus(warnings) {
   elements.setPasteStatus.textContent = warnings.length
-    ? `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`
-    : "Ready";
+    ? t("count.warnings", { count: warnings.length })
+    : t("battle.ready");
   elements.setPasteWarnings.hidden = warnings.length === 0;
-  elements.setPasteWarnings.textContent = warnings.join(" · ");
+  elements.setPasteWarnings.textContent = warnings.map((warning) => formatSetWarning(warning, getLocale())).join(" · ");
 }
 
 function controlFromTarget(target) {
@@ -854,7 +879,7 @@ function renderDamageMovePickers(side) {
       row.className = "damage-move-row";
       const moveLabel = document.createElement("span");
       moveLabel.className = "damage-move-number";
-      moveLabel.textContent = `Move ${index + 1}`;
+      moveLabel.textContent = t("battle.moveNumber", { number: index + 1 });
 
       const combobox = document.createElement("div");
       combobox.className = "move-combobox";
@@ -870,8 +895,8 @@ function renderDamageMovePickers(side) {
       search.type = "search";
       search.autocomplete = "off";
       search.role = "combobox";
-      search.placeholder = selectedMove?.name ?? "Choose a move";
-      search.setAttribute("aria-label", `Move ${index + 1}`);
+      search.placeholder = selectedMove ? localizedName(selectedMove) : t("label.chooseMove");
+      search.setAttribute("aria-label", t("battle.moveNumber", { number: index + 1 }));
       const results = document.createElement("div");
       results.className = "search-results move-search-results";
       results.hidden = true;
@@ -882,8 +907,8 @@ function renderDamageMovePickers(side) {
         getMatches: (query) => filterMoves(sideMoves, { query }),
         onSelect: (picked) => {
           hidden.value = picked.id;
-          search.value = picked.name;
-          search.placeholder = picked.name;
+          search.value = localizedName(picked);
+          search.placeholder = localizedName(picked);
           handleDamageControl({ target: hidden });
         },
         renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
@@ -898,7 +923,7 @@ function renderDamageMovePickers(side) {
       const crit = document.createElement("button");
       crit.type = "button";
       crit.className = "move-toggle";
-      crit.textContent = "Crit";
+      crit.textContent = t("battle.crit");
       crit.dataset.kind = "crit";
       crit.dataset.side = side;
       crit.dataset.index = String(index);
@@ -915,7 +940,7 @@ function renderDamageMovePickers(side) {
       if (hitRange && hitRange.min !== hitRange.max) {
         const hitCountLabel = document.createElement("label");
         hitCountLabel.className = "move-inline-control";
-        hitCountLabel.textContent = "× hits";
+        hitCountLabel.textContent = t("battle.hits");
         const hitCount = document.createElement("select");
         hitCount.dataset.kind = "hit-count";
         hitCount.dataset.side = side;
@@ -934,12 +959,12 @@ function renderDamageMovePickers(side) {
       if (selectedMove && isOrderConditionalMove(selectedMove)) {
         const assumptionLabel = document.createElement("label");
         assumptionLabel.className = "move-inline-control";
-        assumptionLabel.textContent = "Target moved";
+        assumptionLabel.textContent = t("battle.targetMoved");
         const assumption = document.createElement("select");
         assumption.dataset.kind = "target-moved";
         assumption.dataset.side = side;
         assumption.dataset.index = String(index);
-        assumption.replaceChildren(optionElement("auto", "Auto"), optionElement("yes", "Yes"), optionElement("no", "No"));
+        assumption.replaceChildren(optionElement("auto", t("battle.auto")), optionElement("yes", t("battle.yes")), optionElement("no", t("battle.no")));
         const movedOverride = state.targetMovedOverrides?.[index];
         assumption.value = movedOverride === null || movedOverride === undefined ? "auto" : movedOverride ? "yes" : "no";
         assumption.addEventListener("input", handleDamageControl);
@@ -950,12 +975,12 @@ function renderDamageMovePickers(side) {
       if (condition) {
         const conditionLabel = document.createElement("label");
         conditionLabel.className = "move-inline-control";
-        conditionLabel.textContent = condition.label;
+        conditionLabel.textContent = localizedTerm("condition", condition.label);
         const select = document.createElement("select");
         select.dataset.kind = "move-condition";
         select.dataset.side = side;
         select.dataset.index = String(index);
-        select.replaceChildren(optionElement("auto", "Auto"), optionElement("yes", "Yes"), optionElement("no", "No"));
+        select.replaceChildren(optionElement("auto", t("battle.auto")), optionElement("yes", t("battle.yes")), optionElement("no", t("battle.no")));
         const override = state.conditionOverrides?.[index];
         select.value = override === null || override === undefined ? "auto" : override ? "yes" : "no";
         select.addEventListener("input", handleDamageControl);
@@ -990,20 +1015,20 @@ function renderDamage() {
   const attacker = damageState.attacker;
   const defender = damageState.defender;
   if (!attacker?.pokemon || !defender?.pokemon) {
-    elements.damageSource.textContent = "Select one Pokémon on each side to calculate damage.";
+    elements.damageSource.textContent = t("battle.selectSides");
     elements.attackerSummary.textContent = attacker ? sideSummary(attacker) : "—";
     elements.defenderSummary.textContent = defender ? sideSummary(defender) : "—";
     elements.attackerStatEditor.replaceChildren();
     elements.defenderStatEditor.replaceChildren();
-    elements.moveOrder.textContent = "Select one Pokémon on each side to compare move order.";
+    elements.moveOrder.textContent = t("battle.selectSidesOrder");
     elements.speedSummary.textContent = "";
     elements.damageCount.textContent = "—";
     elements.damageList.replaceChildren();
+    applyDocumentTranslations();
     return;
   }
 
-  elements.damageSource.textContent =
-    "Limitless Champions defaults · ranked ability, item, moves, and nature · neutral 0 SP";
+  elements.damageSource.textContent = t("battle.defaults");
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
@@ -1023,11 +1048,12 @@ function renderDamage() {
     renderDamageCard(move, "defender", rowIndex === 0, calcInput, moveOptionsForDamage("defender", index, move)),
   );
   const rows = [...attackerRows, ...defenderRows];
-  elements.damageCount.textContent = `${rows.length} moves`;
+  elements.damageCount.textContent = t("count.moves", { count: rows.length });
   elements.damageList.replaceChildren(
-    damageColumn("Attacker moves", attackerRows),
-    damageColumn("Defender moves", defenderRows),
+    damageColumn(t("battle.attackerMoves"), attackerRows),
+    damageColumn(t("battle.defenderMoves"), defenderRows),
   );
+  applyDocumentTranslations();
 }
 
 function selectedHitCountForMove(side, index, move) {
@@ -1085,7 +1111,7 @@ function renderStatEditor(side, field = {}, speedOptions = {}) {
     ...state,
     tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
   };
-  elements[`${side}SpeedReadout`].textContent = `Speed ${finalSpeed(fieldStateForSide, field, speedOptions)}`;
+  elements[`${side}SpeedReadout`].textContent = t("battle.speed", { value: finalSpeed(fieldStateForSide, field, speedOptions) });
   const rows = ensureRenderedRows(
     container,
     ".battle-stat-editor-row",
@@ -1114,7 +1140,7 @@ function renderStatEditor(side, field = {}, speedOptions = {}) {
 function statEditorHeader() {
   const header = document.createElement("div");
   header.className = "battle-stat-editor-header";
-  for (const label of ["Stat", "Base", "SP", "Final", "Stage"]) {
+  for (const label of [t("battle.statHeader"), t("battle.baseHeader"), "SP", t("battle.finalHeader"), t("battle.stageHeader")]) {
     const cell = document.createElement("span");
     cell.textContent = label;
     header.append(cell);
@@ -1184,13 +1210,13 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     critical: moveOptions.critical,
     moveOptions,
   });
-  const description = resultDescription({
+  const description = formatResultDescription({
     attackerState: isDefenderSource ? calcInput.defenderState : calcInput.attackerState,
     defenderState: isDefenderSource ? calcInput.attackerState : calcInput.defenderState,
     move,
     field: isDefenderSource ? calcInput.reverseField : calcInput.field,
     result,
-  });
+  }, getLocale());
 
   const card = document.createElement("article");
   card.className = `damage-result-card${selected ? " selected" : ""}`;
@@ -1199,11 +1225,11 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   heading.className = "damage-result-heading";
 
   const name = document.createElement("strong");
-  name.textContent = move.name;
+  name.textContent = localizedName(move);
 
   const percent = document.createElement("span");
   percent.className = "damage-percent";
-  percent.textContent = result.supported ? formatDamageResult(result) : "Unsupported";
+  percent.textContent = result.supported ? formatDamageResult(result) : t("battle.unsupported");
   const percentColor = result.supported
     ? damagePercentColor(result.minPercent, result.maxPercent)
     : damagePercentColor(0);
@@ -1224,7 +1250,9 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
 
   const ko = document.createElement("span");
   ko.className = "damage-ko";
-  ko.textContent = result.supported ? result.ko.text : formatDamageResult(result);
+  ko.textContent = result.supported
+    ? formatKoResult(result.ko, getLocale())
+    : formatDamageReason(formatDamageResult(result), getLocale());
   card.append(heading, meta);
   if (selected) card.append(ko);
 
@@ -1236,7 +1264,7 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     const copy = document.createElement("button");
     copy.type = "button";
     copy.className = "damage-copy-button";
-    copy.textContent = "Copy";
+    copy.textContent = t("battle.copy");
     copy.addEventListener("click", () => {
       navigator.clipboard?.writeText(description);
     });
@@ -1247,7 +1275,15 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   if (selected && result.supported && result.notes?.length) {
     const notes = document.createElement("p");
     notes.className = "damage-notes";
-    notes.textContent = result.notes.join(" · ");
+    notes.textContent = result.notes.map((note) => formatDamageNote(note, getLocale(), {
+      move,
+      entities: [
+        calcInput.attackerState.ability,
+        calcInput.attackerState.item,
+        calcInput.defenderState.ability,
+        calcInput.defenderState.item,
+      ],
+    })).join(" · ");
     card.append(notes);
   }
 
@@ -1260,7 +1296,7 @@ function renderMoveOrder(field, calcInput) {
   const attackerMove = attackerEntry?.move;
   const defenderMove = defenderEntry?.move;
   if (!attackerMove || !defenderMove) {
-    elements.moveOrder.textContent = "Select one move on each side to compare move order.";
+    elements.moveOrder.textContent = t("battle.selectMovesOrder");
     return;
   }
 
@@ -1272,10 +1308,13 @@ function renderMoveOrder(field, calcInput) {
     trickRoom: field.trickRoom,
     field,
   });
-  elements.moveOrder.textContent = result.reason;
-  elements.speedSummary.textContent =
-    `${damageState.attacker.pokemon.name} Speed ${result.attackerSpeed} vs ` +
-    `${damageState.defender.pokemon.name} Speed ${result.defenderSpeed}`;
+  elements.moveOrder.textContent = formatMoveOrderResult(result, field, getLocale());
+  elements.speedSummary.textContent = t("battle.speedComparison", {
+    attacker: localizedName(damageState.attacker.pokemon),
+    attackerSpeed: result.attackerSpeed,
+    defender: localizedName(damageState.defender.pokemon),
+    defenderSpeed: result.defenderSpeed,
+  });
 }
 
 function neutralizingGasActive() {
@@ -1321,7 +1360,7 @@ function sideSummary(state) {
     sp: state.sp.hp,
     nature: state.nature,
   });
-  return `${state.pokemon.name} · ${state.nature} · HP ${hp}`;
+  return `${localizedName(state.pokemon)} · ${localizedTerm("nature", state.nature)} · HP ${hp}`;
 }
 
 function normalizeDamageId(value) {

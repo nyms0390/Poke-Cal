@@ -1,5 +1,6 @@
 import { formatMovePriority } from "../data/catalog.js";
 import { pokemonSpriteId } from "../data/pokemon.js";
+import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
 // space is tight.
@@ -29,12 +30,12 @@ export function optionElement(value, text) {
   return option;
 }
 
-export function updateSelectOptions(select, emptyLabel, values) {
+export function updateSelectOptions(select, emptyLabel, values, displayValue = (value) => value) {
   const selected = select.value;
   const sortedValues = values.sort((a, b) => a.localeCompare(b));
   select.replaceChildren(
     optionElement("", emptyLabel),
-    ...sortedValues.map((value) => optionElement(value, value)),
+    ...sortedValues.map((value) => optionElement(value, displayValue(value))),
   );
   select.value = sortedValues.includes(selected) ? selected : "";
 }
@@ -53,7 +54,7 @@ export function moveNameCell(move) {
   cell.dataset.label = "Move";
 
   const name = document.createElement("strong");
-  name.textContent = move.name;
+  name.textContent = localizedName(move);
 
   const id = document.createElement("small");
   id.textContent = move.id;
@@ -68,7 +69,7 @@ export function moveNameCell(move) {
     const badge = document.createElement("span");
     badge.className = `move-priority-badge ${priority > 0 ? "positive" : "negative"}`;
     badge.textContent = formatMovePriority(priority);
-    badge.title = `Priority ${formatMovePriority(priority)}`;
+    badge.title = t("label.priority", { value: formatMovePriority(priority) });
     cell.append(badge);
   }
 
@@ -79,7 +80,7 @@ export function moveNameCell(move) {
 export function typeBadge(type) {
   const badge = document.createElement("span");
   badge.className = `type-badge ${typeClassName(type)}`;
-  badge.textContent = type || "Unknown";
+  badge.textContent = localizedTerm("type", type || "Unknown");
   return badge;
 }
 
@@ -120,14 +121,16 @@ export function textCell(text, className = "", label = "") {
 // stopping the pointerdown from blurring it before the click handler runs.
 export function searchResultButton(entry, onSelect, {
   preventBlur = false,
-  small = entry.searchMatch || (entry.aliases ?? []).join(" · ") || entry.baseSpecies,
+  small = entry.searchMatch || (getLocale() === "zh-TW"
+    ? entry.name
+    : (entry.aliases ?? []).map(toTraditionalChinese).join(" · ")) || entry.baseSpecies,
   strong = entry.baseSpeed,
 } = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "search-result";
   button.innerHTML = `
-    <span>${entry.name}</span>
+    <span>${localizedName(entry)}</span>
     <small>${small ?? ""}</small>
     <strong>${strong ?? ""}</strong>
   `;
@@ -220,7 +223,7 @@ export function statEditorRow(stat, { side, base, sp, final, stage, onChange }) 
 
   const label = document.createElement("span");
   label.className = "stat-cell-label";
-  label.textContent = STAT_LABELS[stat];
+  label.textContent = localizedTerm("stat", STAT_LABELS[stat]);
 
   const baseCell = document.createElement("span");
   baseCell.className = "stat-cell-base";
@@ -229,7 +232,7 @@ export function statEditorRow(stat, { side, base, sp, final, stage, onChange }) 
   const spCell = document.createElement("span");
   spCell.className = "stat-cell-sp";
   const spControl = spInput({ stat, side, value: sp, onChange }).querySelector("input");
-  spControl.setAttribute("aria-label", `${STAT_LABELS[stat]} SP`);
+  spControl.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
   spCell.append(spControl);
 
   const finalCell = document.createElement("span");
@@ -245,7 +248,7 @@ export function statEditorRow(stat, { side, base, sp, final, stage, onChange }) 
     select.dataset.side = side;
     select.dataset.kind = "stage";
     select.dataset.stat = stat;
-    select.setAttribute("aria-label", `${STAT_LABELS[stat]} stage`);
+    select.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} ${getLocale() === "zh-TW" ? "階級" : "stage"}`);
     select.replaceChildren(
       ...Array.from({ length: 13 }, (_, index) => {
         const value = index - 6;
