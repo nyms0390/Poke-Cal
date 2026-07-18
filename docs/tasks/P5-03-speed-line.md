@@ -46,15 +46,15 @@ speedTiers(user, opponents, options)
 //   { speed, entries: [{ id, name, presetLabel, likely, isUser }],
 //     stage, actsBefore /* vs user, Trick Room-aware */ }
 // Base mode: speed = baseStats.spe, one entry per Pokémon, no presets/mods.
-nextBreakpoints(user, rows)   // battle mode only — minimum Speed SP (and +Spe-nature
-// variant when 32 isn't enough) to strictly exceed each not-yet-beaten tier above you:
-// [{ tierSpeed, names, requiredSp, requiresPlusNature }]
+speedBreakpoints(user, rows)  // battle mode only — minimum Speed SP for each reachable
+// +Spe, neutral, and -Spe nature choice that strictly exceeds every opponent tier:
+// [{ tierSpeed, choices: [{ nature, natureLabel, requiredSp }] }]
 ```
 All battle-mode numbers must come from `calculateSpeed` (stage/tailwind/paralysis/
 multiplier/Trick Room order) — hand-compute nothing in this module.
 
 ## Steps
-1. Implement `speedTiers` + `nextBreakpoints` with tests first (fixture of 3 opponents):
+1. Implement `speedTiers` + `speedBreakpoints` with tests first (fixture of 3 opponents):
    tie merging; preset interleaving order; Trick Room flips `actsBefore` but NOT the sort;
    paralysis+tailwind stacking matches `calculateSpeed`; stage −1/+1/+2; breakpoint
    minimality (sp−1 fails, sp succeeds); base mode ignores every mod.
@@ -66,11 +66,11 @@ multiplier/Trick Room order) — hand-compute nothing in this module.
      (default: all 4, `likely` preset marked ●); one shared mod-toggle group for the opposing side.
    - Mode switch **Base | Battle** at the top; Base grays out both toggle groups, SP,
      and presets. Global Trick Room toggle (battle only).
-   - The axis: Smogon-style rows `speed · stage · preset · icons+names`, your row
-     highlighted with an "acts before / after you" divider line at your speed; equal speed
-     = speed tie (never "outspeeds"). Reuse the minisprite approach from P6-03.
-   - Breakpoints list under the axis (battle mode): "+3 SP → outspeed Fast Chien-Pao";
-     clicking applies the SP to your input and the axis re-sorts.
+   - The axis: Smogon-style rows `speed · icons+names · preset · stage · breakpoint`,
+     with your row highlighted by a divider at its Speed. Reuse the minisprite approach
+     from P6-03.
+   - Each opponent row shows every reachable minimum `+Spe`, neutral, and `-Spe` spread;
+     clicking one applies its exact nature and SP to the input and re-sorts the axis.
 3. Builder note: builder.html gets NO speed section — it links here
    (`speed.html?pokemon=<id>`). P5-02's placeholder list drops "Speed line".
 4. Manual QA desktop + mobile; long lists scroll within the axis, header stays visible.

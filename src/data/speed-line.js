@@ -88,36 +88,34 @@ export function speedTiers(user, opponents, options = {}) {
   });
 }
 
-export function nextBreakpoints(user, rows) {
+export function speedBreakpoints(user, rows) {
   const context = rows?.context;
   if (!user?.pokemon || context?.mode !== "battle") return [];
 
   return rows.flatMap((row) => {
-    if (row.speed <= context.userSpeed) return [];
     const opponentEntries = row.entries.filter(({ isUser }) => !isUser);
     if (opponentEntries.length === 0) return [];
 
-    const currentNatureSp = minimumSpAbove(user, context.userMods, row.speed, user.nature);
-    if (currentNatureSp !== null) {
-      return [breakpoint(row, opponentEntries, currentNatureSp, false)];
-    }
-
-    const plusNature = NATURES[user.nature]?.up === "spe"
-      ? null
-      : minimumSpAbove(user, context.userMods, row.speed, "Timid");
-    return plusNature === null
-      ? []
-      : [breakpoint(row, opponentEntries, plusNature, true)];
+    const natureChoices = [
+      { nature: natureForSpeedClass(user.nature, "positive"), natureLabel: "+Spe" },
+      { nature: natureForSpeedClass(user.nature, "neutral"), natureLabel: "Neutral" },
+      { nature: natureForSpeedClass(user.nature, "negative"), natureLabel: "-Spe" },
+    ];
+    const choices = natureChoices.flatMap(({ nature, natureLabel }) => {
+      const requiredSp = minimumSpAbove(user, context.userMods, row.speed, nature);
+      return requiredSp === null ? [] : [{ nature, natureLabel, requiredSp }];
+    });
+    return [{ tierSpeed: row.speed, choices }];
   });
 }
 
-function breakpoint(row, entries, requiredSp, requiresPlusNature) {
-  return {
-    tierSpeed: row.speed,
-    names: entries.map(({ name, presetLabel }) => `${presetLabel} ${name}`.trim()),
-    requiredSp,
-    requiresPlusNature,
-  };
+function natureForSpeedClass(currentNature, speedClass) {
+  const nature = NATURES[currentNature] ?? NATURES.Hardy;
+  const currentClass = nature.up === "spe" ? "positive" : nature.down === "spe" ? "negative" : "neutral";
+  if (currentClass === speedClass) return currentNature;
+  if (speedClass === "positive") return "Timid";
+  if (speedClass === "negative") return "Brave";
+  return "Hardy";
 }
 
 function minimumSpAbove(user, mods, tierSpeed, nature) {

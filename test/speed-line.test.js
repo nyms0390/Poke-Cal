@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { nextBreakpoints, popularOpponentPool, speedTiers } from "../src/data/speed-line.js";
+import { popularOpponentPool, speedBreakpoints, speedTiers } from "../src/data/speed-line.js";
 import { calculateSpeed } from "../src/engine/speed.js";
 
 const userPokemon = pokemon("user", "Yourmon", 100);
@@ -109,15 +109,18 @@ test("battle modifiers delegate stacking and stages to calculateSpeed", () => {
   }
 });
 
-test("finds minimal SP breakpoints and falls back to a plus-Speed nature", () => {
+test("finds every minimum Speed-nature breakpoint that strictly outspeeds each tier", () => {
   const reachableRows = speedTiers(user, [{ pokemon: slowPokemon }], {
     mode: "battle",
     presetFilter: ["fast"],
   });
-  const [reachable] = nextBreakpoints(user, reachableRows);
+  const [reachable] = speedBreakpoints(user, reachableRows);
   assert.equal(reachable.tierSpeed, 132);
-  assert.equal(reachable.requiredSp, 13);
-  assert.equal(reachable.requiresPlusNature, false);
+  assert.deepEqual(reachable.choices, [
+    { nature: "Timid", natureLabel: "+Spe", requiredSp: 1 },
+    { nature: "Hardy", natureLabel: "Neutral", requiredSp: 13 },
+    { nature: "Brave", natureLabel: "-Spe", requiredSp: 28 },
+  ]);
   assert.equal(calculateSpeed({ baseSpeed: 100, sp: 12 }).modifiedSpeed, 132);
   assert.equal(calculateSpeed({ baseSpeed: 100, sp: 13 }).modifiedSpeed, 133);
 
@@ -125,15 +128,28 @@ test("finds minimal SP breakpoints and falls back to a plus-Speed nature", () =>
     mode: "battle",
     presetFilter: ["neutral"],
   });
-  const [nature] = nextBreakpoints(user, natureRows);
+  const [nature] = speedBreakpoints(user, natureRows);
   assert.deepEqual(nature, {
     tierSpeed: 160,
-    names: ["Neutral Wall"],
-    requiredSp: 27,
-    requiresPlusNature: true,
+    choices: [{ nature: "Timid", natureLabel: "+Spe", requiredSp: 27 }],
   });
   assert.equal(calculateSpeed({ baseSpeed: 100, sp: 26, nature: "Timid" }).modifiedSpeed, 160);
   assert.equal(calculateSpeed({ baseSpeed: 100, sp: 27, nature: "Timid" }).modifiedSpeed, 161);
+});
+
+test("breakpoints cover slower rows, preserve modifiers, and omit rows without opponents", () => {
+  const rows = speedTiers(user, [{ pokemon: slowPokemon }], {
+    mode: "battle",
+    presetFilter: ["neutral"],
+    userMods: { paralysis: true },
+  });
+
+  assert.deepEqual(speedBreakpoints(user, rows), [{
+    tierSpeed: 100,
+    choices: [],
+  }]);
+  assert.deepEqual(speedBreakpoints(user, speedTiers(user, [], { mode: "battle" })), []);
+  assert.deepEqual(speedBreakpoints(user, speedTiers(user, [], { mode: "base" })), []);
 });
 
 test("recomputing modes and filters does not mutate manually supplied opponents", () => {

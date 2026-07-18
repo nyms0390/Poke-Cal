@@ -1942,8 +1942,7 @@ button:disabled {
 .builder-break-detail > p,
 .builder-point-list > p,
 .builder-scenarios > p,
-.builder-breakpoints > p,
-.speed-breakpoints > p {
+.builder-breakpoints > p {
   margin: 0;
   color: var(--muted);
   font-size: var(--text-sm);
@@ -2014,8 +2013,7 @@ button:disabled {
   padding: 12px;
 }
 
-.builder-point-list button,
-.speed-breakpoint {
+.builder-point-list button {
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
   padding: 9px 11px;
@@ -2026,9 +2024,7 @@ button:disabled {
 }
 
 .builder-point-list button:hover,
-.builder-point-list button:focus-visible,
-.speed-breakpoint:hover,
-.speed-breakpoint:focus-visible {
+.builder-point-list button:focus-visible {
   border-color: var(--accent);
   outline: none;
   color: var(--accent-dark);
@@ -2271,10 +2267,10 @@ button:disabled {
 .speed-axis-header,
 .speed-axis-row {
   display: grid;
-  grid-template-columns: 60px 58px 110px minmax(280px, 1fr) 120px;
+  grid-template-columns: 60px minmax(280px, 1fr) 110px 58px minmax(190px, 0.9fr);
   gap: 10px;
   align-items: center;
-  min-width: 720px;
+  min-width: 820px;
 }
 
 .speed-axis-header {
@@ -2314,9 +2310,34 @@ button:disabled {
 }
 
 .speed-axis-row > span,
-.speed-axis-order {
+.speed-axis-breakpoints {
   color: var(--muted);
   font-size: var(--text-xs);
+}
+
+.speed-axis-breakpoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.speed-breakpoint-choice {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-badge);
+  padding: 4px 6px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-align: left;
+  cursor: pointer;
+}
+
+.speed-breakpoint-choice:hover,
+.speed-breakpoint-choice:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
 }
 
 .speed-axis-entry.user {
@@ -2337,13 +2358,6 @@ button:disabled {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-}
-
-.speed-breakpoints {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 8px;
-  margin-top: 14px;
 }
 
 @media (max-width: 720px) {

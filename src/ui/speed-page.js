@@ -1,6 +1,6 @@
 import { normalizeId } from "../data/catalog.js";
 import { searchPokemon } from "../data/pokemon.js";
-import { nextBreakpoints, popularOpponentPool, speedTiers } from "../data/speed-line.js";
+import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -34,9 +34,6 @@ const elements = {
   userSummary: document.querySelector("#speed-user-summary"),
   rowCount: document.querySelector("#speed-row-count"),
   axis: document.querySelector("#speed-axis"),
-  breakpointPanel: document.querySelector("#speed-breakpoint-panel"),
-  breakpointCount: document.querySelector("#speed-breakpoint-count"),
-  breakpoints: document.querySelector("#speed-breakpoints"),
   status: document.querySelector("#status"),
 };
 
@@ -177,7 +174,6 @@ function render() {
   const battle = mode === "battle";
   for (const input of elements.battleOnly) input.disabled = !battle;
   for (const group of elements.battleGroups) group.classList.toggle("disabled", !battle);
-  elements.breakpointPanel.hidden = !battle;
 
   elements.pokemonSearch.value = user.pokemon.name;
   elements.userSummary.textContent = battle
@@ -198,18 +194,9 @@ function render() {
     opponentMods: modsFromControls("opponent"),
   };
   const rows = speedTiers(user, selectedOpponents(), options);
+  const breakpoints = new Map(speedBreakpoints(user, rows).map((point) => [point.tierSpeed, point]));
   elements.rowCount.textContent = `${rows.length} tiers`;
-  elements.axis.replaceChildren(...rows.map(renderSpeedRow));
-
-  if (battle) {
-    const breakpoints = nextBreakpoints(user, rows);
-    elements.breakpointCount.textContent = `${breakpoints.length} targets`;
-    elements.breakpoints.replaceChildren(
-      ...(breakpoints.length > 0
-        ? breakpoints.map(renderBreakpoint)
-        : [emptyText("No higher tier is reachable with this build.")]),
-    );
-  }
+  elements.axis.replaceChildren(...rows.map((row) => renderSpeedRow(row, breakpoints.get(row.speed))));
 }
 
 function selectedOpponents() {
@@ -247,18 +234,13 @@ function renderManualOpponents() {
   }));
 }
 
-function renderSpeedRow(row) {
+function renderSpeedRow(row, breakpoint) {
   const item = document.createElement("div");
   item.className = "speed-axis-row";
   if (row.entries.some(({ isUser }) => isUser)) item.classList.add("user");
 
   const speed = document.createElement("strong");
   speed.textContent = String(row.speed);
-  const stage = document.createElement("span");
-  stage.textContent = row.stage === null ? "mixed" : row.stage > 0 ? `+${row.stage}` : String(row.stage);
-  const presets = document.createElement("span");
-  const presetLabels = [...new Set(row.entries.map(({ presetLabel }) => presetLabel).filter(Boolean))];
-  presets.textContent = presetLabels.join(" / ") || "Base";
 
   const pokemon = document.createElement("div");
   pokemon.className = "speed-axis-pokemon";
@@ -272,10 +254,12 @@ function renderSpeedRow(row) {
     pokemon.append(chip);
   }
 
-  const order = document.createElement("span");
-  order.className = "speed-axis-order";
-  order.textContent = row.actsBefore === null ? "Speed tie" : row.actsBefore ? "Acts before you" : "Acts after you";
-  item.append(speed, stage, presets, pokemon, order);
+  const presets = document.createElement("span");
+  const presetLabels = [...new Set(row.entries.map(({ presetLabel }) => presetLabel).filter(Boolean))];
+  presets.textContent = presetLabels.join(" / ") || "Base";
+  const stage = document.createElement("span");
+  stage.textContent = row.stage === null ? "mixed" : row.stage > 0 ? `+${row.stage}` : String(row.stage);
+  item.append(speed, pokemon, presets, stage, renderBreakpointChoices(breakpoint));
 
   if (row.entries.some(({ isUser }) => isUser)) {
     const divider = document.createElement("div");
@@ -286,23 +270,30 @@ function renderSpeedRow(row) {
   return item;
 }
 
-function renderBreakpoint(point) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "speed-breakpoint";
-  const nature = point.requiresPlusNature ? "+Spe nature · " : "";
-  button.textContent = `${nature}${point.requiredSp} SP → exceed ${point.names.join(", ")} (${point.tierSpeed})`;
-  button.addEventListener("click", () => {
-    user = {
-      ...user,
-      spe: point.requiredSp,
-      nature: point.requiresPlusNature ? "Timid" : user.nature,
-    };
-    elements.sp.value = String(user.spe);
-    elements.nature.value = user.nature;
-    render();
-  });
-  return button;
+function renderBreakpointChoices(point) {
+  const choices = document.createElement("div");
+  choices.className = "speed-axis-breakpoints";
+  if (!point || point.choices.length === 0) {
+    const label = document.createElement("span");
+    label.textContent = point ? "Unreachable" : "—";
+    choices.append(label);
+    return choices;
+  }
+
+  for (const choice of point.choices) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "speed-breakpoint-choice";
+    button.textContent = `${choice.nature} (${choice.natureLabel}) · ${choice.requiredSp} SP`;
+    button.addEventListener("click", () => {
+      user = { ...user, spe: choice.requiredSp, nature: choice.nature };
+      elements.sp.value = String(user.spe);
+      elements.nature.value = user.nature;
+      render();
+    });
+    choices.append(button);
+  }
+  return choices;
 }
 
 function sprite(entry) {
@@ -321,10 +312,4 @@ function sprite(entry) {
   fallback.hidden = true;
   wrap.append(image, fallback);
   return wrap;
-}
-
-function emptyText(text) {
-  const paragraph = document.createElement("p");
-  paragraph.textContent = text;
-  return paragraph;
 }
