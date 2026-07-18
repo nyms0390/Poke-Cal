@@ -28,3 +28,30 @@ export function finalStats(state) {
     }),
   ]));
 }
+
+export function partitionBulkMatchups(matchups) {
+  return matchups.reduce((groups, matchup) => {
+    const koText = String(matchup.damage?.koText ?? "");
+    const group = /(?:[3-5]HKO|not a KO|survives with)/i.test(koText) ? "detail" : "primary";
+    groups[group].push(matchup);
+    return groups;
+  }, { primary: [], detail: [] });
+}
+
+export function significantBreakPoints(currentKoText, points) {
+  let currentMilestone = koMilestone(currentKoText);
+  return points.filter((point) => {
+    if (point.requiresPlusNature) return true;
+    const nextMilestone = koMilestone(point.achieves);
+    if (nextMilestone === currentMilestone) return false;
+    currentMilestone = nextMilestone;
+    return true;
+  });
+}
+
+function koMilestone(koText) {
+  const text = String(koText ?? "");
+  if (/not a KO|survives with/i.test(text)) return "not-ko";
+  const tier = /(OHKO|[2-5]HKO)/i.exec(text)?.[1]?.toUpperCase() ?? text;
+  return `${/guaranteed/i.test(text) ? "guaranteed" : "possible"}-${tier}`;
+}

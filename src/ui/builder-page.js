@@ -14,7 +14,12 @@ import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import { applyControl } from "./battle-state.js";
 import { loadCatalogs, rankByUsage } from "./bootstrap.js";
-import { createBuilderState, finalStats } from "./builder-state.js";
+import {
+  createBuilderState,
+  finalStats,
+  partitionBulkMatchups,
+  significantBreakPoints,
+} from "./builder-state.js";
 import {
   attachCombobox,
   damagePercentColor,
@@ -48,7 +53,6 @@ let catalogs = null;
 let state = createBuilderState();
 let moveComboboxCleanups = [];
 let threats = [];
-let selectedBreakCell = null;
 
 initialize();
 
@@ -269,158 +273,241 @@ function selectedMoves() {
 
 function renderBulkPoints() {
   const matchups = bulkPointMatchups(state.user, threats);
-  const spreadCount = matchups.filter(({ points }) => points.length > 0).length;
+  const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
+  const { primary, detail } = partitionBulkMatchups(matchups);
 
   elements.bulkCount.textContent = `${spreadCount} spreads · ${matchups.length} matchups`;
   elements.bulkPoints.replaceChildren(
-    ...(matchups.length > 0
-      ? matchups.map(({ scenario, damage, points }) => bulkScenarioRow(scenario, damage, points))
-      : [emptyText("No supported threat moves are available.")]),
+    ...(matchups.length === 0
+      ? [emptyText("No supported threat moves are available.")]
+      : [
+          ...bulkThreatCards(primary),
+          ...(detail.length > 0 ? [bulkDetailDisclosure(detail)] : []),
+        ]),
   );
 }
 
-function bulkScenarioRow(scenario, damage, points) {
+function bulkThreatCards(matchups) {
+  const groups = new Map();
+  for (const matchup of matchups) {
+    const id = normalizeId(matchup.scenario.threat.pokemon.id);
+    if (!groups.has(id)) groups.set(id, { threat: matchup.scenario.threat, matchups: [] });
+    groups.get(id).matchups.push(matchup);
+  }
+  return [...groups.values()].map(({ threat, matchups: threatMatchups }) =>
+    analysisCard(threat, threatMatchups.map(bulkMovePanel)));
+}
+
+function bulkDetailDisclosure(matchups) {
   const details = document.createElement("details");
-  details.className = "builder-scenario";
-  details.open = points.length > 0;
+  details.className = "builder-more-detail";
   const summary = document.createElement("summary");
   summary.append(
-    pokemonLabel(scenario.threat.pokemon),
-    textSpan(scenario.move.name, "builder-scenario-move"),
-    textSpan(`${damage.minPct}–${damage.maxPct}%`, "builder-scenario-damage"),
-    textSpan(damage.koText, "builder-scenario-ko"),
+    textSpan("More detail", "builder-more-detail-title"),
+    textSpan(`${matchups.length} matchups at 3HKO or longer`, "builder-more-detail-count"),
   );
+  const cards = document.createElement("div");
+  cards.className = "builder-analysis-grid";
+  cards.append(...bulkThreatCards(matchups));
+  details.append(summary, cards);
+  return details;
+}
+
+function bulkMovePanel({ scenario, damage, points }) {
   const defenseStat = scenario.move.overrideDefensiveStat ??
     (scenario.move.category === "Physical" ? "def" : "spd");
-  const list = document.createElement("div");
-  list.className = "builder-point-list";
-  list.replaceChildren(...(points.length > 0 ? points.map((point) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = `${point.totalSp} total SP · ` +
-      `${point.hpSp} HP / ${point.defSp} ${STAT_LABELS[defenseStat]} · ` +
-      `${point.fromKoText} → ${point.koText} · max ${point.maxPct}%`;
-    button.addEventListener("click", () => {
-      state = {
-        ...state,
-        user: {
-          ...state.user,
-          sp: {
-            ...state.user.sp,
-            hp: point.hpSp,
-            [defenseStat]: point.defSp,
+  return analysisMovePanel({
+    move: scenario.move,
+    damage,
+    defensive: true,
+    emptyMessage: "No better survival tier is reachable within 64 SP.",
+    choices: points.map((point) => spreadChoice({
+      label: `${point.totalSp} total SP`,
+      stats: [
+        ["HP", point.hpSp],
+        [STAT_LABELS[defenseStat], point.defSp],
+      ],
+      fromKoText: point.fromKoText,
+      toKoText: point.koText,
+      damageText: `Max damage ${point.maxPct}%`,
+      onSelect: () => {
+        state = {
+          ...state,
+          user: {
+            ...state.user,
+            sp: {
+              ...state.user.sp,
+              hp: point.hpSp,
+              [defenseStat]: point.defSp,
+            },
           },
-        },
-      };
-      render();
-    });
-    return button;
-  }) : [emptyText("No better survival tier is reachable within 64 SP.")]));
-  details.append(summary, list);
-  return details;
+        };
+        render();
+      },
+    })),
+  });
 }
 
 function renderBreakPoints() {
   const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
-  elements.breakCount.textContent = `${moves.length * threats.length} cells`;
+  elements.breakCount.textContent = `${threats.length} Pokémon · ${moves.length} moves`;
   if (moves.length === 0 || threats.length === 0) {
     elements.breakPoints.replaceChildren(emptyText("Choose at least one damaging move."));
     return;
   }
 
-  const wrap = document.createElement("div");
-  wrap.className = "builder-break-matrix-wrap";
-  const table = document.createElement("table");
-  table.className = "builder-break-matrix";
-  const header = document.createElement("tr");
-  const corner = document.createElement("th");
-  corner.scope = "col";
-  corner.textContent = "Move";
-  header.append(corner, ...threats.map((threat) => {
-    const cell = document.createElement("th");
-    cell.scope = "col";
-    cell.append(pokemonLabel(threat.pokemon, { compact: true }));
-    return cell;
-  }));
-  const head = document.createElement("thead");
-  head.append(header);
-
-  const body = document.createElement("tbody");
-  body.append(...moves.map((move) => {
-    const row = document.createElement("tr");
-    const heading = document.createElement("th");
-    heading.scope = "row";
-    heading.textContent = move.name;
-    row.append(heading, ...threats.map((threat) => breakCell(move, threat)));
-    return row;
-  }));
-  table.append(head, body);
-  wrap.append(table);
-
-  const detail = selectedBreakDetail(moves);
-  elements.breakPoints.replaceChildren(wrap, ...(detail ? [detail] : []));
+  const cards = document.createElement("div");
+  cards.className = "builder-analysis-grid";
+  cards.append(...threats.map((threat) =>
+    analysisCard(threat, moves.map((move) => breakMovePanel(move, threat)))));
+  elements.breakPoints.replaceChildren(cards);
 }
 
-function breakCell(move, threat) {
+function breakMovePanel(move, threat) {
   const damage = yourDamage(state.user, move, { threat });
-  const cell = document.createElement("td");
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "builder-break-cell";
-  button.textContent = damage.koText;
-  button.title = `${damage.minPct}–${damage.maxPct}%`;
-  button.style.setProperty("--break-color", damagePercentColor(damage.minPct, damage.maxPct));
-  if (selectedBreakCell?.moveId === move.id && selectedBreakCell?.threatId === threat.pokemon.id) {
-    button.classList.add("selected");
-  }
-  button.addEventListener("click", () => {
-    selectedBreakCell = { moveId: move.id, threatId: threat.pokemon.id };
-    renderBreakPoints();
-  });
-  cell.append(button);
-  return cell;
-}
-
-function selectedBreakDetail(moves) {
-  if (!selectedBreakCell) return null;
-  const move = moves.find(({ id }) => id === selectedBreakCell.moveId);
-  const threat = threats.find(({ pokemon }) => pokemon.id === selectedBreakCell.threatId);
-  if (!move || !threat) return null;
-
-  const current = yourDamage(state.user, move, { threat });
-  const points = breakPoints(state.user, move, { threat });
   const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
-  const detail = document.createElement("section");
-  detail.className = "builder-break-detail";
-  const heading = document.createElement("h3");
-  heading.textContent = `${move.name} → ${threat.pokemon.name}`;
-  const summary = document.createElement("p");
-  summary.textContent = `Current: ${current.minPct}–${current.maxPct}% · ${current.koText}`;
-  const list = document.createElement("div");
-  list.className = "builder-point-list";
-  list.replaceChildren(...(points.length > 0 ? points.map((point) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = `${point.requiresPlusNature ? "+nature · " : ""}${point.sp} ` +
-      `${STAT_LABELS[attackStat]} SP · ${point.achieves} · ${point.minPct}–${point.maxPct}%`;
-    button.addEventListener("click", () => {
+  return analysisMovePanel({
+    move,
+    damage,
+    emptyMessage: "No higher KO tier is reachable with this nature.",
+    loadChoices: () => significantBreakPoints(
+      damage.koText,
+      breakPoints(state.user, move, { threat }),
+    ).map((point) => {
       const nature = point.requiresPlusNature
         ? attackStat === "atk" ? "Adamant" : "Modest"
         : state.user.nature;
-      state = {
-        ...state,
-        user: {
-          ...state.user,
-          nature,
-          sp: { ...state.user.sp, [attackStat]: point.sp },
+      return spreadChoice({
+        label: point.requiresPlusNature ? `${nature} nature` : `${point.sp} ${STAT_LABELS[attackStat]} SP`,
+        stats: [
+          ["Nature", nature],
+          [STAT_LABELS[attackStat], point.sp],
+        ],
+        fromKoText: damage.koText,
+        toKoText: point.achieves,
+        damageText: `${point.minPct}–${point.maxPct}% damage`,
+        onSelect: () => {
+          state = {
+            ...state,
+            user: {
+              ...state.user,
+              nature,
+              sp: { ...state.user.sp, [attackStat]: point.sp },
+            },
+          };
+          render();
         },
-      };
-      render();
-    });
-    return button;
-  }) : [emptyText("No higher KO tier is reachable with this nature.")]));
-  detail.append(heading, summary, list);
-  return detail;
+      });
+    }),
+  });
+}
+
+function analysisCard(threat, movePanels) {
+  const card = document.createElement("article");
+  card.className = "builder-analysis-card";
+  const heading = document.createElement("header");
+  heading.className = "builder-analysis-heading";
+  heading.append(
+    pokemonLabel(threat.pokemon),
+    textSpan(`${movePanels.length} ${movePanels.length === 1 ? "move" : "moves"}`, "builder-analysis-count"),
+  );
+  const moves = document.createElement("div");
+  moves.className = "builder-analysis-moves";
+  moves.append(...movePanels);
+  card.append(heading, moves);
+  return card;
+}
+
+function analysisMovePanel({ move, damage, defensive = false, choices, loadChoices, emptyMessage }) {
+  const collapsible = typeof loadChoices === "function";
+  const panel = document.createElement(collapsible ? "details" : "section");
+  panel.className = "builder-analysis-move";
+  const heading = document.createElement("div");
+  heading.className = "builder-analysis-move-heading";
+  const name = document.createElement("strong");
+  name.textContent = move.name;
+  heading.append(name, koBadge(damage.koText));
+  const range = document.createElement("div");
+  range.className = "builder-damage-range";
+  range.append(
+    textSpan(`${damage.minPct}–${damage.maxPct}%`, "builder-damage-percent"),
+    damageMeter(damage.minPct, damage.maxPct, { defensive }),
+  );
+  const list = document.createElement("div");
+  list.className = "builder-spread-grid";
+  if (!collapsible) {
+    renderSpreadChoices(list, choices, emptyMessage);
+    panel.append(heading, range, list);
+    return panel;
+  }
+
+  const summary = document.createElement("summary");
+  summary.className = "builder-analysis-move-summary";
+  const prompt = textSpan("View threshold spreads", "builder-spread-prompt");
+  summary.append(heading, range, prompt);
+  let loaded = false;
+  panel.addEventListener("toggle", () => {
+    if (!panel.open || loaded) return;
+    const loadedChoices = loadChoices();
+    renderSpreadChoices(list, loadedChoices, emptyMessage);
+    prompt.textContent = loadedChoices.length === 1
+      ? "1 threshold spread"
+      : `${loadedChoices.length} threshold spreads`;
+    loaded = true;
+  });
+  panel.append(summary, list);
+  return panel;
+}
+
+function renderSpreadChoices(list, choices, emptyMessage) {
+  list.replaceChildren(...(choices.length > 0 ? choices : [emptyText(emptyMessage)]));
+}
+
+function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect }) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "builder-spread-choice";
+  const heading = document.createElement("span");
+  heading.className = "builder-spread-heading";
+  heading.append(
+    textSpan(label, "builder-spread-label"),
+    textSpan("Apply", "builder-spread-apply"),
+  );
+  const statList = document.createElement("span");
+  statList.className = "builder-spread-stats";
+  statList.append(...stats.map(([stat, value]) => {
+    const chip = document.createElement("span");
+    chip.append(textSpan(stat, "builder-spread-stat-name"), document.createTextNode(` ${value}`));
+    return chip;
+  }));
+  const shift = document.createElement("span");
+  shift.className = "builder-tier-shift";
+  shift.append(koBadge(fromKoText, { muted: true }), textSpan("→", "builder-tier-arrow"), koBadge(toKoText));
+  button.append(heading, statList, shift, textSpan(damageText, "builder-spread-damage"));
+  button.addEventListener("click", onSelect);
+  return button;
+}
+
+function koBadge(koText, { muted = false } = {}) {
+  const badge = textSpan(koText, "builder-ko-badge");
+  if (muted) badge.classList.add("muted");
+  else if (/OHKO/i.test(koText)) badge.classList.add("danger");
+  else if (/2HKO/i.test(koText)) badge.classList.add("warning");
+  else badge.classList.add("safe");
+  return badge;
+}
+
+function damageMeter(minPct, maxPct, { defensive = false } = {}) {
+  const meter = document.createElement("span");
+  meter.className = "builder-damage-meter";
+  const fill = document.createElement("span");
+  const average = (Number(minPct) + Number(maxPct)) / 2;
+  fill.style.width = `${Math.max(0, Math.min(100, average))}%`;
+  fill.style.background = defensive
+    ? damagePercentColor(100 - Number(maxPct), 100 - Number(minPct))
+    : damagePercentColor(minPct, maxPct);
+  meter.append(fill);
+  return meter;
 }
 
 function pokemonLabel(pokemon, { compact = false } = {}) {

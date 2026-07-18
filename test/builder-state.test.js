@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { createBuilderState, finalStats } from "../src/ui/builder-state.js";
+import {
+  createBuilderState,
+  finalStats,
+  partitionBulkMatchups,
+  significantBreakPoints,
+} from "../src/ui/builder-state.js";
 
 const pikachu = {
   id: "pikachu",
@@ -56,4 +61,35 @@ test("calculates all six final level-50 stats without mutating builder state", (
   });
   assert.deepEqual(state.user.sp, usageDefaults.sp);
   assert.equal(finalStats(createBuilderState()), null);
+});
+
+test("defers bulk matchups at 3HKO and longer behind more detail", () => {
+  const matchups = [
+    { id: "ohko", damage: { koText: "50.0% chance to OHKO" } },
+    { id: "two", damage: { koText: "guaranteed 2HKO" } },
+    { id: "three", damage: { koText: "guaranteed 3HKO" } },
+    { id: "four", damage: { koText: "25.0% chance to 4HKO" } },
+    { id: "five", damage: { koText: "guaranteed 5HKO" } },
+    { id: "safe", damage: { koText: "not a KO within 5 hits" } },
+  ];
+
+  const partitioned = partitionBulkMatchups(matchups);
+
+  assert.deepEqual(partitioned.primary.map(({ id }) => id), ["ohko", "two"]);
+  assert.deepEqual(partitioned.detail.map(({ id }) => id), ["three", "four", "five", "safe"]);
+});
+
+test("keeps only meaningful break-point spread milestones", () => {
+  const points = [
+    { sp: 3, achieves: "100.0% chance to 4HKO" },
+    { sp: 19, achieves: "58.0% chance to 3HKO", requiresPlusNature: true },
+    { sp: 20, achieves: "0.1% chance to 3HKO" },
+    { sp: 22, achieves: "0.5% chance to 3HKO" },
+    { sp: 32, achieves: "guaranteed 3HKO" },
+  ];
+
+  assert.deepEqual(
+    significantBreakPoints("99.5% chance to 4HKO", points),
+    [points[1], points[2], points[4]],
+  );
 });
