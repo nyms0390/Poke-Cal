@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
   threatDamage,
@@ -143,6 +144,18 @@ test("shows the cheapest spread that changes an OHKO into guaranteed survival", 
       assert.match(threatDamage(withBulk(state, hpSp, defSp, "def"), scenario).koText, /OHKO/);
     }
   }
+});
+
+test("keeps only matchups with a reachable bulk spread", () => {
+  const state = userState();
+  const matchups = bulkPointMatchups(state, [{
+    ...threat,
+    moves: [physicalMove, ohkoMove],
+  }], { budget: 24 });
+
+  assert.equal(matchups.length, 1);
+  assert.equal(matchups[0].scenario.move, ohkoMove);
+  assert.deepEqual(matchups[0].points.map(({ totalSp }) => totalSp), [23]);
 });
 
 test("passes the user's defensive item through to the damage engine", () => {

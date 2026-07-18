@@ -5,7 +5,7 @@ import {
   resolvePokemonAbilities,
 } from "../data/catalog.js";
 import { breakPoints, yourDamage } from "../data/break-points.js";
-import { bulkPoints, threatDamage } from "../data/bulk-points.js";
+import { bulkPointMatchups } from "../data/bulk-points.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -268,25 +268,20 @@ function selectedMoves() {
 }
 
 function renderBulkPoints() {
-  const scenarios = threats
-    .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move })))
-    .map((scenario) => ({ scenario, damage: threatDamage(state.user, scenario) }))
-    .filter(({ damage }) => Number.isFinite(damage.maxPct))
-    .sort((a, b) => b.damage.maxPct - a.damage.maxPct ||
-      a.scenario.threat.pokemon.name.localeCompare(b.scenario.threat.pokemon.name) ||
-      a.scenario.move.name.localeCompare(b.scenario.move.name));
+  const matchups = bulkPointMatchups(state.user, threats);
 
-  elements.bulkCount.textContent = `${scenarios.length} matchups`;
+  elements.bulkCount.textContent = `${matchups.length} with spreads`;
   elements.bulkPoints.replaceChildren(
-    ...(scenarios.length > 0
-      ? scenarios.map(({ scenario, damage }) => bulkScenarioRow(scenario, damage))
-      : [emptyText("No supported threat moves are available.")]),
+    ...(matchups.length > 0
+      ? matchups.map(({ scenario, damage, points }) => bulkScenarioRow(scenario, damage, points))
+      : [emptyText("No survival tier improvements are reachable within 64 SP.")]),
   );
 }
 
-function bulkScenarioRow(scenario, damage) {
+function bulkScenarioRow(scenario, damage, points) {
   const details = document.createElement("details");
   details.className = "builder-scenario";
+  details.open = true;
   const summary = document.createElement("summary");
   summary.append(
     pokemonLabel(scenario.threat.pokemon),
@@ -294,39 +289,33 @@ function bulkScenarioRow(scenario, damage) {
     textSpan(`${damage.minPct}–${damage.maxPct}%`, "builder-scenario-damage"),
     textSpan(damage.koText, "builder-scenario-ko"),
   );
-  details.append(summary);
-  details.addEventListener("toggle", () => {
-    if (!details.open || details.dataset.loaded) return;
-    details.dataset.loaded = "true";
-    const points = bulkPoints(state.user, scenario);
-    const defenseStat = scenario.move.overrideDefensiveStat ??
-      (scenario.move.category === "Physical" ? "def" : "spd");
-    const list = document.createElement("div");
-    list.className = "builder-point-list";
-    list.replaceChildren(...(points.length > 0 ? points.map((point) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = `${point.totalSp} total SP · ` +
-        `${point.hpSp} HP / ${point.defSp} ${STAT_LABELS[defenseStat]} · ` +
-        `${point.fromKoText} → ${point.koText} · max ${point.maxPct}%`;
-      button.addEventListener("click", () => {
-        state = {
-          ...state,
-          user: {
-            ...state.user,
-            sp: {
-              ...state.user.sp,
-              hp: point.hpSp,
-              [defenseStat]: point.defSp,
-            },
+  const defenseStat = scenario.move.overrideDefensiveStat ??
+    (scenario.move.category === "Physical" ? "def" : "spd");
+  const list = document.createElement("div");
+  list.className = "builder-point-list";
+  list.replaceChildren(...points.map((point) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${point.totalSp} total SP · ` +
+      `${point.hpSp} HP / ${point.defSp} ${STAT_LABELS[defenseStat]} · ` +
+      `${point.fromKoText} → ${point.koText} · max ${point.maxPct}%`;
+    button.addEventListener("click", () => {
+      state = {
+        ...state,
+        user: {
+          ...state.user,
+          sp: {
+            ...state.user.sp,
+            hp: point.hpSp,
+            [defenseStat]: point.defSp,
           },
-        };
-        render();
-      });
-      return button;
-    }) : [emptyText("No better survival tier is reachable within 64 SP.")]));
-    details.append(list);
-  });
+        },
+      };
+      render();
+    });
+    return button;
+  }));
+  details.append(summary, list);
   return details;
 }
 

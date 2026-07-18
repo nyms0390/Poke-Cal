@@ -17,50 +17,84 @@ export function threatDamage(userState, scenario) {
   };
 }
 
+export function bulkPointMatchups(userState, threats, options) {
+  return threats
+    .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move })))
+    .map((scenario) => {
+      const damage = threatDamage(userState, scenario);
+      if (!Number.isFinite(damage.maxPct)) return null;
+      const points = bulkPoints(userState, scenario, options);
+      return points.length > 0 ? { scenario, damage, points } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.damage.maxPct - a.damage.maxPct ||
+      a.scenario.threat.pokemon.name.localeCompare(b.scenario.threat.pokemon.name) ||
+      a.scenario.move.name.localeCompare(b.scenario.move.name));
+}
+
 export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
   const initial = damageResult(userState, scenario);
   if (!initial.supported) return [];
 
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
   const maximumBudget = Math.max(0, Math.min(64, Math.trunc(Number(budget) || 0)));
-  let previousTier = null;
+  const allocations = new Map();
+  const allocationAtCost = (totalSp) => {
+    if (!allocations.has(totalSp)) {
+      allocations.set(totalSp, bestAllocationAtCost(userState, scenario, totalSp, defenseStat));
+    }
+    return allocations.get(totalSp);
+  };
+  let previousTier = allocationAtCost(0)?.damage;
+  const maximum = allocationAtCost(maximumBudget);
+  if (!previousTier || !maximum ||
+      survivalHits(maximum.damage.koText) <= survivalHits(previousTier.koText)) return [];
+
   const frontier = [];
+  const maximumHits = survivalHits(maximum.damage.koText);
+  let targetHits = survivalHits(previousTier.koText) + 1;
 
-  for (let totalSp = 0; totalSp <= maximumBudget; totalSp += 1) {
-    const candidates = [];
-    for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
-      const defSp = totalSp - hpSp;
-      if (defSp < 0 || defSp > 32) continue;
-      const state = withAllocation(userState, hpSp, defSp, defenseStat);
-      const damage = threatDamage(state, scenario);
-      candidates.push({ hpSp, defSp, totalSp, damage });
+  while (targetHits <= maximumHits) {
+    let lowerCost = 1;
+    let upperCost = maximumBudget;
+    while (lowerCost < upperCost) {
+      const middleCost = Math.floor((lowerCost + upperCost) / 2);
+      const middle = allocationAtCost(middleCost);
+      if (middle && survivalHits(middle.damage.koText) >= targetHits) upperCost = middleCost;
+      else lowerCost = middleCost + 1;
     }
-    candidates.sort((a, b) =>
-      compareKoTiers(a.damage.koText, b.damage.koText) ||
-      a.damage.maxPct - b.damage.maxPct ||
-      a.hpSp - b.hpSp);
-    const bestAtCost = candidates[0];
-    if (!bestAtCost) continue;
-
-    if (previousTier === null) {
-      previousTier = bestAtCost.damage;
-      continue;
-    }
-    if (survivalHits(bestAtCost.damage.koText) <= survivalHits(previousTier.koText)) continue;
+    const bestAtCost = allocationAtCost(lowerCost);
+    if (!bestAtCost) break;
 
     frontier.push({
       hpSp: bestAtCost.hpSp,
       defSp: bestAtCost.defSp,
-      totalSp,
+      totalSp: lowerCost,
       fromKoText: previousTier.koText,
       achieves: survivalText(bestAtCost.damage.koText),
       koText: bestAtCost.damage.koText,
       maxPct: bestAtCost.damage.maxPct,
     });
     previousTier = bestAtCost.damage;
+    targetHits = survivalHits(previousTier.koText) + 1;
   }
 
   return frontier;
+}
+
+function bestAllocationAtCost(userState, scenario, totalSp, defenseStat) {
+  const candidates = [];
+  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+    const defSp = totalSp - hpSp;
+    if (defSp < 0 || defSp > 32) continue;
+    const state = withAllocation(userState, hpSp, defSp, defenseStat);
+    const damage = threatDamage(state, scenario);
+    candidates.push({ hpSp, defSp, totalSp, damage });
+  }
+  return candidates.sort((a, b) =>
+    compareKoTiers(a.damage.koText, b.damage.koText) ||
+    a.damage.maxPct - b.damage.maxPct ||
+    a.hpSp - b.hpSp)[0];
 }
 
 function damageResult(userState, { threat, move }) {
