@@ -42,7 +42,7 @@ test("builds deterministic top-usage threats from Champions defaults", () => {
     "icebeam",
   ]);
   assert.deepEqual(threats[0].spPresets.offense, { atk: 32, spa: 32 });
-  assert.deepEqual(threats[0].spPresets.bulk, { hp: 0, def: 0, spd: 0 });
+  assert.deepEqual(threats[0].spPresets.bulk, { hp: 2, def: 0, spd: 0 });
 });
 
 test("adds Mega forms alongside top-usage builder threats", () => {
@@ -93,7 +93,7 @@ test("builds a usable custom threat without per-Pokémon usage data", () => {
   assert.equal(threat.item, null);
   assert.deepEqual(threat.moves.map(({ id }) => id), ["surf", "tackle"]);
   assert.deepEqual(threat.spPresets.offense, { atk: 32, spa: 32 });
-  assert.deepEqual(threat.spPresets.bulk, { hp: 0, def: 0, spd: 0 });
+  assert.deepEqual(threat.spPresets.bulk, { hp: 2, def: 0, spd: 0 });
 });
 
 test("appends custom threats while de-duplicating Pokémon already in the popular list", () => {

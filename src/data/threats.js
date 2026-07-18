@@ -6,8 +6,8 @@ import { calculateStat } from "../engine/stats.js";
 
 /*
  * Limitless publishes observed natures, but not Champions SP spreads. Threat sets therefore
- * assume 32 SP in both offensive stats, no defensive SP, and one of four explicit Speed
- * presets. These are comparison presets, not claims about the submitted teams' exact spreads.
+ * assume 32 SP in both offensive stats, 2 HP SP, no defensive SP, and one of four explicit
+ * Speed presets. These are comparison presets, not claims about the submitted teams' exact spreads.
  */
 
 export function threatList(
@@ -117,7 +117,7 @@ export function threatForPokemon(
     moves: threatMoves(usage?.moves?.length ? usage.moves : defaults.moves, moveLookup),
     spPresets: {
       offense: { atk: 32, spa: 32 },
-      bulk: { hp: 0, def: 0, spd: 0 },
+      bulk: { hp: 2, def: 0, spd: 0 },
       speed: speedPresets({
         baseSpe: pokemon.baseStats?.spe ?? pokemon.baseSpeed,
         nature,

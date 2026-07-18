@@ -31,8 +31,8 @@ threatList(pokemonCatalog, { count = 20 } = {})
                                  //   filter to move.category !== "Status")
   spPresets: {
     offense: { atk: 32, spa: 32 },          // assume max offensive investment
-    bulk:    { hp: 0, def: 0, spd: 0 },     // assume uninvested bulk (worst case for them,
-                                            //   conservative for the user) — document!
+    bulk:    { hp: 2, def: 0, spd: 0 },     // assume the common fast-offense remainder:
+                                            //   2 HP / 32 offense / 32 Speed — document!
     speed:   speedPresets(...)              // see below
   },
 }
