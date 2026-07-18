@@ -7,7 +7,7 @@ import {
 import { breakPoints, yourDamage } from "../data/break-points.js";
 import { bulkPointMatchups } from "../data/bulk-points.js";
 import { searchPokemon } from "../data/pokemon.js";
-import { threatList } from "../data/threats.js";
+import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -17,6 +17,7 @@ import { loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   createBuilderState,
   finalStats,
+  normalizeThreatCount,
   partitionBulkMatchups,
   significantBreakPoints,
 } from "./builder-state.js";
@@ -41,6 +42,11 @@ const elements = {
   stats: document.querySelector("#builder-stats"),
   spBudget: document.querySelector("#builder-sp-budget"),
   movePicks: document.querySelector("#builder-move-picks"),
+  threatCount: document.querySelector("#builder-threat-count"),
+  threatSearch: document.querySelector("#builder-threat-search"),
+  threatResults: document.querySelector("#builder-threat-results"),
+  threatSummary: document.querySelector("#builder-threat-summary"),
+  customThreats: document.querySelector("#builder-custom-threats"),
   speedLink: document.querySelector("#builder-speed-link"),
   bulkCount: document.querySelector("#bulk-count"),
   bulkPoints: document.querySelector("#bulk-points"),
@@ -52,7 +58,7 @@ const elements = {
 let catalogs = null;
 let state = createBuilderState();
 let moveComboboxCleanups = [];
-let threats = [];
+let customThreats = [];
 
 initialize();
 
@@ -75,13 +81,15 @@ async function initialize() {
   attachCombobox({
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
-    getMatches: (query) => searchPokemon(catalogs.pokemon, query, {
-      abilityLookup: catalogs.abilityLookup,
-      moveLookup: catalogs.moveLookup,
-      itemLookup: catalogs.itemLookup,
-      limit: 8,
-    }),
+    getMatches: pokemonMatches,
     onSelect: seedPokemon,
+    renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
+  });
+  attachCombobox({
+    input: elements.threatSearch,
+    resultsEl: elements.threatResults,
+    getMatches: pokemonMatches,
+    onSelect: addCustomThreat,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
 
@@ -89,18 +97,22 @@ async function initialize() {
     control.addEventListener("input", handlePick);
   }
   elements.stats.addEventListener("input", handleSpInput);
-
-  threats = threatList(catalogs.pokemon, {
-    count: state.threatCount,
-    abilityLookup: catalogs.abilityLookup,
-    includeMegas: true,
-    moveLookup: catalogs.moveLookup,
-  });
+  elements.threatCount.addEventListener("input", handleThreatCount);
+  elements.threatCount.addEventListener("change", handleThreatCount);
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
   const defaultThreat = threatList(catalogs.pokemon, { count: 1, moveLookup: catalogs.moveLookup })[0];
   seedPokemon(requested ?? defaultThreat?.pokemon ?? catalogs.pokemon[0]);
+}
+
+function pokemonMatches(query) {
+  return searchPokemon(catalogs.pokemon, query, {
+    abilityLookup: catalogs.abilityLookup,
+    moveLookup: catalogs.moveLookup,
+    itemLookup: catalogs.itemLookup,
+    limit: 8,
+  });
 }
 
 function seedPokemon(pokemon) {
@@ -167,6 +179,35 @@ function handleSpInput(event) {
   render();
 }
 
+function handleThreatCount(event) {
+  if (event.type === "input" && event.target.value.trim() === "") return;
+  const threatCount = normalizeThreatCount(event.target.value);
+  state = { ...state, threatCount };
+  event.target.value = String(threatCount);
+  render();
+}
+
+function addCustomThreat(pokemon) {
+  if (!pokemon) return;
+  const alreadyCustom = customThreats.some(({ pokemon: entry }) =>
+    normalizeId(entry.id) === normalizeId(pokemon.id));
+  if (!alreadyCustom) {
+    customThreats = [...customThreats, threatForPokemon(pokemon, {
+      abilityLookup: catalogs.abilityLookup,
+      items: catalogs.items,
+      moveLookup: catalogs.moveLookup,
+    })];
+  }
+  elements.threatSearch.value = "";
+  render();
+}
+
+function removeCustomThreat(id) {
+  customThreats = customThreats.filter(({ pokemon }) =>
+    normalizeId(pokemon.id) !== normalizeId(id));
+  render();
+}
+
 function render() {
   const user = state.user;
   if (!user) return;
@@ -176,9 +217,12 @@ function render() {
   elements.ability.value = user.ability?.id ?? "";
   elements.item.value = user.item?.id ?? "";
   elements.tera.value = user.teraType ?? "";
+  elements.threatCount.value = String(state.threatCount);
   elements.summary.textContent = `${user.nature} · ${user.teraType ? `Tera ${user.teraType}` : "No Tera"}`;
+  elements.threatSummary.textContent = `Top ${state.threatCount} + ${customThreats.length} custom`;
   elements.source.textContent =
-    `Limitless Champions defaults · top-${state.threatCount} threats + legal Mega forms · no active Tera`;
+    `Limitless Champions defaults · top-${state.threatCount} threats + legal Mega forms + ` +
+    `${customThreats.length} custom · no active Tera`;
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
 
   elements.stats.replaceChildren(...STAT_KEYS.map((stat) => statRow(stat, user, stats)));
@@ -186,8 +230,10 @@ function render() {
   // TODO(P5-04): show a remaining-SP budget only after an authoritative Champions rule
   // source establishes a total cap; current usage-backed spreads can exceed 64 assigned SP.
   elements.spBudget.textContent = `${spent} SP assigned`;
-  renderBulkPoints();
-  renderBreakPoints();
+  renderCustomThreats();
+  const threats = selectedThreats();
+  renderBulkPoints(threats);
+  renderBreakPoints(threats);
 }
 
 function statRow(stat, user, stats) {
@@ -271,7 +317,35 @@ function selectedMoves() {
   return state.user.selectedMoveIds.map((id) => lookup.get(normalizeId(id))).filter(Boolean);
 }
 
-function renderBulkPoints() {
+function selectedThreats() {
+  const popularThreats = threatList(catalogs.pokemon, {
+    count: state.threatCount,
+    abilityLookup: catalogs.abilityLookup,
+    includeMegas: true,
+    items: catalogs.items,
+    moveLookup: catalogs.moveLookup,
+  });
+  return mergeThreatLists(popularThreats, customThreats);
+}
+
+function renderCustomThreats() {
+  elements.customThreats.replaceChildren(...customThreats.map(({ pokemon }) => {
+    const chip = document.createElement("span");
+    chip.className = "builder-threat-chip";
+    chip.append(pokemonSprite(pokemon));
+    const name = document.createElement("span");
+    name.textContent = pokemon.name;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", `Remove ${pokemon.name}`);
+    remove.addEventListener("click", () => removeCustomThreat(pokemon.id));
+    chip.append(name, remove);
+    return chip;
+  }));
+}
+
+function renderBulkPoints(threats) {
   const matchups = bulkPointMatchups(state.user, threats);
   const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
   const { primary, detail } = partitionBulkMatchups(matchups);
@@ -348,10 +422,14 @@ function bulkMovePanel({ scenario, damage, points }) {
   });
 }
 
-function renderBreakPoints() {
+function renderBreakPoints(threats) {
   const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
   elements.breakCount.textContent = `${threats.length} Pokémon · ${moves.length} moves`;
-  if (moves.length === 0 || threats.length === 0) {
+  if (threats.length === 0) {
+    elements.breakPoints.replaceChildren(emptyText("Add at least one popular or custom Pokémon."));
+    return;
+  }
+  if (moves.length === 0) {
     elements.breakPoints.replaceChildren(emptyText("Choose at least one damaging move."));
     return;
   }

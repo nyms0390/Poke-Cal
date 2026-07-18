@@ -2,7 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildMoveLookup } from "../src/data/catalog.js";
-import { speedPresets, speedTierSummary, threatList } from "../src/data/threats.js";
+import {
+  mergeThreatLists,
+  speedPresets,
+  speedTierSummary,
+  threatForPokemon,
+  threatList,
+} from "../src/data/threats.js";
 
 const moveLookup = buildMoveLookup([
   { id: "protect", name: "Protect", category: "Status" },
@@ -64,6 +70,45 @@ test("adds Mega forms alongside top-usage builder threats", () => {
   assert.equal(threats[1].pokemon, megaX);
   assert.equal(threats[1].ability.name, "Tough Claws");
   assert.deepEqual(threats[1].moves, threats[0].moves);
+});
+
+test("builds a usable custom threat without per-Pokémon usage data", () => {
+  const pokemon = {
+    id: "custom",
+    name: "Custom",
+    abilities: ["Pressure"],
+    moves: ["protect", "tackle", "surf"],
+    baseStats: { hp: 80, atk: 90, def: 80, spa: 90, spd: 80, spe: 100 },
+    champions: { legal: true },
+  };
+
+  const threat = threatForPokemon(pokemon, {
+    abilityLookup: new Map([["pressure", { id: "pressure", name: "Pressure" }]]),
+    moveLookup,
+  });
+
+  assert.equal(threat.pokemon, pokemon);
+  assert.equal(threat.nature, "Hardy");
+  assert.equal(threat.ability.name, "Pressure");
+  assert.equal(threat.item, null);
+  assert.deepEqual(threat.moves.map(({ id }) => id), ["surf", "tackle"]);
+  assert.deepEqual(threat.spPresets.offense, { atk: 32, spa: 32 });
+  assert.deepEqual(threat.spPresets.bulk, { hp: 0, def: 0, spd: 0 });
+});
+
+test("appends custom threats while de-duplicating Pokémon already in the popular list", () => {
+  const popular = threatList(fixtureCatalog, { count: 2, moveLookup });
+  const custom = [
+    threatForPokemon(fixtureCatalog[0], { moveLookup }),
+    threatForPokemon(fixtureCatalog[2], { moveLookup }),
+  ];
+
+  const selected = mergeThreatLists(popular, custom);
+
+  assert.deepEqual(selected.map(({ pokemon }) => pokemon.id), ["alpha", "zeta", "beta"]);
+  assert.equal(selected[0], popular[0]);
+  assert.equal(selected[1], popular[1]);
+  assert.equal(selected[2], custom[1]);
 });
 
 test("computes hand-checked Speed presets and marks nature-likely rows", () => {

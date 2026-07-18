@@ -3,6 +3,7 @@ import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
 
 export function createBuilderState(pokemon, usageDefaults, { threatCount = 20 } = {}) {
+  threatCount = normalizeThreatCount(threatCount);
   if (!pokemon || !usageDefaults) return { user: null, threatCount };
 
   return {
@@ -12,6 +13,13 @@ export function createBuilderState(pokemon, usageDefaults, { threatCount = 20 } 
     },
     threatCount,
   };
+}
+
+export function normalizeThreatCount(value) {
+  if (String(value ?? "").trim() === "") return 20;
+  const count = Number(value);
+  if (!Number.isFinite(count)) return 20;
+  return Math.max(0, Math.min(50, Math.trunc(count)));
 }
 
 export function finalStats(state) {

@@ -1955,6 +1955,56 @@ button:disabled {
   border-top: 1px solid var(--line);
 }
 
+.builder-threat-controls {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.builder-threat-count {
+  display: grid;
+  max-width: 180px;
+  gap: 5px;
+}
+
+.builder-threat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.builder-threat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 7px 2px 3px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.builder-threat-chip button {
+  border: 0;
+  padding: 0 2px;
+  background: transparent;
+  color: var(--subtle);
+  cursor: pointer;
+}
+
+.builder-threat-chip .pokemon-minisprite {
+  width: 28px;
+  height: 28px;
+}
+
+.builder-threat-chip .pokemon-minisprite img {
+  max-width: 34px;
+  max-height: 34px;
+}
+
 .builder-move-picks {
   display: grid;
   gap: 8px;

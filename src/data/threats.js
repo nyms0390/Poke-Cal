@@ -12,7 +12,7 @@ import { calculateStat } from "../engine/stats.js";
 
 export function threatList(
   pokemonCatalog,
-  { count = 20, abilityLookup, moveLookup, includeMegas = false } = {},
+  { count = 20, abilityLookup, items, moveLookup, includeMegas = false } = {},
 ) {
   const popularThreats = pokemonCatalog
     .filter(({ champions }) => Number.isFinite(champions?.usagePercent))
@@ -21,7 +21,7 @@ export function threatList(
         b.champions.usagePercent - a.champions.usagePercent || a.name.localeCompare(b.name),
     )
     .slice(0, count)
-    .map((pokemon) => threatFromPokemon(pokemon, moveLookup));
+    .map((pokemon) => threatForPokemon(pokemon, { abilityLookup, items, moveLookup }));
 
   if (!includeMegas) return popularThreats;
   return popularThreats.flatMap((threat) =>
@@ -32,6 +32,16 @@ export function threatList(
         ? threat.ability
         : formAbility(pokemon, abilityLookup) ?? threat.ability,
     })));
+}
+
+export function mergeThreatLists(popularThreats = [], customThreats = []) {
+  const seen = new Set();
+  return [...popularThreats, ...customThreats].filter(({ pokemon }) => {
+    const id = normalizeId(pokemon?.id ?? pokemon?.name);
+    if (!id || seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
 }
 
 function formAbility(pokemon, abilityLookup) {
@@ -87,21 +97,24 @@ export function speedTierSummary(pokemon, threats) {
   });
 }
 
-function threatFromPokemon(pokemon, moveLookup) {
-  const usage = pokemon.champions.usage;
+export function threatForPokemon(
+  pokemon,
+  { abilityLookup, items = [], moveLookup } = {},
+) {
+  const usage = pokemon?.champions?.usage;
   const natureEntry = topUsageEntry(usage?.natures);
-  const defaults = championsDefaultsForPokemon(pokemon, { moveLookup });
+  const defaults = championsDefaultsForPokemon(pokemon, { abilityLookup, items, moveLookup });
   const nature = natureEntry?.name ?? defaults.nature;
 
   return {
     pokemon,
-    usagePercent: pokemon.champions.usagePercent,
+    usagePercent: pokemon?.champions?.usagePercent ?? 0,
     nature,
     natureShare: natureEntry?.usagePercent ?? 0,
-    item: defaults.item,
+    item: usage ? defaults.item : null,
     ability: defaults.ability,
     teraType: "",
-    moves: threatMoves(usage?.moves, moveLookup),
+    moves: threatMoves(usage?.moves?.length ? usage.moves : defaults.moves, moveLookup),
     spPresets: {
       offense: { atk: 32, spa: 32 },
       bulk: { hp: 0, def: 0, spd: 0 },

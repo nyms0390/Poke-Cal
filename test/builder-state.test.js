@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   createBuilderState,
   finalStats,
+  normalizeThreatCount,
   partitionBulkMatchups,
   significantBreakPoints,
 } from "../src/ui/builder-state.js";
@@ -30,6 +31,14 @@ const usageDefaults = {
 
 test("creates an empty builder with the default threat count", () => {
   assert.deepEqual(createBuilderState(), { user: null, threatCount: 20 });
+});
+
+test("normalizes an editable threat count to a whole number from zero through fifty", () => {
+  assert.equal(normalizeThreatCount("12.9"), 12);
+  assert.equal(normalizeThreatCount(-3), 0);
+  assert.equal(normalizeThreatCount(80), 50);
+  assert.equal(normalizeThreatCount(""), 20);
+  assert.equal(normalizeThreatCount("not a number"), 20);
 });
 
 test("creates one canonical side state without activating the usage-backed Tera type", () => {

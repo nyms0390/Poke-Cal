@@ -83,6 +83,34 @@
               <div id="builder-move-picks" class="builder-move-picks"></div>
             </section>
 
+            <section class="builder-threat-controls" aria-label="Test opponents">
+              <div class="panel-heading">
+                <span>Test against</span>
+                <strong id="builder-threat-summary">Top 20</strong>
+              </div>
+              <label class="builder-threat-count" for="builder-threat-count">
+                Popular Pokémon
+                <input id="builder-threat-count" type="number" min="0" max="50" step="1" value="20" />
+              </label>
+              <label class="pokemon-search-label" for="builder-threat-search">Add custom Pokémon</label>
+              <div class="pokemon-combobox">
+                <input
+                  id="builder-threat-search"
+                  type="search"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-controls="builder-threat-results"
+                  aria-expanded="false"
+                />
+                <div id="builder-threat-results" class="search-results pokemon-search-results" hidden></div>
+              </div>
+              <div
+                id="builder-custom-threats"
+                class="builder-threat-chips"
+                aria-label="Custom test opponents"
+              ></div>
+            </section>
+
             <a id="builder-speed-link" class="common-build-calculator" href="./speed.html">
               Open full speed tiers →
             </a>
