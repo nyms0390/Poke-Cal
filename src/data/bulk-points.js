@@ -24,7 +24,7 @@ export function bulkPointMatchups(userState, threats, options) {
       const damage = threatDamage(userState, scenario);
       if (!Number.isFinite(damage.maxPct)) return null;
       const points = bulkPoints(userState, scenario, options);
-      return points.length > 0 ? { scenario, damage, points } : null;
+      return { scenario, damage, points };
     })
     .filter(Boolean)
     .sort((a, b) => b.damage.maxPct - a.damage.maxPct ||

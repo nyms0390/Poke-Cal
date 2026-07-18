@@ -269,19 +269,20 @@ function selectedMoves() {
 
 function renderBulkPoints() {
   const matchups = bulkPointMatchups(state.user, threats);
+  const spreadCount = matchups.filter(({ points }) => points.length > 0).length;
 
-  elements.bulkCount.textContent = `${matchups.length} with spreads`;
+  elements.bulkCount.textContent = `${spreadCount} spreads · ${matchups.length} matchups`;
   elements.bulkPoints.replaceChildren(
     ...(matchups.length > 0
       ? matchups.map(({ scenario, damage, points }) => bulkScenarioRow(scenario, damage, points))
-      : [emptyText("No survival tier improvements are reachable within 64 SP.")]),
+      : [emptyText("No supported threat moves are available.")]),
   );
 }
 
 function bulkScenarioRow(scenario, damage, points) {
   const details = document.createElement("details");
   details.className = "builder-scenario";
-  details.open = true;
+  details.open = points.length > 0;
   const summary = document.createElement("summary");
   summary.append(
     pokemonLabel(scenario.threat.pokemon),
@@ -293,7 +294,7 @@ function bulkScenarioRow(scenario, damage, points) {
     (scenario.move.category === "Physical" ? "def" : "spd");
   const list = document.createElement("div");
   list.className = "builder-point-list";
-  list.replaceChildren(...points.map((point) => {
+  list.replaceChildren(...(points.length > 0 ? points.map((point) => {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = `${point.totalSp} total SP · ` +
@@ -314,7 +315,7 @@ function bulkScenarioRow(scenario, damage, points) {
       render();
     });
     return button;
-  }));
+  }) : [emptyText("No better survival tier is reachable within 64 SP.")]));
   details.append(summary, list);
   return details;
 }
