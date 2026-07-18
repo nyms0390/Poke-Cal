@@ -205,6 +205,11 @@ test("adds Mega forms for popular Pokémon without consuming popularity slots", 
   assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardmegay").likelyPresetLabel, "max (neutral 32)");
   assert.equal(pool.length, 13);
   assert.equal(manual.length, 2);
+
+  const megaEntry = speedTiers(user, [{ pokemon: megaX }], { mode: "base" })
+    .flatMap(({ entries }) => entries)
+    .find(({ id }) => id === "charizardmegax");
+  assert.equal(megaEntry.spriteId, "charizard-megax");
 });
 
 function pokemon(id, name, spe) {

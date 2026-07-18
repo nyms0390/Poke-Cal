@@ -1,6 +1,6 @@
 import { NATURES } from "../engine/natures.js";
 import { calculateSpeed } from "../engine/speed.js";
-import { megaFamily } from "./pokemon.js";
+import { megaFamily, pokemonSpriteId } from "./pokemon.js";
 
 const PRESETS = [
   { key: "max", label: "Max", sourceLabel: "max (+spe 32)", nature: "Timid", sp: 32 },
@@ -143,6 +143,7 @@ function speedEntry(pokemon, presetLabel, isUser, likely, stage, speed, order = 
   return {
     id: pokemon.id,
     name: pokemon.name,
+    spriteId: pokemonSpriteId(pokemon),
     presetLabel,
     likely,
     isUser,

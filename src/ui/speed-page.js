@@ -1,5 +1,5 @@
 import { normalizeId } from "../data/catalog.js";
-import { searchPokemon } from "../data/pokemon.js";
+import { pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
 import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -302,7 +302,7 @@ function sprite(entry) {
   const image = document.createElement("img");
   image.loading = "lazy";
   image.alt = entry.name;
-  image.src = `https://play.pokemonshowdown.com/sprites/gen5/${normalizeId(entry.id)}.png`;
+  image.src = `https://play.pokemonshowdown.com/sprites/gen5/${entry.spriteId ?? pokemonSpriteId(entry)}.png`;
   const fallback = document.createElement("span");
   fallback.textContent = entry.name.slice(0, 1);
   image.addEventListener("error", () => {

@@ -1,8 +1,20 @@
+import { normalizeId } from "./catalog.js";
+
 export function normalizeSearch(value) {
   return String(value ?? "")
     .normalize("NFKD")
     .toLowerCase()
     .replace(/[^a-z0-9\u3400-\u9fff]/g, "");
+}
+
+export function pokemonSpriteId(pokemon) {
+  const fallback = normalizeId(pokemon?.id ?? pokemon?.name);
+  const baseName = String(pokemon?.baseSpecies ?? "");
+  const name = String(pokemon?.name ?? "");
+  if (!baseName || !name.toLowerCase().startsWith(`${baseName.toLowerCase()}-`)) return fallback;
+
+  const form = normalizeId(name.slice(baseName.length + 1));
+  return form ? `${normalizeId(baseName)}-${form}` : fallback;
 }
 
 export function searchPokemon(pokemon, query, options = 12) {

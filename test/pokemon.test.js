@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { megaFamily, searchPokemon } from "../src/data/pokemon.js";
+import { megaFamily, pokemonSpriteId, searchPokemon } from "../src/data/pokemon.js";
 
 const pokemon = [
   {
@@ -298,6 +298,16 @@ test("groups the base Pokémon with all of its Mega forms", () => {
     ),
     ["charizard", "charizardmegax", "charizardmegay"],
   );
+});
+
+test("builds Pokémon Showdown sprite IDs for Mega forms", () => {
+  assert.equal(pokemonSpriteId(pokemon.find(({ id }) => id === "charizard")), "charizard");
+  assert.equal(pokemonSpriteId(pokemon.find(({ id }) => id === "charizardmegax")), "charizard-megax");
+  assert.equal(pokemonSpriteId({
+    id: "meowsticfmega",
+    name: "Meowstic-F-Mega",
+    baseSpecies: "Meowstic",
+  }), "meowstic-fmega");
 });
 
 test("groups Mega forms whose form label appears before Mega", () => {
