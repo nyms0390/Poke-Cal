@@ -146,6 +146,18 @@ test("shows the cheapest spread that changes an OHKO into guaranteed survival", 
   }
 });
 
+test("never replaces already assigned defensive SP with a lower value", () => {
+  const state = withBulk(userState(), 5, 7, "def");
+  const points = bulkPoints(state, { threat, move: ohkoMove });
+
+  assert.equal(points.length > 0, true);
+  for (const point of points) {
+    assert.equal(point.hpSp >= state.sp.hp, true);
+    assert.equal(point.defSp >= state.sp.def, true);
+    assert.equal(point.totalSp > state.sp.hp + state.sp.def, true);
+  }
+});
+
 test("keeps supported matchups without a reachable bulk spread", () => {
   const state = userState();
   const matchups = bulkPointMatchups(state, [{

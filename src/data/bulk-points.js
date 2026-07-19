@@ -38,14 +38,25 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
 
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
   const maximumBudget = Math.max(0, Math.min(64, Math.trunc(Number(budget) || 0)));
+  const currentHpSp = clampSp(userState.sp?.hp);
+  const currentDefSp = clampSp(userState.sp?.[defenseStat]);
+  const currentTotalSp = currentHpSp + currentDefSp;
+  if (currentTotalSp >= maximumBudget) return [];
   const allocations = new Map();
   const allocationAtCost = (totalSp) => {
     if (!allocations.has(totalSp)) {
-      allocations.set(totalSp, bestAllocationAtCost(userState, scenario, totalSp, defenseStat));
+      allocations.set(totalSp, bestAllocationAtCost(
+        userState,
+        scenario,
+        totalSp,
+        defenseStat,
+        currentHpSp,
+        currentDefSp,
+      ));
     }
     return allocations.get(totalSp);
   };
-  let previousTier = allocationAtCost(0)?.damage;
+  let previousTier = allocationAtCost(currentTotalSp)?.damage;
   const maximum = allocationAtCost(maximumBudget);
   if (!previousTier || !maximum ||
       survivalHits(maximum.damage.koText) <= survivalHits(previousTier.koText)) return [];
@@ -55,7 +66,7 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
   let targetHits = survivalHits(previousTier.koText) + 1;
 
   while (targetHits <= maximumHits) {
-    let lowerCost = 1;
+    let lowerCost = currentTotalSp + 1;
     let upperCost = maximumBudget;
     while (lowerCost < upperCost) {
       const middleCost = Math.floor((lowerCost + upperCost) / 2);
@@ -82,11 +93,18 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
   return frontier;
 }
 
-function bestAllocationAtCost(userState, scenario, totalSp, defenseStat) {
+function bestAllocationAtCost(
+  userState,
+  scenario,
+  totalSp,
+  defenseStat,
+  currentHpSp,
+  currentDefSp,
+) {
   const candidates = [];
-  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+  for (let hpSp = currentHpSp; hpSp <= 32; hpSp += 1) {
     const defSp = totalSp - hpSp;
-    if (defSp < 0 || defSp > 32) continue;
+    if (defSp < currentDefSp || defSp > 32) continue;
     const state = withAllocation(userState, hpSp, defSp, defenseStat);
     const damage = threatDamage(state, scenario);
     candidates.push({ hpSp, defSp, totalSp, damage });
@@ -95,6 +113,12 @@ function bestAllocationAtCost(userState, scenario, totalSp, defenseStat) {
     compareKoTiers(a.damage.koText, b.damage.koText) ||
     a.damage.maxPct - b.damage.maxPct ||
     a.hpSp - b.hpSp)[0];
+}
+
+function clampSp(value) {
+  const sp = Number(value);
+  if (!Number.isFinite(sp)) return 0;
+  return Math.max(0, Math.min(32, Math.trunc(sp)));
 }
 
 function damageResult(userState, { threat, move }) {

@@ -2,9 +2,16 @@ import { STAT_KEYS } from "../engine/constants.js";
 import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
 
-export function createBuilderState(pokemon, usageDefaults, { threatCount = 20 } = {}) {
+const ANALYSIS_TABS = ["bulk", "break"];
+
+export function createBuilderState(
+  pokemon,
+  usageDefaults,
+  { threatCount = 20, analysisTab = "bulk" } = {},
+) {
   threatCount = normalizeThreatCount(threatCount);
-  if (!pokemon || !usageDefaults) return { user: null, threatCount };
+  analysisTab = ANALYSIS_TABS.includes(analysisTab) ? analysisTab : "bulk";
+  if (!pokemon || !usageDefaults) return { user: null, threatCount, analysisTab };
 
   return {
     user: {
@@ -12,7 +19,13 @@ export function createBuilderState(pokemon, usageDefaults, { threatCount = 20 } 
       teraType: "",
     },
     threatCount,
+    analysisTab,
   };
+}
+
+export function selectBuilderAnalysis(state, analysisTab) {
+  if (!ANALYSIS_TABS.includes(analysisTab) || state?.analysisTab === analysisTab) return state;
+  return { ...state, analysisTab };
 }
 
 export function normalizeThreatCount(value) {

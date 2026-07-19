@@ -124,11 +124,40 @@
           </section>
 
           <div class="builder-results">
-            <section class="catalog-panel" aria-label="Bulk points">
-              <div class="panel-heading">
+            <div class="builder-analysis-tabs" role="tablist" aria-label="Builder analyses">
+              <button
+                id="builder-bulk-tab"
+                class="builder-analysis-tab"
+                type="button"
+                role="tab"
+                aria-controls="builder-bulk-panel"
+                aria-selected="true"
+                data-builder-analysis="bulk"
+              >
                 <span>Bulk points</span>
                 <strong id="bulk-count">—</strong>
-              </div>
+              </button>
+              <button
+                id="builder-break-tab"
+                class="builder-analysis-tab"
+                type="button"
+                role="tab"
+                aria-controls="builder-break-panel"
+                aria-selected="false"
+                data-builder-analysis="break"
+              >
+                <span>Break points</span>
+                <strong id="break-count">—</strong>
+              </button>
+            </div>
+
+            <section
+              id="builder-bulk-panel"
+              class="catalog-panel builder-analysis-panel"
+              role="tabpanel"
+              aria-labelledby="builder-bulk-tab"
+              tabindex="0"
+            >
               <p class="builder-assumption">
                 Threats use usage-backed items and abilities, no active Tera, max offense, and a neutral field.
               </p>
@@ -137,11 +166,14 @@
               </div>
             </section>
 
-            <section class="catalog-panel" aria-label="Break points">
-              <div class="panel-heading">
-                <span>Break points</span>
-                <strong id="break-count">—</strong>
-              </div>
+            <section
+              id="builder-break-panel"
+              class="catalog-panel builder-analysis-panel"
+              role="tabpanel"
+              aria-labelledby="builder-break-tab"
+              tabindex="0"
+              hidden
+            >
               <p class="builder-assumption">
                 Threats use 2 HP fast-offense bulk with their usage-backed item and ability, with no active Tera.
               </p>

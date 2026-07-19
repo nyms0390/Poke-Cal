@@ -106,6 +106,14 @@ test("adds a plus-nature variant when 32 SP cannot reach the next tier", () => {
   assert.equal(compareKoTiers(plusAtPoint.koText, plusBefore.koText) > 0, true);
 });
 
+test("never lowers assigned offensive SP for a plus-nature threshold", () => {
+  const state = withOffense(userState(), "atk", 31);
+  const points = breakPoints(state, physicalMove, { threat: threat() });
+
+  assert.equal(points.length > 0, true);
+  assert.equal(points.every(({ sp }) => sp >= state.sp.atk), true);
+});
+
 test("passes the threat's defensive item through to the damage engine", () => {
   const state = userState();
   const unvested = yourDamage(state, specialMove, { threat: threat() });

@@ -6,6 +6,7 @@ import {
   finalStats,
   normalizeThreatCount,
   partitionBulkMatchups,
+  selectBuilderAnalysis,
   significantBreakPoints,
 } from "../src/ui/builder-state.js";
 
@@ -30,7 +31,15 @@ const usageDefaults = {
 };
 
 test("creates an empty builder with the default threat count", () => {
-  assert.deepEqual(createBuilderState(), { user: null, threatCount: 20 });
+  assert.deepEqual(createBuilderState(), { user: null, threatCount: 20, analysisTab: "bulk" });
+});
+
+test("selects only supported builder analysis tabs", () => {
+  const state = createBuilderState();
+  const selected = selectBuilderAnalysis(state, "break");
+
+  assert.equal(selected.analysisTab, "break");
+  assert.equal(selectBuilderAnalysis(selected, "unknown"), selected);
 });
 
 test("normalizes an editable threat count to a whole number from zero through fifty", () => {
@@ -42,7 +51,7 @@ test("normalizes an editable threat count to a whole number from zero through fi
 });
 
 test("creates one canonical side state without activating the usage-backed Tera type", () => {
-  const state = createBuilderState(pikachu, usageDefaults, { threatCount: 12 });
+  const state = createBuilderState(pikachu, usageDefaults, { threatCount: 12, analysisTab: "break" });
 
   assert.equal(state.user.pokemon, pikachu);
   assert.equal(state.user.nature, "Timid");
@@ -55,6 +64,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
     "nastyplot",
   ]);
   assert.equal(state.threatCount, 12);
+  assert.equal(state.analysisTab, "break");
 });
 
 test("calculates all six final level-50 stats without mutating builder state", () => {

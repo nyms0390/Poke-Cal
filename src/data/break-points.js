@@ -34,7 +34,7 @@ export function breakPoints(userState, move, scenario) {
   const maximumCurrentNature = yourDamage(withOffense(userState, attackStat, 32), move, scenario);
   const plusNature = plusNatureFor(attackStat, userState.nature);
   if (plusNature) {
-    for (let sp = 0; sp <= 32; sp += 1) {
+    for (let sp = currentSp; sp <= 32; sp += 1) {
       const plusState = {
         ...withOffense(userState, attackStat, sp),
         nature: plusNature,

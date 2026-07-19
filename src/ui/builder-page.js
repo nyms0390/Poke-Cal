@@ -30,6 +30,7 @@ import {
   finalStats,
   normalizeThreatCount,
   partitionBulkMatchups,
+  selectBuilderAnalysis,
   significantBreakPoints,
 } from "./builder-state.js";
 import {
@@ -60,6 +61,9 @@ const elements = {
   threatSummary: document.querySelector("#builder-threat-summary"),
   customThreats: document.querySelector("#builder-custom-threats"),
   speedLink: document.querySelector("#builder-speed-link"),
+  analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
+  bulkPanel: document.querySelector("#builder-bulk-panel"),
+  breakPanel: document.querySelector("#builder-break-panel"),
   bulkCount: document.querySelector("#bulk-count"),
   bulkPoints: document.querySelector("#bulk-points"),
   breakCount: document.querySelector("#break-count"),
@@ -73,6 +77,7 @@ let moveComboboxCleanups = [];
 let customThreats = [];
 
 initI18n();
+initializeAnalysisTabs();
 initialize();
 
 onLocaleChange(() => {
@@ -123,6 +128,46 @@ async function initialize() {
   seedPokemon(requested ?? defaultThreat?.pokemon ?? catalogs.pokemon[0]);
 }
 
+function initializeAnalysisTabs() {
+  for (const tab of elements.analysisTabs) {
+    tab.addEventListener("click", () => activateAnalysisTab(tab.dataset.builderAnalysis));
+    tab.addEventListener("keydown", handleAnalysisTabKeydown);
+  }
+  renderAnalysisTabs();
+}
+
+function activateAnalysisTab(analysisTab, { focus = false } = {}) {
+  state = selectBuilderAnalysis(state, analysisTab);
+  renderAnalysisTabs();
+  if (focus) {
+    elements.analysisTabs.find((tab) => tab.dataset.builderAnalysis === state.analysisTab)?.focus();
+  }
+}
+
+function handleAnalysisTabKeydown(event) {
+  const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+  if (!keys.includes(event.key)) return;
+  event.preventDefault();
+  const currentIndex = elements.analysisTabs.indexOf(event.currentTarget);
+  const nextIndex = event.key === "Home"
+    ? 0
+    : event.key === "End"
+      ? elements.analysisTabs.length - 1
+      : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + elements.analysisTabs.length) %
+        elements.analysisTabs.length;
+  activateAnalysisTab(elements.analysisTabs[nextIndex].dataset.builderAnalysis, { focus: true });
+}
+
+function renderAnalysisTabs() {
+  for (const tab of elements.analysisTabs) {
+    const selected = tab.dataset.builderAnalysis === state.analysisTab;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  }
+  elements.bulkPanel.hidden = state.analysisTab !== "bulk";
+  elements.breakPanel.hidden = state.analysisTab !== "break";
+}
+
 function renderLocaleOptions() {
   elements.nature.replaceChildren(
     ...Object.keys(NATURES).map((nature) => optionElement(
@@ -152,7 +197,10 @@ function seedPokemon(pokemon) {
     moveLookup: catalogs.moveLookup,
     items: catalogs.items,
   });
-  state = createBuilderState(pokemon, defaults, { threatCount: state.threatCount });
+  state = createBuilderState(pokemon, defaults, {
+    threatCount: state.threatCount,
+    analysisTab: state.analysisTab,
+  });
   renderPicks();
   render();
 }
@@ -255,6 +303,7 @@ function render() {
   elements.threatSummary.textContent = t("builder.topCustom", { top: state.threatCount, custom: customThreats.length });
   elements.source.textContent = t("builder.source", { top: state.threatCount, custom: customThreats.length });
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
+  renderAnalysisTabs();
 
   renderStats(user, stats);
   const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
@@ -444,7 +493,7 @@ function bulkMovePanel({ scenario, damage, points }) {
     damage,
     defensive: true,
     emptyMessage: t("builder.noSurvival"),
-    choices: points.map((point) => spreadChoice({
+    loadChoices: () => points.map((point) => spreadChoice({
       label: t("builder.totalSp", { count: point.totalSp }),
       stats: [
         ["HP", point.hpSp],
