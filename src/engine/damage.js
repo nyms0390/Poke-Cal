@@ -399,9 +399,17 @@ export function calculateDamage({
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
   const actualHitCount = hitPowers.length > 1 ? hitPowers.length : hitCounts.min;
-  const sturdyText = sturdyActive && actualHitCount === 1 && Math.min(...minHitRolls) >= defenderMaxHp
+  const sturdyAffectsKo = sturdyActive && actualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
+  const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
     ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
     : null;
+  let ko = sturdyText ??
+    (baseRollDistribution
+      ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution)
+      : unavailableKoSummary("KO chance unavailable for variable hit count"));
+  if (sturdyAffectsKo && !sturdyText) {
+    ko = { ...ko, text: `${ko.text} (Sturdy)` };
+  }
 
   return {
     supported: true,
@@ -416,10 +424,7 @@ export function calculateDamage({
     attackStat,
     defenseStat,
     critical: effectiveCritical,
-    ko: sturdyText ??
-      (baseRollDistribution
-        ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution)
-        : unavailableKoSummary("KO chance unavailable for variable hit count")),
+    ko,
     notes,
   };
 }

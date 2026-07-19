@@ -24,10 +24,11 @@ export function formatKoResult(ko, locale = "en", maxHits = 5) {
 
 export function formatKoText(text, locale = "en") {
   if (locale !== "zh-TW") return text;
-  const guaranteed = /^guaranteed (OHKO|([2-5])HKO)$/i.exec(text);
+  const guaranteed = /^guaranteed (OHKO|([2-5])HKO)( \(Sturdy\))?$/i.exec(text);
   if (guaranteed) {
     const hits = guaranteed[1].toUpperCase() === "OHKO" ? 1 : Number(guaranteed[2]);
-    return formatKoResult({ hits, chance: 1, text }, locale);
+    const label = formatKoResult({ hits, chance: 1, text }, locale);
+    return guaranteed[3] ? `${label}（結實）` : label;
   }
   const chance = /^([\d.]+)% chance to (OHKO|([2-5])HKO)$/i.exec(text);
   if (chance) {

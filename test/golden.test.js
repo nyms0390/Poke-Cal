@@ -338,7 +338,7 @@ const P2_GOLDEN_CASES = [
       attackerState: p2State,
       defenderState: { ...p2State, ability: { id: "sturdy", name: "Sturdy" } },
     },
-    expected: { min: 132, max: 156, koText: "guaranteed 2HKO" },
+    expected: { min: 132, max: 156, koText: "guaranteed 2HKO (Sturdy)" },
   },
   {
     name: "P2-07 Ice Face negates only the first of three hits",

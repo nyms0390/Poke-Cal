@@ -5185,7 +5185,7 @@ test("Sturdy removes partial single-hit OHKO odds without hiding the raw damage 
   });
 
   assert.deepEqual([result.minDamage, result.maxDamage, result.defenderHp], [132, 156, 155]);
-  assert.equal(result.ko.text.includes("OHKO"), false);
+  assert.equal(result.ko.text, "guaranteed 2HKO (Sturdy)");
 });
 
 test("Ice Face negates only the first physical hit", () => {
