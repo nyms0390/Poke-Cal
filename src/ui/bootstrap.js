@@ -32,3 +32,10 @@ export function catalogLoadedStatus(data) {
 export function rankByUsage(entries, scope) {
   return sortByChampionsUsage(applyScopedUsage(entries, scope));
 }
+
+export function rankObservedUsage(entries, scope) {
+  if (!scope?.length) return [];
+  return rankByUsage(entries, scope).filter(({ champions }) =>
+    Number.isFinite(champions?.usageCount),
+  );
+}

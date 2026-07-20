@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import {
   damagePercentColor,
@@ -7,6 +8,7 @@ import {
   pokemonSpriteUrls,
   typeClassName,
 } from "../src/ui/components.js";
+import { rankObservedUsage } from "../src/ui/bootstrap.js";
 
 test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName("Bug"), "type-bug");
@@ -100,4 +102,32 @@ test("rebuilds reusable rows when their locale render key changes", () => {
   assert.notStrictEqual(englishRows[0], chineseRows[0]);
   assert.equal(englishRows[0].label, "Atk");
   assert.equal(container.replacements, 2);
+});
+
+test("lookup item ranking excludes catalog entries without observed Champions usage", () => {
+  const entries = [
+    { id: "lightball", name: "Light Ball" },
+    { id: "leftovers", name: "Leftovers" },
+  ];
+
+  const ranked = rankObservedUsage(entries, [
+    { id: "lightball", name: "Light Ball", usageCount: 4, usagePercent: 100 },
+  ]);
+
+  assert.deepEqual(ranked.map(({ id }) => id), ["lightball"]);
+  assert.equal(ranked[0].champions.usageCount, 4);
+  assert.equal(entries[0].champions, undefined);
+  assert.deepEqual(
+    rankObservedUsage([{ id: "stale", name: "Stale", champions: { usageCount: 99 } }]),
+    [],
+  );
+});
+
+test("lookup page separates battle profile from build details without a duplicate prose summary", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+
+  assert.match(html, /<section[^>]+aria-labelledby="battle-profile-heading"/);
+  assert.match(html, /<section[^>]+aria-labelledby="build-details-heading"/);
+  assert.doesNotMatch(html, /id="playstyle-summary"/);
+  assert.doesNotMatch(html, /id="usage-source"/);
 });

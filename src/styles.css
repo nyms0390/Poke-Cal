@@ -447,6 +447,19 @@ button:disabled {
   letter-spacing: -0.02em;
 }
 
+.pokemon-card-meta {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+}
+
+.pokemon-card-meta .form-field {
+  display: grid;
+  min-width: 180px;
+  gap: 6px;
+  text-align: left;
+}
+
 .selected-name-row {
   display: flex;
   align-items: center;
@@ -476,92 +489,79 @@ button:disabled {
 
 .base-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
   margin-top: 24px;
-}
-
-/* ---------- Cards (forms, abilities, items, spreads) ---------- */
-
-.form-card,
-.ability-card,
-.item-card {
-  padding: 16px;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
-  background: var(--surface);
+  background: var(--line);
   box-shadow: var(--shadow-micro);
 }
 
-.form-card {
-  position: relative;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 140ms ease,
-    background 140ms ease,
-    box-shadow 140ms ease,
-    transform 140ms ease;
+/* ---------- Lookup hierarchy ---------- */
+
+.lookup-section {
+  padding: var(--panel-pad);
+  background: var(--surface);
 }
 
-.form-card::after {
-  position: absolute;
-  right: 16px;
-  bottom: 12px;
-  width: 28px;
-  height: 3px;
-  border-radius: 999px;
-  background: var(--line);
-  content: "";
-  transition: width 140ms ease, background 140ms ease;
-}
-
-.form-card:hover,
-.form-card:focus-visible {
-  border-color: var(--accent-dark);
-  outline: none;
-  box-shadow: 0 4px 16px rgb(16 17 20 / 6%);
-  transform: translateY(-1px);
-}
-
-.form-card.active {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: 0 0 0 1px var(--accent-ring) inset;
-}
-
-.form-card.active::after {
-  width: 55px;
-  background: var(--accent);
-}
-
-.form-card-heading {
+.lookup-section-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
-.form-card-heading > strong {
+.lookup-section-heading h2 {
+  margin: 0;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+}
+
+.lookup-section-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: right;
+}
+
+.lookup-section-heading > strong {
+  color: var(--accent);
   font-size: var(--text-lg);
   font-weight: 600;
 }
 
-.form-card-heading small {
-  color: var(--subtle);
-  font-size: var(--text-xs);
+.lookup-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 12px;
 }
 
-.form-card-abilities {
+.lookup-panel-grid > .catalog-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-micro);
+}
+
+.lookup-profile-grid .common-build-card,
+.lookup-build-grid .lookup-spread-panel {
+  grid-column: 1 / -1;
+}
+
+.lookup-move-panel {
+  background: var(--surface);
+}
+
+.base-stat {
   display: grid;
   gap: 3px;
-  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
 }
 
-.form-card-abilities small,
-.form-card-stats small {
+.base-stat span {
   color: var(--subtle);
   font-size: var(--text-xs);
   font-weight: 600;
@@ -569,32 +569,25 @@ button:disabled {
   text-transform: uppercase;
 }
 
-.form-card-abilities strong {
-  color: var(--ink);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  line-height: 1.35;
-}
-
-.form-card-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px 8px;
-}
-
-.form-card-stats > span {
-  display: grid;
-  gap: 2px;
-}
-
-.form-card-stats strong {
+.base-stat strong {
   font-size: var(--text-xl);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-.form-card-stats .speed-stat strong {
+.base-stat.speed-stat strong {
   color: var(--accent);
+}
+
+/* ---------- Cards (abilities, items, spreads) ---------- */
+
+.ability-card,
+.item-card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-micro);
 }
 
 .ability-list,
@@ -643,14 +636,6 @@ button:disabled {
   color: var(--muted);
   font-size: var(--text-sm);
   line-height: 1.55;
-}
-
-.playstyle-summary {
-  max-width: 860px;
-  margin: 0;
-  color: var(--ink);
-  font-size: var(--text-md);
-  line-height: 1.6;
 }
 
 .common-build-card {
@@ -874,12 +859,6 @@ button:disabled {
 .form-field {
   display: grid;
   gap: 8px;
-}
-
-.calculator > .form-field {
-  margin: 0;
-  padding: var(--panel-pad) var(--panel-pad) 0;
-  background: var(--surface);
 }
 
 .form-field[hidden],
@@ -1712,6 +1691,37 @@ button:disabled {
 
   h1 {
     font-size: clamp(1.9rem, 8vw, 2.4rem);
+  }
+
+  .pokemon-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pokemon-card-meta {
+    justify-content: space-between;
+  }
+
+  .base-stat-total {
+    margin-left: auto;
+  }
+
+  .base-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lookup-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .lookup-section-heading p {
+    text-align: left;
+  }
+
+  .lookup-panel-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .battle-tool button,

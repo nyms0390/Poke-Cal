@@ -55,86 +55,95 @@
                 <div id="selected-types" class="type-badges" aria-label="Pokémon types"></div>
               </div>
             </div>
-            <div class="base-stat-total">
-              <span>BST</span>
-              <strong id="base-stat-total">—</strong>
+            <div class="pokemon-card-meta">
+              <label id="form-field" class="form-field" hidden>
+                Form
+                <select id="form"></select>
+              </label>
+              <div class="base-stat-total">
+                <span>BST</span>
+                <strong id="base-stat-total">—</strong>
+              </div>
             </div>
           </article>
           <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
         </div>
 
-        <label id="form-field" class="form-field" hidden>
-          Form
-          <select id="form"></select>
-        </label>
-
         <div class="tool-page">
-          <p id="usage-source" class="usage-source">Champions data loading…</p>
-
-          <section id="common-build-card" class="catalog-panel common-build-card" aria-label="Common build" hidden>
-            <div class="panel-heading">
-              <span>Common build</span>
-              <strong id="common-build-headline">—</strong>
+          <section class="lookup-section" aria-labelledby="battle-profile-heading">
+            <div class="lookup-section-heading">
+              <h2 id="battle-profile-heading">Battle profile</h2>
+              <p>Common build, defensive matchups, and practical Speed benchmarks.</p>
             </div>
-            <p id="common-build-source" class="common-build-source"></p>
-            <div id="common-build-facts" class="common-build-facts"></div>
-            <a id="common-build-calculator" class="common-build-calculator" href="./battle.html">
-              Open in calculator →
-            </a>
+
+            <div class="lookup-panel-grid lookup-profile-grid">
+              <section id="common-build-card" class="catalog-panel common-build-card" aria-label="Common build" hidden>
+                <div class="panel-heading">
+                  <span>Common build</span>
+                  <strong id="common-build-headline">—</strong>
+                </div>
+                <p id="common-build-source" class="common-build-source"></p>
+                <div id="common-build-facts" class="common-build-facts"></div>
+                <a id="common-build-calculator" class="common-build-calculator" href="./battle.html">
+                  Open in calculator →
+                </a>
+              </section>
+
+              <section id="type-matchup-card" class="catalog-panel" aria-label="Defensive matchups" hidden>
+                <div class="panel-heading">
+                  <span>Defensive matchups</span>
+                  <strong>Type chart</strong>
+                </div>
+                <div id="type-matchup-list" class="type-matchup-list"></div>
+                <p id="type-matchup-note" class="type-matchup-note" hidden></p>
+              </section>
+
+              <section id="speed-tier-card" class="catalog-panel" aria-label="Speed tiers" hidden>
+                <div class="panel-heading">
+                  <span>Speed tiers</span>
+                  <strong>Top 10 usage</strong>
+                </div>
+                <div id="speed-tier-list" class="speed-tier-list"></div>
+              </section>
+            </div>
           </section>
 
-          <section id="type-matchup-card" class="catalog-panel" aria-label="Defensive matchups" hidden>
-            <div class="panel-heading">
-              <span>Defensive matchups</span>
-              <strong>Type chart</strong>
+          <section class="lookup-section" aria-labelledby="build-details-heading">
+            <div class="lookup-section-heading">
+              <h2 id="build-details-heading">Build details</h2>
+              <p>Available abilities, Limitless item usage, and Smogon/NCP SP spreads.</p>
             </div>
-            <div id="type-matchup-list" class="type-matchup-list"></div>
-            <p id="type-matchup-note" class="type-matchup-note" hidden></p>
+
+            <div class="lookup-panel-grid lookup-build-grid">
+              <section class="catalog-panel lookup-spread-panel" aria-label="Spread source">
+                <div class="panel-heading">
+                  <span>Champions spreads</span>
+                  <strong id="spread-count">—</strong>
+                </div>
+                <div id="spread-list" class="spread-list"></div>
+              </section>
+
+              <section class="catalog-panel" aria-label="Abilities">
+                <div class="panel-heading">
+                  <span>Abilities</span>
+                  <strong id="ability-count">—</strong>
+                </div>
+                <div id="ability-list" class="ability-list"></div>
+              </section>
+
+              <section class="catalog-panel" aria-label="Items">
+                <div class="panel-heading">
+                  <span>Items</span>
+                  <strong id="item-count">—</strong>
+                </div>
+                <div id="item-list" class="item-list"></div>
+              </section>
+            </div>
           </section>
 
-          <section id="speed-tier-card" class="catalog-panel" aria-label="Speed tiers" hidden>
-            <div class="panel-heading">
-              <span>Speed tiers</span>
-              <strong>Top 10 usage</strong>
-            </div>
-            <div id="speed-tier-list" class="speed-tier-list"></div>
-          </section>
-
-          <section class="catalog-panel" aria-label="Champions usage">
-            <div class="panel-heading">
-              <span>Champions usage</span>
-              <strong>Limitless</strong>
-            </div>
-            <p id="playstyle-summary" class="playstyle-summary">Loading Champions profile…</p>
-          </section>
-
-          <section class="catalog-panel" aria-label="Spread source">
-            <div class="panel-heading">
-              <span>Champions spreads</span>
-              <strong id="spread-count">—</strong>
-            </div>
-            <div id="spread-list" class="spread-list"></div>
-          </section>
-
-          <section class="catalog-panel" aria-label="Abilities">
-            <div class="panel-heading">
-              <span>Abilities</span>
-              <strong id="ability-count">—</strong>
-            </div>
-            <div id="ability-list" class="ability-list"></div>
-          </section>
-
-          <section class="catalog-panel" aria-label="Items">
-            <div class="panel-heading">
-              <span>Items</span>
-              <strong id="item-count">—</strong>
-            </div>
-            <div id="item-list" class="item-list"></div>
-          </section>
-
-          <section class="catalog-panel" aria-label="Move set">
-            <div class="panel-heading">
-              <span>Move set</span>
+          <section class="catalog-panel lookup-move-panel" aria-labelledby="move-pool-heading">
+            <div class="lookup-section-heading">
+              <h2 id="move-pool-heading">Move pool</h2>
               <strong id="move-count">—</strong>
             </div>
 

@@ -13,7 +13,7 @@ export const STAT_LABELS = {
   spe: "Spe",
 };
 
-// Full-word stat labels — used on the lookup page's form-card stat grid.
+// Full-word stat labels — used on the lookup page's base-stat grid.
 export const FULL_STAT_LABELS = {
   hp: "HP",
   atk: "Attack",

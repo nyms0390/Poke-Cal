@@ -25,7 +25,12 @@ import {
   toTraditionalChinese,
 } from "../i18n.js";
 import { formatChampionsUsage } from "../i18n-formatters.js";
-import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
+import {
+  catalogLoadedStatus,
+  loadCatalogs,
+  rankByUsage,
+  rankObservedUsage,
+} from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
   moveNameCell,
@@ -46,7 +51,6 @@ const elements = {
   baseStatTotal: document.querySelector("#base-stat-total"),
   formField: document.querySelector("#form-field"),
   form: document.querySelector("#form"),
-  usageSource: document.querySelector("#usage-source"),
   commonBuildCard: document.querySelector("#common-build-card"),
   commonBuildHeadline: document.querySelector("#common-build-headline"),
   commonBuildSource: document.querySelector("#common-build-source"),
@@ -57,7 +61,6 @@ const elements = {
   typeMatchupNote: document.querySelector("#type-matchup-note"),
   speedTierCard: document.querySelector("#speed-tier-card"),
   speedTierList: document.querySelector("#speed-tier-list"),
-  playstyleSummary: document.querySelector("#playstyle-summary"),
   spreadCount: document.querySelector("#spread-count"),
   spreadList: document.querySelector("#spread-list"),
   abilityCount: document.querySelector("#ability-count"),
@@ -91,7 +94,6 @@ onLocaleChange(() => {
   if (catalogs) elements.status.textContent = catalogLoadedStatus(catalogs);
   if (!selectedPokemon) return;
   renderFormOptions();
-  renderFamilyStats();
   selectForm(selectedPokemon, { syncActive: false });
 });
 
@@ -154,7 +156,6 @@ function selectPokemon(entry, options = {}) {
   if (!entry) return;
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
-  renderFamilyStats();
   selectForm(entry, options);
   elements.results.hidden = true;
 }
@@ -166,40 +167,17 @@ function renderFormOptions() {
   elements.formField.hidden = selectedFamily.length === 1;
 }
 
-function renderFamilyStats() {
+function renderBaseStats(entry) {
   elements.baseStats.replaceChildren(
-    ...selectedFamily.map((entry) => {
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "form-card";
-      card.dataset.formId = entry.id;
-      const abilities = resolvePokemonAbilities(entry, abilityLookup)
-        .map((ability) => localizedName(ability))
-        .join(" · ");
-      card.innerHTML = `
-        <span class="form-card-heading">
-          <strong>${localizedName(entry)}</strong>
-          <small>BST ${totalBaseStats(entry.baseStats)}</small>
-        </span>
-        <span class="form-card-abilities">
-          <small>Abilities</small>
-          <strong>${abilities || "—"}</strong>
-        </span>
-        <span class="form-card-stats">
-          ${Object.entries(FULL_STAT_LABELS)
-            .map(
-              ([key, label]) => `
-                <span class="${key === "spe" ? "speed-stat" : ""}">
-                  <small>${localizedTerm("stat", label)}</small>
-                  <strong>${entry.baseStats[key]}</strong>
-                </span>
-              `,
-            )
-            .join("")}
-        </span>
-      `;
-      card.addEventListener("click", () => selectForm(entry));
-      return card;
+    ...Object.entries(FULL_STAT_LABELS).map(([key, label]) => {
+      const stat = document.createElement("div");
+      stat.className = `base-stat${key === "spe" ? " speed-stat" : ""}`;
+      const name = document.createElement("span");
+      name.textContent = localizedTerm("stat", label);
+      const value = document.createElement("strong");
+      value.textContent = String(entry.baseStats[key]);
+      stat.append(name, value);
+      return stat;
     }),
   );
 }
@@ -214,10 +192,7 @@ function selectForm(entry, options = {}) {
     : entry.aliases.map(toTraditionalChinese).join(" · ") || entry.baseSpecies;
   elements.baseStatTotal.textContent = totalBaseStats(entry.baseStats);
   elements.form.value = entry.id;
-
-  for (const card of elements.baseStats.querySelectorAll(".form-card")) {
-    card.classList.toggle("active", card.dataset.formId === entry.id);
-  }
+  renderBaseStats(entry);
   if (options.syncActive !== false) persistActiveDefaults(entry);
   renderCatalog();
 }
@@ -228,27 +203,21 @@ function persistActiveDefaults(entry) {
 }
 
 function renderCatalog() {
-  renderUsageSource();
   renderCommonBuild();
   renderDefensiveMatchups();
   renderSpeedTiers();
 
   const usage = selectedPokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
-  const rankedItems = rankByUsage(items, usage?.items);
+  const rankedItems = rankObservedUsage(items, usage?.items);
   selectedMoves = rankByUsage(resolveChampionsPokemonMoves(selectedPokemon, moveLookup), usage?.moves);
 
-  renderPlaystyle(abilities, rankedItems);
   renderSpreads();
   renderAbilities(abilities);
   renderItems(rankedItems);
   renderMoveFilterOptions();
   renderMoveList();
   applyDocumentTranslations();
-}
-
-function renderUsageSource() {
-  elements.usageSource.textContent = t("lookup.usageSource");
 }
 
 function renderCommonBuild() {
@@ -356,7 +325,7 @@ function renderDefensiveMatchups() {
   const matchups = defensiveMatchups(types);
   elements.typeMatchupList.replaceChildren(
     ...Object.entries(matchups)
-      .filter(([, entries]) => entries.length > 0)
+      .filter(([bucket, entries]) => bucket !== "x1" && entries.length > 0)
       .map(([bucket, entries]) => matchupRow(labels[bucket], entries)),
   );
 
@@ -410,28 +379,6 @@ function speedTierRow(entry) {
     : t("lookup.noThreatsAtSpeed");
   details.append(summary, names);
   return details;
-}
-
-function renderPlaystyle(abilities, rankedItems) {
-  const ability = topName(abilities, "ability");
-  const item = topName(rankedItems, "item");
-  const moves = selectedMoves
-    .slice(0, 4)
-    .map((move) => localizedName(move))
-    .join(", ");
-
-  elements.playstyleSummary.textContent = t("lookup.playstyle", {
-    pokemon: localizedName(selectedPokemon),
-    ability,
-    item,
-    moves: moves || t("lookup.noRankedMoves"),
-  });
-}
-
-function topName(entries, fallback) {
-  const [entry] = rankByUsage(entries);
-  if (entry) return localizedName(entry);
-  return t(fallback === "ability" ? "lookup.noCommonAbility" : "lookup.noCommonItem");
 }
 
 function renderSpreads() {
