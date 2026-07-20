@@ -87,6 +87,8 @@ PokéCal/
 ├── speed.html                  # speed tiers tab      → src/ui/speed-page.js     (P5-03)
 ├── duel.html                   # 1v1 simulator page   → src/ui/duel-page.js      (Phase 6, last)
 ├── src/
+│   ├── identifiers.js          # shared Showdown-style identifier normalization
+│   ├── i18n.js  i18n-formatters.js  locales/
 │   ├── engine/                 # PURE battle math — no DOM, no fetch
 │   │   ├── constants.js        # LEVEL = 50, stat keys, status ids
 │   │   ├── natures.js          # NATURES table + natureMultiplier/natureOptionLabel
@@ -110,7 +112,7 @@ PokéCal/
 │   │   ├── lookup-page.js  battle-page.js  battle-state.js  builder-page.js
 │   └── styles.css
 ├── public/                     # generated catalogs (unchanged)
-├── scripts/                    # sync + serve (unchanged locations)
+├── scripts/                    # sync + serve; shared plumbing in scripts/lib/
 ├── test/                       # node --test suites, mirrors src/ module names
 └── docs/tasks/                 # one file per work unit (this roadmap's children)
 ```

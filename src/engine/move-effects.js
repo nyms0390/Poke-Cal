@@ -24,12 +24,9 @@
 //                                                     read move.damage, not a moveId)
 //   offensiveStat(ctx) -> "atk" | "spa"              (Photon Geyser)
 
+import { normalizeId } from "../identifiers.js";
 import { isGrounded } from "./field.js";
 import { finalSpeedInField } from "./speed.js";
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
-}
 
 const WEATHER_BALL_TYPES = {
   desolateland: "Fire",

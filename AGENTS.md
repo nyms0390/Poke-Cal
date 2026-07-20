@@ -10,8 +10,8 @@ Requires Node.js 20+. No `npm install` needed.
 npm start                      # static server at http://127.0.0.1:4173 (PORT env to change)
 npm test                       # full suite via node --test
 npm run test:battle            # battle-order, damage, speed tests
-npm run test:catalog           # battle-state, catalog, pokemon, stats, ui tests
-npm run test:data              # champions-data, data, limitless-data, showdown-data, smogon-data, sync-pokemon-data, usage-defaults tests
+npm run test:catalog           # battle-state, catalog, identifiers, pokemon, stats, ui tests
+npm run test:data              # sync/parser/merge/data-loading tests, including NCP and sync utilities
 npm run test:damage            # test/damage.test.js only
 npm run test:pokemon           # test/pokemon.test.js only
 npm run sync-data              # regenerate public/*.json (Showdown incl. Champions mod + PokeAPI, needs internet)
@@ -23,7 +23,7 @@ npm run sync-all               # all four syncs in order
 
 ## Architecture
 
-`src/` has three layers — `engine/` (pure battle math, no DOM/fetch), `data/` (loading, parsing, usage), `ui/` (DOM controllers) — plus `src/styles.css`. Data files must not import from `ui/`; `ui/` may import `engine/` and `data/`. See ROADMAP.md "Target code structure" for the authoritative layout and rationale.
+`src/` has three layers — `engine/` (pure battle math, no DOM/fetch), `data/` (loading, parsing, usage), `ui/` (DOM controllers) — plus shared identifier/i18n modules, locale catalogs, and `src/styles.css`. Data files must not import from `ui/`; `ui/` may import `engine/` and `data/`. See ROADMAP.md "Target code structure" for the authoritative layout and rationale.
 
 - Four static HTML entry points: `index.html` -> `src/ui/lookup-page.js` (lookup), `battle.html` -> `src/ui/battle-page.js` (calculator), `builder.html` -> `src/ui/builder-page.js` (SP bulk/break points), and `speed.html` -> `src/ui/speed-page.js` (Speed tiers). All share `src/styles.css` and load catalogs from `public/*.json`.
 - Battle engine is centralized in `src/engine/damage.js` (damage formula, delegating move-specific behavior to `src/engine/move-effects.js` and ability/item modifiers to `src/engine/modifiers.js`), `src/engine/speed.js` (Speed modifiers: Tailwind, paralysis, items/abilities), and `src/engine/battle-order.js` (priority + Trick Room). Prefer engine helpers over UI-only patches.
@@ -63,5 +63,4 @@ npm run sync-all               # all four syncs in order
 - Default battle mode is doubles; both sides keep four editable moves seeded from top usage when usage data exists.
 - Rebuild order matters: run `sync-data`, then `sync-champions-data`, then `sync-champions-spreads`, then `sync-ncp-spreads` when regenerating from scratch (`sync-all` does this). The Limitless, Smogon, and NCP merges each preserve the others' data on re-runs.
 - `.github/workflows/update-data.yml` re-runs all four syncs weekly (Mondays 06:00 UTC), runs tests, and commits `public/` changes.
-- `data/pokeapi/` holds local CSV snapshots; the sync script downloads from GitHub and does not read them.
 - Repo often has concurrent battle-calculator and data-sync edits; check `git status --short` before editing and do not revert user changes.

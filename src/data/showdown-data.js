@@ -1,5 +1,7 @@
 import vm from "node:vm";
 
+import { normalizeId } from "../identifiers.js";
+
 export function parseShowdownExport(source, exportName) {
   const declaration = new RegExp(`export const ${exportName}: [^=]+ =`);
   const executableSource = stripTypeAssertions(source).replace(
@@ -25,7 +27,7 @@ export function extractAbilities(entry) {
 export function extractLearnsetMoves(learnsets, id, baseSpecies) {
   const learnsetEntry = learnsets[id]?.learnset
     ? learnsets[id]
-    : learnsets[toId(baseSpecies)];
+    : learnsets[normalizeId(baseSpecies)];
   return Object.keys(learnsetEntry?.learnset ?? {}).sort((a, b) => a.localeCompare(b));
 }
 
@@ -37,10 +39,6 @@ export function extractCatalogEntries(table, textTable = {}) {
       ...toSerializableValue(textTable[id] ?? {}),
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
-}
-
-export function toId(value) {
-  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
 export function stripTypeAssertions(source) {

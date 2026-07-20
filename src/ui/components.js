@@ -1,5 +1,5 @@
-import { formatMovePriority } from "../data/catalog.js";
 import { pokemonSpriteId } from "../data/pokemon.js";
+import { formatMovePriority } from "../engine/battle-order.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where

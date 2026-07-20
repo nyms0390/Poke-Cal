@@ -1,12 +1,10 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
-
 import {
   NCP_SETDEX_URL,
   buildNcpSets,
   mergeNcpSets,
   parseNcpSetdex,
 } from "../src/data/ncp-data.js";
+import { argumentValue, isMainModule, readJson, writeJson } from "./lib/sync-utils.mjs";
 
 const outputDirectory = new URL("../public/", import.meta.url);
 
@@ -15,17 +13,11 @@ export async function downloadNcpSets({ fetcher = fetchText, url = NCP_SETDEX_UR
 }
 
 export async function updatePublicData(options = {}) {
-  const pokemon = JSON.parse(
-    await readFile(new URL("pokemon.json", outputDirectory), "utf8"),
-  );
+  const pokemon = await readJson(outputDirectory, "pokemon");
   const ncp = await downloadNcpSets(options);
   const merged = mergeNcpSets(pokemon, ncp);
 
-  await mkdir(outputDirectory, { recursive: true });
-  await writeFile(
-    new URL("pokemon.json", outputDirectory),
-    `${JSON.stringify(merged, null, 2)}\n`,
-  );
+  await writeJson(outputDirectory, "pokemon", merged);
 
   return ncp;
 }
@@ -40,10 +32,10 @@ async function fetchText(url) {
   return response.text();
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMainModule(import.meta.url)) {
   try {
     const ncp = await updatePublicData({
-      url: valueAfter(process.argv.slice(2), "--url") ?? NCP_SETDEX_URL,
+      url: argumentValue(process.argv.slice(2), "--url") ?? NCP_SETDEX_URL,
     });
     const setCount = ncp.pokemon.reduce((sum, entry) => sum + entry.sets.length, 0);
     console.log(
@@ -54,9 +46,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.error(error.message);
     process.exitCode = 1;
   }
-}
-
-function valueAfter(argv, flag) {
-  const index = argv.indexOf(flag);
-  return index === -1 ? undefined : argv[index + 1];
 }

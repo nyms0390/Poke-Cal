@@ -1,6 +1,7 @@
 // Pure battle-page state helpers — no DOM. battle-page.js does DOM reads, calls these, then
 // writes the result back to the DOM. See ROADMAP.md "Side state (per Pokémon)" for the shape.
 import { createField } from "../engine/field.js";
+import { normalizeId } from "../identifiers.js";
 import { parseUsageSpread } from "../data/usage-defaults.js";
 
 export const TEAM_SIZE = 6;
@@ -47,10 +48,6 @@ export function clearTeamSlot(teams, side, index) {
     ? Math.max(0, slots.findIndex(Boolean))
     : team.activeIndex;
   return { ...teams, [side]: { ...team, slots, activeIndex } };
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function clampInteger(value, minimum, maximum) {

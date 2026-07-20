@@ -5,7 +5,7 @@ import {
   resolvePokemonAbilities,
   sortByChampionsUsage,
 } from "./catalog.js";
-import { NATURES } from "../engine/damage.js";
+import { NATURES } from "../engine/natures.js";
 
 const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const EMPTY_SPREAD = {

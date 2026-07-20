@@ -1,3 +1,5 @@
+import { normalizeId } from "../identifiers.js";
+
 export function createField(overrides = {}) {
   return {
     format: "doubles", // "singles" | "doubles"
@@ -35,8 +37,4 @@ export function isGrounded(pokemon, state = {}, field = {}) {
 
   const types = state.teraType ? [state.teraType] : pokemon?.types ?? [];
   return !types.includes("Flying");
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }

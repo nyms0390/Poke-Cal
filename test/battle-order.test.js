@@ -1,11 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { compareMoveOrder } from "../src/engine/battle-order.js";
+import { compareMoveOrder, formatMovePriority } from "../src/engine/battle-order.js";
 import { finalSpeed } from "../src/engine/speed.js";
 
 const fastSide = { pokemon: { baseSpeed: 120 }, sp: { spe: 0 }, nature: "Hardy", stages: { spe: 0 } };
 const slowSide = { pokemon: { baseSpeed: 60 }, sp: { spe: 0 }, nature: "Hardy", stages: { spe: 0 } };
+
+test("formats move priority with an explicit positive sign", () => {
+  assert.equal(formatMovePriority(0), "0");
+  assert.equal(formatMovePriority(1), "+1");
+  assert.equal(formatMovePriority(-3), "-3");
+});
 
 test("compares selected moves by priority before Speed", () => {
   const result = compareMoveOrder({

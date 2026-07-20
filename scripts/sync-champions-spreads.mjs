@@ -1,6 +1,3 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
-
 import {
   SMOGON_STATS_URL,
   buildSmogonSpreads,
@@ -9,6 +6,7 @@ import {
   latestStatsMonth,
   mergeSmogonSpreads,
 } from "../src/data/smogon-data.js";
+import { argumentValue, isMainModule, readJson, writeJson } from "./lib/sync-utils.mjs";
 
 const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_CUTOFF = 1760;
@@ -58,17 +56,11 @@ export async function downloadSmogonChampionsSpreads({
 }
 
 export async function updatePublicData(options = {}) {
-  const pokemon = JSON.parse(
-    await readFile(new URL("pokemon.json", outputDirectory), "utf8"),
-  );
+  const pokemon = await readJson(outputDirectory, "pokemon");
   const usage = await downloadSmogonChampionsSpreads(options);
   const merged = mergeSmogonSpreads(pokemon, usage);
 
-  await mkdir(outputDirectory, { recursive: true });
-  await writeFile(
-    new URL("pokemon.json", outputDirectory),
-    `${JSON.stringify(merged, null, 2)}\n`,
-  );
+  await writeJson(outputDirectory, "pokemon", merged);
 
   return usage;
 }
@@ -85,19 +77,14 @@ async function fetchText(url) {
 
 function parseArguments(argv) {
   return {
-    month: valueAfter(argv, "--month") ?? "latest",
-    formats: valueAfter(argv, "--formats") ?? "auto",
-    cutoff: Number(valueAfter(argv, "--cutoff") ?? DEFAULT_CUTOFF),
-    top: Number(valueAfter(argv, "--top") ?? DEFAULT_TOP),
+    month: argumentValue(argv, "--month") ?? "latest",
+    formats: argumentValue(argv, "--formats") ?? "auto",
+    cutoff: Number(argumentValue(argv, "--cutoff") ?? DEFAULT_CUTOFF),
+    top: Number(argumentValue(argv, "--top") ?? DEFAULT_TOP),
   };
 }
 
-function valueAfter(argv, flag) {
-  const index = argv.indexOf(flag);
-  return index === -1 ? undefined : argv[index + 1];
-}
-
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMainModule(import.meta.url)) {
   try {
     const usage = await updatePublicData(parseArguments(process.argv.slice(2)));
     console.log(

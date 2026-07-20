@@ -2,6 +2,7 @@ import {
   filterMoves,
   formatMoveAccuracy,
   formatMovePower,
+  formatUsagePercent,
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
@@ -327,10 +328,6 @@ function commonBuildMoves(moves) {
   );
   row.append(label, list);
   return row;
-}
-
-function formatUsagePercent(value) {
-  return Number.isFinite(value) ? `${value.toFixed(1)}%` : "—";
 }
 
 function browserStorage() {

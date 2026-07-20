@@ -1,4 +1,5 @@
-import { extractLearnsetMoves, toId } from "./showdown-data.js";
+import { normalizeId } from "../identifiers.js";
+import { extractLearnsetMoves } from "./showdown-data.js";
 
 export const CHAMPIONS_MOD_BASE_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mods/champions";
@@ -21,7 +22,7 @@ export function applyChampionsData(data, mod) {
 
 function applyChampionsPokemon(pokemon, { formatsData = {}, learnsets = {} }) {
   return pokemon.map((entry) => {
-    const formatsEntry = formatsData[entry.id] ?? formatsData[toId(entry.baseSpecies)];
+    const formatsEntry = formatsData[entry.id] ?? formatsData[normalizeId(entry.baseSpecies)];
     const legal = isChampionsLegalFormatsEntry(formatsEntry);
     const championsMoves = extractLearnsetMoves(learnsets, entry.id, entry.baseSpecies);
     const champions = { ...entry.champions, legal };

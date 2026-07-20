@@ -1,6 +1,6 @@
-import { NATURES, natureMultiplier, natureOptionLabel } from "./natures.js";
+import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
-import { calculateStat, applyStage } from "./stats.js";
+import { calculateStat } from "./stats.js";
 import { createField } from "./field.js";
 import {
   moveEffect,
@@ -13,9 +13,6 @@ import {
 } from "./move-effects.js";
 import { applyHitCountOverride, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
-
-export { NATURES, natureMultiplier, natureOptionLabel };
-export { calculateStat, applyStage };
 
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
@@ -546,14 +543,6 @@ function hasSandstormSpDefenseBoost(pokemon, state, stat, field) {
   return types.includes("Rock");
 }
 
-export function koSummary({ minDamage, maxDamage, defenderHp, defenderCurrentHp = defenderHp }) {
-  if (minDamage >= defenderCurrentHp) return "Guaranteed 1HKO";
-  if (maxDamage >= defenderCurrentHp) return "Possible 1HKO";
-  if (minDamage * 2 >= defenderCurrentHp) return "Guaranteed 2HKO";
-  if (maxDamage * 2 >= defenderCurrentHp) return "Possible 2HKO";
-  return "3HKO+";
-}
-
 export function formatDamageResult(result) {
   if (!result.supported) return result.reason ?? "No direct damage";
   return `${result.minDamage}–${result.maxDamage} (${result.minPercent}–${result.maxPercent}%)`;
@@ -652,10 +641,6 @@ function attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttacke
 function hasScrappyBypass(moveType, defenderTypes, attackerState) {
   if (!["Normal", "Fighting"].includes(moveType) || !defenderTypes.includes("Ghost")) return false;
   return hasAnyAbility(attackerState, ["scrappy", "mindseye"]);
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function percent(value, total) {

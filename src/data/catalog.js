@@ -1,8 +1,6 @@
-export function normalizeId(value) {
-  return String(value ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
-}
+import { normalizeId } from "../identifiers.js";
+
+export { normalizeId };
 
 function normalizeSearchValue(value) {
   return String(value ?? "")
@@ -110,38 +108,12 @@ export function applyScopedUsage(entries, usageEntries = []) {
   });
 }
 
-export function formatChampionsUsage(entry) {
-  const count = championsUsageCount(entry);
-  const percent = entry?.champions?.usagePercent;
-  if (count < 0) return "—";
-  if (Number.isFinite(percent)) {
-    return `${percent.toFixed(1)}% · ${count.toLocaleString("en-US")} uses`;
-  }
-  return `${count.toLocaleString("en-US")} uses`;
-}
-
 function clearEntryUsage(entry) {
   if (!entry.champions) return entry;
   const champions = { ...entry.champions };
   delete champions.usageCount;
   delete champions.usagePercent;
   return { ...entry, champions };
-}
-
-export function mergeUsage(entries, usageEntries = []) {
-  const usageById = new Map(usageEntries.map((entry) => [normalizeId(entry.id), entry]));
-  return entries.map((entry) => {
-    const usage = usageById.get(normalizeId(entry.id)) ?? usageById.get(normalizeId(entry.name));
-    return usage ? { ...entry, usagePercent: usage.usagePercent } : entry;
-  });
-}
-
-export function sortByUsage(entries) {
-  return [...entries].sort((a, b) => {
-    const aUsage = Number.isFinite(a.usagePercent) ? a.usagePercent : -1;
-    const bUsage = Number.isFinite(b.usagePercent) ? b.usagePercent : -1;
-    return bUsage - aUsage || a.name.localeCompare(b.name);
-  });
 }
 
 export function usageForPokemon(usageStats, entry) {
@@ -180,11 +152,6 @@ export function formatMovePower(power) {
 
 export function formatMoveAccuracy(accuracy) {
   return accuracy === true ? "—" : String(accuracy ?? "—");
-}
-
-export function formatMovePriority(priority) {
-  const value = Number(priority ?? 0);
-  return value > 0 ? `+${value}` : String(value);
 }
 
 export function formatUsagePercent(usagePercent) {

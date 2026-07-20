@@ -1,5 +1,10 @@
-import { formatMovePriority } from "../data/catalog.js";
+import { normalizeId } from "../identifiers.js";
 import { finalSpeed } from "./speed.js";
+
+export function formatMovePriority(priority) {
+  const value = Number(priority ?? 0);
+  return value > 0 ? `+${value}` : String(value);
+}
 
 export function compareMoveOrder({ attacker, defender, attackerMove, defenderMove, field = {}, trickRoom = field.trickRoom ?? false }) {
   const attackerPriority = Number(attackerMove?.priority ?? 0);
@@ -58,10 +63,6 @@ function hasAbility(state, abilityId) {
 
 function hasWeatherSuppressingAbility(state) {
   return ["cloudnine", "airlock"].includes(normalizeId(state?.ability?.id ?? state?.ability?.name));
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function sideName(side) {

@@ -1,3 +1,5 @@
+import { normalizeId } from "../identifiers.js";
+
 const STAT_LABELS = {
   hp: "HP",
   atk: "Atk",
@@ -92,8 +94,4 @@ function fieldClauses({ attackerState, defenderState, field, result }) {
   if (attackerState.teraType) clauses.push(`Tera ${attackerState.teraType}`);
   if (defenderState.teraType) clauses.push(`Tera ${defenderState.teraType}`);
   return clauses;
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }

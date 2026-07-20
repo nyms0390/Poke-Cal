@@ -1,13 +1,12 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
-
 import { CHAMPIONS_MOD_BASE_URL, applyChampionsData } from "../src/data/champions-data.js";
+import { normalizeId } from "../src/identifiers.js";
 import {
   extractAbilities,
   extractCatalogEntries,
   extractLearnsetMoves,
   parseShowdownExport,
 } from "../src/data/showdown-data.js";
+import { isMainModule, writeJsonEntries } from "./lib/sync-utils.mjs";
 
 const SHOWDOWN_POKEDEX_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/pokedex.ts";
@@ -124,12 +123,7 @@ export async function downloadEverything(fetcher = fetchText) {
 }
 
 export async function writeEverything(data) {
-  await mkdir(outputDirectory, { recursive: true });
-  await Promise.all(
-    Object.entries(data).map(([name, entries]) =>
-      writeFile(new URL(`${name}.json`, outputDirectory), `${JSON.stringify(entries, null, 2)}\n`),
-    ),
-  );
+  await writeJsonEntries(outputDirectory, data);
 }
 
 function buildPokemon(pokedex, learnsets, aliasesByNumber) {
@@ -202,7 +196,7 @@ function parsePokeApiItemIds(csv) {
     const [idText, identifier] = parseCsvLine(line);
     const id = Number(idText);
     if (!Number.isInteger(id) || !identifier) continue;
-    ids.set(normalizePokeApiIdentifier(identifier), id);
+    ids.set(normalizeId(identifier), id);
   }
 
   return ids;
@@ -214,7 +208,7 @@ function attachNumberedAliases(entries, aliasesByNumber) {
 
 function attachIdentifierAliases(entries, idsByIdentifier, aliasesByNumber) {
   return entries.map((entry) => {
-    const pokeApiId = idsByIdentifier.get(normalizePokeApiIdentifier(entry.id));
+    const pokeApiId = idsByIdentifier.get(normalizeId(entry.id));
     return attachAliases(entry, aliasesByNumber.get(pokeApiId));
   });
 }
@@ -222,12 +216,6 @@ function attachIdentifierAliases(entries, idsByIdentifier, aliasesByNumber) {
 function attachAliases(entry, aliases = []) {
   const uniqueAliases = [...new Set(aliases)].filter((alias) => alias && alias !== entry.name);
   return uniqueAliases.length > 0 ? { ...entry, aliases: uniqueAliases } : entry;
-}
-
-function normalizePokeApiIdentifier(value) {
-  return String(value ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
 }
 
 function parseCsvLine(line) {
@@ -255,7 +243,7 @@ function parseCsvLine(line) {
   return fields;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMainModule(import.meta.url)) {
   const data = await downloadEverything();
   await writeEverything(data);
   console.log(

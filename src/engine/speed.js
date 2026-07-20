@@ -1,3 +1,4 @@
+import { normalizeId } from "../identifiers.js";
 import { calculateStat } from "./stats.js";
 
 const PARADOX_STATS = ["atk", "def", "spa", "spd", "spe"];
@@ -111,8 +112,4 @@ function hasItem(state, itemId) {
 function isSun(weather) {
   const weatherId = normalizeId(weather);
   return weatherId === "sunnyday" || weatherId === "desolateland";
-}
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }

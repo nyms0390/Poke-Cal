@@ -1,5 +1,5 @@
 import { formatNumber, localizedName, localizedTerm, tFor } from "./i18n.js";
-import { formatMovePriority } from "./data/catalog.js";
+import { formatMovePriority } from "./engine/battle-order.js";
 import { resultDescription } from "./engine/result-text.js";
 
 export function formatChampionsUsage(entry, locale = "en") {

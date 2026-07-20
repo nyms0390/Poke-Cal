@@ -10,15 +10,12 @@ import {
   formatUsagePercent,
   formatMoveAccuracy,
   formatMovePower,
-  formatMovePriority,
-  mergeUsage,
   moveEffect,
   normalizeId,
   resolveChampionsPokemonMoves,
   resolvePokemonAbilities,
   resolvePokemonItems,
   resolvePokemonMoves,
-  sortByUsage,
   usageForPokemon,
 } from "../src/data/catalog.js";
 
@@ -139,28 +136,7 @@ test("resolves items and merges usage by normalized id", () => {
   );
 });
 
-test("merges usage into catalog entries without dropping missing entries", () => {
-  const entries = [
-    { id: "static", name: "Static" },
-    { id: "lightningrod", name: "Lightning Rod" },
-  ];
-  const usageEntries = [{ id: "static", name: "Static", usagePercent: 72.5 }];
-
-  assert.deepEqual(mergeUsage(entries, usageEntries), [
-    { id: "static", name: "Static", usagePercent: 72.5 },
-    { id: "lightningrod", name: "Lightning Rod" },
-  ]);
-});
-
-test("sorts used entries before unused entries and formats usage", () => {
-  assert.deepEqual(
-    sortByUsage([
-      { id: "quickattack", usagePercent: 44.1 },
-      { id: "thunderbolt", usagePercent: 91.4 },
-      { id: "agility" },
-    ]).map(({ id }) => id),
-    ["thunderbolt", "quickattack", "agility"],
-  );
+test("formats usage percentages", () => {
   assert.equal(formatUsagePercent(88.234), "88.2%");
   assert.equal(formatUsagePercent(undefined), "—");
 });
@@ -177,15 +153,6 @@ test("applies scoped usage and clears stale global counts", () => {
   assert.equal(scoped[0].champions.usageCount, 7);
   assert.equal(scoped[0].champions.usagePercent, 70);
   assert.equal(scoped[1].champions.usageCount, undefined);
-});
-
-test("formats Champions usage rates when Limitless percent is available", async () => {
-  const { formatChampionsUsage } = await import("../src/data/catalog.js");
-
-  assert.equal(
-    formatChampionsUsage({ champions: { usageCount: 12, usagePercent: 34.56 } }),
-    "34.6% · 12 uses",
-  );
 });
 
 test("selects exact form usage before base species usage", () => {
@@ -250,9 +217,6 @@ test("formats move display values", () => {
   assert.equal(formatMovePower(90), "90");
   assert.equal(formatMoveAccuracy(true), "—");
   assert.equal(formatMoveAccuracy(85), "85");
-  assert.equal(formatMovePriority(0), "0");
-  assert.equal(formatMovePriority(1), "+1");
-  assert.equal(formatMovePriority(-3), "-3");
   assert.equal(moveEffect({ shortDesc: "Short.", desc: "Long." }), "Short.");
   assert.equal(moveEffect({ desc: "Long." }), "Long.");
   assert.equal(moveEffect({}), "—");

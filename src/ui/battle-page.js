@@ -1,19 +1,17 @@
 import {
-  formatMovePriority,
   filterMoves,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
-import { compareMoveOrder } from "../engine/battle-order.js";
+import { compareMoveOrder, formatMovePriority } from "../engine/battle-order.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import {
   calculateDamage,
-  calculateStat,
   formatDamageResult,
   hitCountRange,
-  NATURES,
-  natureOptionLabel,
 } from "../engine/damage.js";
+import { NATURES, natureOptionLabel } from "../engine/natures.js";
+import { calculateStat } from "../engine/stats.js";
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove, moveCondition, moveEffect } from "../engine/move-effects.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";

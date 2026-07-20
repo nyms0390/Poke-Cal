@@ -3,11 +3,7 @@ import assert from "node:assert/strict";
 
 import {
   calculateDamage,
-  calculateStat,
   formatDamageResult,
-  koSummary,
-  natureMultiplier,
-  natureOptionLabel,
   unsupportedMoveReason,
 } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
@@ -34,26 +30,6 @@ const neutralState = {
   ability: null,
   item: null,
 };
-
-test("calculates Champions-style HP and non-HP stats with nature and stages", () => {
-  assert.equal(calculateStat({ base: 35, stat: "hp", sp: 32 }), 142);
-  assert.equal(calculateStat({ base: 100, stat: "atk", sp: 32, nature: "Adamant" }), 167);
-  assert.equal(calculateStat({ base: 100, stat: "spa", sp: 32, nature: "Adamant" }), 136);
-  assert.equal(calculateStat({ base: 100, stat: "atk", sp: 32, stage: 1 }), 228);
-});
-
-test("maps all named natures to stat multipliers", () => {
-  assert.equal(natureMultiplier("Jolly", "spe"), 1.1);
-  assert.equal(natureMultiplier("Jolly", "spa"), 0.9);
-  assert.equal(natureMultiplier("Quirky", "atk"), 1);
-  assert.equal(natureMultiplier("Unknown", "atk"), 1);
-});
-
-test("formats nature dropdown labels with stat effects", () => {
-  assert.equal(natureOptionLabel("Adamant"), "Adamant (+Atk, -SpA)");
-  assert.equal(natureOptionLabel("Jolly"), "Jolly (+Spe, -SpA)");
-  assert.equal(natureOptionLabel("Hardy"), "Hardy");
-});
 
 test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges", () => {
   const thunderbolt = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
@@ -1850,7 +1826,7 @@ test("scales high-user-HP move power from the attacker's current HP", () => {
   assert.deepEqual([dragonEnergyHalfHp.minDamage, dragonEnergyHalfHp.maxDamage], [60, 72]);
 });
 
-test("uses current defender HP for KO labels while keeping damage percent at max HP", () => {
+test("uses current defender HP for KO calculations while keeping damage percent at max HP", () => {
   const thunderbolt = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
   const result = calculateDamage({
     attacker: pikachu,
@@ -1863,7 +1839,7 @@ test("uses current defender HP for KO labels while keeping damage percent at max
   assert.deepEqual([result.minPercent, result.maxPercent], [72.2, 87.3]);
   assert.equal(result.defenderHp, 119);
   assert.equal(result.defenderCurrentHp, 60);
-  assert.equal(koSummary(result), "Guaranteed 1HKO");
+  assert.equal(result.ko.text, "guaranteed OHKO");
 });
 
 test("applies Tera STAB and defender typing", () => {
@@ -3723,7 +3699,7 @@ test("ignores defender Defense stages for ignoreDefensive physical moves", () =>
   }
 });
 
-test("classifies unsupported moves and summarizes KOs", () => {
+test("classifies unsupported moves", () => {
   assert.match(unsupportedMoveReason({ category: "Status", basePower: 0 }), /Status/);
   assert.equal(unsupportedMoveReason({ id: "grassknot", category: "Special", basePower: 0 }), "");
   assert.equal(unsupportedMoveReason({ id: "lowkick", category: "Physical", basePower: 0 }), "");
@@ -3731,8 +3707,6 @@ test("classifies unsupported moves and summarizes KOs", () => {
   assert.equal(unsupportedMoveReason({ id: "psyshock", category: "Special", basePower: 80 }), "");
   assert.equal(unsupportedMoveReason({ id: "dragonrage", category: "Special", basePower: 0, damage: 40 }), "");
   assert.equal(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), "");
-  assert.equal(koSummary({ minDamage: 100, maxDamage: 100, defenderHp: 100 }), "Guaranteed 1HKO");
-  assert.equal(koSummary({ minDamage: 45, maxDamage: 60, defenderHp: 100 }), "Possible 2HKO");
 });
 
 test("supports P2-04 target-HP, itemless, and stat-boost-scaled powers", () => {

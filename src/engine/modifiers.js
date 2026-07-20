@@ -13,13 +13,10 @@
 // Solid Rock / Prism Armor). Every producer below explicitly gates on `attackerPerspective`
 // so a coincidentally-shared item/ability id on the other side can never double-fire.
 
+import { normalizeId } from "../identifiers.js";
 import { abilityTypeConversion, weatherBlockedByUmbrella } from "./move-effects.js";
 import { isGrounded } from "./field.js";
 import { paradoxBoost } from "./speed.js";
-
-function normalizeId(value) {
-  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
-}
 
 export function applyHitCountOverride(range, value) {
   if (value === "max") return { min: range.max, max: range.max };
