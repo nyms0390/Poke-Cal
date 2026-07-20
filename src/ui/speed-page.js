@@ -1,4 +1,5 @@
 import { normalizeId } from "../data/catalog.js";
+import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
 import { threatList } from "../data/threats.js";
@@ -49,6 +50,7 @@ const elements = {
 
 let catalogs = null;
 let user = null;
+const activeSetStore = createActiveSetStore(browserStorage());
 let popularOpponents = [];
 let manualOpponents = [];
 
@@ -121,7 +123,12 @@ async function initialize() {
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
-  seedUser(requested ?? popularOpponents[0]?.pokemon ?? catalogs.pokemon[0]);
+  const activeSet = activeSetStore.readSet();
+  const activePokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === activeSet?.pokemonId);
+  const initialPokemon = requested ?? activePokemon ?? popularOpponents[0]?.pokemon ?? catalogs.pokemon[0];
+  seedUser(initialPokemon, {
+    activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
+  });
 }
 
 function renderNatureOptions() {
@@ -144,17 +151,20 @@ function pokemonMatches(query) {
   });
 }
 
-function seedUser(pokemon) {
+function seedUser(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: catalogs.abilityLookup,
     moveLookup: catalogs.moveLookup,
     items: catalogs.items,
   });
+  const defaultSet = activeSetFromState(defaults);
+  const initialSet = activeSet ?? defaultSet;
+  activeSetStore.writeSet(initialSet);
   user = {
     pokemon,
-    nature: defaults.nature,
-    spe: defaults.sp.spe ?? 0,
+    nature: initialSet.nature || defaults.nature,
+    spe: initialSet.sp.spe ?? defaults.sp.spe ?? 0,
   };
   elements.nature.value = user.nature;
   elements.sp.value = String(user.spe);
@@ -197,6 +207,11 @@ function handleControl(event) {
 
 function render() {
   if (!user) return;
+  activeSetStore.writeSet(activeSetFromState({
+    pokemon: user.pokemon,
+    nature: user.nature,
+    sp: { spe: user.spe },
+  }, activeSetStore.readSet()));
   const mode = [...elements.mode].find(({ checked }) => checked)?.value ?? "battle";
   const battle = mode === "battle";
   for (const input of elements.battleOnly) input.disabled = !battle;
@@ -225,6 +240,14 @@ function render() {
   elements.rowCount.textContent = t("speed.tierCount", { count: rows.length });
   elements.axis.replaceChildren(...rows.map((row) => renderSpeedRow(row, breakpoints.get(row.speed))));
   applyDocumentTranslations();
+}
+
+function browserStorage() {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function selectedOpponents() {

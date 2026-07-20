@@ -6,6 +6,7 @@ import {
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
+import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
 import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
@@ -80,6 +81,7 @@ let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
 let catalogs = null;
+const activeSetStore = createActiveSetStore(browserStorage());
 
 initI18n();
 initialize();
@@ -89,7 +91,7 @@ onLocaleChange(() => {
   if (!selectedPokemon) return;
   renderFormOptions();
   renderFamilyStats();
-  selectForm(selectedPokemon);
+  selectForm(selectedPokemon, { syncActive: false });
 });
 
 async function initialize() {
@@ -106,8 +108,11 @@ async function initialize() {
   itemLookup = data.itemLookup;
   items = data.items;
   threats = threatList(pokemon, { count: 10, moveLookup });
-  selectPokemon(pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
+  const activeSet = activeSetStore.readSet();
+  const activePokemon = pokemon.find(({ id }) => id === activeSet?.pokemonId);
+  selectPokemon(activePokemon ?? pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
     syncSearch: false,
+    syncActive: !activePokemon,
   });
 }
 
@@ -212,7 +217,13 @@ function selectForm(entry, options = {}) {
   for (const card of elements.baseStats.querySelectorAll(".form-card")) {
     card.classList.toggle("active", card.dataset.formId === entry.id);
   }
+  if (options.syncActive !== false) persistActiveDefaults(entry);
   renderCatalog();
+}
+
+function persistActiveDefaults(entry) {
+  const defaults = championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items });
+  activeSetStore.writeSet(activeSetFromState(defaults));
 }
 
 function renderCatalog() {
@@ -320,6 +331,14 @@ function commonBuildMoves(moves) {
 
 function formatUsagePercent(value) {
   return Number.isFinite(value) ? `${value.toFixed(1)}%` : "—";
+}
+
+function browserStorage() {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function renderDefensiveMatchups() {

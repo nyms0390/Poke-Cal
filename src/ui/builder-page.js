@@ -4,6 +4,11 @@ import {
   resolveChampionsPokemonMoves,
   resolvePokemonAbilities,
 } from "../data/catalog.js";
+import {
+  activeSetFromState,
+  applyActiveSet,
+  createActiveSetStore,
+} from "../data/active-set.js";
 import { breakPoints, yourDamage } from "../data/break-points.js";
 import { bulkPointMatchups } from "../data/bulk-points.js";
 import { searchPokemon } from "../data/pokemon.js";
@@ -74,6 +79,7 @@ const elements = {
 
 let catalogs = null;
 let state = createBuilderState();
+const activeSetStore = createActiveSetStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
 const threatOverrides = new Map();
@@ -127,8 +133,13 @@ async function initialize() {
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
+  const activeSet = activeSetStore.readSet();
+  const activePokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === activeSet?.pokemonId);
   const defaultThreat = threatList(catalogs.pokemon, { count: 1, moveLookup: catalogs.moveLookup })[0];
-  seedPokemon(requested ?? defaultThreat?.pokemon ?? catalogs.pokemon[0]);
+  const initialPokemon = requested ?? activePokemon ?? defaultThreat?.pokemon ?? catalogs.pokemon[0];
+  seedPokemon(initialPokemon, {
+    activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
+  });
 }
 
 function initializeAnalysisTabs() {
@@ -193,7 +204,7 @@ function pokemonMatches(query) {
   });
 }
 
-function seedPokemon(pokemon) {
+function seedPokemon(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: catalogs.abilityLookup,
@@ -204,6 +215,15 @@ function seedPokemon(pokemon) {
     threatCount: state.threatCount,
     analysisTab: state.analysisTab,
   });
+  if (activeSet) {
+    state = {
+      ...state,
+      user: applyActiveSet(state.user, activeSet, {
+        abilityLookup: catalogs.abilityLookup,
+        itemLookup: catalogs.itemLookup,
+      }),
+    };
+  }
   renderPicks();
   render();
 }
@@ -294,6 +314,7 @@ function removeCustomThreat(id) {
 function render() {
   const user = state.user;
   if (!user) return;
+  activeSetStore.writeSet(activeSetFromState(user));
   const stats = finalStats(state);
   elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.nature.value = user.nature;
@@ -320,6 +341,14 @@ function render() {
   renderBulkPoints(threats);
   renderBreakPoints(threats);
   applyDocumentTranslations();
+}
+
+function browserStorage() {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function renderStats(user, stats) {

@@ -17,6 +17,11 @@ import {
 import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
 import { isOrderConditionalMove, moveCondition, moveEffect } from "../engine/move-effects.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
+import {
+  activeSetFromState,
+  applyActiveSet,
+  createActiveSetStore,
+} from "../data/active-set.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
@@ -131,6 +136,7 @@ const elements = {
 
 const SP_STATS = STAT_KEYS;
 const savedSetStore = createSavedSetStore(browserStorage());
+const activeSetStore = createActiveSetStore(browserStorage());
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
 const teamStore = createStorageStore(browserStorage(), {
   key: TEAM_STORAGE_KEY,
@@ -220,7 +226,11 @@ async function initialize() {
   const requestedLeft = pokemon.find(
     ({ id }) => normalizeDamageId(id) === normalizeDamageId(requestedLeftId),
   );
-  renderDamageShell({ requestedLeft });
+  const activeSet = activeSetStore.readSet();
+  const activePokemon = pokemon.find(
+    ({ id }) => normalizeDamageId(id) === normalizeDamageId(activeSet?.pokemonId),
+  );
+  renderDamageShell({ requestedLeft, activeSet: requestedLeft ? null : activeSet, activePokemon });
 }
 
 for (const control of [
@@ -286,7 +296,7 @@ for (const side of ["attacker", "defender"]) {
   });
 }
 
-function renderDamageShell({ requestedLeft } = {}) {
+function renderDamageShell({ requestedLeft, activeSet, activePokemon } = {}) {
   const natureOptions = Object.keys(NATURES).map((nature) =>
     optionElement(nature, getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature)),
   );
@@ -298,6 +308,7 @@ function renderDamageShell({ requestedLeft } = {}) {
 
   for (const side of ["attacker", "defender"]) {
     if (side === "attacker" && requestedLeft) seedDamageSide(side, requestedLeft);
+    else if (side === "attacker" && activePokemon) seedDamageSide(side, activePokemon, { activeSet });
     else if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
     else seedDamageSide(side, defaultPokemonForSide(side));
   }
@@ -353,7 +364,7 @@ function renderSideInputs(side) {
   elements[`${side}StatEditor`].replaceChildren();
 }
 
-function seedDamageSide(side, entry) {
+function seedDamageSide(side, entry, { activeSet = null } = {}) {
   if (!entry) return;
   const existingState = damageState[side];
   const defaults = championsDefaultsForPokemon(entry, {
@@ -364,10 +375,12 @@ function seedDamageSide(side, entry) {
 
   // createSideState gives the pure/default shape; the existing battle-condition controls for
   // this side are preserved rather than reset, same as before the battle-state.js extraction.
-  const state = createSideState(entry, defaults);
+  const defaultActiveSet = activeSetFromState(defaults);
+  let state = createSideState(entry, defaults);
+  if (activeSet) state = applyActiveSet(state, activeSet, { abilityLookup, itemLookup });
   state.speedMultiplier = existingState ? Number(elements[`${side}SpeedMultiplier`]?.value ?? 1) : 1;
   state.status = existingState ? elements[`${side}Status`]?.value ?? "" : "";
-  writeActiveTeamState(side, state);
+  writeActiveTeamState(side, state, { activeFallback: activeSet ?? defaultActiveSet });
   renderActiveTeamSlot(side);
   applyAbilityImpliedField(damageState[side].ability);
   applyAbilityImpliedStages();
@@ -397,6 +410,7 @@ function renderActiveTeamSlot(side) {
   hidePokemonSearchResults(side);
   renderSideSelects(side, defaults);
   syncSideInputs(side);
+  if (side === "attacker") persistActiveAttacker(state);
 }
 
 function renderTeamSlots(side) {
@@ -450,10 +464,11 @@ function clearTeamSlot(side, index) {
   renderDamage();
 }
 
-function writeActiveTeamState(side, state, { persist = true } = {}) {
+function writeActiveTeamState(side, state, { persist = true, activeFallback } = {}) {
   damageState[side] = state;
   teams = updateActiveTeamSlot(teams, side, state);
   if (persist) persistTeams();
+  if (side === "attacker") persistActiveAttacker(state, activeFallback);
 }
 
 function setSideControlsDisabled(side, disabled) {
@@ -479,6 +494,15 @@ function renderEmptySide(side) {
   elements[`${side}StatEditor`].replaceChildren();
   elements[`${side}MovePicks`].replaceChildren();
   hidePokemonSearchResults(side);
+  if (side === "attacker") activeSetStore.clearSet();
+}
+
+function persistActiveAttacker(state, fallback = activeSetStore.readSet()) {
+  if (!state?.pokemon) {
+    activeSetStore.clearSet();
+    return;
+  }
+  activeSetStore.writeSet(activeSetFromState(state, fallback));
 }
 
 function renderSideSelects(side, defaults) {
