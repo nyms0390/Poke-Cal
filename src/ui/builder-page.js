@@ -26,6 +26,7 @@ import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
+  applyThreatControl,
   createBuilderState,
   finalStats,
   normalizeThreatCount,
@@ -75,6 +76,8 @@ let catalogs = null;
 let state = createBuilderState();
 let moveComboboxCleanups = [];
 let customThreats = [];
+const threatOverrides = new Map();
+const expandedThreatIds = new Set();
 
 initI18n();
 initializeAnalysisTabs();
@@ -283,6 +286,8 @@ function addCustomThreat(pokemon) {
 function removeCustomThreat(id) {
   customThreats = customThreats.filter(({ pokemon }) =>
     normalizeId(pokemon.id) !== normalizeId(id));
+  threatOverrides.delete(normalizeId(id));
+  expandedThreatIds.delete(normalizeId(id));
   render();
 }
 
@@ -423,7 +428,8 @@ function selectedThreats() {
     items: catalogs.items,
     moveLookup: catalogs.moveLookup,
   });
-  return mergeThreatLists(popularThreats, customThreats);
+  return mergeThreatLists(popularThreats, customThreats).map((threat) =>
+    threatOverrides.get(normalizeId(threat.pokemon.id)) ?? threat);
 }
 
 function renderCustomThreats() {
@@ -581,19 +587,151 @@ function breakMovePanel(move, threat) {
 }
 
 function analysisCard(threat, movePanels) {
+  const threatId = normalizeId(threat.pokemon.id);
+  const expanded = expandedThreatIds.has(threatId);
   const card = document.createElement("article");
   card.className = "builder-analysis-card";
-  const heading = document.createElement("header");
+  card.classList.toggle("build-open", expanded);
+  const heading = document.createElement("button");
+  heading.type = "button";
   heading.className = "builder-analysis-heading";
+  heading.setAttribute("aria-expanded", String(expanded));
+  const meta = document.createElement("span");
+  meta.className = "builder-analysis-meta";
+  meta.append(
+    textSpan(t("builder.moveCount", { count: movePanels.length }), "builder-analysis-count"),
+    textSpan(t("builder.editBuild"), "builder-analysis-edit"),
+  );
   heading.append(
     pokemonLabel(threat.pokemon),
-    textSpan(t("builder.moveCount", { count: movePanels.length }), "builder-analysis-count"),
+    meta,
   );
+  let editor = expanded ? threatBuildEditor(threat) : null;
   const moves = document.createElement("div");
   moves.className = "builder-analysis-moves";
   moves.append(...movePanels);
-  card.append(heading, moves);
+  heading.addEventListener("click", () => {
+    const expanded = !expandedThreatIds.has(threatId);
+    if (expanded) expandedThreatIds.add(threatId);
+    else expandedThreatIds.delete(threatId);
+    card.classList.toggle("build-open", expanded);
+    heading.setAttribute("aria-expanded", String(expanded));
+    if (expanded && !editor) {
+      editor = threatBuildEditor(threat);
+      card.insertBefore(editor, moves);
+    }
+    if (editor) editor.hidden = !expanded;
+  });
+  card.append(heading, ...(editor ? [editor] : []), moves);
   return card;
+}
+
+function threatBuildEditor(threat) {
+  const editor = document.createElement("section");
+  editor.className = "builder-threat-build";
+  editor.setAttribute("aria-label", t("builder.threatBuild", { name: localizedName(threat.pokemon) }));
+
+  const picks = document.createElement("div");
+  picks.className = "builder-threat-build-picks";
+  picks.append(
+    threatSelect(t("label.nature"), Object.keys(NATURES).map((nature) => ({
+      value: nature,
+      label: getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+    })), threat.nature, (value) => updateThreatBuild(threat, { kind: "nature", value })),
+    threatSelect(t("label.ability"), [
+      { value: "", label: t("builder.noAbility") },
+      ...rankByUsage(
+        resolvePokemonAbilities(threat.pokemon, catalogs.abilityLookup),
+        threat.pokemon.champions?.usage?.abilities,
+      ).map((ability) => ({ value: ability.id, label: localizedName(ability) })),
+    ], threat.ability?.id ?? "", (value) => updateThreatBuild(threat, {
+      kind: "ability",
+      value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
+    })),
+    threatSelect(t("label.item"), [
+      { value: "", label: t("builder.noItem") },
+      ...rankByUsage(catalogs.items, threat.pokemon.champions?.usage?.items)
+        .map((item) => ({ value: item.id, label: localizedName(item) })),
+    ], threat.item?.id ?? "", (value) => updateThreatBuild(threat, {
+      kind: "item",
+      value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
+    })),
+    threatSelect(t("label.tera"), [
+      { value: "", label: t("builder.noTera") },
+      ...Object.keys(TYPE_EFFECTIVENESS)
+        .map((type) => ({ value: type, label: localizedTerm("type", type) })),
+    ], threat.teraType ?? "", (value) => updateThreatBuild(threat, { kind: "teraType", value })),
+  );
+
+  const spread = document.createElement("fieldset");
+  spread.className = "builder-threat-spread";
+  const spreadLegend = document.createElement("legend");
+  spreadLegend.textContent = "SP";
+  spread.append(spreadLegend, ...["hp", "atk", "def", "spa", "spd"].map((stat) => {
+    const group = stat === "atk" || stat === "spa" ? "offense" : "bulk";
+    const label = document.createElement("label");
+    label.textContent = localizedTerm("stat", STAT_LABELS[stat]);
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "0";
+    input.max = "32";
+    input.step = "1";
+    input.value = String(threat.spPresets?.[group]?.[stat] ?? 0);
+    input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
+    input.addEventListener("input", () => updateThreatBuild(
+      threat,
+      { kind: "sp", stat, value: input.value },
+      { renderPage: false },
+    ));
+    input.addEventListener("change", () => updateThreatBuild(threat, {
+      kind: "sp",
+      stat,
+      value: input.value,
+    }));
+    label.append(input);
+    return label;
+  }));
+
+  const moveOptions = rankByUsage(
+    resolveChampionsPokemonMoves(threat.pokemon, catalogs.moveLookup),
+    threat.pokemon.champions?.usage?.moves,
+  ).filter(({ category }) => category === "Physical" || category === "Special");
+  const moves = document.createElement("fieldset");
+  moves.className = "builder-threat-moves";
+  const movesLegend = document.createElement("legend");
+  movesLegend.textContent = t("builder.bulkMoves");
+  moves.append(movesLegend, ...threat.moves.slice(0, 2).map((move, index) =>
+    threatSelect(t("battle.moveNumber", { number: index + 1 }), moveOptions.map((option) => ({
+      value: option.id,
+      label: localizedName(option),
+    })), move.id, (value) => updateThreatBuild(threat, {
+      kind: "move",
+      index,
+      value: catalogs.moveLookup.get(normalizeId(value)) ?? move,
+    }))));
+
+  editor.append(picks, spread, moves);
+  return editor;
+}
+
+function threatSelect(labelText, options, selectedValue, onChange) {
+  const label = document.createElement("label");
+  label.textContent = labelText;
+  const select = document.createElement("select");
+  select.replaceChildren(...options.map(({ value, label: optionLabel }) =>
+    optionElement(value, optionLabel)));
+  select.value = selectedValue;
+  select.addEventListener("input", () => onChange(select.value));
+  label.append(select);
+  return label;
+}
+
+function updateThreatBuild(threat, control, { renderPage = true } = {}) {
+  const threatId = normalizeId(threat.pokemon.id);
+  const current = threatOverrides.get(threatId) ?? threat;
+  threatOverrides.set(threatId, applyThreatControl(current, control));
+  expandedThreatIds.add(threatId);
+  if (renderPage) render();
 }
 
 function analysisMovePanel({ move, damage, defensive = false, choices, loadChoices, emptyMessage }) {

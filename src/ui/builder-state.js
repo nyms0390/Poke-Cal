@@ -3,6 +3,13 @@ import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
 
 const ANALYSIS_TABS = ["bulk", "break"];
+const THREAT_SP_GROUPS = {
+  hp: "bulk",
+  atk: "offense",
+  def: "bulk",
+  spa: "offense",
+  spd: "bulk",
+};
 
 export function createBuilderState(
   pokemon,
@@ -33,6 +40,35 @@ export function normalizeThreatCount(value) {
   const count = Number(value);
   if (!Number.isFinite(count)) return 20;
   return Math.max(0, Math.min(50, Math.trunc(count)));
+}
+
+export function applyThreatControl(threat, { kind, stat, index, value }) {
+  if (!threat) return threat;
+  if (kind === "nature") return { ...threat, nature: value };
+  if (kind === "ability") return { ...threat, ability: value };
+  if (kind === "item") return { ...threat, item: value };
+  if (kind === "teraType") return { ...threat, teraType: value };
+  if (kind === "sp") {
+    const group = THREAT_SP_GROUPS[stat];
+    if (!group) return threat;
+    const number = Number(value);
+    const sp = Number.isFinite(number) ? Math.max(0, Math.min(32, Math.trunc(number))) : 0;
+    return {
+      ...threat,
+      spPresets: {
+        ...threat.spPresets,
+        [group]: { ...threat.spPresets?.[group], [stat]: sp },
+      },
+    };
+  }
+  if (kind === "move") {
+    if (!Number.isInteger(index) || index < 0 || index >= threat.moves.length) return threat;
+    return {
+      ...threat,
+      moves: threat.moves.map((move, moveIndex) => moveIndex === index ? value : move),
+    };
+  }
+  return threat;
 }
 
 export function finalStats(state) {

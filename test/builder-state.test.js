@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  applyThreatControl,
   createBuilderState,
   finalStats,
   normalizeThreatCount,
@@ -30,6 +31,22 @@ const usageDefaults = {
   ],
 };
 
+const threat = {
+  pokemon: { id: "charizard", name: "Charizard" },
+  nature: "Timid",
+  ability: { id: "blaze", name: "Blaze" },
+  item: { id: "lifeorb", name: "Life Orb" },
+  teraType: "",
+  moves: [
+    { id: "heatwave", name: "Heat Wave" },
+    { id: "airslash", name: "Air Slash" },
+  ],
+  spPresets: {
+    offense: { atk: 32, spa: 32 },
+    bulk: { hp: 2, def: 0, spd: 0 },
+  },
+};
+
 test("creates an empty builder with the default threat count", () => {
   assert.deepEqual(createBuilderState(), { user: null, threatCount: 20, analysisTab: "bulk" });
 });
@@ -48,6 +65,37 @@ test("normalizes an editable threat count to a whole number from zero through fi
   assert.equal(normalizeThreatCount(80), 50);
   assert.equal(normalizeThreatCount(""), 20);
   assert.equal(normalizeThreatCount("not a number"), 20);
+});
+
+test("applies editable threat build controls immutably", () => {
+  const ability = { id: "solarpower", name: "Solar Power" };
+  const item = { id: "choicespecs", name: "Choice Specs" };
+  const move = { id: "overheat", name: "Overheat" };
+
+  let edited = applyThreatControl(threat, { kind: "nature", value: "Modest" });
+  edited = applyThreatControl(edited, { kind: "ability", value: ability });
+  edited = applyThreatControl(edited, { kind: "item", value: item });
+  edited = applyThreatControl(edited, { kind: "teraType", value: "Fire" });
+  edited = applyThreatControl(edited, { kind: "sp", stat: "hp", value: "80" });
+  edited = applyThreatControl(edited, { kind: "sp", stat: "spa", value: "18.9" });
+  edited = applyThreatControl(edited, { kind: "move", index: 1, value: move });
+
+  assert.equal(edited.nature, "Modest");
+  assert.equal(edited.ability, ability);
+  assert.equal(edited.item, item);
+  assert.equal(edited.teraType, "Fire");
+  assert.deepEqual(edited.spPresets.bulk, { hp: 32, def: 0, spd: 0 });
+  assert.deepEqual(edited.spPresets.offense, { atk: 32, spa: 18 });
+  assert.deepEqual(edited.moves, [threat.moves[0], move]);
+  assert.equal(threat.nature, "Timid");
+  assert.deepEqual(threat.spPresets.bulk, { hp: 2, def: 0, spd: 0 });
+  assert.equal(threat.moves[1].id, "airslash");
+});
+
+test("ignores unsupported threat build controls and stat keys", () => {
+  assert.equal(applyThreatControl(threat, { kind: "unknown", value: true }), threat);
+  assert.equal(applyThreatControl(threat, { kind: "sp", stat: "spe", value: 32 }), threat);
+  assert.equal(applyThreatControl(threat, { kind: "move", index: 8, value: threat.moves[0] }), threat);
 });
 
 test("creates one canonical side state without activating the usage-backed Tera type", () => {
