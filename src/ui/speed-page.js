@@ -314,9 +314,7 @@ function renderSpeedRow(row, breakpoint) {
     const dot = document.createElement("span");
     dot.className = `speed-preset-dot speed-preset-${entry.presetKey}`;
     dot.setAttribute("aria-hidden", "true");
-    const presetLabel = document.createElement("span");
-    presetLabel.textContent = localizedTerm("speedPreset", entry.presetLabel);
-    preset.append(dot, presetLabel);
+    preset.append(dot);
     chip.append(label, preset);
     pokemon.append(chip);
   }

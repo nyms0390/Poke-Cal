@@ -157,3 +157,13 @@ test("speed tier table combines each Pokémon with its set and omits the stage c
   assert.doesNotMatch(header, />Preset</);
   assert.doesNotMatch(header, />Stage</);
 });
+
+test("speed tier colors keep their labels in the preset legend, not each table chip", () => {
+  const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
+
+  for (const label of ["Max", "Fast", "Neutral", "Slow"]) {
+    assert.match(html, new RegExp(`speed-preset-dot[^>]*><\\/span>${label}<\\/label>`));
+  }
+  assert.doesNotMatch(source, /presetLabel\.textContent/);
+});
