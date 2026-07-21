@@ -45,6 +45,28 @@ test("builds deterministic top-usage threats from Champions defaults", () => {
   assert.deepEqual(threats[0].spPresets.bulk, { hp: 2, def: 0, spd: 0 });
 });
 
+test("uses the most common spread for breakpoint bulk and keeps the fallback without spreads", () => {
+  const withSpreads = {
+    ...fixtureCatalog[0],
+    champions: {
+      ...fixtureCatalog[0].champions,
+      usage: {
+        ...fixtureCatalog[0].champions.usage,
+        spreads: [
+          { name: "Calm:32/0/0/0/24/4", usagePercent: 60 },
+          { name: "Bold:20/0/28/0/12/4", usagePercent: 40 },
+        ],
+      },
+    },
+  };
+
+  const commonBuild = threatForPokemon(withSpreads, { moveLookup });
+  const fallback = threatForPokemon(fixtureCatalog[0], { moveLookup });
+
+  assert.deepEqual(commonBuild.spPresets.bulk, { hp: 32, def: 0, spd: 24 });
+  assert.deepEqual(fallback.spPresets.bulk, { hp: 2, def: 0, spd: 0 });
+});
+
 test("adds Mega forms alongside top-usage builder threats", () => {
   const charizard = {
     ...pokemonFixture({ id: "charizard", name: "Charizard", usagePercent: 20, nature: "Timid" }),

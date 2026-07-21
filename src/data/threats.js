@@ -117,7 +117,9 @@ export function threatForPokemon(
     moves: threatMoves(usage?.moves?.length ? usage.moves : defaults.moves, moveLookup),
     spPresets: {
       offense: { atk: 32, spa: 32 },
-      bulk: { hp: 2, def: 0, spd: 0 },
+      bulk: defaults.spreadName
+        ? { hp: defaults.sp.hp, def: defaults.sp.def, spd: defaults.sp.spd }
+        : { hp: 2, def: 0, spd: 0 },
       speed: speedPresets({
         baseSpe: pokemon.baseStats?.spe ?? pokemon.baseSpeed,
         nature,
