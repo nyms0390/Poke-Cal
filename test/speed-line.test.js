@@ -177,6 +177,33 @@ test("selects popular opponents in ten-Pokémon steps and preserves manual addit
   assert.deepEqual(manual, [{ pokemon: pokemon("manual", "Manual", 75), manual: true }]);
 });
 
+test("excludes the selected user from popular, Mega-family, and manual opponents", () => {
+  const selected = { ...pokemon("popular-1", "Popular 1", 100), baseSpecies: "Popular 1" };
+  const mega = { ...pokemon("popular-1-mega", "Popular 1-Mega", 130), baseSpecies: "Popular 1" };
+  const popular = [
+    { pokemon: selected },
+    ...Array.from({ length: 9 }, (_, index) => ({
+      pokemon: pokemon(`popular-${index + 2}`, `Popular ${index + 2}`, 99 - index),
+    })),
+  ];
+  const manual = [
+    { pokemon: selected, manual: true },
+    { pokemon: mega, manual: true },
+  ];
+
+  const basePool = popularOpponentPool(popular, manual, 10, [selected, mega], {
+    excludePokemonId: selected.id,
+  });
+  const megaPool = popularOpponentPool(popular, manual, 10, [selected, mega], {
+    excludePokemonId: mega.id,
+  });
+
+  assert.equal(basePool.some(({ pokemon: entry }) => entry.id === selected.id), false);
+  assert.equal(basePool.filter(({ pokemon: entry }) => entry.id === mega.id).length, 1);
+  assert.equal(megaPool.some(({ pokemon: entry }) => entry.id === mega.id), false);
+  assert.equal(megaPool.filter(({ pokemon: entry }) => entry.id === selected.id).length, 1);
+});
+
 test("adds Mega forms for popular Pokémon without consuming popularity slots", () => {
   const charizard = { ...pokemon("charizard", "Charizard", 100), baseSpecies: "Charizard" };
   const megaX = { ...pokemon("charizardmegax", "Charizard-Mega-X", 130), baseSpecies: "Charizard" };

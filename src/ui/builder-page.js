@@ -48,6 +48,7 @@ import {
   searchResultButton,
   STAT_LABELS,
 } from "./components.js";
+import { createLiveUpdater } from "./live-update.js";
 
 const elements = {
   source: document.querySelector("#builder-source"),
@@ -83,7 +84,9 @@ const activeSetStore = createActiveSetStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
 const threatOverrides = new Map();
-const expandedThreatIds = new Set();
+const expandedCards = new Set();
+const openAnalysisPanels = new Set();
+const updatePage = createLiveUpdater(render);
 
 initI18n();
 initializeAnalysisTabs();
@@ -151,11 +154,9 @@ function initializeAnalysisTabs() {
 }
 
 function activateAnalysisTab(analysisTab, { focus = false } = {}) {
-  state = selectBuilderAnalysis(state, analysisTab);
-  renderAnalysisTabs();
-  if (focus) {
-    elements.analysisTabs.find((tab) => tab.dataset.builderAnalysis === state.analysisTab)?.focus();
-  }
+  updatePage(() => {
+    state = selectBuilderAnalysis(state, analysisTab);
+  }, { focusAnalysisTab: focus });
 }
 
 function handleAnalysisTabKeydown(event) {
@@ -211,21 +212,21 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
     moveLookup: catalogs.moveLookup,
     items: catalogs.items,
   });
-  state = createBuilderState(pokemon, defaults, {
-    threatCount: state.threatCount,
-    analysisTab: state.analysisTab,
-  });
-  if (activeSet) {
-    state = {
-      ...state,
-      user: applyActiveSet(state.user, activeSet, {
-        abilityLookup: catalogs.abilityLookup,
-        itemLookup: catalogs.itemLookup,
-      }),
-    };
-  }
-  renderPicks();
-  render();
+  updatePage(() => {
+    state = createBuilderState(pokemon, defaults, {
+      threatCount: state.threatCount,
+      analysisTab: state.analysisTab,
+    });
+    if (activeSet) {
+      state = {
+        ...state,
+        user: applyActiveSet(state.user, activeSet, {
+          abilityLookup: catalogs.abilityLookup,
+          itemLookup: catalogs.itemLookup,
+        }),
+      };
+    }
+  }, { refreshPicks: true });
 }
 
 function renderPicks() {
@@ -255,65 +256,74 @@ function renderPicks() {
 function handlePick(event) {
   if (!state.user) return;
   const { id, value } = event.target;
-  if (id === "builder-nature") state = { ...state, user: applyControl(state.user, { kind: "nature", value }) };
-  if (id === "builder-ability") {
-    state = { ...state, user: applyControl(state.user, {
-      kind: "ability",
-      value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
-    }) };
-  }
-  if (id === "builder-item") {
-    state = { ...state, user: applyControl(state.user, {
-      kind: "item",
-      value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
-    }) };
-  }
-  if (id === "builder-tera") state = { ...state, user: { ...state.user, teraType: value } };
-  render();
+  updatePage(() => {
+    if (id === "builder-nature") state = { ...state, user: applyControl(state.user, { kind: "nature", value }) };
+    if (id === "builder-ability") {
+      state = { ...state, user: applyControl(state.user, {
+        kind: "ability",
+        value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
+      }) };
+    }
+    if (id === "builder-item") {
+      state = { ...state, user: applyControl(state.user, {
+        kind: "item",
+        value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
+      }) };
+    }
+    if (id === "builder-tera") state = { ...state, user: { ...state.user, teraType: value } };
+  });
 }
 
 function handleSpInput(event) {
   if (event.target.dataset.kind !== "builder-sp" || !state.user) return;
   const stat = event.target.dataset.stat;
-  state = { ...state, user: applyControl(state.user, { kind: "sp", stat, value: event.target.value }) };
+  updatePage(() => {
+    state = { ...state, user: applyControl(state.user, { kind: "sp", stat, value: event.target.value }) };
+  });
   event.target.value = String(state.user.sp[stat]);
-  render();
 }
 
 function handleThreatCount(event) {
   if (event.type === "input" && event.target.value.trim() === "") return;
   const threatCount = normalizeThreatCount(event.target.value);
-  state = { ...state, threatCount };
+  updatePage(() => {
+    state = { ...state, threatCount };
+  });
   event.target.value = String(threatCount);
-  render();
 }
 
 function addCustomThreat(pokemon) {
   if (!pokemon) return;
   const alreadyCustom = customThreats.some(({ pokemon: entry }) =>
     normalizeId(entry.id) === normalizeId(pokemon.id));
-  if (!alreadyCustom) {
-    customThreats = [...customThreats, threatForPokemon(pokemon, {
-      abilityLookup: catalogs.abilityLookup,
-      items: catalogs.items,
-      moveLookup: catalogs.moveLookup,
-    })];
-  }
-  elements.threatSearch.value = "";
-  render();
+  updatePage(() => {
+    if (!alreadyCustom) {
+      customThreats = [...customThreats, threatForPokemon(pokemon, {
+        abilityLookup: catalogs.abilityLookup,
+        items: catalogs.items,
+        moveLookup: catalogs.moveLookup,
+      })];
+    }
+    elements.threatSearch.value = "";
+  });
 }
 
 function removeCustomThreat(id) {
-  customThreats = customThreats.filter(({ pokemon }) =>
-    normalizeId(pokemon.id) !== normalizeId(id));
-  threatOverrides.delete(normalizeId(id));
-  expandedThreatIds.delete(normalizeId(id));
-  render();
+  updatePage(() => {
+    const threatId = normalizeId(id);
+    customThreats = customThreats.filter(({ pokemon }) =>
+      normalizeId(pokemon.id) !== threatId);
+    threatOverrides.delete(threatId);
+    deletePanelKeysForPokemon(expandedCards, threatId);
+    deletePanelKeysForPokemon(openAnalysisPanels, threatId);
+  });
 }
 
-function render() {
+function render({ refreshPicks = false, refreshMoves = false, focusKey = "", focusAnalysisTab = false } = {}) {
   const user = state.user;
   if (!user) return;
+  if (refreshPicks) renderPicks();
+  else if (refreshMoves) renderMovePicks();
   activeSetStore.writeSet(activeSetFromState(user));
   const stats = finalStats(state);
   elements.pokemonSearch.value = localizedName(user.pokemon);
@@ -341,6 +351,10 @@ function render() {
   renderBulkPoints(threats);
   renderBreakPoints(threats);
   applyDocumentTranslations();
+  restoreLiveFocus(focusKey);
+  if (focusAnalysisTab) {
+    elements.analysisTabs.find((tab) => tab.dataset.builderAnalysis === state.analysisTab)?.focus();
+  }
 }
 
 function browserStorage() {
@@ -421,9 +435,9 @@ function renderMovePicks() {
       resultsEl: results,
       getMatches: (query) => filterMoves(moves, { query }).slice(0, 12),
       onSelect: (move) => {
-        state = { ...state, user: applyControl(state.user, { kind: "move", index, value: move.id }) };
-        renderMovePicks();
-        render();
+        updatePage(() => {
+          state = { ...state, user: applyControl(state.user, { kind: "move", index, value: move.id }) };
+        }, { refreshMoves: true });
       },
       renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
         preventBlur: true,
@@ -488,26 +502,37 @@ function renderBulkPoints(threats) {
     ...(matchups.length === 0
       ? [emptyText(t("builder.noThreatMoves"))]
       : [
-          ...bulkThreatCards(primary),
+          ...bulkThreatCards(primary, "primary"),
           ...(detail.length > 0 ? [bulkDetailDisclosure(detail)] : []),
         ]),
   );
 }
 
-function bulkThreatCards(matchups) {
+function bulkThreatCards(matchups, section) {
   const groups = new Map();
   for (const matchup of matchups) {
     const id = normalizeId(matchup.scenario.threat.pokemon.id);
     if (!groups.has(id)) groups.set(id, { threat: matchup.scenario.threat, matchups: [] });
     groups.get(id).matchups.push(matchup);
   }
-  return [...groups.values()].map(({ threat, matchups: threatMatchups }) =>
-    analysisCard(threat, threatMatchups.map(bulkMovePanel)));
+  return [...groups.values()].map(({ threat, matchups: threatMatchups }) => {
+    const threatId = normalizeId(threat.pokemon.id);
+    const cardKey = `bulk:${section}:${threatId}`;
+    return analysisCard(threat, threatMatchups.map((matchup) =>
+      bulkMovePanel(matchup, bulkPanelKey(matchup))), cardKey);
+  });
+}
+
+function bulkPanelKey({ scenario }) {
+  return `bulk:${normalizeId(scenario.threat.pokemon.id)}:${normalizeId(scenario.move.id)}`;
 }
 
 function bulkDetailDisclosure(matchups) {
+  const panelKey = "bulk:more-detail";
   const details = document.createElement("details");
   details.className = "builder-more-detail";
+  details.open = openAnalysisPanels.has(panelKey) ||
+    matchups.some((matchup) => openAnalysisPanels.has(bulkPanelKey(matchup)));
   const summary = document.createElement("summary");
   summary.append(
     textSpan(t("builder.moreDetail"), "builder-more-detail-title"),
@@ -515,15 +540,17 @@ function bulkDetailDisclosure(matchups) {
   );
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...bulkThreatCards(matchups));
+  cards.append(...bulkThreatCards(matchups, "detail"));
+  details.addEventListener("toggle", () => setPanelOpen(panelKey, details.open));
   details.append(summary, cards);
   return details;
 }
 
-function bulkMovePanel({ scenario, damage, points }) {
+function bulkMovePanel({ scenario, damage, points }, panelKey) {
   const defenseStat = scenario.move.overrideDefensiveStat ??
     (scenario.move.category === "Physical" ? "def" : "spd");
   return analysisMovePanel({
+    panelKey,
     move: scenario.move,
     damage,
     defensive: true,
@@ -538,18 +565,19 @@ function bulkMovePanel({ scenario, damage, points }) {
       toKoText: point.koText,
       damageText: t("builder.maxDamage", { value: point.maxPct }),
       onSelect: () => {
-        state = {
-          ...state,
-          user: {
-            ...state.user,
-            sp: {
-              ...state.user.sp,
-              hp: point.hpSp,
-              [defenseStat]: point.defSp,
+        updatePage(() => {
+          state = {
+            ...state,
+            user: {
+              ...state.user,
+              sp: {
+                ...state.user.sp,
+                hp: point.hpSp,
+                [defenseStat]: point.defSp,
+              },
             },
-          },
-        };
-        render();
+          };
+        });
       },
     })),
   });
@@ -569,15 +597,20 @@ function renderBreakPoints(threats) {
 
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...threats.map((threat) =>
-    analysisCard(threat, moves.map((move) => breakMovePanel(move, threat)))));
+  cards.append(...threats.map((threat) => {
+    const threatId = normalizeId(threat.pokemon.id);
+    const cardKey = `break:${threatId}`;
+    return analysisCard(threat, moves.map((move, index) =>
+      breakMovePanel(move, threat, `${cardKey}:${normalizeId(move.id)}:${index}`)), cardKey);
+  }));
   elements.breakPoints.replaceChildren(cards);
 }
 
-function breakMovePanel(move, threat) {
+function breakMovePanel(move, threat, panelKey) {
   const damage = yourDamage(state.user, move, { threat });
   const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
   return analysisMovePanel({
+    panelKey,
     move,
     damage,
     emptyMessage: t("builder.noHigherKo"),
@@ -600,26 +633,27 @@ function breakMovePanel(move, threat) {
         toKoText: point.achieves,
         damageText: t("builder.damage", { min: point.minPct, max: point.maxPct }),
         onSelect: () => {
-          state = {
-            ...state,
-            user: {
-              ...state.user,
-              nature,
-              sp: { ...state.user.sp, [attackStat]: point.sp },
-            },
-          };
-          render();
+          updatePage(() => {
+            state = {
+              ...state,
+              user: {
+                ...state.user,
+                nature,
+                sp: { ...state.user.sp, [attackStat]: point.sp },
+              },
+            };
+          });
         },
       });
     }),
   });
 }
 
-function analysisCard(threat, movePanels) {
-  const threatId = normalizeId(threat.pokemon.id);
-  const expanded = expandedThreatIds.has(threatId);
+function analysisCard(threat, movePanels, cardKey) {
+  const expanded = expandedCards.has(cardKey);
   const card = document.createElement("article");
   card.className = "builder-analysis-card";
+  card.dataset.analysisCardKey = cardKey;
   card.classList.toggle("build-open", expanded);
   const heading = document.createElement("button");
   heading.type = "button";
@@ -635,27 +669,21 @@ function analysisCard(threat, movePanels) {
     pokemonLabel(threat.pokemon),
     meta,
   );
-  let editor = expanded ? threatBuildEditor(threat) : null;
+  const editor = expanded ? threatBuildEditor(threat, cardKey) : null;
   const moves = document.createElement("div");
   moves.className = "builder-analysis-moves";
   moves.append(...movePanels);
   heading.addEventListener("click", () => {
-    const expanded = !expandedThreatIds.has(threatId);
-    if (expanded) expandedThreatIds.add(threatId);
-    else expandedThreatIds.delete(threatId);
-    card.classList.toggle("build-open", expanded);
-    heading.setAttribute("aria-expanded", String(expanded));
-    if (expanded && !editor) {
-      editor = threatBuildEditor(threat);
-      card.insertBefore(editor, moves);
-    }
-    if (editor) editor.hidden = !expanded;
+    updatePage(() => {
+      if (expandedCards.has(cardKey)) expandedCards.delete(cardKey);
+      else expandedCards.add(cardKey);
+    });
   });
   card.append(heading, ...(editor ? [editor] : []), moves);
   return card;
 }
 
-function threatBuildEditor(threat) {
+function threatBuildEditor(threat, cardKey) {
   const editor = document.createElement("section");
   editor.className = "builder-threat-build";
   editor.setAttribute("aria-label", t("builder.threatBuild", { name: localizedName(threat.pokemon) }));
@@ -666,30 +694,46 @@ function threatBuildEditor(threat) {
     threatSelect(t("label.nature"), Object.keys(NATURES).map((nature) => ({
       value: nature,
       label: getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
-    })), threat.nature, (value) => updateThreatBuild(threat, { kind: "nature", value })),
+    })), threat.nature, (value, focusKey) => updateThreatBuild(
+      threat,
+      { kind: "nature", value },
+      { cardKey, focusKey },
+    ), `${cardKey}:nature`),
     threatSelect(t("label.ability"), [
       { value: "", label: t("builder.noAbility") },
       ...rankByUsage(
         resolvePokemonAbilities(threat.pokemon, catalogs.abilityLookup),
         threat.pokemon.champions?.usage?.abilities,
       ).map((ability) => ({ value: ability.id, label: localizedName(ability) })),
-    ], threat.ability?.id ?? "", (value) => updateThreatBuild(threat, {
-      kind: "ability",
-      value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
-    })),
+    ], threat.ability?.id ?? "", (value, focusKey) => updateThreatBuild(
+      threat,
+      {
+        kind: "ability",
+        value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
+      },
+      { cardKey, focusKey },
+    ), `${cardKey}:ability`),
     threatSelect(t("label.item"), [
       { value: "", label: t("builder.noItem") },
       ...rankByUsage(catalogs.items, threat.pokemon.champions?.usage?.items)
         .map((item) => ({ value: item.id, label: localizedName(item) })),
-    ], threat.item?.id ?? "", (value) => updateThreatBuild(threat, {
-      kind: "item",
-      value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
-    })),
+    ], threat.item?.id ?? "", (value, focusKey) => updateThreatBuild(
+      threat,
+      {
+        kind: "item",
+        value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
+      },
+      { cardKey, focusKey },
+    ), `${cardKey}:item`),
     threatSelect(t("label.tera"), [
       { value: "", label: t("builder.noTera") },
       ...Object.keys(TYPE_EFFECTIVENESS)
         .map((type) => ({ value: type, label: localizedTerm("type", type) })),
-    ], threat.teraType ?? "", (value) => updateThreatBuild(threat, { kind: "teraType", value })),
+    ], threat.teraType ?? "", (value, focusKey) => updateThreatBuild(
+      threat,
+      { kind: "teraType", value },
+      { cardKey, focusKey },
+    ), `${cardKey}:tera`),
   );
 
   const spread = document.createElement("fieldset");
@@ -706,17 +750,14 @@ function threatBuildEditor(threat) {
     input.max = "32";
     input.step = "1";
     input.value = String(threat.spPresets?.[group]?.[stat] ?? 0);
+    const focusKey = `${cardKey}:sp:${stat}`;
+    input.dataset.liveKey = focusKey;
     input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
     input.addEventListener("input", () => updateThreatBuild(
       threat,
       { kind: "sp", stat, value: input.value },
-      { renderPage: false },
+      { cardKey, focusKey },
     ));
-    input.addEventListener("change", () => updateThreatBuild(threat, {
-      kind: "sp",
-      stat,
-      value: input.value,
-    }));
     label.append(input);
     return label;
   }));
@@ -729,44 +770,53 @@ function threatBuildEditor(threat) {
   moves.className = "builder-threat-moves";
   const movesLegend = document.createElement("legend");
   movesLegend.textContent = t("builder.bulkMoves");
-  moves.append(movesLegend, ...threat.moves.slice(0, 2).map((move, index) =>
-    threatSelect(t("battle.moveNumber", { number: index + 1 }), moveOptions.map((option) => ({
+  moves.append(movesLegend, ...threat.moves.slice(0, 2).map((move, index) => {
+    const focusKey = `${cardKey}:move:${index}`;
+    return threatSelect(t("battle.moveNumber", { number: index + 1 }), moveOptions.map((option) => ({
       value: option.id,
       label: localizedName(option),
-    })), move.id, (value) => updateThreatBuild(threat, {
-      kind: "move",
-      index,
-      value: catalogs.moveLookup.get(normalizeId(value)) ?? move,
-    }))));
+    })), move.id, (value, selectedFocusKey) => updateThreatBuild(
+      threat,
+      {
+        kind: "move",
+        index,
+        value: catalogs.moveLookup.get(normalizeId(value)) ?? move,
+      },
+      { cardKey, focusKey: selectedFocusKey },
+    ), focusKey);
+  }));
 
   editor.append(picks, spread, moves);
   return editor;
 }
 
-function threatSelect(labelText, options, selectedValue, onChange) {
+function threatSelect(labelText, options, selectedValue, onChange, focusKey) {
   const label = document.createElement("label");
   label.textContent = labelText;
   const select = document.createElement("select");
   select.replaceChildren(...options.map(({ value, label: optionLabel }) =>
     optionElement(value, optionLabel)));
   select.value = selectedValue;
-  select.addEventListener("input", () => onChange(select.value));
+  select.dataset.liveKey = focusKey;
+  select.addEventListener("input", () => onChange(select.value, focusKey));
   label.append(select);
   return label;
 }
 
-function updateThreatBuild(threat, control, { renderPage = true } = {}) {
-  const threatId = normalizeId(threat.pokemon.id);
-  const current = threatOverrides.get(threatId) ?? threat;
-  threatOverrides.set(threatId, applyThreatControl(current, control));
-  expandedThreatIds.add(threatId);
-  if (renderPage) render();
+function updateThreatBuild(threat, control, { cardKey, focusKey }) {
+  updatePage(() => {
+    const threatId = normalizeId(threat.pokemon.id);
+    const current = threatOverrides.get(threatId) ?? threat;
+    threatOverrides.set(threatId, applyThreatControl(current, control));
+    expandedCards.add(cardKey);
+  }, { focusKey });
 }
 
-function analysisMovePanel({ move, damage, defensive = false, choices, loadChoices, emptyMessage }) {
+function analysisMovePanel({ panelKey, move, damage, defensive = false, choices, loadChoices, emptyMessage }) {
   const collapsible = typeof loadChoices === "function";
   const panel = document.createElement(collapsible ? "details" : "section");
   panel.className = "builder-analysis-move";
+  if (panelKey) panel.dataset.analysisPanelKey = panelKey;
   const heading = document.createElement("div");
   heading.className = "builder-analysis-move-heading";
   const name = document.createElement("strong");
@@ -790,16 +840,39 @@ function analysisMovePanel({ move, damage, defensive = false, choices, loadChoic
   summary.className = "builder-analysis-move-summary";
   const prompt = textSpan(t("builder.viewThresholds"), "builder-spread-prompt");
   summary.append(heading, range, prompt);
-  let loaded = false;
-  panel.addEventListener("toggle", () => {
-    if (!panel.open || loaded) return;
+  panel.open = openAnalysisPanels.has(panelKey);
+  if (panel.open) {
     const loadedChoices = loadChoices();
     renderSpreadChoices(list, loadedChoices, emptyMessage);
     prompt.textContent = t("builder.thresholdCount", { count: loadedChoices.length });
-    loaded = true;
+  }
+  panel.addEventListener("toggle", () => {
+    setPanelOpen(panelKey, panel.open);
   });
   panel.append(summary, list);
   return panel;
+}
+
+function setPanelOpen(panelKey, open) {
+  if (!panelKey || openAnalysisPanels.has(panelKey) === open) return;
+  updatePage(() => {
+    if (open) openAnalysisPanels.add(panelKey);
+    else openAnalysisPanels.delete(panelKey);
+  });
+}
+
+function restoreLiveFocus(focusKey) {
+  if (!focusKey) return;
+  const panel = state.analysisTab === "bulk" ? elements.bulkPanel : elements.breakPanel;
+  const control = [...panel.querySelectorAll("[data-live-key]")]
+    .find(({ dataset }) => dataset.liveKey === focusKey);
+  control?.focus({ preventScroll: true });
+}
+
+function deletePanelKeysForPokemon(keys, pokemonId) {
+  for (const key of keys) {
+    if (key.split(":").includes(pokemonId)) keys.delete(key);
+  }
 }
 
 function renderSpreadChoices(list, choices, emptyMessage) {

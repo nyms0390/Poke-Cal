@@ -14,13 +14,19 @@ export function popularOpponentPool(
   manualOpponents = [],
   count = 10,
   pokemonCatalog = [],
+  { excludePokemonId = "" } = {},
 ) {
   const limit = [10, 20, 30, 40, 50].includes(Number(count)) ? Number(count) : 10;
   const popular = popularOpponents.slice(0, limit).flatMap((opponent) =>
     (pokemonCatalog.length > 0 ? megaFamily(pokemonCatalog, opponent.pokemon) : [opponent.pokemon])
-      .map((pokemon) => ({ ...opponent, pokemon })));
+      .map((pokemon) => ({ ...opponent, pokemon })))
+    .filter(({ pokemon }) => pokemon.id !== excludePokemonId);
   const popularIds = new Set(popular.map(({ pokemon }) => pokemon.id));
-  return [...popular, ...manualOpponents.filter(({ pokemon }) => !popularIds.has(pokemon.id))];
+  return [
+    ...popular,
+    ...manualOpponents.filter(({ pokemon }) =>
+      pokemon.id !== excludePokemonId && !popularIds.has(pokemon.id)),
+  ];
 }
 
 export function speedTiers(user, opponents, options = {}) {

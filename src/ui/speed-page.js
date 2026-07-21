@@ -17,6 +17,7 @@ import {
 } from "../i18n.js";
 import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
 import { attachCombobox, optionElement, pokemonSpriteUrls, searchResultButton } from "./components.js";
+import { createLiveUpdater } from "./live-update.js";
 
 const elements = {
   source: document.querySelector("#speed-source"),
@@ -53,6 +54,7 @@ let user = null;
 const activeSetStore = createActiveSetStore(browserStorage());
 let popularOpponents = [];
 let manualOpponents = [];
+const updatePage = createLiveUpdater(render);
 
 initI18n();
 initialize();
@@ -160,49 +162,52 @@ function seedUser(pokemon, { activeSet = null } = {}) {
   });
   const defaultSet = activeSetFromState(defaults);
   const initialSet = activeSet ?? defaultSet;
-  activeSetStore.writeSet(initialSet);
-  user = {
-    pokemon,
-    nature: initialSet.nature || defaults.nature,
-    spe: initialSet.sp.spe ?? defaults.sp.spe ?? 0,
-  };
-  elements.nature.value = user.nature;
-  elements.sp.value = String(user.spe);
-  render();
+  updatePage(() => {
+    activeSetStore.writeSet(initialSet);
+    user = {
+      pokemon,
+      nature: initialSet.nature || defaults.nature,
+      spe: initialSet.sp.spe ?? defaults.sp.spe ?? 0,
+    };
+    manualOpponents = manualOpponents.filter(({ pokemon: opponent }) =>
+      normalizeId(opponent.id) !== normalizeId(pokemon.id));
+  });
 }
 
 function addOpponent(pokemon) {
   if (!pokemon) return;
-  const alreadyPresent = selectedOpponents()
+  const alreadyPresent = normalizeId(user?.pokemon.id) === normalizeId(pokemon.id) || selectedOpponents()
     .some((entry) => normalizeId(entry.pokemon.id) === normalizeId(pokemon.id));
-  if (!alreadyPresent) {
-    manualOpponents = [...manualOpponents, {
-      pokemon,
-      likelyPresetLabel: "max (neutral 32)",
-      manual: true,
-    }];
-  }
-  elements.opponentSearch.value = "";
-  render();
+  updatePage(() => {
+    if (!alreadyPresent) {
+      manualOpponents = [...manualOpponents, {
+        pokemon,
+        likelyPresetLabel: "max (neutral 32)",
+        manual: true,
+      }];
+    }
+    elements.opponentSearch.value = "";
+  });
 }
 
 function removeOpponent(id) {
-  manualOpponents = manualOpponents.filter(({ pokemon }) => normalizeId(pokemon.id) !== normalizeId(id));
-  render();
+  updatePage(() => {
+    manualOpponents = manualOpponents.filter(({ pokemon }) => normalizeId(pokemon.id) !== normalizeId(id));
+  });
 }
 
 function handleControl(event) {
   if (!user) return;
-  if (event.target === elements.nature) user = { ...user, nature: event.target.value };
-  if (event.target === elements.sp) {
-    const sp = Math.max(0, Math.min(32, Math.trunc(Number(event.target.value) || 0)));
-    user = { ...user, spe: sp };
-    elements.sp.value = String(sp);
-  }
-  if ([...elements.presetInputs].includes(event.target) && ![...elements.presetInputs].some(({ checked }) => checked)) {
-    event.target.checked = true;
-  }
-  render();
+  updatePage(() => {
+    if (event.target === elements.nature) user = { ...user, nature: event.target.value };
+    if (event.target === elements.sp) {
+      const sp = Math.max(0, Math.min(32, Math.trunc(Number(event.target.value) || 0)));
+      user = { ...user, spe: sp };
+    }
+    if ([...elements.presetInputs].includes(event.target) && ![...elements.presetInputs].some(({ checked }) => checked)) {
+      event.target.checked = true;
+    }
+  });
 }
 
 function render() {
@@ -218,6 +223,8 @@ function render() {
   for (const group of elements.battleGroups) group.classList.toggle("disabled", !battle);
 
   elements.pokemonSearch.value = localizedName(user.pokemon);
+  elements.nature.value = user.nature;
+  elements.sp.value = String(user.spe);
   elements.userSummary.textContent = battle
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
@@ -256,6 +263,7 @@ function selectedOpponents() {
     manualOpponents,
     elements.popularCount.value,
     catalogs.pokemon,
+    { excludePokemonId: user?.pokemon.id },
   );
 }
 
@@ -337,10 +345,9 @@ function renderBreakpointChoices(point) {
     button.className = "speed-breakpoint-choice";
     button.textContent = `${localizedTerm("nature", choice.nature)} (${localizedTerm("speedClass", choice.natureLabel)}) · ${choice.requiredSp} SP`;
     button.addEventListener("click", () => {
-      user = { ...user, spe: choice.requiredSp, nature: choice.nature };
-      elements.sp.value = String(user.spe);
-      elements.nature.value = user.nature;
-      render();
+      updatePage(() => {
+        user = { ...user, spe: choice.requiredSp, nature: choice.nature };
+      });
     });
     choices.append(button);
   }

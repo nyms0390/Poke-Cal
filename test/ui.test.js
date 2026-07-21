@@ -9,6 +9,20 @@ import {
   typeClassName,
 } from "../src/ui/components.js";
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
+import { createLiveUpdater } from "../src/ui/live-update.js";
+
+test("commits each live state change before rendering exactly once", () => {
+  let state = { count: 0 };
+  const renders = [];
+  const update = createLiveUpdater((context) => renders.push({ state, context }));
+
+  update(() => {
+    state = { count: state.count + 1 };
+  }, { focusKey: "counter" });
+
+  assert.deepEqual(state, { count: 1 });
+  assert.deepEqual(renders, [{ state: { count: 1 }, context: { focusKey: "counter" } }]);
+});
 
 test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName("Bug"), "type-bug");
