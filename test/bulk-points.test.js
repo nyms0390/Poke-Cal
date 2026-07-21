@@ -5,6 +5,7 @@ import {
   bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
+  rankBulkPokemonGroups,
   threatDamage,
 } from "../src/data/bulk-points.js";
 import { createSideState } from "../src/ui/battle-state.js";
@@ -81,6 +82,27 @@ test("orders KO tiers from no KO through guaranteed OHKO", () => {
   for (let index = 1; index < ordered.length; index += 1) {
     assert.equal(compareKoTiers(ordered[index], ordered[index - 1]) > 0, true);
   }
+});
+
+test("ranks Pokémon by bulk transition then minimum SP without reordering their moves", () => {
+  const twoHko = bulkMatchup("guaranteed 2HKO", 1);
+  const expensiveOhko = bulkMatchup("guaranteed OHKO", 20);
+  const cheapPossibleOhko = bulkMatchup("25.0% chance to OHKO", 7);
+  const cheapTwoHko = bulkMatchup("40.0% chance to 2HKO", 2);
+  const groups = [
+    { id: "mixed", matchups: [twoHko, expensiveOhko] },
+    { id: "possible-ohko", matchups: [cheapPossibleOhko] },
+    { id: "unreachable", matchups: [bulkMatchup("guaranteed OHKO")] },
+    { id: "two-hko", matchups: [cheapTwoHko] },
+  ];
+
+  const ranked = rankBulkPokemonGroups(groups);
+
+  assert.deepEqual(
+    ranked.map(({ id }) => id),
+    ["possible-ohko", "mixed", "two-hko", "unreachable"],
+  );
+  assert.deepEqual(ranked[1].matchups, [twoHko, expensiveOhko]);
 });
 
 test("wraps the damage engine with the threat on the attacker side", () => {
@@ -188,5 +210,12 @@ function withBulk(state, hpSp, defenseSp, defenseStat) {
   return {
     ...state,
     sp: { ...state.sp, hp: hpSp, [defenseStat]: defenseSp },
+  };
+}
+
+function bulkMatchup(fromKoText, totalSp) {
+  return {
+    damage: { koText: fromKoText },
+    points: Number.isFinite(totalSp) ? [{ fromKoText, totalSp }] : [],
   };
 }

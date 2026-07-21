@@ -8,6 +8,7 @@ import {
   normalizeThreatCount,
   partitionBulkMatchups,
   selectBuilderAnalysis,
+  selectBuilderSort,
   significantBreakPoints,
 } from "../src/ui/builder-state.js";
 
@@ -48,7 +49,12 @@ const threat = {
 };
 
 test("creates an empty builder with the default threat count", () => {
-  assert.deepEqual(createBuilderState(), { user: null, threatCount: 20, analysisTab: "bulk" });
+  assert.deepEqual(createBuilderState(), {
+    user: null,
+    threatCount: 20,
+    analysisTab: "bulk",
+    analysisSort: "breakpoint",
+  });
 });
 
 test("selects only supported builder analysis tabs", () => {
@@ -57,6 +63,15 @@ test("selects only supported builder analysis tabs", () => {
 
   assert.equal(selected.analysisTab, "break");
   assert.equal(selectBuilderAnalysis(selected, "unknown"), selected);
+});
+
+test("selects only supported Pokémon sorting methods", () => {
+  const state = createBuilderState();
+  const selected = selectBuilderSort(state, "default");
+
+  assert.equal(selected.analysisSort, "default");
+  assert.equal(selectBuilderSort(selected, "breakpoint").analysisSort, "breakpoint");
+  assert.equal(selectBuilderSort(selected, "unknown"), selected);
 });
 
 test("normalizes an editable threat count to a whole number from zero through fifty", () => {
@@ -99,7 +114,11 @@ test("ignores unsupported threat build controls and stat keys", () => {
 });
 
 test("creates one canonical side state without activating the usage-backed Tera type", () => {
-  const state = createBuilderState(pikachu, usageDefaults, { threatCount: 12, analysisTab: "break" });
+  const state = createBuilderState(pikachu, usageDefaults, {
+    threatCount: 12,
+    analysisTab: "break",
+    analysisSort: "default",
+  });
 
   assert.equal(state.user.pokemon, pikachu);
   assert.equal(state.user.nature, "Timid");
@@ -113,6 +132,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
   ]);
   assert.equal(state.threatCount, 12);
   assert.equal(state.analysisTab, "break");
+  assert.equal(state.analysisSort, "default");
 });
 
 test("calculates all six final level-50 stats without mutating builder state", () => {

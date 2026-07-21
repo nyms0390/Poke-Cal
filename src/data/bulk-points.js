@@ -5,6 +5,13 @@ export function compareKoTiers(left, right) {
   return koTierValue(left) - koTierValue(right);
 }
 
+export function rankBulkPokemonGroups(groups) {
+  return [...groups].sort((left, right) => compareRanks(
+    bulkPokemonRank(left),
+    bulkPokemonRank(right),
+  ));
+}
+
 export function threatDamage(userState, scenario) {
   const result = damageResult(userState, scenario);
   if (!result.supported) {
@@ -59,11 +66,11 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
   let previousTier = allocationAtCost(currentTotalSp)?.damage;
   const maximum = allocationAtCost(maximumBudget);
   if (!previousTier || !maximum ||
-      survivalHits(maximum.damage.koText) <= survivalHits(previousTier.koText)) return [];
+      koHitCount(maximum.damage.koText) <= koHitCount(previousTier.koText)) return [];
 
   const frontier = [];
-  const maximumHits = survivalHits(maximum.damage.koText);
-  let targetHits = survivalHits(previousTier.koText) + 1;
+  const maximumHits = koHitCount(maximum.damage.koText);
+  let targetHits = koHitCount(previousTier.koText) + 1;
 
   while (targetHits <= maximumHits) {
     let lowerCost = currentTotalSp + 1;
@@ -71,7 +78,7 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
     while (lowerCost < upperCost) {
       const middleCost = Math.floor((lowerCost + upperCost) / 2);
       const middle = allocationAtCost(middleCost);
-      if (middle && survivalHits(middle.damage.koText) >= targetHits) upperCost = middleCost;
+      if (middle && koHitCount(middle.damage.koText) >= targetHits) upperCost = middleCost;
       else lowerCost = middleCost + 1;
     }
     const bestAtCost = allocationAtCost(lowerCost);
@@ -87,7 +94,7 @@ export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
       maxPct: bestAtCost.damage.maxPct,
     });
     previousTier = bestAtCost.damage;
-    targetHits = survivalHits(previousTier.koText) + 1;
+    targetHits = koHitCount(previousTier.koText) + 1;
   }
 
   return frontier;
@@ -178,13 +185,30 @@ function koTierValue(text) {
   return tierBase + Math.max(0, Math.min(100, chance)) / 100;
 }
 
-function survivalHits(text) {
+export function koHitCount(text) {
   const value = String(text ?? "");
   if (/not a KO|survives with/i.test(value)) return 6;
 
   const label = /(OHKO|([2-5])HKO)/i.exec(value);
   if (!label) return 0;
   return label[1].toUpperCase() === "OHKO" ? 1 : Number(label[2]);
+}
+
+function bulkPokemonRank(group) {
+  let best = [Infinity, Infinity];
+  for (const matchup of group.matchups ?? []) {
+    const point = matchup.points?.[0];
+    const hits = koHitCount(point?.fromKoText ?? matchup.damage?.koText);
+    const sp = Number(point?.totalSp);
+    if (!point || hits < 1 || !Number.isFinite(sp)) continue;
+    const candidate = [hits, sp];
+    if (compareRanks(candidate, best) < 0) best = candidate;
+  }
+  return best;
+}
+
+function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {
+  return leftTier - rightTier || leftSp - rightSp;
 }
 
 function survivalText(koText) {

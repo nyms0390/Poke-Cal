@@ -103,6 +103,8 @@ export const EN_MESSAGES = {
   "builder.remove": ({ name }) => `Remove ${name}`,
   "builder.bulkCount": ({ spreads, matchups }) => `${spreads} spreads · ${matchups} matchups`,
   "builder.breakCount": ({ pokemon, moves }) => `${pokemon} Pokémon · ${moves} moves`,
+  "builder.sortBreakpoint": "Breakpoint priority",
+  "builder.sortDefault": "Default order",
   "builder.noThreatMoves": "No supported threat moves are available.",
   "builder.moreDetail": "More detail",
   "builder.longMatchups": ({ count }) => `${count} matchups at 3HKO or longer`,

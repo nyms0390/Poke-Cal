@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { breakPoints, yourDamage } from "../src/data/break-points.js";
+import {
+  breakPoints,
+  rankBreakPointPokemonGroups,
+  yourDamage,
+} from "../src/data/break-points.js";
 import { compareKoTiers } from "../src/data/bulk-points.js";
 import { createSideState } from "../src/ui/battle-state.js";
 
@@ -66,6 +70,39 @@ test("wraps the damage engine with the builder Pokémon on the attacker side", (
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
 });
 
+test("ranks Pokémon by guaranteed break transition then minimum SP without reordering moves", () => {
+  const threeHko = breakAnalysis("guaranteed 3HKO", [
+    { sp: 1, achieves: "guaranteed 2HKO" },
+  ]);
+  const expensiveTwoHko = breakAnalysis("guaranteed 2HKO", [
+    { sp: 2, achieves: "10.0% chance to OHKO" },
+    { sp: 20, achieves: "guaranteed OHKO" },
+  ]);
+  const cheapPossibleTwoHko = breakAnalysis("30.0% chance to 2HKO", [
+    { sp: 1, achieves: "50.0% chance to OHKO" },
+    { sp: 7, achieves: "guaranteed OHKO" },
+  ]);
+  const cheapThreeHko = breakAnalysis("20.0% chance to 3HKO", [
+    { sp: 2, achieves: "guaranteed 2HKO" },
+  ]);
+  const groups = [
+    { id: "mixed", analyses: [threeHko, expensiveTwoHko] },
+    { id: "possible-two-hko", analyses: [cheapPossibleTwoHko] },
+    { id: "unreachable", analyses: [breakAnalysis("guaranteed 2HKO", [
+      { sp: 1, achieves: "50.0% chance to OHKO" },
+    ])] },
+    { id: "three-hko", analyses: [cheapThreeHko] },
+  ];
+
+  const ranked = rankBreakPointPokemonGroups(groups);
+
+  assert.deepEqual(
+    ranked.map(({ id }) => id),
+    ["possible-two-hko", "mixed", "three-hko", "unreachable"],
+  );
+  assert.deepEqual(ranked[1].analyses, [threeHko, expensiveTwoHko]);
+});
+
 test("records only minimal offensive SP values where the KO tier improves", () => {
   const state = userState();
   const scenario = { threat: threat() };
@@ -126,4 +163,8 @@ test("passes the threat's defensive item through to the damage engine", () => {
 
 function withOffense(state, stat, sp) {
   return { ...state, sp: { ...state.sp, [stat]: sp } };
+}
+
+function breakAnalysis(koText, points) {
+  return { damage: { koText }, points };
 }

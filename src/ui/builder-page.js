@@ -9,8 +9,12 @@ import {
   applyActiveSet,
   createActiveSetStore,
 } from "../data/active-set.js";
-import { breakPoints, yourDamage } from "../data/break-points.js";
-import { bulkPointMatchups } from "../data/bulk-points.js";
+import {
+  breakPoints,
+  rankBreakPointPokemonGroups,
+  yourDamage,
+} from "../data/break-points.js";
+import { bulkPointMatchups, rankBulkPokemonGroups } from "../data/bulk-points.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -37,6 +41,7 @@ import {
   normalizeThreatCount,
   partitionBulkMatchups,
   selectBuilderAnalysis,
+  selectBuilderSort,
   significantBreakPoints,
 } from "./builder-state.js";
 import {
@@ -68,6 +73,7 @@ const elements = {
   threatSummary: document.querySelector("#builder-threat-summary"),
   customThreats: document.querySelector("#builder-custom-threats"),
   speedLink: document.querySelector("#builder-speed-link"),
+  sortToggle: document.querySelector("#builder-sort-toggle"),
   analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
   bulkPanel: document.querySelector("#builder-bulk-panel"),
   breakPanel: document.querySelector("#builder-break-panel"),
@@ -146,11 +152,19 @@ async function initialize() {
 }
 
 function initializeAnalysisTabs() {
+  elements.sortToggle.addEventListener("click", toggleAnalysisSort);
   for (const tab of elements.analysisTabs) {
     tab.addEventListener("click", () => activateAnalysisTab(tab.dataset.builderAnalysis));
     tab.addEventListener("keydown", handleAnalysisTabKeydown);
   }
   renderAnalysisTabs();
+}
+
+function toggleAnalysisSort() {
+  updatePage(() => {
+    const nextSort = state.analysisSort === "breakpoint" ? "default" : "breakpoint";
+    state = selectBuilderSort(state, nextSort);
+  });
 }
 
 function activateAnalysisTab(analysisTab, { focus = false } = {}) {
@@ -174,6 +188,11 @@ function handleAnalysisTabKeydown(event) {
 }
 
 function renderAnalysisTabs() {
+  const breakpointSort = state.analysisSort === "breakpoint";
+  elements.sortToggle.textContent = t(
+    breakpointSort ? "builder.sortBreakpoint" : "builder.sortDefault",
+  );
+  elements.sortToggle.setAttribute("aria-pressed", String(breakpointSort));
   for (const tab of elements.analysisTabs) {
     const selected = tab.dataset.builderAnalysis === state.analysisTab;
     tab.setAttribute("aria-selected", String(selected));
@@ -216,6 +235,7 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
     state = createBuilderState(pokemon, defaults, {
       threatCount: state.threatCount,
       analysisTab: state.analysisTab,
+      analysisSort: state.analysisSort,
     });
     if (activeSet) {
       state = {
@@ -515,7 +535,11 @@ function bulkThreatCards(matchups, section) {
     if (!groups.has(id)) groups.set(id, { threat: matchup.scenario.threat, matchups: [] });
     groups.get(id).matchups.push(matchup);
   }
-  return [...groups.values()].map(({ threat, matchups: threatMatchups }) => {
+  const pokemonGroups = [...groups.values()];
+  const orderedGroups = state.analysisSort === "breakpoint"
+    ? rankBulkPokemonGroups(pokemonGroups)
+    : pokemonGroups;
+  return orderedGroups.map(({ threat, matchups: threatMatchups }) => {
     const threatId = normalizeId(threat.pokemon.id);
     const cardKey = `bulk:${section}:${threatId}`;
     return analysisCard(threat, threatMatchups.map((matchup) =>
@@ -597,17 +621,27 @@ function renderBreakPoints(threats) {
 
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...threats.map((threat) => {
+  const groups = threats.map((threat) => ({
+    threat,
+    analyses: moves.map((move) => ({
+      move,
+      damage: yourDamage(state.user, move, { threat }),
+      points: breakPoints(state.user, move, { threat }),
+    })),
+  }));
+  const orderedGroups = state.analysisSort === "breakpoint"
+    ? rankBreakPointPokemonGroups(groups)
+    : groups;
+  cards.append(...orderedGroups.map(({ threat, analyses }) => {
     const threatId = normalizeId(threat.pokemon.id);
     const cardKey = `break:${threatId}`;
-    return analysisCard(threat, moves.map((move, index) =>
-      breakMovePanel(move, threat, `${cardKey}:${normalizeId(move.id)}:${index}`)), cardKey);
+    return analysisCard(threat, analyses.map((analysis, index) =>
+      breakMovePanel(analysis, threat, `${cardKey}:${normalizeId(analysis.move.id)}:${index}`)), cardKey);
   }));
   elements.breakPoints.replaceChildren(cards);
 }
 
-function breakMovePanel(move, threat, panelKey) {
-  const damage = yourDamage(state.user, move, { threat });
+function breakMovePanel({ move, damage, points }, threat, panelKey) {
   const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
   return analysisMovePanel({
     panelKey,
@@ -616,7 +650,7 @@ function breakMovePanel(move, threat, panelKey) {
     emptyMessage: t("builder.noHigherKo"),
     loadChoices: () => significantBreakPoints(
       damage.koText,
-      breakPoints(state.user, move, { threat }),
+      points,
     ).map((point) => {
       const nature = point.requiresPlusNature
         ? attackStat === "atk" ? "Adamant" : "Modest"

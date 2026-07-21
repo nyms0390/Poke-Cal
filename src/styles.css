@@ -1931,6 +1931,39 @@ button:disabled {
   min-width: 0;
 }
 
+.builder-analysis-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px var(--panel-pad);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.builder-sort-toggle {
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: var(--surface);
+  color: var(--accent-dark);
+  font: inherit;
+  cursor: pointer;
+}
+
+.builder-sort-toggle:hover,
+.builder-sort-toggle:focus-visible {
+  outline: none;
+  background: var(--accent-soft);
+}
+
+.builder-sort-toggle[aria-pressed="true"] {
+  background: var(--accent);
+  color: white;
+}
+
 .builder-analysis-tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2806,6 +2839,15 @@ details.builder-analysis-move > .builder-spread-grid {
   .builder-more-detail > summary {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .builder-analysis-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .builder-sort-toggle {
+    min-height: 40px;
   }
 
   .speed-toolbar {

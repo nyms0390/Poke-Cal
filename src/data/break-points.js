@@ -1,7 +1,14 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { NATURES } from "../engine/natures.js";
-import { compareKoTiers } from "./bulk-points.js";
+import { compareKoTiers, koHitCount } from "./bulk-points.js";
+
+export function rankBreakPointPokemonGroups(groups) {
+  return [...groups].sort((left, right) => compareRanks(
+    breakPointPokemonRank(left),
+    breakPointPokemonRank(right),
+  ));
+}
 
 export function yourDamage(userState, move, scenario) {
   const result = damageResult(userState, move, scenario);
@@ -104,4 +111,25 @@ function withOffense(userState, stat, sp) {
     ...userState,
     sp: { ...userState.sp, [stat]: sp },
   };
+}
+
+function breakPointPokemonRank(group) {
+  let best = [Infinity, Infinity];
+  for (const analysis of group.analyses ?? []) {
+    const currentHits = koHitCount(analysis.damage?.koText);
+    if (currentHits <= 1) continue;
+    const targetHits = currentHits - 1;
+    const targetSp = Math.min(...(analysis.points ?? [])
+      .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
+      .map(({ sp }) => Number(sp))
+      .filter(Number.isFinite));
+    if (!Number.isFinite(targetSp)) continue;
+    const candidate = [currentHits, targetSp];
+    if (compareRanks(candidate, best) < 0) best = candidate;
+  }
+  return best;
+}
+
+function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {
+  return leftTier - rightTier || leftSp - rightSp;
 }

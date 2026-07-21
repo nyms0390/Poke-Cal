@@ -3,6 +3,7 @@ import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
 
 const ANALYSIS_TABS = ["bulk", "break"];
+const ANALYSIS_SORTS = ["breakpoint", "default"];
 const THREAT_SP_GROUPS = {
   hp: "bulk",
   atk: "offense",
@@ -14,11 +15,12 @@ const THREAT_SP_GROUPS = {
 export function createBuilderState(
   pokemon,
   usageDefaults,
-  { threatCount = 20, analysisTab = "bulk" } = {},
+  { threatCount = 20, analysisTab = "bulk", analysisSort = "breakpoint" } = {},
 ) {
   threatCount = normalizeThreatCount(threatCount);
   analysisTab = ANALYSIS_TABS.includes(analysisTab) ? analysisTab : "bulk";
-  if (!pokemon || !usageDefaults) return { user: null, threatCount, analysisTab };
+  analysisSort = ANALYSIS_SORTS.includes(analysisSort) ? analysisSort : "breakpoint";
+  if (!pokemon || !usageDefaults) return { user: null, threatCount, analysisTab, analysisSort };
 
   return {
     user: {
@@ -27,12 +29,18 @@ export function createBuilderState(
     },
     threatCount,
     analysisTab,
+    analysisSort,
   };
 }
 
 export function selectBuilderAnalysis(state, analysisTab) {
   if (!ANALYSIS_TABS.includes(analysisTab) || state?.analysisTab === analysisTab) return state;
   return { ...state, analysisTab };
+}
+
+export function selectBuilderSort(state, analysisSort) {
+  if (!ANALYSIS_SORTS.includes(analysisSort) || state?.analysisSort === analysisSort) return state;
+  return { ...state, analysisSort };
 }
 
 export function normalizeThreatCount(value) {
