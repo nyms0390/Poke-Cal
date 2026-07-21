@@ -2711,10 +2711,10 @@ details.builder-analysis-move > .builder-spread-grid {
 .speed-axis-header,
 .speed-axis-row {
   display: grid;
-  grid-template-columns: 60px minmax(280px, 1fr) 110px 58px minmax(190px, 0.9fr);
+  grid-template-columns: 60px minmax(360px, 1fr) minmax(190px, 0.9fr);
   gap: 10px;
   align-items: center;
-  min-width: 820px;
+  min-width: 680px;
 }
 
 .speed-axis-header {
@@ -2757,6 +2757,52 @@ details.builder-analysis-move > .builder-spread-grid {
 .speed-axis-breakpoints {
   color: var(--muted);
   font-size: var(--text-xs);
+}
+
+.speed-axis-entry {
+  white-space: nowrap;
+}
+
+.speed-axis-preset {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-left: 1px solid var(--line);
+  padding-left: 7px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.speed-preset-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 999px;
+  background: var(--speed-preset-color, var(--subtle));
+}
+
+.speed-preset-max {
+  --speed-preset-color: #dc445c;
+}
+
+.speed-preset-fast {
+  --speed-preset-color: #dd8b16;
+}
+
+.speed-preset-neutral {
+  --speed-preset-color: #2782c4;
+}
+
+.speed-preset-slow {
+  --speed-preset-color: #8057ce;
+}
+
+.speed-preset-user {
+  --speed-preset-color: var(--accent);
+}
+
+.speed-preset-base {
+  --speed-preset-color: var(--subtle);
 }
 
 .speed-axis-breakpoints {

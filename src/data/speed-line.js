@@ -39,8 +39,8 @@ export function speedTiers(user, opponents, options = {}) {
 
   if (mode === "base") {
     const entries = [
-      speedEntry(user.pokemon, "", true, false, 0, baseSpeed(user.pokemon)),
-      ...opponents.map(({ pokemon }) => speedEntry(pokemon, "", false, false, 0, baseSpeed(pokemon))),
+      speedEntry(user.pokemon, "Base", "base", true, false, 0, baseSpeed(user.pokemon)),
+      ...opponents.map(({ pokemon }) => speedEntry(pokemon, "Base", "base", false, false, 0, baseSpeed(pokemon))),
     ];
     return groupedRows(entries, baseSpeed(user.pokemon), false, {
       mode,
@@ -58,6 +58,7 @@ export function speedTiers(user, opponents, options = {}) {
   const entries = [speedEntry(
     user.pokemon,
     "Your spread",
+    "user",
     true,
     false,
     userMods.stage,
@@ -78,6 +79,7 @@ export function speedTiers(user, opponents, options = {}) {
       entries.push(speedEntry(
         opponent.pokemon,
         preset.label,
+        preset.key,
         false,
         preset.key === likelyKey,
         opponentMods.stage,
@@ -145,7 +147,7 @@ function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom })
   });
 }
 
-function speedEntry(pokemon, presetLabel, isUser, likely, stage, speed, order = speed) {
+function speedEntry(pokemon, presetLabel, presetKey, isUser, likely, stage, speed, order = speed) {
   return {
     id: pokemon.id,
     name: pokemon.name,
@@ -154,6 +156,7 @@ function speedEntry(pokemon, presetLabel, isUser, likely, stage, speed, order = 
     localizations: pokemon.localizations,
     spriteId: pokemonSpriteId(pokemon),
     presetLabel,
+    presetKey,
     likely,
     isUser,
     stage,

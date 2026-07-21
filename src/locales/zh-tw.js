@@ -318,6 +318,7 @@ export const STATIC_ZH_TW = {
   "Shared stage": "共用階級",
   "Ranked Speed axis": "速度排名軸",
   "Speed axis": "速度軸",
+  "Pokémon / set": "寶可夢 / 配置",
   "Preset": "預設",
   "Breakpoint": "臨界點",
   "Quick competitive Pokémon lookup with Champions usage, stats, forms, and move data.": "快速查詢競技寶可夢的 Champions 使用率、能力、形態與招式資料。",

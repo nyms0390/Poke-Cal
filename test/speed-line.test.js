@@ -55,6 +55,12 @@ test("battle mode interleaves fixed opponent presets by calculated Speed", () =>
       name === "Fastmon" && presetLabel === "Slow").likely,
     true,
   );
+  assert.deepEqual(
+    rows.flatMap(({ entries }) => entries)
+      .filter(({ name }) => name === "Slowmon")
+      .map(({ presetLabel, presetKey }) => [presetLabel, presetKey]),
+    [["Max", "max"], ["Fast", "fast"], ["Neutral", "neutral"], ["Slow", "slow"]],
+  );
 });
 
 test("Trick Room flips actsBefore without changing descending row order", () => {

@@ -309,16 +309,19 @@ function renderSpeedRow(row, breakpoint) {
     chip.append(sprite(entry));
     const label = document.createElement("span");
     label.textContent = `${entry.likely ? "● " : ""}${localizedName(entry)}`;
-    chip.append(label);
+    const preset = document.createElement("span");
+    preset.className = "speed-axis-preset";
+    const dot = document.createElement("span");
+    dot.className = `speed-preset-dot speed-preset-${entry.presetKey}`;
+    dot.setAttribute("aria-hidden", "true");
+    const presetLabel = document.createElement("span");
+    presetLabel.textContent = localizedTerm("speedPreset", entry.presetLabel);
+    preset.append(dot, presetLabel);
+    chip.append(label, preset);
     pokemon.append(chip);
   }
 
-  const presets = document.createElement("span");
-  const presetLabels = [...new Set(row.entries.map(({ presetLabel }) => presetLabel).filter(Boolean))];
-  presets.textContent = presetLabels.map((label) => localizedTerm("speedPreset", label)).join(" / ") || t("speed.base");
-  const stage = document.createElement("span");
-  stage.textContent = row.stage === null ? t("speed.mixed") : row.stage > 0 ? `+${row.stage}` : String(row.stage);
-  item.append(speed, pokemon, presets, stage, renderBreakpointChoices(breakpoint));
+  item.append(speed, pokemon, renderBreakpointChoices(breakpoint));
 
   if (row.entries.some(({ isUser }) => isUser)) {
     const divider = document.createElement("div");

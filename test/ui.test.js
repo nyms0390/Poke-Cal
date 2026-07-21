@@ -145,3 +145,15 @@ test("lookup page separates battle profile from build details without a duplicat
   assert.doesNotMatch(html, /id="playstyle-summary"/);
   assert.doesNotMatch(html, /id="usage-source"/);
 });
+
+test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
+  const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
+
+  assert.deepEqual(
+    [...header.matchAll(/<span>([^<]+)<\/span>/g)].map(([, label]) => label),
+    ["Spe", "Pokémon / set", "Breakpoint"],
+  );
+  assert.doesNotMatch(header, />Preset</);
+  assert.doesNotMatch(header, />Stage</);
+});
