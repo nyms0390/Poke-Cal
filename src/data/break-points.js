@@ -4,7 +4,13 @@ import { NATURES } from "../engine/natures.js";
 import { compareKoTiers, koHitCount } from "./bulk-points.js";
 
 export function rankBreakPointPokemonGroups(groups) {
-  return [...groups].sort((left, right) => compareRanks(
+  return groups.map((group) => ({
+    ...group,
+    analyses: [...(group.analyses ?? [])].sort((left, right) => compareRanks(
+      breakPointAnalysisRank(left),
+      breakPointAnalysisRank(right),
+    )),
+  })).sort((left, right) => compareRanks(
     breakPointPokemonRank(left),
     breakPointPokemonRank(right),
   ));
@@ -13,12 +19,18 @@ export function rankBreakPointPokemonGroups(groups) {
 export function yourDamage(userState, move, scenario) {
   const result = damageResult(userState, move, scenario);
   if (!result.supported) {
-    return { minPct: null, maxPct: null, koText: result.reason ?? "Unsupported" };
+    return {
+      minPct: null,
+      maxPct: null,
+      koText: result.reason ?? "Unsupported",
+      effectiveness: null,
+    };
   }
   return {
     minPct: result.minPercent,
     maxPct: result.maxPercent,
     koText: result.ko.text,
+    effectiveness: result.typeMultiplier,
   };
 }
 
@@ -114,22 +126,35 @@ function withOffense(userState, stat, sp) {
 }
 
 function breakPointPokemonRank(group) {
-  let best = [Infinity, Infinity];
-  for (const analysis of group.analyses ?? []) {
-    const currentHits = koHitCount(analysis.damage?.koText);
-    if (currentHits <= 1) continue;
-    const targetHits = currentHits - 1;
-    const targetSp = Math.min(...(analysis.points ?? [])
-      .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
-      .map(({ sp }) => Number(sp))
-      .filter(Number.isFinite));
-    if (!Number.isFinite(targetSp)) continue;
-    const candidate = [currentHits, targetSp];
-    if (compareRanks(candidate, best) < 0) best = candidate;
-  }
-  return best;
+  return breakPointAnalysisRank(group.analyses?.[0]);
 }
 
-function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {
-  return leftTier - rightTier || leftSp - rightSp;
+function breakPointAnalysisRank(analysis) {
+  const effectiveness = Number(analysis?.damage?.effectiveness);
+  const currentHits = koHitCount(analysis?.damage?.koText);
+  if (currentHits <= 1) {
+    return [-normalizedEffectiveness(effectiveness), Infinity, Infinity];
+  }
+  const targetHits = currentHits - 1;
+  const targetSp = Math.min(...(analysis?.points ?? [])
+    .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
+    .map(({ sp }) => Number(sp))
+    .filter(Number.isFinite));
+  return [
+    -normalizedEffectiveness(effectiveness),
+    Number.isFinite(targetSp) ? currentHits : Infinity,
+    targetSp,
+  ];
+}
+
+function normalizedEffectiveness(value) {
+  return Number.isFinite(value) ? value : -Infinity;
+}
+
+function compareRanks(left, right) {
+  for (let index = 0; index < Math.max(left.length, right.length); index += 1) {
+    if (left[index] === right[index]) continue;
+    return left[index] < right[index] ? -1 : 1;
+  }
+  return 0;
 }

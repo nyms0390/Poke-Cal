@@ -67,24 +67,25 @@ test("wraps the damage engine with the builder Pokémon on the attacker side", (
 
   assert.equal(Number.isFinite(result.minPct), true);
   assert.equal(result.maxPct >= result.minPct, true);
+  assert.equal(result.effectiveness, 1);
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
 });
 
-test("ranks Pokémon by guaranteed break transition then minimum SP without reordering moves", () => {
+test("ranks break-point moves by effectiveness before guaranteed transition and minimum SP", () => {
   const threeHko = breakAnalysis("guaranteed 3HKO", [
     { sp: 1, achieves: "guaranteed 2HKO" },
-  ]);
+  ], 2);
   const expensiveTwoHko = breakAnalysis("guaranteed 2HKO", [
     { sp: 2, achieves: "10.0% chance to OHKO" },
     { sp: 20, achieves: "guaranteed OHKO" },
-  ]);
+  ], 4);
   const cheapPossibleTwoHko = breakAnalysis("30.0% chance to 2HKO", [
     { sp: 1, achieves: "50.0% chance to OHKO" },
     { sp: 7, achieves: "guaranteed OHKO" },
-  ]);
+  ], 2);
   const cheapThreeHko = breakAnalysis("20.0% chance to 3HKO", [
     { sp: 2, achieves: "guaranteed 2HKO" },
-  ]);
+  ], 1);
   const groups = [
     { id: "mixed", analyses: [threeHko, expensiveTwoHko] },
     { id: "possible-two-hko", analyses: [cheapPossibleTwoHko] },
@@ -98,9 +99,39 @@ test("ranks Pokémon by guaranteed break transition then minimum SP without reor
 
   assert.deepEqual(
     ranked.map(({ id }) => id),
-    ["possible-two-hko", "mixed", "three-hko", "unreachable"],
+    ["mixed", "possible-two-hko", "three-hko", "unreachable"],
   );
-  assert.deepEqual(ranked[1].analyses, [threeHko, expensiveTwoHko]);
+  assert.deepEqual(ranked[0].analyses, [expensiveTwoHko, threeHko]);
+});
+
+test("uses the most effective move to rank Pokémon, then the existing break-point rank", () => {
+  const groups = [
+    {
+      id: "neutral-cheap",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 1, achieves: "guaranteed OHKO" },
+      ], 1)],
+    },
+    {
+      id: "super-effective-expensive",
+      analyses: [breakAnalysis("guaranteed 3HKO", [
+        { sp: 30, achieves: "guaranteed 2HKO" },
+      ], 2)],
+    },
+    {
+      id: "super-effective-cheap",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 4, achieves: "guaranteed OHKO" },
+      ], 2)],
+    },
+  ];
+
+  const ranked = rankBreakPointPokemonGroups(groups);
+
+  assert.deepEqual(
+    ranked.map(({ id }) => id),
+    ["super-effective-cheap", "super-effective-expensive", "neutral-cheap"],
+  );
 });
 
 test("records only minimal offensive SP values where the KO tier improves", () => {
@@ -165,6 +196,6 @@ function withOffense(state, stat, sp) {
   return { ...state, sp: { ...state.sp, [stat]: sp } };
 }
 
-function breakAnalysis(koText, points) {
-  return { damage: { koText }, points };
+function breakAnalysis(koText, points, effectiveness = 1) {
+  return { damage: { koText, effectiveness }, points };
 }
