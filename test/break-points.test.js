@@ -67,62 +67,54 @@ test("wraps the damage engine with the builder Pokémon on the attacker side", (
 
   assert.equal(Number.isFinite(result.minPct), true);
   assert.equal(result.maxPct >= result.minPct, true);
-  assert.equal(result.effectiveness, 1);
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
 });
 
-test("ranks break-point moves by effectiveness before guaranteed transition and minimum SP", () => {
-  const threeHko = breakAnalysis("guaranteed 3HKO", [
-    { sp: 1, achieves: "guaranteed 2HKO" },
-  ], 2);
-  const expensiveTwoHko = breakAnalysis("guaranteed 2HKO", [
-    { sp: 2, achieves: "10.0% chance to OHKO" },
-    { sp: 20, achieves: "guaranteed OHKO" },
-  ], 4);
-  const cheapPossibleTwoHko = breakAnalysis("30.0% chance to 2HKO", [
-    { sp: 1, achieves: "50.0% chance to OHKO" },
-    { sp: 7, achieves: "guaranteed OHKO" },
-  ], 2);
-  const cheapThreeHko = breakAnalysis("20.0% chance to 3HKO", [
-    { sp: 2, achieves: "guaranteed 2HKO" },
-  ], 1);
-  const groups = [
-    { id: "mixed", analyses: [threeHko, expensiveTwoHko] },
-    { id: "possible-two-hko", analyses: [cheapPossibleTwoHko] },
-    { id: "unreachable", analyses: [breakAnalysis("guaranteed 2HKO", [
-      { sp: 1, achieves: "50.0% chance to OHKO" },
-    ])] },
-    { id: "three-hko", analyses: [cheapThreeHko] },
-  ];
+test("ranks moves within each Pokémon by maximum damage percentage", () => {
+  const higherDamage = breakAnalysis("guaranteed 3HKO", [
+    { sp: 20, achieves: "guaranteed 2HKO" },
+  ], 70);
+  const lowerDamageBetterBreak = breakAnalysis("guaranteed 2HKO", [
+    { sp: 1, achieves: "guaranteed OHKO" },
+  ], 60);
 
-  const ranked = rankBreakPointPokemonGroups(groups);
+  const [ranked] = rankBreakPointPokemonGroups([
+    { id: "mixed", analyses: [lowerDamageBetterBreak, higherDamage] },
+  ]);
 
-  assert.deepEqual(
-    ranked.map(({ id }) => id),
-    ["mixed", "possible-two-hko", "three-hko", "unreachable"],
-  );
-  assert.deepEqual(ranked[0].analyses, [expensiveTwoHko, threeHko]);
+  assert.deepEqual(ranked.analyses, [higherDamage, lowerDamageBetterBreak]);
 });
 
-test("uses the most effective move to rank Pokémon, then the existing break-point rank", () => {
+test("ranks Pokémon from only the highest-damage move, then transition and minimum SP", () => {
   const groups = [
     {
-      id: "neutral-cheap",
-      analyses: [breakAnalysis("guaranteed 2HKO", [
-        { sp: 1, achieves: "guaranteed OHKO" },
-      ], 1)],
+      id: "better-secondary-only",
+      analyses: [
+        breakAnalysis("guaranteed 3HKO", [
+          { sp: 10, achieves: "guaranteed 2HKO" },
+        ], 90),
+        breakAnalysis("guaranteed 2HKO", [
+          { sp: 1, achieves: "guaranteed OHKO" },
+        ], 80),
+      ],
     },
     {
-      id: "super-effective-expensive",
-      analyses: [breakAnalysis("guaranteed 3HKO", [
-        { sp: 30, achieves: "guaranteed 2HKO" },
-      ], 2)],
+      id: "best-top-move",
+      analyses: [breakAnalysis("30.0% chance to 2HKO", [
+        { sp: 5, achieves: "guaranteed OHKO" },
+      ], 70)],
     },
     {
-      id: "super-effective-cheap",
+      id: "costlier-top-move",
       analyses: [breakAnalysis("guaranteed 2HKO", [
-        { sp: 4, achieves: "guaranteed OHKO" },
-      ], 2)],
+        { sp: 7, achieves: "guaranteed OHKO" },
+      ], 75)],
+    },
+    {
+      id: "unreachable-top-move",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 1, achieves: "50.0% chance to OHKO" },
+      ], 65)],
     },
   ];
 
@@ -130,7 +122,7 @@ test("uses the most effective move to rank Pokémon, then the existing break-poi
 
   assert.deepEqual(
     ranked.map(({ id }) => id),
-    ["super-effective-cheap", "super-effective-expensive", "neutral-cheap"],
+    ["best-top-move", "costlier-top-move", "better-secondary-only", "unreachable-top-move"],
   );
 });
 
@@ -196,6 +188,6 @@ function withOffense(state, stat, sp) {
   return { ...state, sp: { ...state.sp, [stat]: sp } };
 }
 
-function breakAnalysis(koText, points, effectiveness = 1) {
-  return { damage: { koText, effectiveness }, points };
+function breakAnalysis(koText, points, maxPct) {
+  return { damage: { koText, maxPct }, points };
 }

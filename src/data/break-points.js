@@ -6,10 +6,7 @@ import { compareKoTiers, koHitCount } from "./bulk-points.js";
 export function rankBreakPointPokemonGroups(groups) {
   return groups.map((group) => ({
     ...group,
-    analyses: [...(group.analyses ?? [])].sort((left, right) => compareRanks(
-      breakPointAnalysisRank(left),
-      breakPointAnalysisRank(right),
-    )),
+    analyses: [...(group.analyses ?? [])].sort(compareDamagePercentage),
   })).sort((left, right) => compareRanks(
     breakPointPokemonRank(left),
     breakPointPokemonRank(right),
@@ -23,14 +20,12 @@ export function yourDamage(userState, move, scenario) {
       minPct: null,
       maxPct: null,
       koText: result.reason ?? "Unsupported",
-      effectiveness: null,
     };
   }
   return {
     minPct: result.minPercent,
     maxPct: result.maxPercent,
     koText: result.ko.text,
-    effectiveness: result.typeMultiplier,
   };
 }
 
@@ -130,24 +125,25 @@ function breakPointPokemonRank(group) {
 }
 
 function breakPointAnalysisRank(analysis) {
-  const effectiveness = Number(analysis?.damage?.effectiveness);
   const currentHits = koHitCount(analysis?.damage?.koText);
-  if (currentHits <= 1) {
-    return [-normalizedEffectiveness(effectiveness), Infinity, Infinity];
-  }
+  if (currentHits <= 1) return [Infinity, Infinity];
   const targetHits = currentHits - 1;
   const targetSp = Math.min(...(analysis?.points ?? [])
     .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
     .map(({ sp }) => Number(sp))
     .filter(Number.isFinite));
-  return [
-    -normalizedEffectiveness(effectiveness),
-    Number.isFinite(targetSp) ? currentHits : Infinity,
-    targetSp,
-  ];
+  return Number.isFinite(targetSp) ? [currentHits, targetSp] : [Infinity, Infinity];
 }
 
-function normalizedEffectiveness(value) {
+function compareDamagePercentage(left, right) {
+  const leftDamage = maximumDamagePercentage(left);
+  const rightDamage = maximumDamagePercentage(right);
+  if (leftDamage === rightDamage) return 0;
+  return leftDamage > rightDamage ? -1 : 1;
+}
+
+function maximumDamagePercentage(analysis) {
+  const value = Number(analysis?.damage?.maxPct);
   return Number.isFinite(value) ? value : -Infinity;
 }
 
