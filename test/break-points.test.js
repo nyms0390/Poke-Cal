@@ -126,6 +126,28 @@ test("ranks Pokémon from only the highest-damage move, then transition and mini
   );
 });
 
+test("ranks a possible OHKO by the SP needed to make it guaranteed", () => {
+  const groups = [
+    {
+      id: "already-guaranteed",
+      analyses: [breakAnalysis("guaranteed OHKO", [], 161.5)],
+    },
+    {
+      id: "guaranteed-at-ten",
+      analyses: [breakAnalysis("62.5% chance to OHKO", [
+        { sp: 10, achieves: "guaranteed OHKO" },
+      ], 110.8)],
+    },
+  ];
+
+  const ranked = rankBreakPointPokemonGroups(groups);
+
+  assert.deepEqual(ranked.map(({ id }) => id), [
+    "guaranteed-at-ten",
+    "already-guaranteed",
+  ]);
+});
+
 test("records only minimal offensive SP values where the KO tier improves", () => {
   const state = userState();
   const scenario = { threat: threat() };

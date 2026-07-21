@@ -126,8 +126,8 @@ function breakPointPokemonRank(group) {
 
 function breakPointAnalysisRank(analysis) {
   const currentHits = koHitCount(analysis?.damage?.koText);
-  if (currentHits <= 1) return [Infinity, Infinity];
-  const targetHits = currentHits - 1;
+  if (currentHits < 1) return [Infinity, Infinity];
+  const targetHits = Math.max(1, currentHits - 1);
   const targetSp = Math.min(...(analysis?.points ?? [])
     .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
     .map(({ sp }) => Number(sp))
