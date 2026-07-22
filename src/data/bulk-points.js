@@ -6,12 +6,10 @@ export function compareKoTiers(left, right) {
 }
 
 export function rankBulkPokemonGroups(groups) {
-  return [...groups].sort((left, right) =>
-    compareMaximumDamage(left, right) ||
-    compareRanks(
-      bulkPokemonRank(left),
-      bulkPokemonRank(right),
-    ));
+  return [...groups].sort((left, right) => compareRanks(
+    bulkPokemonRank(left),
+    bulkPokemonRank(right),
+  ));
 }
 
 export function threatDamage(userState, scenario) {
@@ -202,11 +200,13 @@ function bulkPokemonRank(group) {
   for (const matchup of group.matchups ?? []) {
     if (matchupMaximumDamage(matchup) !== maximumDamage) continue;
     const currentHits = guaranteedKoHitCount(matchup.damage?.koText);
-    if (currentHits >= 2) best = bestRank(best, [currentHits, 0]);
+    if (Number.isFinite(currentHits) && currentHits >= 2) {
+      best = bestRank(best, [currentHits, 0]);
+    }
     for (const point of matchup.points ?? []) {
       const hits = guaranteedKoHitCount(point?.koText ?? point?.achieves ?? point?.fromKoText);
       const sp = Number(point?.totalSp);
-      if (hits < 2 || !Number.isFinite(sp)) continue;
+      if (!Number.isFinite(hits) || hits < 2 || !Number.isFinite(sp)) continue;
       best = bestRank(best, [hits, sp]);
     }
   }
@@ -226,13 +226,6 @@ function guaranteedKoHitCount(text) {
 function matchupMaximumDamage(matchup) {
   const value = Number(matchup?.damage?.maxPct);
   return Number.isFinite(value) ? value : -Infinity;
-}
-
-function compareMaximumDamage(left, right) {
-  const leftDamage = maximumDamagePercentage(left);
-  const rightDamage = maximumDamagePercentage(right);
-  if (leftDamage === rightDamage) return 0;
-  return leftDamage > rightDamage ? -1 : 1;
 }
 
 function maximumDamagePercentage(group) {

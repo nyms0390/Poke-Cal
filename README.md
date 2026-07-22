@@ -96,18 +96,25 @@ npm start
 
 Then open <http://127.0.0.1:4173> for lookup, `/battle.html` for the calculator, `/builder.html` for bulk/break points, or `/speed.html` for interactive Speed tiers. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
 
-### Builder priority
+### Builder breakpoint priority
 
 Builder cards group a base Pokémon with all of its Mega forms into one stack. When
-"Breakpoint priority" is selected, each stack is evaluated using only its highest
-maximum-damage (`maxPct`) move across every form. Ties among those moves use the best
-guaranteed target and then the lowest required offensive SP:
+"Breakpoint priority" is selected, stacks are ranked as follows:
 
-- Break points: any path to a guaranteed OHKO > guaranteed 2HKO > guaranteed 3HKO > …
-- Bulk points: any path to a guaranteed 2HKO > guaranteed 3HKO > guaranteed 4HKO > …
+1. Across every form and move in the stack, keep only the move or tied moves with the
+   highest current maximum-damage percentage (`maxPct`). Lower-damage moves cannot improve
+   the stack's priority.
+2. Rank those representative moves by their best guaranteed target:
+   - Break points: any starting result → guaranteed OHKO > guaranteed 2HKO >
+     guaranteed 3HKO > …
+   - Bulk points: any starting result → guaranteed 2HKO > guaranteed 3HKO >
+     guaranteed 4HKO > …
+3. For the same guaranteed target, prefer the result requiring the least SP. Preserve the
+   default catalog order if the target and SP cost are also tied.
 
-An already-guaranteed target counts as requiring 0 SP. Moves or forms below the stack's
-highest `maxPct` do not improve its priority. The default sort preserves the catalog order.
+An already-guaranteed target counts as requiring 0 SP. A stack whose representative move
+cannot reach a guaranteed target is placed after stacks that can. The default sort does not
+apply these rules and preserves catalog order.
 
 ## Data Sources
 

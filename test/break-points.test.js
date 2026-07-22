@@ -85,7 +85,7 @@ test("ranks moves within each Pokémon by maximum damage percentage", () => {
   assert.deepEqual(ranked.analyses, [higherDamage, lowerDamageBetterBreak]);
 });
 
-test("ranks Pokémon by their highest-damage move before transition and minimum SP", () => {
+test("ranks the highest-damage move by guaranteed target tier then minimum SP", () => {
   const groups = [
     {
       id: "better-secondary-only",
@@ -112,7 +112,7 @@ test("ranks Pokémon by their highest-damage move before transition and minimum 
     },
     {
       id: "unreachable-top-move",
-      analyses: [breakAnalysis("guaranteed 2HKO", [
+      analyses: [breakAnalysis("50.0% chance to 2HKO", [
         { sp: 1, achieves: "50.0% chance to OHKO" },
       ], 65)],
     },
@@ -122,7 +122,7 @@ test("ranks Pokémon by their highest-damage move before transition and minimum 
 
   assert.deepEqual(
     ranked.map(({ id }) => id),
-    ["better-secondary-only", "costlier-top-move", "best-top-move", "unreachable-top-move"],
+    ["best-top-move", "costlier-top-move", "better-secondary-only", "unreachable-top-move"],
   );
 });
 
@@ -149,7 +149,7 @@ test("ranks a Mega-family stack from the strongest move across every form", () =
 
   assert.deepEqual(
     rankBreakPointPokemonGroups(groups).map(({ id }) => id),
-    ["base-and-mega", "other-family"],
+    ["other-family", "base-and-mega"],
   );
 });
 
@@ -248,7 +248,7 @@ test("ranks a possible OHKO by the SP needed to make it guaranteed", () => {
   const groups = [
     {
       id: "already-guaranteed",
-      analyses: [breakAnalysis("guaranteed OHKO", [], 161.5)],
+      analyses: [breakAnalysis("guaranteed OHKO", [], 90)],
     },
     {
       id: "guaranteed-at-ten",
