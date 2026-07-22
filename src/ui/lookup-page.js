@@ -9,6 +9,7 @@ import {
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
+import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
@@ -86,6 +87,7 @@ let selectedFamily = [];
 let selectedMoves = [];
 let catalogs = null;
 const activeSetStore = createActiveSetStore(browserStorage());
+const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 
 initI18n();
 initialize();
@@ -110,7 +112,10 @@ async function initialize() {
   moveLookup = data.moveLookup;
   itemLookup = data.itemLookup;
   items = data.items;
-  threats = threatList(pokemon, { count: 10, moveLookup });
+  threats = threatList(pokemon, {
+    count: threatPreferencesStore.readThreatCount(),
+    moveLookup,
+  });
   const activeSet = activeSetStore.readSet();
   const activePokemon = pokemon.find(({ id }) => id === activeSet?.pokemonId);
   selectPokemon(activePokemon ?? pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {

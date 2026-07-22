@@ -179,3 +179,15 @@ test("speed tier rings the colored dot for the likely preset and explains the ri
   assert.doesNotMatch(source, /●/);
   assert.match(styles, /\.speed-preset-likely\s*\{[^}]*outline:/s);
 });
+
+test("builder and speed tiers offer the same popular-threat dropdown choices", () => {
+  const builderHtml = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+  const speedHtml = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const optionValues = (html, id) => {
+    const select = html.match(new RegExp(`<select id="${id}"[^>]*>([\\s\\S]*?)<\\/select>`))?.[1] ?? "";
+    return [...select.matchAll(/<option value="(\d+)"[^>]*>/g)].map(([, value]) => Number(value));
+  };
+
+  assert.deepEqual(optionValues(builderHtml, "builder-threat-count"), [10, 20, 30, 40, 50]);
+  assert.deepEqual(optionValues(speedHtml, "speed-popular-count"), [10, 20, 30, 40, 50]);
+});

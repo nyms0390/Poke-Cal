@@ -2,6 +2,7 @@ import { normalizeId } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { searchPokemon } from "../data/pokemon.js";
 import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
+import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -52,6 +53,7 @@ const elements = {
 let catalogs = null;
 let user = null;
 const activeSetStore = createActiveSetStore(browserStorage());
+const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let popularOpponents = [];
 let manualOpponents = [];
 const updatePage = createLiveUpdater(render);
@@ -74,6 +76,7 @@ async function initialize() {
   });
   if (!catalogs) return;
 
+  elements.popularCount.value = String(threatPreferencesStore.readThreatCount());
   renderNatureOptions();
   for (const select of [elements.userStage, elements.opponentStage]) {
     select.replaceChildren(...Array.from({ length: 13 }, (_, index) => {
@@ -199,6 +202,9 @@ function removeOpponent(id) {
 function handleControl(event) {
   if (!user) return;
   updatePage(() => {
+    if (event.target === elements.popularCount) {
+      event.target.value = String(threatPreferencesStore.writeThreatCount(event.target.value));
+    }
     if (event.target === elements.nature) user = { ...user, nature: event.target.value };
     if (event.target === elements.sp) {
       const sp = Math.max(0, Math.min(32, Math.trunc(Number(event.target.value) || 0)));

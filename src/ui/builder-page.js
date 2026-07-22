@@ -16,6 +16,7 @@ import {
 } from "../data/break-points.js";
 import { bulkPointMatchups, rankBulkPokemonGroups } from "../data/bulk-points.js";
 import { searchPokemon } from "../data/pokemon.js";
+import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
@@ -38,7 +39,6 @@ import {
   applyThreatControl,
   createBuilderState,
   finalStats,
-  normalizeThreatCount,
   partitionBulkMatchups,
   selectBuilderAnalysis,
   selectBuilderSort,
@@ -87,6 +87,7 @@ const elements = {
 let catalogs = null;
 let state = createBuilderState();
 const activeSetStore = createActiveSetStore(browserStorage());
+const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
 const threatOverrides = new Map();
@@ -116,6 +117,7 @@ async function initialize() {
   });
   if (!catalogs) return;
 
+  state = { ...state, threatCount: threatPreferencesStore.readThreatCount() };
   renderLocaleOptions();
 
   attachCombobox({
@@ -138,7 +140,6 @@ async function initialize() {
   }
   elements.stats.addEventListener("input", handleSpInput);
   elements.threatCount.addEventListener("input", handleThreatCount);
-  elements.threatCount.addEventListener("change", handleThreatCount);
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
@@ -304,8 +305,7 @@ function handleSpInput(event) {
 }
 
 function handleThreatCount(event) {
-  if (event.type === "input" && event.target.value.trim() === "") return;
-  const threatCount = normalizeThreatCount(event.target.value);
+  const threatCount = threatPreferencesStore.writeThreatCount(event.target.value);
   updatePage(() => {
     state = { ...state, threatCount };
   });

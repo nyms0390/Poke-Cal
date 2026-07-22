@@ -97,7 +97,13 @@
               </div>
               <label class="builder-threat-count" for="builder-threat-count">
                 Popular Pokémon
-                <input id="builder-threat-count" type="number" min="0" max="50" step="1" value="20" />
+                <select id="builder-threat-count">
+                  <option value="10">Top 10</option>
+                  <option value="20" selected>Top 20</option>
+                  <option value="30">Top 30</option>
+                  <option value="40">Top 40</option>
+                  <option value="50">Top 50</option>
+                </select>
               </label>
               <label class="pokemon-search-label" for="builder-threat-search">Add custom Pokémon</label>
               <div class="pokemon-combobox">
