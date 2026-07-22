@@ -196,41 +196,15 @@ export function koHitCount(text) {
 
 function bulkPokemonRank(group) {
   let best = [Infinity, Infinity];
-  const maximumDamage = maximumDamagePercentage(group);
   for (const matchup of group.matchups ?? []) {
-    if (matchupMaximumDamage(matchup) !== maximumDamage) continue;
-    const currentHits = guaranteedKoHitCount(matchup.damage?.koText);
-    if (Number.isFinite(currentHits) && currentHits >= 2) {
-      best = bestRank(best, [currentHits, 0]);
-    }
-    for (const point of matchup.points ?? []) {
-      const hits = guaranteedKoHitCount(point?.koText ?? point?.achieves ?? point?.fromKoText);
-      const sp = Number(point?.totalSp);
-      if (!Number.isFinite(hits) || hits < 2 || !Number.isFinite(sp)) continue;
-      best = bestRank(best, [hits, sp]);
-    }
+    const point = matchup.points?.[0];
+    const hits = koHitCount(point?.fromKoText ?? matchup.damage?.koText);
+    const sp = Number(point?.totalSp);
+    if (!point || hits < 1 || !Number.isFinite(sp)) continue;
+    const candidate = [hits, sp];
+    if (compareRanks(candidate, best) < 0) best = candidate;
   }
   return best;
-}
-
-function bestRank(current, candidate) {
-  return compareRanks(candidate, current) < 0 ? candidate : current;
-}
-
-function guaranteedKoHitCount(text) {
-  if (!/guaranteed/i.test(String(text ?? ""))) return Infinity;
-  const hits = koHitCount(text);
-  return hits >= 1 ? hits : Infinity;
-}
-
-function matchupMaximumDamage(matchup) {
-  const value = Number(matchup?.damage?.maxPct);
-  return Number.isFinite(value) ? value : -Infinity;
-}
-
-function maximumDamagePercentage(group) {
-  return Math.max(...(group.matchups ?? [])
-    .map(matchupMaximumDamage), -Infinity);
 }
 
 function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {

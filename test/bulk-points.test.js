@@ -84,45 +84,45 @@ test("orders KO tiers from no KO through guaranteed OHKO", () => {
   }
 });
 
-test("ranks Pokémon by guaranteed bulk transition then minimum SP without reordering their moves", () => {
-  const strongest = bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO");
-  const secondary = bulkMatchup("guaranteed OHKO", 1, 90, "guaranteed 3HKO");
+test("ranks Pokémon by bulk transition then minimum SP without reordering their moves", () => {
+  const twoHko = bulkMatchup("guaranteed 2HKO", 1);
+  const expensiveOhko = bulkMatchup("guaranteed OHKO", 20);
+  const cheapPossibleOhko = bulkMatchup("25.0% chance to OHKO", 7);
+  const cheapTwoHko = bulkMatchup("40.0% chance to 2HKO", 2);
   const groups = [
-    { id: "mixed", matchups: [strongest, secondary] },
-    {
-      id: "unreachable",
-      matchups: [bulkMatchup("guaranteed OHKO", 1, 110, "50.0% chance to 2HKO")],
-    },
-    {
-      id: "three-hko",
-      matchups: [bulkMatchup("guaranteed OHKO", 2, 80, "guaranteed 3HKO")],
-    },
+    { id: "mixed", matchups: [twoHko, expensiveOhko] },
+    { id: "possible-ohko", matchups: [cheapPossibleOhko] },
+    { id: "unreachable", matchups: [bulkMatchup("guaranteed OHKO")] },
+    { id: "two-hko", matchups: [cheapTwoHko] },
   ];
 
   const ranked = rankBulkPokemonGroups(groups);
 
-  assert.deepEqual(ranked.map(({ id }) => id), ["mixed", "three-hko", "unreachable"]);
-  assert.deepEqual(ranked[0].matchups, [strongest, secondary]);
+  assert.deepEqual(
+    ranked.map(({ id }) => id),
+    ["possible-ohko", "mixed", "two-hko", "unreachable"],
+  );
+  assert.deepEqual(ranked[1].matchups, [twoHko, expensiveOhko]);
 });
 
-test("ranks a Mega-family stack from the strongest move across every form", () => {
+test("ranks a Mega-family stack from every matchup across its forms", () => {
   const groups = [
     {
       id: "other-family",
-      matchups: [bulkMatchup("25.0% chance to OHKO", 2, 90, "guaranteed 2HKO")],
+      matchups: [bulkMatchup("guaranteed 2HKO", 2, 90, "guaranteed 3HKO")],
     },
     {
       id: "base-and-mega",
       matchups: [
-        bulkMatchup("guaranteed OHKO", 4, 70, "guaranteed 2HKO"),
-        bulkMatchup("guaranteed OHKO", 20, 95, "guaranteed 3HKO"),
+        bulkMatchup("25.0% chance to OHKO", 4, 70, "guaranteed 2HKO"),
+        bulkMatchup("guaranteed 2HKO", 20, 95, "guaranteed 3HKO"),
       ],
     },
   ];
 
   assert.deepEqual(
     rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["other-family", "base-and-mega"],
+    ["base-and-mega", "other-family"],
   );
 });
 
@@ -138,46 +138,46 @@ test("uses bulk breakpoint cost to order equal-damage Pokémon", () => {
   );
 });
 
-test("prioritizes guaranteed 2HKO targets over guaranteed 3HKO targets", () => {
+test("prioritizes an OHKO transition before a 2HKO transition", () => {
   const groups = [
     {
-      id: "three-hko-target",
-      matchups: [bulkMatchup("guaranteed OHKO", 1, 100, "guaranteed 3HKO")],
+      id: "two-hko-transition",
+      matchups: [bulkMatchup("guaranteed 2HKO", 1, 100, "guaranteed 3HKO")],
     },
     {
-      id: "two-hko-target",
+      id: "ohko-transition",
       matchups: [bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO")],
     },
   ];
 
   assert.deepEqual(
     rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["two-hko-target", "three-hko-target"],
+    ["ohko-transition", "two-hko-transition"],
   );
 });
 
-test("uses the best guaranteed target among tied highest-damage moves", () => {
+test("uses the best transition across all matchups regardless of maximum damage", () => {
   const groups = [
     {
-      id: "tied-stack",
+      id: "mixed-stack",
       matchups: [
-        bulkMatchup("guaranteed OHKO", 1, 100, "guaranteed 3HKO"),
-        bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO"),
+        bulkMatchup("40.0% chance to 2HKO", 1, 100, "guaranteed 3HKO"),
+        bulkMatchup("guaranteed OHKO", 20, 80, "guaranteed 2HKO"),
       ],
     },
     {
-      id: "costlier-two-hko",
+      id: "costlier-ohko",
       matchups: [bulkMatchup("guaranteed OHKO", 24, 90, "guaranteed 2HKO")],
     },
   ];
 
   assert.deepEqual(
     rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["tied-stack", "costlier-two-hko"],
+    ["mixed-stack", "costlier-ohko"],
   );
 });
 
-test("treats an already guaranteed 2HKO as an immediate bulk target", () => {
+test("does not treat an already guaranteed 2HKO as a bulk transition", () => {
   const groups = [
     {
       id: "needs-sp",
@@ -191,7 +191,7 @@ test("treats an already guaranteed 2HKO as an immediate bulk target", () => {
 
   assert.deepEqual(
     rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["already-two-hko", "needs-sp"],
+    ["needs-sp", "already-two-hko"],
   );
 });
 
@@ -199,11 +199,11 @@ test("preserves default order when no stack reaches a guaranteed bulk target", (
   const groups = [
     {
       id: "first",
-      matchups: [bulkMatchup("guaranteed OHKO", 20, 100, "50.0% chance to 2HKO")],
+      matchups: [bulkMatchup("guaranteed OHKO")],
     },
     {
       id: "second",
-      matchups: [bulkMatchup("guaranteed OHKO", 1, 90, "25.0% chance to 2HKO")],
+      matchups: [bulkMatchup("25.0% chance to OHKO")],
     },
   ];
 

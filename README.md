@@ -98,23 +98,25 @@ Then open <http://127.0.0.1:4173> for lookup, `/battle.html` for the calculator,
 
 ### Builder breakpoint priority
 
-Builder cards group a base Pokémon with all of its Mega forms into one stack. When
-"Breakpoint priority" is selected, stacks are ranked as follows:
+Builder cards group a base Pokémon with all of its Mega forms into one stack. "Breakpoint
+priority" ranks actual SP transitions, matching the implementation introduced in `ffc7280`:
 
-1. Across every form and move in the stack, keep only the move or tied moves with the
-   highest current maximum-damage percentage (`maxPct`). Lower-damage moves cannot improve
-   the stack's priority.
-2. Rank those representative moves by their best guaranteed target:
-   - Break points: any starting result → guaranteed OHKO > guaranteed 2HKO >
-     guaranteed 3HKO > …
-   - Bulk points: any starting result → guaranteed 2HKO > guaranteed 3HKO >
-     guaranteed 4HKO > …
-3. For the same guaranteed target, prefer the result requiring the least SP. Preserve the
-   default catalog order if the target and SP cost are also tied.
+- Break points sort every form/move result in the stack by current maximum-damage percentage
+  (`maxPct`) and use only the first, highest-damage result. If its current result takes `H`
+  hits, the required breakpoint is the least SP that guarantees `max(1, H - 1)` hits. The
+  stack rank is `(H, required SP)`, so a possible OHKO → guaranteed OHKO transition ranks
+  before a 2HKO → guaranteed OHKO transition, which ranks before a 3HKO → guaranteed 2HKO
+  transition, and so on.
+- Bulk points consider every matchup from every form in the stack, regardless of `maxPct`.
+  Each matchup contributes only its first calculated bulk point. The stack uses the best
+  `(starting hit count, total SP)` transition: any OHKO → its first guaranteed survival point
+  ranks before any 2HKO → its first point, then any 3HKO → its first point, and so on.
 
-An already-guaranteed target counts as requiring 0 SP. A stack whose representative move
-cannot reach a guaranteed target is placed after stacks that can. The default sort does not
-apply these rules and preserves catalog order.
+A current guaranteed result is not a zero-SP breakpoint or bulkpoint; a result must have an
+actual calculated transition to participate. Lower SP wins within the same transition tier,
+and the existing catalog order is preserved when ranks tie or no transition exists. Maximum
+damage still orders the move panels, but it filters stack priority only for break points. The
+default sort preserves catalog order without applying these rules.
 
 ## Data Sources
 
