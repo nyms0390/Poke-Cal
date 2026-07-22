@@ -315,6 +315,7 @@ export const STATIC_ZH_TW = {
   "Fast": "高速",
   "Neutral": "無投資",
   "Slow": "最慢",
+  "Ring marks likely preset": "外圈表示推定預設",
   "Shared stage": "共用階級",
   "Ranked Speed axis": "速度排名軸",
   "Speed axis": "速度軸",

@@ -308,11 +308,11 @@ function renderSpeedRow(row, breakpoint) {
     chip.className = `speed-axis-entry${entry.isUser ? " user" : ""}`;
     chip.append(sprite(entry));
     const label = document.createElement("span");
-    label.textContent = `${entry.likely ? "● " : ""}${localizedName(entry)}`;
+    label.textContent = localizedName(entry);
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";
     const dot = document.createElement("span");
-    dot.className = `speed-preset-dot speed-preset-${entry.presetKey}`;
+    dot.className = `speed-preset-dot speed-preset-${entry.presetKey}${entry.likely ? " speed-preset-likely" : ""}`;
     dot.setAttribute("aria-hidden", "true");
     preset.append(dot);
     chip.append(label, preset);

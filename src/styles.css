@@ -2781,6 +2781,20 @@ details.builder-analysis-move > .builder-spread-grid {
   background: var(--speed-preset-color, var(--subtle));
 }
 
+.speed-preset-likely {
+  margin-inline: 3px;
+  outline: 1.5px solid var(--speed-preset-color, var(--subtle));
+  outline-offset: 2px;
+}
+
+.speed-preset-likely-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
 .speed-preset-max {
   --speed-preset-color: #dc445c;
 }

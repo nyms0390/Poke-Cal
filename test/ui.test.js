@@ -167,3 +167,15 @@ test("speed tier colors keep their labels in the preset legend, not each table c
   }
   assert.doesNotMatch(source, /presetLabel\.textContent/);
 });
+
+test("speed tier rings the colored dot for the likely preset and explains the ring", () => {
+  const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.match(html, /speed-preset-dot speed-preset-fast speed-preset-likely/);
+  assert.match(html, />Ring marks likely preset</);
+  assert.match(source, /entry\.likely \? " speed-preset-likely" : ""/);
+  assert.doesNotMatch(source, /●/);
+  assert.match(styles, /\.speed-preset-likely\s*\{[^}]*outline:/s);
+});
