@@ -119,6 +119,8 @@ export const ZH_TW_MESSAGES = {
   "builder.noHigherKo": "目前分配的剩餘 SP 無法達到更高的擊倒等級。",
   "builder.damage": ({ min, max }) => `${min}–${max}% 傷害`,
   "builder.moveCount": ({ count }) => `${count} 個招式`,
+  "builder.formCount": ({ count }) => `${count} 個形態`,
+  "builder.chooseForm": ({ name }) => `選擇${name}形態`,
   "builder.editBuild": "編輯配招",
   "builder.threatBuild": ({ name }) => `${name}配招`,
   "builder.bulkMoves": "耐久臨界點招式",

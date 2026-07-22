@@ -85,6 +85,15 @@ export function megaFamily(pokemon, selected) {
   });
 }
 
+export function megaFamilyId(pokemon) {
+  const id = normalizeId(pokemon?.id ?? pokemon?.name);
+  const baseSpecies = String(pokemon?.baseSpecies ?? "");
+  const name = String(pokemon?.name ?? "");
+  const belongsToMegaFamily = baseSpecies &&
+    (name === baseSpecies || name.includes("-Mega"));
+  return belongsToMegaFamily ? normalizeId(baseSpecies) : id;
+}
+
 function matchScore(entry, query, { abilityLookup, moveLookup, itemLookup, usageStats } = {}) {
   const candidates = [entry.name, entry.baseSpecies, ...(entry.aliases ?? [])].map(
     normalizeSearch,

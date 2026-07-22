@@ -2175,6 +2175,38 @@ button:disabled {
   box-shadow: var(--shadow-micro);
 }
 
+.builder-analysis-stack {
+  position: relative;
+  min-width: 0;
+  padding: 0 8px 8px 0;
+}
+
+.builder-analysis-stack::before,
+.builder-analysis-stack::after {
+  position: absolute;
+  content: "";
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  pointer-events: none;
+}
+
+.builder-analysis-stack::before {
+  z-index: 1;
+  inset: 4px 4px 4px;
+  background: var(--surface-soft);
+}
+
+.builder-analysis-stack::after {
+  z-index: 0;
+  inset: 8px 0 0 8px;
+  background: var(--surface-tint);
+}
+
+.builder-analysis-stack > .builder-analysis-card {
+  position: relative;
+  z-index: 2;
+}
+
 .builder-analysis-heading {
   display: flex;
   align-items: center;
@@ -2220,6 +2252,55 @@ button:disabled {
 
 .builder-analysis-card.build-open .builder-analysis-meta::after {
   content: "−";
+}
+
+.builder-form-switch {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-tint);
+}
+
+.builder-form-option {
+  min-width: 0;
+  min-height: 54px;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.builder-form-option:hover,
+.builder-form-option:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+  color: var(--accent-dark);
+}
+
+.builder-form-option[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  box-shadow: 0 0 0 1px var(--accent-ring) inset;
+}
+
+.builder-form-option .builder-pokemon-label.compact {
+  min-width: 0;
+  width: 100%;
+}
+
+.builder-form-option .pokemon-minisprite {
+  width: 28px;
+  height: 28px;
+}
+
+.builder-form-option .pokemon-minisprite img {
+  max-width: 34px;
+  max-height: 34px;
 }
 
 .builder-analysis-count {

@@ -7,10 +7,12 @@ export function rankBreakPointPokemonGroups(groups) {
   return groups.map((group) => ({
     ...group,
     analyses: [...(group.analyses ?? [])].sort(compareDamagePercentage),
-  })).sort((left, right) => compareRanks(
-    breakPointPokemonRank(left),
-    breakPointPokemonRank(right),
-  ));
+  })).sort((left, right) =>
+    compareDamagePercentage(left.analyses?.[0], right.analyses?.[0]) ||
+    compareRanks(
+      breakPointPokemonRank(left),
+      breakPointPokemonRank(right),
+    ));
 }
 
 export function yourDamage(userState, move, scenario) {

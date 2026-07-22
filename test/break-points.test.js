@@ -85,7 +85,7 @@ test("ranks moves within each Pokémon by maximum damage percentage", () => {
   assert.deepEqual(ranked.analyses, [higherDamage, lowerDamageBetterBreak]);
 });
 
-test("ranks Pokémon from only the highest-damage move, then transition and minimum SP", () => {
+test("ranks Pokémon by their highest-damage move before transition and minimum SP", () => {
   const groups = [
     {
       id: "better-secondary-only",
@@ -122,7 +122,56 @@ test("ranks Pokémon from only the highest-damage move, then transition and mini
 
   assert.deepEqual(
     ranked.map(({ id }) => id),
-    ["best-top-move", "costlier-top-move", "better-secondary-only", "unreachable-top-move"],
+    ["better-secondary-only", "costlier-top-move", "best-top-move", "unreachable-top-move"],
+  );
+});
+
+test("ranks a Mega-family stack from the strongest move across every form", () => {
+  const groups = [
+    {
+      id: "other-family",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 2, achieves: "guaranteed OHKO" },
+      ], 90)],
+    },
+    {
+      id: "base-and-mega",
+      analyses: [
+        breakAnalysis("guaranteed 2HKO", [
+          { sp: 20, achieves: "guaranteed OHKO" },
+        ], 70),
+        breakAnalysis("guaranteed 3HKO", [
+          { sp: 24, achieves: "guaranteed 2HKO" },
+        ], 95),
+      ],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBreakPointPokemonGroups(groups).map(({ id }) => id),
+    ["base-and-mega", "other-family"],
+  );
+});
+
+test("uses breakpoint cost to order equal-damage Pokémon", () => {
+  const groups = [
+    {
+      id: "costly",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 20, achieves: "guaranteed OHKO" },
+      ], 90)],
+    },
+    {
+      id: "cheap",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 4, achieves: "guaranteed OHKO" },
+      ], 90)],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBreakPointPokemonGroups(groups).map(({ id }) => id),
+    ["cheap", "costly"],
   );
 });
 
@@ -143,8 +192,8 @@ test("ranks a possible OHKO by the SP needed to make it guaranteed", () => {
   const ranked = rankBreakPointPokemonGroups(groups);
 
   assert.deepEqual(ranked.map(({ id }) => id), [
-    "guaranteed-at-ten",
     "already-guaranteed",
+    "guaranteed-at-ten",
   ]);
 });
 

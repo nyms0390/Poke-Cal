@@ -15,7 +15,7 @@ import {
   yourDamage,
 } from "../data/break-points.js";
 import { bulkPointMatchups, rankBulkPokemonGroups } from "../data/bulk-points.js";
-import { searchPokemon } from "../data/pokemon.js";
+import { megaFamilyId, searchPokemon } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -91,6 +91,7 @@ const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
 const threatOverrides = new Map();
+const activeThreatForms = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
 const updatePage = createLiveUpdater(render);
@@ -331,9 +332,13 @@ function addCustomThreat(pokemon) {
 function removeCustomThreat(id) {
   updatePage(() => {
     const threatId = normalizeId(id);
+    const removed = customThreats.find(({ pokemon }) => normalizeId(pokemon.id) === threatId);
     customThreats = customThreats.filter(({ pokemon }) =>
       normalizeId(pokemon.id) !== threatId);
     threatOverrides.delete(threatId);
+    const familyId = removed ? megaFamilyId(removed.pokemon) : threatId;
+    activeThreatForms.delete(familyId);
+    deletePanelKeysForPokemon(expandedCards, familyId);
     deletePanelKeysForPokemon(expandedCards, threatId);
     deletePanelKeysForPokemon(openAnalysisPanels, threatId);
   });
@@ -514,12 +519,13 @@ function renderCustomThreats() {
 
 function renderBulkPoints(threats) {
   const matchups = bulkPointMatchups(state.user, threats);
+  const families = bulkMatchupFamilies(threats, matchups);
   const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
-  const { primary, detail } = partitionBulkMatchups(matchups);
+  const { primary, detail } = partitionBulkFamilies(families);
 
   elements.bulkCount.textContent = t("builder.bulkCount", { spreads: spreadCount, matchups: matchups.length });
   elements.bulkPoints.replaceChildren(
-    ...(matchups.length === 0
+    ...(families.length === 0
       ? [emptyText(t("builder.noThreatMoves"))]
       : [
           ...bulkThreatCards(primary, "primary"),
@@ -528,22 +534,58 @@ function renderBulkPoints(threats) {
   );
 }
 
-function bulkThreatCards(matchups, section) {
-  const groups = new Map();
-  for (const matchup of matchups) {
-    const id = normalizeId(matchup.scenario.threat.pokemon.id);
-    if (!groups.has(id)) groups.set(id, { threat: matchup.scenario.threat, matchups: [] });
-    groups.get(id).matchups.push(matchup);
+function threatFamilies(threats) {
+  const families = new Map();
+  for (const threat of threats) {
+    const familyId = megaFamilyId(threat.pokemon);
+    if (!families.has(familyId)) families.set(familyId, { familyId, forms: [] });
+    families.get(familyId).forms.push(threat);
   }
-  const pokemonGroups = [...groups.values()];
+  return [...families.values()];
+}
+
+function bulkMatchupFamilies(threats, matchups) {
+  const matchupsByThreat = new Map();
+  for (const matchup of matchups) {
+    const threatId = normalizeId(matchup.scenario.threat.pokemon.id);
+    if (!matchupsByThreat.has(threatId)) matchupsByThreat.set(threatId, []);
+    matchupsByThreat.get(threatId).push(matchup);
+  }
+
+  return threatFamilies(threats).map((family) => {
+    const forms = family.forms.map((threat) => ({
+      threat,
+      matchups: matchupsByThreat.get(normalizeId(threat.pokemon.id)) ?? [],
+    })).filter(({ matchups: formMatchups }) => formMatchups.length > 0);
+    return {
+      ...family,
+      forms,
+      matchups: forms.flatMap(({ matchups: formMatchups }) => formMatchups),
+    };
+  }).filter(({ matchups: familyMatchups }) => familyMatchups.length > 0);
+}
+
+function partitionBulkFamilies(families) {
+  return families.reduce((partitioned, family) => {
+    const section = partitionBulkMatchups(family.matchups).primary.length > 0
+      ? "primary"
+      : "detail";
+    partitioned[section].push(family);
+    return partitioned;
+  }, { primary: [], detail: [] });
+}
+
+function bulkThreatCards(families, section) {
   const orderedGroups = state.analysisSort === "breakpoint"
-    ? rankBulkPokemonGroups(pokemonGroups)
-    : pokemonGroups;
-  return orderedGroups.map(({ threat, matchups: threatMatchups }) => {
-    const threatId = normalizeId(threat.pokemon.id);
-    const cardKey = `bulk:${section}:${threatId}`;
-    return analysisCard(threat, threatMatchups.map((matchup) =>
-      bulkMovePanel(matchup, bulkPanelKey(matchup))), cardKey);
+    ? rankBulkPokemonGroups(families)
+    : families;
+  return orderedGroups.map(({ familyId, forms }) => {
+    const cardKey = `bulk:${section}:${familyId}`;
+    return analysisCard(forms.map(({ threat, matchups: formMatchups }) => ({
+      threat,
+      renderMovePanels: () => formMatchups.map((matchup) =>
+        bulkMovePanel(matchup, bulkPanelKey(matchup))),
+    })), cardKey, familyId);
   });
 }
 
@@ -551,8 +593,9 @@ function bulkPanelKey({ scenario }) {
   return `bulk:${normalizeId(scenario.threat.pokemon.id)}:${normalizeId(scenario.move.id)}`;
 }
 
-function bulkDetailDisclosure(matchups) {
+function bulkDetailDisclosure(families) {
   const panelKey = "bulk:more-detail";
+  const matchups = families.flatMap(({ matchups: familyMatchups }) => familyMatchups);
   const details = document.createElement("details");
   details.className = "builder-more-detail";
   details.open = openAnalysisPanels.has(panelKey) ||
@@ -564,7 +607,7 @@ function bulkDetailDisclosure(matchups) {
   );
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...bulkThreatCards(matchups, "detail"));
+  cards.append(...bulkThreatCards(families, "detail"));
   details.addEventListener("toggle", () => setPanelOpen(panelKey, details.open));
   details.append(summary, cards);
   return details;
@@ -609,7 +652,8 @@ function bulkMovePanel({ scenario, damage, points }, panelKey) {
 
 function renderBreakPoints(threats) {
   const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
-  elements.breakCount.textContent = t("builder.breakCount", { pokemon: threats.length, moves: moves.length });
+  const families = threatFamilies(threats);
+  elements.breakCount.textContent = t("builder.breakCount", { pokemon: families.length, moves: moves.length });
   if (threats.length === 0) {
     elements.breakPoints.replaceChildren(emptyText(t("builder.addThreat")));
     return;
@@ -621,22 +665,39 @@ function renderBreakPoints(threats) {
 
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  const groups = threats.map((threat) => ({
-    threat,
-    analyses: moves.map((move) => ({
-      move,
-      damage: yourDamage(state.user, move, { threat }),
-      points: breakPoints(state.user, move, { threat }),
-    })),
-  }));
+  const groups = families.map((family) => {
+    const forms = family.forms.map((threat) => {
+      const form = {
+        threat,
+        analyses: moves.map((move) => ({
+          move,
+          damage: yourDamage(state.user, move, { threat }),
+          points: breakPoints(state.user, move, { threat }),
+        })),
+      };
+      return state.analysisSort === "breakpoint"
+        ? rankBreakPointPokemonGroups([form])[0]
+        : form;
+    });
+    return {
+      ...family,
+      forms,
+      analyses: forms.flatMap(({ analyses }) => analyses),
+    };
+  });
   const orderedGroups = state.analysisSort === "breakpoint"
     ? rankBreakPointPokemonGroups(groups)
     : groups;
-  cards.append(...orderedGroups.map(({ threat, analyses }) => {
-    const threatId = normalizeId(threat.pokemon.id);
-    const cardKey = `break:${threatId}`;
-    return analysisCard(threat, analyses.map((analysis, index) =>
-      breakMovePanel(analysis, threat, `${cardKey}:${normalizeId(analysis.move.id)}:${index}`)), cardKey);
+  cards.append(...orderedGroups.map(({ familyId, forms }) => {
+    const cardKey = `break:${familyId}`;
+    return analysisCard(forms.map(({ threat, analyses }) => ({
+      threat,
+      renderMovePanels: () => analyses.map((analysis, index) => {
+        const threatId = normalizeId(threat.pokemon.id);
+        const panelKey = `${cardKey}:${threatId}:${normalizeId(analysis.move.id)}:${index}`;
+        return breakMovePanel(analysis, threat, panelKey);
+      }),
+    })), cardKey, familyId);
   }));
   elements.breakPoints.replaceChildren(cards);
 }
@@ -683,7 +744,12 @@ function breakMovePanel({ move, damage, points }, threat, panelKey) {
   });
 }
 
-function analysisCard(threat, movePanels, cardKey) {
+function analysisCard(forms, cardKey, familyId) {
+  const activeFormId = activeThreatForms.get(familyId);
+  const activeForm = forms.find(({ threat }) =>
+    normalizeId(threat.pokemon.id) === activeFormId) ?? forms[0];
+  const { threat } = activeForm;
+  const movePanels = activeForm.renderMovePanels();
   const expanded = expandedCards.has(cardKey);
   const card = document.createElement("article");
   card.className = "builder-analysis-card";
@@ -697,6 +763,9 @@ function analysisCard(threat, movePanels, cardKey) {
   meta.className = "builder-analysis-meta";
   meta.append(
     textSpan(t("builder.moveCount", { count: movePanels.length }), "builder-analysis-count"),
+    ...(forms.length > 1
+      ? [textSpan(t("builder.formCount", { count: forms.length }), "builder-analysis-count")]
+      : []),
     textSpan(t("builder.editBuild"), "builder-analysis-edit"),
   );
   heading.append(
@@ -704,6 +773,7 @@ function analysisCard(threat, movePanels, cardKey) {
     meta,
   );
   const editor = expanded ? threatBuildEditor(threat, cardKey) : null;
+  const formSwitch = forms.length > 1 ? analysisFormSwitch(forms, familyId, threat) : null;
   const moves = document.createElement("div");
   moves.className = "builder-analysis-moves";
   moves.append(...movePanels);
@@ -713,8 +783,39 @@ function analysisCard(threat, movePanels, cardKey) {
       else expandedCards.add(cardKey);
     });
   });
-  card.append(heading, ...(editor ? [editor] : []), moves);
-  return card;
+  card.append(heading, ...(formSwitch ? [formSwitch] : []), ...(editor ? [editor] : []), moves);
+  if (forms.length === 1) return card;
+
+  const stack = document.createElement("div");
+  stack.className = "builder-analysis-stack";
+  stack.append(card);
+  return stack;
+}
+
+function analysisFormSwitch(forms, familyId, activeThreat) {
+  const group = document.createElement("div");
+  group.className = "builder-form-switch";
+  group.setAttribute("role", "group");
+  group.setAttribute("aria-label", t("builder.chooseForm", {
+    name: localizedName(forms[0].threat.pokemon),
+  }));
+  group.append(...forms.map(({ threat }) => {
+    const formId = normalizeId(threat.pokemon.id);
+    const selected = formId === normalizeId(activeThreat.pokemon.id);
+    const focusKey = `form:${familyId}:${formId}`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "builder-form-option";
+    button.setAttribute("aria-pressed", String(selected));
+    button.dataset.liveKey = focusKey;
+    button.append(pokemonLabel(threat.pokemon, { compact: true }));
+    button.addEventListener("click", () => {
+      if (selected) return;
+      updatePage(() => activeThreatForms.set(familyId, formId), { focusKey });
+    });
+    return button;
+  }));
+  return group;
 }
 
 function threatBuildEditor(threat, cardKey) {

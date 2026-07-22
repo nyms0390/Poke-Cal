@@ -116,6 +116,8 @@ export const EN_MESSAGES = {
   "builder.noHigherKo": "No higher KO tier is reachable from the current spread.",
   "builder.damage": ({ min, max }) => `${min}–${max}% damage`,
   "builder.moveCount": ({ count }) => `${count} ${count === 1 ? "move" : "moves"}`,
+  "builder.formCount": ({ count }) => `${count} forms`,
+  "builder.chooseForm": ({ name }) => `Choose ${name} form`,
   "builder.editBuild": "Edit build",
   "builder.threatBuild": ({ name }) => `${name} build`,
   "builder.bulkMoves": "Bulk-point moves",

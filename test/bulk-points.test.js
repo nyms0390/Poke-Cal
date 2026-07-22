@@ -105,6 +105,39 @@ test("ranks Pokémon by bulk transition then minimum SP without reordering their
   assert.deepEqual(ranked[1].matchups, [twoHko, expensiveOhko]);
 });
 
+test("ranks a Mega-family stack from the strongest move across every form", () => {
+  const groups = [
+    {
+      id: "other-family",
+      matchups: [bulkMatchup("25.0% chance to OHKO", 2, 90)],
+    },
+    {
+      id: "base-and-mega",
+      matchups: [
+        bulkMatchup("guaranteed 2HKO", 4, 70),
+        bulkMatchup("guaranteed OHKO", 20, 95),
+      ],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBulkPokemonGroups(groups).map(({ id }) => id),
+    ["base-and-mega", "other-family"],
+  );
+});
+
+test("uses bulk breakpoint cost to order equal-damage Pokémon", () => {
+  const groups = [
+    { id: "costly", matchups: [bulkMatchup("guaranteed OHKO", 20, 90)] },
+    { id: "cheap", matchups: [bulkMatchup("guaranteed OHKO", 4, 90)] },
+  ];
+
+  assert.deepEqual(
+    rankBulkPokemonGroups(groups).map(({ id }) => id),
+    ["cheap", "costly"],
+  );
+});
+
 test("wraps the damage engine with the threat on the attacker side", () => {
   const result = threatDamage(userState(), { threat, move: physicalMove });
 
@@ -213,9 +246,9 @@ function withBulk(state, hpSp, defenseSp, defenseStat) {
   };
 }
 
-function bulkMatchup(fromKoText, totalSp) {
+function bulkMatchup(fromKoText, totalSp, maxPct) {
   return {
-    damage: { koText: fromKoText },
+    damage: { koText: fromKoText, maxPct },
     points: Number.isFinite(totalSp) ? [{ fromKoText, totalSp }] : [],
   };
 }

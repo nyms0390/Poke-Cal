@@ -6,10 +6,12 @@ export function compareKoTiers(left, right) {
 }
 
 export function rankBulkPokemonGroups(groups) {
-  return [...groups].sort((left, right) => compareRanks(
-    bulkPokemonRank(left),
-    bulkPokemonRank(right),
-  ));
+  return [...groups].sort((left, right) =>
+    compareMaximumDamage(left, right) ||
+    compareRanks(
+      bulkPokemonRank(left),
+      bulkPokemonRank(right),
+    ));
 }
 
 export function threatDamage(userState, scenario) {
@@ -205,6 +207,19 @@ function bulkPokemonRank(group) {
     if (compareRanks(candidate, best) < 0) best = candidate;
   }
   return best;
+}
+
+function compareMaximumDamage(left, right) {
+  const leftDamage = maximumDamagePercentage(left);
+  const rightDamage = maximumDamagePercentage(right);
+  if (leftDamage === rightDamage) return 0;
+  return leftDamage > rightDamage ? -1 : 1;
+}
+
+function maximumDamagePercentage(group) {
+  return Math.max(...(group.matchups ?? [])
+    .map(({ damage }) => Number(damage?.maxPct))
+    .filter(Number.isFinite), -Infinity);
 }
 
 function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {
