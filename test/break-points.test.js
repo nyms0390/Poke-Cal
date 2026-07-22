@@ -175,6 +175,75 @@ test("uses breakpoint cost to order equal-damage Pokémon", () => {
   );
 });
 
+test("prioritizes guaranteed OHKO targets over guaranteed 2HKO targets", () => {
+  const groups = [
+    {
+      id: "two-hko-target",
+      analyses: [breakAnalysis("guaranteed 3HKO", [
+        { sp: 1, achieves: "guaranteed 2HKO" },
+      ], 100)],
+    },
+    {
+      id: "ohko-target",
+      analyses: [breakAnalysis("guaranteed 3HKO", [
+        { sp: 20, achieves: "guaranteed OHKO" },
+      ], 100)],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBreakPointPokemonGroups(groups).map(({ id }) => id),
+    ["ohko-target", "two-hko-target"],
+  );
+});
+
+test("uses the best guaranteed target among tied highest-damage moves", () => {
+  const groups = [
+    {
+      id: "mixed-top-ties",
+      analyses: [
+        breakAnalysis("guaranteed 3HKO", [
+          { sp: 1, achieves: "guaranteed 2HKO" },
+        ], 100),
+        breakAnalysis("guaranteed 3HKO", [
+          { sp: 20, achieves: "guaranteed OHKO" },
+        ], 100),
+      ],
+    },
+    {
+      id: "single-ohko",
+      analyses: [breakAnalysis("guaranteed 3HKO", [
+        { sp: 5, achieves: "guaranteed OHKO" },
+      ], 100)],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBreakPointPokemonGroups(groups).map(({ id }) => id),
+    ["single-ohko", "mixed-top-ties"],
+  );
+});
+
+test("treats an already guaranteed OHKO as an immediate breakpoint", () => {
+  const groups = [
+    {
+      id: "needs-sp",
+      analyses: [breakAnalysis("guaranteed 2HKO", [
+        { sp: 20, achieves: "guaranteed OHKO" },
+      ], 100)],
+    },
+    {
+      id: "already-ohko",
+      analyses: [breakAnalysis("guaranteed OHKO", [], 100)],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBreakPointPokemonGroups(groups).map(({ id }) => id),
+    ["already-ohko", "needs-sp"],
+  );
+});
+
 test("ranks a possible OHKO by the SP needed to make it guaranteed", () => {
   const groups = [
     {

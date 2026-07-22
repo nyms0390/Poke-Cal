@@ -96,6 +96,19 @@ npm start
 
 Then open <http://127.0.0.1:4173> for lookup, `/battle.html` for the calculator, `/builder.html` for bulk/break points, or `/speed.html` for interactive Speed tiers. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
 
+### Builder priority
+
+Builder cards group a base Pokémon with all of its Mega forms into one stack. When
+"Breakpoint priority" is selected, each stack is evaluated using only its highest
+maximum-damage (`maxPct`) move across every form. Ties among those moves use the best
+guaranteed target and then the lowest required offensive SP:
+
+- Break points: any path to a guaranteed OHKO > guaranteed 2HKO > guaranteed 3HKO > …
+- Bulk points: any path to a guaranteed 2HKO > guaranteed 3HKO > guaranteed 4HKO > …
+
+An already-guaranteed target counts as requiring 0 SP. Moves or forms below the stack's
+highest `maxPct` do not improve its priority. The default sort preserves the catalog order.
+
 ## Data Sources
 
 - Pokémon Showdown (mechanics/catalog seed: pokedex, learnsets, abilities, moves, items, text descriptions): <https://github.com/smogon/pokemon-showdown/tree/master/data>

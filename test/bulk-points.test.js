@@ -84,11 +84,11 @@ test("orders KO tiers from no KO through guaranteed OHKO", () => {
   }
 });
 
-test("ranks Pokémon by bulk transition then minimum SP without reordering their moves", () => {
-  const twoHko = bulkMatchup("guaranteed 2HKO", 1);
-  const expensiveOhko = bulkMatchup("guaranteed OHKO", 20);
-  const cheapPossibleOhko = bulkMatchup("25.0% chance to OHKO", 7);
-  const cheapTwoHko = bulkMatchup("40.0% chance to 2HKO", 2);
+test("ranks Pokémon by guaranteed bulk transition then minimum SP without reordering their moves", () => {
+  const twoHko = bulkMatchup("guaranteed 2HKO", 1, undefined, "guaranteed 3HKO");
+  const expensiveOhko = bulkMatchup("guaranteed OHKO", 20, undefined, "guaranteed 2HKO");
+  const cheapPossibleOhko = bulkMatchup("25.0% chance to OHKO", 7, undefined, "40.0% chance to 2HKO");
+  const cheapTwoHko = bulkMatchup("40.0% chance to 2HKO", 2, undefined, "50.0% chance to 3HKO");
   const groups = [
     { id: "mixed", matchups: [twoHko, expensiveOhko] },
     { id: "possible-ohko", matchups: [cheapPossibleOhko] },
@@ -100,9 +100,9 @@ test("ranks Pokémon by bulk transition then minimum SP without reordering their
 
   assert.deepEqual(
     ranked.map(({ id }) => id),
-    ["possible-ohko", "mixed", "two-hko", "unreachable"],
+    ["mixed", "possible-ohko", "two-hko", "unreachable"],
   );
-  assert.deepEqual(ranked[1].matchups, [twoHko, expensiveOhko]);
+  assert.deepEqual(ranked[0].matchups, [twoHko, expensiveOhko]);
 });
 
 test("ranks a Mega-family stack from the strongest move across every form", () => {
@@ -128,13 +128,49 @@ test("ranks a Mega-family stack from the strongest move across every form", () =
 
 test("uses bulk breakpoint cost to order equal-damage Pokémon", () => {
   const groups = [
-    { id: "costly", matchups: [bulkMatchup("guaranteed OHKO", 20, 90)] },
-    { id: "cheap", matchups: [bulkMatchup("guaranteed OHKO", 4, 90)] },
+    { id: "costly", matchups: [bulkMatchup("guaranteed OHKO", 20, 90, "guaranteed 2HKO")] },
+    { id: "cheap", matchups: [bulkMatchup("guaranteed OHKO", 4, 90, "guaranteed 2HKO")] },
   ];
 
   assert.deepEqual(
     rankBulkPokemonGroups(groups).map(({ id }) => id),
     ["cheap", "costly"],
+  );
+});
+
+test("prioritizes guaranteed 2HKO targets over guaranteed 3HKO targets", () => {
+  const groups = [
+    {
+      id: "three-hko-target",
+      matchups: [bulkMatchup("guaranteed OHKO", 1, 100, "guaranteed 3HKO")],
+    },
+    {
+      id: "two-hko-target",
+      matchups: [bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO")],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBulkPokemonGroups(groups).map(({ id }) => id),
+    ["two-hko-target", "three-hko-target"],
+  );
+});
+
+test("treats an already guaranteed 2HKO as an immediate bulk target", () => {
+  const groups = [
+    {
+      id: "needs-sp",
+      matchups: [bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO")],
+    },
+    {
+      id: "already-two-hko",
+      matchups: [{ damage: { koText: "guaranteed 2HKO", maxPct: 100 }, points: [] }],
+    },
+  ];
+
+  assert.deepEqual(
+    rankBulkPokemonGroups(groups).map(({ id }) => id),
+    ["already-two-hko", "needs-sp"],
   );
 });
 
@@ -246,9 +282,9 @@ function withBulk(state, hpSp, defenseSp, defenseStat) {
   };
 }
 
-function bulkMatchup(fromKoText, totalSp, maxPct) {
+function bulkMatchup(fromKoText, totalSp, maxPct, koText) {
   return {
     damage: { koText: fromKoText, maxPct },
-    points: Number.isFinite(totalSp) ? [{ fromKoText, totalSp }] : [],
+    points: Number.isFinite(totalSp) ? [{ fromKoText, totalSp, koText }] : [],
   };
 }

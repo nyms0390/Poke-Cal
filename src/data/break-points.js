@@ -123,18 +123,37 @@ function withOffense(userState, stat, sp) {
 }
 
 function breakPointPokemonRank(group) {
-  return breakPointAnalysisRank(group.analyses?.[0]);
+  const analyses = group.analyses ?? [];
+  const maximumDamage = Math.max(...analyses.map(maximumDamagePercentage), -Infinity);
+  let best = [Infinity, Infinity];
+  for (const analysis of analyses) {
+    if (maximumDamagePercentage(analysis) !== maximumDamage) continue;
+    best = bestRank(best, breakPointAnalysisRank(analysis));
+  }
+  return best;
 }
 
 function breakPointAnalysisRank(analysis) {
-  const currentHits = koHitCount(analysis?.damage?.koText);
-  if (currentHits < 1) return [Infinity, Infinity];
-  const targetHits = Math.max(1, currentHits - 1);
-  const targetSp = Math.min(...(analysis?.points ?? [])
-    .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
-    .map(({ sp }) => Number(sp))
-    .filter(Number.isFinite));
-  return Number.isFinite(targetSp) ? [currentHits, targetSp] : [Infinity, Infinity];
+  const targets = [];
+  const currentHits = guaranteedKoHitCount(analysis?.damage?.koText);
+  if (Number.isFinite(currentHits)) targets.push({ hits: currentHits, sp: 0 });
+  for (const point of analysis?.points ?? []) {
+    const hits = guaranteedKoHitCount(point?.achieves);
+    const sp = Number(point?.sp);
+    if (Number.isFinite(hits) && Number.isFinite(sp)) targets.push({ hits, sp });
+  }
+  const best = targets.sort((left, right) => left.hits - right.hits || left.sp - right.sp)[0];
+  return best ? [best.hits, best.sp] : [Infinity, Infinity];
+}
+
+function bestRank(current, candidate) {
+  return compareRanks(candidate, current) < 0 ? candidate : current;
+}
+
+function guaranteedKoHitCount(text) {
+  if (!/guaranteed/i.test(String(text ?? ""))) return Infinity;
+  const hits = koHitCount(text);
+  return hits >= 1 ? hits : Infinity;
 }
 
 function compareDamagePercentage(left, right) {
