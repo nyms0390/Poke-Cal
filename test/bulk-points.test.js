@@ -8,6 +8,7 @@ import {
   rankBulkPokemonGroups,
   threatDamage,
 } from "../src/data/bulk-points.js";
+import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
 
 const defender = {
@@ -43,6 +44,14 @@ const ohkoMove = {
   id: "giga-impact",
   name: "Giga Impact",
   basePower: 200,
+};
+const weatherBall = {
+  id: "weatherball",
+  name: "Weather Ball",
+  type: "Normal",
+  category: "Special",
+  basePower: 50,
+  target: "normal",
 };
 
 const threat = {
@@ -312,6 +321,22 @@ test("passes the user's defensive item through to the damage engine", () => {
   const vested = threatDamage(userState({ id: "assaultvest", name: "Assault Vest" }), scenario);
 
   assert.equal(vested.maxPct < unvested.maxPct, true);
+});
+
+test("uses the selected ambient field for threat damage and every bulk matchup", () => {
+  const weatherThreat = { ...threat, moves: [weatherBall] };
+  const scenario = { threat: weatherThreat, move: weatherBall };
+  const sunnyField = createField({ weather: "SunnyDay" });
+  const neutral = threatDamage(userState(), scenario);
+  const sunny = threatDamage(userState(), { ...scenario, field: sunnyField });
+  const [matchup] = bulkPointMatchups(userState(), [weatherThreat], {
+    budget: 0,
+    field: sunnyField,
+  });
+
+  assert.equal(sunny.maxPct > neutral.maxPct, true);
+  assert.deepEqual(matchup.damage, sunny);
+  assert.equal(matchup.scenario.field, sunnyField);
 });
 
 function withBulk(state, hpSp, defenseSp, defenseStat) {

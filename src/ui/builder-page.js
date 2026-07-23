@@ -20,6 +20,7 @@ import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
+import { createField } from "../engine/field.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import {
@@ -54,6 +55,8 @@ import {
   searchResultButton,
   STAT_LABELS,
 } from "./components.js";
+import { mountAmbientFieldControls } from "./field-controls.js";
+import { applyAmbientFieldControl } from "./field-state.js";
 import { createLiveUpdater } from "./live-update.js";
 
 const elements = {
@@ -68,6 +71,7 @@ const elements = {
   stats: document.querySelector("#builder-stats"),
   spBudget: document.querySelector("#builder-sp-budget"),
   movePicks: document.querySelector("#builder-move-picks"),
+  ambientField: document.querySelector("#builder-ambient-field"),
   threatCount: document.querySelector("#builder-threat-count"),
   threatSearch: document.querySelector("#builder-threat-search"),
   threatResults: document.querySelector("#builder-threat-results"),
@@ -96,6 +100,11 @@ const activeThreatForms = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
 const updatePage = createLiveUpdater(render);
+const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
+  namePrefix: "builder",
+  onChange: handleAmbientFieldControl,
+});
+ambientFieldControls.sync(state.field);
 
 initI18n();
 initializeAnalysisTabs();
@@ -239,6 +248,7 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
       threatCount: state.threatCount,
       analysisTab: state.analysisTab,
       analysisSort: state.analysisSort,
+      field: state.field,
     });
     if (activeSet) {
       state = {
@@ -314,6 +324,15 @@ function handleThreatCount(event) {
   event.target.value = String(threatCount);
 }
 
+function handleAmbientFieldControl(control) {
+  updatePage(() => {
+    state = {
+      ...state,
+      field: applyAmbientFieldControl(state.field, control),
+    };
+  });
+}
+
 function addCustomThreat(pokemon) {
   if (!pokemon) return;
   const alreadyCustom = customThreats.some(({ pokemon: entry }) =>
@@ -358,6 +377,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.item.value = user.item?.id ?? "";
   elements.tera.value = user.teraType ?? "";
   elements.threatCount.value = String(state.threatCount);
+  ambientFieldControls.sync(state.field);
   elements.summary.textContent = t("builder.summary", {
     nature: localizedTerm("nature", user.nature),
     tera: user.teraType ? t("builder.tera", { type: localizedTerm("type", user.teraType) }) : t("builder.noTera"),
@@ -374,8 +394,9 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
   renderCustomThreats();
   const threats = selectedThreats();
-  renderBulkPoints(threats);
-  renderBreakPoints(threats);
+  const field = createField(state.field);
+  renderBulkPoints(threats, field);
+  renderBreakPoints(threats, field);
   applyDocumentTranslations();
   restoreLiveFocus(focusKey);
   if (focusAnalysisTab) {
@@ -518,8 +539,8 @@ function renderCustomThreats() {
   }));
 }
 
-function renderBulkPoints(threats) {
-  const matchups = bulkPointMatchups(state.user, threats);
+function renderBulkPoints(threats, field) {
+  const matchups = bulkPointMatchups(state.user, threats, { field });
   const families = bulkMatchupFamilies(threats, matchups);
   const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
   const { primary, detail } = partitionBulkFamilies(families);
@@ -655,7 +676,7 @@ function bulkMovePanel({ scenario, damage, points }, panelKey) {
   });
 }
 
-function renderBreakPoints(threats) {
+function renderBreakPoints(threats, field) {
   const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
   const families = threatFamilies(threats);
   elements.breakCount.textContent = t("builder.breakCount", { pokemon: families.length, moves: moves.length });
@@ -676,8 +697,8 @@ function renderBreakPoints(threats) {
         threat,
         analyses: moves.map((move) => ({
           move,
-          damage: yourDamage(state.user, move, { threat }),
-          points: breakPoints(state.user, move, { threat }),
+          damage: yourDamage(state.user, move, { threat, field }),
+          points: breakPoints(state.user, move, { threat, field }),
         })),
       };
       return state.analysisSort === "breakpoint"

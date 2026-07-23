@@ -52,6 +52,12 @@ const threat = {
 test("creates an empty builder with the default threat count", () => {
   assert.deepEqual(createBuilderState(), {
     user: null,
+    field: {
+      format: "doubles",
+      weather: "",
+      terrain: "",
+      gravity: false,
+    },
     threatCount: 20,
     analysisTab: "bulk",
     analysisSort: "breakpoint",
@@ -119,6 +125,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
     threatCount: 12,
     analysisTab: "break",
     analysisSort: "default",
+    field: { weather: "SunnyDay", gravity: true },
   });
 
   assert.equal(state.user.pokemon, pikachu);
@@ -134,6 +141,12 @@ test("creates one canonical side state without activating the usage-backed Tera 
   assert.equal(state.threatCount, 12);
   assert.equal(state.analysisTab, "break");
   assert.equal(state.analysisSort, "default");
+  assert.deepEqual(state.field, {
+    format: "doubles",
+    weather: "SunnyDay",
+    terrain: "",
+    gravity: true,
+  });
 });
 
 test("calculates all six final level-50 stats without mutating builder state", () => {

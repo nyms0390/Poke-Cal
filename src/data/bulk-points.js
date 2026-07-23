@@ -25,8 +25,9 @@ export function threatDamage(userState, scenario) {
 }
 
 export function bulkPointMatchups(userState, threats, options) {
+  const field = options?.field ?? createField();
   return threats
-    .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move })))
+    .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move, field })))
     .map((scenario) => {
       const damage = threatDamage(userState, scenario);
       if (!Number.isFinite(damage.maxPct)) return null;
@@ -128,14 +129,14 @@ function clampSp(value) {
   return Math.max(0, Math.min(32, Math.trunc(sp)));
 }
 
-function damageResult(userState, { threat, move }) {
+function damageResult(userState, { threat, move, field = createField() }) {
   return calculateDamage({
     attacker: threat.pokemon,
     defender: userState.pokemon,
     move,
     attackerState: threatState(threat),
     defenderState: { ...userState, currentHpFraction: 1 },
-    field: createField(),
+    field,
   });
 }
 

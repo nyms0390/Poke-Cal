@@ -7,6 +7,7 @@ import {
   yourDamage,
 } from "../src/data/break-points.js";
 import { compareKoTiers } from "../src/data/bulk-points.js";
+import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
 
 const attacker = {
@@ -35,6 +36,14 @@ const specialMove = {
   type: "Normal",
   category: "Special",
   basePower: 100,
+  target: "normal",
+};
+const weatherBall = {
+  id: "weatherball",
+  name: "Weather Ball",
+  type: "Normal",
+  category: "Special",
+  basePower: 50,
   target: "normal",
 };
 
@@ -322,6 +331,30 @@ test("passes the threat's defensive item through to the damage engine", () => {
   });
 
   assert.equal(vested.maxPct < unvested.maxPct, true);
+});
+
+test("uses the selected ambient field throughout Weather Ball break-point searches", () => {
+  const state = userState();
+  const neutralScenario = { threat: threat() };
+  const sunnyScenario = {
+    threat: threat(),
+    field: createField({ weather: "SunnyDay" }),
+  };
+  const neutral = yourDamage(state, weatherBall, neutralScenario);
+  const sunny = yourDamage(state, weatherBall, sunnyScenario);
+  const points = breakPoints(state, weatherBall, sunnyScenario)
+    .filter(({ requiresPlusNature }) => !requiresPlusNature);
+
+  assert.equal(sunny.maxPct > neutral.maxPct, true);
+  for (const point of points) {
+    const damage = yourDamage(
+      withOffense(state, "spa", point.sp),
+      weatherBall,
+      sunnyScenario,
+    );
+    assert.equal(point.achieves, damage.koText);
+    assert.equal(point.maxPct, damage.maxPct);
+  }
 });
 
 function withOffense(state, stat, sp) {

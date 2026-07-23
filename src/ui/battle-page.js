@@ -65,6 +65,11 @@ import {
   STAT_LABELS,
   typeBadge,
 } from "./components.js";
+import { mountAmbientFieldControls } from "./field-controls.js";
+import {
+  applyAmbientFieldControl,
+  createAmbientFieldState,
+} from "./field-state.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -109,11 +114,9 @@ const elements = {
   attackerSpeedReadout: document.querySelector("#attacker-speed-readout"),
   defenderSpeedReadout: document.querySelector("#defender-speed-readout"),
   trickRoom: document.querySelector("#trick-room"),
+  trickRoomToggle: document.querySelector("#trick-room-toggle"),
   swapSides: document.querySelector("#swap-sides"),
-  fieldGravity: document.querySelector("#field-gravity"),
-  fieldFormatInputs: document.querySelectorAll('input[name="field-format"]'),
-  fieldWeatherInputs: document.querySelectorAll('input[name="field-weather"]'),
-  fieldTerrainInputs: document.querySelectorAll('input[name="field-terrain"]'),
+  ambientField: document.querySelector("#battle-ambient-field"),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   assumptionInputs: document.querySelectorAll(
     'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], select[data-kind="rivalry"]',
@@ -186,14 +189,17 @@ function neutralFieldSidePanel() {
 // "Defender's side" panels), not by calculation direction — buildCalcInput derives both
 // directions' Field objects from these two panels.
 let fieldState = {
-  format: "doubles",
-  weather: "",
-  terrain: "",
-  gravity: false,
+  ...createAmbientFieldState(),
   trickRoom: false,
   attackerSide: neutralFieldSidePanel(),
   defenderSide: neutralFieldSidePanel(),
 };
+const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
+  namePrefix: "battle",
+  onChange: handleAmbientFieldControl,
+  toggleElements: [elements.trickRoomToggle],
+});
+ambientFieldControls.sync(fieldState);
 
 initI18n();
 initialize();
@@ -253,11 +259,7 @@ for (const control of [
 }
 
 for (const control of [
-  ...elements.fieldFormatInputs,
-  ...elements.fieldWeatherInputs,
-  ...elements.fieldTerrainInputs,
   ...elements.fieldSideInputs,
-  elements.fieldGravity,
   elements.trickRoom,
 ]) {
   control.addEventListener("input", handleFieldControl);
@@ -605,22 +607,26 @@ function syncSideInputs(side) {
   syncAssumptionInputs(side);
 }
 
-// Updates the module-level fieldState from a Field-card control (format/weather/terrain radio
-// groups, gravity/Trick Room checkboxes). Kept separate from damageState/applyControl since the
-// field applies to both sides at once and must survive either side's Pokémon changing.
+// Updates the ambient controls shared with Builder. Format changes also affect which moves are
+// treated as spread moves, so refresh those pickers before recalculating.
+function handleAmbientFieldControl(control) {
+  fieldState = applyAmbientFieldControl(fieldState, control);
+  if (control.key === "format") {
+    renderDamageMovePickers("attacker");
+    renderDamageMovePickers("defender");
+  }
+  renderDamage();
+}
+
+// Updates the calculator-only side conditions and Trick Room setting.
 function handleFieldControl(event) {
-  const { name, id, checked, value, dataset } = event.target;
+  const { id, checked, dataset } = event.target;
   if (dataset.kind === "field-side") {
     const { side, key } = dataset;
     fieldState = { ...fieldState, [side]: { ...fieldState[side], [key]: checked } };
-  } else if (name === "field-format") {
-    fieldState = { ...fieldState, format: value };
-    renderDamageMovePickers("attacker");
-    renderDamageMovePickers("defender");
-  } else if (name === "field-weather") fieldState = { ...fieldState, weather: value };
-  else if (name === "field-terrain") fieldState = { ...fieldState, terrain: value };
-  else if (id === "field-gravity") fieldState = { ...fieldState, gravity: checked };
-  else if (id === "trick-room") fieldState = { ...fieldState, trickRoom: checked };
+  } else if (id === "trick-room") {
+    fieldState = { ...fieldState, trickRoom: checked };
+  }
   renderDamage();
 }
 
@@ -657,13 +663,12 @@ function applyAbilityImpliedField(ability) {
   let nextFieldState = fieldState;
   if (implied.weather !== undefined && fieldState.weather !== implied.weather) {
     nextFieldState = { ...nextFieldState, weather: implied.weather };
-    syncRadioGroup(elements.fieldWeatherInputs, implied.weather);
   }
   if (implied.terrain !== undefined && fieldState.terrain !== implied.terrain) {
     nextFieldState = { ...nextFieldState, terrain: implied.terrain };
-    syncRadioGroup(elements.fieldTerrainInputs, implied.terrain);
   }
   fieldState = nextFieldState;
+  ambientFieldControls.sync(fieldState);
 }
 
 function applyAbilityImpliedStages() {
@@ -690,17 +695,8 @@ function applyAbilityImpliedStages() {
   if (changed) persistTeams();
 }
 
-function syncRadioGroup(inputs, value) {
-  for (const input of inputs) {
-    input.checked = input.value === value;
-  }
-}
-
 function syncFieldInputs() {
-  syncRadioGroup(elements.fieldFormatInputs, fieldState.format);
-  syncRadioGroup(elements.fieldWeatherInputs, fieldState.weather);
-  syncRadioGroup(elements.fieldTerrainInputs, fieldState.terrain);
-  elements.fieldGravity.checked = fieldState.gravity;
+  ambientFieldControls.sync(fieldState);
   elements.trickRoom.checked = fieldState.trickRoom;
   for (const input of elements.fieldSideInputs) {
     input.checked = Boolean(fieldState[input.dataset.side]?.[input.dataset.key]);

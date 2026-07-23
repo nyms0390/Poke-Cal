@@ -90,6 +90,16 @@
               <div id="builder-move-picks" class="builder-move-picks"></div>
             </section>
 
+            <section class="builder-field-settings" aria-label="Battle environment">
+              <div class="panel-heading">
+                <span data-i18n="field.environment">Environment</span>
+              </div>
+              <div id="builder-ambient-field"></div>
+              <p class="builder-assumption" data-i18n="builder.environmentAssumption">
+                All matchups use this environment. Opponent abilities do not change it automatically.
+              </p>
+            </section>
+
             <section class="builder-threat-controls" aria-label="Test opponents">
               <div class="panel-heading">
                 <span>Test against</span>
@@ -175,8 +185,8 @@
               aria-labelledby="builder-bulk-tab"
               tabindex="0"
             >
-              <p class="builder-assumption">
-                Threats start with usage-backed items and abilities, no active Tera, max offense, and a neutral field. Click a Pokémon to edit its build.
+              <p class="builder-assumption" data-i18n="builder.bulkAssumption">
+                Threats start with usage-backed items and abilities, no active Tera, max offense, and the selected environment. Click a Pokémon to edit its build.
               </p>
               <div id="bulk-points" class="builder-scenarios">
                 <p>Select a Pokémon to calculate defensive targets.</p>
@@ -191,8 +201,8 @@
               tabindex="0"
               hidden
             >
-              <p class="builder-assumption">
-                Threats start with 2 HP fast-offense bulk, usage-backed items and abilities, and no active Tera. Click a Pokémon to edit its build.
+              <p class="builder-assumption" data-i18n="builder.breakAssumption">
+                Threats start with 2 HP fast-offense bulk, usage-backed items and abilities, no active Tera, and the selected environment. Click a Pokémon to edit its build.
               </p>
               <div id="break-points" class="builder-breakpoints">
                 <p>Select a damaging move to calculate offensive targets.</p>

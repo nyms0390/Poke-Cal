@@ -1,6 +1,7 @@
 import { STAT_KEYS } from "../engine/constants.js";
 import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
+import { createAmbientFieldState } from "./field-state.js";
 
 const ANALYSIS_TABS = ["bulk", "break"];
 const ANALYSIS_SORTS = ["breakpoint", "default"];
@@ -16,18 +17,27 @@ const THREAT_SP_GROUPS = {
 export function createBuilderState(
   pokemon,
   usageDefaults,
-  { threatCount = 20, analysisTab = "bulk", analysisSort = "breakpoint" } = {},
+  {
+    threatCount = 20,
+    analysisTab = "bulk",
+    analysisSort = "breakpoint",
+    field,
+  } = {},
 ) {
   threatCount = normalizeThreatCount(threatCount);
   analysisTab = ANALYSIS_TABS.includes(analysisTab) ? analysisTab : "bulk";
   analysisSort = ANALYSIS_SORTS.includes(analysisSort) ? analysisSort : "breakpoint";
-  if (!pokemon || !usageDefaults) return { user: null, threatCount, analysisTab, analysisSort };
+  const ambientField = createAmbientFieldState(field);
+  if (!pokemon || !usageDefaults) {
+    return { user: null, field: ambientField, threatCount, analysisTab, analysisSort };
+  }
 
   return {
     user: {
       ...createSideState(pokemon, usageDefaults),
       teraType: "",
     },
+    field: ambientField,
     threatCount,
     analysisTab,
     analysisSort,

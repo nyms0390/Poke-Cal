@@ -1189,6 +1189,16 @@ button:disabled {
   gap: 16px;
 }
 
+.ambient-field-controls {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.field-grid > .ambient-field-controls {
+  grid-column: 1 / -1;
+}
+
 .field-grid > .radio-group,
 .field-grid > .inline-toggles {
   grid-column: 1 / -1;
@@ -2079,7 +2089,8 @@ button:disabled {
   line-height: 1.5;
 }
 
-.builder-moves {
+.builder-moves,
+.builder-field-settings {
   display: grid;
   gap: 10px;
   padding-top: 14px;
