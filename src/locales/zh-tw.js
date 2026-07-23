@@ -127,6 +127,7 @@ export const ZH_TW_MESSAGES = {
   "builder.viewThresholds": "查看臨界分配",
   "builder.thresholdCount": ({ count }) => `${count} 組臨界分配`,
   "builder.apply": "套用",
+  "builder.notEnoughSp": "SP 不足",
   "speed.userSummary": ({ nature, sp }) => `${nature} · ${sp} SP`,
   "speed.baseSummary": ({ value }) => `種族速度 ${value}`,
   "speed.popularSummary": ({ count }) => `前 ${count} 名 + 超級形態 + 你的寶可夢`,

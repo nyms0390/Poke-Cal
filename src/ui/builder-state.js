@@ -4,6 +4,7 @@ import { createSideState } from "./battle-state.js";
 
 const ANALYSIS_TABS = ["bulk", "break"];
 const ANALYSIS_SORTS = ["breakpoint", "default"];
+const BUILDER_SP_BUDGET = 66;
 const THREAT_SP_GROUPS = {
   hp: "bulk",
   atk: "offense",
@@ -92,6 +93,12 @@ export function finalStats(state) {
       nature: user.nature,
     }),
   ]));
+}
+
+export function canApplySpTargets(sp, targets) {
+  const nextSp = { ...sp, ...targets };
+  return STAT_KEYS.reduce((total, stat) => total + Number(nextSp[stat] ?? 0), 0) <=
+    BUILDER_SP_BUDGET;
 }
 
 export function partitionBulkMatchups(matchups) {

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 
 import {
   applyThreatControl,
+  canApplySpTargets,
   createBuilderState,
   finalStats,
   normalizeThreatCount,
@@ -148,6 +149,13 @@ test("calculates all six final level-50 stats without mutating builder state", (
   });
   assert.deepEqual(state.user.sp, usageDefaults.sp);
   assert.equal(finalStats(createBuilderState()), null);
+});
+
+test("checks whether a recommended SP allocation fits the 66-point budget", () => {
+  const sp = { hp: 4, atk: 20, def: 0, spa: 8, spd: 0, spe: 20 };
+
+  assert.equal(canApplySpTargets(sp, { atk: 32, def: 2 }), true);
+  assert.equal(canApplySpTargets(sp, { atk: 32, def: 3 }), false);
 });
 
 test("defers bulk matchups at 3HKO and longer behind more detail", () => {

@@ -124,6 +124,7 @@ export const EN_MESSAGES = {
   "builder.viewThresholds": "View threshold spreads",
   "builder.thresholdCount": ({ count }) => `${count} threshold ${count === 1 ? "spread" : "spreads"}`,
   "builder.apply": "Apply",
+  "builder.notEnoughSp": "Not enough SP",
   "speed.userSummary": ({ nature, sp }) => `${nature} · ${sp} SP`,
   "speed.baseSummary": ({ value }) => `Base ${value}`,
   "speed.popularSummary": ({ count }) => `Top ${count} + Megas + yours`,

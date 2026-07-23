@@ -37,6 +37,7 @@ import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   applyThreatControl,
+  canApplySpTargets,
   createBuilderState,
   finalStats,
   partitionBulkMatchups,
@@ -631,6 +632,10 @@ function bulkMovePanel({ scenario, damage, points }, panelKey) {
       fromKoText: point.fromKoText,
       toKoText: point.koText,
       damageText: t("builder.maxDamage", { value: point.maxPct }),
+      canApply: canApplySpTargets(state.user.sp, {
+        hp: point.hpSp,
+        [defenseStat]: point.defSp,
+      }),
       onSelect: () => {
         updatePage(() => {
           state = {
@@ -727,6 +732,7 @@ function breakMovePanel({ move, damage, points }, threat, panelKey) {
         fromKoText: damage.koText,
         toKoText: point.achieves,
         damageText: t("builder.damage", { min: point.minPct, max: point.maxPct }),
+        canApply: canApplySpTargets(state.user.sp, { [attackStat]: point.sp }),
         onSelect: () => {
           updatePage(() => {
             state = {
@@ -1014,15 +1020,19 @@ function renderSpreadChoices(list, choices, emptyMessage) {
   list.replaceChildren(...(choices.length > 0 ? choices : [emptyText(emptyMessage)]));
 }
 
-function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect }) {
+function spreadChoice({ label, stats, fromKoText, toKoText, damageText, canApply, onSelect }) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "builder-spread-choice";
+  button.disabled = !canApply;
   const heading = document.createElement("span");
   heading.className = "builder-spread-heading";
   heading.append(
     textSpan(label, "builder-spread-label"),
-    textSpan(t("builder.apply"), "builder-spread-apply"),
+    textSpan(
+      t(canApply ? "builder.apply" : "builder.notEnoughSp"),
+      canApply ? "builder-spread-apply" : "builder-spread-unavailable",
+    ),
   );
   const statList = document.createElement("span");
   statList.className = "builder-spread-stats";
@@ -1039,7 +1049,7 @@ function spreadChoice({ label, stats, fromKoText, toKoText, damageText, onSelect
     koBadge(formatKoText(toKoText, getLocale())),
   );
   button.append(heading, statList, shift, textSpan(damageText, "builder-spread-damage"));
-  button.addEventListener("click", onSelect);
+  if (canApply) button.addEventListener("click", onSelect);
   return button;
 }
 

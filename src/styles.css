@@ -2533,12 +2533,17 @@ details.builder-analysis-move > .builder-spread-grid {
   cursor: pointer;
 }
 
-.builder-spread-choice:hover,
-.builder-spread-choice:focus-visible {
+.builder-spread-choice:not(:disabled):hover,
+.builder-spread-choice:not(:disabled):focus-visible {
   border-color: var(--accent);
   outline: none;
   background: var(--accent-soft);
   box-shadow: 0 0 0 1px var(--accent-ring) inset;
+}
+
+.builder-spread-choice:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
 .builder-spread-label {
@@ -2551,6 +2556,12 @@ details.builder-analysis-move > .builder-spread-grid {
 
 .builder-spread-apply {
   color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.builder-spread-unavailable {
+  color: var(--danger);
   font-size: var(--text-xs);
   font-weight: 700;
 }
