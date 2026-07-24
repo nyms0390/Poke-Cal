@@ -1,15 +1,29 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
+import { calculateStat } from "../engine/stats.js";
+import { normalizeId } from "../identifiers.js";
 
 export function compareKoTiers(left, right) {
   return koTierValue(left) - koTierValue(right);
 }
 
-export function rankBulkPokemonGroups(groups) {
+export function rankBulkCoverageGroups(groups) {
   return [...groups].sort((left, right) => compareRanks(
-    bulkPokemonRank(left),
-    bulkPokemonRank(right),
+    bulkCoverageRank(left),
+    bulkCoverageRank(right),
   ));
+}
+
+export function zeroBulkState(userState) {
+  return {
+    ...userState,
+    sp: {
+      ...userState.sp,
+      hp: 0,
+      def: 0,
+      spd: 0,
+    },
+  };
 }
 
 export function threatDamage(userState, scenario) {
@@ -26,18 +40,79 @@ export function threatDamage(userState, scenario) {
 
 export function bulkPointMatchups(userState, threats, options) {
   const field = options?.field ?? createField();
+  const baselineState = zeroBulkState(userState);
   return threats
     .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move, field })))
     .map((scenario) => {
       const damage = threatDamage(userState, scenario);
       if (!Number.isFinite(damage.maxPct)) return null;
+      const baselineDamage = threatDamage(baselineState, scenario);
+      const baselinePoints = bulkPoints(baselineState, scenario, options);
       const points = bulkPoints(userState, scenario, options);
-      return { scenario, damage, points };
+      return {
+        scenario,
+        baselineDamage,
+        baselinePoints,
+        damage,
+        points,
+        covered: koHitCount(damage.koText) > koHitCount(baselineDamage.koText),
+      };
     })
     .filter(Boolean)
     .sort((a, b) => b.damage.maxPct - a.damage.maxPct ||
       a.scenario.threat.pokemon.name.localeCompare(b.scenario.threat.pokemon.name) ||
       a.scenario.move.name.localeCompare(b.scenario.move.name));
+}
+
+export function bulkCoverage(userState, matchups, { budget, tables } = {}) {
+  const originHits = Math.min(...matchups.map(({ baselineDamage }) =>
+    koHitCount(baselineDamage.koText)));
+  const targetHits = Math.min(6, originHits + 1);
+  const currentHits = Math.min(...matchups.map(({ damage }) =>
+    koHitCount(damage.koText)));
+
+  if (originHits === 6) {
+    return { status: "covered", originHits, targetHits, currentHits, requiredSp: 0 };
+  }
+
+  const coverageTables = tables ?? matchups.map((matchup) =>
+    bulkCoverageTable(userState, matchup));
+  const requiredSp = minimumJointSp(coverageTables, targetHits, budget);
+  const status = currentHits >= targetHits
+    ? "covered"
+    : Number.isFinite(requiredSp) ? "possible" : "unreachable";
+  return { status, originHits, targetHits, currentHits, requiredSp };
+}
+
+export function bulkCoverageTable(userState, { scenario }) {
+  const baselineState = zeroBulkState(userState);
+  const initial = damageResult(baselineState, scenario);
+  const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
+  const tiers = Array.from({ length: 33 }, () => new Uint8Array(33));
+  if (requiresFullCoverageGrid(baselineState, scenario)) {
+    fillFullCoverageGrid(tiers, baselineState, scenario, defenseStat);
+    return { defenseStat, tiers };
+  }
+
+  const hpValues = Array.from({ length: 33 }, (_, hpSp) => calculateStat({
+    base: baselineState.pokemon.baseStats.hp,
+    stat: "hp",
+    sp: hpSp,
+    nature: baselineState.nature,
+  }));
+  for (let defSp = 0; defSp <= 32; defSp += 1) {
+    const state = withAllocation(baselineState, 0, defSp, defenseStat);
+    const result = damageResult(state, scenario);
+    const baselineHits = koHitCount(result.ko?.text);
+    for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+      tiers[hpSp][defSp] = baselineHits === 0
+        ? 0
+        : result.maxDamage > 0
+          ? Math.min(6, Math.ceil(hpValues[hpSp] / result.maxDamage))
+          : 6;
+    }
+  }
+  return { defenseStat, tiers };
 }
 
 export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
@@ -195,17 +270,44 @@ export function koHitCount(text) {
   return label[1].toUpperCase() === "OHKO" ? 1 : Number(label[2]);
 }
 
-function bulkPokemonRank(group) {
-  let best = [Infinity, Infinity];
-  for (const matchup of group.matchups ?? []) {
-    const point = matchup.points?.[0];
-    const hits = koHitCount(point?.fromKoText ?? matchup.damage?.koText);
-    const sp = Number(point?.totalSp);
-    if (!point || hits < 1 || !Number.isFinite(sp)) continue;
-    const candidate = [hits, sp];
-    if (compareRanks(candidate, best) < 0) best = candidate;
+function minimumJointSp(tables, targetHits, budget) {
+  const maximumBudget = Math.max(0, Math.min(96, Math.trunc(Number(budget) || 0)));
+
+  for (let totalSp = 0; totalSp <= maximumBudget; totalSp += 1) {
+    for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+      for (let defSp = 0; defSp <= 32; defSp += 1) {
+        const spdSp = totalSp - hpSp - defSp;
+        if (spdSp < 0 || spdSp > 32) continue;
+        const covered = tables.every(({ defenseStat, tiers }) =>
+          tiers[hpSp][defenseStat === "def" ? defSp : spdSp] >= targetHits);
+        if (covered) return totalSp;
+      }
+    }
   }
-  return best;
+  return Infinity;
+}
+
+function fillFullCoverageGrid(tiers, userState, scenario, defenseStat) {
+  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+    for (let defSp = 0; defSp <= 32; defSp += 1) {
+      const state = withAllocation(userState, hpSp, defSp, defenseStat);
+      tiers[hpSp][defSp] = koHitCount(threatDamage(state, scenario).koText);
+    }
+  }
+}
+
+function requiresFullCoverageGrid(userState, { move }) {
+  const abilityId = normalizeId(userState.ability?.id ?? userState.ability?.name);
+  const moveId = normalizeId(move.id ?? move.name);
+  return ["sturdy", "iceface"].includes(abilityId) ||
+    ["endeavor", "superfang", "ruination", "naturesmadness"].includes(moveId);
+}
+
+function bulkCoverageRank({ coverage }) {
+  return [
+    coverage.originHits,
+    Number.isFinite(coverage.requiredSp) ? coverage.requiredSp : Infinity,
+  ];
 }
 
 function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {

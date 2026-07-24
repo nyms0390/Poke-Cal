@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 
 import {
   applyThreatControl,
+  availableBulkSpBudget,
   canApplySpTargets,
   createBuilderState,
   finalStats,
   normalizeThreatCount,
-  partitionBulkMatchups,
+  partitionBulkCoverageGroups,
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
@@ -171,20 +172,33 @@ test("checks whether a recommended SP allocation fits the 66-point budget", () =
   assert.equal(canApplySpTargets(sp, { atk: 32, def: 3 }), false);
 });
 
-test("defers bulk matchups at 3HKO and longer behind more detail", () => {
-  const matchups = [
-    { id: "ohko", damage: { koText: "50.0% chance to OHKO" } },
-    { id: "two", damage: { koText: "guaranteed 2HKO" } },
-    { id: "three", damage: { koText: "guaranteed 3HKO" } },
-    { id: "four", damage: { koText: "25.0% chance to 4HKO" } },
-    { id: "five", damage: { koText: "guaranteed 5HKO" } },
-    { id: "safe", damage: { koText: "not a KO within 5 hits" } },
+test("replaces the defensive allocation within the remaining total-SP budget", () => {
+  assert.equal(availableBulkSpBudget({
+    hp: 32,
+    atk: 15,
+    def: 31,
+    spa: 16,
+    spd: 30,
+    spe: 17,
+  }), 18);
+  assert.equal(availableBulkSpBudget({ atk: 32, spa: 32, spe: 32 }), 0);
+});
+
+test("partitions ranked families into exactly one coverage section without reordering", () => {
+  const groups = [
+    { id: "possible-a", coverage: { status: "possible" } },
+    { id: "covered-a", coverage: { status: "covered" } },
+    { id: "possible-b", coverage: { status: "possible" } },
+    { id: "unreachable-a", coverage: { status: "unreachable" } },
+    { id: "covered-b", coverage: { status: "covered" } },
   ];
 
-  const partitioned = partitionBulkMatchups(matchups);
+  const partitioned = partitionBulkCoverageGroups(groups);
 
-  assert.deepEqual(partitioned.primary.map(({ id }) => id), ["ohko", "two"]);
-  assert.deepEqual(partitioned.detail.map(({ id }) => id), ["three", "four", "five", "safe"]);
+  assert.deepEqual(partitioned.possible.map(({ id }) => id), ["possible-a", "possible-b"]);
+  assert.deepEqual(partitioned.covered.map(({ id }) => id), ["covered-a", "covered-b"]);
+  assert.deepEqual(partitioned.unreachable.map(({ id }) => id), ["unreachable-a"]);
+  assert.equal(Object.values(partitioned).flat().length, groups.length);
 });
 
 test("keeps only meaningful break-point spread milestones", () => {

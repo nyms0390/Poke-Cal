@@ -2,11 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  bulkCoverage,
   bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
-  rankBulkPokemonGroups,
+  koHitCount,
+  rankBulkCoverageGroups,
   threatDamage,
+  zeroBulkState,
 } from "../src/data/bulk-points.js";
 import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
@@ -93,133 +96,206 @@ test("orders KO tiers from no KO through guaranteed OHKO", () => {
   }
 });
 
-test("ranks Pokémon by bulk transition then minimum SP without reordering their moves", () => {
-  const twoHko = bulkMatchup("guaranteed 2HKO", 1);
-  const expensiveOhko = bulkMatchup("guaranteed OHKO", 20);
-  const cheapPossibleOhko = bulkMatchup("25.0% chance to OHKO", 7);
-  const cheapTwoHko = bulkMatchup("40.0% chance to 2HKO", 2);
-  const groups = [
-    { id: "mixed", matchups: [twoHko, expensiveOhko] },
-    { id: "possible-ohko", matchups: [cheapPossibleOhko] },
-    { id: "unreachable", matchups: [bulkMatchup("guaranteed OHKO")] },
-    { id: "two-hko", matchups: [cheapTwoHko] },
-  ];
+test("zeros only defensive SP without mutating the current state", () => {
+  const state = {
+    ...userState({ id: "assaultvest", name: "Assault Vest" }),
+    nature: "Careful",
+    sp: { hp: 12, atk: 7, def: 8, spa: 9, spd: 10, spe: 11 },
+    stages: { atk: 1, def: 2, spa: -1, spd: 3, spe: 0 },
+    teraType: "Steel",
+    status: "par",
+  };
+  const baseline = zeroBulkState(state);
 
-  const ranked = rankBulkPokemonGroups(groups);
-
-  assert.deepEqual(
-    ranked.map(({ id }) => id),
-    ["possible-ohko", "mixed", "two-hko", "unreachable"],
-  );
-  assert.deepEqual(ranked[1].matchups, [twoHko, expensiveOhko]);
+  assert.deepEqual(baseline.sp, { hp: 0, atk: 7, def: 0, spa: 9, spd: 0, spe: 11 });
+  assert.equal(baseline.nature, "Careful");
+  assert.equal(baseline.item, state.item);
+  assert.equal(baseline.stages, state.stages);
+  assert.equal(baseline.teraType, "Steel");
+  assert.equal(baseline.status, "par");
+  assert.deepEqual(state.sp, { hp: 12, atk: 7, def: 8, spa: 9, spd: 10, spe: 11 });
 });
 
-test("ranks a Mega-family stack from every matchup across its forms", () => {
-  const groups = [
-    {
-      id: "other-family",
-      matchups: [bulkMatchup("guaranteed 2HKO", 2, 90, "guaranteed 3HKO")],
-    },
-    {
-      id: "base-and-mega",
-      matchups: [
-        bulkMatchup("25.0% chance to OHKO", 4, 70, "guaranteed 2HKO"),
-        bulkMatchup("guaranteed 2HKO", 20, 95, "guaranteed 3HKO"),
-      ],
-    },
+test("targets the next modeled KO tier from every non-terminal origin", () => {
+  const tiers = [
+    ["guaranteed OHKO", 1, 2],
+    ["guaranteed 2HKO", 2, 3],
+    ["guaranteed 3HKO", 3, 4],
+    ["guaranteed 4HKO", 4, 5],
+    ["guaranteed 5HKO", 5, 6],
   ];
 
+  for (const [koText, originHits, targetHits] of tiers) {
+    const coverage = bulkCoverage(userState(), [coverageMatchup(physicalMove, koText)], {
+      budget: 0,
+    });
+    assert.equal(coverage.originHits, originHits);
+    assert.equal(coverage.targetHits, targetHits);
+  }
+});
+
+test("treats a terminal zero-bulk tier as covered at zero required SP", () => {
+  const coverage = bulkCoverage(
+    userState(),
+    [coverageMatchup(physicalMove, "not a KO within 5 hits")],
+    { budget: 0 },
+  );
+
+  assert.deepEqual(coverage, {
+    status: "covered",
+    originHits: 6,
+    targetHits: 6,
+    currentHits: 6,
+    requiredSp: 0,
+  });
+});
+
+test("requires every form's constraining matchup to reach the family target", () => {
+  const physicalThreat = {
+    ...threat,
+    pokemon: { ...attacker, id: "attacker", name: "Attacker" },
+    moves: [ohkoMove],
+  };
+  const specialThreat = {
+    ...threat,
+    pokemon: { ...attacker, id: "attackermega", name: "Attacker-Mega" },
+    moves: [{ ...ohkoMove, id: "mega-wave", name: "Mega Wave", category: "Special" }],
+  };
+  const physicalOnly = withDefensiveSp(userState(), { def: 23 });
+  const partialMatchups = bulkPointMatchups(
+    physicalOnly,
+    [physicalThreat, specialThreat],
+    { budget: 66 },
+  );
+
+  assert.equal(
+    partialMatchups.find(({ scenario }) => scenario.move.category === "Physical").covered,
+    true,
+  );
+  assert.equal(
+    partialMatchups.find(({ scenario }) => scenario.move.category === "Special").covered,
+    false,
+  );
+  assert.notEqual(
+    bulkCoverage(physicalOnly, partialMatchups, { budget: 66 }).status,
+    "covered",
+  );
+
+  const coveringState = withDefensiveSp(userState(), { hp: 28, def: 5, spd: 13 });
+  const coveredMatchups = bulkPointMatchups(
+    coveringState,
+    [physicalThreat, specialThreat],
+    { budget: 66 },
+  );
+  assert.equal(bulkCoverage(coveringState, coveredMatchups, { budget: 66 }).status, "covered");
+});
+
+test("distinguishes independent thresholds from one legal joint allocation", () => {
+  const moves = [
+    ohkoMove,
+    { ...ohkoMove, id: "special-impact", name: "Special Impact", category: "Special" },
+  ];
+  const matchups = bulkPointMatchups(userState(), [{ ...threat, moves }], { budget: 32 });
+
   assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["base-and-mega", "other-family"],
+    matchups
+      .map(({ baselinePoints }) => baselinePoints[0].totalSp)
+      .sort((left, right) => left - right),
+    [23, 32],
+  );
+  assert.deepEqual(bulkCoverage(userState(), matchups, { budget: 32 }), {
+    status: "unreachable",
+    originHits: 1,
+    targetHits: 2,
+    currentHits: 1,
+    requiredSp: Infinity,
+  });
+
+  const possible = bulkCoverage(userState(), matchups, { budget: 46 });
+  assert.equal(possible.status, "possible");
+  assert.equal(possible.requiredSp, 46);
+
+  const coveringState = withDefensiveSp(userState(), { hp: 28, def: 5, spd: 13 });
+  const coveredMatchups = bulkPointMatchups(
+    coveringState,
+    [{ ...threat, moves }],
+    { budget: 46 },
+  );
+  assert.deepEqual(bulkCoverage(coveringState, coveredMatchups, { budget: 46 }), {
+    status: "covered",
+    originHits: 1,
+    targetHits: 2,
+    currentHits: 2,
+    requiredSp: 46,
+  });
+});
+
+test("matches a brute-force reference minimum over legal joint defensive spreads", () => {
+  const moves = [
+    ohkoMove,
+    { ...ohkoMove, id: "special-impact", name: "Special Impact", category: "Special" },
+  ];
+  const state = userState();
+  const matchups = bulkPointMatchups(state, [{ ...threat, moves }], { budget: 66 });
+  const coverage = bulkCoverage(state, matchups, { budget: 66 });
+
+  assert.equal(
+    coverage.requiredSp,
+    bruteForceRequiredSp(state, matchups, coverage.targetHits, 66),
   );
 });
 
-test("uses bulk breakpoint cost to order equal-damage Pokémon", () => {
+test("ranks coverage by origin tier and joint SP while preserving complete ties", () => {
   const groups = [
-    { id: "costly", matchups: [bulkMatchup("guaranteed OHKO", 20, 90, "guaranteed 2HKO")] },
-    { id: "cheap", matchups: [bulkMatchup("guaranteed OHKO", 4, 90, "guaranteed 2HKO")] },
+    coverageGroup("two-unreachable", 2, Infinity),
+    coverageGroup("terminal", 6, 0),
+    coverageGroup("ohko-costly", 1, 20),
+    coverageGroup("four", 4, 3),
+    coverageGroup("ohko-tie-a", 1, 4),
+    coverageGroup("five", 5, 1),
+    coverageGroup("ohko-unreachable", 1, Infinity),
+    coverageGroup("three", 3, 7),
+    coverageGroup("ohko-tie-b", 1, 4),
+    coverageGroup("two-cheap", 2, 2),
   ];
 
   assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["cheap", "costly"],
+    rankBulkCoverageGroups(groups).map(({ id }) => id),
+    [
+      "ohko-tie-a",
+      "ohko-tie-b",
+      "ohko-costly",
+      "ohko-unreachable",
+      "two-cheap",
+      "two-unreachable",
+      "three",
+      "four",
+      "five",
+      "terminal",
+    ],
   );
 });
 
-test("prioritizes an OHKO transition before a 2HKO transition", () => {
-  const groups = [
-    {
-      id: "two-hko-transition",
-      matchups: [bulkMatchup("guaranteed 2HKO", 1, 100, "guaranteed 3HKO")],
-    },
-    {
-      id: "ohko-transition",
-      matchups: [bulkMatchup("guaranteed OHKO", 20, 100, "guaranteed 2HKO")],
-    },
-  ];
-
-  assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["ohko-transition", "two-hko-transition"],
+test("marks a move covered only when its exact KO hit count improves", () => {
+  const coveredState = withDefensiveSp(userState(), { def: 23 });
+  const [covered] = bulkPointMatchups(
+    coveredState,
+    [{ ...threat, moves: [ohkoMove] }],
+    { budget: 66 },
   );
-});
+  assert.equal(covered.covered, true);
+  assert.equal(koHitCount(covered.baselineDamage.koText), 1);
+  assert.equal(koHitCount(covered.damage.koText), 2);
 
-test("uses the best transition across all matchups regardless of maximum damage", () => {
-  const groups = [
-    {
-      id: "mixed-stack",
-      matchups: [
-        bulkMatchup("40.0% chance to 2HKO", 1, 100, "guaranteed 3HKO"),
-        bulkMatchup("guaranteed OHKO", 20, 80, "guaranteed 2HKO"),
-      ],
-    },
-    {
-      id: "costlier-ohko",
-      matchups: [bulkMatchup("guaranteed OHKO", 24, 90, "guaranteed 2HKO")],
-    },
-  ];
-
-  assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["mixed-stack", "costlier-ohko"],
+  const sameTierState = withDefensiveSp(userState(), { def: 1 });
+  const [sameTier] = bulkPointMatchups(
+    sameTierState,
+    [{ ...threat, moves: [ohkoMove] }],
+    { budget: 66 },
   );
-});
-
-test("does not treat an already guaranteed 2HKO as a bulk transition", () => {
-  const groups = [
-    {
-      id: "needs-sp",
-      matchups: [bulkMatchup("guaranteed OHKO", 4, 100, "guaranteed 2HKO")],
-    },
-    {
-      id: "already-two-hko",
-      matchups: [{ damage: { koText: "guaranteed 2HKO", maxPct: 90 }, points: [] }],
-    },
-  ];
-
-  assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["needs-sp", "already-two-hko"],
-  );
-});
-
-test("preserves default order when no stack reaches a guaranteed bulk target", () => {
-  const groups = [
-    {
-      id: "first",
-      matchups: [bulkMatchup("guaranteed OHKO")],
-    },
-    {
-      id: "second",
-      matchups: [bulkMatchup("25.0% chance to OHKO")],
-    },
-  ];
-
-  assert.deepEqual(
-    rankBulkPokemonGroups(groups).map(({ id }) => id),
-    ["first", "second"],
-  );
+  assert.notEqual(sameTier.damage.maxPct, sameTier.baselineDamage.maxPct);
+  assert.equal(koHitCount(sameTier.damage.koText), koHitCount(sameTier.baselineDamage.koText));
+  assert.equal(sameTier.covered, false);
 });
 
 test("wraps the damage engine with the threat on the attacker side", () => {
@@ -346,9 +422,51 @@ function withBulk(state, hpSp, defenseSp, defenseStat) {
   };
 }
 
-function bulkMatchup(fromKoText, totalSp, maxPct, koText) {
+function withDefensiveSp(state, { hp = 0, def = 0, spd = 0 }) {
   return {
-    damage: { koText: fromKoText, maxPct },
-    points: Number.isFinite(totalSp) ? [{ fromKoText, totalSp, koText }] : [],
+    ...state,
+    sp: { ...state.sp, hp, def, spd },
   };
+}
+
+function coverageMatchup(move, koText) {
+  const damage = { minPct: 10, maxPct: 20, koText };
+  return {
+    scenario: { threat, move },
+    baselineDamage: damage,
+    baselinePoints: [],
+    damage,
+    points: [],
+    covered: false,
+  };
+}
+
+function coverageGroup(id, originHits, requiredSp) {
+  return {
+    id,
+    coverage: {
+      status: Number.isFinite(requiredSp) ? "possible" : "unreachable",
+      originHits,
+      targetHits: Math.min(6, originHits + 1),
+      currentHits: originHits,
+      requiredSp,
+    },
+  };
+}
+
+function bruteForceRequiredSp(state, matchups, targetHits, budget) {
+  for (let totalSp = 0; totalSp <= budget; totalSp += 1) {
+    for (let hp = 0; hp <= 32; hp += 1) {
+      for (let def = 0; def <= 32; def += 1) {
+        const spd = totalSp - hp - def;
+        if (spd < 0 || spd > 32) continue;
+        const candidate = withDefensiveSp(state, { hp, def, spd });
+        if (matchups.every(({ scenario }) =>
+          koHitCount(threatDamage(candidate, scenario).koText) >= targetHits)) {
+          return totalSp;
+        }
+      }
+    }
+  }
+  return Infinity;
 }

@@ -14,7 +14,13 @@ import {
   rankBreakPointPokemonGroups,
   yourDamage,
 } from "../data/break-points.js";
-import { bulkPointMatchups, rankBulkPokemonGroups } from "../data/bulk-points.js";
+import {
+  bulkCoverage,
+  bulkCoverageTable,
+  bulkPointMatchups,
+  koHitCount,
+  rankBulkCoverageGroups,
+} from "../data/bulk-points.js";
 import { megaFamilyId, searchPokemon } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
@@ -38,10 +44,11 @@ import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   applyThreatControl,
+  availableBulkSpBudget,
   canApplySpTargets,
   createBuilderState,
   finalStats,
-  partitionBulkMatchups,
+  partitionBulkCoverageGroups,
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
@@ -78,6 +85,7 @@ const elements = {
   threatSummary: document.querySelector("#builder-threat-summary"),
   customThreats: document.querySelector("#builder-custom-threats"),
   speedLink: document.querySelector("#builder-speed-link"),
+  sortToolbar: document.querySelector("#builder-sort-toolbar"),
   sortToggle: document.querySelector("#builder-sort-toggle"),
   analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
   bulkPanel: document.querySelector("#builder-bulk-panel"),
@@ -99,6 +107,7 @@ const threatOverrides = new Map();
 const activeThreatForms = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
+let bulkCoverageTableCache = { signature: "", tables: new Map() };
 const updatePage = createLiveUpdater(render);
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
@@ -201,6 +210,7 @@ function handleAnalysisTabKeydown(event) {
 
 function renderAnalysisTabs() {
   const breakpointSort = state.analysisSort === "breakpoint";
+  elements.sortToolbar.hidden = state.analysisTab === "bulk";
   elements.sortToggle.textContent = t(
     breakpointSort ? "builder.sortBreakpoint" : "builder.sortDefault",
   );
@@ -540,20 +550,83 @@ function renderCustomThreats() {
 }
 
 function renderBulkPoints(threats, field) {
-  const matchups = bulkPointMatchups(state.user, threats, { field });
-  const families = bulkMatchupFamilies(threats, matchups);
+  const budget = availableBulkSpBudget(state.user.sp);
+  const matchups = bulkPointMatchups(state.user, threats, { budget, field });
+  const tables = cachedBulkCoverageTables(threats, matchups);
+  const families = rankBulkCoverageGroups(
+    bulkMatchupFamilies(threats, matchups).map((family) => ({
+      ...family,
+      coverage: bulkCoverage(state.user, family.matchups, {
+        budget,
+        tables: family.matchups.map((matchup) => tables.get(matchup)),
+      }),
+    })),
+  );
   const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
-  const { primary, detail } = partitionBulkFamilies(families);
+  const sections = partitionBulkCoverageGroups(families);
 
   elements.bulkCount.textContent = t("builder.bulkCount", { spreads: spreadCount, matchups: matchups.length });
   elements.bulkPoints.replaceChildren(
     ...(families.length === 0
       ? [emptyText(t("builder.noThreatMoves"))]
-      : [
-          ...bulkThreatCards(primary, "primary"),
-          ...(detail.length > 0 ? [bulkDetailDisclosure(detail)] : []),
-        ]),
+      : ["possible", "covered", "unreachable"]
+        .filter((status) => sections[status].length > 0)
+        .map((status) => bulkCoverageSection(sections[status], status))),
   );
+}
+
+function cachedBulkCoverageTables(threats, matchups) {
+  const signature = bulkCoverageSignature(state.user, threats, state.field);
+  if (signature !== bulkCoverageTableCache.signature) {
+    bulkCoverageTableCache = { signature, tables: new Map() };
+  }
+  const tables = new Map();
+  for (const matchup of matchups) {
+    const threatId = normalizeId(matchup.scenario.threat.pokemon.id);
+    const moveId = normalizeId(matchup.scenario.move.id);
+    const key = `${threatId}:${moveId}`;
+    if (!bulkCoverageTableCache.tables.has(key)) {
+      bulkCoverageTableCache.tables.set(key, bulkCoverageTable(state.user, matchup));
+    }
+    tables.set(matchup, bulkCoverageTableCache.tables.get(key));
+  }
+  return tables;
+}
+
+function bulkCoverageSignature(user, threats, field) {
+  return JSON.stringify({
+    user: {
+      pokemon: normalizeId(user.pokemon.id),
+      nature: user.nature,
+      ability: normalizeId(user.ability?.id ?? user.ability?.name),
+      item: normalizeId(user.item?.id ?? user.item?.name),
+      teraType: user.teraType,
+      status: user.status,
+      stages: user.stages,
+      offenseSp: {
+        atk: user.sp.atk,
+        spa: user.sp.spa,
+        spe: user.sp.spe,
+      },
+      selectedMoveIds: user.selectedMoveIds,
+      allyPlusMinus: user.allyPlusMinus,
+      rivalry: user.rivalry,
+      switchedIn: user.switchedIn,
+      faintedAllyCount: user.faintedAllyCount,
+      boosterEnergy: user.boosterEnergy,
+      iceFaceIntact: user.iceFaceIntact,
+    },
+    field,
+    threats: threats.map((threat) => ({
+      pokemon: normalizeId(threat.pokemon.id),
+      nature: threat.nature,
+      ability: normalizeId(threat.ability?.id ?? threat.ability?.name),
+      item: normalizeId(threat.item?.id ?? threat.item?.name),
+      teraType: threat.teraType,
+      spPresets: threat.spPresets,
+      moves: threat.moves.slice(0, 2).map((move) => normalizeId(move.id ?? move.name)),
+    })),
+  });
 }
 
 function threatFamilies(threats) {
@@ -587,22 +660,9 @@ function bulkMatchupFamilies(threats, matchups) {
   }).filter(({ matchups: familyMatchups }) => familyMatchups.length > 0);
 }
 
-function partitionBulkFamilies(families) {
-  return families.reduce((partitioned, family) => {
-    const section = partitionBulkMatchups(family.matchups).primary.length > 0
-      ? "primary"
-      : "detail";
-    partitioned[section].push(family);
-    return partitioned;
-  }, { primary: [], detail: [] });
-}
-
-function bulkThreatCards(families, section) {
-  const orderedGroups = state.analysisSort === "breakpoint"
-    ? rankBulkPokemonGroups(families)
-    : families;
-  return orderedGroups.map(({ familyId, forms }) => {
-    const cardKey = `bulk:${section}:${familyId}`;
+function bulkThreatCards(families) {
+  return families.map(({ familyId, forms }) => {
+    const cardKey = `bulk:${familyId}`;
     return analysisCard(forms.map(({ threat, matchups: formMatchups }) => ({
       threat,
       renderMovePanels: () => formMatchups.map((matchup) =>
@@ -615,27 +675,39 @@ function bulkPanelKey({ scenario }) {
   return `bulk:${normalizeId(scenario.threat.pokemon.id)}:${normalizeId(scenario.move.id)}`;
 }
 
-function bulkDetailDisclosure(families) {
-  const panelKey = "bulk:more-detail";
+function bulkCoverageSection(families, status) {
+  const collapsible = status !== "possible";
+  const panelKey = `bulk:coverage:${status}`;
   const matchups = families.flatMap(({ matchups: familyMatchups }) => familyMatchups);
-  const details = document.createElement("details");
-  details.className = "builder-more-detail";
-  details.open = openAnalysisPanels.has(panelKey) ||
-    matchups.some((matchup) => openAnalysisPanels.has(bulkPanelKey(matchup)));
-  const summary = document.createElement("summary");
-  summary.append(
-    textSpan(t("builder.moreDetail"), "builder-more-detail-title"),
-    textSpan(t("builder.longMatchups", { count: matchups.length }), "builder-more-detail-count"),
+  const section = document.createElement(collapsible ? "details" : "section");
+  section.className = `builder-coverage-section ${status}`;
+  if (collapsible) {
+    section.classList.add("builder-more-detail");
+    section.open = openAnalysisPanels.has(panelKey);
+  }
+  const heading = document.createElement(collapsible ? "summary" : "div");
+  heading.className = "builder-coverage-heading";
+  heading.append(
+    textSpan(t(`builder.coverage.${status}`), "builder-coverage-title"),
+    textSpan(t("builder.coverageCount", {
+      cards: families.length,
+      matchups: matchups.length,
+    }), "builder-coverage-count"),
   );
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...bulkThreatCards(families, "detail"));
-  details.addEventListener("toggle", () => setPanelOpen(panelKey, details.open));
-  details.append(summary, cards);
-  return details;
+  cards.append(...bulkThreatCards(families));
+  if (collapsible) {
+    section.addEventListener("toggle", () => setPanelOpen(panelKey, section.open));
+  }
+  section.append(heading, cards);
+  return section;
 }
 
-function bulkMovePanel({ scenario, damage, points }, panelKey) {
+function bulkMovePanel(
+  { scenario, baselineDamage, baselinePoints, damage, points, covered },
+  panelKey,
+) {
   const defenseStat = scenario.move.overrideDefensiveStat ??
     (scenario.move.category === "Physical" ? "def" : "spd");
   return analysisMovePanel({
@@ -643,7 +715,14 @@ function bulkMovePanel({ scenario, damage, points }, panelKey) {
     move: scenario.move,
     damage,
     defensive: true,
+    covered,
     emptyMessage: t("builder.noSurvival"),
+    loadContext: () => bulkMoveContext({
+      baselineDamage,
+      baselinePoints,
+      damage,
+      defenseStat,
+    }),
     loadChoices: () => points.map((point) => spreadChoice({
       label: t("builder.totalSp", { count: point.totalSp }),
       stats: [
@@ -674,6 +753,65 @@ function bulkMovePanel({ scenario, damage, points }, panelKey) {
       },
     })),
   });
+}
+
+function bulkMoveContext({ baselineDamage, baselinePoints, damage, defenseStat }) {
+  const context = document.createElement("div");
+  context.className = "builder-bulk-context";
+  const comparison = document.createElement("div");
+  comparison.className = "builder-bulk-comparison";
+  comparison.append(
+    bulkDamageComparison(t("builder.zeroBulk"), baselineDamage),
+    bulkDamageComparison(t("builder.currentSpread"), damage),
+  );
+  context.append(comparison);
+
+  const currentHits = koHitCount(damage.koText);
+  const coveredPoint = baselinePoints.find((point) =>
+    koHitCount(point.koText) <= currentHits);
+  if (coveredPoint) {
+    const frontier = document.createElement("div");
+    frontier.className = "builder-covered-frontier";
+    const heading = document.createElement("div");
+    heading.className = "builder-spread-heading";
+    heading.append(
+      textSpan(t("builder.coveredThreshold"), "builder-spread-label"),
+      textSpan(t("builder.totalSp", { count: coveredPoint.totalSp }), "builder-coverage-count"),
+    );
+    const stats = document.createElement("div");
+    stats.className = "builder-spread-stats";
+    stats.append(
+      statChip("HP", coveredPoint.hpSp),
+      statChip(localizedTerm("stat", STAT_LABELS[defenseStat]), coveredPoint.defSp),
+    );
+    const shift = document.createElement("div");
+    shift.className = "builder-tier-shift";
+    shift.append(
+      koBadge(formatKoText(baselineDamage.koText, getLocale()), { muted: true }),
+      textSpan("→", "builder-tier-arrow"),
+      koBadge(formatKoText(coveredPoint.koText, getLocale())),
+    );
+    frontier.append(heading, stats, shift);
+    context.append(frontier);
+  }
+  return context;
+}
+
+function bulkDamageComparison(label, damage) {
+  const row = document.createElement("div");
+  row.className = "builder-bulk-comparison-row";
+  row.append(
+    textSpan(label, "builder-bulk-comparison-label"),
+    textSpan(`${damage.minPct}–${damage.maxPct}%`, "builder-damage-percent"),
+    koBadge(formatKoText(damage.koText, getLocale())),
+  );
+  return row;
+}
+
+function statChip(stat, value) {
+  const chip = document.createElement("span");
+  chip.append(textSpan(stat, "builder-spread-stat-name"), document.createTextNode(` ${value}`));
+  return chip;
 }
 
 function renderBreakPoints(threats, field) {
@@ -974,10 +1112,21 @@ function updateThreatBuild(threat, control, { cardKey, focusKey }) {
   }, { focusKey });
 }
 
-function analysisMovePanel({ panelKey, move, damage, defensive = false, choices, loadChoices, emptyMessage }) {
+function analysisMovePanel({
+  panelKey,
+  move,
+  damage,
+  defensive = false,
+  covered = false,
+  choices,
+  loadContext,
+  loadChoices,
+  emptyMessage,
+}) {
   const collapsible = typeof loadChoices === "function";
   const panel = document.createElement(collapsible ? "details" : "section");
   panel.className = "builder-analysis-move";
+  panel.classList.toggle("covered", covered);
   if (panelKey) panel.dataset.analysisPanelKey = panelKey;
   const heading = document.createElement("div");
   heading.className = "builder-analysis-move-heading";
@@ -1000,9 +1149,13 @@ function analysisMovePanel({ panelKey, move, damage, defensive = false, choices,
 
   const summary = document.createElement("summary");
   summary.className = "builder-analysis-move-summary";
-  const prompt = textSpan(t("builder.viewThresholds"), "builder-spread-prompt");
+  const prompt = textSpan(
+    t(covered ? "builder.coveredPrompt" : "builder.viewThresholds"),
+    `builder-spread-prompt${covered ? " covered" : ""}`,
+  );
   summary.append(heading, range, prompt);
   panel.open = openAnalysisPanels.has(panelKey);
+  const context = panel.open && loadContext ? loadContext() : null;
   if (panel.open) {
     const loadedChoices = loadChoices();
     renderSpreadChoices(list, loadedChoices, emptyMessage);
@@ -1011,7 +1164,7 @@ function analysisMovePanel({ panelKey, move, damage, defensive = false, choices,
   panel.addEventListener("toggle", () => {
     setPanelOpen(panelKey, panel.open);
   });
-  panel.append(summary, list);
+  panel.append(summary, ...(context ? [context] : []), list);
   return panel;
 }
 

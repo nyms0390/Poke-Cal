@@ -107,16 +107,16 @@ priority" ranks actual SP transitions, matching the implementation introduced in
   stack rank is `(H, required SP)`, so a possible OHKO → guaranteed OHKO transition ranks
   before a 2HKO → guaranteed OHKO transition, which ranks before a 3HKO → guaranteed 2HKO
   transition, and so on.
-- Bulk points consider every matchup from every form in the stack, regardless of `maxPct`.
-  Each matchup contributes only its first calculated bulk point. The stack uses the best
-  `(starting hit count, total SP)` transition: any OHKO → its first guaranteed survival point
-  ranks before any 2HKO → its first point, then any 3HKO → its first point, and so on.
+- Bulk points establish each family stack's origin tier from zero HP/Def/SpD SP, using the two
+  analyzed damaging moves for every displayed form. The target is the next modeled tier
+  (OHKO → 2HKO through 5HKO → not KO'd within five hits), and the required cost is the least
+  one legal joint HP/Def/SpD allocation that makes every analyzed matchup reach that target
+  within the 66-point total-SP budget left after Atk/SpA/Spe. Families appear in fixed
+  **Possible**, **Covered**, then **Unreachable** sections and sort within each section by
+  `(zero-bulk origin hit count, joint required SP)`, preserving catalog order on a tie.
 
-A current guaranteed result is not a zero-SP breakpoint or bulkpoint; a result must have an
-actual calculated transition to participate. Lower SP wins within the same transition tier,
-and the existing catalog order is preserved when ranks tie or no transition exists. Maximum
-damage still orders the move panels, but it filters stack priority only for break points. The
-default sort preserves catalog order without applying these rules.
+Maximum damage still orders move panels. The Break points tab retains its breakpoint/default
+sort toggle; the Bulk tab always uses its fixed section order and joint-coverage ranking.
 
 ## Data Sources
 

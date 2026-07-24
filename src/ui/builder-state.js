@@ -111,13 +111,18 @@ export function canApplySpTargets(sp, targets) {
     BUILDER_SP_BUDGET;
 }
 
-export function partitionBulkMatchups(matchups) {
-  return matchups.reduce((groups, matchup) => {
-    const koText = String(matchup.damage?.koText ?? "");
-    const group = /(?:[3-5]HKO|not a KO|survives with)/i.test(koText) ? "detail" : "primary";
-    groups[group].push(matchup);
-    return groups;
-  }, { primary: [], detail: [] });
+export function availableBulkSpBudget(sp) {
+  return Math.max(0, BUILDER_SP_BUDGET -
+    Number(sp?.atk ?? 0) -
+    Number(sp?.spa ?? 0) -
+    Number(sp?.spe ?? 0));
+}
+
+export function partitionBulkCoverageGroups(groups) {
+  return groups.reduce((sections, group) => {
+    sections[group.coverage.status].push(group);
+    return sections;
+  }, { possible: [], covered: [], unreachable: [] });
 }
 
 export function significantBreakPoints(currentKoText, points) {
