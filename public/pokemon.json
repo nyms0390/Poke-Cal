@@ -56588,6 +56588,7 @@
     "id": "floettemega",
     "name": "Floette-Mega",
     "baseSpecies": "Floette",
+    "battleOnly": "Floette-Eternal",
     "types": [
       "Fairy"
     ],

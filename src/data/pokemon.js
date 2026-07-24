@@ -64,16 +64,13 @@ function searchTerms(query) {
 }
 
 export function megaFamily(pokemon, selected) {
-  const baseSpecies = selected.baseSpecies;
-  const isBaseOrMega =
-    selected.name === baseSpecies ||
-    (selected.baseSpecies === baseSpecies && selected.name.includes("-Mega"));
-  if (!isBaseOrMega) return [selected];
+  const baseSpecies = megaParentName(selected) || selected.name;
+  if (!baseSpecies) return [selected];
 
   const family = pokemon.filter(
     (entry) =>
       entry.name === baseSpecies ||
-      (entry.baseSpecies === baseSpecies && entry.name.includes("-Mega")),
+      megaParentName(entry) === baseSpecies,
   );
 
   if (!family.some((entry) => entry.name.includes("-Mega"))) return [selected];
@@ -89,9 +86,18 @@ export function megaFamilyId(pokemon) {
   const id = normalizeId(pokemon?.id ?? pokemon?.name);
   const baseSpecies = String(pokemon?.baseSpecies ?? "");
   const name = String(pokemon?.name ?? "");
-  const belongsToMegaFamily = baseSpecies &&
-    (name === baseSpecies || name.includes("-Mega"));
-  return belongsToMegaFamily ? normalizeId(baseSpecies) : id;
+  const familyName = megaParentName(pokemon) || (name === baseSpecies ? baseSpecies : "");
+  return familyName ? normalizeId(familyName) : id;
+}
+
+function megaParentName(pokemon) {
+  const name = String(pokemon?.name ?? "");
+  if (!name.includes("-Mega")) return "";
+
+  const battleOnly = pokemon?.battleOnly;
+  return typeof battleOnly === "string" && battleOnly
+    ? battleOnly
+    : String(pokemon?.baseSpecies ?? "");
 }
 
 function matchScore(entry, query, { abilityLookup, moveLookup, itemLookup, usageStats } = {}) {

@@ -54,6 +54,23 @@ const pokemon = [
     aliases: ["噴火龍"],
   },
   {
+    id: "floetteeternal",
+    name: "Floette-Eternal",
+    baseSpecies: "Floette",
+    types: ["Fairy"],
+    baseSpeed: 92,
+    aliases: ["花葉蒂"],
+  },
+  {
+    id: "floettemega",
+    name: "Floette-Mega",
+    baseSpecies: "Floette",
+    battleOnly: "Floette-Eternal",
+    types: ["Fairy"],
+    baseSpeed: 102,
+    aliases: ["花葉蒂"],
+  },
+  {
     id: "tatsugiri",
     name: "Tatsugiri",
     baseSpecies: "Tatsugiri",
@@ -305,10 +322,29 @@ test("groups the base Pokémon with all of its Mega forms", () => {
   );
 });
 
+test("groups a Mega form with its explicit battle-only source form", () => {
+  assert.deepEqual(
+    megaFamily(pokemon, pokemon.find(({ id }) => id === "floetteeternal")).map(
+      ({ id }) => id,
+    ),
+    ["floetteeternal", "floettemega"],
+  );
+  assert.deepEqual(
+    megaFamily(pokemon, pokemon.find(({ id }) => id === "floettemega")).map(({ id }) => id),
+    ["floetteeternal", "floettemega"],
+  );
+  assert.deepEqual(
+    megaFamily(pokemon, pokemon.find(({ id }) => id === "floetteeternal")),
+    megaFamily(pokemon, pokemon.find(({ id }) => id === "floettemega")),
+  );
+});
+
 test("uses one family ID for a base Pokémon and all Mega forms", () => {
   assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "charizard")), "charizard");
   assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "charizardmegax")), "charizard");
   assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "charizardmegay")), "charizard");
+  assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "floetteeternal")), "floetteeternal");
+  assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "floettemega")), "floetteeternal");
   assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "charizardgmax")), "charizardgmax");
   assert.equal(megaFamilyId(pokemon.find(({ id }) => id === "pikachu")), "pikachu");
 });
