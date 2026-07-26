@@ -56,6 +56,14 @@ const weatherBall = {
   basePower: 50,
   target: "normal",
 };
+const superFang = {
+  id: "superfang",
+  name: "Super Fang",
+  type: "Normal",
+  category: "Physical",
+  basePower: 0,
+  target: "normal",
+};
 
 const threat = {
   pokemon: attacker,
@@ -296,6 +304,24 @@ test("marks a move covered only when its exact KO hit count improves", () => {
   assert.notEqual(sameTier.damage.maxPct, sameTier.baselineDamage.maxPct);
   assert.equal(koHitCount(sameTier.damage.koText), koHitCount(sameTier.baselineDamage.koText));
   assert.equal(sameTier.covered, false);
+});
+
+test("does not treat Super Fang HP parity as a possible bulk threshold", () => {
+  const matchups = bulkPointMatchups(
+    userState(),
+    [{ ...threat, moves: [superFang] }],
+    { budget: 64 },
+  );
+
+  assert.equal(matchups[0].damage.koText, "not a KO within 5 hits");
+  assert.deepEqual(matchups[0].points, []);
+  assert.deepEqual(bulkCoverage(userState(), matchups, { budget: 64 }), {
+    status: "covered",
+    originHits: 6,
+    targetHits: 6,
+    currentHits: 6,
+    requiredSp: 0,
+  });
 });
 
 test("wraps the damage engine with the threat on the attacker side", () => {

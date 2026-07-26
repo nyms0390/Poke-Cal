@@ -205,6 +205,9 @@ export function calculateDamage({
     const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
       ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
       : null;
+    const recalculatedKo = moveEffect(moveId).recalculatesFixedDamage
+      ? koSummaryForRecalculatedFixedDamage(ctx, firstDistribution[0].damage)
+      : null;
     return {
       supported: true,
       rolls,
@@ -216,7 +219,8 @@ export function calculateDamage({
       defenderCurrentHp,
       typeMultiplier,
       critical: effectiveCritical,
-      ko: sturdyText ?? koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
+      ko: sturdyText ?? recalculatedKo ??
+        koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
       notes: [
         "Fixed damage",
         iceFaceActive ? "Ice Face intact (first hit negated)" : null,
@@ -460,6 +464,25 @@ function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppres
 
 function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribution) {
   const chances = koChance({ rolls, rollDistribution, firstRollDistribution, targetHp });
+  const firstKo = chances.find(({ chance }) => chance > 0);
+  return {
+    hits: firstKo?.hits ?? null,
+    chance: firstKo?.chance ?? 0,
+    text: koText(chances),
+  };
+}
+
+function koSummaryForRecalculatedFixedDamage(ctx, firstDamage, maxHits = 5) {
+  let remainingHp = ctx.defenderHp;
+  const chances = [];
+  for (let hits = 1; hits <= maxHits; hits += 1) {
+    const damage = hits === 1
+      ? firstDamage
+      : Math.max(0, fixedDamageValue({ ...ctx, defenderHp: remainingHp }));
+    remainingHp = Math.max(0, remainingHp - damage);
+    chances.push({ hits, chance: remainingHp === 0 ? 1 : 0 });
+    if (remainingHp === 0) break;
+  }
   const firstKo = chances.find(({ chance }) => chance > 0);
   return {
     hits: firstKo?.hits ?? null,

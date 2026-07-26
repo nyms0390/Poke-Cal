@@ -22,6 +22,7 @@
 //                                                     the generic numeric/"level" cases are
 //                                                     handled directly in damage.js since they
 //                                                     read move.damage, not a moveId)
+//   recalculatesFixedDamage -> boolean                (fixed damage changes with remaining HP)
 //   offensiveStat(ctx) -> "atk" | "spa"              (Photon Geyser)
 
 import { normalizeId } from "../identifiers.js";
@@ -330,9 +331,18 @@ export const MOVE_EFFECTS = {
   },
 
   // -- fixed damage ---------------------------------------------------------
-  superfang: { fixedDamage: (ctx) => Math.floor(ctx.defenderHp / 2) },
-  ruination: { fixedDamage: (ctx) => Math.floor(ctx.defenderHp / 2) },
-  naturesmadness: { fixedDamage: (ctx) => Math.floor(ctx.defenderHp / 2) },
+  superfang: {
+    fixedDamage: (ctx) => Math.max(1, Math.floor(ctx.defenderHp / 2)),
+    recalculatesFixedDamage: true,
+  },
+  ruination: {
+    fixedDamage: (ctx) => Math.max(1, Math.floor(ctx.defenderHp / 2)),
+    recalculatesFixedDamage: true,
+  },
+  naturesmadness: {
+    fixedDamage: (ctx) => Math.max(1, Math.floor(ctx.defenderHp / 2)),
+    recalculatesFixedDamage: true,
+  },
   finalgambit: { fixedDamage: (ctx) => currentHp(ctx.attackerState, ctx.attackerMaxHp) },
 
   // -- variable/multi hit counts --------------------------------------------
