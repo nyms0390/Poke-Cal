@@ -125,6 +125,14 @@ export function partitionBulkCoverageGroups(groups) {
   }, { possible: [], covered: [], unreachable: [] });
 }
 
+export function detachFamilyForms(families) {
+  return families.flatMap(({ forms }) =>
+    forms.map((form) => ({
+      ...form,
+      relatedForms: forms,
+    })));
+}
+
 export function significantBreakPoints(currentKoText, points) {
   let currentMilestone = koMilestone(currentKoText);
   return points.filter((point) => {

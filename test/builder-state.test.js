@@ -6,6 +6,7 @@ import {
   availableBulkSpBudget,
   canApplySpTargets,
   createBuilderState,
+  detachFamilyForms,
   finalStats,
   normalizeThreatCount,
   partitionBulkCoverageGroups,
@@ -184,7 +185,7 @@ test("replaces the defensive allocation within the remaining total-SP budget", (
   assert.equal(availableBulkSpBudget({ atk: 32, spa: 32, spe: 32 }), 0);
 });
 
-test("partitions ranked families into exactly one coverage section without reordering", () => {
+test("partitions ranked results into exactly one coverage section without reordering", () => {
   const groups = [
     { id: "possible-a", coverage: { status: "possible" } },
     { id: "covered-a", coverage: { status: "covered" } },
@@ -199,6 +200,44 @@ test("partitions ranked families into exactly one coverage section without reord
   assert.deepEqual(partitioned.covered.map(({ id }) => id), ["covered-a", "covered-b"]);
   assert.deepEqual(partitioned.unreachable.map(({ id }) => id), ["unreachable-a"]);
   assert.equal(Object.values(partitioned).flat().length, groups.length);
+});
+
+test("detaches related forms so each form keeps its own coverage section", () => {
+  const base = {
+    threat: { pokemon: { id: "charizard", name: "Charizard" } },
+    coverage: { status: "covered" },
+  };
+  const mega = {
+    threat: { pokemon: { id: "charizardmegax", name: "Charizard-Mega-X" } },
+    coverage: { status: "unreachable" },
+  };
+
+  const detached = detachFamilyForms([{
+    familyId: "charizard",
+    forms: [base, mega],
+  }]);
+  const partitioned = partitionBulkCoverageGroups(detached);
+
+  assert.deepEqual(
+    detached.map(({ threat: { pokemon } }) => pokemon.id),
+    ["charizard", "charizardmegax"],
+  );
+  assert.deepEqual(
+    detached[0].relatedForms.map(({ threat: { pokemon }, coverage }) =>
+      [pokemon.id, coverage.status]),
+    [
+      ["charizard", "covered"],
+      ["charizardmegax", "unreachable"],
+    ],
+  );
+  assert.deepEqual(
+    partitioned.covered.map(({ threat: { pokemon } }) => pokemon.id),
+    ["charizard"],
+  );
+  assert.deepEqual(
+    partitioned.unreachable.map(({ threat: { pokemon } }) => pokemon.id),
+    ["charizardmegax"],
+  );
 });
 
 test("keeps only meaningful break-point spread milestones", () => {
