@@ -1,8 +1,28 @@
 # PokéCal Roadmap
 
-This document is the master plan for finishing PokéCal. It is written so that any coding agent
-(including smaller models) can pick up one task at a time and make correct, verifiable progress.
-Individual work units live in `docs/tasks/*.md` — **one task file = one work session = one commit.**
+Status: Completed (2026-07-27)
+
+This document records the completed plan for PokéCal's four-page competitive toolkit.
+
+## Completion record
+
+Phases 0–5 shipped the final four-page scope: lookup, battle calculator, SP builder, and
+interactive Speed tiers. The completed work includes:
+
+- the pure engine/data/UI split, registry-driven battle mechanics, field and side conditions,
+  status/current-HP/Tera mechanics, exact KO chances, set import/export, saved sets, and team
+  state;
+- the battle-page UI refactor: field-owned format and Tailwind controls, unified six-stat
+  editors, search-driven move selection, per-move critical-hit controls, inline hit counts and
+  condition overrides, and responsive side-card ordering;
+- lookup-page common builds, type matchups, and Speed-tier context, plus usage-backed builder
+  bulk/break searches and the dedicated Speed tiers page; and
+- the final builder/calculator cross-check suite and `npm run test:builder` command. At roadmap
+  close, all 314 automated tests passed and all four pages were checked at desktop and mobile
+  widths.
+
+The proposed threat/duel simulator was dropped before implementation and is not part of the
+finished product.
 
 ## Product goals
 
@@ -21,11 +41,6 @@ Individual work units live in `docs/tasks/*.md` — **one task file = one work s
    Pokémon at 4 fixed spread presets, **Base | Battle** modes, speed-control toggles
    (tailwind/paralysis/scarf/stages/Trick Room) on both sides. The builder links here
    instead of embedding its own speed line.
-4. **Duel simulator & real threats** — a simplified deterministic 1v1 simulator built on the
-   damage engine ([pvpoke](https://pvpoke.com/rankings/all/1500/overall/) is the reference for
-   this kind of tool). "Threats" are redefined from *most-used Pokémon* to *Pokémon that win
-   the 1v1 against the target*. The snapshot speed-tier card becomes a **horizontal base-speed
-   line** with Pokémon icons. (Phase 6; a dedicated simulator page `duel.html` is the last task.)
 
 ## Hard constraints (never violate)
 
@@ -44,11 +59,11 @@ The Limitless standings API (`/api/tournaments/<id>/standings`) provides per-Pok
 `id`, `name`, `item`, `ability`, `attacks[4]`, `nature`, `tera`. It does **not** provide SP
 spreads. Consequences:
 
-- The current sync parser (`src/limitless-data.js` → `countPokemonSet`) already captures
-  ability/item/moves/nature but **drops `tera`** — fixed in task P1-05.
-- The builder utility (Phase 5) approximates opponent spreads with **SP presets**
-  (max 32 / neutral 0 / plus-nature / minus-nature) weighted by observed **nature usage**,
-  which we do have. This is documented in P5-01; do not invent spread data.
+- The sync parser captures ability, item, moves, nature, and Tera observations.
+- The builder uses the top Smogon ladder SP spread when one is available. Otherwise it uses
+  explicit presets: 32 SP in both offensive stats, 2 HP / 0 Def / 0 SpD for bulk, and four
+  Speed comparisons (max +nature, max neutral, uninvested, and min −nature). These presets
+  are approximations, not claims about submitted Limitless teams.
 
 ## Competitive landscape (PokéOmni, verified 2026-07-09)
 
@@ -65,7 +80,7 @@ SP overlay — they only have natures).
 Takeaways, in priority order:
 
 1. **Win rate + teammate co-occurrence + archetype clustering** in `src/data/limitless-data.js` —
-   cheap extension of the standings parse we already do; feeds P5-01 threat data directly.
+   a possible extension of the standings parse.
 2. **Freshness + sample-size labels** wherever usage data is shown
    (`LimitlessTCG · M-B · <date> · n samples`) — applies to P4-01 and the builder.
 3. **Speed-tier presets** (base / neutral / max / max+nature / scarf variants) — adopt their
@@ -77,7 +92,7 @@ conflict with the no-dependency constraint or don't serve the calculator-first p
 
 ## Target code structure
 
-Phase 0 migrates the code to this layout. After P0-07, all paths below are canonical:
+Phase 0 migrated the code to this layout. All paths below are canonical:
 
 ```
 PokéCal/
@@ -85,7 +100,6 @@ PokéCal/
 ├── battle.html                 # calculator page      → src/ui/battle-page.js
 ├── builder.html                # builder utility      → src/ui/builder-page.js   (Phase 5)
 ├── speed.html                  # speed tiers tab      → src/ui/speed-page.js     (P5-03)
-├── duel.html                   # 1v1 simulator page   → src/ui/duel-page.js      (Phase 6, last)
 ├── src/
 │   ├── identifiers.js          # shared Showdown-style identifier normalization
 │   ├── i18n.js  i18n-formatters.js  locales/
@@ -100,21 +114,22 @@ PokéCal/
 │   │   ├── damage.js           # the damage pipeline (orchestration only)
 │   │   ├── ko-chance.js        # roll distribution → exact n-hit KO probabilities
 │   │   ├── speed.js            # effective speed
-│   │   ├── battle-order.js     # priority + Trick Room
-│   │   └── duel.js             # deterministic 1v1 simulator (Phase 6)
+│   │   └── battle-order.js     # priority + Trick Room
 │   ├── data/                   # loading, parsing, usage
 │   │   ├── data.js  catalog.js  pokemon.js  showdown-data.js
 │   │   ├── limitless-data.js  usage-defaults.js
-│   │   └── threats.js          # threat sets: usage-based (P5-01, done) + 1v1-ranked (P6-02)
+│   │   ├── threats.js          # usage-backed opponent sets and SP presets
+│   │   ├── speed-line.js       # pure Speed-tier rows and breakpoints
+│   │   └── bulk-points.js  break-points.js
 │   ├── ui/                     # DOM only — build inputs for the engine, render outputs
 │   │   ├── components.js       # shared DOM factories (single STAT_LABELS source)
 │   │   ├── bootstrap.js        # shared page init / catalog loading / error copy
-│   │   ├── lookup-page.js  battle-page.js  battle-state.js  builder-page.js
+│   │   ├── lookup-page.js  battle-page.js  battle-state.js
+│   │   └── builder-page.js  builder-state.js  speed-page.js
 │   └── styles.css
 ├── public/                     # generated catalogs (unchanged)
 ├── scripts/                    # sync + serve; shared plumbing in scripts/lib/
-├── test/                       # node --test suites, mirrors src/ module names
-└── docs/tasks/                 # one file per work unit (this roadmap's children)
+└── test/                       # node --test suites, mirrors src/ module names
 ```
 
 ## Engine architecture (reference for all tasks)
@@ -214,48 +229,6 @@ From the 16-roll damage array, compute exact KO probability for 1–5 hits by co
 uniform roll distribution: `P(KO in n) = P(sum of n independent rolls ≥ remaining HP)`.
 Output both the number and NCP-style text: `"43.8% chance to 2HKO"`, `"guaranteed OHKO"`.
 
-### Duel simulator (`src/engine/duel.js`, Phase 6 — reference for P6-01…P6-04)
-
-A deliberately simplified deterministic 1v1, reusing `calculateDamage`, `speed.js`, and
-`battle-order.js` — never a second damage implementation.
-
-```js
-simulateDuel(sideA, sideB, { maxTurns = 30 } = {})
-// sideA/sideB: the standard side-state shape (see above) + resolved `moves[]`
-// → { winner: "a" | "b" | "tie" | "draw", turns, log: [
-//      { turn, actor, moveId, avgDamageFraction, defenderHpAfter } ] }
-```
-
-v1 rules (implement exactly; every relaxation is a later, explicit change):
-
-- **Move choice**: each turn, each side independently picks its move with the highest
-  *average* damage vs the opponent (mean of the 16 rolls from `calculateDamage`), from its
-  common move set (damaging moves only — same filter as `threatMoves`). No prediction,
-  no switching, no Protect.
-- **Damage**: average damage only, no randomness, no accuracy, no secondary effects, no
-  crits, no multi-turn moves (skip charge moves like Solar Beam in v1 move pools).
-  Recoil/drain ignored. Damage applied as HP fraction via `currentHpFraction`.
-- **Order**: `battle-order.js` with move priority; effective speed from `speed.js` with a
-  default `createField()` — **no** weather, terrain, Trick Room, Tailwind, screens, or any
-  speed control. Items/abilities that are part of the set (Choice Scarf, Booster Energy…)
-  DO apply, because they come from the set, not the field.
-- **Speed ties**: simulate both orders; if the winner differs, result is `"tie"`.
-- **End**: a side at 0 HP loses (simultaneous → faster's KO lands first, so it can't happen);
-  `maxTurns` reached or both sides deal 0 damage → `"draw"`.
-- Format is `"singles"` inside the duel (no spread ×0.75).
-
-v2 (future, not scheduled): replace average damage with the real 16-roll distribution and
-report a **win rate** instead of a binary winner (convolve rolls like `ko-chance.js`, or
-Monte Carlo); optionally accuracy and crit rates. Design v1 so the damage-application step
-is a swappable function.
-
-**Threat definition (P6-02)**: `threatRanking(target, catalog)` builds duel states from the
-usage pool (top ~40 by usage — they're the ones with observed sets) using each threat's
-common set + SP presets (offense 32 / bulk 0 / `likely` speed preset), the target likewise
-with its own common set, runs one `simulateDuel` per pair, and returns candidates ranked:
-wins first (fewer turns = scarier), then ties, by usage.
-The top 10 of this ranking are "the threats" everywhere the UI says threats.
-
 ## Phases and dependency order
 
 | Phase | Theme | Tasks | Depends on |
@@ -266,29 +239,9 @@ The top 10 of this ranking are "the threats" everywhere the UI says threats.
 | 3 | Calculator UX parity with NCP | P3-01 … P3-05 | Phase 1 (P3-02+ need P1-06) |
 | 4 | Snapshot page polish | P4-01 … P4-03 | Phase 0 only |
 | 5 | Builder utility (bulk/break points) + speed tiers tab | P5-01 … P5-06 | Phases 1 + 2 |
-| 6 | Duel simulator, 1v1 threats, base-speed line | P6-01 … P6-04 | Phases 1 + 2, P5-01 |
 
-Phases 3 and 4 can proceed in parallel with Phase 2. Phases 5 and 6 both need the finished
-engine; they are independent of each other and can be interleaved (Phase 6 only reads
-`threats.js` from P5-01, which is done). P5-06 remains the release close-out and should run
-after whichever of the two finishes last.
-
-## Execution protocol (read before every task)
-
-1. Open the lowest-numbered task in `docs/tasks/` whose `Status` is `TODO` and whose
-   `Depends on` tasks are all `Done`.
-2. Read the task file completely, then read every file it lists under **Files to read**.
-3. Do only what the task says. Do not refactor neighboring code, rename unrelated things, or
-   "improve" beyond scope. If the task turns out to be impossible as written, stop and set
-   `Status: Blocked` with a note instead of improvising.
-4. Write/extend tests for every engine change. Expected damage numbers must be verified against
-   the NCP calculator (same inputs) or hand-computed with the pipeline above — say which in the
-   test comment.
-5. Run the task's listed test command, then the full `npm test`. All green before finishing.
-6. For UI changes, run `npm start` and check both desktop and mobile widths.
-7. Update the task file `Status` to `Done`, tick any `MECHANICS_CHECKLIST.md` items you
-   implemented, and update README.md/AGENTS.md if paths or commands changed.
-8. Commit message format: `P0-03: thread Field object through damage engine`.
+Phases 3 and 4 proceeded in parallel with Phase 2. Phase 5 used the completed engine and
+P5-06 closed the roadmap.
 
 ## Verification strategy
 
@@ -298,7 +251,7 @@ after whichever of the two finishes last.
 - The builder (Phase 5) reuses the same engine functions the battle page uses — never a second
   implementation of damage math. P5-06 cross-checks builder output against battle-page output.
 
-## Task index
+## Completed work index
 
 Phase 0: P0-01 extract data tables · P0-02 stats module · P0-03 Field object ·
 P0-04 move-effect registry · P0-05 modifier registries · P0-06 shared UI components ·
@@ -314,5 +267,11 @@ Phase 4: P4-01 common-build card · P4-02 type-matchup chart · P4-03 speed-tier
 Phase 5: P5-01 threat data · P5-02 builder page · P5-03 speed tiers page (`speed.html`) ·
 P5-04 bulk points · P5-05 break points · P5-06 cross-check.
 (P5-03 depends only on P5-01 — it can run before or in parallel with P5-02.)
-Phase 6: P6-01 duel engine · P6-02 1v1 threat ranking · P6-03 horizontal base-speed line ·
-P6-04 simulator page.
+
+## Follow-up ideas (not scheduled)
+
+- Add win rate, teammate co-occurrence, and archetype clustering from Limitless standings.
+- Use submitted SP spreads if Limitless publishes them in the future.
+- Let builder scenarios opt into side-specific field conditions without changing the default
+  usage-backed comparison.
+- Add archived season/regulation switching if the catalog format gains historical snapshots.

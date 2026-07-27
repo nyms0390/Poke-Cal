@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node --test",
     "test:battle": "node --test test/battle-order.test.js test/damage.test.js test/speed.test.js",
+    "test:builder": "node --test test/threats.test.js test/threat-preferences.test.js test/builder-state.test.js test/speed-line.test.js test/bulk-points.test.js test/break-points.test.js test/builder-crosscheck.test.js",
     "test:catalog": "node --test test/battle-state.test.js test/catalog.test.js test/identifiers.test.js test/pokemon.test.js test/stats.test.js test/ui.test.js",
     "test:data": "node --test test/champions-data.test.js test/data.test.js test/limitless-data.test.js test/showdown-data.test.js test/ncp-data.test.js test/smogon-data.test.js test/sync-pokemon-data.test.js test/sync-utils.test.js test/usage-defaults.test.js",
     "test:damage": "node --test test/damage.test.js",

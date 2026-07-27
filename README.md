@@ -67,7 +67,7 @@ PokéCal/
 │   └── serve.mjs                          # Static file server (127.0.0.1:4173)
 ├── test/                      # Node built-in test runner suites (node --test)
 ├── .github/workflows/pages.yml # Deploys repo root to GitHub Pages on push to main
-├── ROADMAP.md                  # Master plan + task index (docs/tasks/*.md)
+├── ROADMAP.md                  # Completed implementation roadmap
 └── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
 ```
 
@@ -95,6 +95,23 @@ npm start
 ```
 
 Then open <http://127.0.0.1:4173> for lookup, `/battle.html` for the calculator, `/builder.html` for bulk/break points, or `/speed.html` for interactive Speed tiers. Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173).
+
+### Builder workflow and assumptions
+
+Open `/builder.html`, choose your Pokémon and SP spread, select how many popular opponents to
+analyze, and optionally add custom opponents. The Bulk tab searches for the least joint
+HP/Def/SpD investment that improves survival against each family; the Break tab searches for
+Atk/SpA thresholds that improve your selected moves' KO tier. Opponent cards are editable, and
+the Speed tiers link carries the chosen Pokémon to `/speed.html`.
+
+In builder and Speed-tier copy, a "threat" is a Pokémon selected by Limitless Champions usage.
+Limitless provides observed nature, ability, item, move, and Tera
+choices but no SP spreads. Threats therefore start with the most-used nature, ability, item, and
+damaging moves, with Tera inactive. Offensive checks assume 32 Atk and 32 SpA. Defensive checks
+use the top Smogon ladder SP spread when available, otherwise the explicit fast-offense fallback
+of 2 HP / 0 Def / 0 SpD. The four Speed presets are max +Speed, max neutral, uninvested neutral,
+and minimum −Speed. These defaults are editable comparison assumptions, not submitted Limitless
+team spreads.
 
 ### Builder breakpoint priority
 
@@ -134,6 +151,7 @@ Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.j
 ```sh
 npm test                 # full suite (node --test)
 npm run test:battle      # battle-order, damage, speed
+npm run test:builder     # threats, builder state, speed line, bulk/break points, cross-check
 npm run test:catalog     # battle-state, catalog, identifiers, pokemon, stats, ui
 npm run test:data        # sync/parser/merge/data-loading suites, including NCP and shared sync utilities
 npm run test:damage      # damage only

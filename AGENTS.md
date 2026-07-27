@@ -10,6 +10,7 @@ Requires Node.js 20+. No `npm install` needed.
 npm start                      # static server at http://127.0.0.1:4173 (PORT env to change)
 npm test                       # full suite via node --test
 npm run test:battle            # battle-order, damage, speed tests
+npm run test:builder           # threat, builder-state, speed-line, bulk/break/cross-check tests
 npm run test:catalog           # battle-state, catalog, identifiers, pokemon, stats, ui tests
 npm run test:data              # sync/parser/merge/data-loading tests, including NCP and sync utilities
 npm run test:damage            # test/damage.test.js only
@@ -41,6 +42,7 @@ npm run sync-all               # all four syncs in order
 - `src/ui/builder-page.js` / `src/ui/builder-state.js` — builder controller and pure one-Pokémon state/final-stat helpers.
 - `src/ui/speed-page.js` / `src/data/speed-line.js` — Speed-tier controller and pure ranking/breakpoint calculations.
 - `src/data/bulk-points.js` / `src/data/break-points.js` — defensive and offensive SP breakpoint searches built on `calculateDamage`.
+- `test/builder-crosscheck.test.js` — independently assembles builder scenarios against the damage/KO engine to prevent builder/calculator drift.
 - `src/engine/damage.js` / `src/engine/speed.js` / `src/engine/battle-order.js` — battle math engine.
 - `src/engine/move-effects.js` — per-move registry (`MOVE_EFFECTS`/`moveEffect()`) replacing moveId ladders.
 - `src/engine/modifiers.js` — per-ability/per-item damage-modifier registry (`ABILITY_MODIFIERS`/`ITEM_MODIFIERS`/`collectModifiers()`).
@@ -52,7 +54,7 @@ npm run sync-all               # all four syncs in order
 - `scripts/serve.mjs` — minimal static HTTP server bound to 127.0.0.1:4173.
 - `public/*.json` — generated catalogs; do not hand-edit, fix sync/parser code and regenerate.
 - `MECHANICS_CHECKLIST.md` — battle-calculator accuracy tracker; only mark items done after implementing and verifying with a test or reproducible manual check.
-- `ROADMAP.md` / `docs/tasks/*.md` — the restructure/feature plan and its one-file-per-work-unit task log.
+- `ROADMAP.md` — the completed implementation roadmap and final scope record.
 
 ## Conventions & Gotchas
 

@@ -395,8 +395,8 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
 
   renderStats(user, stats);
   const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
-  // TODO(P5-04): show a remaining-SP budget only after an authoritative Champions rule
-  // source establishes a total cap; current usage-backed spreads can exceed 64 assigned SP.
+  // Show assigned SP rather than a remaining value because imported usage-backed spreads can
+  // exceed the builder's 66-point recommendation budget.
   elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
   renderCustomThreats();
   const threats = selectedThreats();
