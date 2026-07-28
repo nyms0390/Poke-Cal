@@ -99,7 +99,7 @@ test("applies editable threat build controls immutably", () => {
   let edited = applyThreatControl(threat, { kind: "nature", value: "Modest" });
   edited = applyThreatControl(edited, { kind: "ability", value: ability });
   edited = applyThreatControl(edited, { kind: "item", value: item });
-  edited = applyThreatControl(edited, { kind: "teraType", value: "Fire" });
+  assert.equal(applyThreatControl(edited, { kind: "teraType", value: "Fire" }), edited);
   edited = applyThreatControl(edited, { kind: "sp", stat: "hp", value: "80" });
   edited = applyThreatControl(edited, { kind: "sp", stat: "spa", value: "18.9" });
   edited = applyThreatControl(edited, { kind: "move", index: 1, value: move });
@@ -107,7 +107,7 @@ test("applies editable threat build controls immutably", () => {
   assert.equal(edited.nature, "Modest");
   assert.equal(edited.ability, ability);
   assert.equal(edited.item, item);
-  assert.equal(edited.teraType, "Fire");
+  assert.equal(edited.teraType, "");
   assert.deepEqual(edited.spPresets.bulk, { hp: 32, def: 0, spd: 0 });
   assert.deepEqual(edited.spPresets.offense, { atk: 32, spa: 18 });
   assert.deepEqual(edited.moves, [threat.moves[0], move]);

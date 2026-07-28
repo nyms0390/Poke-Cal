@@ -45,6 +45,9 @@ test("selects top marginal usage defaults with catalog metadata", () => {
         { name: "Timid:0/0/0/32/0/32", usagePercent: 20 },
         { name: "Jolly:2/32/0/0/0/32", usagePercent: 30 },
       ],
+      teras: [
+        { id: "electric", name: "Electric", usagePercent: 100 },
+      ],
     },
     {
       abilityLookup: buildAbilityLookup([{ id: "lightningrod", name: "Lightning Rod" }]),
@@ -62,6 +65,7 @@ test("selects top marginal usage defaults with catalog metadata", () => {
   assert.deepEqual(defaults.sp, { hp: 2, atk: 32, def: 0, spa: 0, spd: 0, spe: 32 });
   assert.equal(defaults.ability.name, "Lightning Rod");
   assert.equal(defaults.item.name, "Light Ball");
+  assert.equal(defaults.teraType, "");
   assert.deepEqual(defaults.moves.map(({ id }) => id), [
     "thunderbolt",
     "fakeout",

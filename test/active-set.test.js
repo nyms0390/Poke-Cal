@@ -83,7 +83,7 @@ test("applies a matching active set using current catalog objects", () => {
   assert.equal(restored.ability, ability);
   assert.equal(restored.item, item);
   assert.equal(restored.nature, "Modest");
-  assert.equal(restored.teraType, "Electric");
+  assert.equal(restored.teraType, "");
   assert.deepEqual(restored.sp, state.sp);
   assert.deepEqual(restored.selectedMoveIds, state.selectedMoveIds);
 

@@ -240,7 +240,6 @@ function renderCommonBuild() {
     items,
   });
   const nature = topUsageEntry(usage.natures);
-  const tera = topUsageEntry(usage.teras);
   const moves = defaults.moves.slice(0, 4);
 
   elements.commonBuildHeadline.textContent = t("lookup.commonHeadline", {
@@ -252,7 +251,6 @@ function renderCommonBuild() {
     commonBuildFact(t("label.ability"), defaults.ability),
     commonBuildFact(t("label.item"), defaults.item),
     commonBuildFact(t("label.nature"), nature ?? { name: defaults.nature }),
-    commonBuildFact(t("label.tera"), tera ?? { name: defaults.teraType || "—" }),
     commonBuildMoves(moves),
   );
   elements.commonBuildCalculator.href =
@@ -270,7 +268,6 @@ function commonBuildFact(labelText, entry) {
   const rawName = entry?.name;
   value.textContent = !entry ? "—"
     : labelText === t("label.nature") ? localizedTerm("nature", rawName)
-    : labelText === t("label.tera") ? localizedTerm("type", rawName)
     : localizedName(entry);
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");

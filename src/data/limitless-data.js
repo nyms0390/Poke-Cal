@@ -69,7 +69,6 @@ function countPokemonSet(counters, set) {
   pokemon.items ??= new Map();
   pokemon.moves ??= new Map();
   pokemon.natures ??= new Map();
-  pokemon.teras ??= new Map();
 
   if (set.ability) {
     increment(counters.abilities, normalizeId(set.ability), set.ability);
@@ -85,7 +84,6 @@ function countPokemonSet(counters, set) {
     increment(pokemon.moves, normalizeId(attack), attack);
   }
   if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
-  if (set.tera) increment(pokemon.teras, normalizeId(set.tera), set.tera);
 }
 
 function normalizePokemonSetId(set) {
@@ -123,7 +121,6 @@ function pokemonUsageEntry(entry, denominator) {
       items: usageEntries(entry.items ?? new Map(), entry.count, simpleUsageEntry),
       moves: usageEntries(entry.moves ?? new Map(), entry.count, simpleUsageEntry),
       natures: usageEntries(entry.natures ?? new Map(), entry.count, simpleUsageEntry),
-      teras: usageEntries(entry.teras ?? new Map(), entry.count, simpleUsageEntry),
     },
   };
 }
@@ -168,15 +165,18 @@ function normalizeUsage(usage, catalogs) {
 }
 
 function normalizePokemonUsage(entries, catalogs) {
-  return normalizeCatalogUsage(entries, catalogs.pokemon).map((entry) => ({
-    ...entry,
-    usage: {
-      ...(entry.usage ?? {}),
-      abilities: normalizeCatalogUsage(entry.usage?.abilities, catalogs.abilities),
-      items: normalizeCatalogUsage(entry.usage?.items, catalogs.items),
-      moves: normalizeCatalogUsage(entry.usage?.moves, catalogs.moves),
-    },
-  }));
+  return normalizeCatalogUsage(entries, catalogs.pokemon).map((entry) => {
+    const { teras: _ignoredTeras, ...usage } = entry.usage ?? {};
+    return {
+      ...entry,
+      usage: {
+        ...usage,
+        abilities: normalizeCatalogUsage(entry.usage?.abilities, catalogs.abilities),
+        items: normalizeCatalogUsage(entry.usage?.items, catalogs.items),
+        moves: normalizeCatalogUsage(entry.usage?.moves, catalogs.moves),
+      },
+    };
+  });
 }
 
 function normalizeCatalogUsage(entries = [], catalog) {

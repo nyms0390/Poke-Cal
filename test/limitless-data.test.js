@@ -78,10 +78,7 @@ test("aggregates Limitless standings into usage rates", () => {
       ["protect", 2],
     ],
   );
-  assert.deepEqual(
-    usage.pokemon[0].usage.teras.map(({ id, usageCount, usagePercent }) => [id, usageCount, usagePercent]),
-    [["electric", 1, 50], ["fire", 1, 50]],
-  );
+  assert.equal("teras" in usage.pokemon[0].usage, false);
 });
 
 test("merges Limitless usage without keeping old catalog-source metadata", () => {
@@ -142,7 +139,7 @@ test("merges Limitless usage without keeping old catalog-source metadata", () =>
   assert.equal(merged.pokemon[1].champions.catalogSource, undefined);
   assert.equal(merged.pokemon[1].champions.usageCount, 2);
   assert.equal(merged.pokemon[1].champions.usage.items[0].id, "raichunitey");
-  assert.equal(merged.pokemon[1].champions.usage.teras[0].id, "fire");
+  assert.equal("teras" in merged.pokemon[1].champions.usage, false);
   assert.equal(merged.pokemon[0].champions.source, undefined);
   assert.equal(merged.pokemon[0].champions.usageCount, undefined);
   assert.equal(merged.pokemon[0].champions.catalogSource, undefined);

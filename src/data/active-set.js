@@ -25,7 +25,7 @@ function normalizeActiveSet(value) {
     sp: Object.fromEntries(STAT_KEYS.map((stat) => [stat, clampSp(value?.sp?.[stat])])),
     abilityId: normalizeId(value?.abilityId),
     itemId: normalizeId(value?.itemId),
-    teraType: String(value?.teraType ?? ""),
+    teraType: "",
     moveIds: Array.from({ length: MOVE_SLOTS }, (_, index) => normalizeId(value?.moveIds?.[index])),
   };
 }
@@ -76,7 +76,7 @@ export function activeSetFromState(state, fallback = null) {
     ])),
     abilityId: has("ability") ? state.ability?.id : previous?.abilityId,
     itemId: has("item") ? state.item?.id : previous?.itemId,
-    teraType: has("teraType") ? state.teraType : previous?.teraType,
+    teraType: "",
     moveIds,
   });
 }

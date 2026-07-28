@@ -28,7 +28,6 @@ import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { createField } from "../engine/field.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
-import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import {
   applyDocumentTranslations,
   getLocale,
@@ -75,7 +74,6 @@ const elements = {
   nature: document.querySelector("#builder-nature"),
   ability: document.querySelector("#builder-ability"),
   item: document.querySelector("#builder-item"),
-  tera: document.querySelector("#builder-tera"),
   stats: document.querySelector("#builder-stats"),
   spBudget: document.querySelector("#builder-sp-budget"),
   movePicks: document.querySelector("#builder-move-picks"),
@@ -155,7 +153,7 @@ async function initialize() {
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
 
-  for (const control of [elements.nature, elements.ability, elements.item, elements.tera]) {
+  for (const control of [elements.nature, elements.ability, elements.item]) {
     control.addEventListener("input", handlePick);
   }
   elements.stats.addEventListener("input", handleSpInput);
@@ -231,10 +229,6 @@ function renderLocaleOptions() {
       getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
     )),
   );
-  elements.tera.replaceChildren(
-    optionElement("", t("builder.noTera")),
-    ...Object.keys(TYPE_EFFECTIVENESS).map((type) => optionElement(type, localizedTerm("type", type))),
-  );
 }
 
 function pokemonMatches(query) {
@@ -292,7 +286,6 @@ function renderPicks() {
   elements.nature.value = user.nature;
   elements.ability.value = user.ability?.id ?? "";
   elements.item.value = user.item?.id ?? "";
-  elements.tera.value = user.teraType ?? "";
   renderMovePicks();
 }
 
@@ -313,7 +306,6 @@ function handlePick(event) {
         value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
       }) };
     }
-    if (id === "builder-tera") state = { ...state, user: { ...state.user, teraType: value } };
   });
 }
 
@@ -381,12 +373,10 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.nature.value = user.nature;
   elements.ability.value = user.ability?.id ?? "";
   elements.item.value = user.item?.id ?? "";
-  elements.tera.value = user.teraType ?? "";
   elements.threatCount.value = String(state.threatCount);
   ambientFieldControls.sync(state.field);
   elements.summary.textContent = t("builder.summary", {
     nature: localizedTerm("nature", user.nature),
-    tera: user.teraType ? t("builder.tera", { type: localizedTerm("type", user.teraType) }) : t("builder.noTera"),
   });
   elements.threatSummary.textContent = t("builder.topCustom", { top: state.threatCount, custom: customThreats.length });
   elements.source.textContent = t("builder.source", { top: state.threatCount, custom: customThreats.length });
@@ -1035,15 +1025,6 @@ function threatBuildEditor(threat, cardKey) {
       },
       { cardKey, focusKey },
     ), `${cardKey}:item`),
-    threatSelect(t("label.tera"), [
-      { value: "", label: t("builder.noTera") },
-      ...Object.keys(TYPE_EFFECTIVENESS)
-        .map((type) => ({ value: type, label: localizedTerm("type", type) })),
-    ], threat.teraType ?? "", (value, focusKey) => updateThreatBuild(
-      threat,
-      { kind: "teraType", value },
-      { cardKey, focusKey },
-    ), `${cardKey}:tera`),
   );
 
   const spread = document.createElement("fieldset");

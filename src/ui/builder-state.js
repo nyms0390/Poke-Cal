@@ -66,7 +66,6 @@ export function applyThreatControl(threat, { kind, stat, index, value }) {
   if (kind === "nature") return { ...threat, nature: value };
   if (kind === "ability") return { ...threat, ability: value };
   if (kind === "item") return { ...threat, item: value };
-  if (kind === "teraType") return { ...threat, teraType: value };
   if (kind === "sp") {
     const group = THREAT_SP_GROUPS[stat];
     if (!group) return threat;
