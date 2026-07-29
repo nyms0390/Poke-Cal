@@ -41,6 +41,7 @@ import {
 import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
   applyThreatControl,
   availableBulkSpBudget,
@@ -394,7 +395,10 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   renderBulkPoints(threats, field);
   renderBreakPoints(threats, field);
   applyDocumentTranslations();
-  restoreLiveFocus(focusKey);
+  const analysisPanel = state.analysisTab === "bulk" ? elements.bulkPanel : elements.breakPanel;
+  restoreBuilderCardFocus(analysisPanel, focusKey, {
+    onOpenPanel: (panelKey) => openAnalysisPanels.add(panelKey),
+  });
   if (focusAnalysisTab) {
     elements.analysisTabs.find((tab) => tab.dataset.builderAnalysis === state.analysisTab)?.focus();
   }
@@ -1165,14 +1169,6 @@ function setPanelOpen(panelKey, open) {
     if (open) openAnalysisPanels.add(panelKey);
     else openAnalysisPanels.delete(panelKey);
   });
-}
-
-function restoreLiveFocus(focusKey) {
-  if (!focusKey) return;
-  const panel = state.analysisTab === "bulk" ? elements.bulkPanel : elements.breakPanel;
-  const control = [...panel.querySelectorAll("[data-live-key]")]
-    .find(({ dataset }) => dataset.liveKey === focusKey);
-  control?.focus({ preventScroll: true });
 }
 
 function deletePanelKeysForPokemon(keys, pokemonId) {

@@ -9,6 +9,7 @@ import {
   typeClassName,
 } from "../src/ui/components.js";
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
+import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
 import { createLiveUpdater } from "../src/ui/live-update.js";
 
 test("commits each live state change before rendering exactly once", () => {
@@ -22,6 +23,49 @@ test("commits each live state change before rendering exactly once", () => {
 
   assert.deepEqual(state, { count: 1 });
   assert.deepEqual(renders, [{ state: { count: 1 }, context: { focusKey: "counter" } }]);
+});
+
+test("reveals and focuses an edited builder card after it moves into a collapsed section", () => {
+  const events = [];
+  const section = {
+    dataset: { analysisPanelKey: "bulk:coverage:covered" },
+    open: false,
+  };
+  const control = {
+    dataset: { liveKey: "bulk:charizard:sp:hp" },
+    closest(selector) {
+      assert.equal(selector, "details.builder-coverage-section");
+      return section;
+    },
+    scrollIntoView(options) {
+      events.push(["scroll", options]);
+    },
+    focus(options) {
+      events.push(["focus", options]);
+    },
+  };
+  const panel = {
+    querySelectorAll(selector) {
+      assert.equal(selector, "[data-live-key]");
+      return [
+        { dataset: { liveKey: "bulk:venusaur:sp:hp" } },
+        control,
+      ];
+    },
+  };
+
+  restoreBuilderCardFocus(panel, "bulk:charizard:sp:hp", {
+    onOpenPanel(panelKey) {
+      events.push(["open", panelKey]);
+    },
+  });
+
+  assert.equal(section.open, true);
+  assert.deepEqual(events, [
+    ["open", "bulk:coverage:covered"],
+    ["scroll", { block: "center", inline: "nearest" }],
+    ["focus", { preventScroll: true }],
+  ]);
 });
 
 test("normalizes type names for CSS badge classes", () => {
