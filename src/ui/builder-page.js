@@ -65,7 +65,7 @@ import {
 } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl } from "./field-state.js";
-import { createLiveUpdater } from "./live-update.js";
+import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
 
 const elements = {
   source: document.querySelector("#builder-source"),
@@ -77,6 +77,7 @@ const elements = {
   item: document.querySelector("#builder-item"),
   stats: document.querySelector("#builder-stats"),
   spBudget: document.querySelector("#builder-sp-budget"),
+  applySpread: document.querySelector("#builder-apply-spread"),
   movePicks: document.querySelector("#builder-move-picks"),
   ambientField: document.querySelector("#builder-ambient-field"),
   threatCount: document.querySelector("#builder-threat-count"),
@@ -103,6 +104,7 @@ const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
+let userSpreadDraft = null;
 const threatOverrides = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
@@ -158,6 +160,7 @@ async function initialize() {
     control.addEventListener("input", handlePick);
   }
   elements.stats.addEventListener("input", handleSpInput);
+  elements.applySpread.addEventListener("click", applyUserSpread);
   elements.threatCount.addEventListener("input", handleThreatCount);
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
@@ -243,6 +246,7 @@ function pokemonMatches(query) {
 
 function seedPokemon(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
+  resetUserSpreadDraft();
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: catalogs.abilityLookup,
     moveLookup: catalogs.moveLookup,
@@ -313,10 +317,31 @@ function handlePick(event) {
 function handleSpInput(event) {
   if (event.target.dataset.kind !== "builder-sp" || !state.user) return;
   const stat = event.target.dataset.stat;
-  updatePage(() => {
-    state = { ...state, user: applyControl(state.user, { kind: "sp", stat, value: event.target.value }) };
-  });
-  event.target.value = String(state.user.sp[stat]);
+  if (!userSpreadDraft) {
+    userSpreadDraft = createDeferredUpdater({ ...state.user.sp }, (sp) => {
+      userSpreadDraft = null;
+      updatePage(() => {
+        state = { ...state, user: { ...state.user, sp } };
+      });
+    });
+  }
+  const sp = userSpreadDraft.stage((current) =>
+    applyControl(
+      { ...state.user, sp: current },
+      { kind: "sp", stat, value: event.target.value },
+    ).sp);
+  event.target.value = String(sp[stat]);
+  elements.applySpread.disabled = false;
+  renderSpBudget(sp);
+}
+
+function applyUserSpread() {
+  userSpreadDraft?.apply();
+}
+
+function resetUserSpreadDraft() {
+  userSpreadDraft = null;
+  elements.applySpread.disabled = true;
 }
 
 function handleThreatCount(event) {
@@ -384,11 +409,10 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
   renderAnalysisTabs();
 
-  renderStats(user, stats);
-  const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
-  // Show assigned SP rather than a remaining value because imported usage-backed spreads can
-  // exceed the builder's 66-point recommendation budget.
-  elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
+  const displayedSp = userSpreadDraft?.current() ?? user.sp;
+  renderStats(user, stats, displayedSp);
+  renderSpBudget(displayedSp);
+  elements.applySpread.disabled = !userSpreadDraft;
   renderCustomThreats();
   const threats = selectedThreats();
   const field = createField(state.field);
@@ -404,6 +428,13 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   }
 }
 
+function renderSpBudget(sp) {
+  const spent = STAT_KEYS.reduce((total, stat) => total + (sp[stat] ?? 0), 0);
+  // Show assigned SP rather than a remaining value because imported usage-backed spreads can
+  // exceed the builder's 66-point recommendation budget.
+  elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
+}
+
 function browserStorage() {
   try {
     return globalThis.localStorage ?? null;
@@ -412,7 +443,7 @@ function browserStorage() {
   }
 }
 
-function renderStats(user, stats) {
+function renderStats(user, stats, sp = user.sp) {
   const rows = ensureRenderedRows(
     elements.stats,
     ".builder-stat-row",
@@ -422,7 +453,7 @@ function renderStats(user, stats) {
   for (const [index, stat] of STAT_KEYS.entries()) {
     const row = rows[index];
     row.querySelector(".builder-stat-base").textContent = String(user.pokemon.baseStats[stat]);
-    row.querySelector("input").value = String(user.sp[stat] ?? 0);
+    row.querySelector("input").value = String(sp[stat] ?? 0);
     row.querySelector(".builder-stat-final").textContent = String(stats[stat]);
   }
 }
@@ -732,6 +763,7 @@ function bulkMovePanel(
         [defenseStat]: point.defSp,
       }),
       onSelect: () => {
+        resetUserSpreadDraft();
         updatePage(() => {
           state = {
             ...state,
@@ -885,6 +917,7 @@ function breakMovePanel({ move, damage, points }, threat, panelKey) {
         damageText: t("builder.damage", { min: point.minPct, max: point.maxPct }),
         canApply: canApplySpTargets(state.user.sp, { [attackStat]: point.sp }),
         onSelect: () => {
+          resetUserSpreadDraft();
           updatePage(() => {
             state = {
               ...state,
@@ -991,6 +1024,20 @@ function threatBuildEditor(threat, cardKey) {
   const editor = document.createElement("section");
   editor.className = "builder-threat-build";
   editor.setAttribute("aria-label", t("builder.threatBuild", { name: localizedName(threat.pokemon) }));
+  const apply = document.createElement("button");
+  apply.type = "button";
+  apply.className = "builder-apply-button";
+  apply.textContent = t("builder.apply");
+  apply.disabled = true;
+  const applyFocusKey = `${cardKey}:apply`;
+  apply.dataset.liveKey = applyFocusKey;
+  const draft = createDeferredUpdater(threat, (nextThreat) => {
+    commitThreatBuild(nextThreat, { cardKey, focusKey: applyFocusKey });
+  });
+  const stageThreatControl = (control) => {
+    draft.stage((current) => applyThreatControl(current, control));
+    apply.disabled = false;
+  };
 
   const picks = document.createElement("div");
   picks.className = "builder-threat-build-picks";
@@ -998,37 +1045,31 @@ function threatBuildEditor(threat, cardKey) {
     threatSelect(t("label.nature"), Object.keys(NATURES).map((nature) => ({
       value: nature,
       label: getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
-    })), threat.nature, (value, focusKey) => updateThreatBuild(
-      threat,
+    })), threat.nature, (value) => stageThreatControl(
       { kind: "nature", value },
-      { cardKey, focusKey },
-    ), `${cardKey}:nature`),
+    )),
     threatSelect(t("label.ability"), [
       { value: "", label: t("builder.noAbility") },
       ...rankByUsage(
         resolvePokemonAbilities(threat.pokemon, catalogs.abilityLookup),
         threat.pokemon.champions?.usage?.abilities,
       ).map((ability) => ({ value: ability.id, label: localizedName(ability) })),
-    ], threat.ability?.id ?? "", (value, focusKey) => updateThreatBuild(
-      threat,
+    ], threat.ability?.id ?? "", (value) => stageThreatControl(
       {
         kind: "ability",
         value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
       },
-      { cardKey, focusKey },
-    ), `${cardKey}:ability`),
+    )),
     threatSelect(t("label.item"), [
       { value: "", label: t("builder.noItem") },
       ...rankByUsage(catalogs.items, threat.pokemon.champions?.usage?.items)
         .map((item) => ({ value: item.id, label: localizedName(item) })),
-    ], threat.item?.id ?? "", (value, focusKey) => updateThreatBuild(
-      threat,
+    ], threat.item?.id ?? "", (value) => stageThreatControl(
       {
         kind: "item",
         value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
       },
-      { cardKey, focusKey },
-    ), `${cardKey}:item`),
+    )),
   );
 
   const spread = document.createElement("fieldset");
@@ -1045,13 +1086,9 @@ function threatBuildEditor(threat, cardKey) {
     input.max = "32";
     input.step = "1";
     input.value = String(threat.spPresets?.[group]?.[stat] ?? 0);
-    const focusKey = `${cardKey}:sp:${stat}`;
-    input.dataset.liveKey = focusKey;
     input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
-    input.addEventListener("input", () => updateThreatBuild(
-      threat,
+    input.addEventListener("input", () => stageThreatControl(
       { kind: "sp", stat, value: input.value },
-      { cardKey, focusKey },
     ));
     label.append(input);
     return label;
@@ -1066,43 +1103,39 @@ function threatBuildEditor(threat, cardKey) {
   const movesLegend = document.createElement("legend");
   movesLegend.textContent = t("builder.bulkMoves");
   moves.append(movesLegend, ...threat.moves.slice(0, 2).map((move, index) => {
-    const focusKey = `${cardKey}:move:${index}`;
     return threatSelect(t("battle.moveNumber", { number: index + 1 }), moveOptions.map((option) => ({
       value: option.id,
       label: localizedName(option),
-    })), move.id, (value, selectedFocusKey) => updateThreatBuild(
-      threat,
+    })), move.id, (value) => stageThreatControl(
       {
         kind: "move",
         index,
         value: catalogs.moveLookup.get(normalizeId(value)) ?? move,
       },
-      { cardKey, focusKey: selectedFocusKey },
-    ), focusKey);
+    ));
   }));
 
-  editor.append(picks, spread, moves);
+  apply.addEventListener("click", () => draft.apply());
+  editor.append(picks, spread, moves, apply);
   return editor;
 }
 
-function threatSelect(labelText, options, selectedValue, onChange, focusKey) {
+function threatSelect(labelText, options, selectedValue, onChange) {
   const label = document.createElement("label");
   label.textContent = labelText;
   const select = document.createElement("select");
   select.replaceChildren(...options.map(({ value, label: optionLabel }) =>
     optionElement(value, optionLabel)));
   select.value = selectedValue;
-  select.dataset.liveKey = focusKey;
-  select.addEventListener("input", () => onChange(select.value, focusKey));
+  select.addEventListener("input", () => onChange(select.value));
   label.append(select);
   return label;
 }
 
-function updateThreatBuild(threat, control, { cardKey, focusKey }) {
+function commitThreatBuild(threat, { cardKey, focusKey }) {
   updatePage(() => {
     const threatId = normalizeId(threat.pokemon.id);
-    const current = threatOverrides.get(threatId) ?? threat;
-    threatOverrides.set(threatId, applyThreatControl(current, control));
+    threatOverrides.set(threatId, threat);
     expandedCards.add(cardKey);
   }, { focusKey });
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Champions team builder with live stats, defensive bulk points, and offensive break points."
+      content="Champions team builder with configurable stats, defensive bulk points, and offensive break points."
     />
     <title>PokéCal — Builder</title>
     <link rel="stylesheet" href="./src/styles.css" />
@@ -75,8 +75,24 @@
             <div class="builder-stat-heading" aria-hidden="true">
               <span>Stat</span><span>Base</span><span>SP</span><span>Final</span>
             </div>
-            <div id="builder-stats" class="builder-stats" aria-label="Live final stats"></div>
-            <p id="builder-sp-budget" class="builder-sp-budget">—</p>
+            <div
+              id="builder-stats"
+              class="builder-stats"
+              aria-label="Final stats"
+              data-i18n-aria-label="builder.finalStats"
+            ></div>
+            <div class="builder-user-spread-footer">
+              <p id="builder-sp-budget" class="builder-sp-budget">—</p>
+              <button
+                id="builder-apply-spread"
+                class="builder-apply-button"
+                type="button"
+                data-i18n="builder.applySpread"
+                disabled
+              >
+                Apply spread
+              </button>
+            </div>
 
             <section class="builder-moves" aria-label="Selected moves">
               <div class="panel-heading">

@@ -2089,6 +2089,13 @@ button:disabled {
   line-height: 1.5;
 }
 
+.builder-user-spread-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .builder-moves,
 .builder-field-settings {
   display: grid;
@@ -2383,6 +2390,26 @@ button:disabled {
   padding: 5px 7px;
   font-size: var(--text-sm);
   box-shadow: none;
+}
+
+.builder-apply-button {
+  justify-self: end;
+  min-width: 120px;
+  min-height: var(--control-height);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-control);
+  padding: 8px 16px;
+  background: var(--accent);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.builder-apply-button:not(:disabled):hover,
+.builder-apply-button:not(:disabled):focus-visible {
+  outline: none;
+  background: var(--accent-dark);
 }
 
 .builder-analysis-moves {
@@ -3066,6 +3093,16 @@ details.builder-analysis-move > .builder-spread-grid {
 
   .builder-threat-spread {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .builder-user-spread-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .builder-apply-button {
+    justify-self: stretch;
+    width: 100%;
   }
 
   .builder-more-detail > summary {

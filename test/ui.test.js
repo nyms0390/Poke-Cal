@@ -10,7 +10,7 @@ import {
 } from "../src/ui/components.js";
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
 import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
-import { createLiveUpdater } from "../src/ui/live-update.js";
+import { createDeferredUpdater, createLiveUpdater } from "../src/ui/live-update.js";
 
 test("commits each live state change before rendering exactly once", () => {
   let state = { count: 0 };
@@ -23,6 +23,35 @@ test("commits each live state change before rendering exactly once", () => {
 
   assert.deepEqual(state, { count: 1 });
   assert.deepEqual(renders, [{ state: { count: 1 }, context: { focusKey: "counter" } }]);
+});
+
+test("stages editor changes without committing until Apply", () => {
+  const commits = [];
+  const editor = createDeferredUpdater(
+    { nature: "Bold", sp: { hp: 0, def: 0 } },
+    (draft) => commits.push(draft),
+  );
+
+  editor.stage((draft) => ({ ...draft, nature: "Calm" }));
+  editor.stage((draft) => ({ ...draft, sp: { ...draft.sp, hp: 24 } }));
+
+  assert.deepEqual(commits, []);
+  assert.deepEqual(editor.current(), { nature: "Calm", sp: { hp: 24, def: 0 } });
+  assert.equal(editor.apply(), true);
+  assert.deepEqual(commits, [{ nature: "Calm", sp: { hp: 24, def: 0 } }]);
+  assert.equal(editor.apply(), false);
+  assert.equal(commits.length, 1);
+});
+
+test("builder target spread has an explicit Apply control instead of live final stats", () => {
+  const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+
+  assert.match(
+    html,
+    /<button[^>]+id="builder-apply-spread"[^>]+data-i18n="builder\.applySpread"[^>]*>/,
+  );
+  assert.match(html, /id="builder-stats"[^>]+aria-label="Final stats"/);
+  assert.doesNotMatch(html, /aria-label="Live final stats"/);
 });
 
 test("reveals and focuses an edited builder card after it moves into a collapsed section", () => {
