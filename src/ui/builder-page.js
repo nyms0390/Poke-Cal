@@ -104,7 +104,7 @@ const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
-let userSpreadDraft = null;
+let userSetupDraft = null;
 const threatOverrides = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
@@ -159,8 +159,8 @@ async function initialize() {
   for (const control of [elements.nature, elements.ability, elements.item]) {
     control.addEventListener("input", handlePick);
   }
-  elements.stats.addEventListener("input", handleSpInput);
-  elements.applySpread.addEventListener("click", applyUserSpread);
+  elements.stats.addEventListener("input", handleSetupInput);
+  elements.applySpread.addEventListener("click", applyUserSetup);
   elements.threatCount.addEventListener("input", handleThreatCount);
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
@@ -246,7 +246,7 @@ function pokemonMatches(query) {
 
 function seedPokemon(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
-  resetUserSpreadDraft();
+  resetUserSetupDraft();
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: catalogs.abilityLookup,
     moveLookup: catalogs.moveLookup,
@@ -273,6 +273,7 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
 
 function renderPicks() {
   const user = state.user;
+  const setup = userSetupDraft?.current() ?? user;
   const usage = user.pokemon.champions?.usage;
   const abilities = rankByUsage(
     resolvePokemonAbilities(user.pokemon, catalogs.abilityLookup),
@@ -288,59 +289,63 @@ function renderPicks() {
     optionElement("", t("builder.noItem")),
     ...items.map((item) => optionElement(item.id, localizedName(item))),
   );
-  elements.nature.value = user.nature;
-  elements.ability.value = user.ability?.id ?? "";
-  elements.item.value = user.item?.id ?? "";
+  elements.nature.value = setup.nature;
+  elements.ability.value = setup.ability?.id ?? "";
+  elements.item.value = setup.item?.id ?? "";
   renderMovePicks();
 }
 
 function handlePick(event) {
   if (!state.user) return;
   const { id, value } = event.target;
-  updatePage(() => {
-    if (id === "builder-nature") state = { ...state, user: applyControl(state.user, { kind: "nature", value }) };
-    if (id === "builder-ability") {
-      state = { ...state, user: applyControl(state.user, {
-        kind: "ability",
-        value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
-      }) };
-    }
-    if (id === "builder-item") {
-      state = { ...state, user: applyControl(state.user, {
-        kind: "item",
-        value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
-      }) };
-    }
-  });
+  if (id === "builder-nature") stageUserSetup({ kind: "nature", value });
+  if (id === "builder-ability") {
+    stageUserSetup({
+      kind: "ability",
+      value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
+    });
+  }
+  if (id === "builder-item") {
+    stageUserSetup({
+      kind: "item",
+      value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
+    });
+  }
 }
 
-function handleSpInput(event) {
-  if (event.target.dataset.kind !== "builder-sp" || !state.user) return;
+function handleSetupInput(event) {
+  const kind = event.target.dataset.kind === "builder-sp"
+    ? "sp"
+    : event.target.dataset.kind === "builder-stage"
+      ? "stage"
+      : "";
+  if (!kind || !state.user) return;
   const stat = event.target.dataset.stat;
-  if (!userSpreadDraft) {
-    userSpreadDraft = createDeferredUpdater({ ...state.user.sp }, (sp) => {
-      userSpreadDraft = null;
+  const setup = stageUserSetup({ kind, stat, value: event.target.value });
+  event.target.value = String(setup[kind === "sp" ? "sp" : "stages"][stat]);
+  if (kind === "sp") renderSpBudget(setup.sp);
+}
+
+function stageUserSetup(control) {
+  if (!userSetupDraft) {
+    userSetupDraft = createDeferredUpdater(state.user, (setup) => {
+      userSetupDraft = null;
       updatePage(() => {
-        state = { ...state, user: { ...state.user, sp } };
+        state = { ...state, user: setup };
       });
     });
   }
-  const sp = userSpreadDraft.stage((current) =>
-    applyControl(
-      { ...state.user, sp: current },
-      { kind: "sp", stat, value: event.target.value },
-    ).sp);
-  event.target.value = String(sp[stat]);
+  const setup = userSetupDraft.stage((current) => applyControl(current, control));
   elements.applySpread.disabled = false;
-  renderSpBudget(sp);
+  return setup;
 }
 
-function applyUserSpread() {
-  userSpreadDraft?.apply();
+function applyUserSetup() {
+  userSetupDraft?.apply();
 }
 
-function resetUserSpreadDraft() {
-  userSpreadDraft = null;
+function resetUserSetupDraft() {
+  userSetupDraft = null;
   elements.applySpread.disabled = true;
 }
 
@@ -395,10 +400,11 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   else if (refreshMoves) renderMovePicks();
   activeSetStore.writeSet(activeSetFromState(user));
   const stats = finalStats(state);
+  const displayedSetup = userSetupDraft?.current() ?? user;
   elements.pokemonSearch.value = localizedName(user.pokemon);
-  elements.nature.value = user.nature;
-  elements.ability.value = user.ability?.id ?? "";
-  elements.item.value = user.item?.id ?? "";
+  elements.nature.value = displayedSetup.nature;
+  elements.ability.value = displayedSetup.ability?.id ?? "";
+  elements.item.value = displayedSetup.item?.id ?? "";
   elements.threatCount.value = String(state.threatCount);
   ambientFieldControls.sync(state.field);
   elements.summary.textContent = t("builder.summary", {
@@ -409,10 +415,9 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
   renderAnalysisTabs();
 
-  const displayedSp = userSpreadDraft?.current() ?? user.sp;
-  renderStats(user, stats, displayedSp);
-  renderSpBudget(displayedSp);
-  elements.applySpread.disabled = !userSpreadDraft;
+  renderStats(user, stats, displayedSetup);
+  renderSpBudget(displayedSetup.sp);
+  elements.applySpread.disabled = !userSetupDraft;
   renderCustomThreats();
   const threats = selectedThreats();
   const field = createField(state.field);
@@ -443,7 +448,7 @@ function browserStorage() {
   }
 }
 
-function renderStats(user, stats, sp = user.sp) {
+function renderStats(user, stats, setup = user) {
   const rows = ensureRenderedRows(
     elements.stats,
     ".builder-stat-row",
@@ -453,8 +458,10 @@ function renderStats(user, stats, sp = user.sp) {
   for (const [index, stat] of STAT_KEYS.entries()) {
     const row = rows[index];
     row.querySelector(".builder-stat-base").textContent = String(user.pokemon.baseStats[stat]);
-    row.querySelector("input").value = String(sp[stat] ?? 0);
+    row.querySelector("input").value = String(setup.sp[stat] ?? 0);
     row.querySelector(".builder-stat-final").textContent = String(stats[stat]);
+    const stage = row.querySelector('select[data-kind="builder-stage"]');
+    if (stage) stage.value = String(setup.stages[stat] ?? 0);
   }
 }
 
@@ -479,8 +486,29 @@ function statRow(stat, user, stats) {
   const final = document.createElement("strong");
   final.className = "builder-stat-final";
   final.textContent = String(stats[stat]);
+  const stage = document.createElement("span");
+  stage.className = "builder-stat-stage";
+  if (stat === "hp") {
+    stage.textContent = "—";
+  } else {
+    const select = document.createElement("select");
+    select.dataset.kind = "builder-stage";
+    select.dataset.stat = stat;
+    select.setAttribute(
+      "aria-label",
+      `${localizedTerm("stat", STAT_LABELS[stat])} ${getLocale() === "zh-TW" ? "階級" : "stage"}`,
+    );
+    select.replaceChildren(
+      ...Array.from({ length: 13 }, (_, index) => {
+        const value = index - 6;
+        return optionElement(value, value > 0 ? `+${value}` : String(value));
+      }),
+    );
+    select.value = String(user.stages[stat] ?? 0);
+    stage.append(select);
+  }
 
-  row.append(label, base, input, final);
+  row.append(label, base, input, stage, final);
   return row;
 }
 
@@ -492,7 +520,7 @@ function renderMovePicks() {
   elements.movePicks.replaceChildren(...[0, 1, 2, 3].map((index) => {
     const row = document.createElement("div");
     row.className = "builder-move-row";
-    const selectedId = state.user.selectedMoveIds[index] ?? "";
+    const selectedId = (userSetupDraft?.current() ?? state.user).selectedMoveIds[index] ?? "";
     const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
     const label = document.createElement("span");
     label.textContent = String(index + 1);
@@ -513,9 +541,8 @@ function renderMovePicks() {
       resultsEl: results,
       getMatches: (query) => filterMoves(moves, { query }).slice(0, 12),
       onSelect: (move) => {
-        updatePage(() => {
-          state = { ...state, user: applyControl(state.user, { kind: "move", index, value: move.id }) };
-        }, { refreshMoves: true });
+        stageUserSetup({ kind: "move", index, value: move.id });
+        input.value = localizedName(move);
       },
       renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
         preventBlur: true,
@@ -763,7 +790,7 @@ function bulkMovePanel(
         [defenseStat]: point.defSp,
       }),
       onSelect: () => {
-        resetUserSpreadDraft();
+        resetUserSetupDraft();
         updatePage(() => {
           state = {
             ...state,
@@ -776,7 +803,7 @@ function bulkMovePanel(
               },
             },
           };
-        });
+        }, { refreshMoves: true });
       },
     })),
   });
@@ -917,7 +944,7 @@ function breakMovePanel({ move, damage, points }, threat, panelKey) {
         damageText: t("builder.damage", { min: point.minPct, max: point.maxPct }),
         canApply: canApplySpTargets(state.user.sp, { [attackStat]: point.sp }),
         onSelect: () => {
-          resetUserSpreadDraft();
+          resetUserSetupDraft();
           updatePage(() => {
             state = {
               ...state,
@@ -927,7 +954,7 @@ function breakMovePanel({ move, damage, points }, threat, panelKey) {
                 sp: { ...state.user.sp, [attackStat]: point.sp },
               },
             };
-          });
+          }, { refreshMoves: true });
         },
       });
     }),

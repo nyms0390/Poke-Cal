@@ -166,6 +166,20 @@ test("calculates all six final level-50 stats without mutating builder state", (
   assert.equal(finalStats(createBuilderState()), null);
 });
 
+test("applies battle stages to the builder final-stat table", () => {
+  const state = createBuilderState(pikachu, usageDefaults);
+  state.user.stages = { ...state.user.stages, spa: 2, spe: -1 };
+
+  assert.deepEqual(finalStats(state), {
+    hp: 110,
+    atk: 67,
+    def: 64,
+    spa: 204,
+    spd: 70,
+    spe: 104,
+  });
+});
+
 test("checks whether a recommended SP allocation fits the 66-point budget", () => {
   const sp = { hp: 4, atk: 20, def: 0, spa: 8, spd: 0, spe: 20 };
 

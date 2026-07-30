@@ -43,14 +43,23 @@ test("stages editor changes without committing until Apply", () => {
   assert.equal(commits.length, 1);
 });
 
-test("builder target spread has an explicit Apply control instead of live final stats", () => {
+test("builder target spread includes stages and applies after move setup", () => {
   const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+  const statHeader = html.match(/<div class="builder-stat-heading"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
 
   assert.match(
     html,
     /<button[^>]+id="builder-apply-spread"[^>]+data-i18n="builder\.applySpread"[^>]*>/,
   );
   assert.match(html, /id="builder-stats"[^>]+aria-label="Final stats"/);
+  assert.deepEqual(
+    [...statHeader.matchAll(/<span>([^<]+)<\/span>/g)].map(([, label]) => label),
+    ["Stat", "Base", "SP", "Stage", "Final"],
+  );
+  assert.ok(
+    html.indexOf('id="builder-apply-spread"') > html.indexOf('id="builder-move-picks"'),
+    "Apply spread should follow the move setup",
+  );
   assert.doesNotMatch(html, /aria-label="Live final stats"/);
 });
 

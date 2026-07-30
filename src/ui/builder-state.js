@@ -100,6 +100,7 @@ export function finalStats(state) {
       stat,
       sp: user.sp?.[stat] ?? 0,
       nature: user.nature,
+      stage: stat === "hp" ? 0 : user.stages?.[stat] ?? 0,
     }),
   ]));
 }
