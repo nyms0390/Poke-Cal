@@ -82958,14 +82958,14 @@
         "sets": [
           {
             "name": "Black Glasses Offense",
-            "spreadName": "Adamant:32/32/0/0/2/0",
+            "spreadName": "Adamant:32/25/2/0/7/0",
             "nature": "Adamant",
             "sps": {
               "hp": 32,
-              "atk": 32,
-              "def": 0,
+              "atk": 25,
+              "def": 2,
               "spa": 0,
-              "spd": 2,
+              "spd": 7,
               "spe": 0
             },
             "ability": "",
