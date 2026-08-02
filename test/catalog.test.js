@@ -212,6 +212,41 @@ test("filters moves by query, type, and category", () => {
   ]);
 });
 
+test("filters moves by move property and combines it with existing filters", () => {
+  const moves = [
+    {
+      id: "thunderpunch",
+      name: "Thunder Punch",
+      type: "Electric",
+      category: "Physical",
+      flags: { contact: 1, punch: 1 },
+    },
+    {
+      id: "hypervoice",
+      name: "Hyper Voice",
+      type: "Normal",
+      category: "Special",
+      flags: { sound: 1 },
+    },
+    {
+      id: "boomburst",
+      name: "Boomburst",
+      type: "Normal",
+      category: "Special",
+      flags: { sound: 1 },
+    },
+  ];
+
+  assert.deepEqual(filterMoves(moves, { flag: "punch" }).map(({ id }) => id), [
+    "thunderpunch",
+  ]);
+  assert.deepEqual(
+    filterMoves(moves, { type: "Normal", category: "Special", flag: "sound", query: "hyper" })
+      .map(({ id }) => id),
+    ["hypervoice"],
+  );
+});
+
 test("formats move display values", () => {
   assert.equal(formatMovePower(0), "—");
   assert.equal(formatMovePower(90), "90");

@@ -125,11 +125,12 @@ export function usageForPokemon(usageStats, entry) {
   );
 }
 
-export function filterMoves(moves, { query = "", type = "", category = "" } = {}) {
+export function filterMoves(moves, { query = "", type = "", category = "", flag = "" } = {}) {
   const normalizedQuery = normalizeSearchValue(query);
   return moves.filter((move) => {
     if (type && move.type !== type) return false;
     if (category && move.category !== category) return false;
+    if (flag && !move.flags?.[flag]) return false;
     if (!normalizedQuery) return true;
 
     return [

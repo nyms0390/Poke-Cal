@@ -42,6 +42,19 @@ import {
   updateSelectOptions,
 } from "./components.js";
 
+const MOVE_PROPERTY_FLAGS = [
+  "contact",
+  "sound",
+  "punch",
+  "bite",
+  "pulse",
+  "slicing",
+  "bullet",
+  "wind",
+  "dance",
+  "powder",
+];
+
 const elements = {
   search: document.querySelector("#pokemon-search"),
   results: document.querySelector("#search-results"),
@@ -72,6 +85,7 @@ const elements = {
   moveSearch: document.querySelector("#move-search"),
   moveType: document.querySelector("#move-type"),
   moveCategory: document.querySelector("#move-category"),
+  moveProperty: document.querySelector("#move-property"),
   moveList: document.querySelector("#move-list"),
   status: document.querySelector("#status"),
 };
@@ -142,7 +156,7 @@ elements.form.addEventListener("input", () => {
   if (form) selectForm(form);
 });
 
-for (const control of [elements.moveSearch, elements.moveType, elements.moveCategory]) {
+for (const control of [elements.moveSearch, elements.moveType, elements.moveCategory, elements.moveProperty]) {
   control.addEventListener("input", renderMoveList);
 }
 
@@ -531,6 +545,9 @@ function renderMoveFilterOptions() {
   updateSelectOptions(elements.moveCategory, t("label.allCategories"), [
     ...new Set(selectedMoves.map(({ category }) => category).filter(Boolean)),
   ], (value) => localizedTerm("category", value));
+  updateSelectOptions(elements.moveProperty, t("label.allMoveProperties"), MOVE_PROPERTY_FLAGS.filter(
+    (flag) => selectedMoves.some((move) => move.flags?.[flag]),
+  ), (value) => t(`moveProperty.${value}`));
 }
 
 function renderMoveList() {
@@ -538,6 +555,7 @@ function renderMoveList() {
     query: elements.moveSearch.value,
     type: elements.moveType.value,
     category: elements.moveCategory.value,
+    flag: elements.moveProperty.value,
   });
   elements.moveCount.textContent = `${moves.length} / ${selectedMoves.length}`;
 
