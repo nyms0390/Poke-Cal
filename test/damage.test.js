@@ -167,6 +167,73 @@ test("condition overrides take precedence over derived move state", () => {
   assert.equal(forced.maxDamage > healthy.maxDamage, true);
 });
 
+test("boosts Knock Off when the target is holding an item", () => {
+  const knockOff = { id: "knockoff", name: "Knock Off", type: "Dark", category: "Physical", basePower: 65 };
+  const boostedReference = { ...knockOff, id: "boostedknockoff", basePower: 97 };
+  const itemless = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: knockOff,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const holdingItem = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: knockOff,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, item: { id: "leftovers", name: "Leftovers" } },
+  });
+  const expected = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: boostedReference,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+
+  assert.equal(holdingItem.maxDamage > itemless.maxDamage, true);
+  assert.deepEqual([holdingItem.minDamage, holdingItem.maxDamage], [expected.minDamage, expected.maxDamage]);
+});
+
+test("does not boost Knock Off against a target's matching Mega Stone", () => {
+  const knockOff = { id: "knockoff", name: "Knock Off", type: "Dark", category: "Physical", basePower: 65 };
+  const raichu = {
+    id: "raichu",
+    name: "Raichu",
+    baseSpecies: "Raichu",
+    types: ["Electric"],
+    baseStats: { hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110 },
+  };
+  const itemless = calculateDamage({
+    attacker: pikachu,
+    defender: raichu,
+    move: knockOff,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const matchingMegaStone = calculateDamage({
+    attacker: pikachu,
+    defender: raichu,
+    move: knockOff,
+    attackerState: neutralState,
+    defenderState: {
+      ...neutralState,
+      item: {
+        id: "raichunitey",
+        name: "Raichunite Y",
+        megaStone: { Raichu: "Raichu-Mega-Y" },
+        itemUser: ["Raichu"],
+      },
+    },
+  });
+
+  assert.deepEqual(
+    [matchingMegaStone.minDamage, matchingMegaStone.maxDamage],
+    [itemless.minDamage, itemless.maxDamage],
+  );
+});
+
 test("Facade doubles for user status and ignores the physical burn penalty", () => {
   const attacker = {
     id: "facadeuser",

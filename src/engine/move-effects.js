@@ -282,6 +282,15 @@ export const MOVE_EFFECTS = {
     condition: { label: "No item" },
     basePower: (ctx) => conditionMet(ctx, () => !ctx.attackerState.item) ? ctx.move.basePower * 2 : undefined,
   },
+  knockoff: {
+    basePower: (ctx) => {
+      const item = ctx.defenderState.item;
+      if (!item) return undefined;
+      const defenderSpecies = normalizeId(ctx.defender.baseSpecies ?? ctx.defender.name ?? ctx.defender.id);
+      const matchingMegaStone = item.megaStone && item.itemUser?.some((name) => normalizeId(name) === defenderSpecies);
+      return matchingMegaStone ? undefined : Math.floor(ctx.move.basePower * 1.5);
+    },
+  },
   fling: { basePower: (ctx) => ctx.attackerState.item?.fling?.basePower ?? null },
   return: { basePower: () => 102, note: () => "Assumes maximum friendship (102 BP)" },
   frustration: { basePower: () => 102, note: () => "Assumes minimum friendship (102 BP)" },
