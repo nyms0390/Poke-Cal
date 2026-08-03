@@ -1592,6 +1592,7 @@ button:disabled {
 }
 
 .damage-result-card {
+  position: relative;
   display: grid;
   gap: 8px;
   min-width: 0;
@@ -1602,10 +1603,47 @@ button:disabled {
   box-shadow: var(--shadow-micro);
 }
 
-.damage-result-card.selected {
+.damage-result-card[open] {
   border-color: var(--accent);
   background: var(--accent-soft);
   box-shadow: 0 0 0 1px var(--accent-ring) inset;
+}
+
+.damage-result-card > summary {
+  display: grid;
+  gap: 8px;
+  padding-right: 24px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.damage-result-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.damage-result-card > summary::after {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  color: var(--muted);
+  content: "+";
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.damage-result-card[open] > summary::after {
+  content: "−";
+}
+
+.damage-result-card > summary:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.damage-result-details {
+  display: grid;
+  gap: 8px;
 }
 
 .damage-result-heading {

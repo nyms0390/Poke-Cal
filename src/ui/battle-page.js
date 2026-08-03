@@ -70,6 +70,7 @@ import {
   applyAmbientFieldControl,
   createAmbientFieldState,
 } from "./field-state.js";
+import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "./battle-results.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -1059,12 +1060,8 @@ function renderDamage() {
   const calcInput = buildCalcInput(damageState, fieldState);
 
   renderMoveOrder(calcInput.field, calcInput);
-  const attackerRows = selectedDamageMoves("attacker").map(({ move, index }, rowIndex) =>
-    renderDamageCard(move, "attacker", rowIndex === 0, calcInput, moveOptionsForDamage("attacker", index, move)),
-  );
-  const defenderRows = selectedDamageMoves("defender").map(({ move, index }, rowIndex) =>
-    renderDamageCard(move, "defender", rowIndex === 0, calcInput, moveOptionsForDamage("defender", index, move)),
-  );
+  const attackerRows = renderDamageCards("attacker", calcInput);
+  const defenderRows = renderDamageCards("defender", calcInput);
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = t("count.moves", { count: rows.length });
   elements.damageList.replaceChildren(
@@ -1213,9 +1210,41 @@ function damageColumn(title, cards) {
   return column;
 }
 
-function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {}) {
+function renderDamageCards(sourceSide, calcInput) {
+  const entries = selectedDamageMoves(sourceSide).map(({ move, index }) => ({
+    move,
+    index,
+    moveOptions: moveOptionsForDamage(sourceSide, index, move),
+  }));
+  const results = entries.map(({ move, moveOptions }) => calculateDamageForMove(move, sourceSide, calcInput, moveOptions));
+  const initialExpandedIndex = mostEffectiveMoveIndex(results);
+  let expandedIndex = initialExpandedIndex;
+  let cards = [];
+
+  cards = entries.map(({ move, index, moveOptions }, cardIndex) => renderDamageCard(
+    move,
+    sourceSide,
+    cardIndex === initialExpandedIndex,
+    calcInput,
+    moveOptions,
+    results[cardIndex],
+    (open) => {
+      if (!open) {
+        if (expandedIndex === cardIndex) expandedIndex = null;
+        return;
+      }
+      expandedIndex = expandedMoveIndexAfterClick(expandedIndex, cardIndex);
+      for (const sibling of cards) {
+        if (sibling !== cards[cardIndex]) sibling.open = false;
+      }
+    },
+  ));
+  return cards;
+}
+
+function calculateDamageForMove(move, sourceSide, calcInput, moveOptions = {}) {
   const isDefenderSource = sourceSide === "defender";
-  const result = calculateDamage({
+  return calculateDamage({
     attacker: isDefenderSource ? calcInput.defender : calcInput.attacker,
     defender: isDefenderSource ? calcInput.attacker : calcInput.defender,
     move,
@@ -1228,18 +1257,25 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
     critical: moveOptions.critical,
     moveOptions,
   });
+}
+
+function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {}, result = null, onToggle) {
+  const damageResult = result ?? calculateDamageForMove(move, sourceSide, calcInput, moveOptions);
+  const isDefenderSource = sourceSide === "defender";
   const description = formatResultDescription({
     attackerState: isDefenderSource ? calcInput.defenderState : calcInput.attackerState,
     defenderState: isDefenderSource ? calcInput.attackerState : calcInput.defenderState,
     move,
     field: isDefenderSource ? calcInput.reverseField : calcInput.field,
-    result,
+    result: damageResult,
   }, getLocale());
 
-  const card = document.createElement("article");
-  card.className = `damage-result-card${selected ? " selected" : ""}`;
+  const card = document.createElement("details");
+  card.className = "damage-result-card";
+  card.open = selected;
 
-  const heading = document.createElement("div");
+  const summary = document.createElement("summary");
+  const heading = document.createElement("span");
   heading.className = "damage-result-heading";
 
   const name = document.createElement("strong");
@@ -1247,14 +1283,14 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
 
   const percent = document.createElement("span");
   percent.className = "damage-percent";
-  percent.textContent = result.supported ? formatDamageResult(result) : t("battle.unsupported");
-  const percentColor = result.supported
-    ? damagePercentColor(result.minPercent, result.maxPercent)
+  percent.textContent = damageResult.supported ? formatDamageResult(damageResult) : t("battle.unsupported");
+  const percentColor = damageResult.supported
+    ? damagePercentColor(damageResult.minPercent, damageResult.maxPercent)
     : damagePercentColor(0);
   percent.style.setProperty("--damage-percent-color", percentColor);
   heading.append(name, percent);
 
-  const meta = document.createElement("div");
+  const meta = document.createElement("span");
   meta.className = "damage-result-meta";
   if (move.type) meta.append(typeBadge(move.type));
 
@@ -1268,13 +1304,15 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
 
   const ko = document.createElement("span");
   ko.className = "damage-ko";
-  ko.textContent = result.supported
-    ? formatKoResult(result.ko, getLocale())
-    : formatDamageReason(formatDamageResult(result), getLocale());
-  card.append(heading, meta);
-  if (selected) card.append(ko);
+  ko.textContent = damageResult.supported
+    ? formatKoResult(damageResult.ko, getLocale())
+    : formatDamageReason(formatDamageResult(damageResult), getLocale());
+  summary.append(heading, meta, ko);
+  card.append(summary);
 
-  if (selected && result.supported) {
+  const details = document.createElement("div");
+  details.className = "damage-result-details";
+  if (damageResult.supported) {
     const line = document.createElement("p");
     line.className = "damage-result-line";
     line.textContent = description;
@@ -1287,13 +1325,13 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
       navigator.clipboard?.writeText(description);
     });
 
-    card.append(line, copy);
+    details.append(line, copy);
   }
 
-  if (selected && result.supported && result.notes?.length) {
+  if (damageResult.supported && damageResult.notes?.length) {
     const notes = document.createElement("p");
     notes.className = "damage-notes";
-    notes.textContent = result.notes.map((note) => formatDamageNote(note, getLocale(), {
+    notes.textContent = damageResult.notes.map((note) => formatDamageNote(note, getLocale(), {
       move,
       entities: [
         calcInput.attackerState.ability,
@@ -1302,9 +1340,11 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
         calcInput.defenderState.item,
       ],
     })).join(" · ");
-    card.append(notes);
+    details.append(notes);
   }
 
+  card.append(details);
+  card.addEventListener("toggle", () => onToggle?.(card.open));
   return card;
 }
 

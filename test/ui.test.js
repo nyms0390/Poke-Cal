@@ -11,6 +11,7 @@ import {
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
 import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
 import { createDeferredUpdater, createLiveUpdater } from "../src/ui/live-update.js";
+import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "../src/ui/battle-results.js";
 
 test("commits each live state change before rendering exactly once", () => {
   let state = { count: 0 };
@@ -122,6 +123,21 @@ test("maps damage percentages from red to green", () => {
 
 test("maps damage ranges by their average percentage", () => {
   assert.equal(damagePercentColor(74.1, 87.6), "hsl(97 72% 56%)");
+});
+
+test("auto-expands the highest-damage move and toggles one open move per side", () => {
+  assert.equal(mostEffectiveMoveIndex([
+    { supported: true, minPercent: 10, maxPercent: 90 },
+    { supported: true, minPercent: 50, maxPercent: 80 },
+    { supported: true, minPercent: 20, maxPercent: 55 },
+  ]), 0);
+  assert.equal(mostEffectiveMoveIndex([
+    { supported: false, maxPercent: 0 },
+    { supported: false, maxPercent: 0 },
+  ]), 0);
+
+  assert.equal(expandedMoveIndexAfterClick(1, 2), 2);
+  assert.equal(expandedMoveIndexAfterClick(2, 2), null);
 });
 
 test("provides an animated fallback for Mega sprites missing from the Gen 5 sheet", () => {
