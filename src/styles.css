@@ -259,6 +259,286 @@ footer {
   letter-spacing: 0.04em;
 }
 
+/* ---------- Limitless tournament teams ---------- */
+
+.teams-tool {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+}
+
+.teams-archive-panel {
+  min-width: 0;
+}
+
+.teams-note {
+  margin: -4px 0 18px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.teams-archive,
+.teams-top-cut,
+.teams-pokemon-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.teams-tournament-card,
+.teams-team-card,
+.teams-pokemon-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-micro);
+}
+
+.teams-tournament-card[open],
+.teams-team-card[open],
+.teams-pokemon-card[open] {
+  border-color: var(--accent-ring);
+  background: var(--surface);
+}
+
+.teams-tournament-card > summary,
+.teams-team-card > summary,
+.teams-pokemon-card > summary {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+  padding: 13px 16px;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.teams-tournament-card > summary::-webkit-details-marker,
+.teams-team-card > summary::-webkit-details-marker,
+.teams-pokemon-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.teams-tournament-card > summary::before,
+.teams-team-card > summary::before,
+.teams-pokemon-card > summary::before {
+  flex: 0 0 auto;
+  color: var(--subtle);
+  content: "＋";
+  font-size: var(--text-lg);
+  font-weight: 400;
+}
+
+.teams-tournament-card[open] > summary::before,
+.teams-team-card[open] > summary::before,
+.teams-pokemon-card[open] > summary::before {
+  content: "−";
+}
+
+.teams-tournament-card > summary:focus-visible,
+.teams-team-card > summary:focus-visible,
+.teams-pokemon-card > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.teams-summary-text {
+  display: grid;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: 2px;
+}
+
+.teams-tournament-title,
+.teams-player-name,
+.teams-pokemon-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teams-tournament-title,
+.teams-player-name {
+  font-weight: 700;
+}
+
+.teams-tournament-meta,
+.teams-team-summary small,
+.teams-pokemon-summary small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.teams-tournament-summary > strong {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-align: right;
+}
+
+.teams-tournament-content,
+.teams-team-content,
+.teams-pokemon-content {
+  display: grid;
+  gap: 14px;
+  border-top: 1px solid var(--line);
+  padding: 14px 16px 16px;
+}
+
+.teams-team-card {
+  background: var(--surface);
+}
+
+.teams-team-summary {
+  flex-wrap: wrap;
+}
+
+.teams-placement {
+  flex: 0 0 42px;
+  color: var(--accent);
+  font-size: var(--text-lg);
+  text-align: center;
+}
+
+.teams-preview {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.teams-sprite {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface-tint);
+  color: var(--accent-dark);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.teams-sprite img {
+  display: block;
+  max-width: 42px;
+  max-height: 42px;
+}
+
+.teams-sprite.empty {
+  border-style: dashed;
+  background: var(--surface-soft);
+  color: var(--subtle);
+}
+
+.teams-source-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.teams-source-link {
+  flex: 0 0 auto;
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.teams-source-link:hover,
+.teams-source-link:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.teams-pokemon-card {
+  background: var(--surface-soft);
+}
+
+.teams-pokemon-summary {
+  flex-wrap: wrap;
+}
+
+.teams-pokemon-label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: 9px;
+  font-weight: 700;
+}
+
+.teams-pokemon-label .teams-sprite {
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+}
+
+.teams-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.teams-fact {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  padding: 9px 10px;
+  background: var(--surface);
+}
+
+.teams-fact-label {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.teams-fact strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.teams-moves {
+  display: grid;
+  gap: 7px;
+}
+
+.teams-move-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.teams-move-list > span {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-badge);
+  padding: 5px 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+
+.teams-message {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
 .panel-heading {
   display: flex;
   align-items: baseline;
@@ -3162,5 +3442,26 @@ details.builder-analysis-move > .builder-spread-grid {
 
   .speed-axis-wrap {
     max-height: 560px;
+  }
+
+  .teams-tournament-card > summary,
+  .teams-team-card > summary,
+  .teams-pokemon-card > summary {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .teams-team-summary .teams-preview {
+    flex-basis: 100%;
+    margin-left: 42px;
+  }
+
+  .teams-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .teams-source-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

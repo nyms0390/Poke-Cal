@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Recent Limitless Champions tournament teams with submitted items, abilities, moves, natures, and Tera data."
+    />
+    <title>PokéCal — Tournament Teams</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a href="./builder.html">Builder</a>
+          <a href="./speed.html">Speed Tiers</a>
+          <a class="active" href="./teams.html">Teams</a>
+          <label class="language-switch">
+            <span>Language</span>
+            <select data-language-switch aria-label="Language">
+              <option value="en">English</option>
+              <option value="zh-TW">繁體中文</option>
+            </select>
+          </label>
+        </nav>
+        <p class="eyebrow" data-i18n="teams.eyebrow">PokéCal // Tournament teams</p>
+        <h1 data-i18n="teams.title">Browse recent tournament teams.</h1>
+        <p class="intro" data-i18n="teams.intro">
+          Explore the latest completed Champions brackets, then open a player and each submitted Pokémon build.
+        </p>
+      </header>
+
+      <section class="calculator teams-tool" aria-label="Tournament teams">
+        <p id="teams-source" class="usage-source">Loading Limitless tournament teams…</p>
+
+        <section class="catalog-panel teams-archive-panel" aria-labelledby="teams-archive-heading">
+          <div class="panel-heading">
+            <span id="teams-archive-heading" data-i18n="teams.archive">Tournaments</span>
+            <strong id="teams-count">—</strong>
+          </div>
+          <p id="teams-note" class="teams-note" data-i18n="teams.spNote">
+            Limitless does not publish SP or EV spreads for these team lists.
+          </p>
+          <div id="teams-archive" class="teams-archive"></div>
+        </section>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span data-i18n="teams.footer">Limitless Champions team lists · submitted builds only · no inferred spreads</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/teams-page.js"></script>
+  </body>
+</html>

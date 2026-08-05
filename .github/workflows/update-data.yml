@@ -29,7 +29,7 @@ jobs:
       - name: Sync Showdown + Champions catalogs
         run: npm run sync-data
 
-      - name: Sync Limitless Champions usage
+      - name: Sync Limitless Champions usage and tournament teams
         run: npm run sync-champions-data
 
       - name: Sync Smogon Champions SP spreads
@@ -50,5 +50,5 @@ jobs:
             echo "No data changes."
             exit 0
           fi
-          git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage, Smogon SP spreads, NCP sets)"
+          git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage/teams, Smogon SP spreads, NCP sets)"
           git push
