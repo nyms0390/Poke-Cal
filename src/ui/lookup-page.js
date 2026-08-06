@@ -40,6 +40,7 @@ import {
   textCell,
   typeBadge,
   updateSelectOptions,
+  visibleSearchResults,
 } from "./components.js";
 
 const MOVE_PROPERTY_FLAGS = [
@@ -100,6 +101,7 @@ let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
 let catalogs = null;
+let pokemonSearchExpanded = false;
 const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 
@@ -139,7 +141,8 @@ async function initialize() {
 }
 
 elements.search.addEventListener("input", () => {
-  renderSearchResults(searchPokemon(pokemon, elements.search.value, searchOptions()));
+  pokemonSearchExpanded = false;
+  renderSearchResults();
 });
 
 elements.search.addEventListener("keydown", (event) => {
@@ -164,11 +167,31 @@ function searchOptions() {
   return { abilityLookup, moveLookup, itemLookup };
 }
 
-function renderSearchResults(results) {
+function renderSearchResults() {
+  const allResults = searchPokemon(pokemon, elements.search.value, {
+    ...searchOptions(),
+    limit: pokemon.length,
+  });
+  const visible = visibleSearchResults(allResults, {
+    limit: 12,
+    expanded: pokemonSearchExpanded,
+  });
   elements.results.replaceChildren(
-    ...results.map((entry) => searchResultButton(entry, selectPokemon)),
+    ...visible.matches.map((entry) => searchResultButton(entry, selectPokemon)),
   );
-  elements.results.hidden = results.length === 0;
+  if (visible.canExpand) {
+    const more = document.createElement("button");
+    more.type = "button";
+    more.className = "search-results-more";
+    more.textContent = t("label.showAll");
+    more.addEventListener("click", () => {
+      pokemonSearchExpanded = true;
+      renderSearchResults();
+      elements.search.focus();
+    });
+    elements.results.append(more);
+  }
+  elements.results.hidden = visible.matches.length === 0;
 }
 
 function selectPokemon(entry, options = {}) {
@@ -177,6 +200,7 @@ function selectPokemon(entry, options = {}) {
   renderFormOptions();
   selectForm(entry, options);
   elements.results.hidden = true;
+  pokemonSearchExpanded = false;
 }
 
 function renderFormOptions() {

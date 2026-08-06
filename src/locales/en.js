@@ -52,6 +52,7 @@ export const EN_MESSAGES = {
   "label.allTypes": "All types",
   "label.allCategories": "All categories",
   "label.allMoveProperties": "All properties",
+  "label.showAll": "Show all results",
   "moveProperty.contact": "Contact",
   "moveProperty.sound": "Sound",
   "moveProperty.punch": "Punch",

@@ -145,6 +145,8 @@ async function initialize() {
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
     getMatches: pokemonMatches,
+    getAllMatches: allPokemonMatches,
+    resultLimit: 8,
     onSelect: seedPokemon,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -152,6 +154,8 @@ async function initialize() {
     input: elements.threatSearch,
     resultsEl: elements.threatResults,
     getMatches: pokemonMatches,
+    getAllMatches: allPokemonMatches,
+    resultLimit: 8,
     onSelect: addCustomThreat,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -241,6 +245,15 @@ function pokemonMatches(query) {
     moveLookup: catalogs.moveLookup,
     itemLookup: catalogs.itemLookup,
     limit: 8,
+  });
+}
+
+function allPokemonMatches(query) {
+  return searchPokemon(catalogs.pokemon, query, {
+    abilityLookup: catalogs.abilityLookup,
+    moveLookup: catalogs.moveLookup,
+    itemLookup: catalogs.itemLookup,
+    limit: catalogs.pokemon.length,
   });
 }
 
@@ -540,6 +553,8 @@ function renderMovePicks() {
       input,
       resultsEl: results,
       getMatches: (query) => filterMoves(moves, { query }).slice(0, 12),
+      getAllMatches: (query) => filterMoves(moves, { query }),
+      resultLimit: 12,
       onSelect: (move) => {
         stageUserSetup({ kind: "move", index, value: move.id });
         input.value = localizedName(move);

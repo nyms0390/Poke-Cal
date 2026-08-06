@@ -55,6 +55,7 @@ export const ZH_TW_MESSAGES = {
   "label.allTypes": "所有屬性",
   "label.allCategories": "所有分類",
   "label.allMoveProperties": "所有性質",
+  "label.showAll": "顯示全部結果",
   "moveProperty.contact": "接觸",
   "moveProperty.sound": "聲音",
   "moveProperty.punch": "拳類",

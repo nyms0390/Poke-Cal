@@ -292,6 +292,13 @@ for (const side of ["attacker", "defender"]) {
       itemLookup,
       limit: 8,
     }),
+    getAllMatches: (query) => searchPokemon(pokemon, query, {
+      abilityLookup,
+      moveLookup,
+      itemLookup,
+      limit: pokemon.length,
+    }),
+    resultLimit: 8,
     onSelect: (picked) => seedDamageSide(side, picked),
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });

@@ -98,6 +98,8 @@ async function initialize() {
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
     getMatches: pokemonMatches,
+    getAllMatches: allPokemonMatches,
+    resultLimit: 8,
     onSelect: seedUser,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -105,6 +107,8 @@ async function initialize() {
     input: elements.opponentSearch,
     resultsEl: elements.opponentResults,
     getMatches: pokemonMatches,
+    getAllMatches: allPokemonMatches,
+    resultLimit: 8,
     onSelect: addOpponent,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -153,6 +157,15 @@ function pokemonMatches(query) {
     moveLookup: catalogs.moveLookup,
     itemLookup: catalogs.itemLookup,
     limit: 8,
+  });
+}
+
+function allPokemonMatches(query) {
+  return searchPokemon(catalogs.pokemon, query, {
+    abilityLookup: catalogs.abilityLookup,
+    moveLookup: catalogs.moveLookup,
+    itemLookup: catalogs.itemLookup,
+    limit: catalogs.pokemon.length,
   });
 }
 

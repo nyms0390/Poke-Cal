@@ -6,6 +6,7 @@ import {
   damagePercentColor,
   ensureRenderedRows,
   pokemonSpriteUrls,
+  visibleSearchResults,
   typeClassName,
 } from "../src/ui/components.js";
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
@@ -123,6 +124,22 @@ test("maps damage percentages from red to green", () => {
 
 test("maps damage ranges by their average percentage", () => {
   assert.equal(damagePercentColor(74.1, 87.6), "hsl(97 72% 56%)");
+});
+
+test("expands capped search results when requested", () => {
+  const matches = ["a", "b", "c"];
+  assert.deepEqual(visibleSearchResults(matches, { limit: 2 }), {
+    matches: ["a", "b"],
+    canExpand: true,
+  });
+  assert.deepEqual(visibleSearchResults(matches, { limit: 2, expanded: true }), {
+    matches,
+    canExpand: false,
+  });
+  assert.deepEqual(visibleSearchResults(["a"], { limit: 2 }), {
+    matches: ["a"],
+    canExpand: false,
+  });
 });
 
 test("auto-expands the highest-damage move and toggles one open move per side", () => {

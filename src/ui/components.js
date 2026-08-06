@@ -142,27 +142,65 @@ export function searchResultButton(entry, onSelect, {
   return button;
 }
 
-export function attachCombobox({ input, resultsEl, getMatches, onSelect, renderRow }) {
+export function visibleSearchResults(matches, { limit = 12, expanded = false } = {}) {
+  const allMatches = Array.isArray(matches) ? matches : [];
+  const visibleMatches = expanded ? allMatches : allMatches.slice(0, limit);
+  return {
+    matches: visibleMatches,
+    canExpand: !expanded && visibleMatches.length < allMatches.length,
+  };
+}
+
+export function attachCombobox({
+  input,
+  resultsEl,
+  getMatches,
+  getAllMatches = null,
+  resultLimit = null,
+  onSelect,
+  renderRow,
+}) {
+  let expanded = false;
+
   function hide() {
     resultsEl.hidden = true;
     input.setAttribute("aria-expanded", "false");
   }
 
   function render() {
-    const matches = getMatches(input.value) ?? [];
+    const allMatches = getAllMatches ? getAllMatches(input.value) ?? [] : null;
+    const matches = allMatches ?? (getMatches(input.value) ?? []);
+    const visible = allMatches
+      ? visibleSearchResults(allMatches, { limit: resultLimit ?? matches.length, expanded })
+      : { matches, canExpand: false };
     resultsEl.replaceChildren(
-      ...matches.map((entry) => renderRow(entry, (selected) => {
+      ...visible.matches.map((entry) => renderRow(entry, (selected) => {
         hide();
         onSelect(selected);
       })),
     );
-    const isOpen = matches.length > 0;
+    if (visible.canExpand) {
+      const more = document.createElement("button");
+      more.type = "button";
+      more.className = "search-results-more";
+      more.textContent = t("label.showAll");
+      more.addEventListener("click", () => {
+        expanded = true;
+        render();
+        input.focus();
+      });
+      resultsEl.append(more);
+    }
+    const isOpen = visible.matches.length > 0;
     resultsEl.hidden = !isOpen;
     input.setAttribute("aria-expanded", String(isOpen));
-    return matches;
+    return visible.matches;
   }
 
-  input.addEventListener("input", render);
+  input.addEventListener("input", () => {
+    expanded = false;
+    render();
+  });
   input.addEventListener("focus", render);
   input.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
