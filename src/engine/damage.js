@@ -114,6 +114,8 @@ export function calculateDamage({
   const suppressDefenderAbility = neutralizingGasActive ||
     move.ignoreAbility ||
     attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility);
+  attackerState = normalizeStatusForAbility(attackerState, suppressAttackerAbility);
+  defenderState = normalizeStatusForAbility(defenderState, suppressDefenderAbility);
   const weatherSuppressed = !neutralizingGasActive && (
     hasAnyAbility(attackerState, ["cloudnine", "airlock"]) ||
     hasAnyAbility(defenderState, ["cloudnine", "airlock"])
@@ -653,6 +655,11 @@ function hasAbility(state, abilityId) {
 function hasAnyAbility(state, abilityIds) {
   const ability = normalizeId(state.ability?.id ?? state.ability?.name);
   return abilityIds.includes(ability);
+}
+
+function normalizeStatusForAbility(state, suppressed) {
+  if (suppressed || state?.status !== "burn" || !hasAbility(state, "waterbubble")) return state;
+  return { ...state, status: "" };
 }
 
 function attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility) {

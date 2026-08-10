@@ -4643,6 +4643,106 @@ test("P2-07 applies defensive stat and incoming-type ability modifiers", () => {
   }
 });
 
+test("applies Water Bubble at the effective-stat stage and suppresses burn state", () => {
+  const attacker = {
+    id: "waterbubbleuser",
+    name: "Waterbubbleuser",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 80, spa: 51, spd: 80, spe: 50 },
+  };
+  const effectiveStatReference = {
+    ...attacker,
+    baseStats: { ...attacker.baseStats, spa: 193 },
+  };
+  const defender = {
+    id: "waterbubbletarget",
+    name: "Waterbubbletarget",
+    types: ["Normal"],
+    baseStats: { hp: 80, atk: 80, def: 50, spa: 80, spd: 50, spe: 50 },
+  };
+  const waterMove = { id: "watermove", name: "Water Move", type: "Water", category: "Special", basePower: 90 };
+  const fireMove = { id: "firemove", name: "Fire Move", type: "Fire", category: "Special", basePower: 90 };
+  const physicalMove = { id: "physicalmove", name: "Physical Move", type: "Normal", category: "Physical", basePower: 90 };
+  const hex = { id: "hex", name: "Hex", type: "Ghost", category: "Special", basePower: 65 };
+  const waterBubble = { ...neutralState, ability: { id: "waterbubble", name: "Water Bubble" } };
+  const choiceSpecsWaterBubble = {
+    ...waterBubble,
+    item: { id: "choicespecs", name: "Choice Specs" },
+  };
+
+  const boostedWater = calculateDamage({
+    attacker,
+    defender,
+    move: waterMove,
+    attackerState: choiceSpecsWaterBubble,
+    defenderState: neutralState,
+  });
+  const waterReference = calculateDamage({
+    attacker: effectiveStatReference,
+    defender,
+    move: waterMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([boostedWater.minDamage, boostedWater.maxDamage], [waterReference.minDamage, waterReference.maxDamage]);
+
+  const fireAttacker = {
+    ...attacker,
+    baseStats: { ...attacker.baseStats, spa: 81 },
+  };
+  const halvedStatReference = {
+    ...fireAttacker,
+    baseStats: { ...fireAttacker.baseStats, spa: 30 },
+  };
+  const incomingFire = calculateDamage({
+    attacker: fireAttacker,
+    defender,
+    move: fireMove,
+    attackerState: neutralState,
+    defenderState: waterBubble,
+  });
+  const fireReference = calculateDamage({
+    attacker: halvedStatReference,
+    defender,
+    move: fireMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([incomingFire.minDamage, incomingFire.maxDamage], [fireReference.minDamage, fireReference.maxDamage]);
+
+  const burnedWaterBubble = calculateDamage({
+    attacker,
+    defender,
+    move: physicalMove,
+    attackerState: { ...waterBubble, status: "burn" },
+    defenderState: neutralState,
+  });
+  const healthy = calculateDamage({
+    attacker,
+    defender,
+    move: physicalMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([burnedWaterBubble.minDamage, burnedWaterBubble.maxDamage], [healthy.minDamage, healthy.maxDamage]);
+
+  const burnedTargetHex = calculateDamage({
+    attacker,
+    defender,
+    move: hex,
+    attackerState: neutralState,
+    defenderState: { ...waterBubble, status: "burn" },
+  });
+  const healthyTargetHex = calculateDamage({
+    attacker,
+    defender,
+    move: hex,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([burnedTargetHex.minDamage, burnedTargetHex.maxDamage], [healthyTargetHex.minDamage, healthyTargetHex.maxDamage]);
+});
+
 test("P2-07 applies Unaware in the correct damage directions", () => {
   const attacker = {
     id: "unawareuser",

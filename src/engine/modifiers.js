@@ -251,10 +251,10 @@ export const ABILITY_MODIFIERS = {
       : null,
   waterbubble: (ctx) => {
     if (ctx.attackerPerspective && ctx.moveType === "Water") {
-      return { kind: "power", value: 2, label: "Water Bubble" };
+      return { kind: "attack", value: 2, label: "Water Bubble" };
     }
     if (!ctx.attackerPerspective && ctx.moveType === "Fire") {
-      return { kind: "damage", value: 0.5, label: "Water Bubble" };
+      return { kind: "attack", value: 0.5, label: "Water Bubble" };
     }
     return null;
   },
