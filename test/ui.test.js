@@ -54,6 +54,7 @@ test("builder target spread includes stages and applies after move setup", () =>
     /<button[^>]+id="builder-apply-spread"[^>]+data-i18n="builder\.applySpread"[^>]*>/,
   );
   assert.match(html, /id="builder-stats"[^>]+aria-label="Final stats"/);
+  assert.match(html, /id="builder-general-bulk"/);
   assert.deepEqual(
     [...statHeader.matchAll(/<span>([^<]+)<\/span>/g)].map(([, label]) => label),
     ["Stat", "Base", "SP", "Stage", "Final"],
@@ -61,6 +62,10 @@ test("builder target spread includes stages and applies after move setup", () =>
   assert.ok(
     html.indexOf('id="builder-apply-spread"') > html.indexOf('id="builder-move-picks"'),
     "Apply spread should follow the move setup",
+  );
+  assert.ok(
+    html.indexOf('id="builder-general-bulk"') < html.indexOf('id="bulk-points"'),
+    "General bulk recommendation should precede matchup-specific bulk points",
   );
   assert.doesNotMatch(html, /aria-label="Live final stats"/);
 });

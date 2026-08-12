@@ -26,6 +26,41 @@ export function zeroBulkState(userState) {
   };
 }
 
+export function generalBulkRecommendation(userState, { budget = 66 } = {}) {
+  if (!userState?.pokemon) return null;
+
+  const currentSp = {
+    hp: clampSp(userState.sp?.hp),
+    def: clampSp(userState.sp?.def),
+    spd: clampSp(userState.sp?.spd),
+  };
+  const currentTotal = currentSp.hp + currentSp.def + currentSp.spd;
+  const targetTotal = Math.max(
+    currentTotal,
+    Math.min(96, Math.max(0, Math.trunc(Number(budget) || 0))),
+  );
+  let best = null;
+
+  for (let hpSp = currentSp.hp; hpSp <= 32; hpSp += 1) {
+    for (let defSp = currentSp.def; defSp <= 32; defSp += 1) {
+      const spdSp = targetTotal - hpSp - defSp;
+      if (spdSp < currentSp.spd || spdSp > 32) continue;
+      const stats = defensiveStats(userState, { hp: hpSp, def: defSp, spd: spdSp });
+      const candidate = {
+        sp: { hp: hpSp, def: defSp, spd: spdSp },
+        addedSp: targetTotal - currentTotal,
+        stats,
+        score: mixedBulkScore(stats),
+      };
+      if (betterGeneralBulk(candidate, best)) best = candidate;
+    }
+  }
+
+  if (!best) return null;
+  const { score: _score, ...recommendation } = best;
+  return recommendation;
+}
+
 export function threatDamage(userState, scenario) {
   const result = damageResult(userState, scenario);
   if (!result.supported) {
@@ -202,6 +237,34 @@ function clampSp(value) {
   const sp = Number(value);
   if (!Number.isFinite(sp)) return 0;
   return Math.max(0, Math.min(32, Math.trunc(sp)));
+}
+
+function defensiveStats(userState, sp) {
+  return Object.fromEntries(["hp", "def", "spd"].map((stat) => [
+    stat,
+    calculateStat({
+      base: userState.pokemon.baseStats[stat],
+      stat,
+      sp: sp[stat],
+      nature: userState.nature ?? "Hardy",
+    }),
+  ]));
+}
+
+function mixedBulkScore({ hp, def, spd }) {
+  // Inverse of equal-weight physical + special fractional damage, up to a constant.
+  return (hp * def * spd) / (def + spd);
+}
+
+function betterGeneralBulk(candidate, current) {
+  if (!current || candidate.score !== current.score) return !current || candidate.score > current.score;
+  const candidateWorstBulk = candidate.stats.hp * Math.min(candidate.stats.def, candidate.stats.spd);
+  const currentWorstBulk = current.stats.hp * Math.min(current.stats.def, current.stats.spd);
+  if (candidateWorstBulk !== currentWorstBulk) return candidateWorstBulk > currentWorstBulk;
+  const candidateGap = Math.abs(candidate.stats.def - candidate.stats.spd);
+  const currentGap = Math.abs(current.stats.def - current.stats.spd);
+  if (candidateGap !== currentGap) return candidateGap < currentGap;
+  return candidate.sp.hp > current.sp.hp;
 }
 
 function damageResult(userState, { threat, move, field = createField() }) {

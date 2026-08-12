@@ -6,6 +6,7 @@ import {
   bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
+  generalBulkRecommendation,
   koHitCount,
   rankBulkCoverageGroups,
   threatDamage,
@@ -122,6 +123,56 @@ test("zeros only defensive SP without mutating the current state", () => {
   assert.equal(baseline.teraType, "Steel");
   assert.equal(baseline.status, "par");
   assert.deepEqual(state.sp, { hp: 12, atk: 7, def: 8, spa: 9, spd: 10, spe: 11 });
+});
+
+test("recommends defenses when HP is already high for general bulk", () => {
+  const state = {
+    ...userState(),
+    pokemon: {
+      ...defender,
+      baseStats: { ...defender.baseStats, hp: 125, def: 60, spd: 60 },
+    },
+  };
+
+  assert.deepEqual(generalBulkRecommendation(state, { budget: 20 }), {
+    sp: { hp: 0, def: 10, spd: 10 },
+    addedSp: 20,
+    stats: { hp: 200, def: 90, spd: 90 },
+  });
+});
+
+test("recommends HP when it is low relative to both defenses", () => {
+  const state = {
+    ...userState(),
+    pokemon: {
+      ...defender,
+      baseStats: { ...defender.baseStats, hp: 65, def: 80, spd: 80 },
+    },
+  };
+
+  assert.deepEqual(generalBulkRecommendation(state, { budget: 20 }), {
+    sp: { hp: 20, def: 0, spd: 0 },
+    addedSp: 20,
+    stats: { hp: 160, def: 100, spd: 100 },
+  });
+});
+
+test("general bulk recommendation spends only unassigned SP", () => {
+  const state = {
+    ...userState(),
+    pokemon: {
+      ...defender,
+      baseStats: { ...defender.baseStats, hp: 125, def: 60, spd: 60 },
+    },
+    sp: { hp: 5, atk: 20, def: 0, spa: 0, spd: 0, spe: 21 },
+  };
+
+  assert.deepEqual(generalBulkRecommendation(state, { budget: 25 }), {
+    sp: { hp: 5, def: 10, spd: 10 },
+    addedSp: 20,
+    stats: { hp: 205, def: 90, spd: 90 },
+  });
+  assert.deepEqual(state.sp, { hp: 5, atk: 20, def: 0, spa: 0, spd: 0, spe: 21 });
 });
 
 test("targets the next modeled KO tier from every non-terminal origin", () => {

@@ -2514,6 +2514,62 @@ button:disabled {
   margin-top: 16px;
 }
 
+.builder-general-bulk {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  border: 1px solid var(--accent-ring);
+  border-radius: var(--radius-card);
+  padding: 12px;
+  background: var(--accent-soft);
+}
+
+.builder-general-bulk[hidden] {
+  display: none;
+}
+
+.builder-general-bulk-heading,
+.builder-general-bulk-stat-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+
+.builder-general-bulk-heading {
+  justify-content: space-between;
+}
+
+.builder-general-bulk-count,
+.builder-general-bulk-description,
+.builder-general-bulk-stat-label {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.builder-general-bulk-count,
+.builder-general-bulk-stat-label {
+  font-weight: 700;
+}
+
+.builder-general-bulk-spreads {
+  display: grid;
+  gap: 7px;
+}
+
+.builder-general-bulk-stat-group > span:not(.builder-general-bulk-stat-label) {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--text-xs);
+}
+
+.builder-general-bulk .builder-apply-button {
+  justify-self: start;
+}
+
 .builder-analysis-card {
   min-width: 0;
   border: 1px solid var(--line);

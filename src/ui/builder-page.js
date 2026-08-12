@@ -18,6 +18,7 @@ import {
   bulkCoverage,
   bulkCoverageTable,
   bulkPointMatchups,
+  generalBulkRecommendation,
   koHitCount,
   rankBulkCoverageGroups,
 } from "../data/bulk-points.js";
@@ -92,6 +93,7 @@ const elements = {
   bulkPanel: document.querySelector("#builder-bulk-panel"),
   breakPanel: document.querySelector("#builder-break-panel"),
   bulkCount: document.querySelector("#bulk-count"),
+  generalBulk: document.querySelector("#builder-general-bulk"),
   bulkPoints: document.querySelector("#bulk-points"),
   breakCount: document.querySelector("#break-count"),
   breakPoints: document.querySelector("#break-points"),
@@ -614,6 +616,7 @@ function renderCustomThreats() {
 
 function renderBulkPoints(threats, field) {
   const budget = availableBulkSpBudget(state.user.sp);
+  renderGeneralBulkRecommendation(generalBulkRecommendation(state.user, { budget }));
   const matchups = bulkPointMatchups(state.user, threats, { budget, field });
   const tables = cachedBulkCoverageTables(threats, matchups);
   const families = bulkMatchupFamilies(threats, matchups).map((family) => ({
@@ -638,6 +641,70 @@ function renderBulkPoints(threats, field) {
         .filter((status) => sections[status].length > 0)
         .map((status) => bulkCoverageSection(sections[status], status))),
   );
+}
+
+function renderGeneralBulkRecommendation(recommendation) {
+  if (!recommendation || recommendation.addedSp <= 0) {
+    elements.generalBulk.hidden = true;
+    elements.generalBulk.replaceChildren();
+    return;
+  }
+
+  const heading = document.createElement("div");
+  heading.className = "builder-general-bulk-heading";
+  const title = document.createElement("strong");
+  title.id = "builder-general-bulk-title";
+  title.textContent = t("builder.generalBulkTitle");
+  heading.append(
+    title,
+    textSpan(
+      t("builder.unassignedSp", { count: recommendation.addedSp }),
+      "builder-general-bulk-count",
+    ),
+  );
+
+  const spreads = document.createElement("div");
+  spreads.className = "builder-general-bulk-spreads";
+  spreads.append(
+    generalBulkStatGroup(t("builder.recommendedSp"), recommendation.sp),
+    generalBulkStatGroup(t("builder.finalBulkStats"), recommendation.stats),
+  );
+
+  const apply = document.createElement("button");
+  apply.type = "button";
+  apply.className = "builder-apply-button";
+  apply.textContent = t("builder.applyRecommendation");
+  apply.addEventListener("click", () => {
+    resetUserSetupDraft();
+    updatePage(() => {
+      state = {
+        ...state,
+        user: {
+          ...state.user,
+          sp: { ...state.user.sp, ...recommendation.sp },
+        },
+      };
+    });
+  });
+
+  elements.generalBulk.replaceChildren(
+    heading,
+    textSpan(t("builder.generalBulkDescription"), "builder-general-bulk-description"),
+    spreads,
+    apply,
+  );
+  elements.generalBulk.hidden = false;
+}
+
+function generalBulkStatGroup(label, values) {
+  const group = document.createElement("div");
+  group.className = "builder-general-bulk-stat-group";
+  group.append(
+    textSpan(label, "builder-general-bulk-stat-label"),
+    ...["hp", "def", "spd"].map((stat) =>
+      statChip(localizedTerm("stat", STAT_LABELS[stat]), values[stat])),
+  );
+  return group;
 }
 
 function cachedBulkCoverageTables(threats, matchups) {
