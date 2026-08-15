@@ -171,10 +171,12 @@ export function sortMoves(moves, { key = "", direction = "ascending" } = {}) {
       const aValue = numericKey ? numericKey(a.move) : stringKey(a.move);
       const bValue = numericKey ? numericKey(b.move) : stringKey(b.move);
       const aMissing = numericKey
-        ? !Number.isFinite(Number(aValue)) || (key === "power" && Number(aValue) === 0)
+        ? aValue === null || aValue === undefined || !Number.isFinite(Number(aValue))
+          || (key === "power" && Number(aValue) === 0)
         : false;
       const bMissing = numericKey
-        ? !Number.isFinite(Number(bValue)) || (key === "power" && Number(bValue) === 0)
+        ? bValue === null || bValue === undefined || !Number.isFinite(Number(bValue))
+          || (key === "power" && Number(bValue) === 0)
         : false;
       if (aMissing || bMissing) {
         if (aMissing !== bMissing) return aMissing ? 1 : -1;

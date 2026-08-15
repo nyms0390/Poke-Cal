@@ -606,7 +606,6 @@ function updateMoveSortButtons() {
     const active = moveSort.key === button.dataset.sortKey;
     const direction = active ? moveSort.direction : "none";
     const header = button.closest("th");
-    button.setAttribute("aria-sort", direction);
     button.querySelector(".sort-icon").textContent = direction === "ascending"
       ? "↑"
       : direction === "descending" ? "↓" : "↕";

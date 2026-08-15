@@ -35,6 +35,10 @@ test("keeps English and Traditional Chinese message catalogs in parity", () => {
   assert.equal(tFor("zh-TW", "nav.moves"), "招式");
   assert.equal(tFor("en", "moves.title"), "Move catalog");
   assert.equal(tFor("zh-TW", "moves.title"), "招式圖鑑");
+  assert.equal(tFor("en", "moves.ariaLabel"), "Move catalog");
+  assert.equal(tFor("zh-TW", "moves.ariaLabel"), "招式圖鑑");
+  assert.equal(tFor("en", "moves.footer"), "Champions catalog · Level 50 · 31 IV · 1 SP = 8 EV");
+  assert.equal(tFor("zh-TW", "moves.footer"), "Champions 圖鑑 · 等級 50 · 31 IV · 1 SP = 8 EV");
   assert.equal(tFor("zh-TW", "count.moves", { count: 4 }), "4 個招式");
 });
 

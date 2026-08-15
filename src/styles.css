@@ -1344,8 +1344,8 @@ button:disabled {
 
 .move-sort-button:hover,
 .move-sort-button:focus-visible,
-.move-sort-button[aria-sort="ascending"],
-.move-sort-button[aria-sort="descending"] {
+.move-table th[aria-sort="ascending"] .move-sort-button,
+.move-table th[aria-sort="descending"] .move-sort-button {
   border-color: var(--accent);
   outline: none;
   color: var(--accent);
@@ -2329,6 +2329,34 @@ button:disabled {
     border-radius: var(--radius-card);
     background: var(--surface);
     box-shadow: var(--shadow-micro);
+  }
+
+  .lookup-move-table thead {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .lookup-move-table thead tr {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .lookup-move-table thead th {
+    position: static;
+    display: block;
+    width: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .lookup-move-table thead .move-sort-button {
+    margin: 0;
   }
 
   .move-table td {

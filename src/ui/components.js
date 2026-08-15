@@ -74,7 +74,8 @@ export function moveNameCell(move, { showType = true } = {}) {
     cell.append(badge);
   }
 
-  cell.append(name, details);
+  cell.append(name);
+  if (details.children.length > 0) cell.append(details);
   return cell;
 }
 

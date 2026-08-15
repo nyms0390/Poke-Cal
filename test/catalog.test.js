@@ -374,3 +374,25 @@ test("sorts moves by every catalog column without mutating or losing stable orde
   assert.deepEqual(sortMoves(moves, { key: "unknown", direction: "ascending" }), moves);
   assert.deepEqual(moves.map(({ id }) => id), ["status-a", "damage-b", "damage-a", "status-b"]);
 });
+
+test("keeps null Accuracy and PP values with displayed-missing values", () => {
+  const moves = [
+    { id: "null-accuracy", name: "Null Accuracy", accuracy: null, pp: 10 },
+    { id: "valid-accuracy", name: "Valid Accuracy", accuracy: 90, pp: 10 },
+    { id: "null-pp", name: "Null PP", accuracy: 90, pp: null },
+    { id: "valid-pp", name: "Valid PP", accuracy: 90, pp: 5 },
+  ];
+
+  for (const direction of ["ascending", "descending"]) {
+    assert.deepEqual(
+      sortMoves(moves, { key: "accuracy", direction }).map(({ id }) => id),
+      ["valid-accuracy", "null-pp", "valid-pp", "null-accuracy"],
+    );
+    assert.deepEqual(
+      sortMoves(moves, { key: "pp", direction }).map(({ id }) => id),
+      direction === "ascending"
+        ? ["valid-pp", "null-accuracy", "valid-accuracy", "null-pp"]
+        : ["null-accuracy", "valid-accuracy", "valid-pp", "null-pp"],
+    );
+  }
+});
