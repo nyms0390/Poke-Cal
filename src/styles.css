@@ -764,6 +764,30 @@ button:disabled {
   margin-top: 28px;
 }
 
+.pokemon-card-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pokemon-card-sprite {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  background: var(--surface-tint);
+  color: var(--accent-dark);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.pokemon-card-sprite img {
+  display: block;
+  max-width: 96px;
+  max-height: 96px;
+}
+
 .pokemon-card h2 {
   margin: 2px 0 0;
   font-size: clamp(1.6rem, 4vw, 2.25rem);

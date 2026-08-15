@@ -37,6 +37,7 @@ import {
   moveCategoryMark,
   moveNameCell,
   optionElement,
+  pokemonSpriteUrls,
   searchResultButton,
   textCell,
   typeBadge,
@@ -60,6 +61,7 @@ const MOVE_PROPERTY_FLAGS = [
 const elements = {
   search: document.querySelector("#pokemon-search"),
   results: document.querySelector("#search-results"),
+  selectedSprite: document.querySelector("#selected-sprite"),
   selectedName: document.querySelector("#selected-name"),
   selectedTypes: document.querySelector("#selected-types"),
   selectedAlias: document.querySelector("#selected-alias"),
@@ -229,6 +231,7 @@ function renderBaseStats(entry) {
 function selectForm(entry, options = {}) {
   selectedPokemon = entry;
   if (options.syncSearch !== false) elements.search.value = localizedName(entry);
+  renderSelectedSprite(entry);
   elements.selectedName.textContent = localizedName(entry);
   elements.selectedTypes.replaceChildren(...(entry.types ?? []).map(typeBadge));
   elements.selectedAlias.textContent = getLocale() === "zh-TW"
@@ -239,6 +242,30 @@ function selectForm(entry, options = {}) {
   renderBaseStats(entry);
   if (options.syncActive !== false) persistActiveDefaults(entry);
   renderCatalog();
+}
+
+function renderSelectedSprite(entry) {
+  const image = document.createElement("img");
+  image.alt = localizedName(entry);
+  const [source, fallbackSource] = pokemonSpriteUrls(entry);
+  image.src = source;
+
+  const fallback = document.createElement("span");
+  fallback.hidden = true;
+  fallback.textContent = localizedName(entry).slice(0, 1);
+
+  let nextSource = fallbackSource;
+  image.addEventListener("error", () => {
+    if (nextSource) {
+      image.src = nextSource;
+      nextSource = "";
+      return;
+    }
+    image.remove();
+    fallback.hidden = false;
+  });
+
+  elements.selectedSprite.replaceChildren(image, fallback);
 }
 
 function persistActiveDefaults(entry) {
