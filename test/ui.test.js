@@ -6,6 +6,7 @@ import {
   damagePercentColor,
   ensureRenderedRows,
   moveCategoryIconPath,
+  moveNameCell,
   pokemonSpriteUrls,
   visibleSearchResults,
   typeClassName,
@@ -144,6 +145,34 @@ test("maps damage ranges by their average percentage", () => {
   assert.equal(damagePercentColor(74.1, 87.6), "hsl(97 72% 56%)");
 });
 
+test("move name cells show the type without repeating the stable move ID", () => {
+  const previousDocument = globalThis.document;
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.dataset = {};
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+  }
+
+  globalThis.document = {
+    createElement: (tagName) => new FakeElement(tagName),
+  };
+
+  try {
+    const cell = moveNameCell({ id: "playrough", name: "Play Rough", type: "Fairy" });
+    assert.equal(cell.children[0].textContent, "Play Rough");
+    assert.equal(cell.children[1].children.length, 1);
+    assert.equal(cell.children[1].children[0].textContent, "Fairy");
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
+
 test("expands capped search results when requested", () => {
   const matches = ["a", "b", "c"];
   assert.deepEqual(visibleSearchResults(matches, { limit: 2 }), {
@@ -277,6 +306,15 @@ test("lookup page separates battle profile from build details without a duplicat
   assert.match(html, /<section[^>]+aria-labelledby="build-details-heading"/);
   assert.doesNotMatch(html, /id="playstyle-summary"/);
   assert.doesNotMatch(html, /id="usage-source"/);
+});
+
+test("lookup move table omits the Champions usage column", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+  const table = html.match(/<table class="move-table">([\s\S]*?)<\/table>/)?.[1] ?? "";
+
+  assert.doesNotMatch(table, />Champions<\/th>/);
+  assert.doesNotMatch(source, /formatChampionsUsage\(move/);
 });
 
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {

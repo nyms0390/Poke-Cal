@@ -604,7 +604,6 @@ function renderMoveRow(move) {
   categoryCell.append(moveCategoryMark(move.category));
   row.append(
     moveNameCell(move),
-    textCell(formatChampionsUsage(move, getLocale()), "numeric-cell", t("label.champions")),
     categoryCell,
     textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),

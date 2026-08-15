@@ -59,13 +59,9 @@ export function moveNameCell(move) {
   const name = document.createElement("strong");
   name.textContent = localizedName(move);
 
-  const id = document.createElement("small");
-  id.textContent = move.id;
-
   const details = document.createElement("span");
   details.className = "move-name-details";
   if (move.type) details.append(typeBadge(move.type));
-  details.append(id);
 
   const priority = Number(move.priority ?? 0);
   if (priority !== 0) {
