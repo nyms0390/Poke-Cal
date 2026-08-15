@@ -3,8 +3,9 @@ import { normalizeId } from "./catalog.js";
 export const LIMITLESS_TOURNAMENTS_URL = "https://play.limitlesstcg.com/tournaments";
 export const LIMITLESS_API_BASE_URL = "https://play.limitlesstcg.com/api";
 
-export function buildLimitlessUsage(tournaments, standingsByTournament) {
+export function buildLimitlessUsage(tournaments, standingsByTournament, catalogs = {}) {
   const tournamentEntries = tournaments.filter(Boolean);
+  const megaStoneMappings = buildMegaStoneMappings(catalogs);
   const counters = {
     pokemon: new Map(),
     abilities: new Map(),
@@ -20,6 +21,7 @@ export function buildLimitlessUsage(tournaments, standingsByTournament) {
       teamCount += 1;
       for (const set of standing.decklist) {
         countPokemonSet(counters, set);
+        countMegaPokemonSet(counters, set, megaStoneMappings);
       }
     }
   }
@@ -84,6 +86,62 @@ function countPokemonSet(counters, set) {
     increment(pokemon.moves, normalizeId(attack), attack);
   }
   if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
+}
+
+function countMegaPokemonSet(counters, set, megaStoneMappings) {
+  const itemMappings = megaStoneMappings.get(normalizeId(set.item)) ?? [];
+  const sourceId = normalizePokemonSetId(set);
+  const mapping = itemMappings.find(({ source }) => source === sourceId);
+  if (!mapping) return;
+
+  const pokemon = increment(counters.pokemon, mapping.target.id, mapping.target.name);
+  pokemon.abilities ??= new Map();
+  pokemon.items ??= new Map();
+  pokemon.moves ??= new Map();
+  pokemon.natures ??= new Map();
+
+  const ability = canonicalAbility(mapping.target);
+  if (ability) increment(pokemon.abilities, normalizeId(ability), ability);
+  increment(pokemon.items, mapping.item.id, mapping.item.name);
+  for (const attack of set.attacks ?? []) {
+    if (!attack) continue;
+    increment(pokemon.moves, normalizeId(attack), attack);
+  }
+  if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
+}
+
+function buildMegaStoneMappings({ pokemon = [], items = [] } = {}) {
+  const pokemonLookup = new Map();
+  for (const entry of pokemon) {
+    for (const key of [entry.id, entry.name]) {
+      const normalizedKey = normalizeId(key);
+      if (normalizedKey) pokemonLookup.set(normalizedKey, entry);
+    }
+  }
+
+  const mappings = new Map();
+  for (const item of items) {
+    const itemKeys = [item.id, item.name].map(normalizeId).filter(Boolean);
+    for (const [sourceName, targetName] of Object.entries(item.megaStone ?? {})) {
+      const target = pokemonLookup.get(normalizeId(targetName));
+      if (!target || target.champions?.legal !== true) continue;
+      for (const itemKey of itemKeys) {
+        const itemMappings = mappings.get(itemKey) ?? [];
+        itemMappings.push({
+          source: normalizeId(sourceName),
+          target,
+          item: { id: item.id ?? normalizeId(item.name), name: item.name ?? item.id },
+        });
+        mappings.set(itemKey, itemMappings);
+      }
+    }
+  }
+  return mappings;
+}
+
+function canonicalAbility(pokemon) {
+  if (Array.isArray(pokemon.abilities)) return pokemon.abilities[0];
+  return Object.values(pokemon.abilities ?? {})[0];
 }
 
 function normalizePokemonSetId(set) {

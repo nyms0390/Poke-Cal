@@ -81,6 +81,151 @@ test("aggregates Limitless standings into usage rates", () => {
   assert.equal("teras" in usage.pokemon[0].usage, false);
 });
 
+test("derives form-specific Mega usage from matching legal stones", () => {
+  const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];
+  const standings = new Map([
+    [
+      "event-1",
+      [
+        {
+          decklist: [
+            {
+              id: "charizard",
+              name: "Charizard",
+              item: "Charizardite X",
+              ability: "Blaze",
+              attacks: ["Flamethrower", "Protect", "Dragon Claw", "Tailwind"],
+              nature: "Adamant",
+            },
+            {
+              id: "raichu",
+              name: "Raichu",
+              item: "Raichunite X",
+              ability: "Lightning Rod",
+              attacks: ["Fake Out", "Protect", "Thunderbolt", "Helping Hand"],
+              nature: "Jolly",
+            },
+          ],
+        },
+        {
+          decklist: [
+            {
+              id: "charizard",
+              name: "Charizard",
+              item: "Charizardite Y",
+              ability: "Blaze",
+              attacks: ["Heat Wave", "Protect", "Air Slash", "Solar Beam"],
+              nature: "Modest",
+            },
+            {
+              id: "raichu",
+              name: "Raichu",
+              item: "Raichunite Y",
+              ability: "Lightning Rod",
+              attacks: ["Thunderbolt", "Protect", "Nasty Plot", "Fake Out"],
+              nature: "Timid",
+            },
+          ],
+        },
+        {
+          decklist: [
+            {
+              id: "charizard",
+              name: "Charizard",
+              item: "Charizardite X",
+              ability: "Blaze",
+              attacks: ["Flamethrower", "Protect", "Dragon Claw", "Tailwind"],
+              nature: "Jolly",
+            },
+            {
+              id: "raichu",
+              name: "Raichu",
+              item: "Focus Sash",
+              ability: "Lightning Rod",
+              attacks: ["Fake Out", "Protect", "Volt Switch", "Helping Hand"],
+              nature: "Modest",
+            },
+            { id: "pikachu", name: "Pikachu", item: "Raichunite X", ability: "Static" },
+            { id: "venusaur", name: "Venusaur", item: "Venusanite", ability: "Overgrow" },
+            { id: "blastoise", name: "Blastoise", item: "Blastoisinite", ability: "Torrent" },
+          ],
+        },
+      ],
+    ],
+  ]);
+  const catalogs = {
+    pokemon: [
+      { id: "charizardmegax", name: "Charizard-Mega-X", abilities: ["Tough Claws"], champions: { legal: true } },
+      { id: "charizardmegay", name: "Charizard-Mega-Y", abilities: ["Drought"], champions: { legal: true } },
+      { id: "raichumegax", name: "Raichu-Mega-X", abilities: ["Electric Surge"], champions: { legal: true } },
+      { id: "raichumegay", name: "Raichu-Mega-Y", abilities: ["No Guard"], champions: { legal: true } },
+      { id: "venusaurmega", name: "Venusaur-Mega", abilities: ["Thick Fat"], champions: { legal: false } },
+    ],
+    items: [
+      { id: "charizarditex", name: "Charizardite X", megaStone: { Charizard: "Charizard-Mega-X" } },
+      { id: "charizarditey", name: "Charizardite Y", megaStone: { Charizard: "Charizard-Mega-Y" } },
+      { id: "raichunitex", name: "Raichunite X", megaStone: { Raichu: "Raichu-Mega-X" } },
+      { id: "raichunitey", name: "Raichunite Y", megaStone: { Raichu: "Raichu-Mega-Y" } },
+      { id: "venusanite", name: "Venusanite", megaStone: { Venusaur: "Venusaur-Mega" } },
+      { id: "blastoisinite", name: "Blastoisinite", megaStone: { Blastoise: "Blastoise-Mega" } },
+    ],
+  };
+
+  const usage = buildLimitlessUsage(tournaments, standings, catalogs);
+  const byId = new Map(usage.pokemon.map((entry) => [entry.id, entry]));
+
+  assert.equal(byId.get("charizard").usageCount, 3);
+  assert.equal(byId.get("raichu").usageCount, 3);
+  assert.deepEqual(
+    ["charizardmegax", "charizardmegay", "raichumegax", "raichumegay"].map((id) => [
+      id,
+      byId.get(id).usageCount,
+      byId.get(id).usagePercent,
+    ]),
+    [
+      ["charizardmegax", 2, (2 / 3) * 100],
+      ["charizardmegay", 1, (1 / 3) * 100],
+      ["raichumegax", 1, (1 / 3) * 100],
+      ["raichumegay", 1, (1 / 3) * 100],
+    ],
+  );
+
+  const charizardX = byId.get("charizardmegax");
+  assert.deepEqual(charizardX.usage.abilities.map(({ id, usagePercent }) => [id, usagePercent]), [
+    ["toughclaws", 100],
+  ]);
+  assert.deepEqual(charizardX.usage.items.map(({ id, usagePercent }) => [id, usagePercent]), [
+    ["charizarditex", 100],
+  ]);
+  assert.deepEqual(charizardX.usage.moves.map(({ id }) => id), [
+    "dragonclaw",
+    "flamethrower",
+    "protect",
+    "tailwind",
+  ]);
+  assert.deepEqual(charizardX.usage.natures.map(({ id, usageCount }) => [id, usageCount]), [
+    ["adamant", 1],
+    ["jolly", 1],
+  ]);
+  assert.deepEqual(byId.get("charizardmegay").usage.items.map(({ id }) => id), ["charizarditey"]);
+  assert.deepEqual(byId.get("charizardmegay").usage.moves.map(({ id }) => id), [
+    "airslash",
+    "heatwave",
+    "protect",
+    "solarbeam",
+  ]);
+  assert.deepEqual(byId.get("charizardmegay").usage.natures.map(({ id }) => id), ["modest"]);
+  assert.deepEqual(byId.get("raichumegax").usage.abilities.map(({ id }) => id), ["electricsurge"]);
+  assert.deepEqual(byId.get("raichumegay").usage.abilities.map(({ id }) => id), ["noguard"]);
+
+  assert.equal(usage.items.find(({ id }) => id === "charizarditex").usageCount, 2);
+  assert.equal(usage.abilities.find(({ id }) => id === "blaze").usageCount, 3);
+  assert.equal(usage.abilities.some(({ id }) => id === "toughclaws"), false);
+  assert.equal(byId.has("venusaurmega"), false);
+  assert.equal(byId.has("blastoisemega"), false);
+  assert.equal(byId.has("raichumegaz"), false);
+});
+
 test("merges Limitless usage without keeping old catalog-source metadata", () => {
   const usage = {
     pokemon: [
