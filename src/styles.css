@@ -680,9 +680,30 @@ button:disabled {
 }
 
 .search-result small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   grid-column: 1;
   color: var(--muted);
   font-size: var(--text-xs);
+}
+
+.move-category-icon {
+  display: inline-block;
+  width: 24px;
+  height: 18px;
+  padding: 2px 3px;
+  border-radius: 4px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.move-category-physical {
+  background: #c94b37;
+}
+
+.move-category-special {
+  background: #536fd3;
 }
 
 .search-result strong {

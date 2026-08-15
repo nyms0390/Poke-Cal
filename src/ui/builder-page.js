@@ -59,6 +59,7 @@ import {
   attachCombobox,
   damagePercentColor,
   ensureRenderedRows,
+  moveCategoryMark,
   optionElement,
   pokemonSpriteUrls,
   searchResultButton,
@@ -561,11 +562,15 @@ function renderMovePicks() {
         stageUserSetup({ kind: "move", index, value: move.id });
         input.value = localizedName(move);
       },
-      renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
-        preventBlur: true,
-        small: `${localizedTerm("type", move.type) ?? "—"} · ${localizedTerm("category", move.category) ?? "—"}`,
-        strong: move.basePower ?? "—",
-      }),
+      renderRow: (move, onSelect) => {
+        const details = document.createDocumentFragment();
+        details.append(`${localizedTerm("type", move.type) ?? "—"} · `, moveCategoryMark(move.category));
+        return searchResultButton(move, onSelect, {
+          preventBlur: true,
+          small: details,
+          strong: move.basePower ?? "—",
+        });
+      },
     });
     moveComboboxCleanups.push(attached.destroy);
     row.append(label, combobox);

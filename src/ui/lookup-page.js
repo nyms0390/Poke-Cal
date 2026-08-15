@@ -34,6 +34,7 @@ import {
 } from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
+  moveCategoryMark,
   moveNameCell,
   optionElement,
   searchResultButton,
@@ -599,10 +600,12 @@ function renderMoveList() {
 
 function renderMoveRow(move) {
   const row = document.createElement("tr");
+  const categoryCell = textCell("", "", t("label.category"));
+  categoryCell.append(moveCategoryMark(move.category));
   row.append(
     moveNameCell(move),
     textCell(formatChampionsUsage(move, getLocale()), "numeric-cell", t("label.champions")),
-    textCell(localizedTerm("category", move.category) || "—", "", t("label.category")),
+    categoryCell,
     textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),
     textCell(String(move.pp ?? "—"), "numeric-cell", "PP"),

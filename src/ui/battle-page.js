@@ -58,6 +58,7 @@ import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
   damagePercentColor,
   ensureRenderedRows,
+  moveCategoryMark,
   optionElement,
   attachCombobox,
   searchResultButton,
@@ -937,11 +938,15 @@ function renderDamageMovePickers(side) {
           search.placeholder = localizedName(picked);
           handleDamageControl({ target: hidden });
         },
-        renderRow: (move, onSelect) => searchResultButton(move, onSelect, {
-          preventBlur: true,
-          small: `${move.type ?? "—"} · ${move.category ?? "—"}`,
-          strong: move.basePower ?? "—",
-        }),
+        renderRow: (move, onSelect) => {
+          const details = document.createDocumentFragment();
+          details.append(`${move.type ?? "—"} · `, moveCategoryMark(move.category));
+          return searchResultButton(move, onSelect, {
+            preventBlur: true,
+            small: details,
+            strong: move.basePower ?? "—",
+          });
+        },
       });
       moveComboboxCleanups[side].push(moveCombobox.destroy);
       row.append(moveLabel, combobox);

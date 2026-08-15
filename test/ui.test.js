@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import {
   damagePercentColor,
   ensureRenderedRows,
+  moveCategoryIconPath,
   pokemonSpriteUrls,
   visibleSearchResults,
   typeClassName,
@@ -117,6 +118,18 @@ test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName("Bug"), "type-bug");
   assert.equal(typeClassName("Mr. Mime"), "type-mr-mime");
   assert.equal(typeClassName(""), "type-unknown");
+});
+
+test("maps damaging move categories to local Champions icons", () => {
+  for (const [category, path] of [
+    ["Physical", "public/icons/move-physical.png"],
+    ["Special", "public/icons/move-special.png"],
+  ]) {
+    assert.equal(moveCategoryIconPath(category), path);
+    const signature = readFileSync(new URL(`../${path}`, import.meta.url)).subarray(0, 8);
+    assert.equal(signature.toString("hex"), "89504e470d0a1a0a");
+  }
+  assert.equal(moveCategoryIconPath("Status"), "");
 });
 
 test("maps damage percentages from red to green", () => {

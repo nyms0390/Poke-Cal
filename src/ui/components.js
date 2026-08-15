@@ -95,6 +95,26 @@ export function typeClassName(type) {
   return `type-${normalized || "unknown"}`;
 }
 
+export function moveCategoryIconPath(category) {
+  return {
+    Physical: "public/icons/move-physical.png",
+    Special: "public/icons/move-special.png",
+  }[category] ?? "";
+}
+
+export function moveCategoryMark(category) {
+  const label = localizedTerm("category", category) || "—";
+  const path = moveCategoryIconPath(category);
+  if (!path) return document.createTextNode(label);
+
+  const icon = document.createElement("img");
+  icon.className = `move-category-icon move-category-${category.toLowerCase()}`;
+  icon.src = path;
+  icon.alt = label;
+  icon.title = label;
+  return icon;
+}
+
 export function damagePercentColor(minPercent, maxPercent = minPercent) {
   const min = Number(minPercent);
   const max = Number(maxPercent);
@@ -132,11 +152,16 @@ export function searchResultButton(entry, onSelect, {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "search-result";
-  button.innerHTML = `
-    <span>${localizedName(entry)}</span>
-    <small>${small ?? ""}</small>
-    <strong>${strong ?? ""}</strong>
-  `;
+
+  const name = document.createElement("span");
+  name.textContent = localizedName(entry);
+  const details = document.createElement("small");
+  if (typeof small === "object" && small !== null) details.append(small);
+  else details.textContent = String(small ?? "");
+  const value = document.createElement("strong");
+  value.textContent = String(strong ?? "");
+  button.append(name, details, value);
+
   if (preventBlur) button.addEventListener("pointerdown", (event) => event.preventDefault());
   button.addEventListener("click", () => onSelect(entry));
   return button;
