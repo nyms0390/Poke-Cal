@@ -99,6 +99,7 @@ export function moveCategoryIconPath(category) {
   return {
     Physical: "public/icons/move-physical.png",
     Special: "public/icons/move-special.png",
+    Status: "public/icons/move-status.png",
   }[category] ?? "";
 }
 

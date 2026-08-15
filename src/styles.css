@@ -706,6 +706,10 @@ button:disabled {
   background: #536fd3;
 }
 
+.move-category-status {
+  background: #6f7180;
+}
+
 .search-result strong {
   grid-column: 2;
   grid-row: 1 / 3;
