@@ -563,6 +563,18 @@ test("all pages expose the Moves navigation link", () => {
   }
 });
 
+test("all pages place Moves in the second navigation slot", () => {
+  for (const page of ["index.html", "battle.html", "builder.html", "speed.html", "teams.html", "moves.html"]) {
+    const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+    const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
+    assert.deepEqual(
+      [...nav.matchAll(/<a(?: class="active")? href="([^"]+)">([^<]+)<\/a>/g)].slice(0, 2).map(([, href, label]) => [href, label]),
+      [["./index.html", "Lookup"], ["./moves.html", "Moves"]],
+      page,
+    );
+  }
+});
+
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
