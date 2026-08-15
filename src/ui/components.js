@@ -4,6 +4,27 @@ import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from
 
 const ITEM_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png?v1";
 
+const TYPE_ICON_PATHS = {
+  Bug: "public/icons/types/bug.png",
+  Dark: "public/icons/types/dark.png",
+  Dragon: "public/icons/types/dragon.png",
+  Electric: "public/icons/types/electric.png",
+  Fairy: "public/icons/types/fairy.png",
+  Fighting: "public/icons/types/fighting.png",
+  Fire: "public/icons/types/fire.png",
+  Flying: "public/icons/types/flying.png",
+  Ghost: "public/icons/types/ghost.png",
+  Grass: "public/icons/types/grass.png",
+  Ground: "public/icons/types/ground.png",
+  Ice: "public/icons/types/ice.png",
+  Normal: "public/icons/types/normal.png",
+  Poison: "public/icons/types/poison.png",
+  Psychic: "public/icons/types/psychic.png",
+  Rock: "public/icons/types/rock.png",
+  Steel: "public/icons/types/steel.png",
+  Water: "public/icons/types/water.png",
+};
+
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
 // space is tight.
 export const STAT_LABELS = {
@@ -81,8 +102,26 @@ export function moveNameCell(move) {
 export function typeBadge(type) {
   const badge = document.createElement("span");
   badge.className = `type-badge ${typeClassName(type)}`;
-  badge.textContent = localizedTerm("type", type || "Unknown");
+
+  const iconPath = typeIconPath(type);
+  if (iconPath) {
+    const icon = document.createElement("img");
+    icon.className = "type-badge-icon";
+    icon.src = iconPath;
+    icon.setAttribute("alt", "");
+    icon.setAttribute("aria-hidden", "true");
+    badge.append(icon);
+  }
+
+  const label = document.createElement("span");
+  label.className = "type-badge-label";
+  label.textContent = localizedTerm("type", type || "Unknown");
+  badge.append(label);
   return badge;
+}
+
+export function typeIconPath(type) {
+  return TYPE_ICON_PATHS[type] ?? "";
 }
 
 export function typeClassName(type) {

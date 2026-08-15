@@ -10,8 +10,10 @@ import {
   moveCategoryIconPath,
   moveNameCell,
   pokemonSpriteUrls,
+  typeBadge,
   visibleSearchResults,
   typeClassName,
+  typeIconPath,
 } from "../src/ui/components.js";
 import { rankObservedUsage } from "../src/ui/bootstrap.js";
 import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
@@ -123,6 +125,63 @@ test("normalizes type names for CSS badge classes", () => {
   assert.equal(typeClassName(""), "type-unknown");
 });
 
+test("renders a type badge with a decorative icon and visible label", () => {
+  const previousDocument = globalThis.document;
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.attributes = {};
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+
+    setAttribute(name, value) {
+      this.attributes[name] = String(value);
+    }
+
+    getAttribute(name) {
+      return this.attributes[name] ?? null;
+    }
+  }
+
+  globalThis.document = { createElement: (tagName) => new FakeElement(tagName) };
+
+  try {
+    const badge = typeBadge("Fire");
+    assert.equal(badge.className, "type-badge type-fire");
+    assert.equal(badge.children[0].tagName, "img");
+    assert.equal(badge.children[0].className, "type-badge-icon");
+    assert.equal(badge.children[0].src, "public/icons/types/fire.png");
+    assert.equal(badge.children[0].getAttribute("alt"), "");
+    assert.equal(badge.children[0].getAttribute("aria-hidden"), "true");
+    assert.equal(badge.children[1].className, "type-badge-label");
+    assert.equal(badge.children[1].textContent, "Fire");
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
+
+test("maps standard type icons to local PNG assets", () => {
+  for (const type of [
+    "Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost",
+    "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water",
+  ]) {
+    const path = `public/icons/types/${type.toLowerCase()}.png`;
+    assert.equal(typeIconPath(type), path);
+    const signature = readFileSync(new URL(`../${path}`, import.meta.url)).subarray(0, 8);
+    assert.equal(signature.toString("hex"), "89504e470d0a1a0a");
+  }
+
+  assert.equal(typeIconPath("Unknown"), "");
+  assert.equal(typeIconPath(""), "");
+  assert.equal(typeIconPath("Typeless"), "");
+  assert.equal(typeIconPath("Stellar"), "");
+  assert.equal(typeIconPath("Not a type"), "");
+});
+
 test("maps damaging move categories to local Champions icons", () => {
   for (const [category, path] of [
     ["Physical", "public/icons/move-physical.png"],
@@ -154,10 +213,15 @@ test("move name cells show the type without repeating the stable move ID", () =>
       this.tagName = tagName;
       this.children = [];
       this.dataset = {};
+      this.attributes = {};
     }
 
     append(...children) {
       this.children.push(...children);
+    }
+
+    setAttribute(name, value) {
+      this.attributes[name] = String(value);
     }
   }
 
@@ -169,7 +233,7 @@ test("move name cells show the type without repeating the stable move ID", () =>
     const cell = moveNameCell({ id: "playrough", name: "Play Rough", type: "Fairy" });
     assert.equal(cell.children[0].textContent, "Play Rough");
     assert.equal(cell.children[1].children.length, 1);
-    assert.equal(cell.children[1].children[0].textContent, "Fairy");
+    assert.equal(cell.children[1].children[0].children[1].textContent, "Fairy");
   } finally {
     globalThis.document = previousDocument;
   }

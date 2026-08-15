@@ -1414,6 +1414,7 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   min-width: 48px;
   border: 1px solid rgb(16 17 20 / 10%);
   border-radius: 999px;
@@ -1426,6 +1427,13 @@ button:disabled {
   text-shadow: 0 1px 1px rgb(0 0 0 / 35%);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.type-badge-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .type-bug { background: #9ab21f; }
