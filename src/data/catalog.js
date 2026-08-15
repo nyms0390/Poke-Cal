@@ -147,6 +147,50 @@ export function filterMoves(moves, { query = "", type = "", category = "", flag 
   });
 }
 
+const MOVE_SORT_KEYS = new Set(["name", "type", "category", "power", "accuracy", "pp", "effect"]);
+
+export function sortMoves(moves, { key = "", direction = "ascending" } = {}) {
+  if (!MOVE_SORT_KEYS.has(key)) return [...moves];
+
+  const directionMultiplier = direction === "descending" ? -1 : 1;
+  const numericKey = {
+    power: (move) => move.basePower,
+    accuracy: (move) => (move.accuracy === true ? undefined : move.accuracy),
+    pp: (move) => move.pp,
+  }[key];
+  const stringKey = {
+    name: (move) => move.name,
+    type: (move) => move.type,
+    category: (move) => move.category,
+    effect: moveEffect,
+  }[key];
+
+  return moves
+    .map((move, index) => ({ move, index }))
+    .sort((a, b) => {
+      const aValue = numericKey ? numericKey(a.move) : stringKey(a.move);
+      const bValue = numericKey ? numericKey(b.move) : stringKey(b.move);
+      const aMissing = numericKey
+        ? aValue === null || aValue === undefined || !Number.isFinite(Number(aValue))
+          || (key === "power" && Number(aValue) === 0)
+        : false;
+      const bMissing = numericKey
+        ? bValue === null || bValue === undefined || !Number.isFinite(Number(bValue))
+          || (key === "power" && Number(bValue) === 0)
+        : false;
+      if (aMissing || bMissing) {
+        if (aMissing !== bMissing) return aMissing ? 1 : -1;
+        return a.index - b.index;
+      }
+
+      const comparison = numericKey
+        ? Number(aValue) - Number(bValue)
+        : String(aValue ?? "").localeCompare(String(bValue ?? ""));
+      return comparison * directionMultiplier || a.index - b.index;
+    })
+    .map(({ move }) => move);
+}
+
 export function formatMovePower(power) {
   return power ? String(power) : "—";
 }
