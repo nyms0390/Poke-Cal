@@ -1,0 +1,4 @@
+interface:
+  display_name: "Poké Strategy"
+  short_description: "Fast and deep PokéCal strategy answers"
+  default_prompt: "Use $poke-strategy to answer this Champions strategy question with PokéCal data."
