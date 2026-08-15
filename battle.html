@@ -49,17 +49,20 @@
             <div id="attacker-team-slots" class="team-slots" aria-label="Attacker team slots" hidden></div>
 
             <label class="pokemon-search-label" for="attacker-pokemon-search">Pokémon</label>
-            <div class="pokemon-combobox">
-              <input id="attacker-pokemon" type="hidden" />
-              <input
-                id="attacker-pokemon-search"
-                type="search"
-                autocomplete="off"
-                role="combobox"
-                aria-controls="attacker-pokemon-results"
-                aria-expanded="false"
-              />
-              <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            <div class="battle-pokemon-picker">
+              <div class="pokemon-combobox">
+                <input id="attacker-pokemon" type="hidden" />
+                <input
+                  id="attacker-pokemon-search"
+                  type="search"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-controls="attacker-pokemon-results"
+                  aria-expanded="false"
+                />
+                <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+              </div>
+              <div id="attacker-pokemon-sprite" class="battle-pokemon-sprite"></div>
             </div>
             <div class="saved-set-controls">
               <label>
@@ -185,17 +188,20 @@
             <div id="defender-team-slots" class="team-slots" aria-label="Defender team slots" hidden></div>
 
             <label class="pokemon-search-label" for="defender-pokemon-search">Pokémon</label>
-            <div class="pokemon-combobox">
-              <input id="defender-pokemon" type="hidden" />
-              <input
-                id="defender-pokemon-search"
-                type="search"
-                autocomplete="off"
-                role="combobox"
-                aria-controls="defender-pokemon-results"
-                aria-expanded="false"
-              />
-              <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            <div class="battle-pokemon-picker">
+              <div class="pokemon-combobox">
+                <input id="defender-pokemon" type="hidden" />
+                <input
+                  id="defender-pokemon-search"
+                  type="search"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-controls="defender-pokemon-results"
+                  aria-expanded="false"
+                />
+                <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+              </div>
+              <div id="defender-pokemon-sprite" class="battle-pokemon-sprite"></div>
             </div>
             <div class="saved-set-controls">
               <label>
