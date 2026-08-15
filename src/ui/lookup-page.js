@@ -34,6 +34,7 @@ import {
 } from "./bootstrap.js";
 import {
   FULL_STAT_LABELS,
+  itemLabel,
   moveCategoryMark,
   moveNameCell,
   optionElement,
@@ -332,8 +333,10 @@ function commonBuildFact(labelText, entry) {
   label.textContent = labelText;
   const value = document.createElement("strong");
   const rawName = entry?.name;
-  value.textContent = !entry ? "—"
-    : labelText === t("label.nature") ? localizedTerm("nature", rawName)
+  if (!entry) value.textContent = "—";
+  else if (labelText === t("label.item")) value.append(itemLabel(entry, { showName: false }));
+  else value.textContent = labelText === t("label.nature")
+    ? localizedTerm("nature", rawName)
     : localizedName(entry);
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");
@@ -574,8 +577,7 @@ function renderItems(items) {
       const heading = document.createElement("div");
       heading.className = "item-heading";
 
-      const name = document.createElement("strong");
-      name.textContent = localizedName(item);
+      const name = itemLabel(item);
       const usage = document.createElement("span");
       usage.textContent = formatChampionsUsage(item, getLocale());
       heading.append(name, usage);

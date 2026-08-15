@@ -2,6 +2,8 @@ import { pokemonSpriteId } from "../data/pokemon.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 
+const ITEM_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png?v1";
+
 // Abbreviated stat labels — used on the battle page (SP/stage inputs, final-stat chips) where
 // space is tight.
 export const STAT_LABELS = {
@@ -125,6 +127,40 @@ export function pokemonSpriteUrls(pokemon) {
   const spriteId = pokemon?.spriteId ?? pokemonSpriteId(pokemon);
   const baseUrl = "https://play.pokemonshowdown.com/sprites";
   return [`${baseUrl}/gen5/${spriteId}.png`, `${baseUrl}/ani/${spriteId}.gif`];
+}
+
+export function itemSpritePosition(item) {
+  const left = (item.spritenum % 16) * 24;
+  const top = Math.floor(item.spritenum / 16) * 24;
+  return `-${left}px -${top}px`;
+}
+
+export function itemLabel(item, { showName = true } = {}) {
+  const name = localizedName(item);
+  const label = document.createElement("span");
+  label.className = "item-label";
+
+  if (!showName) {
+    label.setAttribute("role", "img");
+    label.setAttribute("aria-label", name);
+    label.setAttribute("title", name);
+  }
+
+  const icon = document.createElement("span");
+  icon.className = "item-icon";
+  icon.setAttribute("aria-hidden", "true");
+  icon.style.backgroundImage = `url("${ITEM_ICON_SHEET_URL}")`;
+  icon.style.backgroundPosition = itemSpritePosition(item);
+  label.append(icon);
+
+  if (showName) {
+    const text = document.createElement("span");
+    text.className = "item-label-text";
+    text.textContent = name;
+    label.append(text);
+  }
+
+  return label;
 }
 
 export function textCell(text, className = "", label = "") {

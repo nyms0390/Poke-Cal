@@ -5,6 +5,8 @@ import { readFileSync } from "node:fs";
 import {
   damagePercentColor,
   ensureRenderedRows,
+  itemLabel,
+  itemSpritePosition,
   moveCategoryIconPath,
   moveNameCell,
   pokemonSpriteUrls,
@@ -168,6 +170,88 @@ test("move name cells show the type without repeating the stable move ID", () =>
     assert.equal(cell.children[0].textContent, "Play Rough");
     assert.equal(cell.children[1].children.length, 1);
     assert.equal(cell.children[1].children[0].textContent, "Fairy");
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
+
+test("positions item sprites at sheet column and row boundaries", () => {
+  assert.equal(itemSpritePosition({ spritenum: 0 }), "-0px -0px");
+  assert.equal(itemSpritePosition({ spritenum: 15 }), "-360px -0px");
+  assert.equal(itemSpritePosition({ spritenum: 16 }), "-0px -24px");
+  assert.equal(itemSpritePosition({ spritenum: 17 }), "-24px -24px");
+});
+
+test("renders a full localized item label with a decorative icon", () => {
+  const previousDocument = globalThis.document;
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.attributes = {};
+      this.style = {};
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+
+    setAttribute(name, value) {
+      this.attributes[name] = String(value);
+    }
+
+    getAttribute(name) {
+      return this.attributes[name] ?? null;
+    }
+  }
+
+  globalThis.document = { createElement: (tagName) => new FakeElement(tagName) };
+
+  try {
+    const label = itemLabel({ id: "leftovers", name: "Leftovers", spritenum: 1 });
+    assert.equal(label.className, "item-label");
+    assert.equal(label.children[0].className, "item-icon");
+    assert.equal(label.children[0].getAttribute("aria-hidden"), "true");
+    assert.equal(label.children[0].style.backgroundPosition, "-24px -0px");
+    assert.match(label.children[0].style.backgroundImage, /itemicons-sheet\.png\?v1/);
+    assert.equal(label.children[1].className, "item-label-text");
+    assert.equal(label.children[1].textContent, "Leftovers");
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
+
+test("renders compact item labels accessibly without a visible name", () => {
+  const previousDocument = globalThis.document;
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.attributes = {};
+      this.style = {};
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+
+    setAttribute(name, value) {
+      this.attributes[name] = String(value);
+    }
+
+    getAttribute(name) {
+      return this.attributes[name] ?? null;
+    }
+  }
+
+  globalThis.document = { createElement: (tagName) => new FakeElement(tagName) };
+
+  try {
+    const label = itemLabel({ id: "leftovers", name: "Leftovers", spritenum: 1 }, { showName: false });
+    assert.equal(label.children.length, 1);
+    assert.equal(label.children[0].className, "item-icon");
+    assert.equal(label.getAttribute("aria-label"), "Leftovers");
+    assert.equal(label.getAttribute("title"), "Leftovers");
   } finally {
     globalThis.document = previousDocument;
   }
