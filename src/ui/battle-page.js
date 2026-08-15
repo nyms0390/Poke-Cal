@@ -1454,13 +1454,7 @@ function damageMovesForSide(side) {
 }
 
 function sideSummary(state) {
-  const hp = calculateStat({
-    base: state.pokemon.baseStats.hp,
-    stat: "hp",
-    sp: state.sp.hp,
-    nature: state.nature,
-  });
-  return `${localizedName(state.pokemon)} · ${localizedTerm("nature", state.nature)} · HP ${hp}`;
+  return localizedName(state.pokemon);
 }
 
 function normalizeDamageId(value) {

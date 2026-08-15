@@ -750,10 +750,6 @@ button:disabled {
 }
 
 .battle-pokemon-picker {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 56px;
-  align-items: center;
-  gap: 8px;
   min-width: 0;
 }
 
@@ -772,6 +768,14 @@ button:disabled {
   color: var(--accent-dark);
   font-size: var(--text-md);
   font-weight: 700;
+}
+
+.battle-side-summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
 }
 
 .battle-pokemon-sprite img {
@@ -2304,11 +2308,6 @@ button:disabled {
   .damage-side,
   .field-card {
     min-width: 0;
-  }
-
-  .battle-pokemon-picker {
-    grid-template-columns: minmax(0, 1fr) 48px;
-    gap: 6px;
   }
 
   .battle-pokemon-sprite {

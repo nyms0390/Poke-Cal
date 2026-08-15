@@ -43,7 +43,10 @@
           <section class="damage-side" aria-label="Attacker">
             <div class="panel-heading">
               <span>Attacker</span>
-              <strong id="attacker-summary">—</strong>
+              <div class="battle-side-summary">
+                <strong id="attacker-summary">—</strong>
+                <div id="attacker-pokemon-sprite" class="battle-pokemon-sprite"></div>
+              </div>
             </div>
             <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
             <div id="attacker-team-slots" class="team-slots" aria-label="Attacker team slots" hidden></div>
@@ -62,7 +65,6 @@
                 />
                 <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
               </div>
-              <div id="attacker-pokemon-sprite" class="battle-pokemon-sprite"></div>
             </div>
             <div class="saved-set-controls">
               <label>
@@ -182,7 +184,10 @@
           <section class="damage-side" aria-label="Defender">
             <div class="panel-heading">
               <span>Defender</span>
-              <strong id="defender-summary">—</strong>
+              <div class="battle-side-summary">
+                <strong id="defender-summary">—</strong>
+                <div id="defender-pokemon-sprite" class="battle-pokemon-sprite"></div>
+              </div>
             </div>
             <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
             <div id="defender-team-slots" class="team-slots" aria-label="Defender team slots" hidden></div>
@@ -201,7 +206,6 @@
                 />
                 <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
               </div>
-              <div id="defender-pokemon-sprite" class="battle-pokemon-sprite"></div>
             </div>
             <div class="saved-set-controls">
               <label>
