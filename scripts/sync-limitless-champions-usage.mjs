@@ -25,6 +25,9 @@ export async function downloadLimitlessChampionsData({
   format = DEFAULT_FORMAT,
   limit = DEFAULT_LIMIT,
   archiveLimit = DEFAULT_ARCHIVE_LIMIT,
+  catalogs,
+  pokemon,
+  items,
 } = {}) {
   const tournaments = (await fetcher(tournamentsUrl({ game, format, limit }))).filter(
     (tournament) => !format || tournament.format === format,
@@ -72,7 +75,7 @@ export async function downloadLimitlessChampionsData({
   }
 
   return {
-    usage: buildLimitlessUsage(tournaments, standingsByTournament),
+    usage: buildLimitlessUsage(tournaments, standingsByTournament, catalogs ?? { pokemon, items }),
     teams: buildLimitlessTeamArchive(
       archiveTournaments,
       detailsByTournament,
@@ -95,7 +98,10 @@ export async function updatePublicData(options = {}) {
     readJson(outputDirectory, "moves"),
     readJson(outputDirectory, "items"),
   ]);
-  const { usage, teams } = await downloadLimitlessChampionsData(options);
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    ...options,
+    catalogs: { pokemon, items },
+  });
   const merged = mergeLimitlessUsage({ pokemon, abilities, moves, items }, usage);
 
   await writeJsonEntries(outputDirectory, merged);
