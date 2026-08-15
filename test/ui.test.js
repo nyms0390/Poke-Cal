@@ -465,6 +465,17 @@ test("lookup page reserves a selected Pokémon icon and renders its sprite", () 
   assert.match(source, /pokemonSpriteUrls\(entry\)/);
 });
 
+test("battle page reserves one Pokémon icon per side and wires both sprites", () => {
+  const html = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
+
+  for (const side of ["attacker", "defender"]) {
+    assert.match(html, new RegExp(`id="${side}-pokemon-sprite" class="battle-pokemon-sprite"`));
+    assert.match(source, new RegExp(`${side}PokemonSprite`));
+  }
+  assert.match(source, /pokemonSpriteUrls\(state\.pokemon\)/);
+});
+
 test("lookup selection preserves a non-empty search query", () => {
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
 

@@ -60,6 +60,7 @@ import {
   ensureRenderedRows,
   moveCategoryMark,
   optionElement,
+  pokemonSpriteUrls,
   attachCombobox,
   searchResultButton,
   statEditorRow,
@@ -79,6 +80,8 @@ const elements = {
   defenderSummary: document.querySelector("#defender-summary"),
   attackerPokemon: document.querySelector("#attacker-pokemon"),
   defenderPokemon: document.querySelector("#defender-pokemon"),
+  attackerPokemonSprite: document.querySelector("#attacker-pokemon-sprite"),
+  defenderPokemonSprite: document.querySelector("#defender-pokemon-sprite"),
   attackerPokemonSearch: document.querySelector("#attacker-pokemon-search"),
   defenderPokemonSearch: document.querySelector("#defender-pokemon-search"),
   attackerPokemonResults: document.querySelector("#attacker-pokemon-results"),
@@ -416,6 +419,7 @@ function renderActiveTeamSlot(side) {
   setSideControlsDisabled(side, false);
   elements[`${side}Pokemon`].value = state.pokemon.id;
   elements[`${side}PokemonSearch`].value = localizedName(state.pokemon);
+  renderPokemonSprite(side, state);
   hidePokemonSearchResults(side);
   renderSideSelects(side, defaults);
   syncSideInputs(side);
@@ -495,6 +499,7 @@ function renderEmptySide(side) {
   setSideControlsDisabled(side, true);
   elements[`${side}Pokemon`].value = "";
   elements[`${side}PokemonSearch`].value = "";
+  elements[`${side}PokemonSprite`].replaceChildren();
   elements[`${side}SavedSet`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
   elements[`${side}Spread`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
   elements[`${side}Nature`].replaceChildren(optionElement("", t("battle.choosePokemonFirst")));
@@ -504,6 +509,31 @@ function renderEmptySide(side) {
   elements[`${side}MovePicks`].replaceChildren();
   hidePokemonSearchResults(side);
   if (side === "attacker") activeSetStore.clearSet();
+}
+
+function renderPokemonSprite(side, state) {
+  const statePokemon = state.pokemon;
+  const image = document.createElement("img");
+  image.alt = localizedName(statePokemon);
+  const [source, fallbackSource] = pokemonSpriteUrls(state.pokemon);
+  image.src = source;
+
+  const fallback = document.createElement("span");
+  fallback.hidden = true;
+  fallback.textContent = localizedName(statePokemon).slice(0, 1);
+
+  let nextSource = fallbackSource;
+  image.addEventListener("error", () => {
+    if (nextSource) {
+      image.src = nextSource;
+      nextSource = "";
+      return;
+    }
+    image.remove();
+    fallback.hidden = false;
+  });
+
+  elements[`${side}PokemonSprite`].replaceChildren(image, fallback);
 }
 
 function persistActiveAttacker(state, fallback = activeSetStore.readSet()) {
