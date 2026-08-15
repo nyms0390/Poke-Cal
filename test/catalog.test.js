@@ -16,6 +16,7 @@ import {
   resolvePokemonAbilities,
   resolvePokemonItems,
   resolvePokemonMoves,
+  sortMoves,
   usageForPokemon,
 } from "../src/data/catalog.js";
 
@@ -255,4 +256,121 @@ test("formats move display values", () => {
   assert.equal(moveEffect({ shortDesc: "Short.", desc: "Long." }), "Short.");
   assert.equal(moveEffect({ desc: "Long." }), "Long.");
   assert.equal(moveEffect({}), "—");
+});
+
+test("sorts moves by every catalog column without mutating or losing stable order", () => {
+  const moves = [
+    {
+      id: "status-a",
+      name: "Status A",
+      type: "Normal",
+      category: "Status",
+      basePower: 0,
+      accuracy: true,
+      pp: undefined,
+      shortDesc: "Same effect",
+    },
+    {
+      id: "damage-b",
+      name: "Damage B",
+      type: "Water",
+      category: "Special",
+      basePower: 80,
+      accuracy: 100,
+      pp: 15,
+      shortDesc: "Beta effect",
+    },
+    {
+      id: "damage-a",
+      name: "Damage A",
+      type: "Fire",
+      category: "Physical",
+      basePower: 80,
+      accuracy: 90,
+      pp: 20,
+      shortDesc: "Alpha effect",
+    },
+    {
+      id: "status-b",
+      name: "Status B",
+      type: "Grass",
+      category: "Status",
+      basePower: 0,
+      accuracy: true,
+      pp: undefined,
+      shortDesc: "Same effect",
+    },
+  ];
+
+  for (const key of ["name", "type", "category", "power", "accuracy", "pp", "effect"]) {
+    const ascending = sortMoves(moves, { key, direction: "ascending" });
+    const descending = sortMoves(moves, { key, direction: "descending" });
+    assert.notStrictEqual(ascending, moves);
+    assert.notStrictEqual(descending, moves);
+    assert.equal(ascending.length, moves.length);
+    assert.equal(descending.length, moves.length);
+  }
+
+  assert.deepEqual(sortMoves(moves, { key: "name", direction: "ascending" }).map(({ id }) => id), [
+    "damage-a",
+    "damage-b",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "name", direction: "descending" }).map(({ id }) => id), [
+    "status-b",
+    "status-a",
+    "damage-b",
+    "damage-a",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "type", direction: "ascending" }).map(({ id }) => id), [
+    "damage-a",
+    "status-b",
+    "status-a",
+    "damage-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "category", direction: "descending" }).map(({ id }) => id), [
+    "status-a",
+    "status-b",
+    "damage-b",
+    "damage-a",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "power", direction: "ascending" }).map(({ id }) => id), [
+    "damage-b",
+    "damage-a",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "accuracy", direction: "descending" }).map(({ id }) => id), [
+    "damage-b",
+    "damage-a",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "pp", direction: "ascending" }).map(({ id }) => id), [
+    "damage-b",
+    "damage-a",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "effect", direction: "ascending" }).map(({ id }) => id), [
+    "damage-a",
+    "damage-b",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "effect", direction: "descending" }).map(({ id }) => id), [
+    "status-a",
+    "status-b",
+    "damage-b",
+    "damage-a",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "power", direction: "descending" }).map(({ id }) => id), [
+    "damage-b",
+    "damage-a",
+    "status-a",
+    "status-b",
+  ]);
+  assert.deepEqual(sortMoves(moves, { key: "unknown", direction: "ascending" }), moves);
+  assert.deepEqual(moves.map(({ id }) => id), ["status-a", "damage-b", "damage-a", "status-b"]);
 });

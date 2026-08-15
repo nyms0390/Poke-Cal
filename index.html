@@ -19,6 +19,7 @@
           <a href="./builder.html">Builder</a>
           <a href="./speed.html">Speed Tiers</a>
           <a href="./teams.html">Teams</a>
+          <a href="./moves.html">Moves</a>
           <label class="language-switch">
             <span>Language</span>
             <select data-language-switch aria-label="Language">
@@ -151,41 +152,45 @@
               <strong id="move-count">—</strong>
             </div>
 
-            <div class="move-filters">
-              <label>
-                Search moves
-                <input id="move-search" type="search" autocomplete="off" placeholder="Thunderbolt" />
-              </label>
-              <label>
-                Type
-                <select id="move-type">
-                  <option value="">All types</option>
-                </select>
-              </label>
-              <label>
-                Category
-                <select id="move-category">
-                  <option value="">All categories</option>
-                </select>
-              </label>
-              <label>
-                Move property
-                <select id="move-property">
-                  <option value="">All properties</option>
-                </select>
-              </label>
-            </div>
-
             <div class="move-table-wrap">
               <table class="move-table">
                 <thead>
                   <tr>
-                    <th scope="col">Move</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Power</th>
-                    <th scope="col">Acc.</th>
-                    <th scope="col">PP</th>
-                    <th scope="col">Effect</th>
+                    <th scope="col" data-sort-key="name" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="name" aria-sort="none">
+                        <span data-i18n="label.move">Move</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="type" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="type" aria-sort="none">
+                        <span data-i18n="label.type">Type</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="category" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="category" aria-sort="none">
+                        <span data-i18n="label.category">Category</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="power" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="power" aria-sort="none">
+                        <span data-i18n="label.power">Power</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="accuracy" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="accuracy" aria-sort="none">
+                        <span data-i18n="label.accuracy">Acc.</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="pp" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="pp" aria-sort="none">
+                        <span>PP</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="effect" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="effect" aria-sort="none">
+                        <span data-i18n="label.effect">Effect</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody id="move-list"></tbody>

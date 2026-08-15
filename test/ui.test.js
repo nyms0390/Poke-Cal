@@ -416,6 +416,48 @@ test("lookup move table omits the Champions usage column", () => {
   assert.doesNotMatch(source, /formatChampionsUsage\(move/);
 });
 
+test("lookup moves use sortable headers, a separate Type column, and no move filters", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+  const table = html.match(/<table class="move-table">([\s\S]*?)<\/table>/)?.[1] ?? "";
+
+  for (const id of ["move-search", "move-type", "move-category", "move-property"]) {
+    assert.doesNotMatch(html, new RegExp(`id="${id}"`));
+  }
+  for (const key of ["name", "type", "category", "power", "accuracy", "pp", "effect"]) {
+    assert.match(table, new RegExp(`data-sort-key="${key}"`));
+  }
+  assert.match(source, /sortMoves/);
+  assert.match(source, /aria-sort/);
+  assert.match(source, /moveSort =/);
+  assert.match(table, /data-i18n="label\.type">Type/);
+  assert.match(source, /moveNameCell\(move, \{ showType: false \}\)/);
+  assert.match(source, /typeCell\.append\(typeBadge\(move\.type\)\)/);
+});
+
+test("standalone moves page keeps the four combined filters and full catalog table", () => {
+  const html = readFileSync(new URL("../moves.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/moves-page.js", import.meta.url), "utf8");
+
+  assert.match(html, /<a class="active" href="\.\/moves\.html">Moves<\/a>/);
+  for (const id of ["move-search", "move-type", "move-category", "move-property", "move-count", "move-list"]) {
+    assert.match(html, new RegExp(`id="${id}"`));
+  }
+  assert.match(html, /src\/ui\/moves-page\.js/);
+  assert.match(source, /loadCatalogs/);
+  assert.match(source, /filterMoves/);
+  assert.match(source, /moveEffect/);
+  assert.match(source, /moveNameCell/);
+  assert.match(source, /onLocaleChange/);
+});
+
+test("all pages expose the Moves navigation link", () => {
+  for (const page of ["index.html", "battle.html", "builder.html", "speed.html", "teams.html"]) {
+    const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+    assert.match(html, /<a href="\.\/moves\.html">Moves<\/a>/, page);
+  }
+});
+
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";

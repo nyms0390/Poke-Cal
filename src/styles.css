@@ -901,6 +901,16 @@ button:disabled {
   background: var(--surface);
 }
 
+.moves-tool {
+  display: grid;
+  gap: 16px;
+}
+
+.moves-panel {
+  display: grid;
+  gap: 18px;
+}
+
 .base-stat {
   display: grid;
   gap: 3px;
@@ -1290,7 +1300,7 @@ button:disabled {
 
 .move-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 980px;
   border-collapse: collapse;
 }
 
@@ -1312,6 +1322,40 @@ button:disabled {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.move-sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  margin: -5px -7px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  padding: 4px 7px;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.move-sort-button:hover,
+.move-sort-button:focus-visible,
+.move-sort-button[aria-sort="ascending"],
+.move-sort-button[aria-sort="descending"] {
+  border-color: var(--accent);
+  outline: none;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.sort-icon {
+  color: var(--accent);
+  font-size: var(--text-md);
+  line-height: 1;
 }
 
 .move-table tbody tr:last-child td {
@@ -1348,6 +1392,11 @@ button:disabled {
   position: relative;
   min-width: 150px;
   padding-right: 48px !important;
+}
+
+.move-type-cell {
+  min-width: 100px;
+  white-space: nowrap;
 }
 
 .move-priority-badge {

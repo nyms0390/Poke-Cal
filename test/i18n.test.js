@@ -31,6 +31,10 @@ test("resolves a saved or browser Traditional Chinese locale before English", ()
 test("keeps English and Traditional Chinese message catalogs in parity", () => {
   assert.deepEqual(Object.keys(ZH_TW_MESSAGES).sort(), Object.keys(EN_MESSAGES).sort());
   assert.equal(tFor("zh-TW", "nav.lookup"), "查詢");
+  assert.equal(tFor("en", "nav.moves"), "Moves");
+  assert.equal(tFor("zh-TW", "nav.moves"), "招式");
+  assert.equal(tFor("en", "moves.title"), "Move catalog");
+  assert.equal(tFor("zh-TW", "moves.title"), "招式圖鑑");
   assert.equal(tFor("zh-TW", "count.moves", { count: 4 }), "4 個招式");
 });
 

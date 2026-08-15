@@ -53,7 +53,7 @@ export function ensureRenderedRows(container, rowSelector, createChildren, rende
   return rows;
 }
 
-export function moveNameCell(move) {
+export function moveNameCell(move, { showType = true } = {}) {
   const cell = document.createElement("td");
   cell.className = "move-name-cell";
   cell.dataset.label = "Move";
@@ -63,7 +63,7 @@ export function moveNameCell(move) {
 
   const details = document.createElement("span");
   details.className = "move-name-details";
-  if (move.type) details.append(typeBadge(move.type));
+  if (showType && move.type) details.append(typeBadge(move.type));
 
   const priority = Number(move.priority ?? 0);
   if (priority !== 0) {

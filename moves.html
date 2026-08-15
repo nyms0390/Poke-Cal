@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Search the Champions-legal Pokémon move catalog." />
+    <title>PokéCal — Move catalog</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a href="./builder.html">Builder</a>
+          <a href="./speed.html">Speed Tiers</a>
+          <a href="./teams.html">Teams</a>
+          <a class="active" href="./moves.html">Moves</a>
+          <label class="language-switch">
+            <span>Language</span>
+            <select data-language-switch aria-label="Language">
+              <option value="en">English</option>
+              <option value="zh-TW">繁體中文</option>
+            </select>
+          </label>
+        </nav>
+        <p class="eyebrow" data-i18n="moves.eyebrow">PokéCal // Move catalog</p>
+        <h1 data-i18n="moves.title">Move catalog</h1>
+        <p class="intro" data-i18n="moves.intro">
+          Search every Champions-legal move by name, type, category, or move property.
+        </p>
+      </header>
+
+      <section class="calculator moves-tool" aria-label="Move catalog">
+        <p id="moves-source" class="usage-source" data-i18n="moves.source">
+          Champions-legal moves from the Pokémon Showdown catalog
+        </p>
+        <section class="catalog-panel moves-panel" aria-labelledby="moves-heading">
+          <div class="lookup-section-heading">
+            <h2 id="moves-heading" data-i18n="moves.title">Move catalog</h2>
+            <strong id="move-count">—</strong>
+          </div>
+
+          <div class="move-filters">
+            <label>
+              Search moves
+              <input id="move-search" type="search" autocomplete="off" placeholder="Thunderbolt" />
+            </label>
+            <label>
+              Type
+              <select id="move-type">
+                <option value="">All types</option>
+              </select>
+            </label>
+            <label>
+              Category
+              <select id="move-category">
+                <option value="">All categories</option>
+              </select>
+            </label>
+            <label>
+              Move property
+              <select id="move-property">
+                <option value="">All properties</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="move-table-wrap">
+            <table class="move-table">
+              <thead>
+                <tr>
+                  <th scope="col">Move</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Power</th>
+                  <th scope="col">Acc.</th>
+                  <th scope="col">PP</th>
+                  <th scope="col">Effect</th>
+                </tr>
+              </thead>
+              <tbody id="move-list"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <footer>
+        <span id="status">Loading Pokémon data…</span>
+        <span>Champions catalog · Level 50 · 31 IV · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/moves-page.js"></script>
+  </body>
+</html>

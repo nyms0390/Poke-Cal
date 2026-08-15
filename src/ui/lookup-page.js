@@ -1,11 +1,11 @@
 import {
-  filterMoves,
   formatMoveAccuracy,
   formatMovePower,
   formatUsagePercent,
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
+  sortMoves,
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { megaFamily, searchPokemon } from "../data/pokemon.js";
@@ -42,22 +42,8 @@ import {
   searchResultButton,
   textCell,
   typeBadge,
-  updateSelectOptions,
   visibleSearchResults,
 } from "./components.js";
-
-const MOVE_PROPERTY_FLAGS = [
-  "contact",
-  "sound",
-  "punch",
-  "bite",
-  "pulse",
-  "slicing",
-  "bullet",
-  "wind",
-  "dance",
-  "powder",
-];
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
@@ -87,11 +73,8 @@ const elements = {
   itemCount: document.querySelector("#item-count"),
   itemList: document.querySelector("#item-list"),
   moveCount: document.querySelector("#move-count"),
-  moveSearch: document.querySelector("#move-search"),
-  moveType: document.querySelector("#move-type"),
-  moveCategory: document.querySelector("#move-category"),
-  moveProperty: document.querySelector("#move-property"),
   moveList: document.querySelector("#move-list"),
+  moveSortButtons: [...document.querySelectorAll(".move-sort-button")],
   status: document.querySelector("#status"),
 };
 
@@ -104,6 +87,7 @@ let threats = [];
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
+let moveSort = { key: "", direction: "" };
 let catalogs = null;
 let pokemonSearchExpanded = false;
 const activeSetStore = createActiveSetStore(browserStorage());
@@ -116,7 +100,7 @@ onLocaleChange(() => {
   if (catalogs) elements.status.textContent = catalogLoadedStatus(catalogs);
   if (!selectedPokemon) return;
   renderFormOptions();
-  selectForm(selectedPokemon, { syncActive: false });
+  selectForm(selectedPokemon, { syncActive: false, resetMoveSort: false });
 });
 
 async function initialize() {
@@ -163,8 +147,14 @@ elements.form.addEventListener("input", () => {
   if (form) selectForm(form);
 });
 
-for (const control of [elements.moveSearch, elements.moveType, elements.moveCategory, elements.moveProperty]) {
-  control.addEventListener("input", renderMoveList);
+for (const button of elements.moveSortButtons) {
+  button.addEventListener("click", () => {
+    const key = button.dataset.sortKey;
+    moveSort = moveSort.key === key
+      ? { key, direction: moveSort.direction === "ascending" ? "descending" : "ascending" }
+      : { key, direction: "ascending" };
+    renderMoveList();
+  });
 }
 
 function searchOptions() {
@@ -231,6 +221,7 @@ function renderBaseStats(entry) {
 
 function selectForm(entry, options = {}) {
   selectedPokemon = entry;
+  if (options.resetMoveSort !== false) moveSort = { key: "", direction: "" };
   if (options.syncSearch !== false && !elements.search.value) elements.search.value = localizedName(entry);
   renderSelectedSprite(entry);
   elements.selectedName.textContent = localizedName(entry);
@@ -287,7 +278,6 @@ function renderCatalog() {
   renderSpreads();
   renderAbilities(abilities);
   renderItems(rankedItems);
-  renderMoveFilterOptions();
   renderMoveList();
   applyDocumentTranslations();
 }
@@ -592,26 +582,10 @@ function renderItems(items) {
   );
 }
 
-function renderMoveFilterOptions() {
-  updateSelectOptions(elements.moveType, t("label.allTypes"), [
-    ...new Set(selectedMoves.map(({ type }) => type).filter(Boolean)),
-  ], (value) => localizedTerm("type", value));
-  updateSelectOptions(elements.moveCategory, t("label.allCategories"), [
-    ...new Set(selectedMoves.map(({ category }) => category).filter(Boolean)),
-  ], (value) => localizedTerm("category", value));
-  updateSelectOptions(elements.moveProperty, t("label.allMoveProperties"), MOVE_PROPERTY_FLAGS.filter(
-    (flag) => selectedMoves.some((move) => move.flags?.[flag]),
-  ), (value) => t(`moveProperty.${value}`));
-}
-
 function renderMoveList() {
-  const moves = filterMoves(selectedMoves, {
-    query: elements.moveSearch.value,
-    type: elements.moveType.value,
-    category: elements.moveCategory.value,
-    flag: elements.moveProperty.value,
-  });
-  elements.moveCount.textContent = `${moves.length} / ${selectedMoves.length}`;
+  const moves = moveSort.key ? sortMoves(selectedMoves, moveSort) : selectedMoves;
+  elements.moveCount.textContent = String(selectedMoves.length);
+  updateMoveSortButtons();
 
   if (moves.length === 0) {
     const row = document.createElement("tr");
@@ -627,12 +601,28 @@ function renderMoveList() {
   elements.moveList.replaceChildren(...moves.map(renderMoveRow));
 }
 
+function updateMoveSortButtons() {
+  for (const button of elements.moveSortButtons) {
+    const active = moveSort.key === button.dataset.sortKey;
+    const direction = active ? moveSort.direction : "none";
+    const header = button.closest("th");
+    button.setAttribute("aria-sort", direction);
+    button.querySelector(".sort-icon").textContent = direction === "ascending"
+      ? "↑"
+      : direction === "descending" ? "↓" : "↕";
+    header?.setAttribute("aria-sort", direction);
+  }
+}
+
 function renderMoveRow(move) {
   const row = document.createElement("tr");
   const categoryCell = textCell("", "", t("label.category"));
   categoryCell.append(moveCategoryMark(move.category));
+  const typeCell = textCell("", "move-type-cell", t("label.type"));
+  typeCell.append(typeBadge(move.type));
   row.append(
-    moveNameCell(move),
+    moveNameCell(move, { showType: false }),
+    typeCell,
     categoryCell,
     textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),
