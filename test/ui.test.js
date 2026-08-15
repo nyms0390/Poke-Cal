@@ -308,6 +308,21 @@ test("lookup page separates battle profile from build details without a duplicat
   assert.doesNotMatch(html, /id="usage-source"/);
 });
 
+test("lookup page reserves a selected Pokémon icon and renders its sprite", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+
+  assert.match(html, /id="selected-sprite" class="pokemon-card-sprite"/);
+  assert.match(source, /selectedSprite/);
+  assert.match(source, /pokemonSpriteUrls\(entry\)/);
+});
+
+test("lookup selection preserves a non-empty search query", () => {
+  const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+
+  assert.match(source, /if \(options\.syncSearch !== false && !elements\.search\.value\) elements\.search\.value = localizedName\(entry\);/);
+});
+
 test("lookup move table omits the Champions usage column", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
