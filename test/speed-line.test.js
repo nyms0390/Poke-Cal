@@ -217,7 +217,8 @@ test("adds Mega forms for popular Pokémon without consuming popularity slots", 
   const gmax = { ...pokemon("charizardgmax", "Charizard-Gmax", 100), baseSpecies: "Charizard" };
   const popular = [
     { pokemon: charizard, likelyPresetLabel: "max (neutral 32)" },
-    ...Array.from({ length: 9 }, (_, index) => ({
+    { pokemon: megaY, likelyPresetLabel: "min (-spe 0)" },
+    ...Array.from({ length: 8 }, (_, index) => ({
       pokemon: pokemon(`popular-${index + 2}`, `Popular ${index + 2}`, 100 - index),
     })),
   ];
@@ -235,8 +236,11 @@ test("adds Mega forms for popular Pokémon without consuming popularity slots", 
   ]);
   assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardgmax"), undefined);
   assert.equal(pool.filter(({ pokemon: entry }) => entry.id === "charizardmegax").length, 1);
-  assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardmegay").likelyPresetLabel, "max (neutral 32)");
-  assert.equal(pool.length, 13);
+  assert.equal(pool.filter(({ pokemon: entry }) => entry.id === "charizardmegay").length, 1);
+  assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardmegax").likelyPresetLabel, "max (neutral 32)");
+  assert.equal(pool.find(({ pokemon: entry }) => entry.id === "charizardmegay").likelyPresetLabel, "min (-spe 0)");
+  assert.equal(pool.length, 12);
+  assert.equal(popular.length, 10);
   assert.equal(manual.length, 2);
 
   const megaEntry = speedTiers(user, [{ pokemon: megaX }], { mode: "base" })

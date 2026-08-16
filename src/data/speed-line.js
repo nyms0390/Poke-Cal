@@ -17,9 +17,18 @@ export function popularOpponentPool(
   { excludePokemonId = "" } = {},
 ) {
   const limit = [10, 20, 30, 40, 50].includes(Number(count)) ? Number(count) : 10;
-  const popular = popularOpponents.slice(0, limit).flatMap((opponent) =>
+  const selectedPopular = popularOpponents.slice(0, limit);
+  const rankedByPokemonId = new Map(
+    selectedPopular.map((opponent) => [opponent.pokemon.id, opponent]),
+  );
+  const seenPokemonIds = new Set();
+  const popular = selectedPopular.flatMap((opponent) =>
     (pokemonCatalog.length > 0 ? megaFamily(pokemonCatalog, opponent.pokemon) : [opponent.pokemon])
-      .map((pokemon) => ({ ...opponent, pokemon })))
+      .flatMap((pokemon) => {
+        if (seenPokemonIds.has(pokemon.id)) return [];
+        seenPokemonIds.add(pokemon.id);
+        return [{ ...(rankedByPokemonId.get(pokemon.id) ?? opponent), pokemon }];
+      }))
     .filter(({ pokemon }) => pokemon.id !== excludePokemonId);
   const popularIds = new Set(popular.map(({ pokemon }) => pokemon.id));
   return [
