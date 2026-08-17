@@ -20,6 +20,12 @@ import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
 import { createDeferredUpdater, createLiveUpdater } from "../src/ui/live-update.js";
 import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "../src/ui/battle-results.js";
 
+test("battle status selectors include the Soaked condition", () => {
+  const html = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
+  assert.match(html, /<select id="attacker-status">[\s\S]*<option value="soak">Soaked<\/option>/);
+  assert.match(html, /<select id="defender-status">[\s\S]*<option value="soak">Soaked<\/option>/);
+});
+
 test("commits each live state change before rendering exactly once", () => {
   let state = { count: 0 };
   const renders = [];

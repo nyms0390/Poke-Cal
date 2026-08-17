@@ -83,6 +83,106 @@ test("calculates STAB, type effectiveness, immunity, burn, crit, and roll ranges
   assert.equal(critical.maxDamage > normal.maxDamage, true);
 });
 
+test("Soaked uses pure Water typing for defender effectiveness and attacker STAB", () => {
+  const waterMove = { id: "waterpulse", name: "Water Pulse", type: "Water", category: "Special", basePower: 60 };
+  const fireGroundDefender = { ...squirtle, types: ["Fire", "Ground"] };
+  const electricMove = { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 };
+  const soakedDefender = calculateDamage({
+    attacker: pikachu,
+    defender: fireGroundDefender,
+    move: electricMove,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, soaked: true },
+  });
+  assert.equal(soakedDefender.typeMultiplier, 2);
+
+  const fireAttacker = { ...pikachu, types: ["Fire"] };
+  const soakedAttacker = calculateDamage({
+    attacker: fireAttacker,
+    defender: squirtle,
+    move: waterMove,
+    attackerState: { ...neutralState, soaked: true },
+    defenderState: neutralState,
+  });
+  const explicitWaterAttacker = calculateDamage({
+    attacker: { ...fireAttacker, types: ["Water"] },
+    defender: squirtle,
+    move: waterMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  assert.deepEqual([soakedAttacker.minDamage, soakedAttacker.maxDamage], [explicitWaterAttacker.minDamage, explicitWaterAttacker.maxDamage]);
+});
+
+test("Soaked does not count as a major status and Tera typing stays authoritative", () => {
+  const hex = { id: "hex", name: "Hex", type: "Ghost", category: "Special", basePower: 65 };
+  const healthy = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: hex,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const soaked = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: hex,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, soaked: true },
+  });
+  assert.deepEqual([soaked.minDamage, soaked.maxDamage], [healthy.minDamage, healthy.maxDamage]);
+
+  const teraGround = calculateDamage({
+    attacker: pikachu,
+    defender: fireGroundDefenderForSoakTest(),
+    move: { id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90 },
+    attackerState: neutralState,
+    defenderState: { ...neutralState, soaked: true, teraType: "Ground" },
+  });
+  assert.equal(teraGround.typeMultiplier, 0);
+});
+
+test("Soaked effective typing feeds type-aware ability immunity and Sandstorm Rock SpD", () => {
+  const groundMove = { id: "earthquake", name: "Earthquake", type: "Ground", category: "Physical", basePower: 100 };
+  const levitatingFlying = {
+    ...squirtle,
+    types: ["Flying", "Fire"],
+  };
+  const levitateSoaked = calculateDamage({
+    attacker: pikachu,
+    defender: levitatingFlying,
+    move: groundMove,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, soaked: true, ability: { id: "levitate", name: "Levitate" } },
+  });
+  assert.equal(levitateSoaked.typeMultiplier, 0);
+  assert.ok(levitateSoaked.notes.includes("Immune (ability)"));
+
+  const iceMove = { id: "icebeam", name: "Ice Beam", type: "Ice", category: "Special", basePower: 90 };
+  const rockWater = { ...squirtle, types: ["Rock", "Water"] };
+  const soakedRock = calculateDamage({
+    attacker: pikachu,
+    defender: rockWater,
+    move: iceMove,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, soaked: true },
+    field: createField({ weather: "Sandstorm" }),
+  });
+  const pureWater = calculateDamage({
+    attacker: pikachu,
+    defender: { ...rockWater, types: ["Water"] },
+    move: iceMove,
+    attackerState: neutralState,
+    defenderState: neutralState,
+    field: createField({ weather: "Sandstorm" }),
+  });
+  assert.deepEqual([soakedRock.minDamage, soakedRock.maxDamage], [pureWater.minDamage, pureWater.maxDamage]);
+});
+
+function fireGroundDefenderForSoakTest() {
+  return { ...squirtle, types: ["Fire", "Ground"] };
+}
+
 test("doubles target-status move power only for the required status", () => {
   const attacker = {
     id: "statususer",

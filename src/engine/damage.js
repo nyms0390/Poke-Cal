@@ -161,7 +161,7 @@ export function calculateDamage({
   ctx.attackerMaxHp = attackerMaxHp;
   const moveId = normalizeId(move.id ?? move.name);
   const alwaysCritical = moveEffect(moveId).alwaysCrit === true;
-  const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderState, suppressDefenderAbility });
+  const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility });
   const teraShell = teraShellTypeMultiplier(rawTypeMultiplier, defenderState, suppressDefenderAbility);
   const typeMultiplier = abilityImmunity ? 0 : teraShell ?? rawTypeMultiplier;
   ctx.typeMultiplier = typeMultiplier;
@@ -276,7 +276,7 @@ export function calculateDamage({
     ignoreStage: move.ignoreDefensive || attackerHasUnaware,
     stagePolicy: criticalStagePolicy("defense", effectiveCritical),
   });
-  const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField);
+  const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField, defenderTypes);
   const defense = sandstormSpDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
   const notes = [
     ...fieldNotes(effectiveField, attackerState, defenderState),
@@ -432,12 +432,12 @@ export function calculateDamage({
   };
 }
 
-function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderState, suppressDefenderAbility }) {
+function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility }) {
   if (suppressDefenderAbility) return null;
   const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
   const abilityName = defenderState.ability?.name ?? defenderState.ability?.id;
   const moveId = normalizeId(move?.id ?? move?.name);
-  const types = defenderState.teraType ? [defenderState.teraType] : defender?.types ?? [];
+  const types = defenderTypes ?? (defenderState.teraType ? [defenderState.teraType] : defender?.types ?? []);
   if (abilityId === "levitate" && moveType === "Ground" && defenderState.grounded !== true && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
     return { label: abilityName };
   }
@@ -520,6 +520,7 @@ function stabMultiplier(attackerTypes, attackerState, moveType) {
 }
 
 function effectivePokemonTypes(pokemon, state, field, suppressAbility) {
+  if (state?.soaked) return ["Water"];
   if (!suppressAbility && hasAbility(state, "forecast")) {
     const forecastType = forecastTypeForWeather(field.weather);
     if (forecastType) return [forecastType];
@@ -562,9 +563,9 @@ function fieldNotes(field, attackerState, defenderState) {
   return notes;
 }
 
-function hasSandstormSpDefenseBoost(pokemon, state, stat, field) {
+function hasSandstormSpDefenseBoost(pokemon, state, stat, field, effectiveTypes = null) {
   if (stat !== "spd" || normalizeId(field.weather) !== "sandstorm") return false;
-  const types = state.teraType ? [state.teraType] : pokemon.types ?? [];
+  const types = effectiveTypes ?? (state.teraType ? [state.teraType] : pokemon.types ?? []);
   return types.includes("Rock");
 }
 

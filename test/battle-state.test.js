@@ -75,6 +75,7 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.deepEqual(state.ability, usageDefaults.ability);
   assert.deepEqual(state.item, usageDefaults.item);
   assert.equal(state.status, "");
+  assert.equal(state.soaked, false);
   assert.equal(state.currentHpFraction, 1);
   assert.deepEqual(state.selectedMoveIds, ["thunderbolt", "voltswitch", "protect", "nastyplot"]);
   assert.deepEqual(state.selectedHitCounts, [null, null, null, null]);
@@ -197,6 +198,17 @@ test("applyControl updates nature, speed multiplier, and status", () => {
   assert.equal(applyControl(state, { kind: "speedMultiplier", value: "1.5" }).speedMultiplier, 1.5);
   assert.equal(applyControl(state, { kind: "status", value: "paralysis" }).status, "paralysis");
   assert.equal(applyControl(state, { kind: "status", value: "burn" }).status, "burn");
+});
+
+test("applyControl stores Soaked separately from major status", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const soaked = applyControl(state, { kind: "status", value: "soak" });
+  assert.equal(soaked.status, "");
+  assert.equal(soaked.soaked, true);
+
+  const major = applyControl(soaked, { kind: "status", value: "burn" });
+  assert.equal(major.status, "burn");
+  assert.equal(major.soaked, false);
 });
 
 test("applyControl clamps current HP as a fraction of the supplied maximum", () => {

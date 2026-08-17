@@ -23,7 +23,7 @@ const TERMS = {
   },
   category: { Physical: "物理", Special: "特殊", Status: "變化" },
   stat: { HP: "HP", Atk: "攻擊", Def: "防禦", SpA: "特攻", SpD: "特防", Spe: "速度", Attack: "攻擊", Defense: "防禦", "Sp. Atk": "特攻", "Sp. Def": "特防", Speed: "速度" },
-  status: { Healthy: "正常", Burned: "灼傷", Poisoned: "中毒", "Badly Poisoned": "劇毒", Paralyzed: "麻痺", Asleep: "睡眠", Frozen: "冰凍" },
+  status: { Healthy: "正常", Burned: "灼傷", Poisoned: "中毒", "Badly Poisoned": "劇毒", Paralyzed: "麻痺", Asleep: "睡眠", Frozen: "冰凍", Soaked: "浸水" },
   nature: {
     Hardy: "勤奮", Lonely: "怕寂寞", Brave: "勇敢", Adamant: "固執", Naughty: "頑皮",
     Bold: "大膽", Docile: "坦率", Relaxed: "悠閒", Impish: "淘氣", Lax: "樂天",

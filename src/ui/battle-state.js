@@ -78,6 +78,7 @@ export function createSideState(pokemon, usageDefaults) {
     ability: usageDefaults.ability,
     item: usageDefaults.item,
     status: "",
+    soaked: false,
     currentHpFraction: 1,
     selectedMoveIds: [0, 1, 2, 3].map((index) => normalizeId(usageDefaults.moves[index]?.id)),
     selectedHitCounts: [null, null, null, null],
@@ -116,7 +117,9 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
     case "speedMultiplier":
       return { ...state, speedMultiplier: Number(value) };
     case "status":
-      return { ...state, status: value };
+      return value === "soak"
+        ? { ...state, status: "", soaked: true }
+        : { ...state, status: value, soaked: false };
     case "currentHpFraction":
       return { ...state, currentHpFraction: clampCurrentHpFraction(value, maxHp) };
     case "allyPlusMinus":

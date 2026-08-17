@@ -318,6 +318,7 @@ export const STATIC_ZH_TW = {
   "Paralyzed": "麻痺",
   "Asleep": "睡眠",
   "Frozen": "冰凍",
+  "Soaked": "浸水",
   "Current HP": "目前 HP",
   "Current HP %": "目前 HP %",
   "Speed modifier": "速度修正",

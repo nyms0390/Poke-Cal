@@ -391,7 +391,10 @@ function seedDamageSide(side, entry, { activeSet = null } = {}) {
   let state = createSideState(entry, defaults);
   if (activeSet) state = applyActiveSet(state, activeSet, { abilityLookup, itemLookup });
   state.speedMultiplier = existingState ? Number(elements[`${side}SpeedMultiplier`]?.value ?? 1) : 1;
-  state.status = existingState ? elements[`${side}Status`]?.value ?? "" : "";
+  state = applyControl(state, {
+    kind: "status",
+    value: existingState ? elements[`${side}Status`]?.value ?? "" : "",
+  });
   writeActiveTeamState(side, state, { activeFallback: activeSet ?? defaultActiveSet });
   renderActiveTeamSlot(side);
   applyAbilityImpliedField(damageState[side].ability);
@@ -635,7 +638,7 @@ function syncSideInputs(side) {
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
   elements[`${side}SpeedMultiplier`].value = String(state.speedMultiplier);
-  elements[`${side}Status`].value = state.status;
+  elements[`${side}Status`].value = state.soaked ? "soak" : state.status;
   syncCurrentHpInputs(side);
   for (const input of elements[`${side}StatEditor`].querySelectorAll('input[data-kind="sp"]')) {
     input.value = state.sp[input.dataset.stat] ?? 0;

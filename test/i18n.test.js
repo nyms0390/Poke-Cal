@@ -59,6 +59,7 @@ test("localizes catalog names without changing their stable identifiers", () => 
 test("localizes domain terms and locale-sensitive numbers", () => {
   assert.equal(localizedTerm("type", "Electric", "zh-TW"), "電");
   assert.equal(localizedTerm("category", "Special", "zh-TW"), "特殊");
+  assert.equal(localizedTerm("status", "Soaked", "zh-TW"), "浸水");
   assert.equal(localizedTerm("nature", "Adamant", "zh-TW"), "固執");
   assert.equal(formatNumber(12345, "en"), "12,345");
   assert.equal(formatNumber(12345, "zh-TW"), "12,345");
