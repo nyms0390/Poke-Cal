@@ -46,6 +46,14 @@ const weatherBall = {
   basePower: 50,
   target: "normal",
 };
+const fireMove = {
+  id: "flamethrower",
+  name: "Flamethrower",
+  type: "Fire",
+  category: "Special",
+  basePower: 90,
+  target: "normal",
+};
 
 function threat(item = null) {
   return {
@@ -77,6 +85,15 @@ test("wraps the damage engine with the builder Pokémon on the attacker side", (
   assert.equal(Number.isFinite(result.minPct), true);
   assert.equal(result.maxPct >= result.minPct, true);
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
+});
+
+test("passes a Soaked threat into the damage engine as a Water defender", () => {
+  const neutral = yourDamage(userState(), fireMove, { threat: threat() });
+  const soaked = yourDamage(userState(), fireMove, {
+    threat: { ...threat(), status: "", soaked: true },
+  });
+
+  assert.equal(soaked.maxPct < neutral.maxPct, true);
 });
 
 test("ranks moves within each Pokémon by maximum damage percentage", () => {

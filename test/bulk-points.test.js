@@ -43,6 +43,14 @@ const specialMove = {
   basePower: 100,
   target: "normal",
 };
+const waterMove = {
+  id: "waterpulse",
+  name: "Water Pulse",
+  type: "Water",
+  category: "Special",
+  basePower: 60,
+  target: "normal",
+};
 const ohkoMove = {
   ...physicalMove,
   id: "giga-impact",
@@ -381,6 +389,16 @@ test("wraps the damage engine with the threat on the attacker side", () => {
   assert.equal(Number.isFinite(result.minPct), true);
   assert.equal(result.maxPct >= result.minPct, true);
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
+});
+
+test("passes a Soaked threat into the damage engine as a Water attacker", () => {
+  const neutral = threatDamage(userState(), { threat: { ...threat, moves: [waterMove] }, move: waterMove });
+  const soaked = threatDamage(userState(), {
+    threat: { ...threat, moves: [waterMove], status: "", soaked: true },
+    move: waterMove,
+  });
+
+  assert.equal(soaked.maxPct > neutral.maxPct, true);
 });
 
 test("more HP and relevant defense SP never increases incoming damage percent", () => {

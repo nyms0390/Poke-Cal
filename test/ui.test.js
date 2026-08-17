@@ -29,6 +29,29 @@ test("battle status selectors include the Soaked condition", () => {
   }
 });
 
+test("builder exposes the same user and threat status controls as Battle", () => {
+  const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/builder-page.js", import.meta.url), "utf8");
+  const select = html.match(/<select id="builder-status">[\s\S]*?<\/select>/)?.[0] ?? "";
+
+  assert.ok(select, "builder user status selector exists");
+  assert.deepEqual(
+    [...select.matchAll(/<option value="([^"]*)">([^<]+)<\/option>/g)].map(([, value, label]) => [value, label]),
+    [
+      ["", "Healthy"],
+      ["burn", "Burned"],
+      ["poison", "Poisoned"],
+      ["toxic", "Badly Poisoned"],
+      ["paralysis", "Paralyzed"],
+      ["sleep", "Asleep"],
+      ["freeze", "Frozen"],
+      ["soak", "Soaked"],
+    ],
+  );
+  assert.match(source, /threatSelect\("Status"/);
+  assert.match(source, /threat\.soaked \? "soak" : threat\.status/);
+});
+
 test("commits each live state change before rendering exactly once", () => {
   let state = { count: 0 };
   const renders = [];

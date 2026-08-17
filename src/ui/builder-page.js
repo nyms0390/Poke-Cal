@@ -77,6 +77,7 @@ const elements = {
   nature: document.querySelector("#builder-nature"),
   ability: document.querySelector("#builder-ability"),
   item: document.querySelector("#builder-item"),
+  userStatus: document.querySelector("#builder-status"),
   stats: document.querySelector("#builder-stats"),
   spBudget: document.querySelector("#builder-sp-budget"),
   applySpread: document.querySelector("#builder-apply-spread"),
@@ -100,6 +101,17 @@ const elements = {
   breakPoints: document.querySelector("#break-points"),
   status: document.querySelector("#status"),
 };
+
+const STATUS_OPTIONS = [
+  ["", "Healthy"],
+  ["burn", "Burned"],
+  ["poison", "Poisoned"],
+  ["toxic", "Badly Poisoned"],
+  ["paralysis", "Paralyzed"],
+  ["sleep", "Asleep"],
+  ["freeze", "Frozen"],
+  ["soak", "Soaked"],
+];
 
 let catalogs = null;
 let state = createBuilderState();
@@ -163,7 +175,7 @@ async function initialize() {
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
 
-  for (const control of [elements.nature, elements.ability, elements.item]) {
+  for (const control of [elements.nature, elements.ability, elements.item, elements.userStatus]) {
     control.addEventListener("input", handlePick);
   }
   elements.stats.addEventListener("input", handleSetupInput);
@@ -308,6 +320,8 @@ function renderPicks() {
   elements.nature.value = setup.nature;
   elements.ability.value = setup.ability?.id ?? "";
   elements.item.value = setup.item?.id ?? "";
+  elements.userStatus.replaceChildren(...statusOptions().map(({ value, label }) => optionElement(value, label)));
+  elements.userStatus.value = setup.soaked ? "soak" : setup.status;
   renderMovePicks();
 }
 
@@ -327,6 +341,7 @@ function handlePick(event) {
       value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
     });
   }
+  if (id === "builder-status") stageUserSetup({ kind: "status", value });
 }
 
 function handleSetupInput(event) {
@@ -421,6 +436,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.nature.value = displayedSetup.nature;
   elements.ability.value = displayedSetup.ability?.id ?? "";
   elements.item.value = displayedSetup.item?.id ?? "";
+  elements.userStatus.value = displayedSetup.soaked ? "soak" : displayedSetup.status;
   elements.threatCount.value = String(state.threatCount);
   ambientFieldControls.sync(state.field);
   elements.summary.textContent = t("builder.summary", {
@@ -739,6 +755,7 @@ function bulkCoverageSignature(user, threats, field) {
       item: normalizeId(user.item?.id ?? user.item?.name),
       teraType: user.teraType,
       status: user.status,
+      soaked: user.soaked,
       stages: user.stages,
       offenseSp: {
         atk: user.sp.atk,
@@ -760,6 +777,8 @@ function bulkCoverageSignature(user, threats, field) {
       ability: normalizeId(threat.ability?.id ?? threat.ability?.name),
       item: normalizeId(threat.item?.id ?? threat.item?.name),
       teraType: threat.teraType,
+      status: threat.status,
+      soaked: threat.soaked,
       spPresets: threat.spPresets,
       moves: threat.moves.slice(0, 2).map((move) => normalizeId(move.id ?? move.name)),
     })),
@@ -1184,6 +1203,9 @@ function threatBuildEditor(threat, cardKey) {
         value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
       },
     )),
+    threatSelect("Status", statusOptions(), threat.soaked ? "soak" : threat.status, (value) => stageThreatControl(
+      { kind: "status", value },
+    )),
   );
 
   const spread = document.createElement("fieldset");
@@ -1244,6 +1266,13 @@ function threatSelect(labelText, options, selectedValue, onChange) {
   select.addEventListener("input", () => onChange(select.value));
   label.append(select);
   return label;
+}
+
+function statusOptions() {
+  return STATUS_OPTIONS.map(([value, label]) => ({
+    value,
+    label: localizedTerm("status", label),
+  }));
 }
 
 function commitThreatBuild(threat, { cardKey, focusKey }) {

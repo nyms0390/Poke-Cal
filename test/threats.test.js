@@ -35,6 +35,8 @@ test("builds deterministic top-usage threats from Champions defaults", () => {
   assert.equal(threats[0].ability.name, "Pressure");
   assert.equal(threats[0].item.name, "Life Orb");
   assert.equal(threats[0].teraType, "");
+  assert.equal(threats[0].status, "");
+  assert.equal(threats[0].soaked, false);
   assert.deepEqual(threats[0].moves.map(({ id }) => id), [
     "quickattack",
     "tackle",
@@ -113,6 +115,8 @@ test("builds a usable custom threat without per-Pokémon usage data", () => {
   assert.equal(threat.nature, "Hardy");
   assert.equal(threat.ability.name, "Pressure");
   assert.equal(threat.item, null);
+  assert.equal(threat.status, "");
+  assert.equal(threat.soaked, false);
   assert.deepEqual(threat.moves.map(({ id }) => id), ["surf", "tackle"]);
   assert.deepEqual(threat.spPresets.offense, { atk: 32, spa: 32 });
   assert.deepEqual(threat.spPresets.bulk, { hp: 2, def: 0, spd: 0 });

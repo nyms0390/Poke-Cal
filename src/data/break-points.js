@@ -100,7 +100,8 @@ function threatState(threat) {
     ability: threat.ability ?? null,
     item: threat.item ?? null,
     teraType: threat.teraType ?? "",
-    status: "",
+    status: threat.status ?? "",
+    soaked: threat.soaked ?? false,
     currentHpFraction: 1,
     iceFaceIntact: true,
   };

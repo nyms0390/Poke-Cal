@@ -114,6 +114,8 @@ export function threatForPokemon(
     item: usage ? defaults.item : null,
     ability: defaults.ability,
     teraType: "",
+    status: "",
+    soaked: false,
     moves: threatMoves(usage?.moves?.length ? usage.moves : defaults.moves, moveLookup),
     spPresets: {
       offense: { atk: 32, spa: 32 },

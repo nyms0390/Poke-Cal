@@ -116,6 +116,20 @@ test("applies editable threat build controls immutably", () => {
   assert.equal(threat.moves[1].id, "airslash");
 });
 
+test("applies editable threat status controls with Soaked semantics immutably", () => {
+  const soaked = applyThreatControl(threat, { kind: "status", value: "soak" });
+  assert.equal(soaked.status, "");
+  assert.equal(soaked.soaked, true);
+  assert.equal(threat.status, undefined);
+  assert.equal(threat.soaked, undefined);
+
+  const burned = applyThreatControl(soaked, { kind: "status", value: "burn" });
+  assert.equal(burned.status, "burn");
+  assert.equal(burned.soaked, false);
+  assert.equal(soaked.status, "");
+  assert.equal(soaked.soaked, true);
+});
+
 test("ignores unsupported threat build controls and stat keys", () => {
   assert.equal(applyThreatControl(threat, { kind: "unknown", value: true }), threat);
   assert.equal(applyThreatControl(threat, { kind: "sp", stat: "spe", value: 32 }), threat);
