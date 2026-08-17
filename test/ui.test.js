@@ -22,8 +22,11 @@ import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "../src/ui/b
 
 test("battle status selectors include the Soaked condition", () => {
   const html = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
-  assert.match(html, /<select id="attacker-status">[\s\S]*<option value="soak">Soaked<\/option>/);
-  assert.match(html, /<select id="defender-status">[\s\S]*<option value="soak">Soaked<\/option>/);
+  for (const side of ["attacker", "defender"]) {
+    const select = html.match(new RegExp(`<select id="${side}-status">[\\s\\S]*?<\\/select>`))?.[0] ?? "";
+    assert.ok(select, `${side} status selector exists`);
+    assert.match(select, /<option value="soak">Soaked<\/option>/);
+  }
 });
 
 test("commits each live state change before rendering exactly once", () => {
