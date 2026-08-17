@@ -48,7 +48,21 @@ test("builder exposes the same user and threat status controls as Battle", () =>
       ["soak", "Soaked"],
     ],
   );
-  assert.match(source, /threatSelect\("Status"/);
+  const statusOptions = source.match(/const STATUS_OPTIONS = \[([\s\S]*?)\];/)?.[1] ?? "";
+  assert.deepEqual(
+    [...statusOptions.matchAll(/\["([^"]*)", "([^"]+)"\]/g)].map(([, value, label]) => [value, label]),
+    [
+      ["", "Healthy"],
+      ["burn", "Burned"],
+      ["poison", "Poisoned"],
+      ["toxic", "Badly Poisoned"],
+      ["paralysis", "Paralyzed"],
+      ["sleep", "Asleep"],
+      ["freeze", "Frozen"],
+      ["soak", "Soaked"],
+    ],
+  );
+  assert.match(source, /threatSelect\("Status", statusOptions\(\),/);
   assert.match(source, /threat\.soaked \? "soak" : threat\.status/);
 });
 
