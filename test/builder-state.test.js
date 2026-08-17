@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
   canApplySpTargets,
@@ -61,6 +62,7 @@ test("creates an empty builder with the default threat count", () => {
       gravity: false,
     },
     threatCount: 20,
+    threatStatus: "",
     analysisTab: "bulk",
     analysisSort: "breakpoint",
   });
@@ -116,18 +118,28 @@ test("applies editable threat build controls immutably", () => {
   assert.equal(threat.moves[1].id, "airslash");
 });
 
-test("applies editable threat status controls with Soaked semantics immutably", () => {
-  const soaked = applyThreatControl(threat, { kind: "status", value: "soak" });
-  assert.equal(soaked.status, "");
-  assert.equal(soaked.soaked, true);
+test("applies one global threat status to every threat immutably", () => {
+  const secondThreat = { ...threat, pokemon: { id: "blastoise", name: "Blastoise" } };
+  const threats = [threat, secondThreat];
+  const soaked = applyGlobalThreatStatus(threats, "soak");
+
+  assert.deepEqual(soaked.map(({ status, soaked: isSoaked }) => [status, isSoaked]), [
+    ["", true],
+    ["", true],
+  ]);
+  assert.notEqual(soaked[0], threat);
   assert.equal(threat.status, undefined);
   assert.equal(threat.soaked, undefined);
 
-  const burned = applyThreatControl(soaked, { kind: "status", value: "burn" });
-  assert.equal(burned.status, "burn");
-  assert.equal(burned.soaked, false);
-  assert.equal(soaked.status, "");
-  assert.equal(soaked.soaked, true);
+  const burned = applyGlobalThreatStatus(soaked, "burn");
+  assert.deepEqual(burned.map(({ status, soaked: isSoaked }) => [status, isSoaked]), [
+    ["burn", false],
+    ["burn", false],
+  ]);
+  assert.deepEqual(soaked.map(({ status, soaked: isSoaked }) => [status, isSoaked]), [
+    ["", true],
+    ["", true],
+  ]);
 });
 
 test("ignores unsupported threat build controls and stat keys", () => {
@@ -139,6 +151,7 @@ test("ignores unsupported threat build controls and stat keys", () => {
 test("creates one canonical side state without activating the usage-backed Tera type", () => {
   const state = createBuilderState(pikachu, usageDefaults, {
     threatCount: 12,
+    threatStatus: "soak",
     analysisTab: "break",
     analysisSort: "default",
     field: { weather: "SunnyDay", gravity: true },
@@ -155,6 +168,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
     "nastyplot",
   ]);
   assert.equal(state.threatCount, 12);
+  assert.equal(state.threatStatus, "soak");
   assert.equal(state.analysisTab, "break");
   assert.equal(state.analysisSort, "default");
   assert.deepEqual(state.field, {

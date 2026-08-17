@@ -311,6 +311,7 @@ export const STATIC_ZH_TW = {
   "Ability": "特性",
   "Item": "道具",
   "Status": "狀態",
+  "Threat status": "對手狀態",
   "Healthy": "正常",
   "Burned": "灼傷",
   "Poisoned": "中毒",

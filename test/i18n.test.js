@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { EN_MESSAGES } from "../src/locales/en.js";
-import { ZH_TW_MESSAGES } from "../src/locales/zh-tw.js";
+import { STATIC_ZH_TW, ZH_TW_MESSAGES } from "../src/locales/zh-tw.js";
 import {
   formatNumber,
   localizedName,
@@ -60,6 +60,7 @@ test("localizes domain terms and locale-sensitive numbers", () => {
   assert.equal(localizedTerm("type", "Electric", "zh-TW"), "電");
   assert.equal(localizedTerm("category", "Special", "zh-TW"), "特殊");
   assert.equal(localizedTerm("status", "Soaked", "zh-TW"), "浸水");
+  assert.equal(STATIC_ZH_TW["Threat status"], "對手狀態");
   assert.equal(localizedTerm("nature", "Adamant", "zh-TW"), "固執");
   assert.equal(formatNumber(12345, "en"), "12,345");
   assert.equal(formatNumber(12345, "zh-TW"), "12,345");

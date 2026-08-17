@@ -44,6 +44,7 @@ import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
+  applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
   canApplySpTargets,
@@ -84,6 +85,7 @@ const elements = {
   movePicks: document.querySelector("#builder-move-picks"),
   ambientField: document.querySelector("#builder-ambient-field"),
   threatCount: document.querySelector("#builder-threat-count"),
+  threatStatus: document.querySelector("#builder-threat-status"),
   threatSearch: document.querySelector("#builder-threat-search"),
   threatResults: document.querySelector("#builder-threat-results"),
   threatSummary: document.querySelector("#builder-threat-summary"),
@@ -181,6 +183,7 @@ async function initialize() {
   elements.stats.addEventListener("input", handleSetupInput);
   elements.applySpread.addEventListener("click", applyUserSetup);
   elements.threatCount.addEventListener("input", handleThreatCount);
+  elements.threatStatus.addEventListener("input", handleThreatStatus);
 
   const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
   const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
@@ -283,6 +286,7 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
   updatePage(() => {
     state = createBuilderState(pokemon, defaults, {
       threatCount: state.threatCount,
+      threatStatus: state.threatStatus,
       analysisTab: state.analysisTab,
       analysisSort: state.analysisSort,
       field: state.field,
@@ -388,6 +392,12 @@ function handleThreatCount(event) {
   event.target.value = String(threatCount);
 }
 
+function handleThreatStatus(event) {
+  updatePage(() => {
+    state = { ...state, threatStatus: event.target.value };
+  });
+}
+
 function handleAmbientFieldControl(control) {
   updatePage(() => {
     state = {
@@ -438,6 +448,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.item.value = displayedSetup.item?.id ?? "";
   elements.userStatus.value = displayedSetup.soaked ? "soak" : displayedSetup.status;
   elements.threatCount.value = String(state.threatCount);
+  elements.threatStatus.value = state.threatStatus;
   ambientFieldControls.sync(state.field);
   elements.summary.textContent = t("builder.summary", {
     nature: localizedTerm("nature", user.nature),
@@ -614,8 +625,9 @@ function selectedThreats() {
     items: catalogs.items,
     moveLookup: catalogs.moveLookup,
   });
-  return mergeThreatLists(popularThreats, customThreats).map((threat) =>
+  const threats = mergeThreatLists(popularThreats, customThreats).map((threat) =>
     threatOverrides.get(normalizeId(threat.pokemon.id)) ?? threat);
+  return applyGlobalThreatStatus(threats, state.threatStatus);
 }
 
 function renderCustomThreats() {
@@ -1202,9 +1214,6 @@ function threatBuildEditor(threat, cardKey) {
         kind: "item",
         value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
       },
-    )),
-    threatSelect("Status", statusOptions(), threat.soaked ? "soak" : threat.status, (value) => stageThreatControl(
-      { kind: "status", value },
     )),
   );
 

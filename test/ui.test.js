@@ -29,41 +29,36 @@ test("battle status selectors include the Soaked condition", () => {
   }
 });
 
-test("builder exposes the same user and threat status controls as Battle", () => {
+test("builder exposes user and global threat status controls without per-threat editing", () => {
   const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/builder-page.js", import.meta.url), "utf8");
-  const select = html.match(/<select id="builder-status">[\s\S]*?<\/select>/)?.[0] ?? "";
+  const expectedOptions = [
+    ["", "Healthy"],
+    ["burn", "Burned"],
+    ["poison", "Poisoned"],
+    ["toxic", "Badly Poisoned"],
+    ["paralysis", "Paralyzed"],
+    ["sleep", "Asleep"],
+    ["freeze", "Frozen"],
+    ["soak", "Soaked"],
+  ];
 
-  assert.ok(select, "builder user status selector exists");
-  assert.deepEqual(
-    [...select.matchAll(/<option value="([^"]*)">([^<]+)<\/option>/g)].map(([, value, label]) => [value, label]),
-    [
-      ["", "Healthy"],
-      ["burn", "Burned"],
-      ["poison", "Poisoned"],
-      ["toxic", "Badly Poisoned"],
-      ["paralysis", "Paralyzed"],
-      ["sleep", "Asleep"],
-      ["freeze", "Frozen"],
-      ["soak", "Soaked"],
-    ],
-  );
+  for (const id of ["builder-status", "builder-threat-status"]) {
+    const select = html.match(new RegExp(`<select id="${id}">[\\s\\S]*?<\\/select>`))?.[0] ?? "";
+    assert.ok(select, `${id} exists`);
+    assert.deepEqual(
+      [...select.matchAll(/<option value="([^"]*)">([^<]+)<\/option>/g)]
+        .map(([, value, label]) => [value, label]),
+      expectedOptions,
+    );
+  }
   const statusOptions = source.match(/const STATUS_OPTIONS = \[([\s\S]*?)\];/)?.[1] ?? "";
   assert.deepEqual(
     [...statusOptions.matchAll(/\["([^"]*)", "([^"]+)"\]/g)].map(([, value, label]) => [value, label]),
-    [
-      ["", "Healthy"],
-      ["burn", "Burned"],
-      ["poison", "Poisoned"],
-      ["toxic", "Badly Poisoned"],
-      ["paralysis", "Paralyzed"],
-      ["sleep", "Asleep"],
-      ["freeze", "Frozen"],
-      ["soak", "Soaked"],
-    ],
+    expectedOptions,
   );
-  assert.match(source, /threatSelect\("Status", statusOptions\(\),/);
-  assert.match(source, /threat\.soaked \? "soak" : threat\.status/);
+  assert.doesNotMatch(source, /threatSelect\("Status"/);
+  assert.match(source, /applyGlobalThreatStatus\(threats, state\.threatStatus\)/);
 });
 
 test("commits each live state change before rendering exactly once", () => {

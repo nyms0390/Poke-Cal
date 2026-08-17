@@ -19,6 +19,7 @@ export function createBuilderState(
   usageDefaults,
   {
     threatCount = 20,
+    threatStatus = "",
     analysisTab = "bulk",
     analysisSort = "breakpoint",
     field,
@@ -29,7 +30,7 @@ export function createBuilderState(
   analysisSort = ANALYSIS_SORTS.includes(analysisSort) ? analysisSort : "breakpoint";
   const ambientField = createAmbientFieldState(field);
   if (!pokemon || !usageDefaults) {
-    return { user: null, field: ambientField, threatCount, analysisTab, analysisSort };
+    return { user: null, field: ambientField, threatCount, threatStatus, analysisTab, analysisSort };
   }
 
   return {
@@ -39,6 +40,7 @@ export function createBuilderState(
     },
     field: ambientField,
     threatCount,
+    threatStatus,
     analysisTab,
     analysisSort,
   };
@@ -59,6 +61,10 @@ export function normalizeThreatCount(value) {
   const count = Number(value);
   if (!Number.isFinite(count)) return 20;
   return Math.max(0, Math.min(50, Math.trunc(count)));
+}
+
+export function applyGlobalThreatStatus(threats = [], value = "") {
+  return threats.map((threat) => applyThreatControl(threat, { kind: "status", value }));
 }
 
 export function applyThreatControl(threat, { kind, stat, index, value }) {

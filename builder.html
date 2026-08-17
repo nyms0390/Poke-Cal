@@ -130,16 +130,31 @@
                 <span>Test against</span>
                 <strong id="builder-threat-summary">Top 20</strong>
               </div>
-              <label class="builder-threat-count" for="builder-threat-count">
-                Popular Pokémon
-                <select id="builder-threat-count">
-                  <option value="10">Top 10</option>
-                  <option value="20" selected>Top 20</option>
-                  <option value="30">Top 30</option>
-                  <option value="40">Top 40</option>
-                  <option value="50">Top 50</option>
-                </select>
-              </label>
+              <div class="builder-threat-filters">
+                <label class="builder-threat-count" for="builder-threat-count">
+                  Popular Pokémon
+                  <select id="builder-threat-count">
+                    <option value="10">Top 10</option>
+                    <option value="20" selected>Top 20</option>
+                    <option value="30">Top 30</option>
+                    <option value="40">Top 40</option>
+                    <option value="50">Top 50</option>
+                  </select>
+                </label>
+                <label class="builder-threat-status" for="builder-threat-status">
+                  Threat status
+                  <select id="builder-threat-status">
+                    <option value="">Healthy</option>
+                    <option value="burn">Burned</option>
+                    <option value="poison">Poisoned</option>
+                    <option value="toxic">Badly Poisoned</option>
+                    <option value="paralysis">Paralyzed</option>
+                    <option value="sleep">Asleep</option>
+                    <option value="freeze">Frozen</option>
+                    <option value="soak">Soaked</option>
+                  </select>
+                </label>
+              </div>
               <label class="pokemon-search-label" for="builder-threat-search">Add custom Pokémon</label>
               <div class="pokemon-combobox">
                 <input

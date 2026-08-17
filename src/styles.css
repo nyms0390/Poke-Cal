@@ -2659,9 +2659,15 @@ button:disabled {
   border-top: 1px solid var(--line);
 }
 
-.builder-threat-count {
+.builder-threat-filters {
   display: grid;
-  max-width: 180px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.builder-threat-count,
+.builder-threat-status {
+  display: grid;
   gap: 5px;
 }
 
@@ -3681,6 +3687,7 @@ details.builder-analysis-move > .builder-spread-grid {
   .builder-layout,
   .speed-controls,
   .builder-picks,
+  .builder-threat-filters,
   .speed-spread-controls {
     grid-template-columns: 1fr;
   }
