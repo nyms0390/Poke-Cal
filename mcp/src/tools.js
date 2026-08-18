@@ -7,7 +7,7 @@ import {
 } from "../../src/data/strategy-tools.js";
 
 const limit = z.number().int().min(1).max(10).default(5);
-const query = z.string().min(1);
+const query = z.string().trim().min(1);
 const speedSchema = z.object({
   left: z.string().min(1), right: z.string().min(1),
   leftSpread: z.string().optional(), rightSpread: z.string().optional(),

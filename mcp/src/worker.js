@@ -8,7 +8,7 @@ const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
 export function createWorker(env, { catalogLoader = loadCatalogs } = {}) {
   const mcpHandler = createMcpHandler(
     async () => createToolServer(await catalogLoader(env)),
-    { route: "/mcp", legacy: "stateless", responseMode: "json" },
+    { route: "/mcp", legacy: "stateless" },
   );
   return {
     async fetch(request, runtimeEnv = env, ctx) {
