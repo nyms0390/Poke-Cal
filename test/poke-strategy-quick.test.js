@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import {
+  calculateDamageMatchup,
   checkSurvival,
   compareSpeed,
   loadQuickContext,
@@ -59,6 +60,22 @@ test("Quick mode reports guaranteed survival with a compact damage range", () =>
   assert.deepEqual([result.minPercent, result.maxPercent], [80, 95.7]);
   assert.equal(result.survivalChance, 1);
   assert.equal(result.summary, "YES — Milotic survives 152–182 damage (80–95.7%) at full HP.");
+});
+
+test("Quick mode exposes a deterministic damage matchup result", () => {
+  const result = calculateDamageMatchup(context, {
+    attacker: "eelektrossmega",
+    defender: "milotic",
+    move: "thunder",
+    attackerSpread: "Quiet:32/2/0/32/0/0",
+    defenderSpread: "Calm:20/0/20/4/8/14",
+    targetType: "Water",
+    weather: "RainDance",
+  });
+
+  assert.equal(result.supported, true);
+  assert.deepEqual([result.minDamage, result.maxDamage], [152, 182]);
+  assert.deepEqual([result.minPercent, result.maxPercent], [80, 95.7]);
 });
 
 test("Quick mode reports a supplied current HP fraction", () => {

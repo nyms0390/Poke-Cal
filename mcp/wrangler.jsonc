@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "pokecal-mcp",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-08-18",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "../public"
+  },
+  "routes": [
+    "/mcp"
+  ]
+}

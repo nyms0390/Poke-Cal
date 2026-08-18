@@ -103,6 +103,10 @@ Generated catalogs are committed, so syncing is only needed to refresh data.
 
 ## Usage
 
+### Cloudflare MCP
+
+PokéCal also includes a deploy-ready, read-only Cloudflare Worker MCP at [`mcp/README.md`](mcp/README.md). It exposes deterministic Champions lookup, Speed, damage, and survival tools at `/mcp` without requiring callers to send model-provider credentials.
+
 ```sh
 npm start
 ```
