@@ -4,7 +4,7 @@ This package deploys the public, unauthenticated PokéCal MCP MVP as a Cloudflar
 
 ## Prerequisites and commands
 
-Node.js 20 or newer and a Cloudflare account configured for Wrangler are required for deployment. Dependencies are isolated to this directory:
+Node.js 22 or newer and a Cloudflare account configured for Wrangler are required for deployment. Dependencies are isolated to this directory:
 
 ```sh
 cd mcp

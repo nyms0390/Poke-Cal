@@ -84,7 +84,7 @@ export async function callTool(server, name, input) {
 
 function searchPokemon(context, value, count) {
   const needle = normalize(value);
-  const matches = context.pokemon.filter((entry) => [entry.id, entry.name, ...(entry.aliases ?? [])].some((candidate) => normalize(candidate).includes(needle)));
+  const matches = rankMatches(context.pokemon, needle);
   if (!matches.length) throw new Error(`Unknown Pokémon query: ${value}`);
   return matches.slice(0, count).map((entry) => ({
     id: entry.id, name: entry.name, baseSpecies: entry.baseSpecies ?? null, types: entry.types ?? [], baseStats: entry.baseStats ?? {}, abilities: entry.abilities ?? [],
@@ -94,7 +94,7 @@ function searchPokemon(context, value, count) {
 
 function searchMoves(context, value, count) {
   const needle = normalize(value);
-  const matches = context.moves.filter((entry) => [entry.id, entry.name, ...(entry.aliases ?? []), entry.shortDesc].some((candidate) => normalize(candidate).includes(needle)));
+  const matches = rankMatches(context.moves, needle, { includeDescription: true });
   if (!matches.length) throw new Error(`Unknown move query: ${value}`);
   return matches.slice(0, count).map((entry) => ({
     id: entry.id, name: entry.name, type: entry.type, category: entry.category, basePower: entry.basePower ?? null, accuracy: entry.accuracy ?? null, priority: entry.priority ?? 0, target: entry.target ?? null, shortDesc: entry.shortDesc ?? entry.desc ?? "", champions: { legal: entry.champions?.legal ?? false, tier: entry.champions?.tier ?? null },
@@ -153,3 +153,28 @@ function pickPokemon(entry) { return { id: entry.id, name: entry.name, types: en
 function pickMove(entry) { return { id: entry.id, name: entry.name, type: entry.type, category: entry.category, basePower: entry.basePower ?? null }; }
 function assumptions(result) { return [`Format: ${result.field.format ?? "doubles"}`, "Damage rolls use the deterministic engine distribution.", "Data: Pokémon Showdown mechanics/catalog seed with Champions mod, plus Champions usage overlays where present."]; }
 function normalize(value) { return String(value ?? "").normalize("NFKD").toLowerCase().replace(/[^a-z0-9\u3400-\u9fff]/g, ""); }
+
+function rankMatches(entries, needle, { includeDescription = false } = {}) {
+  return entries
+    .map((entry, index) => ({ entry, index, rank: relevanceRank(entry, needle, includeDescription) }))
+    .filter(({ rank }) => rank !== null)
+    .sort((left, right) => left.rank - right.rank || championPriority(right.entry) - championPriority(left.entry) || left.entry.name.localeCompare(right.entry.name) || left.index - right.index)
+    .map(({ entry }) => entry);
+}
+
+function relevanceRank(entry, needle, includeDescription) {
+  const keys = [entry.id, entry.name, ...(entry.aliases ?? [])].map(normalize);
+  if (keys.some((key) => key === needle)) return 0;
+  if (keys.some((key) => key.startsWith(needle))) return 1;
+  if (keys.some((key) => key.includes(needle))) return 2;
+  if (includeDescription && normalize(entry.shortDesc ?? entry.desc).includes(needle)) return 3;
+  return null;
+}
+
+function championPriority(entry) {
+  const legality = entry.champions?.legal === true ? 1 : 0;
+  const usage = Number.isFinite(entry.champions?.usagePercent)
+    ? entry.champions.usagePercent
+    : Number.isFinite(entry.champions?.usageCount) ? entry.champions.usageCount / 1_000_000 : -Infinity;
+  return legality * 1_000_000_000 + (Number.isFinite(usage) ? usage : -1);
+}

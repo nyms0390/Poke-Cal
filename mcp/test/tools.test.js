@@ -36,3 +36,25 @@ test("MCP tools validate limits and unknown entities", async () => {
   await assert.rejects(() => callTool(server, "calculate_damage", { attacker: "Missing", defender: "Beta", move: "Thunderbolt" }), /Unknown Pokémon/);
   await assert.rejects(() => callTool(server, "calculate_damage", { attacker: "Alpha", defender: "Beta", move: "Missing" }), /Unknown move/);
 });
+
+test("MCP lookup ranks exact identifiers before prefixes, substrings, and descriptions", async () => {
+  const relevanceContext = createStrategyContext({
+    pokemon: [
+      { id: "alphaform", name: "Alpha Form", champions: { legal: true, usagePercent: 99 } },
+      { id: "alpha", name: "Alpha", champions: { legal: false } },
+      { id: "xalpha", name: "Xalpha", champions: { legal: true, usagePercent: 1 } },
+    ],
+    abilities: [], items: [],
+    moves: [
+      { id: "protective", name: "Protective", shortDesc: "Protects the user.", champions: { legal: true, usagePercent: 2 } },
+      { id: "protect", name: "Protect", shortDesc: "Protects the user.", champions: { legal: false } },
+      { id: "xprotectx", name: "XprotectX", shortDesc: "A move that protects.", champions: { legal: true, usagePercent: 1 } },
+      { id: "guardmove", name: "Guard Move", shortDesc: "May protect the user.", champions: { legal: true, usagePercent: 100 } },
+    ],
+  });
+  const server = createToolServer(relevanceContext);
+  const pokemon = await callTool(server, "lookup_pokemon", { query: "alpha", limit: 3 });
+  assert.deepEqual(pokemon.map((entry) => entry.id), ["alpha", "alphaform", "xalpha"]);
+  const moves = await callTool(server, "lookup_move", { query: "protect", limit: 4 });
+  assert.deepEqual(moves.map((entry) => entry.id), ["protect", "protective", "xprotectx", "guardmove"]);
+});
