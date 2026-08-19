@@ -4,7 +4,9 @@ import { searchPokemon } from "../data/pokemon.js";
 import {
   popularOpponentPool,
   speedBreakpoints,
+  speedItemIdForSet,
   speedTiers,
+  SPEED_ITEM_IDS,
   SUPPORTED_SPEED_ABILITIES,
 } from "../data/speed-line.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
@@ -46,7 +48,7 @@ const elements = {
   opponentStage: document.querySelector("#speed-opponent-stage"),
   userTailwind: document.querySelector("#speed-user-tailwind"),
   userParalysis: document.querySelector("#speed-user-paralysis"),
-  userScarf: document.querySelector("#speed-user-scarf"),
+  speedItem: document.querySelector("#speed-user-item"),
   opponentTailwind: document.querySelector("#speed-opponent-tailwind"),
   opponentParalysis: document.querySelector("#speed-opponent-paralysis"),
   includeActiveAbilities: document.querySelector("#speed-include-active-abilities"),
@@ -128,13 +130,13 @@ async function initialize() {
     elements.trickRoom,
     elements.nature,
     elements.ability,
+    elements.speedItem,
     elements.userAbilityActive,
     elements.sp,
     elements.userStage,
     elements.opponentStage,
     elements.userTailwind,
     elements.userParalysis,
-    elements.userScarf,
     elements.opponentTailwind,
     elements.opponentParalysis,
     elements.includeActiveAbilities,
@@ -202,6 +204,7 @@ function seedUser(pokemon, { activeSet = null } = {}) {
       item: catalogs.itemLookup.get(initialSet.itemId)
         ?? defaults.item
         ?? null,
+      speedItem: speedItemIdForSet(initialSet.itemId),
       abilityActive: false,
     };
     manualOpponents = manualOpponents.filter(({ pokemon: opponent }) =>
@@ -248,6 +251,9 @@ function handleControl(event) {
     if (event.target === elements.userAbilityActive) {
       user = { ...user, abilityActive: event.target.checked };
     }
+    if (event.target === elements.speedItem) {
+      user = { ...user, speedItem: speedItemIdForSet(event.target.value) };
+    }
     if (event.target === elements.sp) {
       const sp = Math.max(0, Math.min(32, Math.trunc(Number(event.target.value) || 0)));
       user = { ...user, spe: sp };
@@ -276,6 +282,7 @@ function render() {
   elements.nature.value = user.nature;
   renderAbilityOptions();
   elements.ability.value = user.ability?.id ?? "";
+  renderSpeedItemOptions();
   elements.sp.value = String(user.spe);
   const abilityId = normalizeId(user.ability?.id ?? user.ability?.name);
   const supportsActiveAbility = SUPPORTED_SPEED_ABILITIES.has(abilityId);
@@ -289,11 +296,7 @@ function render() {
     elements.userAbilityActive.checked = Boolean(user.abilityActive);
   }
   const unburdenActive = abilityId === "unburden" && elements.userAbilityActive.checked;
-  if (unburdenActive) {
-    elements.userScarf.checked = false;
-    elements.userScarf.disabled = true;
-  }
-  elements.userScarf.disabled = !battle || unburdenActive;
+  elements.speedItem.disabled = !battle || unburdenActive;
   elements.userSummary.textContent = battle
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
@@ -343,11 +346,21 @@ function modsFromControls(side) {
     stage: Number(elements[`${side}Stage`].value),
     tailwind: elements[`${side}Tailwind`].checked,
     paralysis: elements[`${side}Paralysis`].checked,
-    choiceScarf: side === "user" ? elements.userScarf.checked : false,
+    speedItem: side === "user" ? user.speedItem : "",
     ability: side === "user" ? user.ability : null,
     item: side === "user" ? user.item : null,
     abilityActive: side === "user" && elements.userAbilityActive.checked,
   };
+}
+
+function renderSpeedItemOptions() {
+  const selected = user?.speedItem ?? "";
+  const options = [optionElement("", t("speed.itemNone")), ...SPEED_ITEM_IDS.map((id) => {
+    const item = catalogs.itemLookup.get(id) ?? { id, name: id };
+    return optionElement(id, localizedName(item));
+  })];
+  elements.speedItem.replaceChildren(...options);
+  elements.speedItem.value = speedItemIdForSet(selected);
 }
 
 function renderAbilityOptions() {

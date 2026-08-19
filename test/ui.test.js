@@ -67,12 +67,19 @@ test("Speed tiers expose user and opponent active-ability controls and source me
   const speedLineSource = readFileSync(new URL("../src/data/speed-line.js", import.meta.url), "utf8");
   const enLocale = readFileSync(new URL("../src/locales/en.js", import.meta.url), "utf8");
 
-  assert.match(html, /id="speed-user-scarf"/);
+  assert.match(html, /id="speed-user-item"/);
+  assert.match(html, /<option value=""[^>]*>None<\/option>/);
+  assert.match(html, /<option value="choicescarf">Choice Scarf<\/option>/);
+  assert.match(html, /<option value="ironball">Iron Ball<\/option>/);
   assert.match(html, /id="speed-user-ability"/);
   assert.match(html, /id="speed-user-ability-active"/);
   assert.match(html, /id="speed-include-active-abilities"/);
-  assert.doesNotMatch(html, /speed-opponent-scarf/);
-  assert.doesNotMatch(source, /speed-opponent-scarf/);
+  assert.doesNotMatch(html, /speed-user-scarf/);
+  assert.doesNotMatch(source, /speed-user-scarf/);
+  assert.match(source, /speedItemIdForSet/);
+  assert.match(source, /speedItem/);
+  assert.match(source, /speedItem: speedItemIdForSet\(initialSet\.itemId\)/);
+  assert.match(source, /item: user\.item/);
   assert.match(source, /includeActiveSpeedAbilities/);
   assert.match(source, /entry\.source/);
   assert.match(source, /entry\.nature/);

@@ -182,6 +182,8 @@ export const EN_MESSAGES = {
   "speed.userSummary": ({ nature, sp }) => `${nature} · ${sp} SP`,
   "speed.abilityActive": ({ ability }) => `${ability} active`,
   "speed.abilityActiveUnsupported": "Speed ability active",
+  "speed.speedItem": "Speed item",
+  "speed.itemNone": "None",
   "speed.includeActiveAbilities": "Include active Speed abilities",
   "speed.baseSummary": ({ value }) => `Base ${value}`,
   "speed.popularSummary": ({ count }) => `Top ${count} + Megas + yours`,

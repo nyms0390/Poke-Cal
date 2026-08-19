@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Interactive Champions Speed tiers with spreads, stages, Tailwind, paralysis, Choice Scarf, and Trick Room."
+      content="Interactive Champions Speed tiers with spreads, stages, Tailwind, paralysis, Speed items, and Trick Room."
     />
     <title>PokéCal — Speed Tiers</title>
     <link rel="stylesheet" href="./src/styles.css" />
@@ -73,10 +73,14 @@
               <label>Stage<select id="speed-user-stage" data-battle-only></select></label>
             </div>
             <label>Ability<select id="speed-user-ability" data-battle-only></select></label>
+            <label><span data-i18n="speed.speedItem">Speed item</span><select id="speed-user-item" data-battle-only>
+              <option value="" data-i18n="speed.itemNone">None</option>
+              <option value="choicescarf">Choice Scarf</option>
+              <option value="ironball">Iron Ball</option>
+            </select></label>
             <div class="inline-toggles speed-mods">
               <label class="inline-toggle"><input id="speed-user-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
               <label class="inline-toggle"><input id="speed-user-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
-              <label class="inline-toggle"><input id="speed-user-scarf" type="checkbox" data-battle-only /> Choice Scarf</label>
               <label class="inline-toggle"><input id="speed-user-ability-active" type="checkbox" data-battle-only /><span id="speed-user-ability-active-label">Speed ability active</span></label>
             </div>
           </section>

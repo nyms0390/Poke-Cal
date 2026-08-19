@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { popularOpponentPool, speedBreakpoints, speedTiers } from "../src/data/speed-line.js";
+import {
+  popularOpponentPool,
+  speedBreakpoints,
+  speedItemIdForSet,
+  speedTiers,
+} from "../src/data/speed-line.js";
 import { calculateSpeed } from "../src/engine/speed.js";
 
 const userPokemon = pokemon("user", "Yourmon", 100);
@@ -24,7 +29,7 @@ test("base mode uses raw base Speed, merges ties, and ignores every modifier", (
       mode: "base",
       trickRoom: true,
       presetFilter: ["max"],
-      userMods: { paralysis: true, choiceScarf: true },
+      userMods: { paralysis: true, speedItem: "choicescarf" },
       opponentMods: { tailwind: true, stage: 6 },
     },
   );
@@ -129,7 +134,7 @@ test("battle modifiers delegate stacking and stages to calculateSpeed", () => {
     [],
     {
       mode: "battle",
-      userMods: { stage: 1, tailwind: true, paralysis: true, choiceScarf: true },
+      userMods: { stage: 1, tailwind: true, paralysis: true, speedItem: "choicescarf" },
     },
   );
   assert.equal(rows[0].speed, expected);
@@ -144,6 +149,56 @@ test("battle modifiers delegate stacking and stages to calculateSpeed", () => {
     assert.equal(row.speed, expectedSpeed);
     assert.equal(row.stage, stage);
   }
+});
+
+test("user Speed items apply Scarf and Iron Ball multipliers", () => {
+  const speeds = ["", "choicescarf", "ironball"].map((speedItem) => speedTiers(user, [], {
+    mode: "battle",
+    userMods: { speedItem },
+  })[0].speed);
+
+  assert.deepEqual(speeds, [120, 180, 60]);
+  assert.equal(speedItemIdForSet("Life Orb"), "");
+  assert.equal(speedItemIdForSet("Choice Scarf"), "choicescarf");
+  assert.equal(speedItemIdForSet("Iron Ball"), "ironball");
+});
+
+test("active Speed abilities stack with both user Speed items", () => {
+  const activeUser = {
+    ...user,
+    nature: "Jolly",
+    spe: 32,
+    ability: { id: "swiftswim", name: "Swift Swim" },
+  };
+  const speeds = ["choicescarf", "ironball"].map((speedItem) => speedTiers(activeUser, [], {
+    mode: "battle",
+    userMods: {
+      speedItem,
+      ability: activeUser.ability,
+      abilityActive: true,
+    },
+  })[0].speed);
+
+  assert.deepEqual(speeds, [501, 167]);
+});
+
+test("active Unburden ignores either selected user Speed item", () => {
+  const activeUser = {
+    ...user,
+    nature: "Jolly",
+    spe: 32,
+    ability: { id: "unburden", name: "Unburden" },
+  };
+  const speeds = ["choicescarf", "ironball"].map((speedItem) => speedTiers(activeUser, [], {
+    mode: "battle",
+    userMods: {
+      speedItem,
+      ability: activeUser.ability,
+      abilityActive: true,
+    },
+  })[0].speed);
+
+  assert.deepEqual(speeds, [334, 334]);
 });
 
 test("finds every minimum Speed-nature breakpoint that strictly outspeeds each tier", () => {
@@ -502,14 +557,24 @@ test("breakpoints retain the user's active ability and Choice Scarf modifiers", 
         ability: { id: "swiftswim", name: "Swift Swim" },
         item: { id: "choicescarf", name: "Choice Scarf" },
         abilityActive: true,
-        choiceScarf: true,
+        speedItem: "choicescarf",
       },
     },
   );
-  assert.equal(rows.context.userMods.choiceScarf, true);
+  assert.equal(rows.context.userMods.speedItem, "choicescarf");
   assert.equal(rows.context.userMods.abilityActive, true);
   assert.equal(rows[0].speed, 360);
   assert.deepEqual(speedBreakpoints(user, speedTiers(user, [], { mode: "base" })), []);
+});
+
+test("base mode ignores the selected user Speed item", () => {
+  const rows = speedTiers(user, [], {
+    mode: "base",
+    userMods: { speedItem: "ironball", abilityActive: true },
+  });
+
+  assert.equal(rows[0].speed, 100);
+  assert.equal(rows.context.userMods.speedItem, "");
 });
 
 function pokemon(id, name, spe) {

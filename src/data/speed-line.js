@@ -18,6 +18,7 @@ export const SUPPORTED_SPEED_ABILITIES = new Map([
   ["surgesurfer", "Surge Surfer"],
   ["unburden", "Unburden"],
 ]);
+export const SPEED_ITEM_IDS = ["choicescarf", "ironball"];
 const WEATHER_SPEED_ABILITIES = new Set(["swiftswim", "chlorophyll"]);
 const PROFILE_LIMIT = 4;
 
@@ -167,6 +168,9 @@ function minimumSpAbove(user, mods, tierSpeed, nature) {
 
 function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom }) {
   const speedMods = abilitySpeedMods(mods);
+  const itemMultiplier = speedMods.abilityActive && normalizeEntityId(mods.ability) === "unburden"
+    ? 1
+    : mods.itemSpeedMultiplier ?? 1;
   return calculateSpeed({
     baseSpeed: baseSpeed(pokemon),
     sp: clampInteger(sp, 0, 32),
@@ -174,7 +178,7 @@ function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom })
     stage: mods.stage,
     tailwind: mods.tailwind,
     status: mods.paralysis ? "paralysis" : "",
-    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * (mods.itemSpeedMultiplier ?? 1) *
+    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * itemMultiplier *
       (speedMods.abilityActive ? 2 : 1),
     trickRoom,
   });
@@ -265,7 +269,7 @@ function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
       : false,
     abilityActive: false,
     itemConsumed: false,
-    itemSpeedMultiplier: itemSpeedMultiplier(row.item),
+    itemSpeedMultiplier: speedItemMultiplier(row.item),
   };
   const rows = [opponentSpeedEntry(pokemon, inactive, opponentMods, trickRoom)];
   const abilityId = normalizeEntityId(row.ability);
@@ -378,9 +382,14 @@ function canonicalNature(value) {
   return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
 }
 
-function itemSpeedMultiplier(item) {
+export function speedItemMultiplier(item) {
   const itemId = normalizeEntityId(item);
   return itemId === "choicescarf" ? 1.5 : itemId === "ironball" ? 0.5 : 1;
+}
+
+export function speedItemIdForSet(item) {
+  const itemId = normalizeEntityId(item);
+  return SPEED_ITEM_IDS.includes(itemId) ? itemId : "";
 }
 
 function abilitySpeedMods(mods = {}) {
@@ -444,6 +453,10 @@ function normalizedMods(mods = {}) {
     ability: mods.ability ?? null,
     item: mods.item ?? null,
     abilityActive: Boolean(mods.abilityActive),
+    speedItem: speedItemIdForSet(mods.speedItem),
+    itemSpeedMultiplier: mods.itemSpeedMultiplier === undefined
+      ? speedItemMultiplier(mods.speedItem)
+      : Number.isFinite(Number(mods.itemSpeedMultiplier)) ? Number(mods.itemSpeedMultiplier) : 1,
   };
 }
 
