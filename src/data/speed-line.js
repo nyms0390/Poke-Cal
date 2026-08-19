@@ -1,5 +1,6 @@
 import { NATURES } from "../engine/natures.js";
 import { calculateSpeed } from "../engine/speed.js";
+import { normalizeId } from "./catalog.js";
 import { megaFamily, pokemonSpriteId } from "./pokemon.js";
 
 const PRESETS = [
@@ -8,6 +9,17 @@ const PRESETS = [
   { key: "neutral", label: "Neutral", sourceLabel: "uninvested", nature: "Hardy", sp: 0 },
   { key: "slow", label: "Slow", sourceLabel: "min (-spe 0)", nature: "Brave", sp: 0 },
 ];
+
+export const SUPPORTED_SPEED_ABILITIES = new Map([
+  ["swiftswim", "Swift Swim"],
+  ["chlorophyll", "Chlorophyll"],
+  ["sandrush", "Sand Rush"],
+  ["slushrush", "Slush Rush"],
+  ["surgesurfer", "Surge Surfer"],
+  ["unburden", "Unburden"],
+]);
+const WEATHER_SPEED_ABILITIES = new Set(["swiftswim", "chlorophyll", "sandrush", "slushrush"]);
+const PROFILE_LIMIT = 4;
 
 export function popularOpponentPool(
   popularOpponents = [],
@@ -61,7 +73,11 @@ export function speedTiers(user, opponents, options = {}) {
   const userResult = calculatedSpeed(user.pokemon, {
     sp: user.spe,
     nature: user.nature,
-    mods: userMods,
+    mods: {
+      ...userMods,
+      ability: userMods.ability ?? user.ability,
+      item: userMods.item ?? user.item,
+    },
     trickRoom,
   });
   const entries = [speedEntry(
@@ -73,28 +89,34 @@ export function speedTiers(user, opponents, options = {}) {
     userMods.stage,
     userResult.modifiedSpeed,
     userResult.effectiveOrder,
+    { source: "user", exact: true, nature: user.nature, sp: user.spe },
   )];
 
   for (const opponent of opponents) {
-    const likelyKey = presetKey(opponent.likelyPresetLabel);
+    const profiles = limitlessProfiles(opponent.pokemon);
+    const fixedLikely = profiles.length === 0 ? presetKey(opponent.likelyPresetLabel) : "";
     for (const preset of PRESETS) {
       if (!presetFilter.has(preset.key)) continue;
-      const result = calculatedSpeed(opponent.pokemon, {
-        sp: preset.sp,
+      entries.push(opponentSpeedEntry(opponent.pokemon, {
+        label: preset.label,
+        key: preset.key,
         nature: preset.nature,
-        mods: opponentMods,
-        trickRoom,
-      });
-      entries.push(speedEntry(
-        opponent.pokemon,
-        preset.label,
-        preset.key,
-        false,
-        preset.key === likelyKey,
-        opponentMods.stage,
-        result.modifiedSpeed,
-        result.effectiveOrder,
-      ));
+        sp: preset.sp,
+        likely: preset.key === fixedLikely,
+        source: "preset",
+        sourceLabel: preset.sourceLabel,
+        exact: false,
+        assumed: true,
+      }, opponentMods, trickRoom));
+    }
+
+    for (const row of ncpRows(opponent.pokemon)) {
+      entries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
+    }
+    const likelyProfile = profiles[0];
+    for (const profile of selectedProfiles(profiles)) {
+      const row = profileRow(profile, profile === likelyProfile);
+      entries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
     }
   }
 
@@ -144,6 +166,7 @@ function minimumSpAbove(user, mods, tierSpeed, nature) {
 }
 
 function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom }) {
+  const speedMods = abilitySpeedMods(mods);
   return calculateSpeed({
     baseSpeed: baseSpeed(pokemon),
     sp: clampInteger(sp, 0, 32),
@@ -151,13 +174,23 @@ function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom })
     stage: mods.stage,
     tailwind: mods.tailwind,
     status: mods.paralysis ? "paralysis" : "",
-    speedMultiplier: mods.choiceScarf ? 1.5 : 1,
+    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * (speedMods.abilityActive ? 2 : 1),
     trickRoom,
   });
 }
 
-function speedEntry(pokemon, presetLabel, presetKey, isUser, likely, stage, speed, order = speed) {
-  return {
+function speedEntry(
+  pokemon,
+  presetLabel,
+  presetKey,
+  isUser,
+  likely,
+  stage,
+  speed,
+  order = speed,
+  details = {},
+) {
+  const entry = {
     id: pokemon.id,
     name: pokemon.name,
     baseSpecies: pokemon.baseSpecies,
@@ -166,12 +199,192 @@ function speedEntry(pokemon, presetLabel, presetKey, isUser, likely, stage, spee
     spriteId: pokemonSpriteId(pokemon),
     presetLabel,
     presetKey,
-    likely,
     isUser,
     stage,
     speed,
     order,
+    ...details,
   };
+  if (likely !== undefined) entry.likely = likely;
+  return entry;
+}
+
+function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
+  const itemId = normalizeEntityId(row.item);
+  const abilityId = normalizeEntityId(row.ability);
+  const result = calculatedSpeed(pokemon, {
+    sp: row.sp,
+    nature: row.nature,
+    mods: {
+      ...opponentMods,
+      choiceScarf: row.choiceScarf,
+      ability: row.ability,
+      item: row.item,
+      abilityActive: row.abilityActive,
+    },
+    trickRoom,
+  });
+  return speedEntry(
+    pokemon,
+    row.label,
+    row.key,
+    false,
+    row.likely,
+    opponentMods.stage,
+    result.modifiedSpeed,
+    result.effectiveOrder,
+    {
+      nature: row.nature,
+      sp: row.sp,
+      item: row.item,
+      ability: row.ability,
+      source: row.source,
+      sourceLabel: row.sourceLabel,
+      setLabel: row.setLabel,
+      exact: row.exact,
+      assumed: row.assumed,
+      usageCount: row.usageCount,
+      usagePercent: row.usagePercent,
+      choiceScarf: row.choiceScarf,
+      abilityActive: row.abilityActive,
+      itemConsumed: row.itemConsumed,
+      supportedAbility: SUPPORTED_SPEED_ABILITIES.has(abilityId),
+      choiceScarfItem: itemId === "choicescarf",
+    },
+  );
+}
+
+function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
+  const inactive = {
+    ...row,
+    choiceScarf: row.source === "NCP" || row.source === "Limitless"
+      ? normalizeEntityId(row.item) === "choicescarf"
+      : false,
+    abilityActive: false,
+    itemConsumed: false,
+  };
+  const rows = [opponentSpeedEntry(pokemon, inactive, opponentMods, trickRoom)];
+  const abilityId = normalizeEntityId(row.ability);
+  if (!options.includeActiveSpeedAbilities || !canActivateAbility(row)) return rows;
+
+  const active = {
+    ...row,
+    label: `${row.label} · active`,
+    key: `${row.key}-active`,
+    likely: row.likely,
+    abilityActive: true,
+    itemConsumed: abilityId === "unburden",
+    choiceScarf: abilityId === "unburden" ? false : inactive.choiceScarf,
+  };
+  rows[0].likely = row.likely ? false : row.likely;
+  rows.push(opponentSpeedEntry(pokemon, active, opponentMods, trickRoom));
+  return rows;
+}
+
+function canActivateAbility(row) {
+  const abilityId = normalizeEntityId(row.ability);
+  if (!SUPPORTED_SPEED_ABILITIES.has(abilityId)) return false;
+  return !(normalizeEntityId(row.item) === "utilityumbrella" && WEATHER_SPEED_ABILITIES.has(abilityId));
+}
+
+function limitlessProfiles(pokemon) {
+  return (pokemon?.champions?.usage?.speedProfiles ?? [])
+    .filter((profile) => profile?.nature && profile?.ability && profile?.item)
+    .sort((a, b) => Number(b.usageCount ?? 0) - Number(a.usageCount ?? 0));
+}
+
+function selectedProfiles(profiles) {
+  const selected = [];
+  const seen = new Set();
+  const add = (profile) => {
+    const key = profileKey(profile);
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    selected.push(profile);
+  };
+  profiles.slice(0, PROFILE_LIMIT).forEach(add);
+  for (const abilityId of SUPPORTED_SPEED_ABILITIES.keys()) {
+    add(profiles.find((profile) => normalizeEntityId(profile.ability) === abilityId));
+  }
+  return selected;
+}
+
+function profileRow(profile, likely) {
+  const sp = natureSpeedClass(profile.nature) === "negative" ? 0 : 32;
+  return {
+    label: `${profile.nature} · ${entityName(profile.item)} · ${entityName(profile.ability)}`,
+    key: "limitless",
+    nature: profile.nature,
+    sp,
+    item: entity(profile.item),
+    ability: entity(profile.ability),
+    source: "Limitless",
+    sourceLabel: "Limitless profile",
+    exact: false,
+    assumed: true,
+    usageCount: profile.usageCount,
+    usagePercent: profile.usagePercent,
+    likely,
+  };
+}
+
+function ncpRows(pokemon) {
+  const seen = new Set();
+  return (pokemon?.champions?.ncp?.sets ?? []).flatMap((set) => {
+    const sp = Number(set?.sps?.spe);
+    if (!set?.nature || !Number.isFinite(sp)) return [];
+    const item = entity(set.item);
+    const ability = set.ability ? entity(set.ability) : null;
+    const key = [set.nature, sp, normalizeEntityId(item), normalizeEntityId(ability)].join("\u0000");
+    if (seen.has(key)) return [];
+    seen.add(key);
+    return [{
+      label: set.name || set.spreadName || "NCP set",
+      key: "ncp",
+      nature: set.nature,
+      sp: clampInteger(sp, 0, 32),
+      item,
+      ability,
+      source: "NCP",
+      sourceLabel: "NCP curated",
+      setLabel: set.name || set.spreadName || "NCP set",
+      exact: true,
+      assumed: false,
+    }];
+  });
+}
+
+function profileKey(profile) {
+  if (!profile) return "";
+  return [profile.nature, normalizeEntityId(profile.ability), normalizeEntityId(profile.item)].join("\u0000");
+}
+
+function natureSpeedClass(nature) {
+  const value = NATURES[nature] ?? NATURES.Hardy;
+  return value.down === "spe" ? "negative" : value.up === "spe" ? "positive" : "neutral";
+}
+
+function abilitySpeedMods(mods = {}) {
+  const abilityId = normalizeEntityId(mods.ability);
+  const abilityActive = Boolean(mods.abilityActive) && SUPPORTED_SPEED_ABILITIES.has(abilityId);
+  return {
+    choiceScarf: Boolean(mods.choiceScarf) && !(abilityActive && abilityId === "unburden"),
+    abilityActive,
+  };
+}
+
+function entity(value) {
+  if (!value) return null;
+  const id = normalizeEntityId(value);
+  return { id, name: value?.name ?? value };
+}
+
+function normalizeEntityId(value) {
+  return normalizeId(typeof value === "object" ? value?.id ?? value?.name : value);
+}
+
+function entityName(value) {
+  return value?.name ?? value?.id ?? "";
 }
 
 function groupedRows(entries, userSpeed, trickRoom, context) {
@@ -209,6 +422,9 @@ function normalizedMods(mods = {}) {
     paralysis: Boolean(mods.paralysis),
     choiceScarf: Boolean(mods.choiceScarf),
     stage: clampInteger(mods.stage, -6, 6),
+    ability: mods.ability ?? null,
+    item: mods.item ?? null,
+    abilityActive: Boolean(mods.abilityActive),
   };
 }
 

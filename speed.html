@@ -72,10 +72,12 @@
               <label>Speed SP<input id="speed-sp" type="number" min="0" max="32" step="1" data-battle-only /></label>
               <label>Stage<select id="speed-user-stage" data-battle-only></select></label>
             </div>
+            <label>Ability<select id="speed-user-ability" data-battle-only></select></label>
             <div class="inline-toggles speed-mods">
               <label class="inline-toggle"><input id="speed-user-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
               <label class="inline-toggle"><input id="speed-user-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
               <label class="inline-toggle"><input id="speed-user-scarf" type="checkbox" data-battle-only /> Choice Scarf</label>
+              <label class="inline-toggle"><input id="speed-user-ability-active" type="checkbox" data-battle-only /><span id="speed-user-ability-active-label">Speed ability active</span></label>
             </div>
           </section>
 
@@ -111,7 +113,7 @@
                 <label class="inline-toggle"><input type="checkbox" value="fast" data-preset data-battle-only checked /><span class="speed-preset-dot speed-preset-fast" aria-hidden="true"></span>Fast</label>
                 <label class="inline-toggle"><input type="checkbox" value="neutral" data-preset data-battle-only checked /><span class="speed-preset-dot speed-preset-neutral" aria-hidden="true"></span>Neutral</label>
                 <label class="inline-toggle"><input type="checkbox" value="slow" data-preset data-battle-only checked /><span class="speed-preset-dot speed-preset-slow" aria-hidden="true"></span>Slow</label>
-                <span class="speed-preset-likely-key"><span class="speed-preset-dot speed-preset-fast speed-preset-likely" aria-hidden="true"></span>Ring marks likely preset</span>
+                <span id="speed-likely-legend" class="speed-preset-likely-key"><span class="speed-preset-dot speed-preset-fast speed-preset-likely" aria-hidden="true"></span>Ring marks likely preset</span>
               </div>
             </fieldset>
             <div class="speed-spread-controls opponent">
@@ -120,7 +122,7 @@
             <div class="inline-toggles speed-mods">
               <label class="inline-toggle"><input id="speed-opponent-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
               <label class="inline-toggle"><input id="speed-opponent-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
-              <label class="inline-toggle"><input id="speed-opponent-scarf" type="checkbox" data-battle-only /> Choice Scarf</label>
+              <label class="inline-toggle"><input id="speed-include-active-abilities" type="checkbox" data-battle-only /> Include active Speed abilities</label>
             </div>
           </section>
         </div>
@@ -138,7 +140,7 @@
 
       <footer>
         <span id="status">Loading Pokémon data…</span>
-        <span>Limitless usage presets · Level 50 · 31 IV · 1 SP = 8 EV</span>
+        <span>Limitless tournament profiles · NCP curated sets · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>
     <script type="module" src="./src/ui/speed-page.js"></script>

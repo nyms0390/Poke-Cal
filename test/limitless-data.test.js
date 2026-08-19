@@ -81,6 +81,89 @@ test("aggregates Limitless standings into usage rates", () => {
   assert.equal("teras" in usage.pokemon[0].usage, false);
 });
 
+test("keeps correlated nature, ability, and item Limitless Speed profiles", () => {
+  const usage = buildLimitlessUsage(
+    [{ id: "event-1", game: "VGC", format: "M-B" }],
+    new Map([[
+      "event-1",
+      [{ decklist: [
+        { id: "pelipper", name: "Pelipper", nature: "Jolly", ability: "Adaptability", item: "Choice Scarf" },
+        { id: "pelipper", name: "Pelipper", nature: "Adamant", ability: "Swift Swim", item: "Focus Sash" },
+        { id: "pelipper", name: "Pelipper", nature: "Jolly", ability: "Adaptability", item: "Choice Scarf" },
+      ] }],
+    ]]),
+  );
+
+  assert.deepEqual(usage.pokemon[0].usage.speedProfiles, [
+    {
+      nature: "Jolly",
+      ability: { id: "adaptability", name: "Adaptability" },
+      item: { id: "choicescarf", name: "Choice Scarf" },
+      usageCount: 2,
+      usagePercent: (2 / 3) * 100,
+    },
+    {
+      nature: "Adamant",
+      ability: { id: "swiftswim", name: "Swift Swim" },
+      item: { id: "focussash", name: "Focus Sash" },
+      usageCount: 1,
+      usagePercent: (1 / 3) * 100,
+    },
+  ]);
+});
+
+test("canonicalizes and filters nested Limitless Speed profile catalogs", () => {
+  const merged = mergeLimitlessUsage(
+    {
+      pokemon: [{ id: "pelipper", name: "Pelipper", champions: { legal: true } }],
+      abilities: [{ id: "adaptability", name: "Adaptability", champions: { legal: true } }],
+      items: [{ id: "choicescarf", name: "Choice Scarf", champions: { legal: true } }],
+      moves: [],
+    },
+    {
+      pokemon: [{
+        id: "pelipper",
+        name: "Pelipper",
+        usageCount: 2,
+        usagePercent: 100,
+        usage: {
+          abilities: [],
+          items: [],
+          moves: [],
+          natures: [],
+          speedProfiles: [
+            {
+              nature: "Jolly",
+              ability: { id: "ADAPTABILITY", name: "wrong ability name" },
+              item: { id: "CHOICE SCARF", name: "wrong item name" },
+              usageCount: 1,
+              usagePercent: 50,
+            },
+            {
+              nature: "Adamant",
+              ability: { id: "missing-ability", name: "Missing Ability" },
+              item: { id: "missing-item", name: "Missing Item" },
+              usageCount: 1,
+              usagePercent: 50,
+            },
+          ],
+        },
+      }],
+      abilities: [],
+      items: [],
+      moves: [],
+    },
+  );
+
+  assert.deepEqual(merged.pokemon[0].champions.usage.speedProfiles, [{
+    nature: "Jolly",
+    ability: { id: "adaptability", name: "Adaptability" },
+    item: { id: "choicescarf", name: "Choice Scarf" },
+    usageCount: 1,
+    usagePercent: 50,
+  }]);
+});
+
 test("derives form-specific Mega usage from matching legal stones", () => {
   const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];
   const standings = new Map([
@@ -206,6 +289,22 @@ test("derives form-specific Mega usage from matching legal stones", () => {
   assert.deepEqual(charizardX.usage.natures.map(({ id, usageCount }) => [id, usageCount]), [
     ["adamant", 1],
     ["jolly", 1],
+  ]);
+  assert.deepEqual(charizardX.usage.speedProfiles, [
+    {
+      nature: "Adamant",
+      ability: { id: "toughclaws", name: "Tough Claws" },
+      item: { id: "charizarditex", name: "Charizardite X" },
+      usageCount: 1,
+      usagePercent: 50,
+    },
+    {
+      nature: "Jolly",
+      ability: { id: "toughclaws", name: "Tough Claws" },
+      item: { id: "charizarditex", name: "Charizardite X" },
+      usageCount: 1,
+      usagePercent: 50,
+    },
   ]);
   assert.deepEqual(byId.get("charizardmegay").usage.items.map(({ id }) => id), ["charizarditey"]);
   assert.deepEqual(byId.get("charizardmegay").usage.moves.map(({ id }) => id), [
@@ -388,7 +487,11 @@ test("keeps Smogon SP spreads when merging or clearing Limitless usage", () => {
             source: "Limitless",
             usageCount: 4,
             spreadsMeta: { source: "Smogon" },
-            usage: { spreads, moves: [{ id: "fakeout", name: "Fake Out" }] },
+            usage: {
+              spreads,
+              moves: [{ id: "fakeout", name: "Fake Out" }],
+              speedProfiles: [{ nature: "Jolly" }],
+            },
           },
         },
       ],

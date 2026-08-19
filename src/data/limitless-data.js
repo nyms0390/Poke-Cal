@@ -71,6 +71,7 @@ function countPokemonSet(counters, set) {
   pokemon.items ??= new Map();
   pokemon.moves ??= new Map();
   pokemon.natures ??= new Map();
+  pokemon.speedProfiles ??= new Map();
 
   if (set.ability) {
     increment(counters.abilities, normalizeId(set.ability), set.ability);
@@ -86,6 +87,9 @@ function countPokemonSet(counters, set) {
     increment(pokemon.moves, normalizeId(attack), attack);
   }
   if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
+  if (set.nature && set.ability && set.item) {
+    incrementSpeedProfile(pokemon.speedProfiles, set.nature, set.ability, set.item);
+  }
 }
 
 function countMegaPokemonSet(counters, set, megaStoneMappings) {
@@ -99,6 +103,7 @@ function countMegaPokemonSet(counters, set, megaStoneMappings) {
   pokemon.items ??= new Map();
   pokemon.moves ??= new Map();
   pokemon.natures ??= new Map();
+  pokemon.speedProfiles ??= new Map();
 
   const ability = canonicalAbility(mapping.target);
   if (ability) increment(pokemon.abilities, normalizeId(ability), ability);
@@ -108,6 +113,29 @@ function countMegaPokemonSet(counters, set, megaStoneMappings) {
     increment(pokemon.moves, normalizeId(attack), attack);
   }
   if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
+  if (set.nature && ability && mapping.item) {
+    incrementSpeedProfile(pokemon.speedProfiles, set.nature, ability, mapping.item);
+  }
+}
+
+function incrementSpeedProfile(map, nature, ability, item) {
+  const abilityEntry = usageEntity(ability);
+  const itemEntry = usageEntity(item);
+  const key = [normalizeId(nature), abilityEntry.id, itemEntry.id].join("\u0000");
+  const entry = map.get(key) ?? {
+    nature,
+    ability: abilityEntry,
+    item: itemEntry,
+    count: 0,
+  };
+  entry.count += 1;
+  map.set(key, entry);
+}
+
+function usageEntity(value) {
+  const id = normalizeId(value?.id ?? value);
+  const name = value?.name ?? value;
+  return { id, name: name ?? id };
 }
 
 function buildMegaStoneMappings({ pokemon = [], items = [] } = {}) {
@@ -159,7 +187,7 @@ function increment(map, id, name) {
 function usageEntries(map, denominator, mapEntry) {
   return [...map.values()]
     .map((entry) => mapEntry(entry, denominator))
-    .sort((a, b) => b.usageCount - a.usageCount || a.name.localeCompare(b.name));
+    .sort((a, b) => b.usageCount - a.usageCount || String(a.name ?? a.nature).localeCompare(String(b.name ?? b.nature)));
 }
 
 function simpleUsageEntry(entry, denominator) {
@@ -179,7 +207,18 @@ function pokemonUsageEntry(entry, denominator) {
       items: usageEntries(entry.items ?? new Map(), entry.count, simpleUsageEntry),
       moves: usageEntries(entry.moves ?? new Map(), entry.count, simpleUsageEntry),
       natures: usageEntries(entry.natures ?? new Map(), entry.count, simpleUsageEntry),
+      speedProfiles: usageEntries(entry.speedProfiles ?? new Map(), entry.count, speedProfileUsageEntry),
     },
+  };
+}
+
+function speedProfileUsageEntry(entry, denominator) {
+  return {
+    nature: entry.nature,
+    ability: entry.ability,
+    item: entry.item,
+    usageCount: entry.count,
+    usagePercent: usagePercent(entry.count, denominator),
   };
 }
 
@@ -232,9 +271,28 @@ function normalizePokemonUsage(entries, catalogs) {
         abilities: normalizeCatalogUsage(entry.usage?.abilities, catalogs.abilities),
         items: normalizeCatalogUsage(entry.usage?.items, catalogs.items),
         moves: normalizeCatalogUsage(entry.usage?.moves, catalogs.moves),
+        speedProfiles: normalizeSpeedProfiles(entry.usage?.speedProfiles, catalogs),
       },
     };
   });
+}
+
+function normalizeSpeedProfiles(entries = [], catalogs) {
+  const abilityLookup = usageLookup(catalogs.abilities);
+  const itemLookup = usageLookup(catalogs.items);
+  return entries.flatMap((entry) => {
+    const ability = canonicalNestedUsage(entry.ability, abilityLookup);
+    const item = canonicalNestedUsage(entry.item, itemLookup);
+    return ability && item && entry.nature
+      ? [{ ...entry, ability, item }]
+      : [];
+  });
+}
+
+function canonicalNestedUsage(value, lookup) {
+  const id = normalizeId(value?.id ?? value);
+  const canonical = lookup.get(id) ?? lookup.get(normalizeId(value?.name ?? value));
+  return canonical ? { id: canonical.id, name: canonical.name } : null;
 }
 
 function normalizeCatalogUsage(entries = [], catalog) {

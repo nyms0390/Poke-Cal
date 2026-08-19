@@ -61,6 +61,27 @@ test("builder exposes user and global threat status controls without per-threat 
   assert.match(source, /applyGlobalThreatStatus\(threats, state\.threatStatus\)/);
 });
 
+test("Speed tiers expose user and opponent active-ability controls and source metadata", () => {
+  const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
+  const speedLineSource = readFileSync(new URL("../src/data/speed-line.js", import.meta.url), "utf8");
+
+  assert.match(html, /id="speed-user-scarf"/);
+  assert.match(html, /id="speed-user-ability"/);
+  assert.match(html, /id="speed-user-ability-active"/);
+  assert.match(html, /id="speed-include-active-abilities"/);
+  assert.doesNotMatch(html, /speed-opponent-scarf/);
+  assert.doesNotMatch(source, /speed-opponent-scarf/);
+  assert.match(source, /includeActiveSpeedAbilities/);
+  assert.match(source, /entry\.source/);
+  assert.match(source, /entry\.nature/);
+  assert.match(source, /entry\.sp/);
+  assert.match(source, /entry\.item/);
+  assert.match(source, /entry\.ability/);
+  assert.match(speedLineSource, /speedProfiles/);
+  assert.match(source, /speed\.likelyProfile/);
+});
+
 test("commits each live state change before rendering exactly once", () => {
   let state = { count: 0 };
   const renders = [];

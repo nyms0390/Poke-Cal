@@ -3485,6 +3485,14 @@ details.builder-analysis-move > .builder-spread-grid {
   font-size: var(--text-xs);
 }
 
+.speed-axis-entry-details {
+  max-width: 330px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.9em;
+  text-overflow: ellipsis;
+}
+
 .speed-opponent-chip button {
   border: 0;
   padding: 0 2px;
@@ -3626,6 +3634,14 @@ details.builder-analysis-move > .builder-spread-grid {
 
 .speed-preset-base {
   --speed-preset-color: var(--subtle);
+}
+
+.speed-preset-limitless {
+  --speed-preset-color: #16846f;
+}
+
+.speed-preset-ncp {
+  --speed-preset-color: #9a5b24;
 }
 
 .speed-axis-breakpoints {

@@ -1,7 +1,12 @@
 import { normalizeId } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { searchPokemon } from "../data/pokemon.js";
-import { popularOpponentPool, speedBreakpoints, speedTiers } from "../data/speed-line.js";
+import {
+  popularOpponentPool,
+  speedBreakpoints,
+  speedTiers,
+  SUPPORTED_SPEED_ABILITIES,
+} from "../data/speed-line.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
@@ -32,6 +37,9 @@ const elements = {
   popularSummary: document.querySelector("#speed-popular-summary"),
   manualOpponents: document.querySelector("#speed-manual-opponents"),
   nature: document.querySelector("#speed-nature"),
+  ability: document.querySelector("#speed-user-ability"),
+  userAbilityActive: document.querySelector("#speed-user-ability-active"),
+  userAbilityActiveLabel: document.querySelector("#speed-user-ability-active-label"),
   sp: document.querySelector("#speed-sp"),
   userStage: document.querySelector("#speed-user-stage"),
   opponentStage: document.querySelector("#speed-opponent-stage"),
@@ -40,7 +48,7 @@ const elements = {
   userScarf: document.querySelector("#speed-user-scarf"),
   opponentTailwind: document.querySelector("#speed-opponent-tailwind"),
   opponentParalysis: document.querySelector("#speed-opponent-paralysis"),
-  opponentScarf: document.querySelector("#speed-opponent-scarf"),
+  includeActiveAbilities: document.querySelector("#speed-include-active-abilities"),
   presetInputs: document.querySelectorAll("input[data-preset]"),
   battleOnly: document.querySelectorAll("[data-battle-only]"),
   battleGroups: document.querySelectorAll("[data-battle-group]"),
@@ -48,6 +56,7 @@ const elements = {
   rowCount: document.querySelector("#speed-row-count"),
   axis: document.querySelector("#speed-axis"),
   status: document.querySelector("#status"),
+  likelyLegend: document.querySelector("#speed-likely-legend"),
 };
 
 let catalogs = null;
@@ -117,6 +126,8 @@ async function initialize() {
     ...elements.mode,
     elements.trickRoom,
     elements.nature,
+    elements.ability,
+    elements.userAbilityActive,
     elements.sp,
     elements.userStage,
     elements.opponentStage,
@@ -125,7 +136,7 @@ async function initialize() {
     elements.userScarf,
     elements.opponentTailwind,
     elements.opponentParalysis,
-    elements.opponentScarf,
+    elements.includeActiveAbilities,
     elements.popularCount,
     ...elements.presetInputs,
   ]) input.addEventListener("input", handleControl);
@@ -184,6 +195,13 @@ function seedUser(pokemon, { activeSet = null } = {}) {
       pokemon,
       nature: initialSet.nature || defaults.nature,
       spe: initialSet.sp.spe ?? defaults.sp.spe ?? 0,
+      ability: catalogs.abilityLookup.get(initialSet.abilityId)
+        ?? defaults.ability
+        ?? null,
+      item: catalogs.itemLookup.get(initialSet.itemId)
+        ?? defaults.item
+        ?? null,
+      abilityActive: false,
     };
     manualOpponents = manualOpponents.filter(({ pokemon: opponent }) =>
       normalizeId(opponent.id) !== normalizeId(pokemon.id));
@@ -219,6 +237,16 @@ function handleControl(event) {
       event.target.value = String(threatPreferencesStore.writeThreatCount(event.target.value));
     }
     if (event.target === elements.nature) user = { ...user, nature: event.target.value };
+    if (event.target === elements.ability) {
+      user = {
+        ...user,
+        ability: catalogs.abilityLookup.get(normalizeId(event.target.value)) ?? null,
+        abilityActive: false,
+      };
+    }
+    if (event.target === elements.userAbilityActive) {
+      user = { ...user, abilityActive: event.target.checked };
+    }
     if (event.target === elements.sp) {
       const sp = Math.max(0, Math.min(32, Math.trunc(Number(event.target.value) || 0)));
       user = { ...user, spe: sp };
@@ -235,6 +263,8 @@ function render() {
     pokemon: user.pokemon,
     nature: user.nature,
     sp: { spe: user.spe },
+    ability: user.ability,
+    item: user.item,
   }, activeSetStore.readSet()));
   const mode = [...elements.mode].find(({ checked }) => checked)?.value ?? "battle";
   const battle = mode === "battle";
@@ -243,7 +273,26 @@ function render() {
 
   elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.nature.value = user.nature;
+  renderAbilityOptions();
+  elements.ability.value = user.ability?.id ?? "";
   elements.sp.value = String(user.spe);
+  const abilityId = normalizeId(user.ability?.id ?? user.ability?.name);
+  const supportsActiveAbility = SUPPORTED_SPEED_ABILITIES.has(abilityId);
+  elements.userAbilityActiveLabel.textContent = supportsActiveAbility
+    ? t("speed.abilityActive", { ability: user.ability?.name ?? "" })
+    : t("speed.abilityActiveUnsupported");
+  elements.userAbilityActive.disabled = !battle || !supportsActiveAbility;
+  if (!supportsActiveAbility || !battle) {
+    elements.userAbilityActive.checked = false;
+  } else {
+    elements.userAbilityActive.checked = Boolean(user.abilityActive);
+  }
+  const unburdenActive = abilityId === "unburden" && elements.userAbilityActive.checked;
+  if (unburdenActive) {
+    elements.userScarf.checked = false;
+    elements.userScarf.disabled = true;
+  }
+  elements.userScarf.disabled = !battle || unburdenActive;
   elements.userSummary.textContent = battle
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
@@ -260,11 +309,13 @@ function render() {
     presetFilter: [...elements.presetInputs].filter(({ checked }) => checked).map(({ value }) => value),
     userMods: modsFromControls("user"),
     opponentMods: modsFromControls("opponent"),
+    includeActiveSpeedAbilities: elements.includeActiveAbilities.checked,
   };
   const rows = speedTiers(user, selectedOpponents(), options);
   const breakpoints = new Map(speedBreakpoints(user, rows).map((point) => [point.tierSpeed, point]));
   elements.rowCount.textContent = t("speed.tierCount", { count: rows.length });
   elements.axis.replaceChildren(...rows.map((row) => renderSpeedRow(row, breakpoints.get(row.speed))));
+  renderLikelihoodLegend(rows);
   applyDocumentTranslations();
 }
 
@@ -291,8 +342,36 @@ function modsFromControls(side) {
     stage: Number(elements[`${side}Stage`].value),
     tailwind: elements[`${side}Tailwind`].checked,
     paralysis: elements[`${side}Paralysis`].checked,
-    choiceScarf: elements[`${side}Scarf`].checked,
+    choiceScarf: side === "user" ? elements.userScarf.checked : false,
+    ability: side === "user" ? user.ability : null,
+    item: side === "user" ? user.item : null,
+    abilityActive: side === "user" && elements.userAbilityActive.checked,
   };
+}
+
+function renderAbilityOptions() {
+  if (!user?.pokemon) return;
+  const abilities = (user.pokemon.abilities ?? [])
+    .map((ability) => catalogs.abilityLookup.get(normalizeId(ability))
+      ?? { id: normalizeId(ability), name: ability })
+    .filter((ability) => ability.champions?.legal !== false);
+  elements.ability.replaceChildren(...abilities.map((ability) => optionElement(ability.id, ability.name)));
+}
+
+function renderLikelihoodLegend(rows) {
+  const profile = rows.flatMap(({ entries }) => entries)
+    .find((entry) => entry.source === "Limitless" && entry.likely);
+  const text = profile
+    ? t("speed.likelyProfile", {
+      nature: localizedTerm("nature", profile.nature),
+      ability: profile.ability?.name ?? "",
+      item: profile.item?.name ?? "",
+    })
+    : t("speed.likelyPreset");
+  const dot = document.createElement("span");
+  dot.className = `speed-preset-dot ${profile ? "speed-preset-limitless" : "speed-preset-fast"} speed-preset-likely`;
+  dot.setAttribute("aria-hidden", "true");
+  elements.likelyLegend.replaceChildren(dot, document.createTextNode(text));
 }
 
 function renderManualOpponents() {
@@ -328,13 +407,27 @@ function renderSpeedRow(row, breakpoint) {
     chip.append(sprite(entry));
     const label = document.createElement("span");
     label.textContent = localizedName(entry);
+    const details = document.createElement("span");
+    details.className = "speed-axis-entry-details";
+    const nature = localizedTerm("nature", entry.nature);
+    const sourceLabel = entry.source === "NCP"
+      ? t("speed.sourceNcp")
+      : t("speed.sourceLimitlessProfile");
+    const activeLabel = entry.abilityActive
+      ? ` · ${t("speed.active")}${entry.itemConsumed ? ` · ${t("speed.itemConsumed")}` : ""}`
+      : "";
+    details.textContent = entry.source === "NCP"
+      ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")}${activeLabel}`
+      : entry.source === "Limitless"
+        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t("speed.assumedSp")}${activeLabel}`
+        : entry.presetLabel;
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";
     const dot = document.createElement("span");
     dot.className = `speed-preset-dot speed-preset-${entry.presetKey}${entry.likely ? " speed-preset-likely" : ""}`;
     dot.setAttribute("aria-hidden", "true");
     preset.append(dot);
-    chip.append(label, preset);
+    chip.append(label, details, preset);
     pokemon.append(chip);
   }
 
