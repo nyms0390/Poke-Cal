@@ -683,6 +683,26 @@ test("speed tier rings the colored dot for the likely preset and explains the ri
   assert.match(styles, /\.speed-preset-likely\s*\{[^}]*outline:/s);
 });
 
+test("speed tier source-backed chips collapse complete details behind native controls", () => {
+  const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.match(source, /const sourceBacked = entry\.source === "NCP" \|\| entry\.source === "Limitless";/);
+  assert.match(source, /document\.createElement\(sourceBacked \? "button" : "span"\)/);
+  assert.match(source, /chip\.type = "button"/);
+  assert.match(source, /chip\.className = `speed-axis-entry\$\{entry\.isUser \? " user" : ""\}\$\{sourceBacked \? " expandable" : ""\}`/);
+  assert.match(source, /chip\.setAttribute\("aria-expanded", "false"\)/);
+  assert.match(source, /details\.hidden = sourceBacked/);
+  assert.match(source, /chip\.addEventListener\("click"/);
+  assert.match(source, /details\.hidden = expanded/);
+  assert.match(source, /chip\.setAttribute\("aria-expanded", String\(!expanded\)\)/);
+  assert.match(styles, /\.speed-axis-entry\.expandable/);
+  assert.match(styles, /\.speed-axis-entry\.expandable\s*\{[^}]*font-family: inherit;/s);
+  assert.doesNotMatch(styles, /\.speed-axis-entry\.expandable\s*\{[^}]*font:\s*inherit;/s);
+  assert.match(styles, /\.speed-axis-entry\.expandable\[aria-expanded="true"\]/);
+  assert.match(styles, /overflow-wrap: anywhere/);
+});
+
 test("builder and speed tiers offer the same popular-threat dropdown choices", () => {
   const builderHtml = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
   const speedHtml = readFileSync(new URL("../speed.html", import.meta.url), "utf8");

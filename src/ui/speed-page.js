@@ -410,13 +410,19 @@ function renderSpeedRow(row, breakpoint) {
   const pokemon = document.createElement("div");
   pokemon.className = "speed-axis-pokemon";
   for (const entry of row.entries) {
-    const chip = document.createElement("span");
-    chip.className = `speed-axis-entry${entry.isUser ? " user" : ""}`;
+    const sourceBacked = entry.source === "NCP" || entry.source === "Limitless";
+    const chip = document.createElement(sourceBacked ? "button" : "span");
+    chip.className = `speed-axis-entry${entry.isUser ? " user" : ""}${sourceBacked ? " expandable" : ""}`;
+    if (sourceBacked) {
+      chip.type = "button";
+      chip.setAttribute("aria-expanded", "false");
+    }
     chip.append(sprite(entry));
     const label = document.createElement("span");
     label.textContent = localizedName(entry);
     const details = document.createElement("span");
     details.className = "speed-axis-entry-details";
+    details.hidden = sourceBacked;
     const nature = localizedTerm("nature", entry.nature);
     const sourceLabel = entry.source === "NCP"
       ? t("speed.sourceNcp")
@@ -441,6 +447,13 @@ function renderSpeedRow(row, breakpoint) {
     dot.setAttribute("aria-hidden", "true");
     preset.append(dot);
     chip.append(label, details, preset);
+    if (sourceBacked) {
+      chip.addEventListener("click", () => {
+        const expanded = chip.getAttribute("aria-expanded") === "true";
+        chip.setAttribute("aria-expanded", String(!expanded));
+        details.hidden = expanded;
+      });
+    }
     pokemon.append(chip);
   }
 

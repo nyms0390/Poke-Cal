@@ -3493,6 +3493,37 @@ details.builder-analysis-move > .builder-spread-grid {
   text-overflow: ellipsis;
 }
 
+.speed-axis-entry.expandable {
+  max-width: 100%;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.speed-axis-entry.expandable::after {
+  color: var(--subtle);
+  content: "▸";
+  font-size: 0.9em;
+}
+
+.speed-axis-entry.expandable[aria-expanded="true"]::after {
+  content: "▾";
+}
+
+.speed-axis-entry.expandable:hover,
+.speed-axis-entry.expandable:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.speed-axis-entry.expandable .speed-axis-entry-details {
+  min-width: 0;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
 .speed-opponent-chip button {
   border: 0;
   padding: 0 2px;
