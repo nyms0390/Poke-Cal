@@ -16,7 +16,28 @@ export function createWorker(env, { catalogLoader = loadCatalogs } = {}) {
       if (url.pathname === "/health" && request.method === "GET") {
         return Response.json({ service: "pokecal-mcp", status: "ok" }, { headers: JSON_HEADERS });
       }
-      if (url.pathname === "/mcp") return mcpHandler(request, runtimeEnv, ctx);
+      if (url.pathname === "/mcp") {
+        if (request.method !== "OPTIONS") {
+          const { success } = await runtimeEnv.MCP_RATE_LIMITER.limit({
+            key: request.headers.get("cf-connecting-ip") ?? "unknown",
+          });
+          if (!success) {
+            return Response.json(
+              { error: "Rate limit exceeded" },
+              {
+                status: 429,
+                headers: {
+                  ...JSON_HEADERS,
+                  "retry-after": "60",
+                  "access-control-allow-origin": "*",
+                  "access-control-expose-headers": "Retry-After",
+                },
+              },
+            );
+          }
+        }
+        return mcpHandler(request, runtimeEnv, ctx);
+      }
       return Response.json({ error: "Not found" }, { status: 404, headers: JSON_HEADERS });
     },
   };
