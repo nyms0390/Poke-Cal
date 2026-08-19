@@ -94,11 +94,12 @@ export function speedTiers(user, opponents, options = {}) {
   )];
 
   for (const opponent of opponents) {
+    const opponentEntries = [];
     const profiles = limitlessProfiles(opponent.pokemon);
     const fixedLikely = profiles.length === 0 ? presetKey(opponent.likelyPresetLabel) : "";
     for (const preset of PRESETS) {
       if (!presetFilter.has(preset.key)) continue;
-      entries.push(opponentSpeedEntry(opponent.pokemon, {
+      opponentEntries.push(opponentSpeedEntry(opponent.pokemon, {
         label: preset.label,
         key: preset.key,
         nature: preset.nature,
@@ -112,13 +113,14 @@ export function speedTiers(user, opponents, options = {}) {
     }
 
     for (const row of ncpRows(opponent.pokemon)) {
-      entries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
+      opponentEntries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
     }
     const likelyProfile = profiles[0];
     for (const profile of selectedProfiles(profiles)) {
       const row = profileRow(profile, profile === likelyProfile);
-      entries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
+      opponentEntries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
     }
+    entries.push(...deduplicateOpponentSpeeds(opponentEntries));
   }
 
   return groupedRows(entries, userResult.modifiedSpeed, trickRoom, {
@@ -413,6 +415,22 @@ function normalizeEntityId(value) {
 
 function entityName(value) {
   return value?.name ?? value?.id ?? "";
+}
+
+function deduplicateOpponentSpeeds(entries) {
+  const bySpeed = new Map();
+  for (const entry of entries) {
+    const current = bySpeed.get(entry.speed);
+    if (!current || compareEntryPriority(entry, current) > 0) bySpeed.set(entry.speed, entry);
+  }
+  return [...bySpeed.values()];
+}
+
+function compareEntryPriority(a, b) {
+  const sourcePriority = (entry) => entry.source === "NCP" ? 2 : entry.source === "Limitless" ? 1 : 0;
+  return sourcePriority(a) - sourcePriority(b) ||
+    Number(Boolean(a.likely)) - Number(Boolean(b.likely)) ||
+    Number(a.usageCount ?? 0) - Number(b.usageCount ?? 0);
 }
 
 function groupedRows(entries, userSpeed, trickRoom, context) {

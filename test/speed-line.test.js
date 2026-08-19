@@ -412,7 +412,7 @@ test("deduplicates NCP tuples and skips sets without an item or explicit ability
   assert.equal(entries[0].exact, true);
 });
 
-test("selects top four joint profiles plus the best profile for each Speed ability", () => {
+test("keeps top profiles per Speed plus the active best profile for each Speed ability", () => {
   const profiles = [
     ["Jolly", "Adaptability", "Focus Sash", 10],
     ["Timid", "Adaptability", "Life Orb", 9],
@@ -430,12 +430,18 @@ test("selects top four joint profiles plus the best profile for each Speed abili
     pokemon: { ...pokemon("profilemon", "Profilemon", 100), champions: { usage: { speedProfiles: profiles } } },
   };
 
-  const entries = speedTiers(user, [opponent], { mode: "battle", presetFilter: [] })
+  const entries = speedTiers(user, [opponent], {
+    mode: "battle",
+    presetFilter: [],
+    includeActiveSpeedAbilities: true,
+  })
     .flatMap((row) => row.entries.map((entry) => ({ ...entry, speed: row.speed })))
     .filter(({ name, source }) => name === "Profilemon" && source === "Limitless");
-  assert.deepEqual(entries.map(({ nature }) => nature).sort(), ["Adamant", "Hardy", "Jolly", "Modest", "Timid"]);
-  assert.equal(entries.find(({ nature }) => nature === "Adamant").assumed, true);
-  assert.equal(entries.find(({ nature }) => nature === "Adamant").sp, 32);
+  assert.deepEqual(entries.map(({ nature }) => nature).sort(), ["Adamant", "Hardy", "Jolly"]);
+  const activeSwiftSwim = entries.find(({ nature }) => nature === "Adamant");
+  assert.equal(activeSwiftSwim.assumed, true);
+  assert.equal(activeSwiftSwim.sp, 32);
+  assert.equal(activeSwiftSwim.abilityActive, true);
 });
 
 test("canonicalizes valid profile natures and drops invalid profile rows", () => {
@@ -463,6 +469,60 @@ test("canonicalizes valid profile natures and drops invalid profile rows", () =>
     .filter(({ source }) => source === "Limitless");
 
   assert.deepEqual(entries.map(({ nature }) => nature), ["Quiet"]);
+});
+
+test("keeps one set per opponent Speed while preserving ties between different Pokemon", () => {
+  const profiled = {
+    pokemon: {
+      ...pokemon("profiled", "Profiled", 100),
+      champions: {
+        ncp: { sets: [{
+          name: "Exact neutral max",
+          nature: "Adamant",
+          sps: { spe: 32 },
+          item: "Leftovers",
+          ability: "Adaptability",
+        }] },
+        usage: { speedProfiles: [
+          {
+            nature: "Jolly",
+            ability: { id: "swiftswim", name: "Swift Swim" },
+            item: { id: "ironball", name: "Iron Ball" },
+            usageCount: 100,
+          },
+          {
+            nature: "Modest",
+            ability: { id: "intimidate", name: "Intimidate" },
+            item: { id: "leftovers", name: "Leftovers" },
+            usageCount: 90,
+          },
+          {
+            nature: "Adamant",
+            ability: { id: "intimidate", name: "Intimidate" },
+            item: { id: "sitrusberry", name: "Sitrus Berry" },
+            usageCount: 80,
+          },
+        ] },
+      },
+    },
+  };
+  const rows = speedTiers(user, [profiled, { pokemon: tiePokemon }], {
+    mode: "battle",
+    includeActiveSpeedAbilities: true,
+  });
+  const profiledEntries = rows.flatMap(({ speed, entries }) => entries
+    .filter(({ id }) => id === "profiled")
+    .map((entry) => ({ ...entry, speed })));
+
+  assert.deepEqual(profiledEntries.map(({ speed }) => speed), [167, 152, 120, 108, 83]);
+  assert.equal(profiledEntries.find(({ speed }) => speed === 167).source, "Limitless");
+  assert.equal(profiledEntries.find(({ speed }) => speed === 167).abilityActive, true);
+  assert.equal(profiledEntries.find(({ speed }) => speed === 152).source, "NCP");
+  assert.equal(profiledEntries.find(({ speed }) => speed === 120).source, "preset");
+  assert.equal(
+    rows.find(({ speed }) => speed === 167).entries.filter(({ id }) => id === "tie").length,
+    1,
+  );
 });
 
 test("adds active and inactive profile variants without double Scarf and transfers likelihood", () => {
