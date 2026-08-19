@@ -13,6 +13,7 @@ import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import {
   applyDocumentTranslations,
+  formatNumber,
   getLocale,
   initI18n,
   localizedName,
@@ -359,17 +360,11 @@ function renderAbilityOptions() {
 }
 
 function renderLikelihoodLegend(rows) {
-  const profile = rows.flatMap(({ entries }) => entries)
-    .find((entry) => entry.source === "Limitless" && entry.likely);
-  const text = profile
-    ? t("speed.likelyProfile", {
-      nature: localizedTerm("nature", profile.nature),
-      ability: profile.ability?.name ?? "",
-      item: profile.item?.name ?? "",
-    })
-    : t("speed.likelyPreset");
+  const hasJointProfileRing = rows.some(({ entries }) => entries
+    .some((entry) => entry.source === "Limitless" && entry.likely));
+  const text = hasJointProfileRing ? t("speed.likelyProfile") : t("speed.likelyPreset");
   const dot = document.createElement("span");
-  dot.className = `speed-preset-dot ${profile ? "speed-preset-limitless" : "speed-preset-fast"} speed-preset-likely`;
+  dot.className = `speed-preset-dot ${hasJointProfileRing ? "speed-preset-limitless" : "speed-preset-fast"} speed-preset-likely`;
   dot.setAttribute("aria-hidden", "true");
   elements.likelyLegend.replaceChildren(dot, document.createTextNode(text));
 }
@@ -416,10 +411,15 @@ function renderSpeedRow(row, breakpoint) {
     const activeLabel = entry.abilityActive
       ? ` · ${t("speed.active")}${entry.itemConsumed ? ` · ${t("speed.itemConsumed")}` : ""}`
       : "";
+    const usageLabel = Number.isFinite(entry.usagePercent)
+      ? ` · ${t("speed.jointUsage", {
+        value: formatNumber(entry.usagePercent, getLocale(), { maximumFractionDigits: 1 }),
+      })}`
+      : "";
     details.textContent = entry.source === "NCP"
       ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")}${activeLabel}`
       : entry.source === "Limitless"
-        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t("speed.assumedSp")}${activeLabel}`
+        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t("speed.assumedSp")}${usageLabel}${activeLabel}`
         : entry.presetLabel;
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";

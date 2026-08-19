@@ -146,6 +146,20 @@ test("canonicalizes and filters nested Limitless Speed profile catalogs", () => 
               usageCount: 1,
               usagePercent: 50,
             },
+            {
+              nature: "quiet",
+              ability: { id: "ADAPTABILITY", name: "wrong ability name" },
+              item: { id: "CHOICE SCARF", name: "wrong item name" },
+              usageCount: 1,
+              usagePercent: 50,
+            },
+            {
+              nature: "Adamany",
+              ability: { id: "ADAPTABILITY", name: "wrong ability name" },
+              item: { id: "CHOICE SCARF", name: "wrong item name" },
+              usageCount: 1,
+              usagePercent: 50,
+            },
           ],
         },
       }],
@@ -155,13 +169,22 @@ test("canonicalizes and filters nested Limitless Speed profile catalogs", () => 
     },
   );
 
-  assert.deepEqual(merged.pokemon[0].champions.usage.speedProfiles, [{
-    nature: "Jolly",
-    ability: { id: "adaptability", name: "Adaptability" },
-    item: { id: "choicescarf", name: "Choice Scarf" },
-    usageCount: 1,
-    usagePercent: 50,
-  }]);
+  assert.deepEqual(merged.pokemon[0].champions.usage.speedProfiles, [
+    {
+      nature: "Jolly",
+      ability: { id: "adaptability", name: "Adaptability" },
+      item: { id: "choicescarf", name: "Choice Scarf" },
+      usageCount: 1,
+      usagePercent: 50,
+    },
+    {
+      nature: "Quiet",
+      ability: { id: "adaptability", name: "Adaptability" },
+      item: { id: "choicescarf", name: "Choice Scarf" },
+      usageCount: 1,
+      usagePercent: 50,
+    },
+  ]);
 });
 
 test("derives form-specific Mega usage from matching legal stones", () => {

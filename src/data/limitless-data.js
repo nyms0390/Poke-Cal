@@ -1,4 +1,5 @@
 import { normalizeId } from "./catalog.js";
+import { NATURES } from "../engine/natures.js";
 
 export const LIMITLESS_TOURNAMENTS_URL = "https://play.limitlesstcg.com/tournaments";
 export const LIMITLESS_API_BASE_URL = "https://play.limitlesstcg.com/api";
@@ -281,12 +282,18 @@ function normalizeSpeedProfiles(entries = [], catalogs) {
   const abilityLookup = usageLookup(catalogs.abilities);
   const itemLookup = usageLookup(catalogs.items);
   return entries.flatMap((entry) => {
+    const nature = canonicalNature(entry.nature);
     const ability = canonicalNestedUsage(entry.ability, abilityLookup);
     const item = canonicalNestedUsage(entry.item, itemLookup);
-    return ability && item && entry.nature
-      ? [{ ...entry, ability, item }]
+    return ability && item && nature
+      ? [{ ...entry, nature, ability, item }]
       : [];
   });
+}
+
+function canonicalNature(value) {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
 }
 
 function canonicalNestedUsage(value, lookup) {

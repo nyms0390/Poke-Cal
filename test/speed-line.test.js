@@ -38,6 +38,37 @@ test("base mode uses raw base Speed, merges ties, and ignores every modifier", (
   assert.equal(rows[0].stage, 0);
 });
 
+test("base mode omits NCP and Limitless battle-only rows", () => {
+  const opponent = {
+    pokemon: {
+      ...pokemon("profilemon", "Profilemon", 100),
+      champions: {
+        usage: { speedProfiles: [{
+          nature: "Jolly",
+          ability: { id: "swiftswim", name: "Swift Swim" },
+          item: { id: "choicescarf", name: "Choice Scarf" },
+          usageCount: 3,
+        }] },
+        ncp: { sets: [{
+          name: "Curated",
+          nature: "Jolly",
+          sps: { spe: 32 },
+          item: "Choice Scarf",
+          ability: "Swift Swim",
+        }] },
+      },
+    },
+  };
+  const entries = speedTiers(user, [opponent], {
+    mode: "base",
+    includeActiveSpeedAbilities: true,
+  }).flatMap(({ entries: rowEntries }) => rowEntries);
+
+  assert.ok(entries.length > 0);
+  assert.ok(entries.every(({ source }) => source !== "NCP" && source !== "Limitless"));
+  assert.equal(entries.some(({ abilityActive }) => abilityActive), false);
+});
+
 test("battle mode interleaves fixed opponent presets by calculated Speed", () => {
   const rows = speedTiers(user, [
     { pokemon: slowPokemon, likelyPresetLabel: "max (neutral 32)" },
@@ -281,6 +312,51 @@ test("adds exact NCP rows and derives an opponent Choice Scarf from the row item
   assert.equal(exact.likely, undefined);
 });
 
+test("deduplicates NCP tuples and skips sets without an item or explicit ability", () => {
+  const opponent = {
+    pokemon: {
+      ...pokemon("ncpmon", "NCPmon", 100),
+      champions: {
+        ncp: { sets: [
+          {
+            name: "First tuple",
+            nature: "Jolly",
+            sps: { spe: 32 },
+            item: "Iron Ball",
+            ability: "Swift Swim",
+          },
+          {
+            name: "Duplicate tuple",
+            nature: "Jolly",
+            sps: { spe: 32 },
+            item: "Iron Ball",
+            ability: "Swift Swim",
+          },
+          {
+            name: "Missing ability Swift Swim",
+            nature: "Jolly",
+            sps: { spe: 32 },
+            item: "Iron Ball",
+          },
+          {
+            name: "Missing item",
+            nature: "Jolly",
+            sps: { spe: 32 },
+            ability: "Swift Swim",
+          },
+        ] },
+      },
+    },
+  };
+  const entries = speedTiers(user, [opponent], { mode: "battle", presetFilter: [] })
+    .flatMap(({ entries: rowEntries }) => rowEntries)
+    .filter(({ source }) => source === "NCP");
+
+  assert.equal(entries.length, 1);
+  assert.equal(entries[0].setLabel, "First tuple");
+  assert.equal(entries[0].exact, true);
+});
+
 test("selects top four joint profiles plus the best profile for each Speed ability", () => {
   const profiles = [
     ["Jolly", "Adaptability", "Focus Sash", 10],
@@ -305,6 +381,33 @@ test("selects top four joint profiles plus the best profile for each Speed abili
   assert.deepEqual(entries.map(({ nature }) => nature).sort(), ["Adamant", "Hardy", "Jolly", "Modest", "Timid"]);
   assert.equal(entries.find(({ nature }) => nature === "Adamant").assumed, true);
   assert.equal(entries.find(({ nature }) => nature === "Adamant").sp, 32);
+});
+
+test("canonicalizes valid profile natures and drops invalid profile rows", () => {
+  const opponent = {
+    pokemon: {
+      ...pokemon("profilemon", "Profilemon", 100),
+      champions: { usage: { speedProfiles: [
+        {
+          nature: "quiet",
+          ability: { id: "adaptability", name: "Adaptability" },
+          item: { id: "leftovers", name: "Leftovers" },
+          usageCount: 2,
+        },
+        {
+          nature: "Adamany",
+          ability: { id: "adaptability", name: "Adaptability" },
+          item: { id: "leftovers", name: "Leftovers" },
+          usageCount: 3,
+        },
+      ] } },
+    },
+  };
+  const entries = speedTiers(user, [opponent], { mode: "battle", presetFilter: [] })
+    .flatMap(({ entries: rowEntries }) => rowEntries)
+    .filter(({ source }) => source === "Limitless");
+
+  assert.deepEqual(entries.map(({ nature }) => nature), ["Quiet"]);
 });
 
 test("adds active and inactive profile variants without double Scarf and transfers likelihood", () => {
@@ -334,22 +437,58 @@ test("adds active and inactive profile variants without double Scarf and transfe
   assert.equal(inactive.likely, false);
   assert.equal(active.likely, true);
   assert.equal(active.choiceScarf, true);
+  assert.equal(active.presetKey, "limitless");
 });
 
-test("does not activate Utility Umbrella weather abilities and consumes Unburden items", () => {
-  const weather = profileOpponent("weather", "Weather", "Chlorophyll", "Utility Umbrella");
+test("applies Iron Ball to exact/profile rows and stacks it with an active ability", () => {
+  const opponent = profileOpponent("ironball", "Iron Ball", "Swift Swim", "Iron Ball");
+  const entries = speedTiers(user, [opponent], {
+    mode: "battle",
+    presetFilter: [],
+    includeActiveSpeedAbilities: true,
+  }).flatMap(({ speed, entries: rowEntries }) => rowEntries.map((entry) => ({ ...entry, speed })))
+    .filter(({ name, source }) => name === "Iron Ball" && source === "Limitless");
+  const inactive = entries.find(({ abilityActive }) => !abilityActive);
+  const active = entries.find(({ abilityActive }) => abilityActive);
+
+  assert.equal(inactive.speed, 83);
+  assert.equal(active.speed, 167);
+  assert.equal(active.presetKey, "limitless");
+});
+
+test("only rain and sun abilities are suppressed by Utility Umbrella", () => {
+  const rain = profileOpponent("rain", "Rain", "Swift Swim", "Utility Umbrella");
+  const sun = profileOpponent("sun", "Sun", "Chlorophyll", "Utility Umbrella");
+  const sand = profileOpponent("sand", "Sand", "Sand Rush", "Utility Umbrella");
+  const snow = profileOpponent("snow", "Snow", "Slush Rush", "Utility Umbrella");
+  const entries = speedTiers(user, [rain, sun, sand, snow], {
+    mode: "battle",
+    presetFilter: [],
+    includeActiveSpeedAbilities: true,
+  }).flatMap(({ entries: rowEntries }) => rowEntries);
+
+  for (const name of ["Rain", "Sun"]) {
+    assert.equal(entries.some((entry) => entry.name === name && entry.abilityActive), false);
+  }
+  for (const name of ["Sand", "Snow"]) {
+    assert.equal(entries.some((entry) => entry.name === name && entry.abilityActive), true);
+  }
+});
+
+test("consumes the item for active Unburden and does not create unsupported variants", () => {
   const unburden = profileOpponent("unburden", "Unburden", "Unburden", "Choice Scarf");
-  const entries = speedTiers(user, [weather, unburden], {
+  const unsupported = profileOpponent("unsupported", "Unsupported", "Adaptability", "Choice Scarf");
+  const entries = speedTiers(user, [unburden, unsupported], {
     mode: "battle",
     presetFilter: [],
     includeActiveSpeedAbilities: true,
   }).flatMap((row) => row.entries.map((entry) => ({ ...entry, speed: row.speed })));
 
-  assert.equal(entries.some(({ name, abilityActive }) => name === "Weather" && abilityActive), false);
   const active = entries.find(({ name, abilityActive }) => name === "Unburden" && abilityActive);
   assert.equal(active.itemConsumed, true);
   assert.equal(active.choiceScarf, false);
   assert.equal(active.speed, 334);
+  assert.equal(entries.some(({ name, abilityActive }) => name === "Unsupported" && abilityActive), false);
 });
 
 test("breakpoints retain the user's active ability and Choice Scarf modifiers", () => {

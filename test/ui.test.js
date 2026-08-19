@@ -65,6 +65,7 @@ test("Speed tiers expose user and opponent active-ability controls and source me
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
   const speedLineSource = readFileSync(new URL("../src/data/speed-line.js", import.meta.url), "utf8");
+  const enLocale = readFileSync(new URL("../src/locales/en.js", import.meta.url), "utf8");
 
   assert.match(html, /id="speed-user-scarf"/);
   assert.match(html, /id="speed-user-ability"/);
@@ -78,7 +79,11 @@ test("Speed tiers expose user and opponent active-ability controls and source me
   assert.match(source, /entry\.sp/);
   assert.match(source, /entry\.item/);
   assert.match(source, /entry\.ability/);
+  assert.match(source, /speed\.jointUsage/);
+  assert.match(source, /formatNumber/);
+  assert.match(source, /entry\.presetKey/);
   assert.match(speedLineSource, /speedProfiles/);
+  assert.match(enLocale, /Ring marks each Pokémon's most-used joint Limitless profile/);
   assert.match(source, /speed\.likelyProfile/);
 });
 

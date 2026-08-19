@@ -18,7 +18,7 @@ export const SUPPORTED_SPEED_ABILITIES = new Map([
   ["surgesurfer", "Surge Surfer"],
   ["unburden", "Unburden"],
 ]);
-const WEATHER_SPEED_ABILITIES = new Set(["swiftswim", "chlorophyll", "sandrush", "slushrush"]);
+const WEATHER_SPEED_ABILITIES = new Set(["swiftswim", "chlorophyll"]);
 const PROFILE_LIMIT = 4;
 
 export function popularOpponentPool(
@@ -174,7 +174,8 @@ function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom })
     stage: mods.stage,
     tailwind: mods.tailwind,
     status: mods.paralysis ? "paralysis" : "",
-    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * (speedMods.abilityActive ? 2 : 1),
+    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * (mods.itemSpeedMultiplier ?? 1) *
+      (speedMods.abilityActive ? 2 : 1),
     trickRoom,
   });
 }
@@ -217,10 +218,11 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
     nature: row.nature,
     mods: {
       ...opponentMods,
-      choiceScarf: row.choiceScarf,
+      choiceScarf: false,
       ability: row.ability,
       item: row.item,
       abilityActive: row.abilityActive,
+      itemSpeedMultiplier: row.itemSpeedMultiplier,
     },
     trickRoom,
   });
@@ -237,6 +239,7 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
       nature: row.nature,
       sp: row.sp,
       item: row.item,
+      itemSpeedMultiplier: row.itemSpeedMultiplier,
       ability: row.ability,
       source: row.source,
       sourceLabel: row.sourceLabel,
@@ -262,6 +265,7 @@ function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
       : false,
     abilityActive: false,
     itemConsumed: false,
+    itemSpeedMultiplier: itemSpeedMultiplier(row.item),
   };
   const rows = [opponentSpeedEntry(pokemon, inactive, opponentMods, trickRoom)];
   const abilityId = normalizeEntityId(row.ability);
@@ -270,11 +274,12 @@ function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
   const active = {
     ...row,
     label: `${row.label} · active`,
-    key: `${row.key}-active`,
+    key: row.key,
     likely: row.likely,
     abilityActive: true,
     itemConsumed: abilityId === "unburden",
     choiceScarf: abilityId === "unburden" ? false : inactive.choiceScarf,
+    itemSpeedMultiplier: abilityId === "unburden" ? 1 : inactive.itemSpeedMultiplier,
   };
   rows[0].likely = row.likely ? false : row.likely;
   rows.push(opponentSpeedEntry(pokemon, active, opponentMods, trickRoom));
@@ -289,7 +294,10 @@ function canActivateAbility(row) {
 
 function limitlessProfiles(pokemon) {
   return (pokemon?.champions?.usage?.speedProfiles ?? [])
-    .filter((profile) => profile?.nature && profile?.ability && profile?.item)
+    .flatMap((profile) => {
+      const nature = canonicalNature(profile?.nature);
+      return nature && profile?.ability && profile?.item ? [{ ...profile, nature }] : [];
+    })
     .sort((a, b) => Number(b.usageCount ?? 0) - Number(a.usageCount ?? 0));
 }
 
@@ -332,7 +340,8 @@ function ncpRows(pokemon) {
   const seen = new Set();
   return (pokemon?.champions?.ncp?.sets ?? []).flatMap((set) => {
     const sp = Number(set?.sps?.spe);
-    if (!set?.nature || !Number.isFinite(sp)) return [];
+    if (!set?.nature || !String(set.item ?? "").trim() || !String(set.ability ?? "").trim() ||
+      !Number.isFinite(sp)) return [];
     const item = entity(set.item);
     const ability = set.ability ? entity(set.ability) : null;
     const key = [set.nature, sp, normalizeEntityId(item), normalizeEntityId(ability)].join("\u0000");
@@ -362,6 +371,16 @@ function profileKey(profile) {
 function natureSpeedClass(nature) {
   const value = NATURES[nature] ?? NATURES.Hardy;
   return value.down === "spe" ? "negative" : value.up === "spe" ? "positive" : "neutral";
+}
+
+function canonicalNature(value) {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
+}
+
+function itemSpeedMultiplier(item) {
+  const itemId = normalizeEntityId(item);
+  return itemId === "choicescarf" ? 1.5 : itemId === "ironball" ? 0.5 : 1;
 }
 
 function abilitySpeedMods(mods = {}) {
