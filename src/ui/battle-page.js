@@ -973,7 +973,7 @@ function renderDamageMovePickers(side) {
         },
         renderRow: (move, onSelect) => {
           const details = document.createDocumentFragment();
-          details.append(`${move.type ?? "—"} · `, moveCategoryMark(move.category));
+          details.append(typeBadge(move.type), " · ", moveCategoryMark(move.category));
           return searchResultButton(move, onSelect, {
             preventBlur: true,
             small: details,

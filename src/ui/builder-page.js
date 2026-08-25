@@ -65,6 +65,7 @@ import {
   pokemonSpriteUrls,
   searchResultButton,
   STAT_LABELS,
+  typeBadge,
 } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl } from "./field-state.js";
@@ -591,7 +592,7 @@ function renderMovePicks() {
       },
       renderRow: (move, onSelect) => {
         const details = document.createDocumentFragment();
-        details.append(`${localizedTerm("type", move.type) ?? "—"} · `, moveCategoryMark(move.category));
+        details.append(typeBadge(move.type), " · ", moveCategoryMark(move.category));
         return searchResultButton(move, onSelect, {
           preventBlur: true,
           small: details,

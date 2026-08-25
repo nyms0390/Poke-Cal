@@ -572,6 +572,17 @@ test("lookup selection preserves a non-empty search query", () => {
   assert.match(source, /if \(options\.syncSearch !== false && !elements\.search\.value\) elements\.search\.value = localizedName\(entry\);/);
 });
 
+test("battle and builder move-search results render type badges before category metadata", () => {
+  for (const page of ["battle-page", "builder-page"]) {
+    const source = readFileSync(new URL(`../src/ui/${page}.js`, import.meta.url), "utf8");
+    assert.match(
+      source,
+      /details\.append\(typeBadge\(move\.type\), " · ", moveCategoryMark\(move\.category\)\);/,
+      page,
+    );
+  }
+});
+
 test("lookup move table omits the Champions usage column", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
