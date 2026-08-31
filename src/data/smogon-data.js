@@ -12,8 +12,9 @@ export function latestStatsMonth(indexHtml) {
 }
 
 export function discoverChampionsFormats(chaosIndexHtml, { cutoff }) {
+  // Smogon directory indexes may expose compressed mirrors alongside JSON URLs.
   const pattern = new RegExp(
-    `href="(gen9champions(vgc\\d+reg[a-z]+?)(bo3)?)-${cutoff}\\.json"`,
+    `href="(gen9champions(vgc\\d+reg[a-z]+?)(bo3)?)-${cutoff}\\.json(?:\\.gz)?"`,
     "g",
   );
   const formatsByRegulation = new Map();
