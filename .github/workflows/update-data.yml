@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install MCP test dependencies
+        run: npm ci --prefix mcp --ignore-scripts
+
       - name: Sync Showdown + Champions catalogs
         run: npm run sync-data
 
