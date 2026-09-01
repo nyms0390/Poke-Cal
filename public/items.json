@@ -10,9 +10,9 @@
     "num": 1881,
     "gen": 9,
     "shortDesc": "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
-    "block": "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
+    "block": "  {POKEMON}'s Ability is protected by the effects of its Ability Shield!",
     "aliases": [
-      "特性护具"
+      "特性護具"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -40,8 +40,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05441542288557214
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -66,7 +66,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -121,7 +121,7 @@
     "gen": 8,
     "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
     "aliases": [
-      "大金刚宝玉"
+      "大金剛寶玉"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -192,8 +192,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 167,
-      "usagePercent": 1.2981965174129353
+      "usageCount": 118,
+      "usagePercent": 1.0993106018259735
     }
   },
   {
@@ -217,8 +217,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -257,8 +257,8 @@
     "num": 541,
     "gen": 5,
     "shortDesc": "Holder is immune to Ground-type attacks. Pops when holder is hit.",
-    "start": "  [POKEMON] floats in the air with its Air Balloon!",
-    "end": "  [POKEMON]'s Air Balloon popped!",
+    "start": "  {POKEMON} floats in the air with its Air Balloon!",
+    "end": "  {POKEMON}'s Air Balloon popped!",
     "aliases": [
       "氣球"
     ],
@@ -288,8 +288,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -331,8 +331,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -356,8 +356,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -457,8 +457,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -472,7 +472,7 @@
     "gen": 9,
     "shortDesc": "Evolves Charcadet into Armarouge when used.",
     "aliases": [
-      "庆祝之铠"
+      "慶祝之鎧"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -498,8 +498,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -523,8 +523,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -542,7 +542,11 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -600,8 +604,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -739,8 +743,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 22,
+      "usagePercent": 0.20495621389975777
     }
   },
   {
@@ -802,8 +806,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -827,8 +831,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 286,
-      "usagePercent": 2.2232587064676617
+      "usageCount": 227,
+      "usagePercent": 2.1147754797838645
     }
   },
   {
@@ -843,7 +847,7 @@
     "num": 281,
     "gen": 4,
     "shortDesc": "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
-    "heal": "  [POKEMON] restored a little HP using its Black Sludge!",
+    "heal": "  {POKEMON} restored a little HP using its Black Sludge!",
     "aliases": [
       "黑色污泥"
     ],
@@ -873,8 +877,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 126,
-      "usagePercent": 0.9794776119402986
+      "usageCount": 115,
+      "usagePercent": 1.0713620272032793
     }
   },
   {
@@ -898,8 +902,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 42,
-      "usagePercent": 0.3264925373134328
+      "usageCount": 40,
+      "usagePercent": 0.3726476616359232
     }
   },
   {
@@ -973,7 +977,7 @@
     "gen": 9,
     "shortDesc": "Activates the Protosynthesis or Quark Drive Abilities. Single use.",
     "aliases": [
-      "驱劲能量"
+      "驅勁能量"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -1019,8 +1023,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.09328358208955223
+      "usageCount": 29,
+      "usagePercent": 0.2701695546860443
     }
   },
   {
@@ -1141,7 +1145,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 22,
-      "usagePercent": 0.17101990049751245
+      "usagePercent": 0.20495621389975777
     }
   },
   {
@@ -1183,8 +1187,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -1208,8 +1212,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 103,
-      "usagePercent": 0.8006840796019901
+      "usageCount": 78,
+      "usagePercent": 0.7266629401900504
     }
   },
   {
@@ -1233,8 +1237,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10883084577114428
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -1258,8 +1262,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 501,
-      "usagePercent": 3.8945895522388057
+      "usageCount": 419,
+      "usagePercent": 3.9034842556362954
     }
   },
   {
@@ -1281,8 +1285,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -1338,8 +1342,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -1358,11 +1362,7 @@
       "零餘果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -1421,7 +1421,9 @@
     "champions": {
       "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -1480,8 +1482,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 641,
-      "usagePercent": 4.982898009950248
+      "usageCount": 544,
+      "usagePercent": 5.068008198248556
     }
   },
   {
@@ -1523,8 +1525,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 400,
-      "usagePercent": 3.109452736318408
+      "usageCount": 335,
+      "usagePercent": 3.120924166200857
     }
   },
   {
@@ -1556,9 +1558,9 @@
     "num": 1882,
     "gen": 9,
     "shortDesc": "Prevents other Pokemon from lowering the holder's stat stages.",
-    "block": "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
+    "block": "  The effects of {POKEMON}'s Clear Amulet prevent its stats from being lowered!",
     "aliases": [
-      "清净坠饰"
+      "清淨墜飾"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -1584,7 +1586,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -1624,8 +1626,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.2409825870646766
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -1647,8 +1649,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 259,
-      "usagePercent": 2.013370646766169
+      "usageCount": 244,
+      "usagePercent": 2.2731507359791316
     }
   },
   {
@@ -1666,6 +1668,9 @@
     "num": 2406,
     "gen": 9,
     "shortDesc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "aliases": [
+      "礎石面具"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -1747,8 +1752,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -1800,7 +1805,7 @@
     "num": 210,
     "gen": 4,
     "shortDesc": "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
-    "activate": "  [POKEMON] can act faster than normal, thanks to its Custap Berry!",
+    "activate": "  {POKEMON} can act faster than normal, thanks to its Custap Berry!",
     "aliases": [
       "釋陀果"
     ],
@@ -1826,8 +1831,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17879353233830847
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -2005,8 +2010,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 213,
-      "usagePercent": 1.6557835820895521
+      "usageCount": 243,
+      "usagePercent": 2.2638345444382337
     }
   },
   {
@@ -2139,8 +2144,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0777363184079602
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -2167,8 +2172,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 26,
-      "usagePercent": 0.2021144278606965
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -2249,8 +2254,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 96,
-      "usagePercent": 0.7462686567164178
+      "usageCount": 61,
+      "usagePercent": 0.5682876839947829
     }
   },
   {
@@ -2288,8 +2293,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10883084577114428
+      "usageCount": 12,
+      "usagePercent": 0.11179429849077697
     }
   },
   {
@@ -2439,8 +2444,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -2472,7 +2477,7 @@
     "num": 547,
     "gen": 5,
     "shortDesc": "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
-    "end": "  [POKEMON] is switched out with the Eject Button!",
+    "end": "  {POKEMON} is switched out with the Eject Button!",
     "aliases": [
       "逃脫按鍵"
     ],
@@ -2493,7 +2498,7 @@
     "num": 1119,
     "gen": 8,
     "shortDesc": "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
-    "end": "  [POKEMON] is switched out by the Eject Pack!",
+    "end": "  {POKEMON} is switched out by the Eject Pack!",
     "aliases": [
       "避難背包"
     ],
@@ -2613,11 +2618,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "legal": true
     }
   },
   {
@@ -2681,8 +2682,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -2702,8 +2703,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 59,
-      "usagePercent": 0.45864427860696516
+      "usageCount": 53,
+      "usagePercent": 0.4937581516675983
     }
   },
   {
@@ -2734,12 +2735,15 @@
     "num": 2401,
     "gen": 9,
     "shortDesc": "Holder's Fairy-type attacks have 1.2x power.",
+    "aliases": [
+      "妖精之羽"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 423,
-      "usagePercent": 3.2882462686567164
+      "usageCount": 334,
+      "usagePercent": 3.1116079746599588
     }
   },
   {
@@ -2793,11 +2797,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -2834,8 +2834,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.17101990049751245
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   },
   {
@@ -3088,8 +3088,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 298,
-      "usagePercent": 2.316542288557214
+      "usageCount": 309,
+      "usagePercent": 2.878703186137507
     }
   },
   {
@@ -3180,7 +3180,7 @@
     "gen2": {
       "shortDesc": "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP."
     },
-    "activate": "  [POKEMON] hung on using its Focus Band!",
+    "activate": "  {POKEMON} hung on using its Focus Band!",
     "aliases": [
       "氣勢頭帶"
     ],
@@ -3188,8 +3188,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -3206,7 +3206,7 @@
     "gen4": {
       "shortDesc": "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use."
     },
-    "end": "  [POKEMON] hung on using its Focus Sash!",
+    "end": "  {POKEMON} hung on using its Focus Sash!",
     "aliases": [
       "氣勢披帶"
     ],
@@ -3214,8 +3214,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1758,
-      "usagePercent": 13.666044776119405
+      "usageCount": 1430,
+      "usagePercent": 13.322153903484255
     }
   },
   {
@@ -3324,8 +3324,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 205,
-      "usagePercent": 1.593594527363184
+      "usageCount": 168,
+      "usagePercent": 1.5651201788708775
     }
   },
   {
@@ -3404,8 +3404,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -3449,8 +3449,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 80,
-      "usagePercent": 0.6218905472636816
+      "usageCount": 30,
+      "usagePercent": 0.2794857462269424
     }
   },
   {
@@ -3492,8 +3492,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 41,
-      "usagePercent": 0.3187189054726368
+      "usageCount": 34,
+      "usagePercent": 0.31675051239053476
     }
   },
   {
@@ -3517,8 +3517,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 139,
-      "usagePercent": 1.0805348258706466
+      "usageCount": 91,
+      "usagePercent": 0.8477734302217254
     }
   },
   {
@@ -3599,7 +3599,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -3620,8 +3620,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 52,
-      "usagePercent": 0.404228855721393
+      "usageCount": 36,
+      "usagePercent": 0.3353828954723309
     }
   },
   {
@@ -3699,8 +3699,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.10105721393034825
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -3815,8 +3815,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.1632462686567164
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -3871,7 +3871,7 @@
     "gen": 8,
     "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
     "aliases": [
-      "大白金宝玉"
+      "大白金寶玉"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -3980,8 +3980,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13992537313432835
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -4003,8 +4003,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -4025,7 +4025,11 @@
       "硬石頭"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -4046,8 +4050,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4081,6 +4085,9 @@
     "num": 2408,
     "gen": 9,
     "shortDesc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "aliases": [
+      "火灶面具"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -4104,7 +4111,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4198,8 +4205,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4244,8 +4251,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -4407,11 +4414,7 @@
       "冰冷岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -4470,8 +4473,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13992537313432835
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4551,8 +4554,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.14769900497512436
+      "usageCount": 18,
+      "usagePercent": 0.16769144773616546
     }
   },
   {
@@ -4574,8 +4577,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 107,
-      "usagePercent": 0.8317786069651741
+      "usageCount": 95,
+      "usagePercent": 0.8850381963853177
     }
   },
   {
@@ -4597,8 +4600,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -4663,7 +4666,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4842,7 +4845,7 @@
     "num": 234,
     "gen": 2,
     "shortDesc": "At the end of every turn, holder restores 1/16 of its max HP.",
-    "heal": "  [POKEMON] restored a little HP using its Leftovers!",
+    "heal": "  {POKEMON} restored a little HP using its Leftovers!",
     "aliases": [
       "吃剩的東西"
     ],
@@ -4850,8 +4853,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 689,
-      "usagePercent": 5.356032338308458
+      "usageCount": 510,
+      "usagePercent": 4.751257685858022
     }
   },
   {
@@ -4866,7 +4869,7 @@
     "num": 154,
     "gen": 3,
     "shortDesc": "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
-    "activate": "  [POKEMON] restored PP to its move [MOVE] using its Leppa Berry!",
+    "activate": "  {POKEMON} restored PP to its move {MOVE} using its Leppa Berry!",
     "aliases": [
       "蘋野果"
     ],
@@ -4920,7 +4923,7 @@
     "num": 270,
     "gen": 4,
     "shortDesc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
-    "damage": "  [POKEMON] lost some of its HP!",
+    "damage": "  {POKEMON} lost some of its HP!",
     "aliases": [
       "生命寶珠"
     ],
@@ -4928,8 +4931,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1337,
-      "usagePercent": 10.39334577114428
+      "usageCount": 1150,
+      "usagePercent": 10.713620272032793
     }
   },
   {
@@ -4976,8 +4979,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5000,8 +5003,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 215,
-      "usagePercent": 1.6713308457711442
+      "usageCount": 149,
+      "usagePercent": 1.388112539593814
     }
   },
   {
@@ -5016,7 +5019,7 @@
     "desc": "The holder's moves that normally hit 2 to 5 times instead hit 4 or 5 times. If the first hit is successful, the holder's use of Triple Kick or Triple Axel hits 3 times, and Population Bomb hits 4 to 10 times, at random.",
     "shortDesc": "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
     "aliases": [
-      "机变骰子"
+      "老千骰子"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -5044,8 +5047,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usageCount": 22,
+      "usagePercent": 0.20495621389975777
     }
   },
   {
@@ -5103,8 +5106,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -5169,8 +5172,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.14769900497512436
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -5242,7 +5245,7 @@
     "gen": 8,
     "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
     "aliases": [
-      "大白宝玉"
+      "大白寶玉"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -5385,8 +5388,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -5466,8 +5469,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5481,7 +5484,7 @@
     "gen": 9,
     "shortDesc": "Evolves Charcadet into Ceruledge when used.",
     "aliases": [
-      "咒术之铠"
+      "詛咒之鎧"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -5509,8 +5512,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5577,6 +5580,9 @@
     "num": 2404,
     "gen": 9,
     "shortDesc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
+    "aliases": [
+      "傑作茶碗"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -5603,8 +5609,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 77,
-      "usagePercent": 0.5985696517412935
+      "usageCount": 49,
+      "usagePercent": 0.456493385504006
     }
   },
   {
@@ -5646,8 +5652,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -5668,8 +5674,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.1943407960199005
+      "usageCount": 16,
+      "usagePercent": 0.1490590646543693
     }
   },
   {
@@ -5692,8 +5698,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 41,
-      "usagePercent": 0.3187189054726368
+      "usageCount": 30,
+      "usagePercent": 0.2794857462269424
     }
   },
   {
@@ -5716,8 +5722,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -5741,8 +5747,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 83,
-      "usagePercent": 0.6452114427860697
+      "usageCount": 57,
+      "usagePercent": 0.5310229178311906
     }
   },
   {
@@ -5752,6 +5758,9 @@
     "num": 2482,
     "gen": 9,
     "shortDesc": "Evolves Duraludon into Archaludon when used.",
+    "aliases": [
+      "複合金屬"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -5780,8 +5789,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.14769900497512436
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -5832,8 +5841,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -6019,8 +6028,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -6035,7 +6044,7 @@
     "num": 1883,
     "gen": 9,
     "shortDesc": "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
-    "activate": "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
+    "activate": "  {POKEMON} used its Mirror Herb to mirror its opponent's stat changes!",
     "aliases": [
       "模仿香草"
     ],
@@ -6119,8 +6128,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -6139,7 +6148,7 @@
     ],
     "isNonstandard": "Past",
     "shortDesc": "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
-    "activate": "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!",
+    "activate": "  {POKEMON} restored PP to its {MOVE} move using Mystery Berry!",
     "champions": {
       "legal": false
     }
@@ -6165,8 +6174,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 224,
-      "usagePercent": 1.7412935323383085
+      "usageCount": 114,
+      "usagePercent": 1.0620458356623812
     }
   },
   {
@@ -6243,8 +6252,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 58,
-      "usagePercent": 0.45087064676616917
+      "usageCount": 40,
+      "usagePercent": 0.3726476616359232
     }
   },
   {
@@ -6321,8 +6330,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 166,
-      "usagePercent": 1.2904228855721394
+      "usageCount": 199,
+      "usagePercent": 1.853922116638718
     }
   },
   {
@@ -6455,8 +6464,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 80,
-      "usagePercent": 0.6218905472636816
+      "usageCount": 44,
+      "usagePercent": 0.40991242779951553
     }
   },
   {
@@ -6513,7 +6522,11 @@
       "柿仔果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -6558,7 +6571,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -6660,8 +6673,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -6722,8 +6735,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -6920,7 +6933,7 @@
     "num": 271,
     "gen": 4,
     "shortDesc": "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
-    "end": "  [POKEMON] became fully charged due to its Power Herb!",
+    "end": "  {POKEMON} became fully charged due to its Power Herb!",
     "aliases": [
       "強力香草"
     ],
@@ -7044,7 +7057,7 @@
     "num": 880,
     "gen": 7,
     "shortDesc": "Holder's moves are protected from adverse contact effects, except Pickpocket.",
-    "block": "  [POKEMON] protected itself with its Protective Pads!",
+    "block": "  {POKEMON} protected itself with its Protective Pads!",
     "aliases": [
       "部位護具"
     ],
@@ -7202,7 +7215,7 @@
     "gen": 9,
     "shortDesc": "Holder's punch-based attacks have 1.1x power and do not make contact.",
     "aliases": [
-      "拳击手套"
+      "拳擊手套"
     ],
     "isNonstandard": "Past",
     "champions": {
@@ -7227,8 +7240,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13992537313432835
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -7282,7 +7295,7 @@
     "gen2": {
       "shortDesc": "Each turn, holder has a ~23.4% chance to move first in its priority bracket."
     },
-    "activate": "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
+    "activate": "  {POKEMON} can act faster than normal, thanks to its Quick Claw!",
     "aliases": [
       "先制之爪"
     ],
@@ -7290,8 +7303,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.17101990049751245
+      "usageCount": 16,
+      "usagePercent": 0.1490590646543693
     }
   },
   {
@@ -7354,8 +7367,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -7376,8 +7389,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 301,
-      "usagePercent": 2.339863184079602
+      "usageCount": 246,
+      "usagePercent": 2.291783119060928
     }
   },
   {
@@ -7506,7 +7519,7 @@
     "num": 542,
     "gen": 5,
     "shortDesc": "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
-    "end": "  [POKEMON] held up its Red Card against [TARGET]!",
+    "end": "  {POKEMON} held up its Red Card against {TARGET}!",
     "aliases": [
       "紅牌"
     ],
@@ -7585,7 +7598,11 @@
       "羅子果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -7693,7 +7710,7 @@
     "num": 540,
     "gen": 5,
     "shortDesc": "If holder is hit by a contact move, the attacker loses 1/6 of its max HP.",
-    "damage": "  [POKEMON] was hurt by the Rocky Helmet!",
+    "damage": "  {POKEMON} was hurt by the Rocky Helmet!",
     "aliases": [
       "凸凸頭盔"
     ],
@@ -7777,8 +7794,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 0.6918532338308457
+      "usageCount": 47,
+      "usagePercent": 0.4378610024222098
     }
   },
   {
@@ -7858,8 +7875,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -7906,7 +7923,7 @@
     "num": 650,
     "gen": 6,
     "shortDesc": "Holder is immune to powder moves and damage from Sandstorm or Hail.",
-    "block": "  [POKEMON] is not affected by [MOVE] thanks to its Safety Goggles!",
+    "block": "  {POKEMON} is not affected by {MOVE} thanks to its Safety Goggles!",
     "aliases": [
       "防塵護目鏡"
     ],
@@ -7995,8 +8012,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.14769900497512436
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -8020,8 +8037,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.13215174129353235
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -8042,8 +8059,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -8063,8 +8080,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0777363184079602
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   },
   {
@@ -8085,8 +8102,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 99,
-      "usagePercent": 0.769589552238806
+      "usageCount": 102,
+      "usagePercent": 0.9502515371716043
     }
   },
   {
@@ -8107,8 +8124,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 31,
-      "usagePercent": 0.2409825870646766
+      "usageCount": 24,
+      "usagePercent": 0.22358859698155395
     }
   },
   {
@@ -8154,8 +8171,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 41,
-      "usagePercent": 0.3187189054726368
+      "usageCount": 36,
+      "usagePercent": 0.3353828954723309
     }
   },
   {
@@ -8180,7 +8197,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -8199,11 +8216,7 @@
       "美麗空殼"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -8217,7 +8230,7 @@
     "num": 253,
     "gen": 3,
     "shortDesc": "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
-    "heal": "  [POKEMON] restored a little HP using its Shell Bell!",
+    "heal": "  {POKEMON} restored a little HP using its Shell Bell!",
     "aliases": [
       "貝殼之鈴"
     ],
@@ -8225,8 +8238,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   },
   {
@@ -8287,8 +8300,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17879353233830847
+      "usageCount": 21,
+      "usagePercent": 0.1956400223588597
     }
   },
   {
@@ -8312,8 +8325,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10883084577114428
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -8359,8 +8372,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1457,
-      "usagePercent": 11.3261815920398
+      "usageCount": 1290,
+      "usagePercent": 12.017887087758524
     }
   },
   {
@@ -8381,8 +8394,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -8440,8 +8453,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05441542288557214
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     },
     "aliases": [
       "呆殼獸進化石"
@@ -8461,11 +8474,7 @@
       "沙沙岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -8528,8 +8537,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -8600,7 +8609,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usagePercent": 0.1490590646543693
     }
   },
   {
@@ -8712,8 +8721,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 381,
-      "usagePercent": 2.9617537313432836
+      "usageCount": 328,
+      "usagePercent": 3.0557108254145704
     }
   },
   {
@@ -8754,8 +8763,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -8835,8 +8844,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -8911,7 +8920,7 @@
     "isNonstandard": "Past",
     "shortDesc": "Placeholder if caught in Poke Ball not in current game.",
     "aliases": [
-      "奇异球"
+      "奇異球"
     ],
     "champions": {
       "legal": false
@@ -8975,8 +8984,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 161,
-      "usagePercent": 1.2515547263681592
+      "usageCount": 121,
+      "usagePercent": 1.1272591764486677
     }
   },
   {
@@ -9007,6 +9016,9 @@
     "num": 2402,
     "gen": 9,
     "shortDesc": "Evolves Applin into Dipplin when used.",
+    "aliases": [
+      "蜜汁蘋果"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -11076,7 +11088,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -11100,8 +11112,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 131,
-      "usagePercent": 1.0183457711442787
+      "usageCount": 120,
+      "usagePercent": 1.1179429849077696
     }
   },
   {
@@ -11134,8 +11146,8 @@
     "gen": 7,
     "isNonstandard": "Past",
     "shortDesc": "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
-    "transform": "  Bright light is about to burst out of [POKEMON]!",
-    "activate": "[POKEMON] regained its true power through Ultra Burst!",
+    "transform": "  Bright light is about to burst out of {POKEMON}!",
+    "activate": "{POKEMON} regained its true power through Ultra Burst!",
     "champions": {
       "legal": false
     }
@@ -11150,6 +11162,9 @@
     "num": 2403,
     "gen": 9,
     "shortDesc": "Evolves Poltchageist into Sinistcha when used.",
+    "aliases": [
+      "凡作茶碗"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -11216,8 +11231,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 71,
-      "usagePercent": 0.5519278606965174
+      "usageCount": 56,
+      "usagePercent": 0.5217067262902926
     }
   },
   {
@@ -11238,8 +11253,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -11281,8 +11296,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -11437,6 +11452,9 @@
     "num": 2407,
     "gen": 9,
     "shortDesc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "aliases": [
+      "水井面具"
+    ],
     "isNonstandard": "Past",
     "champions": {
       "legal": false
@@ -11493,7 +11511,7 @@
     "num": 214,
     "gen": 3,
     "shortDesc": "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
-    "end": "  [POKEMON] returned its stats to normal using its White Herb!",
+    "end": "  {POKEMON} returned its stats to normal using its White Herb!",
     "aliases": [
       "白色香草"
     ],
@@ -11501,8 +11519,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 298,
-      "usagePercent": 2.316542288557214
+      "usageCount": 287,
+      "usagePercent": 2.673746972237749
     }
   },
   {
@@ -11523,8 +11541,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 0.6918532338308457
+      "usageCount": 96,
+      "usagePercent": 0.8943543879262158
     }
   },
   {
@@ -11571,8 +11589,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -11594,8 +11612,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -11652,8 +11670,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {

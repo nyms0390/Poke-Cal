@@ -14,8 +14,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 654,
-      "usagePercent": 5.083955223880597
+      "usageCount": 483,
+      "usagePercent": 4.499720514253773
     }
   },
   {
@@ -48,14 +48,12 @@
     "num": 106,
     "desc": "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. This effect is prevented if the move's user has the Magic Guard Ability or if any active Pokemon has the Damp Ability.",
     "shortDesc": "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
-    "damage": "  [POKEMON] was hurt!",
+    "damage": "  {POKEMON} was hurt!",
     "aliases": [
       "引爆"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "legal": true
     }
   },
   {
@@ -87,7 +85,11 @@
       "分析"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -102,7 +104,7 @@
       "desc": "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
       "shortDesc": "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages."
     },
-    "boost": "  [POKEMON] maxed its Attack!",
+    "boost": "  {POKEMON} maxed its Attack!",
     "aliases": [
       "憤怒穴位"
     ],
@@ -110,8 +112,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -143,7 +145,7 @@
     "gen4": {
       "desc": "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move if this Pokemon is not immune to the type and the Pokemon with the move is not a lower level than this Pokemon. This effect considers moves to be their original type. This effect is not activated by Counter, Dragon Rage, Metal Burst, Mirror Coat, Night Shade, Psywave, or Seismic Toss. This effect checks if this Pokemon is holding an Iron Ball, if it is under the effects of Foresight (Odor Sleuth), Gravity, Ingrain, Miracle Eye, or Roost, and whether each opposing Pokemon has the Normalize or Scrappy Abilities before determining if their attacks fit the conditions."
     },
-    "activate": "  [POKEMON] shuddered!",
+    "activate": "  {POKEMON} shuddered!",
     "aliases": [
       "危險預知"
     ],
@@ -196,8 +198,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 443,
-      "usagePercent": 3.443718905472637
+      "usageCount": 379,
+      "usagePercent": 3.5308365940003728
     }
   },
   {
@@ -210,7 +212,7 @@
     "num": 165,
     "desc": "This Pokemon and its allies cannot become affected by Attract, Disable, Encore, Heal Block, Taunt, or Torment.",
     "shortDesc": "Protects user/allies from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
-    "block": "  [POKEMON] is protected by an aromatic veil!",
+    "block": "  {POKEMON} is protected by an aromatic veil!",
     "aliases": [
       "芳香幕"
     ],
@@ -218,8 +220,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -276,7 +278,7 @@
     "num": 188,
     "desc": "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
     "shortDesc": "While this Pokemon is active, the Dark Aura and Fairy Aura power modifier is 0.75x.",
-    "start": "  [POKEMON] reversed all other Pokémon's auras!",
+    "start": "  {POKEMON} reversed all other Pokémon's auras!",
     "aliases": [
       "氣場破壞"
     ],
@@ -302,7 +304,7 @@
       "desc": "Causes opposing Pokemon to lose 1/8 of their maximum HP, rounded down, at the end of each turn if they are asleep.",
       "shortDesc": "Causes sleeping foes to lose 1/8 of their max HP at the end of each turn."
     },
-    "damage": "  [POKEMON] is tormented!",
+    "damage": "  {POKEMON} is tormented!",
     "aliases": [
       "夢魘"
     ],
@@ -376,8 +378,8 @@
       "desc": "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
       "shortDesc": "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x."
     },
-    "activate": "  [POKEMON] became fully charged due to its bond with its Trainer!",
-    "transform": "[POKEMON] became Ash-Greninja!",
+    "activate": "  {POKEMON} became fully charged due to its bond with its Trainer!",
+    "transform": "{POKEMON} became Ash-Greninja!",
     "aliases": [
       "牽絆變身"
     ],
@@ -392,7 +394,7 @@
     "rating": 4.5,
     "num": 284,
     "shortDesc": "Active Pokemon without this Ability have their Special Defense multiplied by 0.75.",
-    "start": "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
+    "start": "  {POKEMON}'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
     ],
@@ -430,8 +432,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -450,8 +452,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -475,8 +477,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 621,
-      "usagePercent": 4.827425373134328
+      "usageCount": 588,
+      "usagePercent": 5.477920626048071
     }
   },
   {
@@ -495,8 +497,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.09328358208955223
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -514,7 +516,11 @@
       "頰囊"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -538,10 +544,10 @@
     "name": "Chlorophyll",
     "rating": 3,
     "num": 34,
-    "desc": "If Sunny Day is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If Sunny Day is active, this Pokemon's Speed is doubled.",
+    "desc": "If Sun is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If Sun is active, this Pokemon's Speed is doubled.",
     "gen7": {
-      "desc": "If Sunny Day is active, this Pokemon's Speed is doubled."
+      "desc": "If Sun is active, this Pokemon's Speed is doubled."
     },
     "aliases": [
       "葉綠素"
@@ -550,8 +556,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 247,
-      "usagePercent": 1.920087064676617
+      "usageCount": 225,
+      "usagePercent": 2.096143096702068
     }
   },
   {
@@ -570,8 +576,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 101,
-      "usagePercent": 0.7851368159203981
+      "usageCount": 69,
+      "usagePercent": 0.6428172163219675
     }
   },
   {
@@ -590,8 +596,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 28,
-      "usagePercent": 0.21766169154228857
+      "usageCount": 24,
+      "usagePercent": 0.22358859698155395
     }
   },
   {
@@ -627,7 +633,7 @@
     "num": 213,
     "desc": "This Pokemon is considered to be asleep and cannot become affected by a non-volatile status condition or Yawn.",
     "shortDesc": "This Pokemon cannot be statused, and is considered to be asleep.",
-    "start": "  [POKEMON] is drowsing!",
+    "start": "  {POKEMON} is drowsing!",
     "aliases": [
       "絕對睡眠"
     ],
@@ -650,7 +656,7 @@
     "num": 279,
     "desc": "If this Pokemon is a Tatsugiri and a Dondozo is an active ally, this Pokemon goes into the Dondozo's mouth. The Dondozo has its Attack, Special Attack, Speed, Defense, and Special Defense raised by 2 stages. During the effect, the Dondozo cannot be switched out, this Pokemon cannot select an action, and attacks targeted at this Pokemon will be avoided but it will still take indirect damage. If this Pokemon faints during the effect, a Pokemon can be switched in as a replacement but the Dondozo remains unable to be switched out. If the Dondozo faints during the effect, this Pokemon regains the ability to select an action.",
     "shortDesc": "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
-    "activate": "  [POKEMON] was swallowed by [TARGET] and became [TARGET]'s commander!",
+    "activate": "  {POKEMON} was swallowed by {TARGET} and became {TARGET}'s commander!",
     "aliases": [
       "發號施令"
     ],
@@ -673,8 +679,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 167,
-      "usagePercent": 1.2981965174129353
+      "usageCount": 123,
+      "usagePercent": 1.145891559530464
     }
   },
   {
@@ -692,8 +698,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 72,
-      "usagePercent": 0.5597014925373134
+      "usageCount": 35,
+      "usagePercent": 0.32606670393143283
     }
   },
   {
@@ -718,8 +724,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 26,
-      "usagePercent": 0.2021144278606965
+      "usageCount": 20,
+      "usagePercent": 0.1863238308179616
     }
   },
   {
@@ -736,8 +742,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -786,8 +792,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -819,8 +825,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 322,
-      "usagePercent": 2.5031094527363185
+      "usageCount": 238,
+      "usagePercent": 2.2172535867337433
     }
   },
   {
@@ -845,8 +851,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   },
   {
@@ -871,7 +877,7 @@
       "desc": "While this Pokemon is active, Explosion and Self-Destruct are prevented from having an effect.",
       "shortDesc": "Prevents Explosion and Self-Destruct while this Pokemon is active."
     },
-    "block": "  [SOURCE] cannot use [MOVE]!",
+    "block": "  {SOURCE} cannot use {MOVE}!",
     "aliases": [
       "濕氣"
     ],
@@ -879,8 +885,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 51,
-      "usagePercent": 0.396455223880597
+      "usageCount": 36,
+      "usagePercent": 0.3353828954723309
     }
   },
   {
@@ -907,7 +913,7 @@
     "num": 186,
     "desc": "While this Pokemon is active, the power of Dark-type moves used by active Pokemon is multiplied by 1.33.",
     "shortDesc": "While this Pokemon is active, a Dark move used by any Pokemon has 1.33x power.",
-    "start": "  [POKEMON] is radiating a dark aura!",
+    "start": "  {POKEMON} is radiating a dark aura!",
     "aliases": [
       "暗黑氣場"
     ],
@@ -982,8 +988,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 959,
-      "usagePercent": 7.454912935323383
+      "usageCount": 856,
+      "usagePercent": 7.974659959008758
     }
   },
   {
@@ -992,7 +998,7 @@
     "name": "Delta Stream",
     "rating": 4,
     "num": 191,
-    "desc": "On switch-in, the weather becomes Delta Stream, which removes the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Desolate Land or Primordial Sea Abilities.",
+    "desc": "On switch-in, the weather becomes Strong Winds, which removes the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Desolate Land or Primordial Sea Abilities.",
     "shortDesc": "On switch-in, strong winds begin until this Ability is not active in battle.",
     "aliases": [
       "德爾塔氣流"
@@ -1007,7 +1013,7 @@
     "name": "Desolate Land",
     "rating": 4.5,
     "num": 190,
-    "desc": "On switch-in, the weather becomes Desolate Land, which includes all the effects of Sunny Day and prevents damaging Water-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Primordial Sea Abilities.",
+    "desc": "On switch-in, the weather becomes Intense Sun, which includes all the effects of Sun and prevents damaging Water-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Primordial Sea Abilities.",
     "shortDesc": "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
     "aliases": [
       "終結之地"
@@ -1039,7 +1045,7 @@
       "shortDesc": "(Mimikyu only) First hit deals 0 damage, breaks disguise."
     },
     "block": "  Its disguise served it as a decoy!",
-    "transform": "[POKEMON]'s disguise was busted!",
+    "transform": "{POKEMON}'s disguise was busted!",
     "aliases": [
       "畫皮"
     ],
@@ -1047,8 +1053,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11660447761194029
+      "usageCount": 12,
+      "usagePercent": 0.11179429849077697
     }
   },
   {
@@ -1103,7 +1109,7 @@
     "name": "Drizzle",
     "rating": 4,
     "num": 2,
-    "shortDesc": "On switch-in, this Pokemon summons Rain Dance.",
+    "shortDesc": "On switch-in, this Pokemon summons Rain.",
     "aliases": [
       "降雨"
     ],
@@ -1111,8 +1117,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 317,
-      "usagePercent": 2.4642412935323383
+      "usageCount": 216,
+      "usagePercent": 2.0122973728339857
     }
   },
   {
@@ -1121,7 +1127,7 @@
     "name": "Drought",
     "rating": 4,
     "num": 70,
-    "shortDesc": "On switch-in, this Pokemon summons Sunny Day.",
+    "shortDesc": "On switch-in, this Pokemon summons Sun.",
     "aliases": [
       "日照"
     ],
@@ -1129,8 +1135,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 100,
-      "usagePercent": 0.777363184079602
+      "usageCount": 91,
+      "usagePercent": 0.8477734302217254
     }
   },
   {
@@ -1142,12 +1148,12 @@
     "name": "Dry Skin",
     "rating": 3,
     "num": 87,
-    "desc": "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
+    "desc": "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
     "shortDesc": "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
     "gen7": {
-      "desc": "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day."
+      "desc": "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun."
     },
-    "damage": "  ([POKEMON] was hurt by its Dry Skin.)",
+    "damage": "#aftermath",
     "aliases": [
       "乾燥皮膚"
     ],
@@ -1155,8 +1161,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -1190,8 +1196,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -1209,8 +1215,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -1232,11 +1238,7 @@
       "孢子"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -1261,7 +1263,7 @@
     "rating": 3,
     "num": 280,
     "shortDesc": "This Pokemon gains the Charge effect when it takes a hit from an attack.",
-    "start": "  Being hit by [MOVE] charged [POKEMON] with power!",
+    "start": "  Being hit by {MOVE} charged {POKEMON} with power!",
     "aliases": [
       "電力轉換"
     ],
@@ -1269,8 +1271,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -1287,7 +1289,7 @@
     "rating": 3.5,
     "num": 304,
     "shortDesc": "On switch-in, this Pokemon's Defense is raised by 1 stage.",
-    "boost": "  The Cornerstone Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Defense rose!",
+    "boost": "  The Cornerstone Mask worn by {POKEMON} shone brilliantly, and {POKEMON}'s Defense rose!",
     "aliases": [
       "太晶變形"
     ],
@@ -1309,7 +1311,7 @@
     "rating": 3.5,
     "num": 303,
     "shortDesc": "On switch-in, this Pokemon's Attack is raised by 1 stage.",
-    "boost": "  The Hearthflame Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Attack rose!",
+    "boost": "  The Hearthflame Mask worn by {POKEMON} shone brilliantly, and {POKEMON}'s Attack rose!",
     "aliases": [
       "面影輝映"
     ],
@@ -1331,7 +1333,7 @@
     "rating": 3.5,
     "num": 301,
     "shortDesc": "On switch-in, this Pokemon's Speed is raised by 1 stage.",
-    "boost": "  The Teal Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Speed rose!",
+    "boost": "  The Teal Mask worn by {POKEMON} shone brilliantly, and {POKEMON}'s Speed rose!",
     "aliases": [
       "款待"
     ],
@@ -1353,7 +1355,7 @@
     "rating": 3.5,
     "num": 302,
     "shortDesc": "On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
-    "boost": "  The Wellspring Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Sp. Def rose!",
+    "boost": "  The Wellspring Mask worn by {POKEMON} shone brilliantly, and {POKEMON}'s Sp. Def rose!",
     "aliases": [
       "毒鎖鏈"
     ],
@@ -1385,7 +1387,7 @@
     "num": 187,
     "desc": "While this Pokemon is active, the power of Fairy-type moves used by active Pokemon is multiplied by 1.33.",
     "shortDesc": "While this Pokemon is active, a Fairy move used by any Pokemon has 1.33x power.",
-    "start": "  [POKEMON] is radiating a fairy aura!",
+    "start": "  {POKEMON} is radiating a fairy aura!",
     "aliases": [
       "妖精氣場"
     ],
@@ -1393,8 +1395,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -1448,8 +1450,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.14769900497512436
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -1489,7 +1491,7 @@
     "gen3": {
       "desc": "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability. If this Pokemon has a non-volatile status condition, is a Fire type, or has a substitute, Will-O-Wisp will not activate this Ability."
     },
-    "start": "  The power of [POKEMON]'s Fire-type moves rose!",
+    "start": "  The power of {POKEMON}'s Fire-type moves rose!",
     "aliases": [
       "引火"
     ],
@@ -1497,8 +1499,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 95,
-      "usagePercent": 0.7384950248756219
+      "usageCount": 72,
+      "usagePercent": 0.6707657909446618
     }
   },
   {
@@ -1516,14 +1518,14 @@
     "name": "Flower Gift",
     "rating": 1,
     "num": 122,
-    "desc": "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If user is Cherrim and Sunny Day is active, it and allies' Attack and Sp. Def are 1.5x.",
+    "desc": "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If user is Cherrim and Sun is active, it and allies' Attack and Sp. Def are 1.5x.",
     "gen7": {
-      "desc": "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5."
+      "desc": "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5."
     },
     "gen4": {
-      "desc": "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
-      "shortDesc": "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x."
+      "desc": "If Sun is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
+      "shortDesc": "If Sun is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x."
     },
     "aliases": [
       "花之禮"
@@ -1542,7 +1544,7 @@
     "num": 166,
     "desc": "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a non-volatile status condition inflicted on them by other Pokemon.",
     "shortDesc": "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
-    "block": "  [POKEMON] surrounded itself with a veil of petals!",
+    "block": "  {POKEMON} surrounded itself with a veil of petals!",
     "aliases": [
       "花幕"
     ],
@@ -1550,8 +1552,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 296,
-      "usagePercent": 2.300995024875622
+      "usageCount": 305,
+      "usagePercent": 2.8414384199739144
     }
   },
   {
@@ -1568,11 +1570,7 @@
       "毛茸茸"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -1587,7 +1585,7 @@
     "name": "Forecast",
     "rating": 2,
     "num": 59,
-    "desc": "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. This effect is prevented if this Pokemon is holding a Utility Umbrella and the weather is Rain Dance or Sunny Day.",
+    "desc": "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. This effect is prevented if this Pokemon is holding a Utility Umbrella and the weather is Rain or Sun.",
     "shortDesc": "Castform's type changes to the current weather condition's type, except Sandstorm.",
     "gen7": {
       "desc": "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm."
@@ -1600,7 +1598,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -1614,8 +1612,8 @@
     "gen4": {
       "desc": "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, and every other attacking move with an unspecified power to have 80 power."
     },
-    "activate": "  [TARGET]'s [MOVE] was revealed!",
-    "activateNoTarget": "  [POKEMON]'s Forewarn alerted it to [MOVE]!",
+    "activate": "  {TARGET}'s {MOVE} was revealed!",
+    "activateNoTarget": "  {POKEMON}'s Forewarn alerted it to {MOVE}!",
     "aliases": [
       "預知夢"
     ],
@@ -1639,8 +1637,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 97,
-      "usagePercent": 0.754042288557214
+      "usageCount": 66,
+      "usagePercent": 0.6148686416992734
     }
   },
   {
@@ -1653,8 +1651,8 @@
     "gen5": {
       "shortDesc": "On switch-in, this Pokemon identifies the held item of a random opposing Pokemon."
     },
-    "activate": "  [POKEMON] frisked [TARGET] and found its [ITEM]!",
-    "activateNoTarget": "  [POKEMON] frisked its target and found one [ITEM]!",
+    "activate": "  {POKEMON} frisked {TARGET} and found its {ITEM}!",
+    "activateNoTarget": "  {POKEMON} frisked its target and found one {ITEM}!",
     "aliases": [
       "察覺"
     ],
@@ -1662,8 +1660,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -1694,11 +1692,7 @@
       "毛皮大衣"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -1718,8 +1712,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 74,
-      "usagePercent": 0.5752487562189055
+      "usageCount": 66,
+      "usagePercent": 0.6148686416992734
     }
   },
   {
@@ -1770,8 +1764,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 164,
-      "usagePercent": 1.2748756218905473
+      "usageCount": 129,
+      "usagePercent": 1.2017887087758523
     }
   },
   {
@@ -1789,7 +1783,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -1907,8 +1901,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -1919,8 +1913,8 @@
     "rating": 4.5,
     "num": 289,
     "shortDesc": "On switch-in, summons Electric Terrain. During Electric Terrain, Sp. Atk is 1.3333x.",
-    "start": "  [POKEMON] turned the ground into Electric Terrain, energizing its futuristic engine!",
-    "activate": "  [POKEMON] used the Electric Terrain to energize its futuristic engine!",
+    "start": "  {POKEMON} turned the ground into Electric Terrain, energizing its futuristic engine!",
+    "activate": "  {POKEMON} used the Electric Terrain to energize its futuristic engine!",
     "aliases": [
       "強子引擎"
     ],
@@ -1936,14 +1930,18 @@
     "name": "Harvest",
     "rating": 2.5,
     "num": 139,
-    "desc": "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sunny Day is active, this chance is 100%.",
+    "desc": "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sun is active, this chance is 100%.",
     "shortDesc": "If last item used is a Berry, 50% chance to restore it each end of turn. 100% in Sun.",
-    "addItem": "  [POKEMON] harvested one [ITEM]!",
+    "addItem": "  {POKEMON} harvested one {ITEM}!",
     "aliases": [
       "收穫"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -1962,8 +1960,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     },
     "gen6": {
       "desc": "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
@@ -1996,8 +1994,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -2019,7 +2017,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -2044,7 +2042,7 @@
     "rating": 0,
     "num": 299,
     "shortDesc": "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
-    "heal": "  [POKEMON] drank down all the matcha that [SOURCE] made!",
+    "heal": "  {POKEMON} drank down all the matcha that {SOURCE} made!",
     "aliases": [
       "心眼"
     ],
@@ -2052,8 +2050,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 479,
-      "usagePercent": 3.7235696517412937
+      "usageCount": 487,
+      "usagePercent": 4.536985280417365
     }
   },
   {
@@ -2071,8 +2069,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.09328358208955223
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -2098,8 +2096,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -2127,20 +2125,16 @@
     "name": "Hydration",
     "rating": 1.5,
     "num": 93,
-    "desc": "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "This Pokemon has its status cured at the end of each turn if Rain Dance is active.",
+    "desc": "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain is active. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "This Pokemon has its status cured at the end of each turn if Rain is active.",
     "gen7": {
-      "desc": "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active."
+      "desc": "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain is active."
     },
     "aliases": [
       "濕潤之軀"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "legal": true
     }
   },
   {
@@ -2159,8 +2153,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 63,
-      "usagePercent": 0.4897388059701493
+      "usageCount": 54,
+      "usagePercent": 0.5030743432084964
     }
   },
   {
@@ -2182,8 +2176,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -2253,8 +2247,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -2271,7 +2265,7 @@
     "num": 149,
     "desc": "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
     "shortDesc": "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
-    "end": "  [POKEMON]'s illusion wore off!",
+    "end": "  {POKEMON}'s illusion wore off!",
     "aliases": [
       "幻覺"
     ],
@@ -2279,8 +2273,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.17879353233830847
+      "usageCount": 27,
+      "usagePercent": 0.2515371716042482
     }
   },
   {
@@ -2296,7 +2290,11 @@
       "免疫"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -2319,8 +2317,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -2346,8 +2344,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08550995024875623
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -2388,8 +2386,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 133,
-      "usagePercent": 1.0338930348258706
+      "usageCount": 110,
+      "usagePercent": 1.0247810694987889
     }
   },
   {
@@ -2408,8 +2406,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -2441,8 +2439,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1088,
-      "usagePercent": 8.45771144278607
+      "usageCount": 936,
+      "usagePercent": 8.719955282280603
     }
   },
   {
@@ -2495,8 +2493,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13992537313432835
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -2513,8 +2511,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -2538,8 +2536,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -2566,14 +2564,14 @@
     "name": "Leaf Guard",
     "rating": 0.5,
     "num": 102,
-    "desc": "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
+    "desc": "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If Sun is active, this Pokemon cannot be statused and Rest will fail for it.",
     "gen7": {
-      "desc": "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it."
+      "desc": "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it."
     },
     "gen4": {
-      "desc": "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, but can use Rest normally.",
-      "shortDesc": "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally."
+      "desc": "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, but can use Rest normally.",
+      "shortDesc": "If Sun is active, this Pokemon cannot be statused, but Rest works normally."
     },
     "aliases": [
       "葉子防守"
@@ -2582,8 +2580,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.13992537313432835
+      "usageCount": 11,
+      "usagePercent": 0.10247810694987888
     }
   },
   {
@@ -2614,8 +2612,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 162,
-      "usagePercent": 1.2593283582089552
+      "usageCount": 141,
+      "usagePercent": 1.3135830072666295
     }
   },
   {
@@ -2672,7 +2670,7 @@
       "desc": "If this Pokemon is not the target of a single-target Electric-type move used by an opposing Pokemon, this Pokemon redirects that move to itself. This effect considers Hidden Power a Normal-type move.",
       "shortDesc": "This Pokemon draws single-target Electric moves used by opponents to itself."
     },
-    "activate": "  [POKEMON] took the attack!",
+    "activate": "  {POKEMON} took the attack!",
     "aliases": [
       "避雷針"
     ],
@@ -2680,8 +2678,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 310,
-      "usagePercent": 2.4098258706467663
+      "usageCount": 235,
+      "usagePercent": 2.189305012111049
     }
   },
   {
@@ -2700,8 +2698,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usageCount": 20,
+      "usagePercent": 0.1863238308179616
     }
   },
   {
@@ -2715,7 +2713,7 @@
     "gen8": {
       "desc": "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Lingering Aroma, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities."
     },
-    "changeAbility": "  A lingering aroma clings to [TARGET]!",
+    "changeAbility": "  A lingering aroma clings to {TARGET}!",
     "aliases": [
       "甩不掉的氣味"
     ],
@@ -2733,7 +2731,7 @@
     "gen4": {
       "desc": "This Pokemon damages those draining HP from it for as much as they would heal. This effect does not consider Dream Eater."
     },
-    "damage": "  [POKEMON] sucked up the liquid ooze!",
+    "damage": "  {POKEMON} sucked up the liquid ooze!",
     "aliases": [
       "污泥漿"
     ],
@@ -2757,8 +2755,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.388681592039801
+      "usageCount": 44,
+      "usagePercent": 0.40991242779951553
     }
   },
   {
@@ -2776,7 +2774,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -2801,8 +2799,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -2824,8 +2822,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 10,
+      "usagePercent": 0.0931619154089808
     }
   },
   {
@@ -2843,8 +2841,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 26,
-      "usagePercent": 0.2021144278606965
+      "usageCount": 19,
+      "usagePercent": 0.17700763927706353
     }
   },
   {
@@ -2860,11 +2858,7 @@
       "熔岩鎧甲"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "legal": true
     }
   },
   {
@@ -2914,7 +2908,9 @@
     "champions": {
       "legal": true,
       "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments"
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -2933,8 +2929,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -2945,7 +2941,7 @@
     "name": "Mega Sol",
     "rating": 3,
     "num": 315,
-    "shortDesc": "This Pokemon's moves are used as if the effects of Sunny Day were active.",
+    "shortDesc": "This Pokemon's moves are used as if the effects of Sun were active.",
     "champions": {
       "legal": true
     }
@@ -2973,16 +2969,12 @@
     "num": 250,
     "desc": "This Pokemon's types change to match the active Terrain when this Pokemon acquires this Ability, or whenever a Terrain begins. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain. If this Ability is acquired without an active Terrain, or a Terrain ends, this Pokemon's types become the original types for its species.",
     "shortDesc": "This Pokemon's types change to match the Terrain. Type reverts when Terrain ends.",
-    "activate": "  [POKEMON] returned to its original type!",
+    "activate": "  {POKEMON} returned to its original type!",
     "aliases": [
       "擬態"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "legal": true
     }
   },
   {
@@ -3044,8 +3036,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 74,
-      "usagePercent": 0.5752487562189055
+      "usageCount": 41,
+      "usagePercent": 0.3819638531768213
     }
   },
   {
@@ -3085,7 +3077,7 @@
     "gen4": {
       "desc": "This Pokemon's moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightning Rod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke, and Wonder Guard. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move. The Attack modifier from an ally's Flower Gift Ability is not negated."
     },
-    "start": "  [POKEMON] breaks the mold!",
+    "start": "  {POKEMON} breaks the mold!",
     "aliases": [
       "破格"
     ],
@@ -3093,8 +3085,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 20,
-      "usagePercent": 0.1554726368159204
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -3118,8 +3110,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 87,
-      "usagePercent": 0.6763059701492536
+      "usageCount": 79,
+      "usagePercent": 0.7359791317309483
     }
   },
   {
@@ -3168,8 +3160,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10883084577114428
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -3188,8 +3180,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 107,
-      "usagePercent": 0.8317786069651741
+      "usageCount": 60,
+      "usagePercent": 0.5589714924538848
     }
   },
   {
@@ -3213,7 +3205,7 @@
       "shortDesc": "If this Pokemon is an Arceus, its type changes to match its held Plate."
     },
     "gen4": {
-      "shortDesc": "If this Pokemon is an Arceus, its type changes to match its held Plate. This Pokemon cannot lose its held item due to another Pokemon's attack."
+      "desc": "If this Pokemon is an Arceus, its type changes to match its held Plate. This Pokemon cannot lose its held item due to another Pokemon's attack."
     },
     "aliases": [
       "多屬性"
@@ -3242,7 +3234,7 @@
     "gen5": {
       "desc": "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the Multitype or Mummy Abilities."
     },
-    "changeAbility": "  [TARGET]'s Ability became Mummy!",
+    "changeAbility": "  {TARGET}'s Ability became Mummy!",
     "aliases": [
       "木乃伊"
     ],
@@ -3250,8 +3242,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -3277,7 +3269,7 @@
     "rating": 2.5,
     "num": 30,
     "shortDesc": "This Pokemon has its non-volatile status condition cured when it switches out.",
-    "activate": "  ([POKEMON] is cured by its Natural Cure)",
+    "activate": "  ({POKEMON} is cured by its Natural Cure)",
     "aliases": [
       "自然回復"
     ],
@@ -3285,8 +3277,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -3359,8 +3351,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -3412,8 +3404,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.1943407960199005
+      "usageCount": 13,
+      "usagePercent": 0.12111049003167505
     }
   },
   {
@@ -3429,11 +3421,7 @@
       "跟風"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -3443,9 +3431,9 @@
     "name": "Orichalcum Pulse",
     "rating": 4.5,
     "num": 288,
-    "shortDesc": "On switch-in, summons Sunny Day. During Sunny Day, Attack is 1.3333x.",
-    "start": "  [POKEMON] turned the sunlight harsh, sending its ancient pulse into a frenzy!",
-    "activate": "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
+    "shortDesc": "On switch-in, summons Sun. During Sun, Attack is 1.3333x.",
+    "start": "  {POKEMON} turned the sunlight harsh, sending its ancient pulse into a frenzy!",
+    "activate": "  {POKEMON} basked in the sunlight, sending its ancient pulse into a frenzy!",
     "aliases": [
       "緋紅脈動"
     ],
@@ -3479,8 +3467,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.17101990049751245
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -3504,8 +3492,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 36,
-      "usagePercent": 0.2798507462686567
+      "usageCount": 31,
+      "usagePercent": 0.2888019377678405
     }
   },
   {
@@ -3529,8 +3517,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -3600,7 +3588,7 @@
     "num": -3,
     "desc": "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
     "shortDesc": "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
-    "activate": "  [POKEMON] extends [MOVE] by 2 turns!",
+    "activate": "  {POKEMON} extends {MOVE} by 2 turns!",
     "champions": {
       "legal": false
     }
@@ -3620,8 +3608,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0777363184079602
+      "usageCount": 15,
+      "usagePercent": 0.1397428731134712
     }
   },
   {
@@ -3646,7 +3634,11 @@
       "撿拾"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -3685,8 +3677,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 420,
-      "usagePercent": 3.264925373134328
+      "usageCount": 315,
+      "usagePercent": 2.9346003353828953
     }
   },
   {
@@ -3730,7 +3722,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -3754,8 +3746,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 4,
+      "usagePercent": 0.037264766163592325
     }
   },
   {
@@ -3794,8 +3786,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 275,
-      "usagePercent": 2.1377487562189055
+      "usageCount": 239,
+      "usagePercent": 2.226569778274641
     }
   },
   {
@@ -3815,7 +3807,7 @@
     "desc": "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
     "shortDesc": "If Zygarde 10%/50%, changes to Complete if at 1/2 max HP or less at end of turn.",
     "activate": "  You sense the presence of many!",
-    "transform": "[POKEMON] transformed into its Complete Forme!",
+    "transform": "{POKEMON} transformed into its Complete Forme!",
     "aliases": [
       "群聚變形"
     ],
@@ -3885,8 +3877,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 699,
-      "usagePercent": 5.433768656716418
+      "usageCount": 573,
+      "usagePercent": 5.3381777529346
     }
   },
   {
@@ -3907,7 +3899,7 @@
       "desc": "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
       "shortDesc": "If this Pokemon is the target of a move, that move loses one additional PP."
     },
-    "start": "  [POKEMON] is exerting its pressure!",
+    "start": "  {POKEMON} is exerting its pressure!",
     "aliases": [
       "壓迫感"
     ],
@@ -3915,8 +3907,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.10883084577114428
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -3925,7 +3917,7 @@
     "name": "Primordial Sea",
     "rating": 4.5,
     "num": 189,
-    "desc": "On switch-in, the weather becomes Primordial Sea, which includes all the effects of Rain Dance and prevents damaging Fire-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Desolate Land Abilities.",
+    "desc": "On switch-in, the weather becomes Heavy Rain, which includes all the effects of Rain and prevents damaging Fire-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Desolate Land Abilities.",
     "shortDesc": "On switch-in, heavy rain begins until this Ability is not active in battle.",
     "aliases": [
       "始源之海"
@@ -3982,8 +3974,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 45,
-      "usagePercent": 0.3498134328358209
+      "usageCount": 24,
+      "usagePercent": 0.22358859698155395
     }
   },
   {
@@ -4007,12 +3999,12 @@
     "name": "Protosynthesis",
     "rating": 3,
     "num": 281,
-    "desc": "If Sunny Day is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sunny Day, a held Booster Energy will not activate and the effect ends when Sunny Day is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
-    "shortDesc": "Sunny Day active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
-    "activate": "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
-    "activateFromItem": "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
-    "start": "  [POKEMON]'s [STAT] was heightened!",
-    "end": "  The effects of [POKEMON]'s Protosynthesis wore off!",
+    "desc": "If Sun is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sun, a held Booster Energy will not activate and the effect ends when Sun is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
+    "shortDesc": "Sun active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
+    "activate": "  The harsh sunlight activated {POKEMON}'s Protosynthesis!",
+    "activateFromItem": "  {POKEMON} used its Booster Energy to activate Protosynthesis!",
+    "start": "  {POKEMON}'s {STAT} was heightened!",
+    "end": "  The effects of {POKEMON}'s Protosynthesis wore off!",
     "aliases": [
       "古代活性"
     ],
@@ -4067,8 +4059,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06996268656716417
+      "usageCount": 11,
+      "usagePercent": 0.10247810694987888
     }
   },
   {
@@ -4090,8 +4082,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -4117,10 +4109,10 @@
     "num": 282,
     "desc": "If Electric Terrain is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Electric Terrain, a held Booster Energy will not activate and the effect ends when Electric Terrain is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
     "shortDesc": "Electric Terrain active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
-    "activate": "  The Electric Terrain activated [POKEMON]'s Quark Drive!",
-    "activateFromItem": "  [POKEMON] used its Booster Energy to activate its Quark Drive!",
-    "start": "  [POKEMON]'s [STAT] was heightened!",
-    "end": "  The effects of [POKEMON]'s Quark Drive wore off!",
+    "activate": "  The Electric Terrain activated {POKEMON}'s Quark Drive!",
+    "activateFromItem": "  {POKEMON} used its Booster Energy to activate its Quark Drive!",
+    "start": "  {POKEMON}'s {STAT} was heightened!",
+    "end": "  The effects of {POKEMON}'s Quark Drive wore off!",
     "aliases": [
       "夸克充能"
     ],
@@ -4146,8 +4138,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 58,
-      "usagePercent": 0.45087064676616917
+      "usageCount": 40,
+      "usagePercent": 0.3726476616359232
     }
   },
   {
@@ -4158,7 +4150,7 @@
     "rating": 2.5,
     "num": 259,
     "shortDesc": "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
-    "activate": "  Quick Draw made [POKEMON] move faster!",
+    "activate": "  Quick Draw made {POKEMON} move faster!",
     "aliases": [
       "速擊"
     ],
@@ -4190,10 +4182,10 @@
     "name": "Rain Dish",
     "rating": 1.5,
     "num": 44,
-    "desc": "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If Rain Dance is active, this Pokemon heals 1/16 of its max HP each turn.",
+    "desc": "If Rain is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If Rain is active, this Pokemon heals 1/16 of its max HP each turn.",
     "gen7": {
-      "desc": "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn."
+      "desc": "If Rain is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn."
     },
     "aliases": [
       "雨盤"
@@ -4202,8 +4194,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 111,
-      "usagePercent": 0.8628731343283582
+      "usageCount": 87,
+      "usagePercent": 0.810508664058133
     }
   },
   {
@@ -4261,7 +4253,7 @@
     "gen7": {
       "desc": "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode."
     },
-    "changeAbility": "  [SOURCE]'s [ABILITY] was taken over!",
+    "changeAbility": "  {SOURCE}'s {ABILITY} was taken over!",
     "aliases": [
       "接球手"
     ],
@@ -4285,8 +4277,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4307,7 +4299,11 @@
       "冰凍皮膚"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -4324,8 +4320,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 71,
-      "usagePercent": 0.5519278606965174
+      "usageCount": 63,
+      "usagePercent": 0.5869200670765791
     }
   },
   {
@@ -4342,7 +4338,11 @@
       "熟成"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -4361,8 +4361,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -4405,8 +4405,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 157,
-      "usagePercent": 1.220460199004975
+      "usageCount": 145,
+      "usagePercent": 1.3508477734302218
     }
   },
   {
@@ -4441,7 +4441,7 @@
       "desc": "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down. This effect does not happen if this Pokemon did not lose HP from the attack.",
       "shortDesc": "Pokemon making contact with this Pokemon lose 1/16 of their max HP."
     },
-    "damage": "  [POKEMON] was hurt!",
+    "damage": "  {POKEMON} was hurt!",
     "aliases": [
       "粗糙皮膚"
     ],
@@ -4449,8 +4449,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 701,
-      "usagePercent": 5.44931592039801
+      "usageCount": 571,
+      "usagePercent": 5.319545369852804
     }
   },
   {
@@ -4484,7 +4484,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -4502,8 +4502,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 121,
-      "usagePercent": 0.9406094527363185
+      "usageCount": 94,
+      "usagePercent": 0.8757220048444196
     }
   },
   {
@@ -4537,8 +4537,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 201,
-      "usagePercent": 1.5625
+      "usageCount": 174,
+      "usagePercent": 1.621017328116266
     }
   },
   {
@@ -4559,8 +4559,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08550995024875623
+      "usageCount": 8,
+      "usagePercent": 0.07452953232718465
     }
   },
   {
@@ -4581,8 +4581,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -4602,8 +4602,8 @@
     "num": 208,
     "desc": "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form.",
     "shortDesc": "If user is Wishiwashi, changes to School Form if it has > 1/4 max HP, else Solo Form.",
-    "transform": "[POKEMON] formed a school!",
-    "transformEnd": "[POKEMON] stopped schooling!",
+    "transform": "{POKEMON} formed a school!",
+    "transformEnd": "{POKEMON} stopped schooling!",
     "aliases": [
       "魚群"
     ],
@@ -4631,8 +4631,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 44,
-      "usagePercent": 0.3420398009950249
+      "usageCount": 37,
+      "usagePercent": 0.344699087013229
     }
   },
   {
@@ -4649,8 +4649,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -4730,8 +4730,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05441542288557214
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -4749,8 +4749,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 40,
-      "usagePercent": 0.3109452736318408
+      "usageCount": 78,
+      "usagePercent": 0.7266629401900504
     }
   },
   {
@@ -4795,8 +4795,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usageCount": 17,
+      "usagePercent": 0.15837525619526738
     }
   },
   {
@@ -4816,8 +4816,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05441542288557214
+      "usageCount": 6,
+      "usagePercent": 0.05589714924538849
     }
   },
   {
@@ -4852,8 +4852,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -4873,8 +4873,8 @@
     "num": 197,
     "desc": "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by a non-volatile status condition or Yawn.",
     "shortDesc": "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
-    "transform": "Shields Down deactivated!\n([POKEMON] shielded itself.)",
-    "transformEnd": "Shields Down activated!\n([POKEMON] stopped shielding itself.)",
+    "transform": "Shields Down deactivated!\n({POKEMON} shielded itself.)",
+    "transformEnd": "Shields Down activated!\n({POKEMON} stopped shielding itself.)",
     "aliases": [
       "界限盾殼"
     ],
@@ -4926,11 +4926,7 @@
       "連續攻擊"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -4949,8 +4945,8 @@
     "gen6": {
       "desc": "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns."
     },
-    "start": "  [POKEMON] can't get it going!",
-    "end": "  [POKEMON] finally got its act together!",
+    "start": "  {POKEMON} can't get it going!",
+    "end": "  {POKEMON} finally got its act together!",
     "aliases": [
       "慢啟動"
     ],
@@ -4972,11 +4968,7 @@
       "撥雪"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -4994,7 +4986,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -5019,8 +5011,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 28,
-      "usagePercent": 0.21766169154228857
+      "usageCount": 35,
+      "usagePercent": 0.32606670393143283
     }
   },
   {
@@ -5040,8 +5032,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 174,
-      "usagePercent": 1.3526119402985073
+      "usageCount": 115,
+      "usagePercent": 1.0713620272032793
     }
   },
   {
@@ -5051,10 +5043,10 @@
     "name": "Solar Power",
     "rating": 2,
     "num": 94,
-    "desc": "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
+    "desc": "If Sun is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If Sun is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
     "gen7": {
-      "desc": "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn."
+      "desc": "If Sun is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn."
     },
     "aliases": [
       "太陽之力"
@@ -5063,8 +5055,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 88,
-      "usagePercent": 0.6840796019900498
+      "usageCount": 57,
+      "usagePercent": 0.5310229178311906
     }
   },
   {
@@ -5083,8 +5075,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 24,
-      "usagePercent": 0.18656716417910446
+      "usageCount": 23,
+      "usagePercent": 0.21427240544065587
     }
   },
   {
@@ -5127,8 +5119,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 48,
-      "usagePercent": 0.3731343283582089
+      "usageCount": 36,
+      "usagePercent": 0.3353828954723309
     }
   },
   {
@@ -5148,8 +5140,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 56,
-      "usagePercent": 0.43532338308457713
+      "usageCount": 59,
+      "usagePercent": 0.5496553009129868
     }
   },
   {
@@ -5165,7 +5157,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -5215,7 +5207,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5232,8 +5224,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 244,
-      "usagePercent": 1.8967661691542288
+      "usageCount": 175,
+      "usagePercent": 1.6303335196571642
     }
   },
   {
@@ -5264,8 +5256,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 20,
-      "usagePercent": 0.1554726368159204
+      "usageCount": 26,
+      "usagePercent": 0.2422209800633501
     }
   },
   {
@@ -5289,8 +5281,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08550995024875623
+      "usageCount": 25,
+      "usagePercent": 0.23290478852245203
     }
   },
   {
@@ -5387,12 +5379,16 @@
     "gen4": {
       "desc": "This Pokemon cannot lose its held item due to another Pokemon's attack, even if the attack knocks out this Pokemon. A Sticky Barb will be transferred to other Pokemon regardless of this Ability."
     },
-    "block": "  [POKEMON]'s item cannot be removed!",
+    "block": "  {POKEMON}'s item cannot be removed!",
     "aliases": [
       "黏著"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -5433,8 +5429,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5452,7 +5448,7 @@
       "desc": "OHKO moves fail when used against this Pokemon.",
       "shortDesc": "OHKO moves fail when used against this Pokemon."
     },
-    "activate": "  [POKEMON] endured the hit!",
+    "activate": "  {POKEMON} endured the hit!",
     "aliases": [
       "結實"
     ],
@@ -5460,8 +5456,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.12437810945273632
+      "usageCount": 12,
+      "usagePercent": 0.11179429849077697
     }
   },
   {
@@ -5474,7 +5470,7 @@
     "rating": 1,
     "num": 21,
     "shortDesc": "This Pokemon cannot be forced to switch out by another Pokemon's attack or item.",
-    "block": "  [POKEMON] is anchored in place with its suction cups!",
+    "block": "  {POKEMON} is anchored in place with its suction cups!",
     "aliases": [
       "吸盤"
     ],
@@ -5496,8 +5492,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5507,12 +5503,16 @@
     "rating": 1.5,
     "num": 306,
     "shortDesc": "On switch-in, this Pokemon lowers the evasiveness of opponents 1 stage. Once per battle.",
-    "start": "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
+    "start": "  A supersweet aroma is wafting from the syrup covering {POKEMON}!",
     "aliases": [
       "歸零化境"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -5524,7 +5524,7 @@
     "num": 293,
     "desc": "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
     "shortDesc": "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
-    "activate": "  [POKEMON] gained strength from the fallen!",
+    "activate": "  {POKEMON} gained strength from the fallen!",
     "aliases": [
       "大將"
     ],
@@ -5532,8 +5532,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.17101990049751245
+      "usageCount": 7,
+      "usagePercent": 0.06521334078628657
     }
   },
   {
@@ -5547,11 +5547,7 @@
       "衝浪之尾"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "legal": true
     }
   },
   {
@@ -5575,8 +5571,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.046641791044776115
+      "usageCount": 5,
+      "usagePercent": 0.0465809577044904
     }
   },
   {
@@ -5589,7 +5585,7 @@
     "num": 175,
     "desc": "This Pokemon and its allies cannot fall asleep, but those already asleep do not wake up immediately. This Pokemon and its allies cannot use Rest successfully or become affected by Yawn, and those previously affected will not fall asleep.",
     "shortDesc": "This Pokemon and its allies cannot fall asleep; those already asleep do not wake up.",
-    "block": "  [POKEMON] can't fall asleep due to a veil of sweetness!",
+    "block": "  {POKEMON} can't fall asleep due to a veil of sweetness!",
     "aliases": [
       "甜幕"
     ],
@@ -5603,10 +5599,10 @@
     "name": "Swift Swim",
     "rating": 3,
     "num": 33,
-    "desc": "If Rain Dance is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-    "shortDesc": "If Rain Dance is active, this Pokemon's Speed is doubled.",
+    "desc": "If Rain is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+    "shortDesc": "If Rain is active, this Pokemon's Speed is doubled.",
     "gen7": {
-      "desc": "If Rain Dance is active, this Pokemon's Speed is doubled."
+      "desc": "If Rain is active, this Pokemon's Speed is doubled."
     },
     "aliases": [
       "悠游自如"
@@ -5615,8 +5611,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.23320895522388058
+      "usageCount": 23,
+      "usagePercent": 0.21427240544065587
     }
   },
   {
@@ -5626,7 +5622,7 @@
     "rating": 4.5,
     "num": 285,
     "shortDesc": "Active Pokemon without this Ability have their Defense multiplied by 0.75.",
-    "start": "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
+    "start": "  {POKEMON}'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
     "aliases": [
       "災禍之劍"
     ],
@@ -5648,7 +5644,7 @@
     "gen6": {
       "desc": "If an ally uses its item, this Pokemon gives its item to that ally immediately. Does not activate if the ally's item was stolen or knocked off."
     },
-    "activate": "  [POKEMON] shared its [ITEM] with [TARGET]!",
+    "activate": "  {POKEMON} shared its {ITEM} with {TARGET}!",
     "aliases": [
       "共生"
     ],
@@ -5656,8 +5652,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 2,
+      "usagePercent": 0.018632383081796162
     }
   },
   {
@@ -5678,8 +5674,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -5689,7 +5685,7 @@
     "rating": 4.5,
     "num": 284,
     "shortDesc": "Active Pokemon without this Ability have their Attack multiplied by 0.75.",
-    "start": "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
+    "start": "  {POKEMON}'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
     ],
@@ -5711,7 +5707,11 @@
       "蹣跚"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -5748,8 +5748,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 0.6918532338308457
+      "usageCount": 54,
+      "usagePercent": 0.5030743432084964
     }
   },
   {
@@ -5761,7 +5761,7 @@
     "rating": 0,
     "num": 140,
     "shortDesc": "This Pokemon does not take damage from attacks made by its allies.",
-    "block": "  [POKEMON] can't be hit by attacks from its ally Pokémon!",
+    "block": "  {POKEMON} can't be hit by attacks from its ally Pokémon!",
     "aliases": [
       "心靈感應"
     ],
@@ -5769,8 +5769,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06218905472636816
+      "usageCount": 12,
+      "usagePercent": 0.11179429849077697
     }
   },
   {
@@ -5788,7 +5788,7 @@
     "num": 308,
     "desc": "If this Pokemon is a Terapagos at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
     "shortDesc": "Terapagos: If full HP, attacks taken have 0.5x effectiveness unless naturally immune.",
-    "activate": "  [POKEMON] made its shell gleam! It's distorting type matchups!",
+    "activate": "  {POKEMON} made its shell gleam! It's distorting type matchups!",
     "aliases": [
       "貫穿鑽"
     ],
@@ -5812,7 +5812,7 @@
     "rating": 3,
     "num": 307,
     "shortDesc": "If this Pokemon is a Terapagos, it transforms into its Terastal Form on entry.",
-    "transform": "[POKEMON] transformed!",
+    "transform": "{POKEMON} transformed!",
     "aliases": [
       "毒傀儡"
     ],
@@ -5863,7 +5863,7 @@
     "gen4": {
       "desc": "This Pokemon's moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightning Rod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke, and Wonder Guard. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move. The Attack modifier from an ally's Flower Gift Ability is not negated."
     },
-    "start": "  [POKEMON] is radiating a bursting aura!",
+    "start": "  {POKEMON} is radiating a bursting aura!",
     "aliases": [
       "兆級電壓"
     ],
@@ -5915,8 +5915,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 24,
-      "usagePercent": 0.18656716417910446
+      "usageCount": 15,
+      "usagePercent": 0.1397428731134712
     }
   },
   {
@@ -5954,8 +5954,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 169,
-      "usagePercent": 1.3137437810945274
+      "usageCount": 141,
+      "usagePercent": 1.3135830072666295
     }
   },
   {
@@ -5973,8 +5973,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 82,
-      "usagePercent": 0.6374378109452736
+      "usageCount": 83,
+      "usagePercent": 0.7732438978945407
     }
   },
   {
@@ -6022,8 +6022,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 133,
-      "usagePercent": 1.0338930348258706
+      "usageCount": 95,
+      "usagePercent": 0.8850381963853177
     }
   },
   {
@@ -6057,7 +6057,7 @@
     "gen3": {
       "desc": "On switch-in, this Pokemon copies a random opposing Pokemon's Ability."
     },
-    "changeAbility": "  [POKEMON] traced [SOURCE]'s [ABILITY]!",
+    "changeAbility": "  {POKEMON} traced {SOURCE}'s {ABILITY}!",
     "aliases": [
       "複製"
     ],
@@ -6065,8 +6065,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 36,
-      "usagePercent": 0.2798507462686567
+      "usageCount": 30,
+      "usagePercent": 0.2794857462269424
     }
   },
   {
@@ -6114,7 +6114,7 @@
     "gen3": {
       "desc": "This Pokemon skips every other turn instead of using a move. If this Pokemon replaces a Pokemon that fainted during end-of-turn effects, its first turn will be skipped."
     },
-    "cant": "[POKEMON] is loafing around!",
+    "cant": "{POKEMON} is loafing around!",
     "aliases": [
       "懶惰"
     ],
@@ -6145,7 +6145,7 @@
     "gen4": {
       "desc": "This Pokemon's moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightning Rod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke, and Wonder Guard. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move. The Attack modifier from an ally's Flower Gift Ability is not negated."
     },
-    "start": "  [POKEMON] is radiating a blazing aura!",
+    "start": "  {POKEMON} is radiating a blazing aura!",
     "aliases": [
       "渦輪火焰"
     ],
@@ -6170,8 +6170,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11660447761194029
+      "usageCount": 14,
+      "usagePercent": 0.13042668157257314
     }
   },
   {
@@ -6190,8 +6190,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 380,
-      "usagePercent": 2.9539800995024876
+      "usageCount": 323,
+      "usagePercent": 3.00912986771008
     }
   },
   {
@@ -6203,7 +6203,7 @@
     "num": 127,
     "desc": "While this Pokemon is active, it prevents opposing Pokemon from using their Berries. This Ability activates before hazards and other Abilities take effect.",
     "shortDesc": "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
-    "start": "  [TEAM] is too nervous to eat Berries!",
+    "start": "  {TEAM} is too nervous to eat Berries!",
     "aliases": [
       "緊張感"
     ],
@@ -6211,8 +6211,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 241,
-      "usagePercent": 1.8734452736318408
+      "usageCount": 176,
+      "usagePercent": 1.6396497111980621
     }
   },
   {
@@ -6237,7 +6237,7 @@
     "rating": 4.5,
     "num": 284,
     "shortDesc": "Active Pokemon without this Ability have their Special Attack multiplied by 0.75.",
-    "start": "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
+    "start": "  {POKEMON}'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
     "aliases": [
       "災禍之鼎"
     ],
@@ -6273,11 +6273,7 @@
       "幹勁"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "legal": true
     }
   },
   {
@@ -6301,8 +6297,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.023320895522388058
+      "usageCount": 1,
+      "usagePercent": 0.009316191540898081
     }
   },
   {
@@ -6324,8 +6320,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.00777363184079602
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -6345,8 +6341,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0388681592039801
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -6368,8 +6364,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05441542288557214
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   },
   {
@@ -6421,8 +6417,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03109452736318408
+      "usageCount": 3,
+      "usagePercent": 0.027948574622694244
     }
   },
   {
@@ -6455,11 +6451,7 @@
       "白色煙霧"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01554726368159204
+      "legal": true
     }
   },
   {
@@ -6602,7 +6594,7 @@
     "rating": 5,
     "num": 278,
     "shortDesc": "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form.",
-    "activate": "  [POKEMON] underwent a heroic transformation!",
+    "activate": "  {POKEMON} underwent a heroic transformation!",
     "aliases": [
       "全能變身"
     ],
@@ -6610,8 +6602,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.11660447761194029
+      "usageCount": 9,
+      "usagePercent": 0.08384572386808273
     }
   }
 ]
