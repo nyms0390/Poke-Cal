@@ -14,7 +14,7 @@ export function buildLimitlessTeamArchive(
   detailsByTournament = new Map(),
   standingsByTournament = new Map(),
   pairingsByTournament = new Map(),
-  { limit = 10 } = {},
+  { limit = 10, format } = {},
 ) {
   const orderedTournaments = [...tournaments]
     .filter(Boolean)
@@ -38,7 +38,7 @@ export function buildLimitlessTeamArchive(
     source: "Limitless",
     sourceUrl: LIMITLESS_TEAM_SOURCE_URL,
     game: "VGC",
-    format: "M-B",
+    format: format ?? orderedTournaments[0]?.format ?? null,
     tournaments: qualifying,
   };
 }

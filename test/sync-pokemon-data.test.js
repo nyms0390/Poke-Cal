@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { downloadEverything } from "../scripts/sync-pokemon-data.mjs";
+import { extractAbilities } from "../src/data/showdown-data.js";
 
 const fixtures = new Map([
   [
@@ -261,4 +262,15 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
   assert.equal(data.items[0].champions.legal, false);
   assert.equal("onModifyAtk" in data.items[0], false);
   assert.equal("usage-stats" in data, false);
+});
+
+test("extracts only slot 0 for Mega forms while retaining all normal slots", () => {
+  assert.deepEqual(
+    extractAbilities({ name: "Baxcalibur-Mega", abilities: { 0: "Thermal Exchange", H: "Ice Body" } }),
+    ["Thermal Exchange"],
+  );
+  assert.deepEqual(
+    extractAbilities({ name: "Baxcalibur", abilities: { 0: "Thermal Exchange", H: "Ice Body" } }),
+    ["Ice Body", "Thermal Exchange"],
+  );
 });

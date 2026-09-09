@@ -14,7 +14,7 @@ import {
 
 const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_GAME = "VGC";
-const DEFAULT_FORMAT = "M-B";
+const DEFAULT_FORMAT = "M-C";
 const DEFAULT_LIMIT = 50;
 const DEFAULT_ARCHIVE_LIMIT = 10;
 const API_DELAY_MS = 1250;
@@ -69,7 +69,7 @@ export async function downloadLimitlessChampionsData({
       detailsByTournament,
       standingsByTournament,
       pairingsByTournament,
-      { limit: archiveLimit },
+      { limit: archiveLimit, format },
     );
     if (partialArchive.tournaments.length >= archiveLimit) break;
   }
@@ -81,7 +81,7 @@ export async function downloadLimitlessChampionsData({
       detailsByTournament,
       standingsByTournament,
       pairingsByTournament,
-      { limit: archiveLimit },
+      { limit: archiveLimit, format },
     ),
   };
 }

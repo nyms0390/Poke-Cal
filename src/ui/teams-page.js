@@ -57,7 +57,7 @@ function renderPage() {
   const tournaments = archive?.tournaments ?? [];
   elements.source.textContent = t("teams.source", {
     count: tournaments.length,
-    limit: archive?.format ?? "M-B",
+    limit: archive?.format ?? "M-C",
   });
   elements.count.textContent = t("teams.tournamentCount", { count: tournaments.length });
   elements.archive.replaceChildren(

@@ -109,3 +109,18 @@ test("overlays Champions item and ability availability", () => {
   assert.equal(abilityById.get("dragonize").champions.legal, true);
   assert.equal(abilityById.get("regenerator").champions.legal, true);
 });
+
+test("marks abilities used by a legal Pokémon as Champions legal", () => {
+  const data = {
+    ...catalogs,
+    pokemon: [{ id: "lucariomega-z", name: "Lucario-Mega-Z", baseSpecies: "Lucario", abilities: ["Aura Guard"] }],
+    abilities: [{ id: "auraguard", name: "Aura Guard", isNonstandard: "Future" }],
+  };
+  const modWithAuraGuard = {
+    ...mod,
+    formatsData: { "lucariomega-z": { tier: "OU" } },
+    abilities: { ...mod.abilities },
+  };
+  const ability = applyChampionsData(data, modWithAuraGuard).abilities.find(({ id }) => id === "auraguard");
+  assert.equal(ability.champions.legal, true);
+});

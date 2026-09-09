@@ -280,6 +280,10 @@ export const ABILITY_MODIFIERS = {
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
       ? { kind: "damage", value: 0.5, label: "Multiscale" }
       : null,
+  auraguard: (ctx) =>
+    !ctx.attackerPerspective && ctx.move.flags?.contact
+      ? { kind: "damage", value: 0.5, label: "Aura Guard" }
+      : null,
   shadowshield: (ctx) =>
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
       ? { kind: "damage", value: 0.5, label: "Shadow Shield" }

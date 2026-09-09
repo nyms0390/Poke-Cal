@@ -909,6 +909,51 @@ test("applies curated item and ability modifiers", () => {
   }
 });
 
+test("Aura Guard halves contact damage but not non-contact or ignored-ability moves", () => {
+  const contact = {
+    id: "tackle",
+    name: "Tackle",
+    type: "Normal",
+    category: "Physical",
+    basePower: 40,
+    flags: { contact: true },
+  };
+  const nonContact = { ...contact, id: "swift", name: "Swift", flags: {} };
+  const guardedState = { ...neutralState, ability: { id: "auraguard", name: "Aura Guard" } };
+  const baseline = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: contact,
+    attackerState: neutralState,
+    defenderState: neutralState,
+  });
+  const guarded = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: contact,
+    attackerState: neutralState,
+    defenderState: guardedState,
+  });
+  const guardedNonContact = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: nonContact,
+    attackerState: neutralState,
+    defenderState: guardedState,
+  });
+  const ignored = calculateDamage({
+    attacker: pikachu,
+    defender: squirtle,
+    move: { ...contact, ignoreAbility: true },
+    attackerState: neutralState,
+    defenderState: guardedState,
+  });
+
+  assert.deepEqual([guarded.minDamage, guarded.maxDamage], [Math.floor(baseline.minDamage / 2), Math.floor(baseline.maxDamage / 2)]);
+  assert.deepEqual([guardedNonContact.minDamage, guardedNonContact.maxDamage], [baseline.minDamage, baseline.maxDamage]);
+  assert.deepEqual([ignored.minDamage, ignored.maxDamage], [baseline.minDamage, baseline.maxDamage]);
+});
+
 test("applies type-boosting held items only to matching move types", () => {
   const ironTail = {
     id: "irontail",

@@ -18,8 +18,9 @@ export function parseShowdownExport(source, exportName) {
   return value;
 }
 
-export function extractAbilities(entry) {
-  return [...new Set(Object.values(entry.abilities ?? {}))].sort((a, b) =>
+export function extractAbilities(entry, { megaOnly = /-Mega$/i.test(entry.name ?? "") } = {}) {
+  const abilities = megaOnly && entry.abilities?.[0] ? [entry.abilities[0]] : Object.values(entry.abilities ?? {});
+  return [...new Set(abilities)].sort((a, b) =>
     a.localeCompare(b),
   );
 }

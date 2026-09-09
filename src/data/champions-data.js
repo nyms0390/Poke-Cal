@@ -11,10 +11,16 @@ export function isChampionsLegalFormatsEntry(formatsEntry) {
 }
 
 export function applyChampionsData(data, mod) {
+  const legalAbilityIds = new Set(
+    data.pokemon
+      .filter((entry) => isChampionsLegalFormatsEntry(mod.formatsData?.[entry.id] ?? mod.formatsData?.[normalizeId(entry.baseSpecies)]))
+      .flatMap((entry) => entry.abilities ?? [])
+      .map((ability) => normalizeId(ability)),
+  );
   return {
     ...data,
     pokemon: applyChampionsPokemon(data.pokemon, mod),
-    abilities: overlayCatalogEntries(data.abilities, mod.abilities),
+    abilities: overlayCatalogEntries(data.abilities, mod.abilities, legalAbilityIds),
     moves: overlayCatalogEntries(data.moves, mod.moves),
     items: overlayCatalogEntries(data.items, mod.items),
   };
@@ -38,12 +44,12 @@ function applyChampionsPokemon(pokemon, { formatsData = {}, learnsets = {} }) {
   });
 }
 
-function overlayCatalogEntries(entries, modTable = {}) {
+function overlayCatalogEntries(entries, modTable = {}, legalIds = new Set()) {
   return entries.map((entry) => {
     const overridden = overlayEntry(entry, modTable[entry.id]);
     return {
       ...overridden,
-      champions: { ...entry.champions, legal: !overridden.isNonstandard },
+      champions: { ...entry.champions, legal: legalIds.has(entry.id) || !overridden.isNonstandard },
     };
   });
 }

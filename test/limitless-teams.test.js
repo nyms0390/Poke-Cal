@@ -145,3 +145,14 @@ test("skips Swiss-only, unfinished, and non-public-champion events, then limits 
 
   assert.deepEqual(archive.tournaments.map(({ id }) => id), ["valid-0", "valid-1"]);
 });
+
+test("preserves an explicitly requested format for an empty archive", () => {
+  const archive = buildLimitlessTeamArchive([], new Map(), new Map(), new Map(), { format: "M-C" });
+  assert.equal(archive.format, "M-C");
+  assert.deepEqual(archive.tournaments, []);
+});
+
+test("infers the format from the first tournament when not requested", () => {
+  const archive = buildLimitlessTeamArchive([tournament("legacy", "2026-08-01T17:00:00.000Z")]);
+  assert.equal(archive.format, "M-B");
+});
