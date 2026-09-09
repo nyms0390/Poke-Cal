@@ -138,7 +138,7 @@ function buildPokemon(pokedex, learnsets, aliasesByNumber) {
       baseStats: { ...entry.baseStats },
       baseSpeed: entry.baseStats.spe,
       weightkg: entry.weightkg,
-      abilities: extractAbilities(entry, { megaOnly: /-Mega$/i.test(entry.name ?? "") }),
+      abilities: extractAbilities(entry, { megaOnly: /-Mega(?:-|$)/i.test(entry.name ?? "") }),
       moves: extractLearnsetMoves(learnsets, id, entry.baseSpecies ?? entry.name),
       aliases: aliasesByNumber.get(entry.num) ?? [],
     }))

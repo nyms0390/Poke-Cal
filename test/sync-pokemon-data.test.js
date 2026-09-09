@@ -266,7 +266,7 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
 
 test("extracts only slot 0 for Mega forms while retaining all normal slots", () => {
   assert.deepEqual(
-    extractAbilities({ name: "Baxcalibur-Mega", abilities: { 0: "Thermal Exchange", H: "Ice Body" } }),
+    extractAbilities({ name: "Baxcalibur-Mega-Z", abilities: { 0: "Thermal Exchange", H: "Ice Body" } }),
     ["Thermal Exchange"],
   );
   assert.deepEqual(
