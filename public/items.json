@@ -37,11 +37,7 @@
       "暴雪王進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0674217907227616
+      "legal": true
     }
   },
   {
@@ -77,10 +73,10 @@
     ],
     "num": 2638,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -115,7 +111,7 @@
     ],
     "num": 1777,
     "gen": 8,
-    "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2× power.",
     "aliases": [
       "大金剛寶玉"
     ],
@@ -137,7 +133,7 @@
     ],
     "num": 135,
     "gen": 4,
-    "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2× power.",
     "aliases": [
       "金剛寶珠"
     ],
@@ -185,11 +181,7 @@
       "化石翼龍進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 168,
-      "usagePercent": 1.132686084142395
+      "legal": true
     }
   },
   {
@@ -210,11 +202,7 @@
       "波士可多拉進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -258,9 +246,8 @@
     "aliases": [
       "氣球"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -281,11 +268,7 @@
       "胡地進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -324,11 +307,7 @@
       "七夕青鳥進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -349,11 +328,7 @@
       "電龍進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0337108953613808
+      "legal": true
     }
   },
   {
@@ -423,7 +398,7 @@
     "onModifySpDPriority": 1,
     "num": 640,
     "gen": 6,
-    "shortDesc": "Holder's Sp. Def is 1.5x, but it can only select damaging moves.",
+    "shortDesc": "Holder's Sp. Def is 1.5×, but it can only select damaging moves.",
     "aliases": [
       "突擊背心"
     ],
@@ -450,11 +425,7 @@
       "差不多娃娃進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -491,11 +462,7 @@
       "霹霹果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -516,11 +483,7 @@
       "詛咒娃娃進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -538,11 +501,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -557,10 +516,10 @@
     ],
     "num": 2648,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Baxcalibur, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -597,11 +556,7 @@
       "大針蜂進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -728,19 +683,15 @@
     "onTryHealPriority": 1,
     "num": 296,
     "gen": 4,
-    "shortDesc": "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+    "shortDesc": "Holder gains 1.3× HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
     "gen6": {
-      "shortDesc": "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed."
+      "shortDesc": "Holder gains 1.3× HP from draining moves, Aqua Ring, Ingrain, and Leech Seed."
     },
     "aliases": [
       "大根莖"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.09439050701186624
+      "legal": true
     }
   },
   {
@@ -756,9 +707,8 @@
     "aliases": [
       "緊綁束帶"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -791,19 +741,15 @@
     "onBasePowerPriority": 15,
     "num": 241,
     "gen": 2,
-    "shortDesc": "Holder's Fighting-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Fighting-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Fighting-type attacks have 1.1x power."
+      "shortDesc": "Holder's Fighting-type attacks have 1.1× power."
     },
     "aliases": [
       "黑帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -816,19 +762,15 @@
     "onBasePowerPriority": 15,
     "num": 240,
     "gen": 2,
-    "shortDesc": "Holder's Dark-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Dark-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Dark-type attacks have 1.1x power."
+      "shortDesc": "Holder's Dark-type attacks have 1.1× power."
     },
     "aliases": [
       "黑色眼鏡"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 357,
-      "usagePercent": 2.406957928802589
+      "legal": true
     }
   },
   {
@@ -870,11 +812,7 @@
       "水箭龜進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 120,
-      "usagePercent": 0.8090614886731391
+      "legal": true
     }
   },
   {
@@ -895,11 +833,7 @@
       "火焰雞進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 68,
-      "usagePercent": 0.4584681769147788
+      "legal": true
     }
   },
   {
@@ -1008,7 +942,7 @@
     "onModifyAccuracyPriority": -2,
     "num": 213,
     "gen": 2,
-    "shortDesc": "The accuracy of attacks against the holder is 0.9x.",
+    "shortDesc": "The accuracy of attacks against the holder is 0.9×.",
     "gen2": {
       "shortDesc": "An attack against the holder has its accuracy out of 255 lowered by 20."
     },
@@ -1016,11 +950,7 @@
       "光粉"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 29,
-      "usagePercent": 0.19552319309600863
+      "legal": true
     }
   },
   {
@@ -1031,9 +961,9 @@
     "num": 558,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Bug-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Bug-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Bug-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "蟲之寶石"
@@ -1137,11 +1067,7 @@
       "噴火駝進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 36,
-      "usagePercent": 0.24271844660194172
+      "legal": true
     }
   },
   {
@@ -1180,11 +1106,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Chandelure, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -1197,19 +1119,15 @@
     "onBasePowerPriority": 15,
     "num": 249,
     "gen": 2,
-    "shortDesc": "Holder's Fire-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Fire-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Fire-type attacks have 1.1x power."
+      "shortDesc": "Holder's Fire-type attacks have 1.1× power."
     },
     "aliases": [
       "木炭"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 172,
-      "usagePercent": 1.1596548004314995
+      "legal": true
     }
   },
   {
@@ -1230,11 +1148,7 @@
       "噴火龍進化石Ｘ"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08090614886731393
+      "legal": true
     }
   },
   {
@@ -1255,11 +1169,7 @@
       "噴火龍進化石Ｙ"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 511,
-      "usagePercent": 3.4452535059331177
+      "legal": true
     }
   },
   {
@@ -1278,11 +1188,7 @@
       "草蠶果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -1335,11 +1241,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Chesnaught, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -1415,11 +1317,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -1451,7 +1349,7 @@
     "isChoice": true,
     "num": 220,
     "gen": 3,
-    "shortDesc": "Holder's Attack is 1.5x, but it can only select the first move it executes.",
+    "shortDesc": "Holder's Attack is 1.5×, but it can only select the first move it executes.",
     "aliases": [
       "講究頭帶"
     ],
@@ -1470,16 +1368,12 @@
     "isChoice": true,
     "num": 287,
     "gen": 4,
-    "shortDesc": "Holder's Speed is 1.5x, but it can only select the first move it executes.",
+    "shortDesc": "Holder's Speed is 1.5×, but it can only select the first move it executes.",
     "aliases": [
       "講究圍巾"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 698,
-      "usagePercent": 4.706040992448759
+      "legal": true
     }
   },
   {
@@ -1493,7 +1387,7 @@
     "isChoice": true,
     "num": 297,
     "gen": 4,
-    "shortDesc": "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes.",
+    "shortDesc": "Holder's Sp. Atk is 1.5×, but it can only select the first move it executes.",
     "aliases": [
       "講究眼鏡"
     ],
@@ -1518,11 +1412,7 @@
       "蓮蒲果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 430,
-      "usagePercent": 2.8991370010787487
+      "legal": true
     }
   },
   {
@@ -1578,11 +1468,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Clefable, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -1619,11 +1505,7 @@
       "稜瓜果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1146170442286947
+      "legal": true
     }
   },
   {
@@ -1642,11 +1524,7 @@
       "刺耳果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 303,
-      "usagePercent": 2.042880258899676
+      "legal": true
     }
   },
   {
@@ -1663,7 +1541,7 @@
     ],
     "num": 2406,
     "gen": 9,
-    "shortDesc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "shortDesc": "Ogerpon-Cornerstone: 1.2× power attacks; Terastallize to gain Embody Aspect.",
     "aliases": [
       "礎石面具"
     ],
@@ -1745,11 +1623,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Crabominable, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -1824,11 +1698,7 @@
       "潮濕岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 33,
-      "usagePercent": 0.22249190938511326
+      "legal": true
     }
   },
   {
@@ -1839,9 +1709,9 @@
     "num": 562,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Dark-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Dark-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Dark-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "惡之寶石"
@@ -2003,11 +1873,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Delphox, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 211,
-      "usagePercent": 1.4225997842502696
+      "legal": true
     }
   },
   {
@@ -2113,7 +1979,7 @@
     "forcedForme": "Arceus-Dragon",
     "num": 311,
     "gen": 4,
-    "shortDesc": "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
+    "shortDesc": "Holder's Dragon-type attacks have 1.2× power. Judgment is Dragon type.",
     "aliases": [
       "龍之石板"
     ],
@@ -2137,11 +2003,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Dragalge, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -2154,9 +2016,9 @@
     "onBasePowerPriority": 15,
     "num": 250,
     "gen": 2,
-    "shortDesc": "Holder's Dragon-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Dragon-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Dragon-type attacks have 1.1x power."
+      "shortDesc": "Holder's Dragon-type attacks have 1.1× power."
     },
     "gen2": {
       "shortDesc": "No competitive use."
@@ -2165,11 +2027,7 @@
       "龍之牙"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.1483279395900755
+      "legal": true
     }
   },
   {
@@ -2180,9 +2038,9 @@
     "num": 561,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Dragon-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Dragon-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Dragon-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "龍之寶石"
@@ -2222,7 +2080,7 @@
     "gen": 2,
     "shortDesc": "Evolves Seadra into Kingdra when traded.",
     "gen2": {
-      "shortDesc": "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade)."
+      "shortDesc": "Holder's Dragon-type attacks have 1.1× power. Evolves Seadra (trade)."
     },
     "aliases": [
       "龍之鱗片"
@@ -2247,11 +2105,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 171,
-      "usagePercent": 1.1529126213592233
+      "legal": true
     }
   },
   {
@@ -2286,11 +2140,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Drampa, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -2302,7 +2152,7 @@
     "forcedForme": "Arceus-Dark",
     "num": 312,
     "gen": 4,
-    "shortDesc": "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
+    "shortDesc": "Holder's Dark-type attacks have 1.2× power. Judgment is Dark type.",
     "aliases": [
       "惡顏石板"
     ],
@@ -2413,7 +2263,7 @@
     "forcedForme": "Arceus-Ground",
     "num": 305,
     "gen": 4,
-    "shortDesc": "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
+    "shortDesc": "Holder's Ground-type attacks have 1.2× power. Judgment is Ground type.",
     "aliases": [
       "大地石板"
     ],
@@ -2437,11 +2287,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.168554476806904
+      "legal": true
     }
   },
   {
@@ -2477,9 +2323,8 @@
     "aliases": [
       "逃脫按鍵"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -2529,9 +2374,9 @@
     "num": 550,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Electric-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Electric-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Electric-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "電之寶石"
@@ -2577,9 +2422,8 @@
     "aliases": [
       "電氣種子"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -2614,11 +2458,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -2655,7 +2495,7 @@
     "onModifySpDPriority": 2,
     "num": 538,
     "gen": 5,
-    "shortDesc": "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
+    "shortDesc": "If holder's species can evolve, its Defense and Sp. Def are 1.5×.",
     "aliases": [
       "進化奇石"
     ],
@@ -2679,11 +2519,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by an Excadrill, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -2695,16 +2531,12 @@
     },
     "num": 268,
     "gen": 4,
-    "shortDesc": "Holder's attacks that are super effective against the target do 1.2x damage.",
+    "shortDesc": "Holder's attacks that are super effective against the target do 1.2× damage.",
     "aliases": [
       "達人帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 99,
-      "usagePercent": 0.6674757281553397
+      "legal": true
     }
   },
   {
@@ -2734,16 +2566,12 @@
     "onBasePowerPriority": 15,
     "num": 2401,
     "gen": 9,
-    "shortDesc": "Holder's Fairy-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Fairy-type attacks have 1.2× power.",
     "aliases": [
       "妖精之羽"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 461,
-      "usagePercent": 3.1081445523193096
+      "legal": true
     }
   },
   {
@@ -2754,7 +2582,7 @@
     "num": 715,
     "gen": 6,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Fairy-type attack will have 1.3× power. Single use.",
     "aliases": [
       "妖精寶石"
     ],
@@ -2797,11 +2625,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -2835,11 +2659,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Feraligatr, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -2850,9 +2670,9 @@
     "num": 553,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Fighting-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Fighting-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Fighting-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "格鬥寶石"
@@ -2932,9 +2752,9 @@
     "num": 548,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Fire-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Fire-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Fire-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "火之寶石"
@@ -3008,7 +2828,7 @@
     "forcedForme": "Arceus-Fighting",
     "num": 303,
     "gen": 4,
-    "shortDesc": "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
+    "shortDesc": "Holder's Fighting-type attacks have 1.2× power. Judgment is Fighting type.",
     "aliases": [
       "拳頭石板"
     ],
@@ -3047,7 +2867,7 @@
     "forcedForme": "Arceus-Fire",
     "num": 298,
     "gen": 4,
-    "shortDesc": "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
+    "shortDesc": "Holder's Fire-type attacks have 1.2× power. Judgment is Fire type.",
     "aliases": [
       "火球石板"
     ],
@@ -3089,11 +2909,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 437,
-      "usagePercent": 2.9463322545846817
+      "legal": true
     }
   },
   {
@@ -3122,9 +2938,9 @@
     "num": 556,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Flying-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Flying-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Flying-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "飛行寶石"
@@ -3189,11 +3005,7 @@
       "氣勢頭帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -3215,11 +3027,7 @@
       "氣勢披帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2044,
-      "usagePercent": 13.781014023732471
+      "legal": true
     }
   },
   {
@@ -3325,11 +3133,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Froslass, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 266,
-      "usagePercent": 1.7934196332254584
+      "legal": true
     }
   },
   {
@@ -3405,11 +3209,7 @@
       "艾路雷朵進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -3450,11 +3250,7 @@
       "烈咬陸鯊進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 28,
-      "usagePercent": 0.18878101402373249
+      "legal": true
     }
   },
   {
@@ -3469,10 +3265,10 @@
     ],
     "num": 2640,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -3493,11 +3289,7 @@
       "沙奈朵進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 26,
-      "usagePercent": 0.17529665587918017
+      "legal": true
     }
   },
   {
@@ -3518,11 +3310,7 @@
       "耿鬼進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 103,
-      "usagePercent": 0.6944444444444444
+      "legal": true
     }
   },
   {
@@ -3533,9 +3321,9 @@
     "num": 560,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Ghost-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Ghost-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Ghost-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "幽靈寶石"
@@ -3617,11 +3405,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Glimmora, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 26,
-      "usagePercent": 0.17529665587918017
+      "legal": true
     }
   },
   {
@@ -3675,10 +3459,10 @@
     ],
     "num": 2645,
     "gen": 9,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -3696,11 +3480,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Golurk, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.09439050701186624
+      "legal": true
     }
   },
   {
@@ -3711,9 +3491,9 @@
     "num": 551,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Grass-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Grass-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Grass-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "草之寶石"
@@ -3776,9 +3556,8 @@
     "aliases": [
       "青草種子"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -3812,11 +3591,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Greninja, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.08764832793959008
+      "legal": true
     }
   },
   {
@@ -3869,7 +3644,7 @@
     ],
     "num": 1779,
     "gen": 8,
-    "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2× power.",
     "aliases": [
       "大白金寶玉"
     ],
@@ -3891,9 +3666,9 @@
     ],
     "num": 112,
     "gen": 4,
-    "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2× power.",
     "gen4": {
-      "shortDesc": "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power."
+      "shortDesc": "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2× power."
     },
     "aliases": [
       "白金寶珠"
@@ -3911,9 +3686,9 @@
     "num": 555,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Ground-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Ground-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Ground-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "地面寶石"
@@ -3977,11 +3752,7 @@
       "暴鯉龍進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.15507011866235168
+      "legal": true
     }
   },
   {
@@ -4000,11 +3771,7 @@
       "莓榴果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.09439050701186624
+      "legal": true
     }
   },
   {
@@ -4017,19 +3784,15 @@
     "onBasePowerPriority": 15,
     "num": 238,
     "gen": 2,
-    "shortDesc": "Holder's Rock-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Rock-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Rock-type attacks have 1.1x power."
+      "shortDesc": "Holder's Rock-type attacks have 1.1× power."
     },
     "aliases": [
       "硬石頭"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0674217907227616
+      "legal": true
     }
   },
   {
@@ -4047,11 +3810,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Hawlucha, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -4084,7 +3843,7 @@
     ],
     "num": 2408,
     "gen": 9,
-    "shortDesc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "shortDesc": "Ogerpon-Hearthflame: 1.2× power attacks; Terastallize to gain Embody Aspect.",
     "aliases": [
       "火灶面具"
     ],
@@ -4107,11 +3866,7 @@
       "熾熱岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -4202,11 +3957,7 @@
       "赫拉克羅斯進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.07416396979503775
+      "legal": true
     }
   },
   {
@@ -4248,11 +3999,7 @@
       "黑魯加進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04045307443365696
+      "legal": true
     }
   },
   {
@@ -4309,9 +4056,9 @@
     "num": 552,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Ice-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Ice-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Ice-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "冰之寶石"
@@ -4371,7 +4118,7 @@
     "forcedForme": "Arceus-Ice",
     "num": 302,
     "gen": 4,
-    "shortDesc": "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
+    "shortDesc": "Holder's Ice-type attacks have 1.2× power. Judgment is Ice type.",
     "aliases": [
       "冰柱石板"
     ],
@@ -4444,7 +4191,7 @@
     "forcedForme": "Arceus-Bug",
     "num": 308,
     "gen": 4,
-    "shortDesc": "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
+    "shortDesc": "Holder's Bug-type attacks have 1.2× power. Judgment is Bug type.",
     "aliases": [
       "玉蟲石板"
     ],
@@ -4470,11 +4217,7 @@
       "黑色鐵球"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 27,
-      "usagePercent": 0.1820388349514563
+      "legal": true
     }
   },
   {
@@ -4486,7 +4229,7 @@
     "forcedForme": "Arceus-Steel",
     "num": 313,
     "gen": 4,
-    "shortDesc": "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
+    "shortDesc": "Holder's Steel-type attacks have 1.2× power. Judgment is Steel type.",
     "aliases": [
       "鋼鐵石板"
     ],
@@ -4551,11 +4294,7 @@
       "袋獸進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.1483279395900755
+      "legal": true
     }
   },
   {
@@ -4574,11 +4313,7 @@
       "佛柑果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 83,
-      "usagePercent": 0.5596008629989212
+      "legal": true
     }
   },
   {
@@ -4597,11 +4332,7 @@
       "通通果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06067961165048543
+      "legal": true
     }
   },
   {
@@ -4662,11 +4393,7 @@
       "王者之證"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.14158576051779936
+      "legal": true
     }
   },
   {
@@ -4780,9 +4507,9 @@
     "num": 255,
     "gen": 3,
     "isNonstandard": "Past",
-    "shortDesc": "The accuracy of attacks against the holder is 0.9x.",
+    "shortDesc": "The accuracy of attacks against the holder is 0.9×.",
     "gen3": {
-      "shortDesc": "The accuracy of attacks against the holder is 0.95x."
+      "shortDesc": "The accuracy of attacks against the holder is 0.95×."
     },
     "aliases": [
       "悠閒薰香"
@@ -4827,10 +4554,10 @@
     ],
     "num": 259,
     "gen": 8,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Farfetch’d or Sirfetch’d, its critical hit ratio is raised by 2 stages.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -4850,11 +4577,7 @@
       "吃剩的東西"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 731,
-      "usagePercent": 4.928532901833873
+      "legal": true
     }
   },
   {
@@ -4922,17 +4645,13 @@
     },
     "num": 270,
     "gen": 4,
-    "shortDesc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
+    "shortDesc": "Holder's attacks do 1.3× damage, and it loses 1/10 its max HP after the attack.",
     "damage": "  {POKEMON} lost some of its HP!",
     "aliases": [
       "生命寶珠"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1664,
-      "usagePercent": 11.21898597626753
+      "legal": true
     }
   },
   {
@@ -4976,11 +4695,7 @@
       "電氣球"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -5000,11 +4715,7 @@
       "光之黏土"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 205,
-      "usagePercent": 1.3821467098166127
+      "legal": true
     }
   },
   {
@@ -5044,11 +4755,7 @@
       "長耳兔進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.07416396979503775
+      "legal": true
     }
   },
   {
@@ -5103,11 +4810,7 @@
       "路卡利歐進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.07416396979503775
+      "legal": true
     }
   },
   {
@@ -5122,10 +4825,10 @@
     ],
     "num": 2641,
     "gen": 9,
-    "isNonstandard": "Future",
+    "isNonstandard": null,
     "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle.",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -5169,11 +4872,7 @@
       "木子果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 29,
-      "usagePercent": 0.19552319309600863
+      "legal": true
     }
   },
   {
@@ -5243,7 +4942,7 @@
     ],
     "num": 1778,
     "gen": 8,
-    "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2× power.",
     "aliases": [
       "大白寶玉"
     ],
@@ -5265,7 +4964,7 @@
     ],
     "num": 136,
     "gen": 4,
-    "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2× power.",
     "aliases": [
       "白玉寶珠"
     ],
@@ -5377,19 +5076,15 @@
     "onBasePowerPriority": 15,
     "num": 242,
     "gen": 2,
-    "shortDesc": "Holder's Electric-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Electric-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Electric-type attacks have 1.1x power."
+      "shortDesc": "Holder's Electric-type attacks have 1.1× power."
     },
     "aliases": [
       "磁鐵"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.168554476806904
+      "legal": true
     }
   },
   {
@@ -5466,11 +5161,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Malamar, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -5509,11 +5200,7 @@
       "雷電獸進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -5606,11 +5293,7 @@
       "大嘴娃進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 66,
-      "usagePercent": 0.4449838187702265
+      "legal": true
     }
   },
   {
@@ -5622,7 +5305,7 @@
     "forcedForme": "Arceus-Grass",
     "num": 301,
     "gen": 4,
-    "shortDesc": "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
+    "shortDesc": "Holder's Grass-type attacks have 1.2× power. Judgment is Grass type.",
     "aliases": [
       "碧綠石板"
     ],
@@ -5649,11 +5332,7 @@
       "恰雷姆進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -5671,11 +5350,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Meganium, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.12810140237324705
+      "legal": true
     }
   },
   {
@@ -5695,11 +5370,7 @@
       "心靈香草"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 92,
-      "usagePercent": 0.6202804746494067
+      "legal": true
     }
   },
   {
@@ -5719,11 +5390,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -5744,11 +5411,7 @@
       "巨金怪進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 91,
-      "usagePercent": 0.6135382955771305
+      "legal": true
     }
   },
   {
@@ -5776,21 +5439,17 @@
     "onBasePowerPriority": 15,
     "num": 233,
     "gen": 2,
-    "desc": "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-    "shortDesc": "Holder's Steel-type attacks have 1.2x power.",
+    "desc": "Holder's Steel-type attacks have 1.2× power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+    "shortDesc": "Holder's Steel-type attacks have 1.2× power.",
     "gen3": {
-      "desc": "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-      "shortDesc": "Holder's Steel-type attacks have 1.1x power."
+      "desc": "Holder's Steel-type attacks have 1.1× power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+      "shortDesc": "Holder's Steel-type attacks have 1.1× power."
     },
     "aliases": [
       "金屬膜"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.08764832793959008
+      "legal": true
     }
   },
   {
@@ -5809,7 +5468,7 @@
     "isNonstandard": "Past",
     "shortDesc": "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
     "gen2": {
-      "shortDesc": "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed."
+      "shortDesc": "If held by a Ditto, its Defense and Sp. Def are 1.5×, even while Transformed."
     },
     "aliases": [
       "金屬粉"
@@ -5830,19 +5489,15 @@
     },
     "num": 277,
     "gen": 4,
-    "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+    "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2× after 5 turns.",
     "gen4": {
-      "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns."
+      "shortDesc": "Damage of moves used on consecutive turns is increased. Max 2× after 10 turns."
     },
     "aliases": [
       "節拍器"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.07416396979503775
+      "legal": true
     }
   },
   {
@@ -5919,7 +5574,7 @@
     },
     "num": 209,
     "gen": 4,
-    "shortDesc": "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
+    "shortDesc": "Holder's next move has 1.2× accuracy when at 1/4 max HP or less. Single use.",
     "aliases": [
       "奇秘果"
     ],
@@ -5958,7 +5613,7 @@
     "forcedForme": "Arceus-Psychic",
     "num": 307,
     "gen": 4,
-    "shortDesc": "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
+    "shortDesc": "Holder's Psychic-type attacks have 1.2× power. Judgment is Psychic type.",
     "aliases": [
       "神奇石板"
     ],
@@ -6017,19 +5672,15 @@
     "onBasePowerPriority": 15,
     "num": 239,
     "gen": 2,
-    "shortDesc": "Holder's Grass-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Grass-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Grass-type attacks have 1.1x power."
+      "shortDesc": "Holder's Grass-type attacks have 1.1× power."
     },
     "aliases": [
       "奇跡種子"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -6070,9 +5721,8 @@
     "aliases": [
       "薄霧種子"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -6120,16 +5770,12 @@
     "onBasePowerPriority": 16,
     "num": 266,
     "gen": 4,
-    "shortDesc": "Holder's physical attacks have 1.1x power.",
+    "shortDesc": "Holder's physical attacks have 1.1× power.",
     "aliases": [
       "力量頭帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.10787486515641855
+      "legal": true
     }
   },
   {
@@ -6163,19 +5809,15 @@
     "onBasePowerPriority": 15,
     "num": 243,
     "gen": 2,
-    "shortDesc": "Holder's Water-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Water-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Water-type attacks have 1.1x power."
+      "shortDesc": "Holder's Water-type attacks have 1.1× power."
     },
     "aliases": [
       "神秘水滴"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 183,
-      "usagePercent": 1.233818770226537
+      "legal": true
     }
   },
   {
@@ -6241,19 +5883,15 @@
     "onBasePowerPriority": 15,
     "num": 246,
     "gen": 2,
-    "shortDesc": "Holder's Ice-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Ice-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Ice-type attacks have 1.1x power."
+      "shortDesc": "Holder's Ice-type attacks have 1.1× power."
     },
     "aliases": [
       "不融冰"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 48,
-      "usagePercent": 0.3236245954692557
+      "legal": true
     }
   },
   {
@@ -6284,16 +5922,15 @@
     "isGem": true,
     "num": 564,
     "gen": 5,
-    "shortDesc": "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Normal-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Normal-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Normal-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "一般寶石"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -6327,11 +5964,7 @@
       "巧可果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 275,
-      "usagePercent": 1.854099244875944
+      "legal": true
     }
   },
   {
@@ -6345,7 +5978,7 @@
     "num": 314,
     "gen": 4,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's Psychic-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Psychic-type attacks have 1.2× power.",
     "aliases": [
       "奇異薰香"
     ],
@@ -6461,11 +6094,7 @@
       "千香果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 75,
-      "usagePercent": 0.5056634304207119
+      "legal": true
     }
   },
   {
@@ -6484,11 +6113,7 @@
       "福祿果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -6526,11 +6151,7 @@
       "柿仔果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -6571,11 +6192,7 @@
       "大比鳥進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -6651,7 +6268,7 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1× power.",
     "champions": {
       "legal": false
     }
@@ -6674,11 +6291,7 @@
       "凱羅斯進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -6690,7 +6303,7 @@
     "forcedForme": "Arceus-Fairy",
     "num": 644,
     "gen": 6,
-    "shortDesc": "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
+    "shortDesc": "Holder's Fairy-type attacks have 1.2× power. Judgment is Fairy type.",
     "aliases": [
       "妖精石板"
     ],
@@ -6728,19 +6341,15 @@
     "onBasePowerPriority": 15,
     "num": 245,
     "gen": 2,
-    "shortDesc": "Holder's Poison-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Poison-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Poison-type attacks have 1.1x power."
+      "shortDesc": "Holder's Poison-type attacks have 1.1× power."
     },
     "aliases": [
       "毒針"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0337108953613808
+      "legal": true
     }
   },
   {
@@ -6751,9 +6360,9 @@
     "num": 554,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Poison-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Poison-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Poison-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "毒之寶石"
@@ -6825,7 +6434,7 @@
       "True Past"
     ],
     "isNonstandard": "Past",
-    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+    "shortDesc": "(Gen 2) Holder's Normal-type attacks have 1.1× power.",
     "champions": {
       "legal": false
     }
@@ -7136,9 +6745,9 @@
     "num": 557,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Psychic-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Psychic-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Psychic-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "超能力寶石"
@@ -7184,9 +6793,8 @@
     "aliases": [
       "精神種子"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -7217,7 +6825,7 @@
     "onModifyMovePriority": 1,
     "num": 1884,
     "gen": 9,
-    "shortDesc": "Holder's punch-based attacks have 1.1x power and do not make contact.",
+    "shortDesc": "Holder's punch-based attacks have 1.1× power and do not make contact.",
     "aliases": [
       "拳擊手套"
     ],
@@ -7241,11 +6849,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Pyroar, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.12135922330097086
+      "legal": true
     }
   },
   {
@@ -7304,11 +6908,7 @@
       "先制之爪"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 34,
-      "usagePercent": 0.2292340884573894
+      "legal": true
     }
   },
   {
@@ -7368,11 +6968,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -7390,11 +6986,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 335,
-      "usagePercent": 2.2586299892125137
+      "legal": true
     }
   },
   {
@@ -7527,9 +7119,8 @@
     "aliases": [
       "紅牌"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -7602,11 +7193,7 @@
       "羅子果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -7636,9 +7223,9 @@
     "num": 559,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Rock-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Rock-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Rock-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "岩石寶石"
@@ -7658,7 +7245,7 @@
     "num": 315,
     "gen": 4,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's Rock-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Rock-type attacks have 1.2× power.",
     "aliases": [
       "岩石薰香"
     ],
@@ -7718,9 +7305,8 @@
     "aliases": [
       "凸凸頭盔"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -7774,7 +7360,7 @@
     "num": 318,
     "gen": 4,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's Grass-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Grass-type attacks have 1.2× power.",
     "aliases": [
       "花朵薰香"
     ],
@@ -7795,11 +7381,7 @@
     "gen": 6,
     "shortDesc": "Halves damage taken from a supereffective Fairy-type attack. Single use.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 103,
-      "usagePercent": 0.6944444444444444
+      "legal": true
     }
   },
   {
@@ -7876,11 +7458,7 @@
       "勾魂眼進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
@@ -7986,13 +7564,13 @@
     ],
     "num": 769,
     "gen": 6,
-    "isNonstandard": "Past",
+    "isNonstandard": null,
     "shortDesc": "If held by a Salamence, this item allows it to Mega Evolve in battle.",
     "aliases": [
       "暴飛龍進化石"
     ],
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -8013,11 +7591,7 @@
       "蜥蜴王進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -8038,11 +7612,7 @@
       "巨鉗螳螂進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.08090614886731393
+      "legal": true
     }
   },
   {
@@ -8060,11 +7630,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Scolipede, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.10113268608414239
+      "legal": true
     }
   },
   {
@@ -8081,11 +7647,7 @@
       "焦點鏡"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.10787486515641855
+      "legal": true
     }
   },
   {
@@ -8103,11 +7665,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Scovillain, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 179,
-      "usagePercent": 1.2068500539374325
+      "legal": true
     }
   },
   {
@@ -8125,11 +7683,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Scrafty, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 16,
-      "usagePercent": 0.10787486515641855
+      "legal": true
     }
   },
   {
@@ -8143,9 +7697,9 @@
     "num": 254,
     "gen": 3,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's Water-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Water-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Water-type attacks have 1.05x power."
+      "shortDesc": "Holder's Water-type attacks have 1.05× power."
     },
     "aliases": [
       "海潮薰香"
@@ -8164,19 +7718,15 @@
     "onBasePowerPriority": 15,
     "num": 244,
     "gen": 2,
-    "shortDesc": "Holder's Flying-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Flying-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Flying-type attacks have 1.1x power."
+      "shortDesc": "Holder's Flying-type attacks have 1.1× power."
     },
     "aliases": [
       "銳利鳥嘴"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.337108953613808
+      "legal": true
     }
   },
   {
@@ -8197,11 +7747,7 @@
       "巨牙鯊進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -8239,11 +7785,7 @@
       "貝殼之鈴"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     }
   },
   {
@@ -8301,11 +7843,7 @@
       "腰木果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 34,
-      "usagePercent": 0.2292340884573894
+      "legal": true
     }
   },
   {
@@ -8318,19 +7856,15 @@
     "onBasePowerPriority": 15,
     "num": 251,
     "gen": 3,
-    "shortDesc": "Holder's Normal-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Normal-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Normal-type attacks have 1.1x power."
+      "shortDesc": "Holder's Normal-type attacks have 1.1× power."
     },
     "aliases": [
       "絲綢圍巾"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06067961165048543
+      "legal": true
     }
   },
   {
@@ -8343,19 +7877,15 @@
     "onBasePowerPriority": 15,
     "num": 222,
     "gen": 2,
-    "shortDesc": "Holder's Bug-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Bug-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Bug-type attacks have 1.1x power."
+      "shortDesc": "Holder's Bug-type attacks have 1.1× power."
     },
     "aliases": [
       "銀粉"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.02022653721682848
+      "legal": true
     }
   },
   {
@@ -8377,11 +7907,7 @@
       "文柚果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1639,
-      "usagePercent": 11.050431499460625
+      "legal": true
     }
   },
   {
@@ -8399,11 +7925,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Skarmory, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.0674217907227616
+      "legal": true
     }
   },
   {
@@ -8433,7 +7955,7 @@
     "forcedForme": "Arceus-Flying",
     "num": 306,
     "gen": 4,
-    "shortDesc": "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
+    "shortDesc": "Holder's Flying-type attacks have 1.2× power. Judgment is Flying type.",
     "aliases": [
       "藍天石板"
     ],
@@ -8458,11 +7980,7 @@
     "shortDesc": "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
     "champions": {
       "shortDesc": "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.026968716289104636
+      "legal": true
     },
     "aliases": [
       "呆殼獸進化石"
@@ -8482,11 +8000,7 @@
       "沙沙岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -8538,19 +8052,15 @@
     "onBasePowerPriority": 15,
     "num": 237,
     "gen": 2,
-    "shortDesc": "Holder's Ground-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Ground-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Ground-type attacks have 1.1x power."
+      "shortDesc": "Holder's Ground-type attacks have 1.1× power."
     },
     "aliases": [
       "柔軟沙子"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0337108953613808
+      "legal": true
     }
   },
   {
@@ -8586,9 +8096,9 @@
     ],
     "num": 225,
     "gen": 3,
-    "shortDesc": "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
+    "shortDesc": "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2× power.",
     "gen6": {
-      "shortDesc": "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x."
+      "shortDesc": "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5×."
     },
     "aliases": [
       "心之水滴"
@@ -8608,20 +8118,16 @@
     "onBasePowerPriority": 15,
     "num": 247,
     "gen": 2,
-    "shortDesc": "Holder's Ghost-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Ghost-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Ghost-type attacks have 1.1x power."
+      "shortDesc": "Holder's Ghost-type attacks have 1.1× power."
     },
     "aliases": [
       "詛咒之符"
     ],
     "isNonstandard": null,
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 17,
-      "usagePercent": 0.1146170442286947
+      "legal": true
     }
   },
   {
@@ -8654,7 +8160,7 @@
     "forcedForme": "Arceus-Water",
     "num": 299,
     "gen": 4,
-    "shortDesc": "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
+    "shortDesc": "Holder's Water-type attacks have 1.2× power. Judgment is Water type.",
     "aliases": [
       "水滴石板"
     ],
@@ -8672,7 +8178,7 @@
     "forcedForme": "Arceus-Ghost",
     "num": 310,
     "gen": 4,
-    "shortDesc": "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
+    "shortDesc": "Holder's Ghost-type attacks have 1.2× power. Judgment is Ghost type.",
     "aliases": [
       "妖怪石板"
     ],
@@ -8730,11 +8236,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Staraptor, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 354,
-      "usagePercent": 2.3867313915857604
+      "legal": true
     }
   },
   {
@@ -8772,11 +8274,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Starmie, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.06067961165048543
+      "legal": true
     }
   },
   {
@@ -8787,9 +8285,9 @@
     "num": 563,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Steel-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Steel-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Steel-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "鋼之寶石"
@@ -8853,11 +8351,7 @@
       "大鋼蛇進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.05393743257820927
+      "legal": true
     }
   },
   {
@@ -8913,7 +8407,7 @@
     "forcedForme": "Arceus-Rock",
     "num": 309,
     "gen": 4,
-    "shortDesc": "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
+    "shortDesc": "Holder's Rock-type attacks have 1.2× power. Judgment is Rock type.",
     "aliases": [
       "岩石石板"
     ],
@@ -8993,11 +8487,7 @@
       "巨沼怪進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 199,
-      "usagePercent": 1.3416936353829558
+      "legal": true
     }
   },
   {
@@ -9073,11 +8563,7 @@
       "扁櫻果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.006742179072276159
+      "legal": true
     }
   },
   {
@@ -9154,9 +8640,8 @@
     "aliases": [
       "大地膜"
     ],
-    "isNonstandard": "Past",
     "champions": {
-      "legal": false
+      "legal": true
     }
   },
   {
@@ -9273,7 +8758,7 @@
     "forcedForme": "Arceus-Poison",
     "num": 304,
     "gen": 4,
-    "shortDesc": "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
+    "shortDesc": "Holder's Poison-type attacks have 1.2× power. Judgment is Poison type.",
     "aliases": [
       "劇毒石板"
     ],
@@ -11092,19 +10577,15 @@
     "onBasePowerPriority": 15,
     "num": 248,
     "gen": 2,
-    "shortDesc": "Holder's Psychic-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Psychic-type attacks have 1.2× power.",
     "gen3": {
-      "shortDesc": "Holder's Psychic-type attacks have 1.1x power."
+      "shortDesc": "Holder's Psychic-type attacks have 1.1× power."
     },
     "aliases": [
       "彎曲的湯匙"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -11125,11 +10606,7 @@
       "班基拉斯進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 102,
-      "usagePercent": 0.6877022653721683
+      "legal": true
     }
   },
   {
@@ -11244,11 +10721,7 @@
       "妙蛙花進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 63,
-      "usagePercent": 0.42475728155339804
+      "legal": true
     }
   },
   {
@@ -11266,11 +10739,7 @@
     "isNonstandard": null,
     "shortDesc": "If held by a Victreebel, this item allows it to Mega Evolve in battle.",
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.0337108953613808
+      "legal": true
     }
   },
   {
@@ -11288,7 +10757,7 @@
     "num": -2,
     "gen": 8,
     "isNonstandard": "CAP",
-    "shortDesc": "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+    "shortDesc": "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2× power.",
     "champions": {
       "legal": false
     }
@@ -11309,11 +10778,7 @@
       "燭木果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 20,
-      "usagePercent": 0.1348435814455232
+      "legal": true
     }
   },
   {
@@ -11324,9 +10789,9 @@
     "num": 549,
     "gen": 5,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's first successful Water-type attack will have 1.3x power. Single use.",
+    "shortDesc": "Holder's first successful Water-type attack will have 1.3× power. Single use.",
     "gen5": {
-      "shortDesc": "Holder's first successful Water-type attack will have 1.5x power. Single use."
+      "shortDesc": "Holder's first successful Water-type attack will have 1.5× power. Single use."
     },
     "aliases": [
       "水之寶石"
@@ -11423,7 +10888,7 @@
     "num": 317,
     "gen": 4,
     "isNonstandard": "Past",
-    "shortDesc": "Holder's Water-type attacks have 1.2x power.",
+    "shortDesc": "Holder's Water-type attacks have 1.2× power.",
     "aliases": [
       "漣漪薰香"
     ],
@@ -11467,7 +10932,7 @@
     ],
     "num": 2407,
     "gen": 9,
-    "shortDesc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+    "shortDesc": "Ogerpon-Wellspring: 1.2× power attacks; Terastallize to gain Embody Aspect.",
     "aliases": [
       "水井面具"
     ],
@@ -11532,11 +10997,7 @@
       "白色香草"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 446,
-      "usagePercent": 3.0070118662351675
+      "legal": true
     }
   },
   {
@@ -11549,16 +11010,12 @@
     "onSourceModifyAccuracyPriority": -2,
     "num": 265,
     "gen": 4,
-    "shortDesc": "The accuracy of attacks by the holder is 1.1x.",
+    "shortDesc": "The accuracy of attacks by the holder is 1.1×.",
     "aliases": [
       "廣角鏡"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 164,
-      "usagePercent": 1.1057173678532901
+      "legal": true
     }
   },
   {
@@ -11597,16 +11054,12 @@
     "onBasePowerPriority": 16,
     "num": 267,
     "gen": 4,
-    "shortDesc": "Holder's special attacks have 1.1x power.",
+    "shortDesc": "Holder's special attacks have 1.1× power.",
     "aliases": [
       "博識眼鏡"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 18,
-      "usagePercent": 0.12135922330097086
+      "legal": true
     }
   },
   {
@@ -11625,11 +11078,7 @@
       "番荔果"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.04719525350593312
+      "legal": true
     }
   },
   {
@@ -11641,7 +11090,7 @@
     "forcedForme": "Arceus-Electric",
     "num": 300,
     "gen": 4,
-    "shortDesc": "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
+    "shortDesc": "Holder's Electric-type attacks have 1.2× power. Judgment is Electric type.",
     "aliases": [
       "雷電石板"
     ],
@@ -11678,16 +11127,12 @@
     "onSourceModifyAccuracyPriority": -2,
     "num": 276,
     "gen": 4,
-    "shortDesc": "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
+    "shortDesc": "The accuracy of attacks by the holder is 1.2× if it moves after its target.",
     "aliases": [
       "對焦鏡"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.013484358144552318
+      "legal": true
     }
   },
   {
