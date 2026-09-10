@@ -2,6 +2,49 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildLimitlessUsage, mergeLimitlessUsage } from "../src/data/limitless-data.js";
+import { downloadLimitlessChampionsData } from "../scripts/sync-limitless-champions-usage.mjs";
+
+test("falls back to M-B usage when M-C has no tournaments", async () => {
+  const requestedUrls = [];
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    fetcher: async (url) => {
+      requestedUrls.push(url);
+      const parsed = new URL(url);
+      if (parsed.pathname === "/api/tournaments") {
+        if (parsed.searchParams.get("format") === "M-C") return [];
+        return [
+          {
+            id: "mb-event",
+            game: "VGC",
+            format: "M-B",
+            name: "M-B Event",
+            date: "2026-08-01T00:00:00.000Z",
+            players: 1,
+          },
+        ];
+      }
+      if (parsed.pathname.endsWith("/standings")) {
+        return [{ decklist: [{ id: "raichu", name: "Raichu" }] }];
+      }
+      if (parsed.pathname.endsWith("/details")) return { phases: [] };
+      throw new Error(`Unexpected URL: ${url}`);
+    },
+    catalogs: {
+      pokemon: [{ id: "raichu", name: "Raichu", champions: { legal: true } }],
+      items: [],
+    },
+  });
+
+  assert.deepEqual(
+    requestedUrls
+      .filter((url) => new URL(url).pathname === "/api/tournaments")
+      .map((url) => new URL(url).searchParams.get("format")),
+    ["M-C", "M-B"],
+  );
+  assert.equal(teams.format, "M-B");
+  assert.equal(usage.tournamentCount, 1);
+  assert.equal(usage.pokemon[0].id, "raichu");
+});
 
 test("aggregates Limitless standings into usage rates", () => {
   const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];

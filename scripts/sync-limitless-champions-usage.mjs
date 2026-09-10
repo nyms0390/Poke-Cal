@@ -15,6 +15,7 @@ import {
 const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_GAME = "VGC";
 const DEFAULT_FORMAT = "M-C";
+const DEFAULT_FALLBACK_FORMAT = "M-B";
 const DEFAULT_LIMIT = 50;
 const DEFAULT_ARCHIVE_LIMIT = 10;
 const API_DELAY_MS = 1250;
@@ -29,9 +30,16 @@ export async function downloadLimitlessChampionsData({
   pokemon,
   items,
 } = {}) {
-  const tournaments = (await fetcher(tournamentsUrl({ game, format, limit }))).filter(
+  let selectedFormat = format;
+  let tournaments = (await fetcher(tournamentsUrl({ game, format, limit }))).filter(
     (tournament) => !format || tournament.format === format,
   );
+  if (tournaments.length === 0 && format === DEFAULT_FORMAT) {
+    selectedFormat = DEFAULT_FALLBACK_FORMAT;
+    tournaments = (
+      await fetcher(tournamentsUrl({ game, format: selectedFormat, limit }))
+    ).filter((tournament) => tournament.format === selectedFormat);
+  }
   const standingsByTournament = new Map();
   const detailsByTournament = new Map();
   const pairingsByTournament = new Map();
@@ -69,7 +77,7 @@ export async function downloadLimitlessChampionsData({
       detailsByTournament,
       standingsByTournament,
       pairingsByTournament,
-      { limit: archiveLimit, format },
+      { limit: archiveLimit, format: selectedFormat },
     );
     if (partialArchive.tournaments.length >= archiveLimit) break;
   }
@@ -81,7 +89,7 @@ export async function downloadLimitlessChampionsData({
       detailsByTournament,
       standingsByTournament,
       pairingsByTournament,
-      { limit: archiveLimit, format },
+      { limit: archiveLimit, format: selectedFormat },
     ),
   };
 }
