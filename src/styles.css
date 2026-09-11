@@ -2589,10 +2589,6 @@ button:disabled {
   gap: 12px;
 }
 
-.builder-break-options .builder-sort-toggle {
-  flex: 0 0 auto;
-}
-
 .builder-picks,
 .speed-spread-controls {
   display: grid;
@@ -2726,7 +2722,7 @@ button:disabled {
 
 .builder-move-row {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
 }

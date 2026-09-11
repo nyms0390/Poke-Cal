@@ -28,6 +28,7 @@ import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { createField } from "../engine/field.js";
+import { moveEffect } from "../engine/move-effects.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import {
   applyDocumentTranslations,
@@ -94,7 +95,6 @@ const elements = {
   speedLink: document.querySelector("#builder-speed-link"),
   sortToolbar: document.querySelector("#builder-sort-toolbar"),
   sortToggle: document.querySelector("#builder-sort-toggle"),
-  criticalToggle: document.querySelector("#builder-critical-toggle"),
   analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
   bulkPanel: document.querySelector("#builder-bulk-panel"),
   breakPanel: document.querySelector("#builder-break-panel"),
@@ -200,18 +200,11 @@ async function initialize() {
 
 function initializeAnalysisTabs() {
   elements.sortToggle.addEventListener("click", toggleAnalysisSort);
-  elements.criticalToggle.addEventListener("click", toggleBreakCritical);
   for (const tab of elements.analysisTabs) {
     tab.addEventListener("click", () => activateAnalysisTab(tab.dataset.builderAnalysis));
     tab.addEventListener("keydown", handleAnalysisTabKeydown);
   }
   renderAnalysisTabs();
-}
-
-function toggleBreakCritical() {
-  updatePage(() => {
-    state = { ...state, breakCritical: !state.breakCritical };
-  });
 }
 
 function toggleAnalysisSort() {
@@ -248,7 +241,6 @@ function renderAnalysisTabs() {
     breakpointSort ? "builder.sortBreakpoint" : "builder.sortDefault",
   );
   elements.sortToggle.setAttribute("aria-pressed", String(breakpointSort));
-  elements.criticalToggle.setAttribute("aria-pressed", String(state.breakCritical));
   for (const tab of elements.analysisTabs) {
     const selected = tab.dataset.builderAnalysis === state.analysisTab;
     tab.setAttribute("aria-selected", String(selected));
@@ -299,7 +291,6 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
       threatStatus: state.threatStatus,
       analysisTab: state.analysisTab,
       analysisSort: state.analysisSort,
-      breakCritical: state.breakCritical,
       field: state.field,
     });
     if (activeSet) {
@@ -599,6 +590,7 @@ function renderMovePicks() {
       onSelect: (move) => {
         stageUserSetup({ kind: "move", index, value: move.id });
         input.value = localizedName(move);
+        renderMovePicks();
       },
       renderRow: (move, onSelect) => {
         const details = document.createDocumentFragment();
@@ -611,7 +603,27 @@ function renderMovePicks() {
       },
     });
     moveComboboxCleanups.push(attached.destroy);
-    row.append(label, combobox);
+    const crit = document.createElement("button");
+    crit.type = "button";
+    crit.className = "move-toggle";
+    crit.textContent = t("battle.crit");
+    crit.dataset.kind = "crit";
+    crit.dataset.index = String(index);
+    const setup = userSetupDraft?.current() ?? state.user;
+    const manualCrit = Boolean(setup.critMoves?.[index]);
+    const alwaysCrit = selected && moveEffect(normalizeId(selected.id)).alwaysCrit === true;
+    crit.disabled = alwaysCrit;
+    crit.setAttribute("aria-pressed", String(alwaysCrit || manualCrit));
+    crit.addEventListener("click", () => {
+      const next = crit.getAttribute("aria-pressed") !== "true";
+      updatePage(() => {
+        if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, {
+          kind: "crit", index, value: next,
+        }));
+        state = { ...state, user: applyControl(state.user, { kind: "crit", index, value: next }) };
+      });
+    });
+    row.append(label, combobox, crit);
     return row;
   }));
 }
@@ -623,9 +635,14 @@ function builderMoves() {
   );
 }
 
-function selectedMoves() {
+function selectedMoves(setup = state.user) {
   const lookup = new Map(builderMoves().map((move) => [normalizeId(move.id), move]));
-  return state.user.selectedMoveIds.map((id) => lookup.get(normalizeId(id))).filter(Boolean);
+  return setup.selectedMoveIds
+    .map((id, index) => {
+      const move = lookup.get(normalizeId(id));
+      return move ? { ...move, slotIndex: index } : null;
+    })
+    .filter(Boolean);
 }
 
 function selectedThreats() {
@@ -998,7 +1015,8 @@ function statChip(stat, value) {
 }
 
 function renderBreakPoints(threats, field) {
-  const moves = selectedMoves().filter(({ category }) => category === "Physical" || category === "Special");
+  const setup = state.user;
+  const moves = selectedMoves(setup).filter(({ category }) => category === "Physical" || category === "Special");
   const families = threatFamilies(threats);
   elements.breakCount.textContent = t("builder.breakCount", { pokemon: threats.length, moves: moves.length });
   if (threats.length === 0) {
@@ -1017,8 +1035,8 @@ function renderBreakPoints(threats, field) {
       threat,
       analyses: moves.map((move) => ({
         move,
-        damage: yourDamage(state.user, move, { threat, field, critical: state.breakCritical }),
-        points: breakPoints(state.user, move, { threat, field, critical: state.breakCritical }),
+        damage: yourDamage(setup, move, { threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]) }),
+        points: breakPoints(setup, move, { threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]) }),
       })),
     }));
     return {
