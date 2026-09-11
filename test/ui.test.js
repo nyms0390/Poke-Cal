@@ -61,6 +61,15 @@ test("builder exposes user and global threat status controls without per-threat 
   assert.match(source, /applyGlobalThreatStatus\(threats, state\.threatStatus\)/);
 });
 
+test("builder exposes one critical-hit toggle for offensive breakpoint analysis", () => {
+  const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/builder-page.js", import.meta.url), "utf8");
+
+  assert.match(html, /id="builder-critical-toggle"[^>]*aria-pressed="false"/);
+  assert.match(source, /critical: state\.breakCritical/);
+  assert.match(source, /breakCritical: state\.breakCritical/);
+});
+
 test("Speed tiers expose user and opponent active-ability controls and source metadata", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");

@@ -87,6 +87,25 @@ test("wraps the damage engine with the builder Pokémon on the attacker side", (
   assert.match(result.koText, /(OHKO|2HKO|3HKO|4HKO|5HKO|not a KO)/);
 });
 
+test("calculates current damage and offensive breakpoints as critical hits when requested", () => {
+  const state = userState();
+  const scenario = { threat: threat() };
+  const normal = yourDamage(state, physicalMove, scenario);
+  const critical = yourDamage(state, physicalMove, { ...scenario, critical: true });
+  const criticalPoints = breakPoints(state, physicalMove, { ...scenario, critical: true });
+
+  assert.equal(critical.maxPct > normal.maxPct, true);
+  assert.deepEqual(
+    criticalPoints.find(({ achieves }) => achieves === "guaranteed 2HKO"),
+    {
+      sp: 12,
+      achieves: "guaranteed 2HKO",
+      minPct: 50.2,
+      maxPct: 60,
+    },
+  );
+});
+
 test("passes a Soaked threat into the damage engine as a Water defender", () => {
   const neutral = yourDamage(userState(), fireMove, { threat: threat() });
   const soaked = yourDamage(userState(), fireMove, {

@@ -2582,6 +2582,17 @@ button:disabled {
   display: none;
 }
 
+.builder-break-options {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.builder-break-options .builder-sort-toggle {
+  flex: 0 0 auto;
+}
+
 .builder-picks,
 .speed-spread-controls {
   display: grid;
@@ -3773,6 +3784,11 @@ details.builder-analysis-move > .builder-spread-grid {
   }
 
   .builder-analysis-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .builder-break-options {
     align-items: stretch;
     flex-direction: column;
   }

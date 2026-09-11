@@ -103,6 +103,7 @@ export const ZH_TW_MESSAGES = {
   "builder.environmentAssumption": "所有對戰均使用此環境；對手特性不會自動改變設定。",
   "builder.bulkAssumption": "威脅預設採用使用率資料中的道具與特性、最大攻擊能力，並使用所選環境。每個形態會依其兩個已分析攻擊招式獨立分類。可使用相關形態連結在形態間跳轉，並點擊寶可夢編輯配招。",
   "builder.breakAssumption": "威脅預設採用 2 HP 高速攻擊型耐久、使用率資料中的道具與特性，並使用所選環境。點擊寶可夢可編輯配招。",
+  "builder.criticalHit": "要害傷害",
   "battle.saveName": "配招名稱",
   "battle.deleteConfirm": ({ name }) => `要刪除已儲存的配招「${name}」嗎？`,
   "battle.ready": "就緒",

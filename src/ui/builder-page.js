@@ -94,6 +94,7 @@ const elements = {
   speedLink: document.querySelector("#builder-speed-link"),
   sortToolbar: document.querySelector("#builder-sort-toolbar"),
   sortToggle: document.querySelector("#builder-sort-toggle"),
+  criticalToggle: document.querySelector("#builder-critical-toggle"),
   analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
   bulkPanel: document.querySelector("#builder-bulk-panel"),
   breakPanel: document.querySelector("#builder-break-panel"),
@@ -199,11 +200,18 @@ async function initialize() {
 
 function initializeAnalysisTabs() {
   elements.sortToggle.addEventListener("click", toggleAnalysisSort);
+  elements.criticalToggle.addEventListener("click", toggleBreakCritical);
   for (const tab of elements.analysisTabs) {
     tab.addEventListener("click", () => activateAnalysisTab(tab.dataset.builderAnalysis));
     tab.addEventListener("keydown", handleAnalysisTabKeydown);
   }
   renderAnalysisTabs();
+}
+
+function toggleBreakCritical() {
+  updatePage(() => {
+    state = { ...state, breakCritical: !state.breakCritical };
+  });
 }
 
 function toggleAnalysisSort() {
@@ -240,6 +248,7 @@ function renderAnalysisTabs() {
     breakpointSort ? "builder.sortBreakpoint" : "builder.sortDefault",
   );
   elements.sortToggle.setAttribute("aria-pressed", String(breakpointSort));
+  elements.criticalToggle.setAttribute("aria-pressed", String(state.breakCritical));
   for (const tab of elements.analysisTabs) {
     const selected = tab.dataset.builderAnalysis === state.analysisTab;
     tab.setAttribute("aria-selected", String(selected));
@@ -290,6 +299,7 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
       threatStatus: state.threatStatus,
       analysisTab: state.analysisTab,
       analysisSort: state.analysisSort,
+      breakCritical: state.breakCritical,
       field: state.field,
     });
     if (activeSet) {
@@ -1007,8 +1017,8 @@ function renderBreakPoints(threats, field) {
       threat,
       analyses: moves.map((move) => ({
         move,
-        damage: yourDamage(state.user, move, { threat, field }),
-        points: breakPoints(state.user, move, { threat, field }),
+        damage: yourDamage(state.user, move, { threat, field, critical: state.breakCritical }),
+        points: breakPoints(state.user, move, { threat, field, critical: state.breakCritical }),
       })),
     }));
     return {

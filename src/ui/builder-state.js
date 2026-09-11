@@ -22,15 +22,25 @@ export function createBuilderState(
     threatStatus = "",
     analysisTab = "bulk",
     analysisSort = "breakpoint",
+    breakCritical = false,
     field,
   } = {},
 ) {
   threatCount = normalizeThreatCount(threatCount);
   analysisTab = ANALYSIS_TABS.includes(analysisTab) ? analysisTab : "bulk";
   analysisSort = ANALYSIS_SORTS.includes(analysisSort) ? analysisSort : "breakpoint";
+  breakCritical = Boolean(breakCritical);
   const ambientField = createAmbientFieldState(field);
   if (!pokemon || !usageDefaults) {
-    return { user: null, field: ambientField, threatCount, threatStatus, analysisTab, analysisSort };
+    return {
+      user: null,
+      field: ambientField,
+      threatCount,
+      threatStatus,
+      analysisTab,
+      analysisSort,
+      breakCritical,
+    };
   }
 
   return {
@@ -43,6 +53,7 @@ export function createBuilderState(
     threatStatus,
     analysisTab,
     analysisSort,
+    breakCritical,
   };
 }
 

@@ -65,6 +65,7 @@ test("creates an empty builder with the default threat count", () => {
     threatStatus: "",
     analysisTab: "bulk",
     analysisSort: "breakpoint",
+    breakCritical: false,
   });
 });
 
@@ -154,6 +155,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
     threatStatus: "soak",
     analysisTab: "break",
     analysisSort: "default",
+    breakCritical: true,
     field: { weather: "SunnyDay", gravity: true },
   });
 
@@ -171,6 +173,7 @@ test("creates one canonical side state without activating the usage-backed Tera 
   assert.equal(state.threatStatus, "soak");
   assert.equal(state.analysisTab, "break");
   assert.equal(state.analysisSort, "default");
+  assert.equal(state.breakCritical, true);
   assert.deepEqual(state.field, {
     format: "doubles",
     weather: "SunnyDay",
