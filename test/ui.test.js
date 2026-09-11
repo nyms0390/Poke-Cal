@@ -67,6 +67,7 @@ test("builder exposes per-move critical-hit controls for offensive breakpoint an
 
   assert.doesNotMatch(html, /builder-critical-toggle/);
   assert.match(source, /crit\.dataset\.kind = "crit"/);
+  assert.match(source, /const next = crit\.getAttribute\("aria-pressed"\) !== "true";[\s\S]*?crit\.setAttribute\("aria-pressed", String\(next\)\)/);
   assert.match(source, /critical: Boolean\(setup\.critMoves\?\./);
   assert.doesNotMatch(source, /breakCritical/);
 });

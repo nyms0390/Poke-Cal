@@ -616,6 +616,7 @@ function renderMovePicks() {
     crit.setAttribute("aria-pressed", String(alwaysCrit || manualCrit));
     crit.addEventListener("click", () => {
       const next = crit.getAttribute("aria-pressed") !== "true";
+      crit.setAttribute("aria-pressed", String(next));
       updatePage(() => {
         if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, {
           kind: "crit", index, value: next,
