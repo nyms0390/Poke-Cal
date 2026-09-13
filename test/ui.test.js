@@ -470,8 +470,13 @@ test("combobox closes only after focus leaves both input and results", async () 
       this.listeners.get(type)?.delete(listener);
     }
 
-    dispatch(type) {
-      for (const listener of this.listeners.get(type) ?? []) listener({ target: this });
+    dispatch(type, event = { target: this }) {
+      for (const listener of this.listeners.get(type) ?? []) listener(event);
+    }
+
+    focus() {
+      globalThis.document.activeElement = this;
+      this.dispatch("focus");
     }
 
     setAttribute(name, value) {
@@ -490,6 +495,7 @@ test("combobox closes only after focus leaves both input and results", async () 
   const previousDocument = globalThis.document;
   const fakeDocument = new FakeTarget();
   const input = new FakeTarget();
+  input.value = "pika";
   const results = new FakeTarget();
   results.id = "test-results";
   results.querySelectorAll = () => [];
@@ -503,7 +509,7 @@ test("combobox closes only after focus leaves both input and results", async () 
     const combobox = attachCombobox({
       input,
       resultsEl: results,
-      getMatches: () => [],
+      getMatches: () => ["Pikachu"],
       onSelect: () => {},
       renderRow: () => new FakeTarget(),
     });
@@ -519,6 +525,22 @@ test("combobox closes only after focus leaves both input and results", async () 
     results.dispatch("focusout");
     await settleFocus();
     assert.equal(results.hidden, false, "result-to-input focus keeps the popup open");
+
+    results.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    fakeDocument.activeElement = insideResult;
+    let escapePrevented = false;
+    results.dispatch("keydown", {
+      key: "Escape",
+      target: insideResult,
+      preventDefault() {
+        escapePrevented = true;
+      },
+    });
+    assert.equal(escapePrevented, true);
+    assert.equal(fakeDocument.activeElement, input, "Escape restores focus to the input");
+    assert.equal(results.hidden, true, "Escape leaves the popup hidden after focus restoration");
+    assert.equal(input.attributes.get("aria-expanded"), "false");
 
     fakeDocument.activeElement = outside;
     input.dispatch("focusout");

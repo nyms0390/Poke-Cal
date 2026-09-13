@@ -363,8 +363,8 @@ export function attachCombobox({
   resultsEl.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       event.preventDefault();
-      hide();
       input.focus();
+      hide();
       return;
     }
     const options = [...resultsEl.querySelectorAll(".search-result")];
