@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fb" />
     <meta
       name="description"
       content="Recent Limitless Champions tournament teams with submitted items, abilities, moves, natures, and Tera data."
@@ -11,7 +12,8 @@
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
       <header>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
@@ -19,7 +21,7 @@
           <a href="./battle.html">Battle Calculator</a>
           <a href="./builder.html">Builder</a>
           <a href="./speed.html">Speed Tiers</a>
-          <a class="active" href="./teams.html">Teams</a>
+          <a class="active" href="./teams.html" aria-current="page">Teams</a>
           <label class="language-switch">
             <span>Language</span>
             <select data-language-switch aria-label="Language">
@@ -51,7 +53,7 @@
       </section>
 
       <footer>
-        <span id="status">Loading Pokémon data…</span>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
         <span data-i18n="teams.footer">Limitless Champions team lists · submitted builds only · no inferred spreads</span>
       </footer>
     </main>

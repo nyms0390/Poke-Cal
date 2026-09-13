@@ -10,6 +10,7 @@ import {
   moveCategoryIconPath,
   moveNameCell,
   pokemonSpriteUrls,
+  searchResultFocusIndex,
   typeBadge,
   visibleSearchResults,
   typeClassName,
@@ -429,6 +430,17 @@ test("expands capped search results when requested", () => {
   });
 });
 
+test("search-result arrows wrap focus through the popup", () => {
+  assert.equal(searchResultFocusIndex(0, 3, "ArrowDown"), 1);
+  assert.equal(searchResultFocusIndex(2, 3, "ArrowDown"), 0);
+  assert.equal(searchResultFocusIndex(0, 3, "ArrowUp"), 2);
+  assert.equal(searchResultFocusIndex(1, 3, "ArrowUp"), 0);
+  assert.equal(searchResultFocusIndex(1, 3, "Home"), 0);
+  assert.equal(searchResultFocusIndex(1, 3, "End"), 2);
+  assert.equal(searchResultFocusIndex(1, 0, "ArrowDown"), -1);
+  assert.equal(searchResultFocusIndex(1, 3, "Escape"), -1);
+});
+
 test("auto-expands the highest-damage move and toggles one open move per side", () => {
   assert.equal(mostEffectiveMoveIndex([
     { supported: true, minPercent: 10, maxPercent: 90 },
@@ -638,7 +650,7 @@ test("standalone moves page keeps the four combined filters and full catalog tab
   const html = readFileSync(new URL("../moves.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/moves-page.js", import.meta.url), "utf8");
 
-  assert.match(html, /<a class="active" href="\.\/moves\.html">Moves<\/a>/);
+  assert.match(html, /<a class="active" href="\.\/moves\.html" aria-current="page">Moves<\/a>/);
   for (const id of ["move-search", "move-type", "move-category", "move-property", "move-count", "move-list"]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
@@ -664,7 +676,7 @@ test("all pages place Moves in the second navigation slot", () => {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
     assert.deepEqual(
-      [...nav.matchAll(/<a(?: class="active")? href="([^"]+)">([^<]+)<\/a>/g)].slice(0, 2).map(([, href, label]) => [href, label]),
+      [...nav.matchAll(/<a(?: class="active")? href="([^"]+)"(?: aria-current="page")?>([^<]+)<\/a>/g)].slice(0, 2).map(([, href, label]) => [href, label]),
       [["./index.html", "Lookup"], ["./moves.html", "Moves"]],
       page,
     );

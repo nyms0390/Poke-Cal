@@ -33,6 +33,7 @@ import {
   rankObservedUsage,
 } from "./bootstrap.js";
 import {
+  attachCombobox,
   FULL_STAT_LABELS,
   itemLabel,
   moveCategoryMark,
@@ -42,7 +43,6 @@ import {
   searchResultButton,
   textCell,
   typeBadge,
-  visibleSearchResults,
 } from "./components.js";
 
 const elements = {
@@ -89,11 +89,22 @@ let selectedFamily = [];
 let selectedMoves = [];
 let moveSort = { key: "", direction: "" };
 let catalogs = null;
-let pokemonSearchExpanded = false;
 const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 
 initI18n();
+attachCombobox({
+  input: elements.search,
+  resultsEl: elements.results,
+  getMatches: (query) => searchPokemon(pokemon, query, { ...searchOptions(), limit: 12 }),
+  getAllMatches: (query) => searchPokemon(pokemon, query, {
+    ...searchOptions(),
+    limit: pokemon.length,
+  }),
+  resultLimit: 12,
+  onSelect: selectPokemon,
+  renderRow: (entry, onSelect) => searchResultButton(entry, onSelect),
+});
 initialize();
 
 onLocaleChange(() => {
@@ -128,20 +139,6 @@ async function initialize() {
   });
 }
 
-elements.search.addEventListener("input", () => {
-  pokemonSearchExpanded = false;
-  renderSearchResults();
-});
-
-elements.search.addEventListener("keydown", (event) => {
-  if (event.key !== "Enter") return;
-  const [firstResult] = searchPokemon(pokemon, elements.search.value, {
-    ...searchOptions(),
-    limit: 1,
-  });
-  if (firstResult) selectPokemon(firstResult);
-});
-
 elements.form.addEventListener("input", () => {
   const form = selectedFamily.find(({ id }) => id === elements.form.value);
   if (form) selectForm(form);
@@ -161,40 +158,13 @@ function searchOptions() {
   return { abilityLookup, moveLookup, itemLookup };
 }
 
-function renderSearchResults() {
-  const allResults = searchPokemon(pokemon, elements.search.value, {
-    ...searchOptions(),
-    limit: pokemon.length,
-  });
-  const visible = visibleSearchResults(allResults, {
-    limit: 12,
-    expanded: pokemonSearchExpanded,
-  });
-  elements.results.replaceChildren(
-    ...visible.matches.map((entry) => searchResultButton(entry, selectPokemon)),
-  );
-  if (visible.canExpand) {
-    const more = document.createElement("button");
-    more.type = "button";
-    more.className = "search-results-more";
-    more.textContent = t("label.showAll");
-    more.addEventListener("click", () => {
-      pokemonSearchExpanded = true;
-      renderSearchResults();
-      elements.search.focus();
-    });
-    elements.results.append(more);
-  }
-  elements.results.hidden = visible.matches.length === 0;
-}
-
 function selectPokemon(entry, options = {}) {
   if (!entry) return;
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
   selectForm(entry, options);
   elements.results.hidden = true;
-  pokemonSearchExpanded = false;
+  elements.search.setAttribute("aria-expanded", "false");
 }
 
 function renderFormOptions() {
@@ -238,11 +208,15 @@ function selectForm(entry, options = {}) {
 
 function renderSelectedSprite(entry) {
   const image = document.createElement("img");
-  image.alt = localizedName(entry);
+  image.alt = "";
+  image.width = 96;
+  image.height = 96;
+  image.fetchPriority = "high";
   const [source, fallbackSource] = pokemonSpriteUrls(entry);
   image.src = source;
 
   const fallback = document.createElement("span");
+  fallback.setAttribute("aria-hidden", "true");
   fallback.hidden = true;
   fallback.textContent = localizedName(entry).slice(0, 1);
 

@@ -67,6 +67,7 @@ export const ZH_TW_MESSAGES = {
   "label.allCategories": "所有分類",
   "label.allMoveProperties": "所有性質",
   "label.showAll": "顯示全部結果",
+  "search.noMatches": "找不到符合的寶可夢或招式。請檢查拼字或使用更廣泛的關鍵字。",
   "moveProperty.contact": "接觸",
   "moveProperty.sound": "聲音",
   "moveProperty.punch": "拳類",
@@ -242,6 +243,7 @@ export const ZH_TW_MESSAGES = {
 // Exact document-shell copy. Runtime sentences with values are formatted through message keys.
 export const STATIC_ZH_TW = {
   "Language": "語言",
+  "Skip to main content": "跳至主要內容",
   "PokéCal pages": "PokéCal 頁面",
   "Builder analyses": "構築分析",
   "Moves": "招式",

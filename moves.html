@@ -3,16 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fb" />
     <meta name="description" content="Search the Champions-legal Pokémon move catalog." />
     <title>PokéCal — Move catalog</title>
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
       <header>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
-          <a class="active" href="./moves.html">Moves</a>
+          <a class="active" href="./moves.html" aria-current="page">Moves</a>
           <a href="./battle.html">Battle Calculator</a>
           <a href="./builder.html">Builder</a>
           <a href="./speed.html">Speed Tiers</a>
@@ -49,23 +51,23 @@
           <div class="move-filters">
             <label>
               Search moves
-              <input id="move-search" type="search" autocomplete="off" placeholder="Thunderbolt" />
+              <input id="move-search" name="move-search" type="search" autocomplete="off" placeholder="Thunderbolt" />
             </label>
             <label>
               Type
-              <select id="move-type">
+              <select id="move-type" name="move-type">
                 <option value="">All types</option>
               </select>
             </label>
             <label>
               Category
-              <select id="move-category">
+              <select id="move-category" name="move-category">
                 <option value="">All categories</option>
               </select>
             </label>
             <label>
               Move property
-              <select id="move-property">
+              <select id="move-property" name="move-property">
                 <option value="">All properties</option>
               </select>
             </label>
@@ -90,7 +92,7 @@
       </section>
 
       <footer>
-        <span id="status">Loading Pokémon data…</span>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
         <span data-i18n="moves.footer">Champions catalog · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>

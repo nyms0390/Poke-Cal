@@ -230,10 +230,13 @@ function teamPreviewSprite(submitted, { showName = false } = {}) {
     const [source, fallbackSource] = pokemonSpriteUrls(resolved);
     const image = document.createElement("img");
     image.loading = "lazy";
-    image.alt = localizedName(resolved);
+    image.alt = "";
+    image.width = 42;
+    image.height = 42;
     image.src = source;
     let nextSource = fallbackSource;
     const fallback = document.createElement("span");
+    fallback.setAttribute("aria-hidden", "true");
     fallback.hidden = true;
     fallback.textContent = localizedName(resolved).slice(0, 1);
     image.addEventListener("error", () => {

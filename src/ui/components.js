@@ -109,6 +109,8 @@ export function typeBadge(type) {
     const icon = document.createElement("img");
     icon.className = "type-badge-icon";
     icon.src = iconPath;
+    icon.width = 14;
+    icon.height = 14;
     icon.setAttribute("alt", "");
     icon.setAttribute("aria-hidden", "true");
     badge.append(icon);
@@ -149,6 +151,8 @@ export function moveCategoryMark(category) {
   const icon = document.createElement("img");
   icon.className = `move-category-icon move-category-${category.toLowerCase()}`;
   icon.src = path;
+  icon.width = 24;
+  icon.height = 18;
   icon.alt = label;
   icon.title = label;
   return icon;
@@ -231,6 +235,7 @@ export function searchResultButton(entry, onSelect, {
   const details = document.createElement("small");
   if (typeof small === "object" && small !== null) details.append(small);
   else details.textContent = String(small ?? "");
+  details.hidden = details.children.length === 0 && !details.textContent;
   const value = document.createElement("strong");
   value.textContent = String(strong ?? "");
   button.append(name, details, value);
@@ -249,6 +254,15 @@ export function visibleSearchResults(matches, { limit = 12, expanded = false } =
   };
 }
 
+export function searchResultFocusIndex(currentIndex, count, key) {
+  if (count <= 0) return -1;
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  if (key === "ArrowDown") return (currentIndex + 1 + count) % count;
+  if (key === "ArrowUp") return (currentIndex - 1 + count) % count;
+  return -1;
+}
+
 export function attachCombobox({
   input,
   resultsEl,
@@ -259,10 +273,14 @@ export function attachCombobox({
   renderRow,
 }) {
   let expanded = false;
+  resultsEl.setAttribute("role", "listbox");
+  input.setAttribute("aria-autocomplete", "list");
+  input.setAttribute("aria-haspopup", "listbox");
 
   function hide() {
     resultsEl.hidden = true;
     input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
   }
 
   function render() {
@@ -272,15 +290,25 @@ export function attachCombobox({
       ? visibleSearchResults(allMatches, { limit: resultLimit ?? matches.length, expanded })
       : { matches, canExpand: false };
     resultsEl.replaceChildren(
-      ...visible.matches.map((entry) => renderRow(entry, (selected) => {
-        hide();
-        onSelect(selected);
-      })),
+      ...visible.matches.map((entry, index) => {
+        const row = renderRow(entry, (selected) => {
+          row.setAttribute("aria-selected", "true");
+          input.removeAttribute("aria-activedescendant");
+          hide();
+          onSelect(selected);
+        });
+        row.id = `${resultsEl.id}-option-${index}`;
+        row.setAttribute("role", "option");
+        row.setAttribute("aria-selected", "false");
+        return row;
+      }),
     );
     if (visible.canExpand) {
       const more = document.createElement("button");
       more.type = "button";
       more.className = "search-results-more";
+      more.setAttribute("role", "option");
+      more.setAttribute("aria-selected", "false");
       more.textContent = t("label.showAll");
       more.addEventListener("click", () => {
         expanded = true;
@@ -289,7 +317,16 @@ export function attachCombobox({
       });
       resultsEl.append(more);
     }
-    const isOpen = visible.matches.length > 0;
+    const hasQuery = input.value.trim().length > 0;
+    if (hasQuery && visible.matches.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "search-results-empty";
+      empty.setAttribute("role", "option");
+      empty.setAttribute("aria-disabled", "true");
+      empty.textContent = t("search.noMatches");
+      resultsEl.append(empty);
+    }
+    const isOpen = visible.matches.length > 0 || hasQuery;
     resultsEl.hidden = !isOpen;
     input.setAttribute("aria-expanded", String(isOpen));
     return visible.matches;
@@ -305,11 +342,13 @@ export function attachCombobox({
       hide();
       return;
     }
-    if (event.key === "ArrowDown") {
-      const first = resultsEl.querySelector(".search-result");
-      if (first) {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      const options = [...resultsEl.querySelectorAll(".search-result")];
+      const target = event.key === "ArrowDown" ? options[0] : options.at(-1);
+      if (target) {
         event.preventDefault();
-        first.focus();
+        input.setAttribute("aria-activedescendant", target.id);
+        target.focus();
       }
       return;
     }
@@ -322,10 +361,25 @@ export function attachCombobox({
   });
 
   resultsEl.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      hide();
+      input.focus();
+      return;
+    }
+    const options = [...resultsEl.querySelectorAll(".search-result")];
+    const current = options.indexOf(event.target.closest?.(".search-result"));
+    const next = searchResultFocusIndex(current, options.length, event.key);
+    if (next < 0) return;
     event.preventDefault();
-    hide();
-    input.focus();
+    input.setAttribute("aria-activedescendant", options[next].id);
+    options[next].focus();
+  });
+
+  resultsEl.addEventListener("focusout", () => {
+    queueMicrotask(() => {
+      if (document.activeElement !== input && !resultsEl.contains(document.activeElement)) hide();
+    });
   });
 
   const outsideClick = (event) => {

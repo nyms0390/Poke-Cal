@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fb" />
     <meta
       name="description"
       content="Two-Pokémon battle calculator with move order, Speed conditions, and damage ranges."
@@ -11,12 +12,13 @@
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
       <header>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
           <a href="./moves.html">Moves</a>
-          <a class="active" href="./battle.html">Battle Calculator</a>
+          <a class="active" href="./battle.html" aria-current="page">Battle Calculator</a>
           <a href="./builder.html">Builder</a>
           <a href="./speed.html">Speed Tiers</a>
           <a href="./teams.html">Teams</a>
@@ -57,6 +59,7 @@
                 <input id="attacker-pokemon" type="hidden" />
                 <input
                   id="attacker-pokemon-search"
+                  name="attacker-pokemon-search"
                   type="search"
                   autocomplete="off"
                   role="combobox"
@@ -199,6 +202,7 @@
                 <input id="defender-pokemon" type="hidden" />
                 <input
                   id="defender-pokemon-search"
+                  name="defender-pokemon-search"
                   type="search"
                   autocomplete="off"
                   role="combobox"
@@ -291,11 +295,12 @@
 
         <section class="set-paste-panel" aria-label="Set import and export">
           <div class="panel-heading">
-            <span>Set paste</span>
-            <strong id="set-paste-status">—</strong>
+            <label for="set-paste">Set paste</label>
+            <strong id="set-paste-status" role="status" aria-live="polite" aria-atomic="true">—</strong>
           </div>
           <textarea
             id="set-paste"
+            name="set-paste"
             rows="9"
             spellcheck="false"
             placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
@@ -306,7 +311,7 @@
             <button id="export-attacker-set" type="button">Export left</button>
             <button id="export-defender-set" type="button">Export right</button>
           </div>
-          <p id="set-paste-warnings" class="set-paste-warnings" hidden></p>
+          <p id="set-paste-warnings" class="set-paste-warnings" role="status" aria-live="polite" hidden></p>
         </section>
 
         <section class="catalog-panel" aria-label="Damage ranges">
@@ -324,7 +329,7 @@
       </section>
 
       <footer>
-        <span id="status">Loading Pokémon data…</span>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
         <span>Limitless usage defaults · Showdown catalog · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>

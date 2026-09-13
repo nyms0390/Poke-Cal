@@ -64,6 +64,7 @@ export const EN_MESSAGES = {
   "label.allCategories": "All categories",
   "label.allMoveProperties": "All properties",
   "label.showAll": "Show all results",
+  "search.noMatches": "No matching Pokémon or moves. Check the spelling or try a broader search.",
   "moveProperty.contact": "Contact",
   "moveProperty.sound": "Sound",
   "moveProperty.punch": "Punch",

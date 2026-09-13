@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fb" />
     <meta
       name="description"
       content="Interactive Champions Speed tiers with spreads, stages, Tailwind, paralysis, Speed items, and Trick Room."
@@ -11,14 +12,15 @@
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <main>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
       <header>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
           <a href="./moves.html">Moves</a>
           <a href="./battle.html">Battle Calculator</a>
           <a href="./builder.html">Builder</a>
-          <a class="active" href="./speed.html">Speed Tiers</a>
+          <a class="active" href="./speed.html" aria-current="page">Speed Tiers</a>
           <a href="./teams.html">Teams</a>
           <label class="language-switch">
             <span>Language</span>
@@ -59,6 +61,7 @@
             <div class="pokemon-combobox">
               <input
                 id="speed-pokemon-search"
+                name="speed-pokemon-search"
                 type="search"
                 autocomplete="off"
                 role="combobox"
@@ -101,6 +104,7 @@
             <div class="pokemon-combobox">
               <input
                 id="speed-opponent-search"
+                name="speed-opponent-search"
                 type="search"
                 autocomplete="off"
                 role="combobox"
@@ -143,7 +147,7 @@
       </section>
 
       <footer>
-        <span id="status">Loading Pokémon data…</span>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
         <span>Limitless tournament profiles · NCP curated sets · Level 50 · 31 IV · 1 SP = 8 EV</span>
       </footer>
     </main>

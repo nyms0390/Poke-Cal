@@ -1466,10 +1466,13 @@ function pokemonSprite(pokemon) {
   wrap.className = "pokemon-minisprite";
   const image = document.createElement("img");
   image.loading = "lazy";
-  image.alt = localizedName(pokemon);
+  image.alt = "";
+  image.width = 42;
+  image.height = 42;
   const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
   image.src = source;
   const fallback = document.createElement("span");
+  fallback.setAttribute("aria-hidden", "true");
   fallback.hidden = true;
   fallback.textContent = localizedName(pokemon).slice(0, 1);
   let nextSource = fallbackSource;

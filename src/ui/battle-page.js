@@ -517,11 +517,14 @@ function renderEmptySide(side) {
 function renderPokemonSprite(side, state) {
   const statePokemon = state.pokemon;
   const image = document.createElement("img");
-  image.alt = localizedName(statePokemon);
+  image.alt = "";
+  image.width = 56;
+  image.height = 56;
   const [source, fallbackSource] = pokemonSpriteUrls(state.pokemon);
   image.src = source;
 
   const fallback = document.createElement("span");
+  fallback.setAttribute("aria-hidden", "true");
   fallback.hidden = true;
   fallback.textContent = localizedName(statePokemon).slice(0, 1);
 
