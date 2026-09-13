@@ -56,7 +56,6 @@ import {
 } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
-  damagePercentColor,
   ensureRenderedRows,
   moveCategoryMark,
   optionElement,
@@ -1332,10 +1331,6 @@ function renderDamageCard(move, sourceSide, selected, calcInput, moveOptions = {
   const percent = document.createElement("span");
   percent.className = "damage-percent";
   percent.textContent = damageResult.supported ? formatDamageResult(damageResult) : t("battle.unsupported");
-  const percentColor = damageResult.supported
-    ? damagePercentColor(damageResult.minPercent, damageResult.maxPercent)
-    : damagePercentColor(0);
-  percent.style.setProperty("--damage-percent-color", percentColor);
   heading.append(name, percent);
 
   const meta = document.createElement("span");

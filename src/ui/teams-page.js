@@ -249,6 +249,10 @@ function teamPreviewSprite(submitted, { showName = false } = {}) {
       fallback.hidden = false;
     });
     wrap.append(image, fallback);
+    if (!showName) {
+      wrap.setAttribute("role", "img");
+      wrap.setAttribute("aria-label", localizedName(resolved));
+    }
   } else {
     wrap.classList.add("empty");
     wrap.textContent = "?";

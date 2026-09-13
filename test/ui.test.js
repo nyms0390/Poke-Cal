@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import {
+  attachCombobox,
   damagePercentColor,
   ensureRenderedRows,
   itemLabel,
@@ -292,6 +293,16 @@ test("maps damage ranges by their average percentage", () => {
   assert.equal(damagePercentColor(74.1, 87.6), "hsl(97 72% 56%)");
 });
 
+test("keeps dynamic damage hues on meter fills and battle text on an accessible color", () => {
+  const battleSource = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
+  const builderSource = readFileSync(new URL("../src/ui/builder-page.js", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.doesNotMatch(battleSource, /damagePercentColor|--damage-percent-color/);
+  assert.match(builderSource, /fill\.style\.background = defensive[\s\S]*?damagePercentColor/);
+  assert.match(styles, /\.damage-percent \{[\s\S]*?color: var\(--ink\);/);
+});
+
 test("move name cells show the type without repeating the stable move ID", () => {
   const previousDocument = globalThis.document;
   class FakeElement {
@@ -439,6 +450,87 @@ test("search-result arrows wrap focus through the popup", () => {
   assert.equal(searchResultFocusIndex(1, 3, "End"), 2);
   assert.equal(searchResultFocusIndex(1, 0, "ArrowDown"), -1);
   assert.equal(searchResultFocusIndex(1, 3, "Escape"), -1);
+});
+
+test("combobox closes only after focus leaves both input and results", async () => {
+  class FakeTarget {
+    constructor() {
+      this.attributes = new Map();
+      this.listeners = new Map();
+      this.hidden = false;
+    }
+
+    addEventListener(type, listener) {
+      const listeners = this.listeners.get(type) ?? new Set();
+      listeners.add(listener);
+      this.listeners.set(type, listeners);
+    }
+
+    removeEventListener(type, listener) {
+      this.listeners.get(type)?.delete(listener);
+    }
+
+    dispatch(type) {
+      for (const listener of this.listeners.get(type) ?? []) listener({ target: this });
+    }
+
+    setAttribute(name, value) {
+      this.attributes.set(name, String(value));
+    }
+
+    removeAttribute(name) {
+      this.attributes.delete(name);
+    }
+
+    contains(target) {
+      return target === this || target === this.inside;
+    }
+  }
+
+  const previousDocument = globalThis.document;
+  const fakeDocument = new FakeTarget();
+  const input = new FakeTarget();
+  const results = new FakeTarget();
+  results.id = "test-results";
+  results.querySelectorAll = () => [];
+  results.replaceChildren = () => {};
+  const insideResult = {};
+  const outside = {};
+  results.inside = insideResult;
+  globalThis.document = fakeDocument;
+
+  try {
+    const combobox = attachCombobox({
+      input,
+      resultsEl: results,
+      getMatches: () => [],
+      onSelect: () => {},
+      renderRow: () => new FakeTarget(),
+    });
+    const settleFocus = () => new Promise((resolve) => queueMicrotask(resolve));
+
+    results.hidden = false;
+    fakeDocument.activeElement = insideResult;
+    input.dispatch("focusout");
+    await settleFocus();
+    assert.equal(results.hidden, false, "input-to-result focus keeps the popup open");
+
+    fakeDocument.activeElement = input;
+    results.dispatch("focusout");
+    await settleFocus();
+    assert.equal(results.hidden, false, "result-to-input focus keeps the popup open");
+
+    fakeDocument.activeElement = outside;
+    input.dispatch("focusout");
+    await settleFocus();
+    assert.equal(results.hidden, true, "Tab or Shift+Tab outside closes the popup");
+
+    combobox.destroy();
+    assert.equal(input.listeners.get("focusout")?.size, 0);
+    assert.equal(results.listeners.get("focusout")?.size, 0);
+  } finally {
+    globalThis.document = previousDocument;
+  }
 });
 
 test("auto-expands the highest-damage move and toggles one open move per side", () => {

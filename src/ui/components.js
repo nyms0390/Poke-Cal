@@ -376,11 +376,13 @@ export function attachCombobox({
     options[next].focus();
   });
 
-  resultsEl.addEventListener("focusout", () => {
+  const focusLeave = () => {
     queueMicrotask(() => {
       if (document.activeElement !== input && !resultsEl.contains(document.activeElement)) hide();
     });
-  });
+  };
+  input.addEventListener("focusout", focusLeave);
+  resultsEl.addEventListener("focusout", focusLeave);
 
   const outsideClick = (event) => {
     if (!input.contains(event.target) && !resultsEl.contains(event.target)) hide();
@@ -391,6 +393,8 @@ export function attachCombobox({
     render,
     hide,
     destroy() {
+      input.removeEventListener("focusout", focusLeave);
+      resultsEl.removeEventListener("focusout", focusLeave);
       document.removeEventListener("click", outsideClick);
     },
   };

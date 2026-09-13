@@ -14,7 +14,7 @@
   --accent-ring: rgb(113 50 245 / 16%);
   --ink: #101114;
   --muted: #686b82;
-  --subtle: #707386;
+  --subtle: #696c7d;
   --line: #dedee5;
   --canvas: #f7f8fb;
   --surface: #ffffff;
@@ -2229,7 +2229,7 @@ button:disabled {
 }
 
 .damage-percent {
-  color: var(--damage-percent-color, var(--success));
+  color: var(--ink);
   font-weight: 700;
   white-space: nowrap;
 }
