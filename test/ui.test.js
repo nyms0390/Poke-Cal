@@ -499,7 +499,7 @@ test("pointer selection keeps the combobox input focused until the result click"
   }
 });
 
-test("combobox waits for Chinese IME composition before searching or selecting", () => {
+test("combobox updates Chinese suggestions during IME composition without selecting", () => {
   class FakeTarget {
     constructor() {
       this.attributes = new Map();
@@ -565,7 +565,8 @@ test("combobox waits for Chinese IME composition before searching or selecting",
 
     input.value = "皮卡";
     input.dispatch("input", { target: input, isComposing: true });
-    assert.deepEqual(queries, [], "intermediate composition text must not trigger search");
+    assert.deepEqual(queries, ["皮卡"], "composition text must keep suggestions updated");
+    assert.equal(results.hidden, false);
 
     let enterPrevented = false;
     input.dispatch("keydown", {
@@ -581,7 +582,7 @@ test("combobox waits for Chinese IME composition before searching or selecting",
 
     input.value = "皮卡丘";
     input.dispatch("input", { target: input, isComposing: false });
-    assert.deepEqual(queries, ["皮卡丘"]);
+    assert.deepEqual(queries, ["皮卡", "皮卡丘"]);
     assert.equal(results.hidden, false);
   } finally {
     globalThis.document = previousDocument;

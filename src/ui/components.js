@@ -332,8 +332,7 @@ export function attachCombobox({
     return visible.matches;
   }
 
-  input.addEventListener("input", (event) => {
-    if (event.isComposing) return;
+  input.addEventListener("input", () => {
     expanded = false;
     render();
   });
