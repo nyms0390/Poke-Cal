@@ -11,6 +11,7 @@ import {
   moveCategoryIconPath,
   moveNameCell,
   pokemonSpriteUrls,
+  searchResultButton,
   searchResultFocusIndex,
   typeBadge,
   visibleSearchResults,
@@ -450,6 +451,141 @@ test("search-result arrows wrap focus through the popup", () => {
   assert.equal(searchResultFocusIndex(1, 3, "End"), 2);
   assert.equal(searchResultFocusIndex(1, 0, "ArrowDown"), -1);
   assert.equal(searchResultFocusIndex(1, 3, "Escape"), -1);
+});
+
+test("pointer selection keeps the combobox input focused until the result click", () => {
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.listeners = new Map();
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+
+    addEventListener(type, listener) {
+      this.listeners.set(type, listener);
+    }
+
+    dispatch(type, event = {}) {
+      this.listeners.get(type)?.(event);
+    }
+  }
+
+  const previousDocument = globalThis.document;
+  globalThis.document = { createElement: (tagName) => new FakeElement(tagName) };
+  const pikachu = { name: "Pikachu", aliases: [], baseSpecies: "Pikachu", baseSpeed: 90 };
+
+  try {
+    let pointerDownPrevented = false;
+    let selected = null;
+    const result = searchResultButton(pikachu, (entry) => {
+      selected = entry;
+    });
+
+    result.dispatch("pointerdown", {
+      preventDefault() {
+        pointerDownPrevented = true;
+      },
+    });
+    assert.equal(pointerDownPrevented, true, "pointer-down must not blur and close the popup");
+
+    result.dispatch("click");
+    assert.equal(selected, pikachu);
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
+
+test("combobox waits for Chinese IME composition before searching or selecting", () => {
+  class FakeTarget {
+    constructor() {
+      this.attributes = new Map();
+      this.listeners = new Map();
+      this.hidden = true;
+      this.value = "";
+    }
+
+    addEventListener(type, listener) {
+      const listeners = this.listeners.get(type) ?? new Set();
+      listeners.add(listener);
+      this.listeners.set(type, listeners);
+    }
+
+    removeEventListener(type, listener) {
+      this.listeners.get(type)?.delete(listener);
+    }
+
+    dispatch(type, event = { target: this }) {
+      for (const listener of this.listeners.get(type) ?? []) listener(event);
+    }
+
+    setAttribute(name, value) {
+      this.attributes.set(name, String(value));
+    }
+
+    removeAttribute(name) {
+      this.attributes.delete(name);
+    }
+
+    contains(target) {
+      return target === this;
+    }
+
+    replaceChildren(...children) {
+      this.children = children;
+    }
+  }
+
+  const previousDocument = globalThis.document;
+  const fakeDocument = new FakeTarget();
+  const input = new FakeTarget();
+  const results = new FakeTarget();
+  results.id = "ime-results";
+  const pikachu = { name: "Pikachu" };
+  const queries = [];
+  let selected = null;
+  globalThis.document = fakeDocument;
+
+  try {
+    attachCombobox({
+      input,
+      resultsEl: results,
+      getMatches: (query) => {
+        queries.push(query);
+        return [pikachu];
+      },
+      onSelect: (entry) => {
+        selected = entry;
+      },
+      renderRow: () => new FakeTarget(),
+    });
+
+    input.value = "皮卡";
+    input.dispatch("input", { target: input, isComposing: true });
+    assert.deepEqual(queries, [], "intermediate composition text must not trigger search");
+
+    let enterPrevented = false;
+    input.dispatch("keydown", {
+      key: "Enter",
+      keyCode: 229,
+      isComposing: false,
+      preventDefault() {
+        enterPrevented = true;
+      },
+    });
+    assert.equal(enterPrevented, false, "IME Enter must remain available to accept the candidate");
+    assert.equal(selected, null, "IME Enter must not select a search result");
+
+    input.value = "皮卡丘";
+    input.dispatch("input", { target: input, isComposing: false });
+    assert.deepEqual(queries, ["皮卡丘"]);
+    assert.equal(results.hidden, false);
+  } finally {
+    globalThis.document = previousDocument;
+  }
 });
 
 test("combobox closes only after focus leaves both input and results", async () => {

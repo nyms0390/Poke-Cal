@@ -217,10 +217,10 @@ export function textCell(text, className = "", label = "") {
 
 // Shared Pokémon search-result row, used by both the lookup page's Pokémon search and the
 // battle page's attacker/defender search. `onSelect` receives the chosen entry.
-// `preventBlur: true` (battle page only) keeps the search input focused across the click by
-// stopping the pointerdown from blurring it before the click handler runs.
+// Pointer selection keeps the search input focused until the click handler runs, so the
+// combobox's focus-leave behavior cannot close the popup before selection completes.
 export function searchResultButton(entry, onSelect, {
-  preventBlur = false,
+  preventBlur = true,
   small = entry.searchMatch || (getLocale() === "zh-TW"
     ? entry.name
     : (entry.aliases ?? []).map(toTraditionalChinese).join(" · ")) || entry.baseSpecies,
@@ -332,12 +332,14 @@ export function attachCombobox({
     return visible.matches;
   }
 
-  input.addEventListener("input", () => {
+  input.addEventListener("input", (event) => {
+    if (event.isComposing) return;
     expanded = false;
     render();
   });
   input.addEventListener("focus", render);
   input.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Escape") {
       hide();
       return;
