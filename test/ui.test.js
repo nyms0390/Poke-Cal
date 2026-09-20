@@ -589,11 +589,12 @@ test("combobox updates Chinese suggestions during IME composition without select
   }
 });
 
-test("combobox closes only after focus leaves both input and results", async () => {
+test("combobox preserves internal pointer and focus interactions before closing", async () => {
   class FakeTarget {
     constructor() {
       this.attributes = new Map();
       this.listeners = new Map();
+      this.children = [];
       this.hidden = false;
     }
 
@@ -625,30 +626,50 @@ test("combobox closes only after focus leaves both input and results", async () 
     }
 
     contains(target) {
-      return target === this || target === this.inside;
+      return target === this || target === this.inside || this.children.includes(target);
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+
+    replaceChildren(...children) {
+      this.children = children;
+    }
+
+    querySelectorAll(selector) {
+      return selector === ".search-result"
+        ? this.children.filter((child) => child.className === "search-result")
+        : [];
     }
   }
 
   const previousDocument = globalThis.document;
   const fakeDocument = new FakeTarget();
+  fakeDocument.createElement = () => new FakeTarget();
   const input = new FakeTarget();
   input.value = "pika";
   const results = new FakeTarget();
   results.id = "test-results";
-  results.querySelectorAll = () => [];
-  results.replaceChildren = () => {};
   const insideResult = {};
   const outside = {};
   results.inside = insideResult;
   globalThis.document = fakeDocument;
 
   try {
+    const entries = ["Pikachu", "Pikipek", "Pikachu-Mega"];
     const combobox = attachCombobox({
       input,
       resultsEl: results,
-      getMatches: () => ["Pikachu"],
+      getMatches: () => entries.slice(0, 2),
+      getAllMatches: () => entries,
+      resultLimit: 2,
       onSelect: () => {},
-      renderRow: () => new FakeTarget(),
+      renderRow: () => {
+        const row = new FakeTarget();
+        row.className = "search-result";
+        return row;
+      },
     });
     const settleFocus = () => new Promise((resolve) => queueMicrotask(resolve));
 
@@ -683,6 +704,26 @@ test("combobox closes only after focus leaves both input and results", async () 
     input.dispatch("focusout");
     await settleFocus();
     assert.equal(results.hidden, true, "Tab or Shift+Tab outside closes the popup");
+
+    combobox.render();
+    const showAll = results.children.at(-1);
+    let pointerDownPrevented = false;
+    showAll.dispatch("pointerdown", {
+      preventDefault() {
+        pointerDownPrevented = true;
+      },
+    });
+    assert.equal(pointerDownPrevented, true, "Show all must not blur and close the popup");
+
+    const clickEvent = {
+      target: showAll,
+      composedPath: () => [showAll, results, fakeDocument],
+    };
+    showAll.dispatch("click", clickEvent);
+    fakeDocument.dispatch("click", clickEvent);
+    assert.equal(results.hidden, false, "Show all stays open after replacing the clicked button");
+    assert.equal(results.children.length, entries.length);
+    assert.equal(input.attributes.get("aria-expanded"), "true");
 
     combobox.destroy();
     assert.equal(input.listeners.get("focusout")?.size, 0);

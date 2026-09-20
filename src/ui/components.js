@@ -310,6 +310,7 @@ export function attachCombobox({
       more.setAttribute("role", "option");
       more.setAttribute("aria-selected", "false");
       more.textContent = t("label.showAll");
+      more.addEventListener("pointerdown", (event) => event.preventDefault());
       more.addEventListener("click", () => {
         expanded = true;
         render();
@@ -386,7 +387,11 @@ export function attachCombobox({
   resultsEl.addEventListener("focusout", focusLeave);
 
   const outsideClick = (event) => {
-    if (!input.contains(event.target) && !resultsEl.contains(event.target)) hide();
+    const path = event.composedPath?.();
+    const isInside = path
+      ? path.includes(input) || path.includes(resultsEl)
+      : input.contains(event.target) || resultsEl.contains(event.target);
+    if (!isInside) hide();
   };
   document.addEventListener("click", outsideClick);
 
