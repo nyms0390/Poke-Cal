@@ -91,5 +91,6 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatDamageReason("Natural Gift requires a held Berry.", "zh-TW"), "自然之恩需要攜帶樹果。");
   assert.equal(formatDamageNote("Tera (Electric)", "zh-TW"), "太晶（電）");
   assert.equal(formatDamageNote("Assumes target already moved", "zh-TW"), "假設目標已行動");
+  assert.equal(formatDamageNote("Protean changed type to Fighting", "zh-TW"), "Protean將屬性變為格鬥");
   assert.equal(formatSetWarning("Unknown move: Missing Move", "zh-TW"), "未知招式：Missing Move");
 });

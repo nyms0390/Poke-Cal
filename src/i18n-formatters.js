@@ -171,6 +171,8 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     "-1 Def / +1 Spe after use": "使用後防禦 -1／速度 +1",
   };
   if (exact[note]) return exact[note];
+  const changedType = /^(.+) changed type to (.+)$/.exec(note);
+  if (changedType) return `${localizedName(entities.find((entity) => entity?.name === changedType[1]) ?? { name: changedType[1] }, locale)}將屬性變為${localizedTerm("type", changedType[2], locale)}`;
   for (const entity of entities.filter(Boolean)) {
     if (note === entity.name) return localizedName(entity, locale);
     if (note.startsWith(`${entity.name} (`)) return note.replace(entity.name, localizedName(entity, locale));

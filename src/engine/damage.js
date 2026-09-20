@@ -36,6 +36,7 @@ const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
   "round",
   "twister",
 ]);
+const TYPE_CHANGE_ABILITIES = new Set(["libero", "protean"]);
 
 const UNSUPPORTED_MOVE_IDS = new Set([
   "seismictoss",
@@ -146,7 +147,16 @@ export function calculateDamage({
     suppressDefenderAbility,
   };
   const moveType = effectiveMoveType(ctx);
-  const attackerTypes = effectivePokemonTypes(attacker, attackerState, effectiveField, suppressAttackerAbility);
+  const attackerTypeChange = typeChangeForMove({
+    pokemon: attacker,
+    state: attackerState,
+    moveType,
+    suppressAbility: suppressAttackerAbility,
+  });
+  const attackerTypes = effectivePokemonTypes(attacker, attackerState, effectiveField, suppressAttackerAbility, {
+    moveType,
+    activateTypeChange: true,
+  });
   const defenderTypes = defenderState.teraType
     ? [defenderState.teraType]
     : effectivePokemonTypes(defender, defenderState, effectiveField, suppressDefenderAbility);
@@ -186,6 +196,7 @@ export function calculateDamage({
         abilityImmunity?.label,
         ...fieldNotes(effectiveField, attackerState, defenderState),
         ...teraNotes(attackerState, defenderState),
+        attackerTypeChange.note,
       ].filter(Boolean),
     };
   }
@@ -230,6 +241,7 @@ export function calculateDamage({
         ...fieldNotes(effectiveField, attackerState, defenderState),
         moveEffect(moveId).note?.(ctx),
         ...teraNotes(attackerState, defenderState),
+        attackerTypeChange.note,
       ].filter(Boolean),
     };
   }
@@ -283,6 +295,7 @@ export function calculateDamage({
     ...forecastNotes(attacker, attackerState, attackerTypes, suppressAttackerAbility),
     ...forecastNotes(defender, defenderState, defenderTypes, suppressDefenderAbility),
     ...teraNotes(attackerState, defenderState),
+    attackerTypeChange.note,
   ];
   if (iceFaceActive) notes.push("Ice Face intact (first hit negated)");
   if (megaSolActive) notes.push("Mega Sol treats this move as Sunny Day");
@@ -519,8 +532,20 @@ function stabMultiplier(attackerTypes, attackerState, moveType) {
   return originalType ? 1.5 : 1;
 }
 
-function effectivePokemonTypes(pokemon, state, field, suppressAbility) {
+function effectivePokemonTypes(pokemon, state, field, suppressAbility, { moveType, activateTypeChange = false } = {}) {
+  // The attacker's pre-Tera types are still needed by the special Tera STAB rules;
+  // defender Tera typing is selected by calculateDamage before this helper runs.
+  if (state?.teraType) return pokemon.types ?? [];
   if (state?.soaked) return ["Water"];
+  if (state?.typeChangeUsed && state?.typeChangeType) return [state.typeChangeType];
+  if (
+    activateTypeChange &&
+    moveType &&
+    !suppressAbility &&
+    !state?.teraType &&
+    !state?.typeChangeUsed &&
+    TYPE_CHANGE_ABILITIES.has(normalizeId(state?.ability?.id ?? state?.ability?.name))
+  ) return [moveType];
   if (!suppressAbility && hasAbility(state, "forecast")) {
     const forecastType = forecastTypeForWeather(field.weather);
     if (forecastType) return [forecastType];
@@ -643,6 +668,31 @@ function effectiveMoveType(ctx) {
   return abilityTypeConversion(ctx)?.to ??
     moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).moveType?.(ctx) ??
     ctx.move.type;
+}
+
+/** Resolve all ordinary move/item/weather/terrain conversions before Libero/Protean. */
+export function resolveMoveType({ attacker, defender, move, attackerState = {}, defenderState = {}, field = createField(), suppressAttackerAbility = false }) {
+  return effectiveMoveType({
+    attacker,
+    defender,
+    move,
+    attackerState,
+    defenderState,
+    field,
+    suppressAttackerAbility,
+  });
+}
+
+function typeChangeForMove({ pokemon, state, moveType, suppressAbility }) {
+  if (!moveType || state?.teraType || state?.soaked || state?.typeChangeUsed || suppressAbility) {
+    return { note: "" };
+  }
+  const ability = normalizeId(state?.ability?.id ?? state?.ability?.name);
+  if (!TYPE_CHANGE_ABILITIES.has(ability)) return { note: "" };
+  const originalTypes = pokemon?.types ?? [];
+  if (originalTypes.length === 1 && originalTypes[0] === moveType) return { note: "" };
+  const abilityName = state.ability?.name ?? state.ability?.id ?? ability;
+  return { note: `${abilityName} changed type to ${moveType}` };
 }
 
 function effectiveMovePower(ctx) {

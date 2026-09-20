@@ -131,6 +131,8 @@ export const ZH_TW_MESSAGES = {
   "battle.noItem": "無道具修正",
   "battle.addSlot": ({ number }) => `在第 ${number} 個欄位加入寶可夢`,
   "battle.clearSlot": ({ number }) => `清除第 ${number} 個欄位`,
+  "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability}已啟用`,
+  "battle.typeChangeCurrentType": ({ ability }) => `${ability}目前屬性`,
   "battle.smogonSpreadGroup": "Smogon 對戰梯能力分配",
   "battle.ncpSpreadGroup": "NCP 精選配招",
   "battle.championsDefault": "Champions 預設",

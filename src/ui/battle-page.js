@@ -9,6 +9,7 @@ import {
   calculateDamage,
   formatDamageResult,
   hitCountRange,
+  resolveMoveType,
 } from "../engine/damage.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
@@ -50,6 +51,8 @@ import {
   clearTeamSlot as clearTeamSlotState,
   createSideState,
   createTeamsState,
+  isTypeChangeAbility,
+  normalizeTypeChangeState,
   swapTeamsState,
   TEAM_SIZE,
   updateActiveTeamSlot,
@@ -115,6 +118,14 @@ const elements = {
   defenderMaxHp: document.querySelector("#defender-max-hp"),
   attackerHpPercent: document.querySelector("#attacker-hp-percent"),
   defenderHpPercent: document.querySelector("#defender-hp-percent"),
+  attackerTypeChangeUsed: document.querySelector("#attacker-type-change-used"),
+  defenderTypeChangeUsed: document.querySelector("#defender-type-change-used"),
+  attackerTypeChangeUsedLabel: document.querySelector("#attacker-type-change-used-label"),
+  defenderTypeChangeUsedLabel: document.querySelector("#defender-type-change-used-label"),
+  attackerTypeChangeType: document.querySelector("#attacker-type-change-type"),
+  defenderTypeChangeType: document.querySelector("#defender-type-change-type"),
+  attackerTypeChangeTypeLabel: document.querySelector("#attacker-type-change-type-label"),
+  defenderTypeChangeTypeLabel: document.querySelector("#defender-type-change-type-label"),
   attackerSpeedReadout: document.querySelector("#attacker-speed-readout"),
   defenderSpeedReadout: document.querySelector("#defender-speed-readout"),
   trickRoom: document.querySelector("#trick-room"),
@@ -123,7 +134,7 @@ const elements = {
   ambientField: document.querySelector("#battle-ambient-field"),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   assumptionInputs: document.querySelectorAll(
-    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], select[data-kind="rivalry"]',
+    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], input[data-kind="type-change-used"], select[data-kind="type-change-type"], select[data-kind="rivalry"]',
   ),
   setPaste: document.querySelector("#set-paste"),
   setPasteStatus: document.querySelector("#set-paste-status"),
@@ -690,6 +701,10 @@ function handleDamageControl(event) {
         syncSideInputs("attacker");
         syncSideInputs("defender");
       }
+      if (control.kind === "move" || control.kind === "ability" || control.kind === "typeChangeUsed" || control.kind === "typeChangeType") {
+        normalizeTypeChangeForSide(control.side);
+        syncAssumptionInputs(control.side);
+      }
       if (["move", "hitCount", "targetMoved", "crit", "moveCondition", "ability", "item"].includes(control.kind)) {
         renderDamageMovePickers(control.side);
       }
@@ -811,6 +826,9 @@ function applyParsedSet(side, parsed) {
     writeActiveTeamState(side, {
       ...state,
       ability: parsed.ability ?? state.ability,
+      ...(parsed.ability && !isTypeChangeAbility(parsed.ability)
+        ? { typeChangeUsed: false, typeChangeType: "" }
+        : {}),
       item: parsed.item ?? state.item,
       nature: parsed.nature || state.nature,
       sp: parsed.hasSpread ? parsed.sp : state.sp,
@@ -818,6 +836,7 @@ function applyParsedSet(side, parsed) {
         ? [0, 1, 2, 3].map((index) => parsed.selectedMoveIds[index] ?? "")
         : state.selectedMoveIds,
     });
+    normalizeTypeChangeForSide(side);
     renderSideSelects(side, { spreadName: "" });
     syncSideInputs(side);
     applyAbilityImpliedField(damageState[side].ability);
@@ -908,6 +927,12 @@ function controlFromTarget(target) {
   }
   if (target.dataset.kind === "ice-face-intact") {
     return { kind: "iceFaceIntact", side: target.dataset.side, value: target.checked };
+  }
+  if (target.dataset.kind === "type-change-used") {
+    return { kind: "typeChangeUsed", side: target.dataset.side, value: target.checked };
+  }
+  if (target.dataset.kind === "type-change-type") {
+    return { kind: "typeChangeType", side: target.dataset.side, value: target.value };
   }
   return null;
 }
@@ -1106,6 +1131,9 @@ function renderDamage() {
 
   const calcInput = buildCalcInput(damageState, fieldState);
 
+  syncAssumptionInputs("attacker");
+  syncAssumptionInputs("defender");
+
   renderMoveOrder(calcInput.field, calcInput);
   const attackerRows = renderDamageCards("attacker", calcInput);
   const defenderRows = renderDamageCards("defender", calcInput);
@@ -1224,6 +1252,21 @@ function syncCurrentHpInputs(side) {
 
 function syncAssumptionInputs(side) {
   const state = damageState[side];
+  const abilityActive = isTypeChangeAbility(state?.ability);
+  const effectiveTypes = typeChangeMoveTypes(side);
+  const used = elements[`${side}TypeChangeUsed`];
+  const usedLabel = elements[`${side}TypeChangeUsedLabel`];
+  const currentLabel = elements[`${side}TypeChangeTypeLabel`];
+  const current = elements[`${side}TypeChangeType`];
+  if (used && usedLabel && currentLabel && current) {
+    used.closest("label").hidden = !abilityActive;
+    current.closest("label").hidden = !abilityActive || !state.typeChangeUsed;
+    const abilityName = localizedName(state.ability);
+    usedLabel.textContent = t("battle.typeChangeAlreadyActivated", { ability: abilityName });
+    currentLabel.textContent = t("battle.typeChangeCurrentType", { ability: abilityName });
+    current.replaceChildren(...effectiveTypes.map((type) => optionElement(type, localizedTerm("type", type))));
+    current.value = state.typeChangeType;
+  }
   for (const input of elements.assumptionInputs) {
     if (input.dataset.side !== side) continue;
     if (input.dataset.kind === "ally-plus-minus") input.checked = Boolean(state.allyPlusMinus);
@@ -1232,7 +1275,40 @@ function syncAssumptionInputs(side) {
     if (input.dataset.kind === "fainted-allies") input.value = String(state.faintedAllyCount ?? 0);
     if (input.dataset.kind === "booster-energy") input.checked = Boolean(state.boosterEnergy);
     if (input.dataset.kind === "ice-face-intact") input.checked = state.iceFaceIntact !== false;
+    if (input.dataset.kind === "type-change-used") input.checked = Boolean(state.typeChangeUsed);
   }
+}
+
+function normalizeTypeChangeForSide(side) {
+  const state = damageState[side];
+  if (!state) return;
+  const normalized = normalizeTypeChangeState(state, typeChangeMoveTypes(side));
+  if (normalized !== state) writeActiveTeamState(side, normalized);
+}
+
+function typeChangeMoveTypes(side) {
+  const state = damageState[side];
+  if (!state?.pokemon) return [];
+  const moveState = {
+    ...state,
+    typeChangeUsed: false,
+    typeChangeType: "",
+  };
+  const calcInput = damageState.attacker?.pokemon && damageState.defender?.pokemon
+    ? buildCalcInput(damageState, fieldState)
+    : null;
+  const attacker = state.pokemon;
+  const field = calcInput?.field ?? fieldState;
+  const suppressed = neutralizingGasActive();
+  return [...new Set(selectedDamageMoves(side).map(({ move }) => resolveMoveType({
+    attacker,
+    defender: side === "attacker" ? calcInput?.defender ?? damageState.defender?.pokemon : calcInput?.attacker ?? damageState.attacker?.pokemon,
+    move,
+    attackerState: moveState,
+    defenderState: side === "attacker" ? calcInput?.defenderState ?? {} : calcInput?.attackerState ?? {},
+    field,
+    suppressAttackerAbility: suppressed,
+  })).filter(Boolean))];
 }
 
 function finalStat(state, stat, field = {}, speedOptions = {}) {

@@ -90,8 +90,34 @@ test("createSideState builds the canonical side-state shape with neutral battle-
   assert.equal(state.boosterEnergy, false);
   assert.equal(state.iceFaceIntact, true);
   assert.equal(state.speedMultiplier, 1);
+  assert.equal(state.typeChangeUsed, false);
+  assert.equal(state.typeChangeType, "");
   assert.equal("teraType" in state, false);
   assert.equal("tailwind" in state, false);
+});
+
+test("applyControl normalizes the one-time Libero/Protean type-change controls", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const activated = applyControl(state, { kind: "typeChangeUsed", value: true });
+  const selected = applyControl(activated, { kind: "typeChangeType", value: "Fighting" });
+  assert.equal(selected.typeChangeUsed, true);
+  assert.equal(selected.typeChangeType, "Fighting");
+  const reset = applyControl(selected, { kind: "ability", value: { id: "static", name: "Static" } });
+  assert.equal(reset.typeChangeUsed, false);
+  assert.equal(reset.typeChangeType, "");
+  const libero = applyControl(selected, { kind: "ability", value: { id: "libero", name: "Libero" } });
+  assert.equal(libero.typeChangeUsed, true);
+  assert.equal(libero.typeChangeType, "Fighting");
+});
+
+test("applyControl resets a current type when it is no longer represented", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const selected = applyControl({ ...state, typeChangeUsed: true, typeChangeType: "Fighting" }, {
+    kind: "normalizeTypeChange",
+    effectiveTypes: ["Electric", "Water"],
+  });
+  assert.equal(selected.typeChangeUsed, false);
+  assert.equal(selected.typeChangeType, "");
 });
 
 test("createSideState normalizes fewer than four usage moves without throwing", () => {

@@ -145,6 +145,14 @@
                 <label class="inline-toggle">Fainted allies
                   <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="attacker" />
                 </label>
+                <label class="inline-toggle type-change-control" hidden>
+                  <input id="attacker-type-change-used" type="checkbox" data-kind="type-change-used" data-side="attacker" />
+                  <span id="attacker-type-change-used-label">Already activated</span>
+                </label>
+                <label class="inline-toggle type-change-control" hidden>
+                  <span id="attacker-type-change-type-label">Current type</span>
+                  <select id="attacker-type-change-type" data-kind="type-change-type" data-side="attacker"></select>
+                </label>
               </div>
             </details>
           </section>
@@ -287,6 +295,14 @@
                 </label>
                 <label class="inline-toggle">Fainted allies
                   <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="defender" />
+                </label>
+                <label class="inline-toggle type-change-control" hidden>
+                  <input id="defender-type-change-used" type="checkbox" data-kind="type-change-used" data-side="defender" />
+                  <span id="defender-type-change-used-label">Already activated</span>
+                </label>
+                <label class="inline-toggle" hidden>
+                  <span id="defender-type-change-type-label">Current type</span>
+                  <select id="defender-type-change-type" data-kind="type-change-type" data-side="defender"></select>
                 </label>
               </div>
             </details>

@@ -128,6 +128,8 @@ export const EN_MESSAGES = {
   "battle.noItem": "No item modifier",
   "battle.addSlot": ({ number }) => `Add Pokémon to slot ${number}`,
   "battle.clearSlot": ({ number }) => `Clear slot ${number}`,
+  "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability} already activated`,
+  "battle.typeChangeCurrentType": ({ ability }) => `${ability} current type`,
   "battle.smogonSpreadGroup": "Smogon ladder SP spreads",
   "battle.ncpSpreadGroup": "NCP curated sets",
   "battle.championsDefault": "Champions default",

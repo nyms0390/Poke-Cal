@@ -179,6 +179,141 @@ test("Soaked effective typing feeds type-aware ability immunity and Sandstorm Ro
   assert.deepEqual([soakedRock.minDamage, soakedRock.maxDamage], [pureWater.minDamage, pureWater.maxDamage]);
 });
 
+test("Libero and Protean auto-activate on each independent damage calculation", () => {
+  const fightingMove = { id: "brickbreak", name: "Brick Break", type: "Fighting", category: "Physical", basePower: 75 };
+  const normalAttacker = { ...pikachu, types: ["Normal"] };
+  const defender = { ...squirtle, types: ["Normal"] };
+  const baseline = calculateDamage({ attacker: normalAttacker, defender, move: fightingMove, attackerState: neutralState, defenderState: neutralState });
+  for (const ability of ["libero", "protean"]) {
+    const result = calculateDamage({
+      attacker: normalAttacker,
+      defender,
+      move: fightingMove,
+      attackerState: { ...neutralState, ability: { id: ability, name: ability === "libero" ? "Libero" : "Protean" } },
+      defenderState: neutralState,
+    });
+    assert.ok(result.maxDamage > baseline.maxDamage, `${ability} should grant Fighting STAB`);
+    assert.ok(result.notes.includes(`${ability === "libero" ? "Libero" : "Protean"} changed type to Fighting`));
+  }
+});
+
+test("Libero does not report a no-op for an already single-typed attacker, and dual types still become pure", () => {
+  const fightingMove = { id: "brickbreak", name: "Brick Break", type: "Fighting", category: "Physical", basePower: 75 };
+  const exact = calculateDamage({
+    attacker: { ...pikachu, types: ["Fighting"] },
+    defender: { ...squirtle, types: ["Normal"] },
+    move: fightingMove,
+    attackerState: { ...neutralState, ability: { id: "libero", name: "Libero" } },
+    defenderState: neutralState,
+  });
+  const dual = calculateDamage({
+    attacker: { ...pikachu, types: ["Normal", "Fire"] },
+    defender: { ...squirtle, types: ["Normal"] },
+    move: fightingMove,
+    attackerState: { ...neutralState, ability: { id: "libero", name: "Libero" } },
+    defenderState: neutralState,
+  });
+  assert.ok(!exact.notes.includes("Libero changed type to Fighting"));
+  assert.ok(dual.notes.includes("Libero changed type to Fighting"));
+});
+
+test("Neutralizing Gas blocks a new Libero/Protean activation but not an established type", () => {
+  const fightingMove = { id: "brickbreak", name: "Brick Break", type: "Fighting", category: "Physical", basePower: 75 };
+  const attacker = { ...pikachu, types: ["Normal"] };
+  const defender = { ...squirtle, types: ["Normal"] };
+  const gas = { ...neutralState, ability: { id: "neutralizinggas", name: "Neutralizing Gas" } };
+  const blocked = calculateDamage({
+    attacker,
+    defender,
+    move: fightingMove,
+    attackerState: { ...neutralState, ability: { id: "protean", name: "Protean" } },
+    defenderState: gas,
+  });
+  const established = calculateDamage({
+    attacker,
+    defender,
+    move: fightingMove,
+    attackerState: { ...neutralState, ability: { id: "protean", name: "Protean" }, typeChangeUsed: true, typeChangeType: "Fighting" },
+    defenderState: gas,
+  });
+  assert.ok(!blocked.notes.includes("Protean changed type to Fighting"));
+  assert.ok(established.maxDamage > blocked.maxDamage);
+});
+
+test("Libero resolves converted move types before changing to the final type", () => {
+  const weatherBall = { id: "weatherball", name: "Weather Ball", type: "Normal", category: "Special", basePower: 50 };
+  const attacker = { ...pikachu, types: ["Normal"] };
+  const defender = { ...squirtle, types: ["Fire"] };
+  const result = calculateDamage({
+    attacker,
+    defender,
+    move: weatherBall,
+    attackerState: { ...neutralState, ability: { id: "libero", name: "Libero" } },
+    defenderState: neutralState,
+    field: createField({ weather: "RainDance" }),
+  });
+  assert.equal(result.typeMultiplier, 2);
+  assert.ok(result.notes.includes("Libero changed type to Water"));
+});
+
+test("Established type uses pure typing on offense and defense, and survives suppression", () => {
+  const fightingMove = { id: "brickbreak", name: "Brick Break", type: "Fighting", category: "Physical", basePower: 75 };
+  const currentType = { typeChangeUsed: true, typeChangeType: "Fighting", ability: { id: "libero", name: "Libero" } };
+  const fireMove = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90 };
+  const attacker = { ...pikachu, types: ["Normal"] };
+  const defender = { ...squirtle, types: ["Normal"] };
+  const outgoing = calculateDamage({ attacker, defender, move: fightingMove, attackerState: { ...neutralState, ...currentType }, defenderState: neutralState });
+  const incoming = calculateDamage({
+    attacker: { ...pikachu, types: ["Fire"] },
+    defender,
+    move: fireMove,
+    attackerState: { ...neutralState, ability: null },
+    defenderState: { ...neutralState, ...currentType },
+  });
+  const psychicMove = { id: "psychic", name: "Psychic", type: "Psychic", category: "Special", basePower: 90 };
+  const establishedDefense = calculateDamage({
+    attacker: { ...pikachu, types: ["Psychic"] },
+    defender,
+    move: psychicMove,
+    attackerState: neutralState,
+    defenderState: { ...neutralState, ...currentType },
+  });
+  const suppressed = calculateDamage({
+    attacker,
+    defender,
+    move: fightingMove,
+    attackerState: { ...neutralState, ...currentType },
+    defenderState: { ...neutralState, ability: { id: "neutralizinggas", name: "Neutralizing Gas" } },
+  });
+  assert.ok(outgoing.notes.every((note) => !note.includes("changed type")));
+  assert.ok(outgoing.maxDamage > calculateDamage({ attacker, defender, move: fightingMove, attackerState: neutralState, defenderState: neutralState }).maxDamage);
+  assert.equal(incoming.typeMultiplier, 1);
+  assert.equal(establishedDefense.typeMultiplier, 2);
+  assert.equal(suppressed.maxDamage, outgoing.maxDamage);
+});
+
+test("Tera and Soaked remain authoritative over Libero/Protean typing", () => {
+  const waterMove = { id: "waterpulse", name: "Water Pulse", type: "Water", category: "Special", basePower: 60 };
+  const attacker = { ...pikachu, types: ["Fire"] };
+  const defender = { ...squirtle, types: ["Fire", "Ground"] };
+  const tera = calculateDamage({
+    attacker,
+    defender,
+    move: waterMove,
+    attackerState: { ...neutralState, ability: { id: "protean", name: "Protean" }, teraType: "Fire" },
+    defenderState: neutralState,
+  });
+  const soaked = calculateDamage({
+    attacker,
+    defender,
+    move: waterMove,
+    attackerState: { ...neutralState, ability: { id: "protean", name: "Protean" }, soaked: true, typeChangeUsed: true, typeChangeType: "Fighting" },
+    defenderState: neutralState,
+  });
+  assert.ok(!tera.notes.includes("Protean changed type to Water"));
+  assert.ok(soaked.maxDamage > calculateDamage({ attacker: { ...attacker, types: ["Fire"] }, defender, move: waterMove, attackerState: neutralState, defenderState: neutralState }).maxDamage);
+});
+
 function fireGroundDefenderForSoakTest() {
   return { ...squirtle, types: ["Fire", "Ground"] };
 }

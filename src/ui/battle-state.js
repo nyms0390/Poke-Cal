@@ -5,6 +5,7 @@ import { normalizeId } from "../identifiers.js";
 import { parseUsageSpread } from "../data/usage-defaults.js";
 
 export const TEAM_SIZE = 6;
+const TYPE_CHANGE_ABILITIES = new Set(["libero", "protean"]);
 
 export function createTeamState(size = TEAM_SIZE) {
   return { slots: Array.from({ length: size }, () => null), activeIndex: 0 };
@@ -93,6 +94,8 @@ export function createSideState(pokemon, usageDefaults) {
     boosterEnergy: false,
     iceFaceIntact: true,
     speedMultiplier: 1,
+    typeChangeUsed: false,
+    typeChangeType: "",
   };
 }
 
@@ -111,7 +114,9 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
     case "nature":
       return { ...state, nature: value };
     case "ability":
-      return { ...state, ability: value };
+      return isTypeChangeAbility(value)
+        ? { ...state, ability: value }
+        : { ...state, ability: value, typeChangeUsed: false, typeChangeType: "" };
     case "item":
       return { ...state, item: value };
     case "speedMultiplier":
@@ -134,6 +139,14 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
       return { ...state, boosterEnergy: Boolean(value) };
     case "iceFaceIntact":
       return { ...state, iceFaceIntact: Boolean(value) };
+    case "typeChangeUsed":
+      return value
+        ? { ...state, typeChangeUsed: true }
+        : { ...state, typeChangeUsed: false, typeChangeType: "" };
+    case "typeChangeType":
+      return state.typeChangeUsed ? { ...state, typeChangeType: String(value ?? "") } : state;
+    case "normalizeTypeChange":
+      return normalizeTypeChangeState(state, value?.effectiveTypes);
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":
@@ -186,6 +199,21 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
     default:
       return state;
   }
+}
+
+export function isTypeChangeAbility(ability) {
+  return TYPE_CHANGE_ABILITIES.has(normalizeId(ability?.id ?? ability?.name));
+}
+
+export function normalizeTypeChangeState(state, effectiveTypes = []) {
+  const types = [...new Set(effectiveTypes.filter(Boolean))];
+  const current = String(state.typeChangeType ?? "");
+  if (!state.typeChangeUsed || (current && !types.includes(current))) {
+    return state.typeChangeUsed || current
+      ? { ...state, typeChangeUsed: false, typeChangeType: "" }
+      : state;
+  }
+  return state;
 }
 
 // A field-card side panel tracks six side-condition checkboxes for one physical side of the
