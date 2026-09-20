@@ -1129,6 +1129,11 @@ function renderDamage() {
   syncCurrentHpInputs("attacker");
   syncCurrentHpInputs("defender");
 
+  // Weather, terrain, item, and other field-dependent move conversions can change the
+  // available current-type choices without a side-control event. Normalize both sides before
+  // assembling the render's immutable calculation input so stale established types are cleared.
+  normalizeTypeChangeForSide("attacker");
+  normalizeTypeChangeForSide("defender");
   const calcInput = buildCalcInput(damageState, fieldState);
 
   syncAssumptionInputs("attacker");

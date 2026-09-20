@@ -105,7 +105,7 @@ export function createSideState(pokemon, usageDefaults) {
 // a <select>'s chosen option against the ability/item lookup requires the DOM element itself
 // (to read its selected option's display text as a fallback name), so that resolution stays in
 // battle-page.js and only the resolved value crosses into this pure function.
-export function applyControl(state, { kind, stat, index, value, maxHp }) {
+export function applyControl(state, { kind, stat, index, value, maxHp, effectiveTypes }) {
   switch (kind) {
     case "spread": {
       const spread = parseUsageSpread(value);
@@ -146,7 +146,7 @@ export function applyControl(state, { kind, stat, index, value, maxHp }) {
     case "typeChangeType":
       return state.typeChangeUsed ? { ...state, typeChangeType: String(value ?? "") } : state;
     case "normalizeTypeChange":
-      return normalizeTypeChangeState(state, value?.effectiveTypes);
+      return normalizeTypeChangeState(state, value?.effectiveTypes ?? effectiveTypes);
     case "sp":
       return { ...state, sp: { ...state.sp, [stat]: clampInteger(value, 0, 32) } };
     case "stage":
@@ -208,11 +208,15 @@ export function isTypeChangeAbility(ability) {
 export function normalizeTypeChangeState(state, effectiveTypes = []) {
   const types = [...new Set(effectiveTypes.filter(Boolean))];
   const current = String(state.typeChangeType ?? "");
-  if (!state.typeChangeUsed || (current && !types.includes(current))) {
+  if (!state.typeChangeUsed) {
     return state.typeChangeUsed || current
       ? { ...state, typeChangeUsed: false, typeChangeType: "" }
       : state;
   }
+  if (!types.length || (current && !types.includes(current))) {
+    return { ...state, typeChangeUsed: false, typeChangeType: "" };
+  }
+  if (!current) return { ...state, typeChangeType: types[0] };
   return state;
 }
 

@@ -110,6 +110,23 @@ test("applyControl normalizes the one-time Libero/Protean type-change controls",
   assert.equal(libero.typeChangeType, "Fighting");
 });
 
+test("normalizeTypeChangeState chooses a selected move type when activation has no current type", () => {
+  const state = createSideState(pikachu, usageDefaults);
+  const selected = applyControl(state, { kind: "typeChangeUsed", value: true });
+  const normalized = applyControl(selected, {
+    kind: "normalizeTypeChange",
+    effectiveTypes: ["Electric", "Water"],
+  });
+  assert.equal(normalized.typeChangeUsed, true);
+  assert.equal(normalized.typeChangeType, "Electric");
+  const unusable = applyControl(selected, {
+    kind: "normalizeTypeChange",
+    effectiveTypes: [],
+  });
+  assert.equal(unusable.typeChangeUsed, false);
+  assert.equal(unusable.typeChangeType, "");
+});
+
 test("applyControl resets a current type when it is no longer represented", () => {
   const state = createSideState(pikachu, usageDefaults);
   const selected = applyControl({ ...state, typeChangeUsed: true, typeChangeType: "Fighting" }, {
