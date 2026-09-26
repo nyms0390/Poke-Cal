@@ -49,6 +49,7 @@ import { lookupBrowseEntries } from "./lookup-browse.js";
 const elements = {
   search: document.querySelector("#pokemon-search"),
   results: document.querySelector("#search-results"),
+  browseContext: document.querySelector("#browse-context"),
   selectedCalculator: document.querySelector("#selected-calculator"),
   selectedSprite: document.querySelector("#selected-sprite"),
   selectedName: document.querySelector("#selected-name"),
@@ -206,6 +207,9 @@ function selectForm(entry, options = {}) {
 }
 
 function renderBrowseList() {
+  elements.browseContext.textContent = t(elements.search.value.trim()
+    ? "lookup.browseResults"
+    : "lookup.browsePopular");
   const matches = lookupBrowseEntries(pokemon, selectedPokemon, elements.search.value, {
     abilityLookup,
     moveLookup,
@@ -306,6 +310,7 @@ function renderSelectedSprite(entry) {
   image.alt = "";
   image.width = 96;
   image.height = 96;
+  if (entry.id === "pikachu") image.className = "compact-sprite";
   image.fetchPriority = "high";
   const [source, fallbackSource] = pokemonSpriteUrls(entry);
   image.src = source;

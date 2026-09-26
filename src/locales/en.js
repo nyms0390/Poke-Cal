@@ -46,6 +46,8 @@ export const EN_MESSAGES = {
   "catalog.missing": "Run npm run sync-data to generate Pokémon data.",
   "lookup.commonHeadline": ({ usage, samples }) => `${usage} usage · ${samples} team samples`,
   "lookup.searchLabel": "Pokémon search",
+  "lookup.browsePopular": "Popular Pokémon · Limitless Champions tournament usage",
+  "lookup.browseResults": "Search results",
   "lookup.openCalculator": "Open in calculator →",
   "lookup.commonSource": "Limitless Champions usage (last 50 tournaments)",
   "lookup.outspeeds": ({ count, total }) => `Outspeeds ${count}/${total} top threats`,
