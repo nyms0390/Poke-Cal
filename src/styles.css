@@ -2566,7 +2566,7 @@ button:disabled {
     overflow-wrap: anywhere;
   }
 
-  .move-property-cell {
+  .move-table .move-property-cell {
     min-width: 0;
     grid-template-columns: minmax(96px, 0.32fr) minmax(0, 1fr);
   }
