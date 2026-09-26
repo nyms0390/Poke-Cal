@@ -4395,14 +4395,6 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
-.lookup-page .lookup-move-panel {
-  order: 2;
-}
-
-.lookup-page .lookup-section[aria-labelledby="build-details-heading"] {
-  order: 3;
-}
-
 .lookup-page .move-table-wrap {
   min-width: 0;
   max-height: 430px;
