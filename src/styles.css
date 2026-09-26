@@ -4,22 +4,22 @@
   color-scheme: light;
   font-family: "Helvetica Neue", "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
   font-synthesis: none;
-  background: #f7f8fb;
-  color: #101114;
+  background: #f7f8f5;
+  color: #18272b;
 
   /* Color tokens */
-  --accent: #7132f5;
-  --accent-dark: #5741d8;
-  --accent-soft: rgb(133 91 251 / 12%);
-  --accent-ring: rgb(113 50 245 / 16%);
-  --ink: #101114;
-  --muted: #686b82;
-  --subtle: #696c7d;
-  --line: #dedee5;
-  --canvas: #f7f8fb;
+  --accent: #166a70;
+  --accent-dark: #0d5056;
+  --accent-soft: rgb(22 106 112 / 11%);
+  --accent-ring: rgb(22 106 112 / 18%);
+  --ink: #18272b;
+  --muted: #52656a;
+  --subtle: #58696d;
+  --line: #dce5e1;
+  --canvas: #f7f8f5;
   --surface: #ffffff;
-  --surface-soft: #fafafd;
-  --surface-tint: #f1f0ff;
+  --surface-soft: #fafbf9;
+  --surface-tint: #eaf4f2;
   --success: #149e61;
   --success-dark: #026b3f;
   --danger: #c23b3b;
@@ -37,7 +37,6 @@
   --radius-card: 12px;
   --radius-control: 8px;
   --radius-badge: 8px;
-  --shadow-frame: 0 4px 24px rgb(16 17 20 / 3%);
   --shadow-micro: 0 1px 4px rgb(16 24 40 / 4%);
 
   /* Control sizing tokens */
@@ -99,9 +98,9 @@ h3 {
 /* ---------- Page scaffold ---------- */
 
 main {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1500px, calc(100% - 24px));
   margin: 0 auto;
-  padding: 48px 0 32px;
+  padding: 0 0 32px;
 }
 
 .skip-link {
@@ -121,24 +120,6 @@ main {
 
 .skip-link:focus-visible {
   translate: 0;
-}
-
-header {
-  position: relative;
-  max-width: 850px;
-  margin-bottom: 32px;
-  padding-left: 18px;
-}
-
-header::before {
-  position: absolute;
-  top: 4px;
-  bottom: 6px;
-  left: 0;
-  width: 4px;
-  border-radius: 999px;
-  background: var(--accent);
-  content: "";
 }
 
 .page-nav {
@@ -198,8 +179,7 @@ header::before {
   white-space: nowrap;
 }
 
-/* Kicker labels: the one deliberately "small caps" voice in the system. */
-.eyebrow,
+/* Compact metadata and field labels. */
 label,
 legend,
 .panel-heading span,
@@ -209,12 +189,6 @@ legend,
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.eyebrow {
-  margin: 0 0 4px;
-  color: var(--accent);
-  font-weight: 700;
 }
 
 h1,
@@ -240,6 +214,25 @@ h1 {
   line-height: 1.6;
 }
 
+.page-intro {
+  padding: 18px 24px 20px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  background: var(--surface);
+}
+
+.page-intro h1 {
+  max-width: none;
+  margin: 0 0 4px;
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  line-height: 1.25;
+}
+
+.page-intro .intro {
+  max-width: 85ch;
+  line-height: 1.45;
+}
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -255,17 +248,13 @@ footer {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: var(--radius-card);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
   background: var(--surface);
-  box-shadow: var(--shadow-frame);
+  box-shadow: none;
 }
 
 .calculator::before {
-  display: block;
-  width: 100%;
-  height: 4px;
-  background: var(--accent);
-  content: "";
+  display: none;
 }
 
 /* Panels sit on a 1px --line grid so dividers stay hairline-consistent. */
@@ -641,7 +630,7 @@ input[type="radio"] {
   accent-color: var(--accent);
 }
 
-/* Secondary button: white, hairline border, purple on hover. */
+/* Secondary button: white, hairline border, accent on hover. */
 .panel-heading button,
 .saved-set-controls button,
 .set-paste-actions button,
@@ -3790,7 +3779,7 @@ details.builder-analysis-move > .builder-spread-grid {
 }
 
 .speed-preset-slow {
-  --speed-preset-color: #8057ce;
+  --speed-preset-color: #6b7280;
 }
 
 .speed-preset-user {
@@ -3983,7 +3972,7 @@ textarea:focus-visible {
   box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
-/* Modern Pokédex lookup: the catalog stays beside the selected detail. */
+/* Shared app header and lookup catalog detail. */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -3993,12 +3982,7 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
-.lookup-page main {
-  width: min(1500px, calc(100% - 24px));
-  padding-top: 0;
-}
-
-.lookup-page .lookup-header {
+.lookup-header {
   display: flex;
   align-items: center;
   gap: 36px;
@@ -4007,7 +3991,7 @@ textarea:focus-visible {
   padding: 0 8px;
 }
 
-.lookup-page .lookup-header::before {
+.lookup-header::before {
   display: none;
 }
 
@@ -4030,7 +4014,7 @@ textarea:focus-visible {
   color: var(--accent-dark);
 }
 
-.lookup-page .page-nav {
+.lookup-header .page-nav {
   align-items: center;
   flex: 1;
   gap: 4px 24px;
@@ -4038,7 +4022,7 @@ textarea:focus-visible {
   margin: 0;
 }
 
-.lookup-page .page-nav a {
+.lookup-header .page-nav a {
   min-height: 56px;
   border: 0;
   border-bottom: 3px solid transparent;
@@ -4050,15 +4034,15 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
-.lookup-page .page-nav a:hover,
-.lookup-page .page-nav a:focus-visible,
-.lookup-page .page-nav a.active {
+.lookup-header .page-nav a:hover,
+.lookup-header .page-nav a:focus-visible,
+.lookup-header .page-nav a.active {
   border-bottom-color: var(--accent);
   background: transparent;
   color: var(--accent-dark);
 }
 
-.lookup-page .language-switch {
+.lookup-header .language-switch {
   width: auto;
   margin-left: auto;
   box-shadow: none;
@@ -4403,12 +4387,12 @@ textarea:focus-visible {
 }
 
 @media (max-width: 1050px) {
-  .lookup-page .lookup-header {
+  .lookup-header {
     flex-wrap: wrap;
     gap: 0;
   }
 
-  .lookup-page .page-nav {
+  .lookup-header .page-nav {
     flex-basis: 100%;
     gap: 4px 14px;
   }
@@ -4437,11 +4421,11 @@ textarea:focus-visible {
 }
 
 @media (max-width: 700px) {
-  .lookup-page main {
+  main {
     width: min(100%, calc(100% - 16px));
   }
 
-  .lookup-page .page-nav a {
+  .lookup-header .page-nav a {
     min-height: 44px;
     min-width: 64px;
     padding: 9px 8px 7px;
@@ -4449,8 +4433,12 @@ textarea:focus-visible {
     justify-content: center;
   }
 
-  .lookup-page .language-switch {
+  .lookup-header .language-switch {
     margin: 4px 0 8px;
+  }
+
+  .page-intro {
+    padding: 14px 16px 16px;
   }
 
   .lookup-page .calculator {
@@ -4551,7 +4539,7 @@ textarea:focus-visible {
 }
 
 @media (max-width: 360px) {
-  .lookup-page .page-nav {
+  .lookup-header .page-nav {
     gap: 2px 6px;
   }
 

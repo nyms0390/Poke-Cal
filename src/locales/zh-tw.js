@@ -10,7 +10,6 @@ export const ZH_TW_MESSAGES = {
   "nav.speed": "速度線",
   "nav.teams": "隊伍",
   "nav.moves": "招式",
-  "moves.eyebrow": "PokéCal // 招式圖鑑",
   "moves.title": "招式圖鑑",
   "moves.ariaLabel": "招式圖鑑",
   "moves.intro": "依名稱、屬性、分類或招式性質搜尋所有 Champions 合法招式。",
@@ -220,7 +219,6 @@ export const ZH_TW_MESSAGES = {
   "lookup.smogonSpreadSource": ({ month, cutoff }) =>
     `Smogon 對戰梯能力分配${month ? `（${month}，門檻 ${cutoff}）` : ""}`,
   "lookup.ncpSpreadSource": "NCP 精選配招（Nimbasa City Post）",
-  "teams.eyebrow": "PokéCal // 賽事隊伍",
   "teams.title": "瀏覽近期賽事隊伍。",
   "teams.intro": "查看最近完成的 Champions 淘汰賽，並開啟選手與其提交的每隻寶可夢配招。",
   "teams.archive": "賽事",

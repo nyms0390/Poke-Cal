@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f7f8fb" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="Interactive Champions Speed tiers with spreads, stages, Tailwind, paralysis, Speed items, and Trick Room."
@@ -14,7 +14,8 @@
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <main id="main-content">
-      <header>
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home" translate="no">Poké<span>Cal</span></a>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
           <a href="./moves.html">Moves</a>
@@ -30,13 +31,14 @@
             </select>
           </label>
         </nav>
-        <p class="eyebrow">PokéCal // Speed tiers</p>
+      </header>
+      <div class="page-intro">
         <h1>See the whole Speed field at once.</h1>
         <p class="intro">
           Compare one build against popular Champions Pokémon at fixed spreads, then apply
           battle-wide Speed control without losing manually added opponents.
         </p>
-      </header>
+      </div>
 
       <section class="calculator speed-tool" aria-label="Speed tiers">
         <p id="speed-source" class="usage-source">Champions threats loading…</p>

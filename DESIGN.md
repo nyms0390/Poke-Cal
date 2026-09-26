@@ -4,13 +4,13 @@ PokéCal is a frequently used competitive Pokémon analysis tool. The interface 
 
 ## Product character
 
-The visual direction is calm, precise, compact, readable, and consistent. Keep the incumbent light interface, purple identity, white working surfaces, quiet borders, and sparse elevation. Pokémon sprites, type colors, move-category marks, and aligned battle data provide the domain character. Do not replace this identity with generic dashboard styling, decorative gradients, glow, ornamental icon tiles, or a new brand system during refinement.
+The visual direction is calm, precise, compact, readable, and consistent. All six routes share the lookup page's slim brand and navigation header, white working surfaces, quiet dividers, and sparse elevation. Deep teal marks interaction; Pokémon sprites, type colors, move-category marks, and aligned battle data provide the domain character. Avoid generic dashboard styling, decorative gradients, glow, and ornamental icon tiles.
 
 PokéCal uses the system font stack already declared in `src/styles.css`. Do not introduce proprietary or downloaded fonts. The historic Kraken reference in `docs/design-references/kraken/` is visual inspiration only; PokéCal owns the decisions in this file.
 
 ## Tokens and roles
 
-`src/styles.css` is the implementation source of truth for tokens. Purple (`--accent`, `--accent-dark`, `--accent-soft`, `--accent-ring`) marks the active page, selected state, focus, primary actions, and emphasized results. It does not replace semantic colors for success, warning, danger, raised/lowered stats, Pokémon types, move categories, or Speed presets.
+`src/styles.css` is the implementation source of truth for tokens. Deep teal (`--accent`, `--accent-dark`, `--accent-soft`, `--accent-ring`) marks the active page, selected state, focus, primary actions, and emphasized results. It does not replace semantic colors for success, warning, danger, raised/lowered stats, Pokémon types, move categories, or Speed presets.
 
 Use `--ink` for primary text, `--muted` for supporting text, and `--subtle` only when it still meets ordinary-text contrast. Use `--canvas`, `--surface`, `--surface-soft`, and `--surface-tint` to distinguish the page, working areas, grouped controls, and selected rows. Use a border or the documented soft shadow to establish depth; avoid piling both on decorative wrappers.
 
@@ -20,11 +20,11 @@ Ordinary spacing follows 4, 8, 12, 16, 24, 32, and 48px steps. Small optical adj
 
 The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Keep visible field labels legible. The small uppercase label voice is reserved for compact metadata and field labels.
 
-Use tabular numerals for stats, percentages, counts, damage ranges, Speed values, and aligned numeric columns. Use an em dash for unavailable values and keep units such as `%`, `SP`, `EV`, and multipliers explicit. Purple may emphasize a selected or primary number; semantic state colors keep their own meanings and must also have text or another non-color cue.
+Use tabular numerals for stats, percentages, counts, damage ranges, Speed values, and aligned numeric columns. Use an em dash for unavailable values and keep units such as `%`, `SP`, `EV`, and multipliers explicit. Teal may emphasize a selected or primary number; semantic state colors keep their own meanings and must also have text or another non-color cue.
 
 ## Components and interaction
 
-Navigation uses wrapped links and a language control. The current page has both a visible selected state and `aria-current="page"`. Every page begins with a keyboard-visible skip link and has one `main` landmark target.
+Navigation uses the same PokéCal brand, wrapped links, and language control on every page. The current page has both a visible selected state and `aria-current="page"`. Pages other than lookup place a compact title and introduction between navigation and the working surface. Every page begins with a keyboard-visible skip link and has one `main` landmark target.
 
 Search pickers use a labeled search input and a popup list. They support typing, Arrow Up/Down, Enter, Escape, Tab, Shift+Tab, pointer selection, a visible no-match state, and clear focus. Results must not be clipped by their panel. Forms use native inputs, selects, checkboxes, and radios unless the product needs behavior those controls cannot provide.
 

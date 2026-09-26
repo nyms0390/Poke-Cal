@@ -4,14 +4,14 @@ Use this workflow for UI audits, cleanup, and refinement. It is the authoritativ
 
 ## Guidance and precedence
 
-Use the project-local Impeccable skill in **Operate/refinement** mode as the primary craft process. Use the project-local Vercel Web Interface Guidelines as a supplemental technical checklist. The copied skill sources adopted with this policy are:
+Use the project-local Impeccable skill in **Operate** mode as the primary craft process: refinement for cleanup, new-work for redesign. Use the project-local Vercel Web Interface Guidelines as a supplemental technical checklist. The copied skill sources adopted with this policy are:
 
 - The vendored Impeccable skill is pinned to `pbakaus/impeccable` at `cb56ed6c19a07329a9fa0cd4e657bee040156593`.
 - The vendored Vercel wrapper is pinned to `vercel-labs/agent-skills` at `063bee94c3f4df8453406c830b0a7df0f2860278`.
 
 The Vercel wrapper fetches its supplemental rules from the living `vercel-labs/web-interface-guidelines` `main` branch. Each audit must record the fetch date and the resolved upstream commit when it can be determined. If resolution is unavailable, record the source URL and that limitation; never describe the live rule content as pinned by the wrapper revision. See `.agents/skills/VENDORED_SOURCES.md` for source and license provenance.
 
-Read upstream guidance through PokéCal's product truth and repository constraints. Generic upstream preferences do not override `DESIGN.md`, the purple identity, semantic or Pokémon type colors, the system-font choice, the dependency-free ES-module architecture, factual source labels, or an explicit task brief. Review and record a new upstream revision before updating either vendored skill.
+Read upstream guidance through PokéCal's product truth and repository constraints. Generic upstream preferences do not override `DESIGN.md`, the teal identity, semantic or Pokémon type colors, the system-font choice, the dependency-free ES-module architecture, factual source labels, or an explicit task brief. Review and record a new upstream revision before updating either vendored skill.
 
 ## Scope and product goal
 

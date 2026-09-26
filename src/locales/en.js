@@ -7,7 +7,6 @@ export const EN_MESSAGES = {
   "nav.speed": "Speed Tiers",
   "nav.teams": "Teams",
   "nav.moves": "Moves",
-  "moves.eyebrow": "PokéCal // Move catalog",
   "moves.title": "Move catalog",
   "moves.ariaLabel": "Move catalog",
   "moves.intro": "Search every Champions-legal move by name, type, category, or move property.",
@@ -217,7 +216,6 @@ export const EN_MESSAGES = {
   "lookup.smogonSpreadSource": ({ month, cutoff }) =>
     `Smogon ladder SP spreads${month ? ` (${month}, cutoff ${cutoff})` : ""}`,
   "lookup.ncpSpreadSource": "NCP curated sets (Nimbasa City Post)",
-  "teams.eyebrow": "PokéCal // Tournament teams",
   "teams.title": "Browse recent tournament teams.",
   "teams.intro": "Explore the latest completed Champions brackets, then open a player and each submitted Pokémon build.",
   "teams.archive": "Tournaments",

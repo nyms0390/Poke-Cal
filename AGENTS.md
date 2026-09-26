@@ -4,7 +4,7 @@ PokéCal is a dependency-free, browser-first ES-module web app: a Pokémon looku
 
 ## UI quality policy
 
-For UI changes, read and follow `DESIGN.md` and `docs/ui-quality-workflow.md` before editing. They are the authoritative project design and verification policy. Use the project-local Impeccable skill in Operate/refinement mode as the primary process and the project-local Vercel Web Interface Guidelines as a supplemental checklist. Generic upstream guidance must not override PokéCal's product truth, incumbent purple identity, semantic and Pokémon type colors, system-font choice, precise data-source labels, or dependency-free architecture.
+For UI changes, read and follow `DESIGN.md` and `docs/ui-quality-workflow.md` before editing. They are the authoritative project design and verification policy. Use the project-local Impeccable skill in Operate mode (refinement for cleanup, new-work for redesign) as the primary process and the project-local Vercel Web Interface Guidelines as a supplemental checklist. Generic upstream guidance must not override PokéCal's product truth, teal identity and shared lookup-style navigation, semantic and Pokémon type colors, system-font choice, precise data-source labels, or dependency-free architecture.
 
 ## Commands
 

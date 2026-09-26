@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f7f8fb" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="Recent Limitless Champions tournament teams with submitted items, abilities, moves, natures, and Tera data."
@@ -14,7 +14,8 @@
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <main id="main-content">
-      <header>
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home" translate="no">Poké<span>Cal</span></a>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a href="./index.html">Lookup</a>
           <a href="./moves.html">Moves</a>
@@ -30,12 +31,13 @@
             </select>
           </label>
         </nav>
-        <p class="eyebrow" data-i18n="teams.eyebrow">PokéCal // Tournament teams</p>
+      </header>
+      <div class="page-intro">
         <h1 data-i18n="teams.title">Browse recent tournament teams.</h1>
         <p class="intro" data-i18n="teams.intro">
           Explore the latest completed Champions brackets, then open a player and each submitted Pokémon build.
         </p>
-      </header>
+      </div>
 
       <section class="calculator teams-tool" aria-label="Tournament teams">
         <p id="teams-source" class="usage-source">Loading Limitless tournament teams…</p>
