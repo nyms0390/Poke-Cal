@@ -947,10 +947,11 @@ test("battle page shows each Pokémon name and icon together in the side heading
   );
 });
 
-test("lookup selection preserves a non-empty search query", () => {
+test("lookup selection clears a search query and restores the persistent catalog list", () => {
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
 
-  assert.match(source, /if \(options\.syncSearch !== false && !elements\.search\.value\) elements\.search\.value = localizedName\(entry\);/);
+  assert.match(source, /elements\.search\.value = "";\s*renderBrowseList\(\);/);
+  assert.match(source, /button\.setAttribute\("aria-selected", String\(selected\)\)/);
 });
 
 test("battle and builder move-search results render type badges before category metadata", () => {

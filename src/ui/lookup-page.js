@@ -8,7 +8,7 @@ import {
   sortMoves,
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
-import { megaFamily, searchPokemon } from "../data/pokemon.js";
+import { megaFamily } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
@@ -33,7 +33,6 @@ import {
   rankObservedUsage,
 } from "./bootstrap.js";
 import {
-  attachCombobox,
   FULL_STAT_LABELS,
   itemLabel,
   moveCategoryMark,
@@ -41,20 +40,25 @@ import {
   movePropertyCell,
   optionElement,
   pokemonSpriteUrls,
-  searchResultButton,
+  searchResultFocusIndex,
   textCell,
   typeBadge,
 } from "./components.js";
+import { lookupBrowseEntries } from "./lookup-browse.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
   results: document.querySelector("#search-results"),
+  selectedCalculator: document.querySelector("#selected-calculator"),
   selectedSprite: document.querySelector("#selected-sprite"),
   selectedName: document.querySelector("#selected-name"),
   selectedTypes: document.querySelector("#selected-types"),
   selectedAlias: document.querySelector("#selected-alias"),
+  selectedUsage: document.querySelector("#selected-usage"),
+  selectedUsageSource: document.querySelector("#selected-usage-source"),
   baseStats: document.querySelector("#base-stats"),
   baseStatTotal: document.querySelector("#base-stat-total"),
+  baseStatTotalCell: document.querySelector(".base-stat-total"),
   formField: document.querySelector("#form-field"),
   form: document.querySelector("#form"),
   commonBuildCard: document.querySelector("#common-build-card"),
@@ -94,18 +98,12 @@ const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 
 initI18n();
-attachCombobox({
-  input: elements.search,
-  resultsEl: elements.results,
-  getMatches: (query) => searchPokemon(pokemon, query, { ...searchOptions(), limit: 12 }),
-  getAllMatches: (query) => searchPokemon(pokemon, query, {
-    ...searchOptions(),
-    limit: pokemon.length,
-  }),
-  resultLimit: 12,
-  onSelect: selectPokemon,
-  renderRow: (entry, onSelect) => searchResultButton(entry, onSelect),
-});
+elements.search.setAttribute("aria-autocomplete", "list");
+elements.search.setAttribute("aria-haspopup", "listbox");
+elements.search.setAttribute("aria-expanded", "true");
+elements.search.addEventListener("input", () => renderBrowseList());
+elements.search.addEventListener("keydown", handleSearchKeydown);
+elements.results.addEventListener("keydown", handleBrowseKeydown);
 initialize();
 
 onLocaleChange(() => {
@@ -135,14 +133,16 @@ async function initialize() {
   const activeSet = activeSetStore.readSet();
   const activePokemon = pokemon.find(({ id }) => id === activeSet?.pokemonId);
   selectPokemon(activePokemon ?? pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
-    syncSearch: false,
     syncActive: !activePokemon,
   });
 }
 
 elements.form.addEventListener("input", () => {
   const form = selectedFamily.find(({ id }) => id === elements.form.value);
-  if (form) selectForm(form);
+  if (form) {
+    elements.search.value = "";
+    selectForm(form);
+  }
 });
 
 for (const button of elements.moveSortButtons) {
@@ -155,17 +155,13 @@ for (const button of elements.moveSortButtons) {
   });
 }
 
-function searchOptions() {
-  return { abilityLookup, moveLookup, itemLookup };
-}
-
 function selectPokemon(entry, options = {}) {
   if (!entry) return;
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
-  selectForm(entry, options);
-  elements.results.hidden = true;
-  elements.search.setAttribute("aria-expanded", "false");
+  selectForm(entry, { ...options, syncBrowse: false });
+  elements.search.value = "";
+  renderBrowseList();
 }
 
 function renderFormOptions() {
@@ -188,12 +184,12 @@ function renderBaseStats(entry) {
       return stat;
     }),
   );
+  elements.baseStats.append(elements.baseStatTotalCell);
 }
 
 function selectForm(entry, options = {}) {
   selectedPokemon = entry;
   if (options.resetMoveSort !== false) moveSort = { key: "", direction: "" };
-  if (options.syncSearch !== false && !elements.search.value) elements.search.value = localizedName(entry);
   renderSelectedSprite(entry);
   elements.selectedName.textContent = localizedName(entry);
   elements.selectedTypes.replaceChildren(...(entry.types ?? []).map(typeBadge));
@@ -202,9 +198,107 @@ function selectForm(entry, options = {}) {
     : entry.aliases.map(toTraditionalChinese).join(" · ") || entry.baseSpecies;
   elements.baseStatTotal.textContent = totalBaseStats(entry.baseStats);
   elements.form.value = entry.id;
+  elements.selectedCalculator.href = `./battle.html?left=${encodeURIComponent(entry.id)}`;
   renderBaseStats(entry);
   if (options.syncActive !== false) persistActiveDefaults(entry);
   renderCatalog();
+  if (options.syncBrowse !== false) renderBrowseList();
+}
+
+function renderBrowseList() {
+  const matches = lookupBrowseEntries(pokemon, selectedPokemon, elements.search.value, {
+    abilityLookup,
+    moveLookup,
+    itemLookup,
+  });
+  if (matches.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "lookup-browse-empty";
+    empty.textContent = t("search.noMatches");
+    elements.results.replaceChildren(empty);
+    return;
+  }
+  elements.results.replaceChildren(...matches.map((entry) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "lookup-browse-row";
+    button.id = `browse-${entry.id}`;
+    button.setAttribute("role", "option");
+    const selected = entry.id === selectedPokemon?.id;
+    button.setAttribute("aria-selected", String(selected));
+    if (selected) button.classList.add("is-selected");
+
+    const sprite = document.createElement("img");
+    sprite.alt = "";
+    sprite.width = 52;
+    sprite.height = 52;
+    sprite.loading = "lazy";
+    const [source, fallback] = pokemonSpriteUrls(entry);
+    sprite.src = source;
+    sprite.addEventListener("error", () => {
+      if (sprite.src !== fallback) sprite.src = fallback;
+      else sprite.hidden = true;
+    });
+
+    const names = document.createElement("span");
+    names.className = "lookup-browse-names";
+    const name = document.createElement("strong");
+    name.textContent = localizedName(entry);
+    const alias = document.createElement("small");
+    alias.textContent = getLocale() === "zh-TW"
+      ? entry.name
+      : entry.aliases.map(toTraditionalChinese).join(" · ");
+    names.append(name, alias);
+    button.append(sprite, names);
+    button.addEventListener("click", () => {
+      selectPokemon(entry);
+      elements.results.querySelector(`#browse-${entry.id}`)?.focus({ preventScroll: true });
+    });
+    return button;
+  }));
+}
+
+function handleSearchKeydown(event) {
+  if (event.isComposing || event.keyCode === 229) return;
+  if (event.key === "Escape") {
+    elements.search.value = "";
+    renderBrowseList();
+    return;
+  }
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    const rows = [...elements.results.querySelectorAll(".lookup-browse-row")];
+    const row = event.key === "ArrowDown" ? rows[0] : rows.at(-1);
+    if (row) {
+      event.preventDefault();
+      row.focus();
+    }
+    return;
+  }
+  if (event.key === "Enter") {
+    const first = elements.results.querySelector(".lookup-browse-row");
+    if (first) {
+      event.preventDefault();
+      first.click();
+    }
+  }
+}
+
+function handleBrowseKeydown(event) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    elements.search.value = "";
+    renderBrowseList();
+    elements.search.focus();
+    return;
+  }
+  if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+  const rows = [...elements.results.querySelectorAll(".lookup-browse-row")];
+  const current = rows.indexOf(event.target.closest?.(".lookup-browse-row"));
+  const next = searchResultFocusIndex(current, rows.length, event.key);
+  if (next >= 0) {
+    event.preventDefault();
+    rows[next].focus();
+  }
 }
 
 function renderSelectedSprite(entry) {
@@ -263,6 +357,8 @@ function renderCommonBuild() {
   if (!usage || !Number.isFinite(champions.usageCount)) {
     elements.commonBuildCard.hidden = true;
     elements.commonBuildFacts.replaceChildren();
+    elements.selectedUsage.hidden = true;
+    elements.selectedUsageSource.hidden = true;
     return;
   }
 
@@ -279,6 +375,10 @@ function renderCommonBuild() {
     samples: champions.usageCount.toLocaleString(getLocale()),
   });
   elements.commonBuildSource.textContent = t("lookup.commonSource");
+  elements.selectedUsage.textContent = elements.commonBuildHeadline.textContent;
+  elements.selectedUsageSource.textContent = elements.commonBuildSource.textContent;
+  elements.selectedUsage.hidden = false;
+  elements.selectedUsageSource.hidden = false;
   elements.commonBuildFacts.replaceChildren(
     commonBuildFact(t("label.ability"), defaults.ability),
     commonBuildFact(t("label.item"), defaults.item),
@@ -299,7 +399,7 @@ function commonBuildFact(labelText, entry) {
   const value = document.createElement("strong");
   const rawName = entry?.name;
   if (!entry) value.textContent = "—";
-  else if (labelText === t("label.item")) value.append(itemLabel(entry, { showName: false }));
+  else if (labelText === t("label.item")) value.append(itemLabel(entry));
   else value.textContent = labelText === t("label.nature")
     ? localizedTerm("nature", rawName)
     : localizedName(entry);

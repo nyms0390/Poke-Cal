@@ -3982,3 +3982,586 @@ textarea:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-ring);
 }
+
+/* Modern Pokédex lookup: the catalog stays beside the selected detail. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.lookup-page main {
+  width: min(1500px, calc(100% - 24px));
+  padding-top: 0;
+}
+
+.lookup-page .lookup-header {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  max-width: none;
+  margin: 0;
+  padding: 0 8px;
+}
+
+.lookup-page .lookup-header::before {
+  display: none;
+}
+
+.lookup-brand {
+  flex: none;
+  color: var(--ink);
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lookup-brand span {
+  color: var(--accent);
+}
+
+.lookup-brand:hover,
+.lookup-brand:focus-visible {
+  color: var(--accent-dark);
+}
+
+.lookup-page .page-nav {
+  align-items: center;
+  flex: 1;
+  gap: 4px 24px;
+  min-width: 0;
+  margin: 0;
+}
+
+.lookup-page .page-nav a {
+  min-height: 56px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding: 13px 4px 10px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.lookup-page .page-nav a:hover,
+.lookup-page .page-nav a:focus-visible,
+.lookup-page .page-nav a.active {
+  border-bottom-color: var(--accent);
+  background: transparent;
+  color: var(--accent-dark);
+}
+
+.lookup-page .language-switch {
+  width: auto;
+  margin-left: auto;
+  box-shadow: none;
+}
+
+.lookup-page .calculator {
+  display: grid;
+  grid-template-columns: minmax(245px, 290px) minmax(0, 1fr);
+  align-items: start;
+  overflow: visible;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  box-shadow: none;
+}
+
+.lookup-page .calculator::before {
+  display: none;
+}
+
+.lookup-page .search-panel {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  min-width: 0;
+  padding: 16px 0 0;
+  border-right: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.lookup-page .search-panel > label {
+  display: block;
+  margin: 0 16px;
+  color: var(--ink);
+  font-size: var(--text-md);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.lookup-page .search-wrap {
+  margin: 10px 16px 14px;
+}
+
+.lookup-page #pokemon-search {
+  min-height: 44px;
+}
+
+.lookup-browse-list {
+  overflow-y: auto;
+  max-height: min(750px, calc(100vh - 148px));
+  border-top: 1px solid var(--line);
+  scrollbar-color: var(--subtle) var(--surface-soft);
+}
+
+.lookup-browse-row {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 74px;
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  content-visibility: auto;
+  contain-intrinsic-size: 74px;
+}
+
+.lookup-browse-row:hover,
+.lookup-browse-row:focus-visible,
+.lookup-browse-row.is-selected {
+  background: var(--surface-tint);
+}
+
+.lookup-browse-row.is-selected {
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.lookup-browse-row img {
+  display: block;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.lookup-browse-names {
+  display: grid;
+  min-width: 0;
+}
+
+.lookup-browse-names strong,
+.lookup-browse-names small {
+  overflow-wrap: anywhere;
+}
+
+.lookup-browse-names strong {
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.lookup-browse-names small {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.lookup-browse-empty {
+  margin: 0;
+  padding: 20px 16px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.lookup-page .lookup-tool > .tool-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  background: var(--surface);
+}
+
+.lookup-hero {
+  min-width: 0;
+}
+
+.lookup-page .pokemon-card {
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+}
+
+.lookup-page .pokemon-card-identity {
+  min-width: 0;
+  gap: 20px;
+}
+
+.lookup-page .pokemon-card-identity > div:last-child {
+  min-width: 0;
+}
+
+.lookup-page .pokemon-card-sprite {
+  flex: none;
+  width: 160px;
+  height: 160px;
+  border-radius: var(--radius-card);
+}
+
+.lookup-page .pokemon-card-sprite img {
+  max-width: 145px;
+  max-height: 145px;
+  image-rendering: pixelated;
+}
+
+.lookup-page .pokemon-card h2 {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.lookup-page .selected-name-row {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lookup-page .alias {
+  margin-top: 5px;
+  font-size: var(--text-lg);
+}
+
+.selected-usage {
+  margin: 12px 0 0;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.selected-usage-source {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.lookup-page .pokemon-card-meta {
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lookup-page .pokemon-card-meta .form-field {
+  min-width: 180px;
+}
+
+.selected-calculator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.selected-calculator:hover,
+.selected-calculator:focus-visible {
+  background: var(--accent-dark);
+  color: white;
+}
+
+.lookup-page .base-stats {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-top: 12px;
+  box-shadow: none;
+}
+
+.lookup-page .base-stat,
+.lookup-page .base-stat-total {
+  min-width: 0;
+  padding: 8px 12px;
+  background: var(--surface-soft);
+  text-align: center;
+}
+
+.lookup-page .base-stat span,
+.lookup-page .base-stat-total span {
+  white-space: nowrap;
+}
+
+.lookup-page .base-stat strong,
+.lookup-page .base-stat-total strong {
+  color: var(--accent);
+  font-size: 1.45rem;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.lookup-page .lookup-section,
+.lookup-page .lookup-move-panel {
+  min-width: 0;
+  padding: 0;
+}
+
+.lookup-page .lookup-section-heading {
+  margin: 0 0 8px;
+}
+
+.lookup-page .lookup-section-heading h2 {
+  font-size: var(--text-lg);
+}
+
+.lookup-page .lookup-section-heading p {
+  font-size: var(--text-xs);
+}
+
+.lookup-page .lookup-panel-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lookup-page .lookup-profile-grid .common-build-card,
+.lookup-page .lookup-build-grid .lookup-spread-panel {
+  grid-column: auto;
+}
+
+.lookup-page .lookup-panel-grid > .catalog-panel,
+.lookup-page .lookup-move-panel {
+  box-shadow: none;
+}
+
+.lookup-page .lookup-panel-grid > .catalog-panel {
+  padding: 12px;
+}
+
+.lookup-page .common-build-card {
+  background: var(--surface);
+}
+
+.lookup-page .common-build-card .panel-heading strong,
+.lookup-page .common-build-source,
+.lookup-page .common-build-calculator {
+  display: none;
+}
+
+.lookup-page .common-build-facts {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.lookup-page .common-build-fact {
+  gap: 8px;
+  padding-bottom: 5px;
+}
+
+.lookup-page .common-build-fact strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.lookup-page .common-build-moves {
+  grid-column: auto;
+}
+
+.lookup-page .common-build-move-list {
+  justify-content: flex-end;
+}
+
+.lookup-page .type-matchup-row {
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.lookup-page .type-matchup-row .type-badges {
+  flex-wrap: wrap;
+}
+
+.lookup-page .lookup-move-panel {
+  order: 2;
+}
+
+.lookup-page .lookup-section[aria-labelledby="build-details-heading"] {
+  order: 3;
+}
+
+.lookup-page .move-table-wrap {
+  min-width: 0;
+  max-height: 430px;
+  overflow: auto;
+  scrollbar-color: var(--subtle) var(--surface-soft);
+}
+
+@media (max-width: 1050px) {
+  .lookup-page .lookup-header {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .lookup-page .page-nav {
+    flex-basis: 100%;
+    gap: 4px 14px;
+  }
+
+  .lookup-page .calculator {
+    grid-template-columns: minmax(210px, 240px) minmax(0, 1fr);
+  }
+
+  .lookup-page .lookup-panel-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lookup-page .pokemon-card-sprite {
+    width: 112px;
+    height: 112px;
+  }
+
+  .lookup-page .pokemon-card-sprite img {
+    max-width: 104px;
+    max-height: 104px;
+  }
+
+  .lookup-page .base-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .lookup-page main {
+    width: min(100%, calc(100% - 16px));
+  }
+
+  .lookup-page .page-nav a {
+    min-height: 44px;
+    padding: 9px 2px 7px;
+    font-size: var(--text-xs);
+  }
+
+  .lookup-page .language-switch {
+    margin: 4px 0 8px;
+  }
+
+  .lookup-page .calculator {
+    display: block;
+  }
+
+  .lookup-page .search-panel {
+    position: static;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lookup-browse-list {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    scrollbar-width: thin;
+  }
+
+  .lookup-browse-row {
+    flex: 0 0 160px;
+    min-height: 72px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 6px;
+    padding: 8px;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+
+  .lookup-browse-row img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lookup-browse-names strong {
+    font-size: var(--text-sm);
+  }
+
+  .lookup-browse-names small {
+    font-size: var(--text-xs);
+  }
+
+  .lookup-page .lookup-tool > .tool-page {
+    padding: 12px;
+  }
+
+  .lookup-page .pokemon-card {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .lookup-page .pokemon-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .lookup-page .pokemon-card-meta {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .lookup-page .base-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lookup-page .base-stat-total {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .lookup-page .base-stat,
+  .lookup-page .base-stat-total {
+    padding: 8px 4px;
+  }
+
+  .lookup-page .base-stat span,
+  .lookup-page .base-stat-total span {
+    font-size: 0.65rem;
+  }
+
+  .lookup-page .base-stat strong,
+  .lookup-page .base-stat-total strong {
+    font-size: 1.15rem;
+  }
+
+  .lookup-page .lookup-section-heading {
+    align-items: start;
+  }
+
+  .lookup-page .lookup-section-heading p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 360px) {
+  .lookup-page .page-nav {
+    gap: 2px 10px;
+  }
+
+  .lookup-page .pokemon-card-sprite {
+    width: 88px;
+    height: 88px;
+  }
+
+  .lookup-page .pokemon-card-sprite img {
+    max-width: 82px;
+    max-height: 82px;
+  }
+
+  .lookup-page .pokemon-card h2 {
+    font-size: 1.55rem;
+  }
+
+  .lookup-page .base-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

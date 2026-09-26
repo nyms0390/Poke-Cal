@@ -11,10 +11,11 @@
     <title>PokéCal — Pokémon Lookup</title>
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
-  <body>
+  <body class="lookup-page">
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <main id="main-content">
-      <header>
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home">Poké<span>Cal</span></a>
         <nav class="page-nav" aria-label="PokéCal pages">
           <a class="active" href="./index.html" aria-current="page">Lookup</a>
           <a href="./moves.html">Moves</a>
@@ -30,17 +31,12 @@
             </select>
           </label>
         </nav>
-        <p class="eyebrow">PokéCal // Quick lookup</p>
-        <h1>Check a Pokémon at a glance.</h1>
-        <p class="intro">
-          Search in English or Traditional Chinese, compare forms, and review
-          Limitless Champions tournament usage for abilities, items, and moves.
-        </p>
+        <h1 class="visually-hidden">Pokémon lookup</h1>
       </header>
 
       <section class="calculator lookup-tool" aria-label="Pokémon lookup">
-        <div class="search-panel">
-          <label for="pokemon-search">Pokémon / 寶可夢</label>
+        <aside class="search-panel" aria-label="Pokémon search">
+          <label for="pokemon-search" data-i18n="lookup.searchLabel">Pokémon search</label>
           <div class="search-wrap">
             <input
               id="pokemon-search"
@@ -52,10 +48,13 @@
               aria-expanded="false"
               placeholder="Pikachu / 皮卡丘"
             />
-            <div id="search-results" class="search-results" hidden></div>
           </div>
+          <div id="search-results" class="lookup-browse-list" role="listbox" aria-label="Pokémon results"></div>
+        </aside>
 
-          <article class="pokemon-card">
+        <div class="tool-page">
+          <div class="lookup-hero">
+            <article class="pokemon-card">
             <div class="pokemon-card-identity">
               <div id="selected-sprite" class="pokemon-card-sprite"></div>
               <div>
@@ -64,6 +63,8 @@
                   <h2 id="selected-name">Loading…</h2>
                   <div id="selected-types" class="type-badges" aria-label="Pokémon types"></div>
                 </div>
+                <p id="selected-usage" class="selected-usage" hidden></p>
+                <p id="selected-usage-source" class="selected-usage-source" hidden></p>
               </div>
             </div>
             <div class="pokemon-card-meta">
@@ -75,16 +76,15 @@
                 <span>BST</span>
                 <strong id="base-stat-total">—</strong>
               </div>
+              <a id="selected-calculator" class="selected-calculator" href="./battle.html" data-i18n="lookup.openCalculator">Open in calculator →</a>
             </div>
-          </article>
-          <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
-        </div>
-
-        <div class="tool-page">
+            </article>
+            <div id="base-stats" class="base-stats" aria-label="Base stats"></div>
+          </div>
           <section class="lookup-section" aria-labelledby="battle-profile-heading">
             <div class="lookup-section-heading">
               <h2 id="battle-profile-heading">Battle profile</h2>
-              <p>Common build, defensive matchups, and practical Speed benchmarks.</p>
+              <p>Common build and defensive matchups.</p>
             </div>
 
             <div class="lookup-panel-grid lookup-profile-grid">
@@ -108,14 +108,6 @@
                 <div id="type-matchup-list" class="type-matchup-list"></div>
                 <p id="type-matchup-note" class="type-matchup-note" hidden></p>
               </section>
-
-              <section id="speed-tier-card" class="catalog-panel" aria-label="Speed tiers" hidden>
-                <div class="panel-heading">
-                  <span>Speed tiers</span>
-                  <strong>Top 10 usage</strong>
-                </div>
-                <div id="speed-tier-list" class="speed-tier-list"></div>
-              </section>
             </div>
           </section>
 
@@ -126,6 +118,14 @@
             </div>
 
             <div class="lookup-panel-grid lookup-build-grid">
+              <section id="speed-tier-card" class="catalog-panel" aria-label="Speed tiers" hidden>
+                <div class="panel-heading">
+                  <span>Speed tiers</span>
+                  <strong>Top 10 usage</strong>
+                </div>
+                <div id="speed-tier-list" class="speed-tier-list"></div>
+              </section>
+
               <section class="catalog-panel lookup-spread-panel" aria-label="Spread source">
                 <div class="panel-heading">
                   <span>Champions spreads</span>
@@ -158,7 +158,7 @@
               <strong id="move-count">—</strong>
             </div>
 
-            <div class="move-table-wrap">
+            <div class="move-table-wrap" role="region" aria-labelledby="move-pool-heading" tabindex="0">
               <table class="move-table lookup-move-table">
                 <thead>
                   <tr>
