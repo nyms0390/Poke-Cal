@@ -77,6 +77,7 @@ export const EN_MESSAGES = {
   "moveProperty.powder": "Powder",
   "label.champions": "Champions",
   "label.category": "Category",
+  "label.moveProperties": "Properties",
   "label.power": "Power",
   "label.accuracy": "Acc.",
   "label.effect": "Effect",

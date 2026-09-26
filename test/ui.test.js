@@ -10,6 +10,7 @@ import {
   itemSpritePosition,
   moveCategoryIconPath,
   moveNameCell,
+  movePropertyCell,
   pokemonSpriteUrls,
   searchResultButton,
   searchResultFocusIndex,
@@ -22,6 +23,7 @@ import { rankObservedUsage } from "../src/ui/bootstrap.js";
 import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
 import { createDeferredUpdater, createLiveUpdater } from "../src/ui/live-update.js";
 import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "../src/ui/battle-results.js";
+import { getLocale, setLocale, tFor } from "../src/i18n.js";
 
 test("battle status selectors include the Soaked condition", () => {
   const html = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
@@ -249,6 +251,70 @@ test("renders a type badge with a decorative icon and visible label", () => {
     assert.equal(badge.children[1].textContent, "Fire");
   } finally {
     globalThis.document = previousDocument;
+  }
+});
+
+test("move property cells show each supported truthy flag as a localized tag", () => {
+  const previousDocument = globalThis.document;
+  const previousLocale = getLocale();
+  class FakeElement {
+    constructor(tagName) {
+      this.tagName = tagName;
+      this.children = [];
+      this.dataset = {};
+    }
+
+    append(...children) {
+      this.children.push(...children);
+    }
+  }
+  globalThis.document = { createElement: (tagName) => new FakeElement(tagName) };
+
+  try {
+    for (const [locale, labels] of [
+      ["en", ["Contact", "Punch"]],
+      ["zh-TW", ["接觸", "拳類"]],
+    ]) {
+      setLocale(locale, { persist: false });
+      const cell = movePropertyCell({
+        flags: { contact: 1, punch: true, sound: 0, recharge: 1 },
+      });
+      assert.equal(cell.tagName, "td");
+      assert.equal(cell.className, "move-property-cell");
+      assert.equal(cell.dataset.label, tFor(locale, "label.moveProperties"));
+      assert.equal(cell.children[0].className, "move-property-tags");
+      assert.deepEqual(cell.children[0].children.map((tag) => tag.textContent), labels);
+      assert.ok(cell.children[0].children.every((tag) => tag.className === "move-property-tag"));
+    }
+    for (const move of [{}, { flags: { sound: 0, recharge: true } }]) {
+      assert.equal(movePropertyCell(move).textContent, "—");
+    }
+    setLocale("en", { persist: false });
+    const allFlags = {
+      contact: 1, sound: 1, punch: 1, bite: 1, pulse: 1,
+      slicing: 1, bullet: 1, wind: 1, dance: 1, powder: 1,
+    };
+    assert.deepEqual(
+      movePropertyCell({ flags: allFlags }).children[0].children.map((tag) => tag.textContent),
+      ["Contact", "Sound", "Punch", "Bite", "Pulse", "Slicing", "Bullet", "Wind", "Dance", "Powder"],
+    );
+  } finally {
+    setLocale(previousLocale, { persist: false });
+    globalThis.document = previousDocument;
+  }
+});
+
+test("both move tables include a localized properties column and matching row cells", () => {
+  for (const [page, controller, columns] of [
+    ["index.html", "lookup-page.js", 8],
+    ["moves.html", "moves-page.js", 7],
+  ]) {
+    const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+    const source = readFileSync(new URL(`../src/ui/${controller}`, import.meta.url), "utf8");
+    const table = html.match(/<table class="move-table(?: lookup-move-table)?">([\s\S]*?)<\/table>/)?.[1] ?? "";
+    assert.match(table, /<th scope="col"[\s\S]*?data-i18n="label\.moveProperties"/);
+    assert.match(source, /movePropertyCell\(move\)/);
+    assert.match(source, new RegExp(`cell\\.colSpan = ${columns};`));
   }
 });
 

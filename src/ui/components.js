@@ -1,4 +1,5 @@
 import { pokemonSpriteId } from "../data/pokemon.js";
+import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 
@@ -156,6 +157,26 @@ export function moveCategoryMark(category) {
   icon.alt = label;
   icon.title = label;
   return icon;
+}
+
+export function movePropertyCell(move) {
+  const cell = textCell("", "move-property-cell", t("label.moveProperties"));
+  const flags = MOVE_PROPERTY_FLAGS.filter((flag) => move.flags?.[flag]);
+  if (flags.length === 0) {
+    cell.textContent = "—";
+    return cell;
+  }
+
+  const tags = document.createElement("div");
+  tags.className = "move-property-tags";
+  tags.append(...flags.map((flag) => {
+    const tag = document.createElement("span");
+    tag.className = "move-property-tag";
+    tag.textContent = t(`moveProperty.${flag}`);
+    return tag;
+  }));
+  cell.append(tags);
+  return cell;
 }
 
 export function damagePercentColor(minPercent, maxPercent = minPercent) {

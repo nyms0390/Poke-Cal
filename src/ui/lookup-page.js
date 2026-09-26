@@ -38,6 +38,7 @@ import {
   itemLabel,
   moveCategoryMark,
   moveNameCell,
+  movePropertyCell,
   optionElement,
   pokemonSpriteUrls,
   searchResultButton,
@@ -564,7 +565,7 @@ function renderMoveList() {
   if (moves.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 7;
+    cell.colSpan = 8;
     cell.className = "empty-moves";
     cell.textContent = t("lookup.noMoveMatches");
     row.append(cell);
@@ -597,6 +598,7 @@ function renderMoveRow(move) {
     moveNameCell(move, { showType: false }),
     typeCell,
     categoryCell,
+    movePropertyCell(move),
     textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),
     textCell(String(move.pp ?? "—"), "numeric-cell", "PP"),

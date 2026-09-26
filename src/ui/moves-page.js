@@ -4,6 +4,7 @@ import {
   formatMovePower,
   moveEffect,
 } from "../data/catalog.js";
+import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import {
   applyDocumentTranslations,
   getLocale,
@@ -16,22 +17,10 @@ import { loadCatalogs, catalogLoadedStatus } from "./bootstrap.js";
 import {
   moveCategoryMark,
   moveNameCell,
+  movePropertyCell,
   textCell,
   updateSelectOptions,
 } from "./components.js";
-
-const MOVE_PROPERTY_FLAGS = [
-  "contact",
-  "sound",
-  "punch",
-  "bite",
-  "pulse",
-  "slicing",
-  "bullet",
-  "wind",
-  "dance",
-  "powder",
-];
 
 const elements = {
   search: document.querySelector("#move-search"),
@@ -102,7 +91,7 @@ function renderMoveList() {
   if (filtered.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 6;
+    cell.colSpan = 7;
     cell.className = "empty-moves";
     cell.textContent = t("moves.noMatches");
     row.append(cell);
@@ -120,6 +109,7 @@ function renderMoveRow(move) {
   row.append(
     moveNameCell(move),
     categoryCell,
+    movePropertyCell(move),
     textCell(formatMovePower(move.basePower), "numeric-cell", t("label.power")),
     textCell(formatMoveAccuracy(move.accuracy), "numeric-cell", t("label.accuracy")),
     textCell(String(move.pp ?? "—"), "numeric-cell", "PP"),

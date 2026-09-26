@@ -80,6 +80,7 @@ export const ZH_TW_MESSAGES = {
   "moveProperty.powder": "粉末",
   "label.champions": "Champions",
   "label.category": "分類",
+  "label.moveProperties": "招式性質",
   "label.power": "威力",
   "label.accuracy": "命中",
   "label.effect": "效果",
