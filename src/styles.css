@@ -2520,6 +2520,10 @@ button:disabled {
     background: transparent;
   }
 
+  .lookup-move-table thead .move-property-heading {
+    display: none;
+  }
+
   .lookup-move-table thead .move-sort-button {
     margin: 0;
   }
@@ -2564,6 +2568,7 @@ button:disabled {
 
   .move-property-cell {
     min-width: 0;
+    grid-template-columns: minmax(96px, 0.32fr) minmax(0, 1fr);
   }
 
   footer {
