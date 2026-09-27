@@ -5,6 +5,7 @@ import {
   applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
+  breakCoverage,
   canApplySpTargets,
   createBuilderState,
   detachFamilyForms,
@@ -295,4 +296,58 @@ test("keeps only meaningful break-point spread milestones", () => {
     significantBreakPoints("99.5% chance to 4HKO", points),
     [points[1], points[2], points[4]],
   );
+});
+
+function breakAnalysis(move, koText, points = [], maxPct = 40) {
+  return { move, damage: { koText, maxPct }, points };
+}
+
+test("classifies each break-point form from its best supported zero-offense move", () => {
+  const physical = { category: "Physical" };
+  const special = { category: "Special" };
+  const state = { sp: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } };
+  const baselines = [
+    { koText: "guaranteed 3HKO", maxPct: 40 },
+    { koText: "guaranteed 4HKO", maxPct: 30 },
+  ];
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(physical, "guaranteed 3HKO"),
+    breakAnalysis(special, "guaranteed 2HKO"),
+  ], baselines), { status: "covered", baselineHits: 3, targetHits: 2 });
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(physical, "guaranteed 3HKO"),
+    breakAnalysis(special, "guaranteed 4HKO", [{ sp: 8, achieves: "guaranteed 2HKO" }]),
+  ], baselines), { status: "possible", baselineHits: 3, targetHits: 2 });
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(physical, "guaranteed 3HKO"),
+    breakAnalysis(special, "guaranteed 4HKO", [{ sp: 8, achieves: "guaranteed 3HKO" }]),
+  ], baselines), { status: "unreachable", baselineHits: 3, targetHits: 2 });
+  assert.equal(breakCoverage(state, [breakAnalysis(physical, "guaranteed OHKO")], [
+    { koText: "guaranteed OHKO", maxPct: 100 },
+  ]).status, "covered");
+});
+
+test("break coverage respects the 66 SP budget and ignores unsupported damage", () => {
+  const physical = { category: "Physical" };
+  const special = { category: "Special" };
+  const state = { sp: { hp: 32, atk: 0, def: 32, spa: 0, spd: 0, spe: 0 } };
+  const baseline = [
+    { koText: "guaranteed OHKO", maxPct: null },
+    { koText: "guaranteed 3HKO", maxPct: 40 },
+  ];
+  const analyses = [
+    breakAnalysis(physical, "guaranteed OHKO", [{ sp: 1, achieves: "guaranteed OHKO" }], null),
+    breakAnalysis(special, "guaranteed 3HKO", [{ sp: 3, achieves: "guaranteed 2HKO" }]),
+  ];
+  assert.deepEqual(breakCoverage(state, analyses, baseline), {
+    status: "unreachable", baselineHits: 3, targetHits: 2,
+  });
+  assert.equal(breakCoverage(state, [
+    analyses[0],
+    { ...analyses[1], points: [{ sp: 2, achieves: "guaranteed 2HKO" }] },
+  ], baseline).status, "possible");
+  assert.equal(breakCoverage(state, analyses, [
+    { koText: "guaranteed OHKO", maxPct: null },
+    { koText: "guaranteed 2HKO", maxPct: null },
+  ]).status, "unreachable");
 });

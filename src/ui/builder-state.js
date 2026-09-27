@@ -1,3 +1,4 @@
+import { koHitCount } from "../data/bulk-points.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { calculateStat } from "../engine/stats.js";
 import { createSideState } from "./battle-state.js";
@@ -134,6 +135,31 @@ export function availableBulkSpBudget(sp) {
     Number(sp?.atk ?? 0) -
     Number(sp?.spa ?? 0) -
     Number(sp?.spe ?? 0));
+}
+
+export function breakCoverage(userState, analyses, baselineDamages) {
+  const supportedHits = (damages) => damages
+    .filter((damage) => Number.isFinite(damage?.maxPct))
+    .map((damage) => koHitCount(damage.koText))
+    .filter((hits) => hits > 0);
+  const baselineHits = Math.min(...supportedHits(baselineDamages));
+  if (!Number.isFinite(baselineHits)) return { status: "unreachable" };
+
+  const targetHits = Math.max(1, baselineHits - 1);
+  const currentHits = Math.min(...supportedHits(analyses.map(({ damage }) => damage)));
+  if (baselineHits === 1 || currentHits <= targetHits) {
+    return { status: "covered", baselineHits, targetHits };
+  }
+
+  const possible = analyses.some(({ move, damage, points }) => {
+    if (!Number.isFinite(damage?.maxPct)) return false;
+    const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
+    return points.some(({ sp, achieves }) =>
+      koHitCount(achieves) > 0 &&
+      koHitCount(achieves) <= targetHits &&
+      canApplySpTargets(userState.sp, { [attackStat]: sp }));
+  });
+  return { status: possible ? "possible" : "unreachable", baselineHits, targetHits };
 }
 
 export function partitionBulkCoverageGroups(groups) {

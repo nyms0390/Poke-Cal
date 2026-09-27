@@ -48,6 +48,7 @@ import {
   applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
+  breakCoverage,
   canApplySpTargets,
   createBuilderState,
   detachFamilyForms,
@@ -701,7 +702,7 @@ function renderBulkPoints(threats, field) {
       ? [emptyText(t("builder.noThreatMoves"))]
       : ["possible", "covered", "unreachable"]
         .filter((status) => sections[status].length > 0)
-        .map((status) => bulkCoverageSection(sections[status], status))),
+        .map((status) => coverageSection(sections[status], status, "bulk", bulkThreatCards))),
   );
 }
 
@@ -874,10 +875,11 @@ function bulkPanelKey({ scenario }) {
   return `bulk:${normalizeId(scenario.threat.pokemon.id)}:${normalizeId(scenario.move.id)}`;
 }
 
-function bulkCoverageSection(forms, status) {
+function coverageSection(forms, status, analysis, renderCards) {
   const collapsible = status !== "possible";
-  const panelKey = `bulk:coverage:${status}`;
-  const matchups = forms.flatMap(({ matchups: formMatchups }) => formMatchups);
+  const panelKey = `${analysis}:coverage:${status}`;
+  const matchupCount = forms.reduce((count, form) =>
+    count + (analysis === "bulk" ? form.matchups.length : form.analyses.length), 0);
   const section = document.createElement(collapsible ? "details" : "section");
   section.className = `builder-coverage-section ${status}`;
   section.dataset.analysisPanelKey = panelKey;
@@ -891,12 +893,12 @@ function bulkCoverageSection(forms, status) {
     textSpan(t(`builder.coverage.${status}`), "builder-coverage-title"),
     textSpan(t("builder.coverageCount", {
       cards: forms.length,
-      matchups: matchups.length,
+      matchups: matchupCount,
     }), "builder-coverage-count"),
   );
   const cards = document.createElement("div");
   cards.className = "builder-analysis-grid";
-  cards.append(...bulkThreatCards(forms));
+  cards.append(...renderCards(forms));
   if (collapsible) {
     section.addEventListener("toggle", () => setPanelOpen(panelKey, section.open));
   }
@@ -1029,27 +1031,44 @@ function renderBreakPoints(threats, field) {
     return;
   }
 
-  const cards = document.createElement("div");
-  cards.className = "builder-analysis-grid";
-  const groups = families.map((family) => {
-    const forms = family.forms.map((threat) => ({
-      threat,
-      analyses: moves.map((move) => ({
+  const baselineSetup = {
+    ...setup,
+    sp: { ...setup.sp, atk: 0, spa: 0 },
+  };
+  const groups = families.map((family) => ({
+    ...family,
+    forms: family.forms.map((threat) => {
+      const scenarios = moves.map((move) => ({
+        threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]),
+      }));
+      const analyses = moves.map((move, index) => ({
         move,
-        damage: yourDamage(setup, move, { threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]) }),
-        points: breakPoints(setup, move, { threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]) }),
-      })),
-    }));
-    return {
-      ...family,
-      forms,
-    };
-  });
+        damage: yourDamage(setup, move, scenarios[index]),
+        points: breakPoints(setup, move, scenarios[index]),
+      }));
+      const baselineDamages = moves.map((move, index) =>
+        yourDamage(baselineSetup, move, scenarios[index]));
+      return {
+        threat,
+        analyses,
+        coverage: breakCoverage(setup, analyses, baselineDamages),
+      };
+    }),
+  }));
   const detachedForms = detachFamilyForms(groups);
   const orderedForms = state.analysisSort === "breakpoint"
     ? rankBreakPointPokemonGroups(detachedForms)
     : detachedForms;
-  cards.append(...orderedForms.map(({ threat, analyses, relatedForms }) => {
+  const sections = partitionBulkCoverageGroups(orderedForms);
+  elements.breakPoints.replaceChildren(
+    ...["possible", "covered", "unreachable"]
+      .filter((status) => sections[status].length > 0)
+      .map((status) => coverageSection(sections[status], status, "break", breakThreatCards)),
+  );
+}
+
+function breakThreatCards(forms) {
+  return forms.map(({ threat, analyses, relatedForms }) => {
     const threatId = normalizeId(threat.pokemon.id);
     const cardKey = `break:${threatId}`;
     return analysisCard({
@@ -1061,8 +1080,7 @@ function renderBreakPoints(threats, field) {
       relatedForms,
       analysis: "break",
     }, cardKey);
-  }));
-  elements.breakPoints.replaceChildren(cards);
+  });
 }
 
 function breakMovePanel({ move, damage, points }, threat, panelKey) {
