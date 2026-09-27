@@ -14,18 +14,28 @@ export function rankBreakPointPokemonGroups(groups) {
 }
 
 export function yourDamage(userState, move, scenario) {
+  return yourDamageAnalysis(userState, move, scenario).damage;
+}
+
+export function yourDamageAnalysis(userState, move, scenario) {
   const result = damageResult(userState, move, scenario);
   if (!result.supported) {
     return {
-      minPct: null,
-      maxPct: null,
-      koText: result.reason ?? "Unsupported",
+      attackStat: null,
+      damage: {
+        minPct: null,
+        maxPct: null,
+        koText: result.reason ?? "Unsupported",
+      },
     };
   }
   return {
-    minPct: result.minPercent,
-    maxPct: result.maxPercent,
-    koText: result.ko.text,
+    attackStat: result.attackStat ?? (move.category === "Physical" ? "atk" : "spa"),
+    damage: {
+      minPct: result.minPercent,
+      maxPct: result.maxPercent,
+      koText: result.ko.text,
+    },
   };
 }
 

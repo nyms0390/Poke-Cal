@@ -13,6 +13,7 @@ import {
   breakPoints,
   rankBreakPointPokemonGroups,
   yourDamage,
+  yourDamageAnalysis,
 } from "../data/break-points.js";
 import {
   bulkCoverage,
@@ -1040,7 +1041,7 @@ function renderBreakPoints(threats, field) {
       }));
       const analyses = moves.map((move, index) => ({
         move,
-        damage: yourDamage(setup, move, scenarios[index]),
+        ...yourDamageAnalysis(setup, move, scenarios[index]),
         points: breakPoints(setup, move, scenarios[index]),
       }));
       const baselineDamages = moves.map((move, index) =>
@@ -1080,8 +1081,8 @@ function breakThreatCards(forms) {
   });
 }
 
-function breakMovePanel({ move, damage, points }, threat, panelKey) {
-  const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
+function breakMovePanel({ move, damage, points, attackStat }, threat, panelKey) {
+  attackStat ??= move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
   return analysisMovePanel({
     panelKey,
     move,

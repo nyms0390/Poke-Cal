@@ -163,9 +163,9 @@ export function breakCoverage(userState, analyses, baselineDamages) {
     return { status: "covered", baselineHits, targetHits };
   }
 
-  const possible = analyses.some(({ move, damage, points }) => {
+  const possible = analyses.some(({ move, damage, points, attackStat }) => {
     if (!Number.isFinite(damage?.maxPct)) return false;
-    const attackStat = move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
+    attackStat ??= move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
     return points.some(({ sp, achieves }) =>
       koHitCount(achieves) > 0 &&
       koHitCount(achieves) <= targetHits &&

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { yourDamage } from "../src/data/break-points.js";
+import { breakPoints, yourDamage, yourDamageAnalysis } from "../src/data/break-points.js";
 import { createSideState } from "../src/ui/battle-state.js";
 
 import {
@@ -395,4 +395,49 @@ test("Body Press coverage uses its zero-Defense KO tier", () => {
   assert.deepEqual(breakCoverage(state, [
     { move, damage: current, points: [] },
   ], [baseline]), { status: "covered", baselineHits: 3, targetHits: 2 });
+});
+
+test("Tera Blast coverage budgets its actual Attack target and preserves damage summaries", () => {
+  const attacker = {
+    id: "tera-blast-user", types: ["Normal"],
+    baseStats: { hp: 80, atk: 130, def: 80, spa: 50, spd: 80, spe: 80 },
+  };
+  const defender = {
+    id: "tera-blast-threat", types: ["Normal"],
+    baseStats: { hp: 100, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+  };
+  const move = {
+    id: "terablast", type: "Normal", category: "Special", basePower: 80,
+  };
+  const scenario = {
+    threat: { pokemon: defender, nature: "Hardy", spPresets: { bulk: { hp: 0, def: 0, spd: 0 } } },
+  };
+  const analyze = (spa) => {
+    const state = {
+      ...createSideState(attacker, {
+        nature: "Hardy",
+        sp: { hp: 32, atk: 0, def: 2, spa, spd: 0, spe: 0 },
+        ability: null, item: null, moves: [move],
+      }),
+      teraType: "Fighting",
+    };
+    const detail = yourDamageAnalysis(state, move, scenario);
+    const points = breakPoints(state, move, scenario);
+    const baseline = yourDamage(zeroOffenseStateForMove(state, move), move, scenario);
+    return { state, detail, points, coverage: breakCoverage(state, [
+      { move, ...detail, points },
+    ], [baseline]) };
+  };
+  const full = analyze(32);
+  assert.equal(full.detail.attackStat, "atk");
+  assert.deepEqual(full.detail.damage, yourDamage(full.state, move, scenario));
+  assert.equal(full.points[0].sp, 12);
+  assert.match(full.points[0].achieves, /OHKO/);
+  assert.equal(canApplySpTargets(full.state.sp, { atk: full.points[0].sp }), false);
+  assert.equal(full.coverage.status, "unreachable");
+
+  const freed = analyze(0);
+  assert.equal(freed.detail.attackStat, "atk");
+  assert.equal(canApplySpTargets(freed.state.sp, { atk: freed.points[0].sp }), true);
+  assert.equal(freed.coverage.status, "possible");
 });
