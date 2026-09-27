@@ -137,6 +137,18 @@ export function availableBulkSpBudget(sp) {
     Number(sp?.spe ?? 0));
 }
 
+export function zeroOffenseStateForMove(userState, move) {
+  return {
+    ...userState,
+    sp: {
+      ...userState.sp,
+      atk: 0,
+      spa: 0,
+      ...(move.overrideOffensiveStat ? { [move.overrideOffensiveStat]: 0 } : {}),
+    },
+  };
+}
+
 export function breakCoverage(userState, analyses, baselineDamages) {
   const supportedHits = (damages) => damages
     .filter((damage) => Number.isFinite(damage?.maxPct))

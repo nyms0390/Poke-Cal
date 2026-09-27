@@ -2861,6 +2861,11 @@ button:disabled {
   margin-top: 16px;
 }
 
+.builder-breakpoints {
+  display: grid;
+  gap: 12px;
+}
+
 .builder-general-bulk {
   display: grid;
   gap: 10px;

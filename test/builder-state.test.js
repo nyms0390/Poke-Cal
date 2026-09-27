@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import { yourDamage } from "../src/data/break-points.js";
+import { createSideState } from "../src/ui/battle-state.js";
+
 import {
   applyGlobalThreatStatus,
   applyThreatControl,
@@ -15,6 +18,7 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
+  zeroOffenseStateForMove,
 } from "../src/ui/builder-state.js";
 
 const pikachu = {
@@ -350,4 +354,45 @@ test("break coverage respects the 66 SP budget and ignores unsupported damage", 
     { koText: "guaranteed OHKO", maxPct: null },
     { koText: "guaranteed 2HKO", maxPct: null },
   ]).status, "unreachable");
+});
+
+test("zeros Body Press Defense for its baseline without clearing other SP", () => {
+  const state = { sp: { hp: 4, atk: 12, def: 32, spa: 18, spd: 0, spe: 0 } };
+  const bodyPress = { category: "Physical", overrideOffensiveStat: "def" };
+  assert.deepEqual(zeroOffenseStateForMove(state, bodyPress).sp, {
+    hp: 4, atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
+  });
+  assert.equal(state.sp.def, 32);
+  assert.equal(zeroOffenseStateForMove(state, { category: "Physical" }).sp.spa, 0);
+  assert.equal(zeroOffenseStateForMove(state, { category: "Special" }).sp.atk, 0);
+});
+
+test("Body Press coverage uses its zero-Defense KO tier", () => {
+  const attacker = {
+    id: "body-press-user", types: ["Fighting"],
+    baseStats: { hp: 80, atk: 80, def: 120, spa: 80, spd: 80, spe: 80 },
+  };
+  const defender = {
+    id: "body-press-threat", types: ["Normal"],
+    baseStats: { hp: 190, atk: 80, def: 100, spa: 80, spd: 80, spe: 80 },
+  };
+  const move = {
+    id: "bodypress", type: "Fighting", category: "Physical", basePower: 80,
+    target: "normal", overrideOffensiveStat: "def",
+  };
+  const state = createSideState(attacker, {
+    nature: "Hardy",
+    sp: { hp: 0, atk: 0, def: 32, spa: 0, spd: 0, spe: 0 },
+    ability: null, item: null, moves: [move],
+  });
+  const scenario = {
+    threat: { pokemon: defender, nature: "Hardy", spPresets: { bulk: { hp: 0, def: 0, spd: 0 } } },
+  };
+  const current = yourDamage(state, move, scenario);
+  const baseline = yourDamage(zeroOffenseStateForMove(state, move), move, scenario);
+  assert.match(current.koText, /2HKO/);
+  assert.match(baseline.koText, /3HKO/);
+  assert.deepEqual(breakCoverage(state, [
+    { move, damage: current, points: [] },
+  ], [baseline]), { status: "covered", baselineHits: 3, targetHits: 2 });
 });

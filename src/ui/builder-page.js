@@ -57,6 +57,7 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
+  zeroOffenseStateForMove,
 } from "./builder-state.js";
 import {
   attachCombobox,
@@ -1031,10 +1032,6 @@ function renderBreakPoints(threats, field) {
     return;
   }
 
-  const baselineSetup = {
-    ...setup,
-    sp: { ...setup.sp, atk: 0, spa: 0 },
-  };
   const groups = families.map((family) => ({
     ...family,
     forms: family.forms.map((threat) => {
@@ -1047,7 +1044,7 @@ function renderBreakPoints(threats, field) {
         points: breakPoints(setup, move, scenarios[index]),
       }));
       const baselineDamages = moves.map((move, index) =>
-        yourDamage(baselineSetup, move, scenarios[index]));
+        yourDamage(zeroOffenseStateForMove(setup, move), move, scenarios[index]));
       return {
         threat,
         analyses,
