@@ -4056,6 +4056,38 @@ test("classifies unsupported moves", () => {
   assert.equal(unsupportedMoveReason({ id: "nightshade", category: "Special", basePower: 0, damage: "level" }), "");
 });
 
+test("calculates powered moves with textual damage messages", () => {
+  const moves = [
+    { id: "steelbeam", name: "Steel Beam", type: "Steel", category: "Special", basePower: 140, damage: "#mindblown", mindBlownRecoil: true },
+    { id: "mindblown", name: "Mind Blown", type: "Fire", category: "Special", basePower: 150, damage: "  ({POKEMON} cut its own HP to power up its move)", mindBlownRecoil: true, target: "allAdjacent" },
+    { id: "highjumpkick", name: "High Jump Kick", type: "Fighting", category: "Physical", basePower: 130, damage: "#crash", hasCrashDamage: true },
+    { id: "saltcure", name: "Salt Cure", type: "Rock", category: "Physical", basePower: 40, damage: "  {POKEMON} is hurt by Salt Cure!" },
+  ];
+
+  for (const move of moves) {
+    const result = calculateDamage({
+      attacker: pikachu,
+      defender: squirtle,
+      move,
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    assert.equal(result.supported, true, move.name);
+    assert.ok(result.minDamage > 0, move.name);
+    const withoutMessage = calculateDamage({
+      attacker: pikachu,
+      defender: squirtle,
+      move: { ...move, damage: undefined },
+      attackerState: neutralState,
+      defenderState: neutralState,
+    });
+    assert.deepEqual(result.rolls, withoutMessage.rolls, move.name);
+  }
+
+  assert.match(unsupportedMoveReason({ id: "unknown", category: "Special", basePower: 0, damage: "#custom" }), /Fixed-damage/);
+  assert.match(unsupportedMoveReason({ id: "unknown", category: "Special", basePower: 80, damageCallback: true }), /Fixed-damage/);
+});
+
 test("supports P2-04 target-HP, itemless, and stat-boost-scaled powers", () => {
   const attacker = {
     id: "p204attacker",

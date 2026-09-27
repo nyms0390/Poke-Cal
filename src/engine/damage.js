@@ -87,7 +87,8 @@ export function unsupportedMoveReason(move) {
   if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(normalizeId(move.id ?? move.name))) return "";
   if (fixedDamageKind(move)) return "";
   if (UNSUPPORTED_MOVE_IDS.has(moveId)) return UNSUPPORTED_MOVE_REASONS[moveId] ?? "Custom damage behavior is not supported.";
-  if ((move.damage && typeof move.damage !== "number") || move.damageCallback || move.ohko) {
+  // Showdown move text can use `damage` for a battle message on powered moves.
+  if ((move.damage && typeof move.damage !== "number" && !move.basePower) || move.damageCallback || move.ohko) {
     return "Fixed-damage moves are not supported.";
   }
   if (!move.basePower && !moveEffect(moveId).basePower) return "Variable or zero base power is not supported.";
