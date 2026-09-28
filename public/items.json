@@ -37,7 +37,11 @@
       "暴雪王進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.06958942240779402
     }
   },
   {
@@ -75,12 +79,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle.",
+    "aliases": [
+      "阿勃梭魯進化石Z"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.17144256674014205
+      "usageCount": 30,
+      "usagePercent": 0.2609603340292276
     }
   },
   {
@@ -188,8 +195,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 21,
-      "usagePercent": 0.2571638501102131
+      "usageCount": 25,
+      "usagePercent": 0.21746694502435632
     }
   },
   {
@@ -213,8 +220,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -262,8 +269,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -288,7 +295,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 7,
-      "usagePercent": 0.08572128337007102
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -330,8 +337,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -352,7 +359,11 @@
       "電龍進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -452,8 +463,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -490,7 +501,11 @@
       "霹霹果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -528,12 +543,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "龜足巨鎧進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -550,12 +568,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Baxcalibur, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "戟脊龍進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 43,
-      "usagePercent": 0.526573597844722
+      "usageCount": 44,
+      "usagePercent": 0.3827418232428671
     }
   },
   {
@@ -595,8 +616,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -751,8 +772,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -797,7 +818,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -821,8 +842,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 64,
-      "usagePercent": 0.783737447954935
+      "usageCount": 60,
+      "usagePercent": 0.5219206680584552
     }
   },
   {
@@ -867,8 +888,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 41,
-      "usagePercent": 0.5020818025961303
+      "usageCount": 43,
+      "usagePercent": 0.3740431454418929
     }
   },
   {
@@ -892,8 +913,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.18368846436443792
+      "usageCount": 25,
+      "usagePercent": 0.21746694502435632
     }
   },
   {
@@ -1013,8 +1034,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usageCount": 10,
+      "usagePercent": 0.08698677800974253
     }
   },
   {
@@ -1134,8 +1155,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 37,
-      "usagePercent": 0.45309821209894685
+      "usageCount": 48,
+      "usagePercent": 0.41753653444676403
     }
   },
   {
@@ -1173,12 +1194,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Chandelure, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "水晶燈火靈進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -1202,8 +1226,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 65,
-      "usagePercent": 0.795983345579231
+      "usageCount": 99,
+      "usagePercent": 0.8611691022964509
     }
   },
   {
@@ -1227,8 +1251,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 17,
+      "usagePercent": 0.14787752261656228
     }
   },
   {
@@ -1252,8 +1276,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 118,
-      "usagePercent": 1.4450159196669117
+      "usageCount": 185,
+      "usagePercent": 1.6092553931802367
     }
   },
   {
@@ -1275,8 +1299,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -1328,8 +1352,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Chesnaught, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "布里卡隆進化石"
+    ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -1404,12 +1435,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "風鈴鈴進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -1468,8 +1502,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 262,
-      "usagePercent": 3.2084251775655153
+      "usageCount": 439,
+      "usagePercent": 3.818719554627697
     }
   },
   {
@@ -1511,8 +1545,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 211,
-      "usagePercent": 2.583884398726427
+      "usageCount": 193,
+      "usagePercent": 1.6788448155880307
     }
   },
   {
@@ -1567,8 +1601,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Clefable, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "皮可西進化石"
+    ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -1608,8 +1649,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.1469507714915503
+      "usageCount": 23,
+      "usagePercent": 0.2000695894224078
     }
   },
   {
@@ -1631,8 +1672,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 167,
-      "usagePercent": 2.045064903257409
+      "usageCount": 184,
+      "usagePercent": 1.6005567153792624
     }
   },
   {
@@ -1730,8 +1771,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Crabominable, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "好勝毛蟹進化石"
+    ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -1809,8 +1857,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 9,
+      "usagePercent": 0.07828810020876827
     }
   },
   {
@@ -1883,6 +1931,9 @@
     "gen": 9,
     "isNonstandard": "Past",
     "shortDesc": "If held by a Darkrai, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "達克萊伊進化石"
+    ],
     "champions": {
       "legal": false
     }
@@ -1984,12 +2035,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Delphox, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "妖火紅狐進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 38,
-      "usagePercent": 0.46534410972324275
+      "usageCount": 82,
+      "usagePercent": 0.7132915796798887
     }
   },
   {
@@ -2118,8 +2172,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Dragalge, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "毒藻龍進化石"
+    ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -2146,8 +2207,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -2224,12 +2285,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "快龍進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 50,
-      "usagePercent": 0.612294881214793
+      "usageCount": 49,
+      "usagePercent": 0.42623521224773836
     }
   },
   {
@@ -2263,12 +2327,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Drampa, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "老翁龍進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -2414,12 +2481,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "麻麻鰻魚王進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -2459,8 +2529,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 64,
-      "usagePercent": 0.783737447954935
+      "usageCount": 109,
+      "usagePercent": 0.9481558803061934
     }
   },
   {
@@ -2562,8 +2632,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -2597,8 +2667,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "炎武王進化石"
+    ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -2658,12 +2735,11 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by an Excadrill, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "龍頭地鼠進化石"
+    ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "legal": true
     }
   },
   {
@@ -2683,8 +2759,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 35,
-      "usagePercent": 0.42860641685035517
+      "usageCount": 33,
+      "usagePercent": 0.2870563674321503
     }
   },
   {
@@ -2722,8 +2798,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 176,
-      "usagePercent": 2.1552779818760714
+      "usageCount": 220,
+      "usagePercent": 1.9137091162143354
     }
   },
   {
@@ -2776,6 +2852,9 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "列陣兵進化石"
+    ],
     "champions": {
       "legal": true
     }
@@ -2810,12 +2889,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Feraligatr, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "大力鱷進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -3064,12 +3146,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "花葉蒂進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 158,
-      "usagePercent": 1.934851824638746
+      "usageCount": 151,
+      "usagePercent": 1.313500347947112
     }
   },
   {
@@ -3165,7 +3250,11 @@
       "氣勢頭帶"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -3190,8 +3279,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 867,
-      "usagePercent": 10.61719324026451
+      "usageCount": 1208,
+      "usagePercent": 10.508002783576895
     }
   },
   {
@@ -3296,12 +3385,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Froslass, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "雪妖女進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 76,
-      "usagePercent": 0.9306882194464855
+      "usageCount": 121,
+      "usagePercent": 1.0525400139178844
     }
   },
   {
@@ -3377,7 +3469,11 @@
       "艾路雷朵進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -3421,8 +3517,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.09796718099436688
+      "usageCount": 9,
+      "usagePercent": 0.07828810020876827
     }
   },
   {
@@ -3439,12 +3535,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z.",
+    "aliases": [
+      "烈咬陸鯊進化石Z"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 113,
-      "usagePercent": 1.3837864315454322
+      "usageCount": 140,
+      "usagePercent": 1.2178148921363952
     }
   },
   {
@@ -3468,8 +3567,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 105,
-      "usagePercent": 1.2858192505510653
+      "usageCount": 143,
+      "usagePercent": 1.2439109255393181
     }
   },
   {
@@ -3493,8 +3592,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 83,
-      "usagePercent": 1.0164095028165565
+      "usageCount": 128,
+      "usagePercent": 1.1134307585247043
     }
   },
   {
@@ -3571,7 +3670,11 @@
       "冰鬼護進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -3588,12 +3691,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Glimmora, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "晶光花進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 36,
-      "usagePercent": 0.440852314474651
+      "usageCount": 41,
+      "usagePercent": 0.3566457898399443
     }
   },
   {
@@ -3649,12 +3755,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "具甲武者進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 186,
-      "usagePercent": 2.2777369581190303
+      "usageCount": 240,
+      "usagePercent": 2.0876826722338206
     }
   },
   {
@@ -3671,12 +3780,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Golurk, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "泥偶巨人進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -3756,8 +3868,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 398,
-      "usagePercent": 4.8738672544697526
+      "usageCount": 385,
+      "usagePercent": 3.348990953375087
     }
   },
   {
@@ -3790,12 +3902,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Greninja, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "甲賀忍蛙進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -3956,7 +4071,11 @@
       "暴鯉龍進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -3978,8 +4097,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -4003,8 +4122,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 1,
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -4021,12 +4140,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Hawlucha, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "摔角鷹人進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usageCount": 14,
+      "usagePercent": 0.12178148921363954
     }
   },
   {
@@ -4082,7 +4204,11 @@
       "熾熱岩石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -4099,6 +4225,9 @@
     "gen": 9,
     "isNonstandard": "Past",
     "shortDesc": "If held by a Heatran, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "席多藍恩進化石"
+    ],
     "champions": {
       "legal": false
     }
@@ -4176,8 +4305,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -4222,8 +4351,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 8,
+      "usagePercent": 0.06958942240779402
     }
   },
   {
@@ -4385,7 +4514,11 @@
       "冰冷岩石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -4444,8 +4577,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -4525,8 +4658,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 14,
+      "usagePercent": 0.12178148921363954
     }
   },
   {
@@ -4548,8 +4681,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.11021307861866275
+      "usageCount": 19,
+      "usagePercent": 0.16527487821851078
     }
   },
   {
@@ -4571,8 +4704,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.08572128337007102
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -4636,8 +4769,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 1,
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -4804,8 +4937,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -4828,8 +4961,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 404,
-      "usagePercent": 4.947342640215528
+      "usageCount": 629,
+      "usagePercent": 5.471468336812804
     }
   },
   {
@@ -4852,8 +4985,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 8,
+      "usagePercent": 0.06958942240779402
     }
   },
   {
@@ -4910,8 +5043,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 818,
-      "usagePercent": 10.017144256674014
+      "usageCount": 1083,
+      "usagePercent": 9.420668058455114
     }
   },
   {
@@ -4955,7 +5088,11 @@
       "電氣球"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -4978,8 +5115,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 1.0898848885623318
+      "usageCount": 178,
+      "usagePercent": 1.5483646485734168
     }
   },
   {
@@ -5022,8 +5159,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 31,
+      "usagePercent": 0.2696590118302018
     }
   },
   {
@@ -5082,7 +5219,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -5099,12 +5236,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle.",
+    "aliases": [
+      "路卡利歐進化石Z"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 70,
-      "usagePercent": 0.8572128337007103
+      "usageCount": 67,
+      "usagePercent": 0.5828114126652749
     }
   },
   {
@@ -5151,8 +5291,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -5324,6 +5464,9 @@
     "gen": 9,
     "isNonstandard": "Future",
     "shortDesc": "If held by a Magearna, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "瑪機雅娜進化石"
+    ],
     "champions": {
       "legal": false
     }
@@ -5367,8 +5510,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 6,
+      "usagePercent": 0.052192066805845504
     }
   },
   {
@@ -5444,12 +5587,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Malamar, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "烏賊王進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -5491,8 +5637,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -5588,8 +5734,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.23267205486162137
+      "usageCount": 32,
+      "usagePercent": 0.2783576896311761
     }
   },
   {
@@ -5628,7 +5774,11 @@
       "恰雷姆進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -5645,12 +5795,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Meganium, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "大竺葵進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.09796718099436688
+      "usageCount": 21,
+      "usagePercent": 0.18267223382045927
     }
   },
   {
@@ -5673,8 +5826,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.11021307861866275
+      "usageCount": 17,
+      "usagePercent": 0.14787752261656228
     }
   },
   {
@@ -5693,12 +5846,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "超能妙喵進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 12,
+      "usagePercent": 0.10438413361169101
     }
   },
   {
@@ -5722,8 +5878,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 69,
-      "usagePercent": 0.8449669360764144
+      "usageCount": 102,
+      "usagePercent": 0.8872651356993737
     }
   },
   {
@@ -5761,7 +5917,11 @@
       "金屬膜"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 8,
+      "usagePercent": 0.06958942240779402
     }
   },
   {
@@ -5995,8 +6155,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 534,
-      "usagePercent": 6.53930933137399
+      "usageCount": 681,
+      "usagePercent": 5.923799582463466
     }
   },
   {
@@ -6094,8 +6254,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -6140,8 +6300,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 61,
-      "usagePercent": 0.7469997550820475
+      "usageCount": 92,
+      "usagePercent": 0.8002783576896312
     }
   },
   {
@@ -6218,8 +6378,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.09796718099436688
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -6261,8 +6421,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -6299,8 +6459,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 41,
-      "usagePercent": 0.5020818025961303
+      "usageCount": 69,
+      "usagePercent": 0.6002087682672234
     }
   },
   {
@@ -6433,8 +6593,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 45,
-      "usagePercent": 0.5510653930933138
+      "usageCount": 77,
+      "usagePercent": 0.6697981906750173
     }
   },
   {
@@ -6453,7 +6613,11 @@
       "福祿果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -6536,7 +6700,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -7141,8 +7305,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 189,
-      "usagePercent": 2.314474650991918
+      "usageCount": 331,
+      "usagePercent": 2.8792623521224776
     }
   },
   {
@@ -7196,12 +7360,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Pyroar, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "火炎獅進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.13470487386725447
+      "usageCount": 19,
+      "usagePercent": 0.16527487821851078
     }
   },
   {
@@ -7263,8 +7430,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 16,
+      "usagePercent": 0.13917884481558804
     }
   },
   {
@@ -7323,12 +7490,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle.",
+    "aliases": [
+      "雷丘進化石Ｘ"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 21,
+      "usagePercent": 0.18267223382045927
     }
   },
   {
@@ -7345,12 +7515,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle.",
+    "aliases": [
+      "雷丘進化石Ｙ"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 251,
-      "usagePercent": 3.0737203036982614
+      "usageCount": 412,
+      "usagePercent": 3.5838552540013917
     }
   },
   {
@@ -7488,7 +7661,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -7564,8 +7737,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.09796718099436688
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -7681,8 +7854,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 142,
-      "usagePercent": 1.7389174626500123
+      "usageCount": 232,
+      "usagePercent": 2.0180932498260264
     }
   },
   {
@@ -7760,8 +7933,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.13470487386725447
+      "usageCount": 24,
+      "usagePercent": 0.20876826722338201
     }
   },
   {
@@ -7953,8 +8126,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 464,
-      "usagePercent": 5.682096497673279
+      "usageCount": 430,
+      "usagePercent": 3.7404314544189283
     }
   },
   {
@@ -7978,8 +8151,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 12,
+      "usagePercent": 0.10438413361169101
     }
   },
   {
@@ -8003,8 +8176,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.08572128337007102
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -8021,12 +8194,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Scolipede, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "蜈蚣王進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -8046,8 +8222,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 22,
+      "usagePercent": 0.19137091162143355
     }
   },
   {
@@ -8064,12 +8240,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Scovillain, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "狠辣椒進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.18368846436443792
+      "usageCount": 16,
+      "usagePercent": 0.13917884481558804
     }
   },
   {
@@ -8086,12 +8265,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Scrafty, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "頭巾混混進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 12,
+      "usagePercent": 0.10438413361169101
     }
   },
   {
@@ -8137,8 +8319,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.11021307861866275
+      "usageCount": 18,
+      "usagePercent": 0.15657620041753653
     }
   },
   {
@@ -8159,7 +8341,11 @@
       "巨牙鯊進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -8200,8 +8386,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.03673769287288758
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -8262,8 +8448,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.08572128337007102
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -8287,8 +8473,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -8309,7 +8495,11 @@
       "銀粉"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -8334,8 +8524,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 768,
-      "usagePercent": 9.40484937545922
+      "usageCount": 1081,
+      "usagePercent": 9.403270702853165
     }
   },
   {
@@ -8352,12 +8542,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Skarmory, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "盔甲鳥進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.07347538574577515
+      "usageCount": 10,
+      "usagePercent": 0.08698677800974253
     }
   },
   {
@@ -8415,8 +8608,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     },
     "aliases": [
       "呆殼獸進化石"
@@ -8440,7 +8633,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -8503,8 +8696,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -8574,8 +8767,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 13,
+      "usagePercent": 0.11308281141266527
     }
   },
   {
@@ -8683,12 +8876,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Staraptor, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "姆克鷹進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 132,
-      "usagePercent": 1.6164584864070537
+      "usageCount": 216,
+      "usagePercent": 1.8789144050104383
     }
   },
   {
@@ -8725,12 +8921,15 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Starmie, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "寶石海星進化石"
+    ],
     "champions": {
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.02449179524859172
+      "usageCount": 5,
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -8811,7 +9010,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usagePercent": 0.008698677800974252
     }
   },
   {
@@ -8950,8 +9149,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 44,
-      "usagePercent": 0.5388194954690179
+      "usageCount": 83,
+      "usagePercent": 0.7219902574808629
     }
   },
   {
@@ -9087,6 +9286,9 @@
     "gen": 9,
     "isNonstandard": "Future",
     "shortDesc": "If held by a Tatsugiri, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "米立龍進化石"
+    ],
     "champions": {
       "legal": false
     }
@@ -9108,8 +9310,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 10,
-      "usagePercent": 0.12245897624295861
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -11056,8 +11258,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.04898359049718344
+      "usageCount": 14,
+      "usagePercent": 0.12178148921363954
     }
   },
   {
@@ -11081,8 +11283,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 85,
-      "usagePercent": 1.0409012980651482
+      "usageCount": 159,
+      "usagePercent": 1.383089770354906
     }
   },
   {
@@ -11201,7 +11403,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 5,
-      "usagePercent": 0.061229488121479304
+      "usagePercent": 0.043493389004871263
     }
   },
   {
@@ -11218,6 +11420,9 @@
     "gen": 9,
     "isNonstandard": null,
     "shortDesc": "If held by a Victreebel, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "大食花進化石"
+    ],
     "champions": {
       "legal": true
     }
@@ -11261,8 +11466,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 4,
+      "usagePercent": 0.03479471120389701
     }
   },
   {
@@ -11484,8 +11689,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 154,
-      "usagePercent": 1.8858682341415627
+      "usageCount": 303,
+      "usagePercent": 2.6356993736951986
     }
   },
   {
@@ -11506,8 +11711,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 22,
-      "usagePercent": 0.26940974773450893
+      "usageCount": 49,
+      "usagePercent": 0.42623521224773836
     }
   },
   {
@@ -11554,8 +11759,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.01224589762429586
+      "usageCount": 7,
+      "usagePercent": 0.06089074460681977
     }
   },
   {
@@ -11574,7 +11779,11 @@
       "番荔果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.026096033402922752
     }
   },
   {
@@ -11609,6 +11818,9 @@
     "gen": 9,
     "isNonstandard": "Future",
     "shortDesc": "If held by a Zeraora, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "捷拉奧拉進化石"
+    ],
     "champions": {
       "legal": false
     }
@@ -11628,7 +11840,11 @@
       "對焦鏡"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.017397355601948505
     }
   },
   {
@@ -11645,6 +11861,9 @@
     "gen": 9,
     "isNonstandard": "Future",
     "shortDesc": "If held by a Zygarde in Complete Forme, this item allows it to Mega Evolve in battle.",
+    "aliases": [
+      "基格爾德進化石"
+    ],
     "champions": {
       "legal": false
     }
