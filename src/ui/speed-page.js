@@ -438,7 +438,7 @@ function renderSpeedRow(row, breakpoint) {
     details.textContent = entry.source === "NCP"
       ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")}${activeLabel}`
       : entry.source === "Limitless"
-        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t("speed.assumedSp")}${usageLabel}${activeLabel}`
+        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t(entry.spSource === "Smogon" ? "speed.smogonSpEstimate" : "speed.assumedSp")}${usageLabel}${activeLabel}`
         : entry.presetLabel;
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";

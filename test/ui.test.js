@@ -106,7 +106,8 @@ test("Speed tiers expose user and opponent active-ability controls and source me
   assert.match(source, /formatNumber/);
   assert.match(source, /entry\.presetKey/);
   assert.match(speedLineSource, /speedProfiles/);
-  assert.match(enLocale, /Ring marks each Pokémon's most-used joint Limitless profile/);
+  assert.match(enLocale, /Ring marks the most-used Limitless nature, ability, and item; Speed SP is estimated separately/);
+  assert.match(enLocale, /Speed SP estimated from a same-nature Smogon ladder spread/);
   assert.match(source, /speed\.likelyProfile/);
 });
 

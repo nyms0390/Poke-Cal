@@ -2,6 +2,7 @@ import { NATURES } from "../engine/natures.js";
 import { calculateSpeed } from "../engine/speed.js";
 import { normalizeId } from "./catalog.js";
 import { megaFamily, pokemonSpriteId } from "./pokemon.js";
+import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
 
 const PRESETS = [
   { key: "max", label: "Max", sourceLabel: "max (+spe 32)", nature: "Timid", sp: 32 },
@@ -117,7 +118,7 @@ export function speedTiers(user, opponents, options = {}) {
     }
     const likelyProfile = profiles[0];
     for (const profile of selectedProfiles(profiles)) {
-      const row = profileRow(profile, profile === likelyProfile);
+      const row = profileRow(opponent.pokemon, profile, profile === likelyProfile);
       opponentEntries.push(...opponentVariants(opponent.pokemon, row, opponentMods, trickRoom, options));
     }
     entries.push(...deduplicateOpponentSpeeds(opponentEntries));
@@ -244,6 +245,7 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
     {
       nature: row.nature,
       sp: row.sp,
+      spSource: row.spSource,
       item: row.item,
       itemSpeedMultiplier: row.itemSpeedMultiplier,
       ability: row.ability,
@@ -323,13 +325,19 @@ function selectedProfiles(profiles) {
   return selected;
 }
 
-function profileRow(profile, likely) {
-  const sp = natureSpeedClass(profile.nature) === "negative" ? 0 : 32;
+function profileRow(pokemon, profile, likely) {
+  const matchingSpread = topUsageEntry(
+    (pokemon?.champions?.usage?.spreads ?? [])
+      .filter(({ name }) => parseUsageSpread(name)?.nature === profile.nature),
+  );
+  const spreadSp = parseUsageSpread(matchingSpread?.name)?.sp.spe;
+  const sp = spreadSp ?? (natureSpeedClass(profile.nature) === "negative" ? 0 : 32);
   return {
     label: `${profile.nature} · ${entityName(profile.item)} · ${entityName(profile.ability)}`,
     key: "limitless",
     nature: profile.nature,
     sp,
+    spSource: spreadSp === undefined ? "assumed" : "Smogon",
     item: entity(profile.item),
     ability: entity(profile.ability),
     source: "Limitless",

@@ -444,6 +444,34 @@ test("keeps top profiles per Speed plus the active best profile for each Speed a
   assert.equal(activeSwiftSwim.abilityActive, true);
 });
 
+test("estimates a Limitless profile's Speed SP from the top same-nature Smogon spread", () => {
+  const opponent = {
+    pokemon: {
+      ...pokemon("kingambit", "Kingambit", 50),
+      champions: { usage: {
+        speedProfiles: [{
+          nature: "Adamant",
+          ability: { id: "defiant", name: "Defiant" },
+          item: { id: "lifeorb", name: "Life Orb" },
+          usageCount: 114,
+        }],
+        spreads: [
+          { name: "Adamant:0/32/0/0/2/32", usagePercent: 3.64 },
+          { name: "Adamant:32/32/0/0/1/1", usagePercent: 11.94 },
+          { name: "Brave:32/32/0/0/2/0", usagePercent: 20 },
+        ],
+      } },
+    },
+  };
+  const entry = speedTiers(user, [opponent], { mode: "battle", presetFilter: [] })
+    .flatMap(({ entries }) => entries)
+    .find(({ source }) => source === "Limitless");
+
+  assert.equal(entry.sp, 1);
+  assert.equal(entry.spSource, "Smogon");
+  assert.equal(entry.likely, true);
+});
+
 test("canonicalizes valid profile natures and drops invalid profile rows", () => {
   const opponent = {
     pokemon: {
