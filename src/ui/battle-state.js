@@ -86,6 +86,7 @@ export function createSideState(pokemon, usageDefaults) {
     targetMovedOverrides: [null, null, null, null],
     critMoves: [false, false, false, false],
     conditionOverrides: [null, null, null, null],
+    moveOptionsBySlot: [{}, {}, {}, {}],
     singleTargetMoves: [false, false, false, false],
     allyPlusMinus: false,
     rivalry: "off",
@@ -105,7 +106,7 @@ export function createSideState(pokemon, usageDefaults) {
 // a <select>'s chosen option against the ability/item lookup requires the DOM element itself
 // (to read its selected option's display text as a fallback name), so that resolution stays in
 // battle-page.js and only the resolved value crosses into this pure function.
-export function applyControl(state, { kind, stat, index, value, maxHp, effectiveTypes }) {
+export function applyControl(state, { kind, stat, index, key, value, maxHp, effectiveTypes }) {
   switch (kind) {
     case "spread": {
       const spread = parseUsageSpread(value);
@@ -163,6 +164,21 @@ export function applyControl(state, { kind, stat, index, value, maxHp, effective
           .map((critical, i) => (i === index ? false : critical)),
         conditionOverrides: (state.conditionOverrides ?? [null, null, null, null])
           .map((condition, i) => (i === index ? null : condition)),
+        selectedHitCounts: (state.selectedHitCounts ?? [null, null, null, null])
+          .map((hitCount, i) => (i === index ? null : hitCount)),
+        moveOptionsBySlot: (state.moveOptionsBySlot ?? [{}, {}, {}, {}])
+          .map((options, i) => (i === index ? {} : options)),
+      };
+    case "moveOption":
+      return {
+        ...state,
+        moveOptionsBySlot: (state.moveOptionsBySlot ?? [{}, {}, {}, {}]).map((options, i) => {
+          if (i !== index) return options;
+          const next = { ...options };
+          if (value === "auto") delete next[key];
+          else next[key] = String(value);
+          return next;
+        }),
       };
     case "hitCount":
       return {

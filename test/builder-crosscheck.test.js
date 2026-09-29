@@ -133,6 +133,29 @@ test("builder damage wrappers match direct engine assembly for representative ma
   }
 });
 
+test("builder offensive damage forwards a selected move condition to the engine", () => {
+  const userState = makeUserState();
+  const threat = makeThreat();
+  const move = damagingMove("lastrespects", "Last Respects", "Ghost", "Physical", 50);
+  const moveOptions = { faintedAllyCount: 3 };
+  const scenario = { threat, moveOptions };
+
+  assert.deepEqual(yourDamage(userState, move, scenario), directSummary({
+    attacker: userState.pokemon,
+    defender: threat.pokemon,
+    move,
+    attackerState: { ...userState, currentHpFraction: 1 },
+    defenderState: directThreatBulkState(threat),
+    field: createField(),
+    moveOptions,
+  }));
+  assert.equal(
+    yourDamage(userState, move, scenario).maxPct >
+      yourDamage(userState, move, { threat }).maxPct,
+    true,
+  );
+});
+
 function makeUserState(overrides = {}) {
   const state = createSideState(userPokemon, {
     nature: "Hardy",

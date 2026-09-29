@@ -5,6 +5,7 @@ import {
   breakPoints,
   rankBreakPointPokemonGroups,
   yourDamage,
+  yourDamageAnalysis,
 } from "../src/data/break-points.js";
 import { compareKoTiers } from "../src/data/bulk-points.js";
 import { createField } from "../src/engine/field.js";
@@ -104,6 +105,26 @@ test("calculates current damage and offensive breakpoints as critical hits when 
       maxPct: 60,
     },
   );
+});
+
+test("uses per-move options for current damage and offensive SP searches", () => {
+  const hex = {
+    id: "hex", name: "Hex", type: "Ghost", category: "Special", basePower: 65,
+    target: "normal",
+  };
+  const state = userState();
+  const scenario = { threat: { ...threat(), pokemon: { ...defender, types: ["Psychic"] } } };
+  const boosted = { ...scenario, moveOptions: { conditionOverride: true } };
+
+  assert.equal(
+    yourDamage(state, hex, boosted).maxPct > yourDamage(state, hex, scenario).maxPct,
+    true,
+  );
+  assert.equal(
+    yourDamageAnalysis(state, hex, boosted).damage.maxPct,
+    yourDamage(state, hex, boosted).maxPct,
+  );
+  assert.notDeepEqual(breakPoints(state, hex, boosted), breakPoints(state, hex, scenario));
 });
 
 test("passes a Soaked threat into the damage engine as a Water defender", () => {

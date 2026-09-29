@@ -83,7 +83,7 @@ function point(sp, damage, requiresPlusNature) {
   };
 }
 
-function damageResult(userState, move, { threat, field = createField(), critical = false }) {
+function damageResult(userState, move, { threat, field = createField(), critical = false, moveOptions = {} }) {
   return calculateDamage({
     attacker: userState.pokemon,
     defender: threat.pokemon,
@@ -92,6 +92,7 @@ function damageResult(userState, move, { threat, field = createField(), critical
     defenderState: threatState(threat),
     field,
     critical,
+    moveOptions,
   });
 }
 

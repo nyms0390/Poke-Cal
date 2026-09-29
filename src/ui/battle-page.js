@@ -8,13 +8,13 @@ import { STAT_KEYS } from "../engine/constants.js";
 import {
   calculateDamage,
   formatDamageResult,
-  hitCountRange,
   resolveMoveType,
 } from "../engine/damage.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
-import { impliedField, impliedStageDefaults, resolveHitCountRange } from "../engine/modifiers.js";
-import { isOrderConditionalMove, moveCondition, moveEffect } from "../engine/move-effects.js";
+import { impliedField, impliedStageDefaults } from "../engine/modifiers.js";
+import { moveEffect } from "../engine/move-effects.js";
+import { moveConditionDescriptors, moveConditionValue, moveOptionsForSlot } from "./move-conditions.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
 import {
   activeSetFromState,
@@ -705,7 +705,7 @@ function handleDamageControl(event) {
         normalizeTypeChangeForSide(control.side);
         syncAssumptionInputs(control.side);
       }
-      if (["move", "hitCount", "targetMoved", "crit", "moveCondition", "ability", "item"].includes(control.kind)) {
+      if (["move", "crit", "ability", "item"].includes(control.kind)) {
         renderDamageMovePickers(control.side);
       }
       if (control.kind === "sp" || control.kind === "stage") {
@@ -894,21 +894,13 @@ function controlFromTarget(target) {
     const { side, index } = target.dataset;
     return { kind: "singleTarget", side, index: Number(index), value: target.checked };
   }
-  if (target.dataset.kind === "hit-count") {
-    const { side, index } = target.dataset;
-    return { kind: "hitCount", side, index: Number(index), value: target.value };
-  }
-  if (target.dataset.kind === "target-moved") {
-    const { side, index } = target.dataset;
-    return { kind: "targetMoved", side, index: Number(index), value: target.value === "auto" ? null : target.value };
+  if (target.dataset.kind === "move-option") {
+    const { side, index, key } = target.dataset;
+    return { kind: "moveOption", side, index: Number(index), key, value: target.value };
   }
   if (target.dataset.kind === "crit") {
     const { side, index } = target.dataset;
     return { kind: "crit", side, index: Number(index), value: target.getAttribute("aria-pressed") === "true" };
-  }
-  if (target.dataset.kind === "move-condition") {
-    const { side, index } = target.dataset;
-    return { kind: "moveCondition", side, index: Number(index), value: target.value === "auto" ? null : target.value };
   }
   if (target.dataset.kind === "ally-plus-minus") {
     return { kind: "allyPlusMinus", side: target.dataset.side, value: target.checked };
@@ -1027,56 +1019,21 @@ function renderDamageMovePickers(side) {
       });
       row.append(crit);
 
-      const hitRange = selectedMove ? moveHitCountRange(selectedMove, state) : null;
-      if (hitRange && hitRange.min !== hitRange.max) {
-        const hitCountLabel = document.createElement("label");
-        hitCountLabel.className = "move-inline-control";
-        hitCountLabel.textContent = t("battle.hits");
-        const hitCount = document.createElement("select");
-        hitCount.dataset.kind = "hit-count";
-        hitCount.dataset.side = side;
-        hitCount.dataset.index = String(index);
-        hitCount.replaceChildren(
-          ...Array.from({ length: hitRange.max - hitRange.min + 1 }, (_, offset) => {
-            const count = hitRange.min + offset;
-            return optionElement(count, String(count));
-          }),
-        );
-        hitCount.value = String(selectedHitCountFor(side, index, hitRange));
-        hitCount.addEventListener("input", handleDamageControl);
-        hitCountLabel.append(hitCount);
-        row.append(hitCountLabel);
-      }
-      if (selectedMove && isOrderConditionalMove(selectedMove)) {
-        const assumptionLabel = document.createElement("label");
-        assumptionLabel.className = "move-inline-control";
-        assumptionLabel.textContent = t("battle.targetMoved");
-        const assumption = document.createElement("select");
-        assumption.dataset.kind = "target-moved";
-        assumption.dataset.side = side;
-        assumption.dataset.index = String(index);
-        assumption.replaceChildren(optionElement("auto", t("battle.auto")), optionElement("yes", t("battle.yes")), optionElement("no", t("battle.no")));
-        const movedOverride = state.targetMovedOverrides?.[index];
-        assumption.value = movedOverride === null || movedOverride === undefined ? "auto" : movedOverride ? "yes" : "no";
-        assumption.addEventListener("input", handleDamageControl);
-        assumptionLabel.append(assumption);
-        row.append(assumptionLabel);
-      }
-      const condition = selectedMove ? moveCondition(selectedMove) : null;
-      if (condition) {
-        const conditionLabel = document.createElement("label");
-        conditionLabel.className = "move-inline-control";
-        conditionLabel.textContent = localizedTerm("condition", condition.label);
+      for (const descriptor of moveConditionDescriptors(selectedMove, state)) {
+        const label = document.createElement("label");
+        label.className = "move-inline-control";
+        label.textContent = t(descriptor.labelKey);
         const select = document.createElement("select");
-        select.dataset.kind = "move-condition";
+        select.dataset.kind = "move-option";
         select.dataset.side = side;
         select.dataset.index = String(index);
-        select.replaceChildren(optionElement("auto", t("battle.auto")), optionElement("yes", t("battle.yes")), optionElement("no", t("battle.no")));
-        const override = state.conditionOverrides?.[index];
-        select.value = override === null || override === undefined ? "auto" : override ? "yes" : "no";
+        select.dataset.key = descriptor.key;
+        select.replaceChildren(...descriptor.choices.map((choice) =>
+          optionElement(choice.value, choice.labelKey ? t(choice.labelKey) : choice.label)));
+        select.value = moveConditionValue(state, index, descriptor);
         select.addEventListener("input", handleDamageControl);
-        conditionLabel.append(select);
-        row.append(conditionLabel);
+        label.append(select);
+        row.append(label);
       }
       return row;
     }),
@@ -1086,20 +1043,6 @@ function renderDamageMovePickers(side) {
 function clearMoveComboboxes(side) {
   for (const cleanup of moveComboboxCleanups[side]) cleanup();
   moveComboboxCleanups[side] = [];
-}
-
-function moveHitCountRange(move, state) {
-  return resolveHitCountRange(
-    hitCountRange({ move, attackerState: state }),
-    { move, attackerState: state },
-  );
-}
-
-function selectedHitCountFor(side, index, range) {
-  const storedValue = damageState[side].selectedHitCounts?.[index];
-  const stored = Number(storedValue);
-  const requested = storedValue !== null && storedValue !== undefined && Number.isFinite(stored) ? stored : 3;
-  return Math.max(range.min, Math.min(range.max, Math.trunc(requested)));
 }
 
 function renderDamage() {
@@ -1151,11 +1094,6 @@ function renderDamage() {
   applyDocumentTranslations();
 }
 
-function selectedHitCountForMove(side, index, move) {
-  const range = moveHitCountRange(move, damageState[side]);
-  return range.min === range.max ? undefined : selectedHitCountFor(side, index, range);
-}
-
 function targetMovedForMove(side, index, move) {
   const stored = damageState[side].targetMovedOverrides?.[index];
   if (stored !== null && stored !== undefined) return Boolean(stored);
@@ -1184,13 +1122,13 @@ function targetMovedForMove(side, index, move) {
 
 function moveOptionsForDamage(side, index, move) {
   const otherSide = side === "attacker" ? "defender" : "attacker";
+  const slotOptions = moveOptionsForSlot(damageState[side], index, move);
   return {
+    ...slotOptions,
     singleTarget: damageState[side].singleTargetMoves?.[index],
-    hitCount: selectedHitCountForMove(side, index, move),
     critical: Boolean(damageState[side].critMoves?.[index]),
-    conditionOverride: damageState[side].conditionOverrides?.[index] ?? null,
     opponentMove: selectedDamageMoves(otherSide)[0]?.move,
-    targetMoved: targetMovedForMove(side, index, move),
+    targetMoved: slotOptions.targetMoved ?? targetMovedForMove(side, index, move),
   };
 }
 

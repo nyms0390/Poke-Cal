@@ -87,8 +87,8 @@ function beatUpBasePower(attacker, attackerState) {
   return Math.max(1, 5 + Math.floor(baseAttack / 10));
 }
 
-function eligibleBeatUpPartyCount(attackerState) {
-  const count = attackerState.beatUpPartyCount ?? attackerState.partyMemberCount ?? attackerState.partyCount ?? 6;
+function eligibleBeatUpPartyCount(attackerState, moveOptions = {}) {
+  const count = moveOptions.beatUpPartyCount ?? attackerState.beatUpPartyCount ?? attackerState.partyMemberCount ?? attackerState.partyCount ?? 6;
   if (!Number.isFinite(count)) return 6;
   return Math.min(6, Math.max(1, Math.floor(count)));
 }
@@ -239,6 +239,17 @@ export const MOVE_EFFECTS = {
   gravapple: {
     basePower: (ctx) => (ctx.field.gravity ? Math.floor(ctx.move.basePower * 1.5) : undefined),
   },
+  mistyexplosion: {
+    basePower: (ctx) => normalizeId(ctx.field.terrain) === "mistyterrain" &&
+      isGrounded(ctx.attacker, ctx.attackerState, ctx.field)
+      ? Math.floor(ctx.move.basePower * 1.5) : undefined,
+  },
+  earthquake: { condition: { label: "Target using Dig" }, basePower: historyDoublePower },
+  surf: { condition: { label: "Target using Dive" }, basePower: historyDoublePower },
+  bodyslam: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
+  dragonrush: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
+  flyingpress: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
+  supercellslam: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
 
   // -- sun/rain-halved charge moves ---------------------------------------
   solarbeam: { basePower: solarPowerHandler },
@@ -252,7 +263,8 @@ export const MOVE_EFFECTS = {
   // -- beatup: power from base Attack, hit count from party size ---------
   beatup: {
     basePower: (ctx) => beatUpBasePower(ctx.attacker, ctx.attackerState),
-    hits: (ctx) => eligibleBeatUpPartyCount(ctx.attackerState),
+    hits: (ctx) => eligibleBeatUpPartyCount(ctx.attackerState, ctx.moveOptions),
+    note: () => "Beat Up estimates ally hits with the user's base Attack; exact damage requires each eligible ally's base Attack",
   },
 
   // -- current-HP-scaled power ---------------------------------------------
@@ -296,10 +308,17 @@ export const MOVE_EFFECTS = {
   frustration: { basePower: () => 102, note: () => "Assumes minimum friendship (102 BP)" },
   pikapapow: { basePower: () => 102, note: () => "Assumes maximum friendship (102 BP)" },
   veeveevolley: { basePower: () => 102, note: () => "Assumes maximum friendship (102 BP)" },
-  spitup: { basePower: () => 300, note: () => "Assumes 3 Stockpile uses (300 BP)" },
+  spitup: {
+    basePower: (ctx) => {
+      const count = boundedCount(ctx.moveOptions?.stockpileCount, 3, 0, 3);
+      return count === 0 ? null : 100 * count;
+    },
+    note: (ctx) => `Assumes ${boundedCount(ctx.moveOptions?.stockpileCount, 3, 0, 3)} Stockpile uses`,
+  },
   trumpcard: { basePower: () => 40, note: () => "Assumes 5+ PP remaining (40 BP)" },
   pursuit: { note: () => "×2 on switch not modeled" },
-  ficklebeam: { basePower: () => 80, note: () => "Assumes the 80 BP outcome; 30% chance of 140 BP" },
+  ficklebeam: { basePower: (ctx) => ctx.moveOptions?.allOut ? 160 : 80,
+    note: (ctx) => ctx.moveOptions?.allOut ? "All-out attack (160 BP)" : "Normal outcome (80 BP); 30% chance of 160 BP" },
   magnitude: { basePower: () => 70, note: () => "Assumes Magnitude 7 (70 BP)" },
   present: { basePower: () => 80, note: () => "Assumes the 80 BP outcome" },
   psywave: { fixedDamage: () => 50, note: () => "Assumes the level-50 average (50 damage)" },
@@ -311,8 +330,14 @@ export const MOVE_EFFECTS = {
   lowkick: { basePower: targetWeightPowerHandler },
 
   // -- user-versus-target-weight-ratio power -------------------------------
-  heatcrash: { basePower: userTargetWeightPowerHandler },
-  heavyslam: { basePower: userTargetWeightPowerHandler },
+  heatcrash: { condition: { label: "Target minimized" }, basePower: (ctx) => {
+    const power = userTargetWeightPowerHandler(ctx);
+    return power === null ? null : conditionMet(ctx, () => false) ? power * 2 : power;
+  } },
+  heavyslam: { condition: { label: "Target minimized" }, basePower: (ctx) => {
+    const power = userTargetWeightPowerHandler(ctx);
+    return power === null ? null : conditionMet(ctx, () => false) ? power * 2 : power;
+  } },
 
   // -- speed-scaled and order-conditional power ----------------------------
   gyroball: { basePower: gyroBallPower },
@@ -320,9 +345,17 @@ export const MOVE_EFFECTS = {
   boltbeak: { orderCondition: "before", basePower: orderConditionalPower, note: orderAssumptionNote },
   fishiousrend: { orderCondition: "before", basePower: orderConditionalPower, note: orderAssumptionNote },
   payback: { orderCondition: "after", basePower: orderConditionalPower, note: orderAssumptionNote },
-  avalanche: { orderCondition: "history", basePower: orderConditionalPower, note: orderAssumptionNote },
-  assurance: { orderCondition: "history", basePower: orderConditionalPower, note: orderAssumptionNote },
-  revenge: { orderCondition: "history", basePower: orderConditionalPower, note: orderAssumptionNote },
+  avalanche: { condition: { label: "Damaged by target this turn" }, basePower: historyDoublePower },
+  assurance: { condition: { label: "Target damaged this turn" }, basePower: historyDoublePower },
+  revenge: { condition: { label: "Damaged by target this turn" }, basePower: historyDoublePower },
+  lashout: { condition: { label: "User's stats lowered this turn" }, basePower: historyDoublePower },
+  stompingtantrum: { condition: { label: "Previous move failed" }, basePower: historyDoublePower },
+  temperflare: { condition: { label: "Previous move failed" }, basePower: historyDoublePower },
+  round: { condition: { label: "Another Round used this turn" }, basePower: historyDoublePower },
+  lastrespects: { basePower: (ctx) => ctx.move.basePower * (1 + boundedCount(
+    ctx.moveOptions?.faintedAllyCount ?? ctx.attackerState.faintedAllyCount, 0, 0, 5)),
+  },
+  ragefist: { basePower: (ctx) => ctx.move.basePower * (1 + boundedCount(ctx.moveOptions?.hitsReceived, 0, 0, 6)) },
 
   // -- status-conditional power --------------------------------------------
   hex: { condition: { label: "Target statused" }, basePower: (ctx) => conditionMet(ctx, () => Boolean(ctx.defenderState.status)) ? ctx.move.basePower * 2 : undefined },
@@ -377,10 +410,11 @@ export const MOVE_EFFECTS = {
   scaleshot: { hits: [2, 5], note: () => "-1 Def / +1 Spe after use" },
   surgingstrikes: { hits: 3, alwaysCrit: true },
   tripledive: { hits: 3 },
+  dragondarts: { hits: [1, 2], defaultHits: 2 },
 
   // -- successive-hit power lists -------------------------------------------
-  tripleaxel: { hitPowers: (ctx) => [ctx.power, ctx.power * 2, ctx.power * 3] },
-  triplekick: { hitPowers: (ctx) => [ctx.power, ctx.power * 2, ctx.power * 3] },
+  tripleaxel: { hits: [1, 3], defaultHits: 3, hitPowers: (ctx) => [ctx.power, ctx.power * 2, ctx.power * 3] },
+  triplekick: { hits: [1, 3], defaultHits: 3, hitPowers: (ctx) => [ctx.power, ctx.power * 2, ctx.power * 3] },
 
   // -- dynamic offensive stat selection --------------------------------------
   photongeyser: {
@@ -464,7 +498,7 @@ function targetMovedForOrder(ctx) {
 function orderConditionalPower(ctx) {
   const targetMoved = targetMovedForOrder(ctx);
   const condition = moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).orderCondition;
-  const doubles = condition === "before" ? !targetMoved : targetMoved;
+  const doubles = condition === "before" ? (!targetMoved || ctx.defenderState.switchedIn) : targetMoved;
   return doubles ? ctx.move.basePower * 2 : undefined;
 }
 
@@ -476,6 +510,16 @@ function conditionMet(ctx, derive) {
   return typeof ctx.moveOptions?.conditionOverride === "boolean"
     ? ctx.moveOptions.conditionOverride
     : derive();
+}
+
+function historyDoublePower(ctx) {
+  return conditionMet(ctx, () => false) ? ctx.move.basePower * 2 : undefined;
+}
+
+function boundedCount(value, fallback, min, max) {
+  const number = Number(value);
+  return value === null || value === undefined || !Number.isFinite(number)
+    ? fallback : Math.max(min, Math.min(max, Math.trunc(number)));
 }
 
 export function moveEffect(moveId) {

@@ -21,19 +21,13 @@ const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "echoedvoice",
   "furycutter",
   "iceball",
-  "lashout",
-  "lastrespects",
-  "ragefist",
   "retaliate",
   "rollout",
-  "stompingtantrum",
-  "temperflare",
 ]);
 const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
   "fusionbolt",
   "fusionflare",
   "gust",
-  "round",
   "twister",
 ]);
 const TYPE_CHANGE_ABILITIES = new Set(["libero", "protean"]);
@@ -251,6 +245,7 @@ export function calculateDamage({
   if (dynamicPower === null) {
     let reason = "Natural Gift requires a held Berry.";
     if (moveId === "fling") reason = "Fling requires a held item with fling power data.";
+    if (moveId === "spitup") reason = "Spit Up fails without Stockpile.";
     if (USER_TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
       reason = `${move.name} requires attacker and defender weights.`;
     } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
@@ -349,18 +344,24 @@ export function calculateDamage({
     if (modifier.kind === "hitPowerMultipliers") hitPowerMultipliers = modifier.value;
   }
 
+  const hasExplicitHitCount = moveOptions.hitCount !== null && moveOptions.hitCount !== undefined;
   const selectedHitCount = Number(moveOptions.hitCount);
-  if (Number.isFinite(selectedHitCount)) {
+  if (hasExplicitHitCount && Number.isFinite(selectedHitCount)) {
     const count = Math.max(hitCounts.min, Math.min(hitCounts.max, Math.trunc(selectedHitCount)));
     hitCounts = { min: count, max: count };
   }
 
   const baseHitPowers = successiveHitBasePowers(ctx);
+  const successiveHits = baseHitPowers.length > 1;
+  const defaultHits = moveEffect(moveId).defaultHits;
+  if (!hasExplicitHitCount && Number.isInteger(defaultHits)) hitCounts = { min: defaultHits, max: defaultHits };
   const scaledHitPowers = hitPowerMultipliers && baseHitPowers.length === 1 && hitCounts.min === 1 && hitCounts.max === 1
     ? hitPowerMultipliers.map((multiplier) => Math.max(1, Math.floor(baseHitPowers[0] * multiplier)))
     : baseHitPowers;
-  const hitPowers = scaledHitPowers.map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
+  const hitPowers = (successiveHits ? scaledHitPowers.slice(0, hitCounts.max) : scaledHitPowers)
+    .map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
   if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
+  else if (baseHitPowers.length > 1) notes.push(`${move.name} hits 1 time at ${hitPowers[0]}`);
   power = hitPowers[0];
   const modifiedAttack = Math.max(1, Math.floor(attack * attackModifier));
   const modifiedDefense = Math.max(1, Math.floor(defense * defenseModifier));
@@ -393,9 +394,9 @@ export function calculateDamage({
     return Math.max(1, hitDamage);
   };
   const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {
-    const powers = hitPowers.length > 1
-      ? hitPowers
-      : Array.from({ length: hitCount }, () => hitPowers[0]);
+    const powers = successiveHits
+      ? hitPowers.slice(0, hitCount)
+      : hitPowers.length > 1 ? hitPowers : Array.from({ length: hitCount }, () => hitPowers[0]);
     return powers.reduce((total, hitPower, index) =>
       total + (negateFirstHit && index === 0 ? 0 : damageForHit(hitPower, roll)), 0);
   };
@@ -415,7 +416,7 @@ export function calculateDamage({
     : hitCounts.min === hitCounts.max
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
-  const actualHitCount = hitPowers.length > 1 ? hitPowers.length : hitCounts.min;
+  const actualHitCount = successiveHits ? hitCounts.min : hitPowers.length > 1 ? hitPowers.length : hitCounts.min;
   const sturdyAffectsKo = sturdyActive && actualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
   const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
     ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }

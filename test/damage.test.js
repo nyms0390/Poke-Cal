@@ -658,7 +658,7 @@ test("defaults history-assumed moves to normal power and doubles with the overri
       move,
       attackerState,
       defenderState,
-      moveOptions: { targetMoved: true },
+      moveOptions: { conditionOverride: true },
     });
     const baselineReference = calculateDamage({
       attacker,
@@ -668,7 +668,7 @@ test("defaults history-assumed moves to normal power and doubles with the overri
       defenderState,
     });
 
-    assert.equal(normal.notes.includes("Assumes target has not moved"), true, name);
+    assert.equal(normal.notes.includes("Assumes target has not moved"), false, name);
     const baseReference = calculateDamage({
       attacker,
       defender,
@@ -2988,11 +2988,6 @@ test("uses Showdown baseline power for unavailable move-history state moves", ()
     baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
   };
   const historyMoves = [
-    ["Last Respects", "lastrespects", "Ghost", "Physical", 50],
-    ["Stomping Tantrum", "stompingtantrum", "Ground", "Physical", 75],
-    ["Rage Fist", "ragefist", "Ghost", "Physical", 50],
-    ["Temper Flare", "temperflare", "Fire", "Physical", 75],
-    ["Lash Out", "lashout", "Dark", "Physical", 75],
     ["Echoed Voice", "echoedvoice", "Normal", "Special", 40],
     ["Fury Cutter", "furycutter", "Bug", "Physical", 40],
     ["Ice Ball", "iceball", "Ice", "Physical", 30],
@@ -3037,7 +3032,6 @@ test("uses Showdown baseline power for unavailable combo or target-state moves",
     baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 50 },
   };
   const contextMoves = [
-    ["Round", "round", "Normal", "Special", 60],
     ["Fusion Bolt", "fusionbolt", "Electric", "Physical", 100],
     ["Fusion Flare", "fusionflare", "Fire", "Special", 100],
     ["Gust", "gust", "Flying", "Special", 40],
@@ -3328,6 +3322,56 @@ test("sums successive-hit base-power damage", () => {
     );
     assert.equal(result.notes.includes(`${name} hits 3 times at ${hitPowers.join("/")}`), true, name);
   }
+});
+
+test("partial Triple Axel and Triple Kick use only landed hit powers", () => {
+  for (const [id, type, power] of [["tripleaxel", "Ice", 20], ["triplekick", "Fighting", 10]]) {
+    const move = { id, name: id, type, category: "Physical", basePower: power, multihit: 3 };
+    const hit = (count) => calculateDamage({ attacker: pikachu, defender: squirtle, move,
+      attackerState: neutralState, defenderState: neutralState, moveOptions: { hitCount: count } });
+    const first = hit(1);
+    const second = hit(2);
+    const third = hit(3);
+    assert.equal(first.maxDamage < second.maxDamage, true, id);
+    assert.equal(second.maxDamage < third.maxDamage, true, id);
+    assert.match(first.notes.join(" "), /hits 1 time/);
+  }
+});
+
+test("historical and outcome options alter only their own move power", () => {
+  const damage = (id, type, basePower, moveOptions = {}, attackerState = neutralState) =>
+    calculateDamage({ attacker: pikachu, defender: squirtle,
+      move: { id, name: id, type, category: "Physical", basePower },
+      attackerState, defenderState: neutralState, moveOptions });
+  const cases = [
+    ["lastrespects", "Ghost", 50, { faintedAllyCount: 2 }],
+    ["ragefist", "Ghost", 50, { hitsReceived: 3 }],
+    ["lashout", "Dark", 75, { conditionOverride: true }],
+    ["stompingtantrum", "Ground", 75, { conditionOverride: true }],
+    ["temperflare", "Fire", 75, { conditionOverride: true }],
+    ["assurance", "Dark", 60, { conditionOverride: true }],
+    ["avalanche", "Ice", 60, { conditionOverride: true }],
+    ["round", "Normal", 60, { conditionOverride: true }],
+    ["ficklebeam", "Dragon", 80, { allOut: true }],
+  ];
+  for (const [id, type, power, options] of cases) {
+    assert.equal(damage(id, type, power, options).maxDamage > damage(id, type, power).maxDamage, true, id);
+  }
+  assert.equal(damage("spitup", "Normal", 0, { stockpileCount: 1 }).maxDamage <
+    damage("spitup", "Normal", 0, { stockpileCount: 3 }).maxDamage, true);
+  assert.match(damage("spitup", "Normal", 0, { stockpileCount: 0 }).reason, /fails without Stockpile/);
+  assert.equal(damage("lastrespects", "Ghost", 50, {}, { ...neutralState, faintedAllyCount: 2 }).maxDamage,
+    damage("lastrespects", "Ghost", 50, { faintedAllyCount: 2 }).maxDamage);
+  assert.equal(damage("assurance", "Dark", 60, { targetMoved: true }).maxDamage,
+    damage("assurance", "Dark", 60).maxDamage);
+});
+
+test("Beat Up uses the selected eligible hit count and identifies its estimate", () => {
+  const move = { id: "beatup", name: "Beat Up", type: "Dark", category: "Physical", basePower: 0 };
+  const hit = (beatUpPartyCount) => calculateDamage({ attacker: pikachu, defender: squirtle, move,
+    attackerState: neutralState, defenderState: neutralState, moveOptions: { beatUpPartyCount } });
+  assert.equal(hit(6).maxDamage > hit(1).maxDamage, true);
+  assert.match(hit(1).notes.join(" "), /estimate.*base Attack/i);
 });
 
 test("displays Population Bomb's accuracy-chained hit damage range", () => {

@@ -2036,8 +2036,8 @@ button:disabled {
 }
 
 .damage-move-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
@@ -2052,6 +2052,7 @@ button:disabled {
 .move-combobox {
   position: relative;
   min-width: 0;
+  flex: 1 1 130px;
 }
 
 .move-combobox input[type="search"] {
@@ -2067,9 +2068,10 @@ button:disabled {
 }
 
 .move-inline-control {
-  display: flex !important;
-  align-items: center;
-  gap: 5px;
+  display: grid !important;
+  align-items: start;
+  gap: 3px;
+  min-width: 0;
   white-space: nowrap;
 }
 
@@ -2428,12 +2430,12 @@ button:disabled {
   }
 
   .damage-move-row {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
   }
 
   .damage-move-row .move-inline-control,
   .damage-move-row > .inline-toggle {
-    grid-column: 2 / -1;
+    margin-left: 24px;
   }
 
   .damage-result-column h3 {
@@ -2837,8 +2839,8 @@ button:disabled {
 }
 
 .builder-move-row {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }

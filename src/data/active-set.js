@@ -19,6 +19,13 @@ function clampSp(value) {
 function normalizeActiveSet(value) {
   const pokemonId = normalizeId(value?.pokemonId);
   if (!pokemonId) return null;
+  const moveOptionsBySlot = Array.isArray(value?.moveOptionsBySlot)
+    ? Array.from({ length: MOVE_SLOTS }, (_, index) => Object.fromEntries(
+      Object.entries(value.moveOptionsBySlot[index] ?? {}).filter(([key, option]) =>
+        ["hitCount", "targetMoved", "conditionOverride", "faintedAllyCount", "hitsReceived", "stockpileCount", "beatUpPartyCount", "allOut"].includes(key) &&
+          (typeof option === "string" || typeof option === "number" || typeof option === "boolean"))
+        .map(([key, option]) => [key, String(option)]),
+    )) : undefined;
   return {
     pokemonId,
     nature: String(value?.nature ?? ""),
@@ -27,6 +34,7 @@ function normalizeActiveSet(value) {
     itemId: normalizeId(value?.itemId),
     teraType: "",
     moveIds: Array.from({ length: MOVE_SLOTS }, (_, index) => normalizeId(value?.moveIds?.[index])),
+    ...(moveOptionsBySlot ? { moveOptionsBySlot } : {}),
   };
 }
 
@@ -78,6 +86,7 @@ export function activeSetFromState(state, fallback = null) {
     itemId: has("item") ? state.item?.id : previous?.itemId,
     teraType: "",
     moveIds,
+    moveOptionsBySlot: has("moveOptionsBySlot") ? state.moveOptionsBySlot : previous?.moveOptionsBySlot,
   });
 }
 
@@ -98,5 +107,8 @@ export function applyActiveSet(state, activeSet, { abilityLookup, itemLookup } =
   }
   if (Object.prototype.hasOwnProperty.call(state, "teraType")) next.teraType = set.teraType;
   if (Array.isArray(state.selectedMoveIds)) next.selectedMoveIds = [...set.moveIds];
+  if (Array.isArray(state.moveOptionsBySlot) && set.moveOptionsBySlot) {
+    next.moveOptionsBySlot = set.moveOptionsBySlot.map((options) => ({ ...options }));
+  }
   return next;
 }

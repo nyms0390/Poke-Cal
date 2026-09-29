@@ -74,6 +74,11 @@ import {
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
+import {
+  moveConditionDescriptors,
+  moveConditionValue,
+  moveOptionsForSlot,
+} from "./move-conditions.js";
 
 const elements = {
   source: document.querySelector("#builder-source"),
@@ -628,6 +633,27 @@ function renderMovePicks() {
       });
     });
     row.append(label, combobox, crit);
+    if (selected) {
+      for (const descriptor of moveConditionDescriptors(selected, setup)) {
+        const conditionLabel = document.createElement("label");
+        conditionLabel.className = "move-inline-control";
+        conditionLabel.textContent = t(descriptor.labelKey);
+        const select = document.createElement("select");
+        select.dataset.kind = "move-option";
+        select.dataset.index = String(index);
+        select.dataset.key = descriptor.key;
+        select.replaceChildren(...descriptor.choices.map((choice) => optionElement(
+          choice.value,
+          choice.labelKey ? t(choice.labelKey) : choice.label,
+        )));
+        select.value = moveConditionValue(setup, index, descriptor);
+        select.addEventListener("input", () => {
+          stageUserSetup({ kind: "moveOption", index, key: descriptor.key, value: select.value });
+        });
+        conditionLabel.append(select);
+        row.append(conditionLabel);
+      }
+    }
     return row;
   }));
 }
@@ -1038,6 +1064,7 @@ function renderBreakPoints(threats, field) {
     forms: family.forms.map((threat) => {
       const scenarios = moves.map((move) => ({
         threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]),
+        moveOptions: moveOptionsForSlot(setup, move.slotIndex, move),
       }));
       const analyses = moves.map((move, index) => ({
         move,
