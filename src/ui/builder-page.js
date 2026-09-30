@@ -12,7 +12,6 @@ import {
 import {
   breakPoints,
   rankBreakPointPokemonGroups,
-  yourDamage,
   yourDamageAnalysis,
 } from "../data/break-points.js";
 import {
@@ -58,7 +57,6 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
-  zeroOffenseStateForMove,
 } from "./builder-state.js";
 import {
   attachCombobox,
@@ -1073,12 +1071,10 @@ function renderBreakPoints(threats, field) {
         ...yourDamageAnalysis(setup, move, scenarios[index]),
         points: breakPoints(setup, move, scenarios[index]),
       }));
-      const baselineDamages = moves.map((move, index) =>
-        yourDamage(zeroOffenseStateForMove(setup, move), move, scenarios[index]));
       return {
         threat,
         analyses,
-        coverage: breakCoverage(setup, analyses, baselineDamages),
+        coverage: breakCoverage(setup, analyses),
       };
     }),
   }));

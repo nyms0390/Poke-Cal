@@ -137,41 +137,23 @@ export function availableBulkSpBudget(sp) {
     Number(sp?.spe ?? 0));
 }
 
-export function zeroOffenseStateForMove(userState, move) {
-  return {
-    ...userState,
-    sp: {
-      ...userState.sp,
-      atk: 0,
-      spa: 0,
-      ...(move.overrideOffensiveStat ? { [move.overrideOffensiveStat]: 0 } : {}),
-    },
-  };
-}
-
-export function breakCoverage(userState, analyses, baselineDamages) {
-  const supportedHits = (damages) => damages
-    .filter((damage) => Number.isFinite(damage?.maxPct))
-    .map((damage) => koHitCount(damage.koText))
-    .filter((hits) => hits > 0);
-  const baselineHits = Math.min(...supportedHits(baselineDamages));
-  if (!Number.isFinite(baselineHits)) return { status: "unreachable" };
-
-  const targetHits = Math.max(1, baselineHits - 1);
-  const currentHits = Math.min(...supportedHits(analyses.map(({ damage }) => damage)));
-  if (baselineHits === 1 || currentHits <= targetHits) {
-    return { status: "covered", baselineHits, targetHits };
+export function breakCoverage(userState, analyses) {
+  const supported = analyses.filter(({ damage }) => Number.isFinite(damage?.maxPct));
+  if (supported.some(({ damage }) => koHitCount(damage.koText) === 1)) {
+    return { status: "covered" };
   }
 
-  const possible = analyses.some(({ move, damage, points, attackStat }) => {
-    if (!Number.isFinite(damage?.maxPct)) return false;
+  const possible = supported.some(({ move, damage, points, attackStat }) => {
+    const currentHits = koHitCount(damage.koText);
+    if (currentHits < 2) return false;
     attackStat ??= move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
     return points.some(({ sp, achieves }) =>
+      /guaranteed/i.test(achieves) &&
       koHitCount(achieves) > 0 &&
-      koHitCount(achieves) <= targetHits &&
+      koHitCount(achieves) < currentHits &&
       canApplySpTargets(userState.sp, { [attackStat]: sp }));
   });
-  return { status: possible ? "possible" : "unreachable", baselineHits, targetHits };
+  return { status: possible ? "possible" : "unreachable" };
 }
 
 export function partitionBulkCoverageGroups(groups) {

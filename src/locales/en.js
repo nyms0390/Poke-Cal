@@ -104,7 +104,7 @@ export const EN_MESSAGES = {
   "field.gravity": "Gravity",
   "builder.environmentAssumption": "All matchups use this environment. Opponent abilities do not change it automatically.",
   "builder.bulkAssumption": "Threats start with usage-backed items and abilities, max offense, and the selected environment. Each form is classified independently from its two analyzed damaging moves. Use related-form links to jump between forms, and click a Pokémon to edit its build.",
-  "builder.breakAssumption": "Threats start with 2 HP fast-offense bulk, usage-backed items and abilities, and the selected environment. Each form is classified across your damaging moves from zero offensive SP. Covered meets the next KO tier, Possible reaches it within 66 SP, and Unreachable cannot reach it. Click a Pokémon to edit its build.",
+  "builder.breakAssumption": "Threats start with 2 HP fast-offense bulk, usage-backed items and abilities, and the selected environment. Covered means a selected move can OHKO with your current spread. Possible means at least one move can reach a guaranteed KO in fewer hits than it currently needs, within 66 total SP. Otherwise, it is Unreachable. Click a Pokémon to edit its build.",
   "battle.saveName": "Save set name",
   "battle.deleteConfirm": ({ name }) => `Delete saved set \"${name}\"?`,
   "battle.ready": "Ready",

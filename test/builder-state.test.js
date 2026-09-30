@@ -18,7 +18,6 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
-  zeroOffenseStateForMove,
 } from "../src/ui/builder-state.js";
 
 const pikachu = {
@@ -306,68 +305,95 @@ function breakAnalysis(move, koText, points = [], maxPct = 40) {
   return { move, damage: { koText, maxPct }, points };
 }
 
-test("classifies each break-point form from its best supported zero-offense move", () => {
+test("only current guaranteed or chance-based OHKOs count as break coverage", () => {
   const physical = { category: "Physical" };
   const special = { category: "Special" };
-  const state = { sp: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } };
-  const baselines = [
-    { koText: "guaranteed 3HKO", maxPct: 40 },
-    { koText: "guaranteed 4HKO", maxPct: 30 },
-  ];
+  const state = { sp: {} };
   assert.deepEqual(breakCoverage(state, [
     breakAnalysis(physical, "guaranteed 3HKO"),
     breakAnalysis(special, "guaranteed 2HKO"),
-  ], baselines), { status: "covered", baselineHits: 3, targetHits: 2 });
-  assert.deepEqual(breakCoverage(state, [
-    breakAnalysis(physical, "guaranteed 3HKO"),
-    breakAnalysis(special, "guaranteed 4HKO", [{ sp: 8, achieves: "guaranteed 2HKO" }]),
-  ], baselines), { status: "possible", baselineHits: 3, targetHits: 2 });
-  assert.deepEqual(breakCoverage(state, [
-    breakAnalysis(physical, "guaranteed 3HKO"),
-    breakAnalysis(special, "guaranteed 4HKO", [{ sp: 8, achieves: "guaranteed 3HKO" }]),
-  ], baselines), { status: "unreachable", baselineHits: 3, targetHits: 2 });
-  assert.equal(breakCoverage(state, [breakAnalysis(physical, "guaranteed OHKO")], [
-    { koText: "guaranteed OHKO", maxPct: 100 },
-  ]).status, "covered");
+  ]), { status: "unreachable" });
+  for (const koText of ["guaranteed OHKO", "6.3% chance to OHKO"]) {
+    assert.deepEqual(breakCoverage(state, [
+      breakAnalysis(physical, "guaranteed 2HKO", [{ sp: 8, achieves: "guaranteed OHKO" }]),
+      breakAnalysis(special, koText, [], 110),
+    ]), { status: "covered" });
+  }
+});
+
+for (const hits of [2, 3, 4, 5]) {
+  for (const currentKoText of [`guaranteed ${hits}HKO`, `12.5% chance to ${hits}HKO`]) {
+    test(`break coverage can improve ${currentKoText} to a guaranteed lower-hit tier`, () => {
+      const achieves = hits === 2 ? "guaranteed OHKO" : `guaranteed ${hits - 1}HKO`;
+      assert.deepEqual(breakCoverage({ sp: {} }, [
+        breakAnalysis({ category: "Physical" }, currentKoText, [{ sp: 8, achieves }]),
+      ]), { status: "possible" });
+    });
+  }
+}
+
+test("chance-based lower tiers and same-tier probability improvements are not possible coverage", () => {
+  const move = { category: "Physical" };
+  for (const [currentKoText, achieves] of [
+    ["guaranteed 2HKO", "99.9% chance to OHKO"],
+    ["guaranteed 3HKO", "100.0% chance to 2HKO"],
+    ["12.5% chance to 3HKO", "guaranteed 3HKO"],
+    ["12.5% chance to 3HKO", "99.9% chance to 3HKO"],
+  ]) {
+    assert.deepEqual(breakCoverage({ sp: {} }, [
+      breakAnalysis(move, currentKoText, [{ sp: 8, achieves }]),
+    ]), { status: "unreachable" });
+  }
+});
+
+test("each selected move can make its own guaranteed tier improvement", () => {
+  const physical = breakAnalysis({ category: "Physical" }, "guaranteed 2HKO");
+  const special = breakAnalysis({ category: "Special" }, "guaranteed 3HKO", [
+    { sp: 8, achieves: "guaranteed 2HKO" },
+  ]);
+  assert.deepEqual(breakCoverage({ sp: {} }, [physical, special]), { status: "possible" });
+});
+
+test("break coverage allows a guaranteed 5HKO improvement from no KO within five hits", () => {
+  assert.deepEqual(breakCoverage({ sp: {} }, [
+    breakAnalysis({ category: "Physical" }, "not a KO", [{ sp: 8, achieves: "guaranteed 5HKO" }]),
+  ]), { status: "possible" });
+});
+
+test("break coverage allows affordable nature-changing guaranteed tier improvements", () => {
+  assert.deepEqual(breakCoverage({ sp: { atk: 32, spe: 32 } }, [
+    breakAnalysis({ category: "Physical" }, "guaranteed 2HKO", [
+      { sp: 32, achieves: "guaranteed OHKO", requiresPlusNature: true },
+    ]),
+  ]), { status: "possible" });
 });
 
 test("break coverage respects the 66 SP budget and ignores unsupported damage", () => {
   const physical = { category: "Physical" };
   const special = { category: "Special" };
   const state = { sp: { hp: 32, atk: 0, def: 32, spa: 0, spd: 0, spe: 0 } };
-  const baseline = [
-    { koText: "guaranteed OHKO", maxPct: null },
-    { koText: "guaranteed 3HKO", maxPct: 40 },
-  ];
   const analyses = [
     breakAnalysis(physical, "guaranteed OHKO", [{ sp: 1, achieves: "guaranteed OHKO" }], null),
     breakAnalysis(special, "guaranteed 3HKO", [{ sp: 3, achieves: "guaranteed 2HKO" }]),
   ];
-  assert.deepEqual(breakCoverage(state, analyses, baseline), {
-    status: "unreachable", baselineHits: 3, targetHits: 2,
-  });
-  assert.equal(breakCoverage(state, [
+  assert.deepEqual(breakCoverage(state, analyses), { status: "unreachable" });
+  assert.deepEqual(breakCoverage(state, [
     analyses[0],
     { ...analyses[1], points: [{ sp: 2, achieves: "guaranteed 2HKO" }] },
-  ], baseline).status, "possible");
-  assert.equal(breakCoverage(state, analyses, [
-    { koText: "guaranteed OHKO", maxPct: null },
-    { koText: "guaranteed 2HKO", maxPct: null },
-  ]).status, "unreachable");
+  ]), { status: "possible" });
+  assert.deepEqual(breakCoverage(state, [analyses[0]]), { status: "unreachable" });
+  assert.deepEqual(breakCoverage(state, []), { status: "unreachable" });
 });
 
-test("zeros Body Press Defense for its baseline without clearing other SP", () => {
-  const state = { sp: { hp: 4, atk: 12, def: 32, spa: 18, spd: 0, spe: 0 } };
-  const bodyPress = { category: "Physical", overrideOffensiveStat: "def" };
-  assert.deepEqual(zeroOffenseStateForMove(state, bodyPress).sp, {
-    hp: 4, atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
-  });
-  assert.equal(state.sp.def, 32);
-  assert.equal(zeroOffenseStateForMove(state, { category: "Physical" }).sp.spa, 0);
-  assert.equal(zeroOffenseStateForMove(state, { category: "Special" }).sp.atk, 0);
+test("unknown KO tiers cannot supply possible coverage", () => {
+  const move = { category: "Physical" };
+  assert.deepEqual(breakCoverage({ sp: {} }, [
+    breakAnalysis(move, "Unsupported", [{ sp: 8, achieves: "guaranteed OHKO" }]),
+    breakAnalysis(move, "guaranteed 2HKO", [{ sp: 8, achieves: "Unsupported" }]),
+  ]), { status: "unreachable" });
 });
 
-test("Body Press coverage uses its zero-Defense KO tier", () => {
+test("a current Body Press 2HKO is not covered after improving from a zero-Defense 3HKO", () => {
   const attacker = {
     id: "body-press-user", types: ["Fighting"],
     baseStats: { hp: 80, atk: 80, def: 120, spa: 80, spd: 80, spe: 80 },
@@ -389,12 +415,46 @@ test("Body Press coverage uses its zero-Defense KO tier", () => {
     threat: { pokemon: defender, nature: "Hardy", spPresets: { bulk: { hp: 0, def: 0, spd: 0 } } },
   };
   const current = yourDamage(state, move, scenario);
-  const baseline = yourDamage(zeroOffenseStateForMove(state, move), move, scenario);
+  const baseline = yourDamage({ ...state, sp: { ...state.sp, def: 0 } }, move, scenario);
   assert.match(current.koText, /2HKO/);
   assert.match(baseline.koText, /3HKO/);
   assert.deepEqual(breakCoverage(state, [
-    { move, damage: current, points: [] },
-  ], [baseline]), { status: "covered", baselineHits: 3, targetHits: 2 });
+    { move, ...yourDamageAnalysis(state, move, scenario), points: breakPoints(state, move, scenario) },
+  ]), { status: "unreachable" });
+});
+
+test("Body Press coverage budgets the actual Defense target", () => {
+  const attacker = {
+    id: "body-press-user", types: ["Fighting"],
+    baseStats: { hp: 80, atk: 80, def: 120, spa: 80, spd: 80, spe: 80 },
+  };
+  const defender = {
+    id: "body-press-threat", types: ["Normal"],
+    baseStats: { hp: 188, atk: 80, def: 100, spa: 80, spd: 80, spe: 80 },
+  };
+  const move = {
+    id: "bodypress", type: "Fighting", category: "Physical", basePower: 80,
+    target: "normal", overrideOffensiveStat: "def",
+  };
+  const scenario = {
+    threat: { pokemon: defender, nature: "Hardy", spPresets: { bulk: { hp: 0, def: 0, spd: 0 } } },
+  };
+  const state = createSideState(attacker, {
+    nature: "Hardy",
+    sp: { hp: 32, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+    ability: null, item: null, moves: [move],
+  });
+  const detail = yourDamageAnalysis(state, move, scenario);
+  const points = breakPoints(state, move, scenario);
+  const guaranteedPoint = points.find(({ achieves }) => achieves === "guaranteed 2HKO");
+  assert.equal(detail.attackStat, "def");
+  assert.equal(detail.damage.koText, "guaranteed 3HKO");
+  assert.ok(guaranteedPoint);
+  assert.equal(canApplySpTargets(state.sp, { def: guaranteedPoint.sp }), false);
+  assert.deepEqual(breakCoverage(state, [{ move, ...detail, points }]), { status: "unreachable" });
+  const freed = { ...state, sp: { ...state.sp, hp: 0 } };
+  assert.equal(canApplySpTargets(freed.sp, { def: guaranteedPoint.sp }), true);
+  assert.deepEqual(breakCoverage(freed, [{ move, ...detail, points }]), { status: "possible" });
 });
 
 test("Tera Blast coverage budgets its actual Attack target and preserves damage summaries", () => {
@@ -404,7 +464,7 @@ test("Tera Blast coverage budgets its actual Attack target and preserves damage 
   };
   const defender = {
     id: "tera-blast-threat", types: ["Normal"],
-    baseStats: { hp: 100, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+    baseStats: { hp: 90, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
   };
   const move = {
     id: "terablast", type: "Normal", category: "Special", basePower: 80,
@@ -423,21 +483,21 @@ test("Tera Blast coverage budgets its actual Attack target and preserves damage 
     };
     const detail = yourDamageAnalysis(state, move, scenario);
     const points = breakPoints(state, move, scenario);
-    const baseline = yourDamage(zeroOffenseStateForMove(state, move), move, scenario);
     return { state, detail, points, coverage: breakCoverage(state, [
       { move, ...detail, points },
-    ], [baseline]) };
+    ]) };
   };
   const full = analyze(32);
   assert.equal(full.detail.attackStat, "atk");
   assert.deepEqual(full.detail.damage, yourDamage(full.state, move, scenario));
-  assert.equal(full.points[0].sp, 12);
-  assert.match(full.points[0].achieves, /OHKO/);
-  assert.equal(canApplySpTargets(full.state.sp, { atk: full.points[0].sp }), false);
+  assert.equal(full.detail.damage.koText, "guaranteed 2HKO");
+  const guaranteedPoint = full.points.find(({ achieves }) => achieves === "guaranteed OHKO");
+  assert.equal(guaranteedPoint.sp, 32);
+  assert.equal(canApplySpTargets(full.state.sp, { atk: guaranteedPoint.sp }), false);
   assert.equal(full.coverage.status, "unreachable");
 
   const freed = analyze(0);
   assert.equal(freed.detail.attackStat, "atk");
-  assert.equal(canApplySpTargets(freed.state.sp, { atk: freed.points[0].sp }), true);
+  assert.equal(canApplySpTargets(freed.state.sp, { atk: guaranteedPoint.sp }), true);
   assert.equal(freed.coverage.status, "possible");
 });
