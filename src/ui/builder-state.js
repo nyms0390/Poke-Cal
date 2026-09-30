@@ -139,18 +139,19 @@ export function availableBulkSpBudget(sp) {
 
 export function breakCoverage(userState, analyses) {
   const supported = analyses.filter(({ damage }) => Number.isFinite(damage?.maxPct));
-  if (supported.some(({ damage }) => koHitCount(damage.koText) === 1)) {
+  if (supported.some(({ damage }) =>
+    /guaranteed/i.test(damage.koText) && koHitCount(damage.koText) === 1)) {
     return { status: "covered" };
   }
 
   const possible = supported.some(({ move, damage, points, attackStat }) => {
     const currentHits = koHitCount(damage.koText);
-    if (currentHits < 2) return false;
+    if (currentHits < 1) return false;
     attackStat ??= move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
     return points.some(({ sp, achieves }) =>
       /guaranteed/i.test(achieves) &&
       koHitCount(achieves) > 0 &&
-      koHitCount(achieves) < currentHits &&
+      koHitCount(achieves) <= Math.max(1, currentHits - 1) &&
       canApplySpTargets(userState.sp, { [attackStat]: sp }));
   });
   return { status: possible ? "possible" : "unreachable" };

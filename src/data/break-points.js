@@ -60,6 +60,9 @@ export function breakPoints(userState, move, scenario) {
   if (plusNature) {
     let exceedsMaximum = false;
     let bestGuaranteedHits = koHitCount(initialResult.ko.text);
+    if (bestGuaranteedHits === 1 && !/guaranteed/i.test(initialResult.ko.text)) {
+      bestGuaranteedHits = 2;
+    }
     for (let sp = currentSp; sp <= 32; sp += 1) {
       const plusState = {
         ...withOffense(userState, attackStat, sp),

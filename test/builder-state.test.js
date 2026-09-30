@@ -305,7 +305,7 @@ function breakAnalysis(move, koText, points = [], maxPct = 40) {
   return { move, damage: { koText, maxPct }, points };
 }
 
-test("only current guaranteed or chance-based OHKOs count as break coverage", () => {
+test("only current guaranteed OHKOs count as break coverage", () => {
   const physical = { category: "Physical" };
   const special = { category: "Special" };
   const state = { sp: {} };
@@ -313,12 +313,40 @@ test("only current guaranteed or chance-based OHKOs count as break coverage", ()
     breakAnalysis(physical, "guaranteed 3HKO"),
     breakAnalysis(special, "guaranteed 2HKO"),
   ]), { status: "unreachable" });
-  for (const koText of ["guaranteed OHKO", "6.3% chance to OHKO"]) {
-    assert.deepEqual(breakCoverage(state, [
-      breakAnalysis(physical, "guaranteed 2HKO", [{ sp: 8, achieves: "guaranteed OHKO" }]),
-      breakAnalysis(special, koText, [], 110),
-    ]), { status: "covered" });
-  }
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(physical, "guaranteed 2HKO", [{ sp: 8, achieves: "guaranteed OHKO" }]),
+    breakAnalysis(special, "guaranteed OHKO", [], 110),
+  ]), { status: "covered" });
+});
+
+test("a current chance-based OHKO without a guaranteed breakpoint is unreachable", () => {
+  assert.deepEqual(breakCoverage({ sp: {} }, [
+    breakAnalysis({ category: "Special" }, "6.3% chance to OHKO", [
+      { sp: 8, achieves: "99.9% chance to OHKO" },
+    ], 110),
+  ]), { status: "unreachable" });
+});
+
+test("a current chance OHKO is possible only when remaining SP can guarantee it", () => {
+  const state = { sp: { hp: 20, atk: 12, def: 2, spa: 10, spd: 0, spe: 14 } };
+  const move = { category: "Physical" };
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(move, "37.5% chance to OHKO", [{ sp: 20, achieves: "guaranteed OHKO" }], 110),
+  ]), { status: "possible" });
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(move, "37.5% chance to OHKO", [{ sp: 21, achieves: "guaranteed OHKO" }], 110),
+  ]), { status: "unreachable" });
+  assert.deepEqual(breakCoverage({ sp: { ...state.sp, spe: 22 } }, [
+    breakAnalysis(move, "37.5% chance to OHKO", [{ sp: 13, achieves: "guaranteed OHKO" }], 110),
+  ]), { status: "unreachable" });
+});
+
+test("a chance OHKO can become guaranteed through nature alone with no unassigned SP", () => {
+  assert.deepEqual(breakCoverage({ sp: { hp: 2, atk: 32, spe: 32 } }, [
+    breakAnalysis({ category: "Physical" }, "37.5% chance to OHKO", [
+      { sp: 32, achieves: "guaranteed OHKO", requiresPlusNature: true },
+    ], 110),
+  ]), { status: "possible" });
 });
 
 for (const hits of [2, 3, 4, 5]) {
@@ -361,11 +389,33 @@ test("break coverage allows a guaranteed 5HKO improvement from no KO within five
 });
 
 test("break coverage allows affordable nature-changing guaranteed tier improvements", () => {
-  assert.deepEqual(breakCoverage({ sp: { atk: 32, spe: 32 } }, [
+  assert.deepEqual(breakCoverage({ sp: { hp: 2, atk: 32, spe: 32 } }, [
     breakAnalysis({ category: "Physical" }, "guaranteed 2HKO", [
       { sp: 32, achieves: "guaranteed OHKO", requiresPlusNature: true },
     ]),
   ]), { status: "possible" });
+});
+
+test("break coverage spends only remaining SP above the current attacking allocation", () => {
+  const state = { sp: { hp: 20, atk: 12, def: 2, spa: 10, spd: 0, spe: 14 } };
+  const move = { category: "Physical" };
+  // The current 58 SP leaves 8 points; the Attack target replaces its current 12 SP.
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(move, "guaranteed 2HKO", [{ sp: 20, achieves: "guaranteed OHKO" }]),
+  ]), { status: "possible" });
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis(move, "guaranteed 2HKO", [{ sp: 21, achieves: "guaranteed OHKO" }]),
+  ]), { status: "unreachable" });
+  assert.deepEqual(state.sp, { hp: 20, atk: 12, def: 2, spa: 10, spd: 0, spe: 14 });
+});
+
+test("break coverage cannot add attacking SP when all 66 points are assigned", () => {
+  const state = { sp: { hp: 20, atk: 12, def: 2, spa: 10, spd: 0, spe: 22 } };
+  assert.deepEqual(breakCoverage(state, [
+    breakAnalysis({ category: "Physical" }, "guaranteed 2HKO", [
+      { sp: 13, achieves: "guaranteed OHKO" },
+    ]),
+  ]), { status: "unreachable" });
 });
 
 test("break coverage respects the 66 SP budget and ignores unsupported damage", () => {
@@ -501,4 +551,25 @@ test("Tera Blast coverage budgets its actual Attack target and preserves damage 
   assert.equal(freed.detail.attackStat, "atk");
   assert.equal(canApplySpTargets(freed.state.sp, { atk: guaranteedPoint.sp }), true);
   assert.equal(freed.coverage.status, "possible");
+
+  const fullyAssigned = {
+    ...full.state,
+    nature: "Timid",
+    sp: { hp: 32, atk: 16, def: 18, spa: 0, spd: 0, spe: 0 },
+  };
+  const detail = yourDamageAnalysis(fullyAssigned, move, scenario);
+  const points = breakPoints(fullyAssigned, move, scenario);
+  assert.equal(detail.damage.koText, "guaranteed 2HKO");
+  assert.equal(yourDamage({ ...fullyAssigned, nature: "Adamant" }, move, scenario).koText, "guaranteed OHKO");
+  assert.ok(points.some(({ sp, achieves, requiresPlusNature }) =>
+    sp === 16 && achieves === "guaranteed OHKO" && requiresPlusNature));
+  assert.deepEqual(breakCoverage(fullyAssigned, [{ move, ...detail, points }]), { status: "possible" });
+
+  const chanceAssigned = { ...fullyAssigned, nature: "Hardy" };
+  const chanceDetail = yourDamageAnalysis(chanceAssigned, move, scenario);
+  const chancePoints = breakPoints(chanceAssigned, move, scenario);
+  assert.match(chanceDetail.damage.koText, /chance to OHKO/);
+  assert.ok(chancePoints.some(({ sp, achieves, requiresPlusNature }) =>
+    sp === 16 && achieves === "guaranteed OHKO" && requiresPlusNature));
+  assert.deepEqual(breakCoverage(chanceAssigned, [{ move, ...chanceDetail, points: chancePoints }]), { status: "possible" });
 });

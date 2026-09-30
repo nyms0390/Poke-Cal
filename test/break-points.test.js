@@ -381,11 +381,12 @@ test("never lowers assigned offensive SP for a plus-nature threshold", () => {
   assert.equal(points.every(({ sp }) => sp >= state.sp.atk), true);
 });
 
-for (const { hp, defenseSp, guaranteedSp, neutralMaximum } of [
+for (const { hp, defenseSp, guaranteedSp, neutralMaximum, attackSp = 0, currentKoText = "guaranteed 2HKO" } of [
   { hp: 100, defenseSp: 7, guaranteedSp: 27, neutralMaximum: "68.8% chance to OHKO" },
   { hp: 90, defenseSp: 18, guaranteedSp: 16, neutralMaximum: "guaranteed OHKO" },
+  { hp: 90, defenseSp: 18, guaranteedSp: 16, neutralMaximum: "guaranteed OHKO", attackSp: 4, currentKoText: "6.3% chance to OHKO" },
 ]) {
-  test(`plus nature offers an affordable guaranteed OHKO when the neutral maximum is ${neutralMaximum}`, () => {
+  test(`plus nature offers an affordable guaranteed OHKO from Attack ${attackSp} when the neutral maximum is ${neutralMaximum}`, () => {
     const pokemon = {
       id: "tera-blast-user", types: ["Normal"],
       baseStats: { hp: 80, atk: 130, def: 80, spa: 50, spd: 80, spe: 80 },
@@ -394,7 +395,7 @@ for (const { hp, defenseSp, guaranteedSp, neutralMaximum } of [
     const state = {
       ...createSideState(pokemon, {
         nature: "Hardy",
-        sp: { hp: 32, atk: 0, def: defenseSp, spa: 0, spd: 0, spe: 0 },
+        sp: { hp: 32, atk: attackSp, def: defenseSp, spa: 0, spd: 0, spe: 0 },
         ability: null, item: null, moves: [move],
       }),
       teraType: "Fighting",
@@ -410,7 +411,7 @@ for (const { hp, defenseSp, guaranteedSp, neutralMaximum } of [
     };
     const detail = yourDamageAnalysis(state, move, scenario);
     assert.equal(detail.attackStat, "atk");
-    assert.equal(detail.damage.koText, "guaranteed 2HKO");
+    assert.equal(detail.damage.koText, currentKoText);
     assert.equal(yourDamage(withOffense(state, "atk", 32), move, scenario).koText, neutralMaximum);
     assert.equal(canApplySpTargets(state.sp, { atk: 32 }), false);
     const plusDamage = yourDamage({ ...withOffense(state, "atk", guaranteedSp), nature: "Adamant" }, move, scenario);
