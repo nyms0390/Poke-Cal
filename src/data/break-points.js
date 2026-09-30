@@ -58,15 +58,23 @@ export function breakPoints(userState, move, scenario) {
   const maximumCurrentNature = yourDamage(withOffense(userState, attackStat, 32), move, scenario);
   const plusNature = plusNatureFor(attackStat, userState.nature);
   if (plusNature) {
+    let exceedsMaximum = false;
+    let bestGuaranteedHits = koHitCount(initialResult.ko.text);
     for (let sp = currentSp; sp <= 32; sp += 1) {
       const plusState = {
         ...withOffense(userState, attackStat, sp),
         nature: plusNature,
       };
       const damage = yourDamage(plusState, move, scenario);
-      if (compareKoTiers(damage.koText, maximumCurrentNature.koText) <= 0) continue;
+      const firstBeyondMaximum = !exceedsMaximum &&
+        compareKoTiers(damage.koText, maximumCurrentNature.koText) > 0;
+      const hits = koHitCount(damage.koText);
+      const improvesGuaranteedHits = /guaranteed/i.test(damage.koText) &&
+        hits > 0 && hits < bestGuaranteedHits;
+      if (!firstBeyondMaximum && !improvesGuaranteedHits) continue;
       points.push(point(sp, damage, true));
-      break;
+      if (firstBeyondMaximum) exceedsMaximum = true;
+      if (improvesGuaranteedHits) bestGuaranteedHits = hits;
     }
   }
 

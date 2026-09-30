@@ -491,7 +491,8 @@ test("Tera Blast coverage budgets its actual Attack target and preserves damage 
   assert.equal(full.detail.attackStat, "atk");
   assert.deepEqual(full.detail.damage, yourDamage(full.state, move, scenario));
   assert.equal(full.detail.damage.koText, "guaranteed 2HKO");
-  const guaranteedPoint = full.points.find(({ achieves }) => achieves === "guaranteed OHKO");
+  const guaranteedPoint = full.points.find(({ achieves, requiresPlusNature }) =>
+    !requiresPlusNature && achieves === "guaranteed OHKO");
   assert.equal(guaranteedPoint.sp, 32);
   assert.equal(canApplySpTargets(full.state.sp, { atk: guaranteedPoint.sp }), false);
   assert.equal(full.coverage.status, "unreachable");

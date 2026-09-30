@@ -10,6 +10,7 @@ import {
 import { compareKoTiers } from "../src/data/bulk-points.js";
 import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
+import { breakCoverage, canApplySpTargets } from "../src/ui/builder-state.js";
 
 const attacker = {
   id: "builder",
@@ -379,6 +380,53 @@ test("never lowers assigned offensive SP for a plus-nature threshold", () => {
   assert.equal(points.length > 0, true);
   assert.equal(points.every(({ sp }) => sp >= state.sp.atk), true);
 });
+
+for (const { hp, defenseSp, guaranteedSp, neutralMaximum } of [
+  { hp: 100, defenseSp: 7, guaranteedSp: 27, neutralMaximum: "68.8% chance to OHKO" },
+  { hp: 90, defenseSp: 18, guaranteedSp: 16, neutralMaximum: "guaranteed OHKO" },
+]) {
+  test(`plus nature offers an affordable guaranteed OHKO when the neutral maximum is ${neutralMaximum}`, () => {
+    const pokemon = {
+      id: "tera-blast-user", types: ["Normal"],
+      baseStats: { hp: 80, atk: 130, def: 80, spa: 50, spd: 80, spe: 80 },
+    };
+    const move = { id: "terablast", type: "Normal", category: "Special", basePower: 80 };
+    const state = {
+      ...createSideState(pokemon, {
+        nature: "Hardy",
+        sp: { hp: 32, atk: 0, def: defenseSp, spa: 0, spd: 0, spe: 0 },
+        ability: null, item: null, moves: [move],
+      }),
+      teraType: "Fighting",
+    };
+    const scenario = {
+      threat: {
+        pokemon: {
+          id: "tera-blast-threat", types: ["Normal"],
+          baseStats: { hp, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
+        },
+        nature: "Hardy", spPresets: { bulk: { hp: 0, def: 0, spd: 0 } },
+      },
+    };
+    const detail = yourDamageAnalysis(state, move, scenario);
+    assert.equal(detail.attackStat, "atk");
+    assert.equal(detail.damage.koText, "guaranteed 2HKO");
+    assert.equal(yourDamage(withOffense(state, "atk", 32), move, scenario).koText, neutralMaximum);
+    assert.equal(canApplySpTargets(state.sp, { atk: 32 }), false);
+    const plusDamage = yourDamage({ ...withOffense(state, "atk", guaranteedSp), nature: "Adamant" }, move, scenario);
+    assert.equal(plusDamage.koText, "guaranteed OHKO");
+    assert.notEqual(yourDamage({ ...withOffense(state, "atk", guaranteedSp - 1), nature: "Adamant" }, move, scenario).koText, "guaranteed OHKO");
+    const points = breakPoints(state, move, scenario);
+    const guaranteedPoint = points.find(({ achieves, requiresPlusNature }) =>
+      requiresPlusNature && achieves === "guaranteed OHKO");
+    assert.deepEqual(guaranteedPoint, {
+      sp: guaranteedSp, achieves: plusDamage.koText,
+      minPct: plusDamage.minPct, maxPct: plusDamage.maxPct, requiresPlusNature: true,
+    });
+    assert.equal(canApplySpTargets(state.sp, { atk: guaranteedPoint.sp }), true);
+    assert.deepEqual(breakCoverage(state, [{ move, ...detail, points }]), { status: "possible" });
+  });
+}
 
 test("passes the threat's defensive item through to the damage engine", () => {
   const state = userState();
