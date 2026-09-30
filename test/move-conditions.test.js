@@ -19,6 +19,9 @@ test("catalog-driven controls expose exact predicates and no ordinary-move contr
   assert.deepEqual(moveConditionDescriptors(move("lastrespects"))[0].choices.map((choice) => choice.value), ["auto", "0", "1", "2", "3", "4", "5"]);
   assert.deepEqual(moveConditionDescriptors(move("spitup"))[0].choices.map((choice) => choice.value), ["auto", "0", "1", "2", "3"]);
   assert.deepEqual(moveConditionDescriptors(move("beatup"))[0].choices.map((choice) => choice.value), ["auto", "1", "2", "3", "4", "5", "6"]);
+  assert.equal(moveConditionDescriptors(move("whirlpool"))[0].labelKey, "battle.condition.targetDiving");
+  assert.deepEqual(moveConditionDescriptors({ ...move("dragondarts"), multihit: 2 },
+    { item: { id: "loadeddice" } })[0].choices.map((choice) => choice.value), ["auto", "1", "2"]);
 });
 
 test("per-slot conditions survive unrelated edits and reset on move replacement", () => {
@@ -40,4 +43,23 @@ test("active set reload restores move options for the same selected moves", () =
   const stored = activeSetFromState(chosen);
   const restored = applyActiveSet(createSideState(pokemon, defaults), stored);
   assert.deepEqual(moveOptionsForSlot(restored, 3, move("ragefist")), { hitsReceived: 6 });
+});
+
+test("Auto clears legacy slot overrides for hits, order, and condition through reload", () => {
+  const cases = [
+    ["tripleaxel", "hitCount", "selectedHitCounts", 2],
+    ["payback", "targetMoved", "targetMovedOverrides", true],
+    ["hex", "conditionOverride", "conditionOverrides", true],
+  ];
+  for (const [id, key, legacyKey, legacyValue] of cases) {
+    const initial = createSideState(pokemon, { ...defaults, moves: [move(id), ...defaults.moves.slice(1)] });
+    const legacy = { ...initial, [legacyKey]: [legacyValue, null, null, null] };
+    const automatic = applyControl(legacy, { kind: "moveOption", index: 0, key, value: "auto" });
+    const descriptor = moveConditionDescriptors(move(id))[0];
+    assert.equal(moveConditionValue(automatic, 0, descriptor), "auto", id);
+    assert.deepEqual(moveOptionsForSlot(automatic, 0, move(id)), {}, id);
+    const persisted = activeSetFromState(automatic);
+    const restored = applyActiveSet(legacy, persisted);
+    assert.deepEqual(moveOptionsForSlot(restored, 0, move(id)), {}, `${id} reload`);
+  }
 });

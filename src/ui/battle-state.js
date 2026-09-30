@@ -169,9 +169,13 @@ export function applyControl(state, { kind, stat, index, key, value, maxHp, effe
         moveOptionsBySlot: (state.moveOptionsBySlot ?? [{}, {}, {}, {}])
           .map((options, i) => (i === index ? {} : options)),
       };
-    case "moveOption":
+    case "moveOption": {
+      const legacyField = { hitCount: "selectedHitCounts", targetMoved: "targetMovedOverrides",
+        conditionOverride: "conditionOverrides" }[key];
       return {
         ...state,
+        ...(legacyField ? { [legacyField]: (state[legacyField] ?? [null, null, null, null])
+          .map((old, i) => (i === index ? null : old)) } : {}),
         moveOptionsBySlot: (state.moveOptionsBySlot ?? [{}, {}, {}, {}]).map((options, i) => {
           if (i !== index) return options;
           const next = { ...options };
@@ -180,6 +184,7 @@ export function applyControl(state, { kind, stat, index, key, value, maxHp, effe
           return next;
         }),
       };
+    }
     case "hitCount":
       return {
         ...state,

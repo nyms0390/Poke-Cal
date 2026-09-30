@@ -244,12 +244,13 @@ export const MOVE_EFFECTS = {
       isGrounded(ctx.attacker, ctx.attackerState, ctx.field)
       ? Math.floor(ctx.move.basePower * 1.5) : undefined,
   },
-  earthquake: { condition: { label: "Target using Dig" }, basePower: historyDoublePower },
-  surf: { condition: { label: "Target using Dive" }, basePower: historyDoublePower },
-  bodyslam: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
-  dragonrush: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
-  flyingpress: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
-  supercellslam: { condition: { label: "Target minimized" }, basePower: historyDoublePower },
+  earthquake: { condition: { label: "Target using Dig" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  surf: { condition: { label: "Target using Dive" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  whirlpool: { condition: { label: "Target using Dive" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  bodyslam: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  dragonrush: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  flyingpress: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  supercellslam: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
 
   // -- sun/rain-halved charge moves ---------------------------------------
   solarbeam: { basePower: solarPowerHandler },
@@ -330,14 +331,10 @@ export const MOVE_EFFECTS = {
   lowkick: { basePower: targetWeightPowerHandler },
 
   // -- user-versus-target-weight-ratio power -------------------------------
-  heatcrash: { condition: { label: "Target minimized" }, basePower: (ctx) => {
-    const power = userTargetWeightPowerHandler(ctx);
-    return power === null ? null : conditionMet(ctx, () => false) ? power * 2 : power;
-  } },
-  heavyslam: { condition: { label: "Target minimized" }, basePower: (ctx) => {
-    const power = userTargetWeightPowerHandler(ctx);
-    return power === null ? null : conditionMet(ctx, () => false) ? power * 2 : power;
-  } },
+  heatcrash: { condition: { label: "Target minimized" }, basePower: userTargetWeightPowerHandler,
+    sourceDamageMultiplier: targetStateDamageMultiplier },
+  heavyslam: { condition: { label: "Target minimized" }, basePower: userTargetWeightPowerHandler,
+    sourceDamageMultiplier: targetStateDamageMultiplier },
 
   // -- speed-scaled and order-conditional power ----------------------------
   gyroball: { basePower: gyroBallPower },
@@ -514,6 +511,10 @@ function conditionMet(ctx, derive) {
 
 function historyDoublePower(ctx) {
   return conditionMet(ctx, () => false) ? ctx.move.basePower * 2 : undefined;
+}
+
+function targetStateDamageMultiplier(ctx) {
+  return conditionMet(ctx, () => false) ? 2 : 1;
 }
 
 function boundedCount(value, fallback, min, max) {

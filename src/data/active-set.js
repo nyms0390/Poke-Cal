@@ -109,6 +109,9 @@ export function applyActiveSet(state, activeSet, { abilityLookup, itemLookup } =
   if (Array.isArray(state.selectedMoveIds)) next.selectedMoveIds = [...set.moveIds];
   if (Array.isArray(state.moveOptionsBySlot) && set.moveOptionsBySlot) {
     next.moveOptionsBySlot = set.moveOptionsBySlot.map((options) => ({ ...options }));
+    for (const key of ["selectedHitCounts", "targetMovedOverrides", "conditionOverrides"]) {
+      if (Array.isArray(state[key])) next[key] = state[key].map(() => null);
+    }
   }
   return next;
 }

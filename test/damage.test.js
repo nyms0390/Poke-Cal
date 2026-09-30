@@ -3374,6 +3374,61 @@ test("Beat Up uses the selected eligible hit count and identifies its estimate",
   assert.match(hit(1).notes.join(" "), /estimate.*base Attack/i);
 });
 
+test("Dig, Dive, and Minimize double final damage rolls rather than base power", () => {
+  const species = { id: "neutral", name: "Neutral", types: ["Normal"], weightkg: 100,
+    baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 } };
+  const target = { ...species, id: "target", weightkg: 25 };
+  for (const [id, power, category] of [
+    ["earthquake", 100, "Physical"], ["surf", 90, "Special"],
+    ["whirlpool", 35, "Special"], ["bodyslam", 85, "Physical"],
+    ["dragonrush", 100, "Physical"], ["flyingpress", 100, "Physical"],
+    ["supercellslam", 100, "Physical"], ["heatcrash", 1, "Physical"],
+    ["heavyslam", 1, "Physical"],
+  ]) {
+    const move = { id, name: id, type: "Normal", category, basePower: power };
+    const input = { attacker: species, defender: target, move,
+      attackerState: neutralState, defenderState: neutralState };
+    const normal = calculateDamage(input);
+    const boosted = calculateDamage({ ...input, moveOptions: { conditionOverride: true } });
+    assert.deepEqual(boosted.rolls, normal.rolls.map((roll) => roll * 2), id);
+  }
+  const surf = { id: "surf", name: "Surf", type: "Water", category: "Special", basePower: 90 };
+  const normal = calculateDamage({ attacker: species, defender: species, move: surf,
+    attackerState: neutralState, defenderState: neutralState });
+  const diving = calculateDamage({ attacker: species, defender: species, move: surf,
+    attackerState: neutralState, defenderState: neutralState,
+    moveOptions: { conditionOverride: true } });
+  assert.deepEqual([normal.minDamage, normal.maxDamage], [34, 41]);
+  assert.deepEqual([diving.minDamage, diving.maxDamage], [68, 82]);
+});
+
+test("Minimize damage follows weight power and actual Technician eligibility", () => {
+  const user = { id: "heavy", name: "Heavy", types: ["Normal"], weightkg: 100,
+    baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 } };
+  const move = { id: "heatcrash", name: "Heat Crash", type: "Normal", category: "Physical", basePower: 1 };
+  const hit = (weightkg, ability = null) => calculateDamage({ attacker: user,
+    defender: { ...user, id: "target", weightkg }, move,
+    attackerState: { ...neutralState, ability }, defenderState: neutralState,
+    moveOptions: { conditionOverride: true } });
+  assert.equal(hit(15).notes.includes("Technician"), false); // 120 BP from the weight ratio
+  assert.equal(hit(40, { id: "technician", name: "Technician" }).notes.includes("Technician"), true); // 60 BP
+  assert.equal(hit(15, { id: "technician", name: "Technician" }).notes.includes("Technician"), false);
+});
+
+test("Dragon Darts target split ignores Loaded Dice hit forcing", () => {
+  const move = { id: "dragondarts", name: "Dragon Darts", type: "Dragon",
+    category: "Physical", basePower: 50, multihit: 2 };
+  const input = { attacker: pikachu, defender: squirtle, move,
+    attackerState: { ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } },
+    defenderState: neutralState };
+  const one = calculateDamage({ ...input, moveOptions: { hitCount: 1 } });
+  const two = calculateDamage({ ...input, moveOptions: { hitCount: 2 } });
+  assert.equal(one.supported, true);
+  assert.equal(one.maxDamage < two.minDamage, true);
+  assert.equal(one.notes.some((note) => note.includes("hits 1 time")), true);
+  assert.equal(one.notes.includes("Loaded Dice"), false);
+});
+
 test("displays Population Bomb's accuracy-chained hit damage range", () => {
   const maushold = {
     id: "maushold",

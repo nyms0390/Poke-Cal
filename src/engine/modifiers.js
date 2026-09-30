@@ -138,7 +138,7 @@ export const ITEM_MODIFIERS = {
   wiseglasses: (ctx) =>
     ctx.attackerPerspective && !ctx.isPhysical ? { kind: "power", value: 1.1, label: "Wise Glasses" } : null,
   loadeddice: (ctx) => {
-    if (!ctx.attackerPerspective || ctx.hitCountRange?.max <= 1) return null;
+    if (!ctx.attackerPerspective || ctx.hitCountRange?.max <= 1 || normalizeId(ctx.move.id) === "dragondarts") return null;
     return {
       kind: "hits",
       value: [Math.max(4, ctx.hitCountRange.min), ctx.hitCountRange.max],
@@ -175,7 +175,7 @@ export const ABILITY_MODIFIERS = {
       ? { kind: "attack", value: 2, label: ctx.attackerState.ability.name }
       : null,
   skilllink: (ctx) =>
-    ctx.attackerPerspective && ctx.hitCountRange?.max > 1
+    ctx.attackerPerspective && ctx.hitCountRange?.max > 1 && normalizeId(ctx.move.id) !== "dragondarts"
       ? { kind: "hits", value: "max", label: "Skill Link" }
       : null,
   purepower: (ctx) =>
@@ -199,7 +199,7 @@ export const ABILITY_MODIFIERS = {
   overgrow: (ctx) => lowHpTypeBoostModifier(ctx, "Grass", "Overgrow"),
   swarm: (ctx) => lowHpTypeBoostModifier(ctx, "Bug", "Swarm"),
   technician: (ctx) =>
-    ctx.attackerPerspective && ctx.move.basePower <= 60 ? { kind: "power", value: 1.5, label: "Technician" } : null,
+    ctx.attackerPerspective && ctx.power <= 60 ? { kind: "power", value: 1.5, label: "Technician" } : null,
   adaptability: (ctx) =>
     adaptabilityModifier(ctx),
   sheerforce: (ctx) =>

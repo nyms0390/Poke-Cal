@@ -375,10 +375,13 @@ export function calculateDamage({
       : 1;
   const spreadModifier =
     battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget ? 0.75 : 1;
+  const sourceDamageMultiplier = moveEffect(moveId).sourceDamageMultiplier?.(ctx) ?? 1;
+  if (sourceDamageMultiplier !== 1) notes.push(`${move.name} target-state damage ×${sourceDamageMultiplier}`);
   if (spreadModifier !== 1) notes.push("Doubles spread move");
-  if (hitPowers.length === 1 && (hitCounts.min > 1 || hitCounts.max > 1)) {
+  if (!successiveHits && hitPowers.length === 1 &&
+    (hitCounts.min > 1 || hitCounts.max > 1 || (hasExplicitHitCount && ctx.hitCountRange.max > 1))) {
     notes.push(hitCounts.min === hitCounts.max
-      ? `${move.name} hits ${hitCounts.max} times`
+      ? `${move.name} hits ${hitCounts.max} ${hitCounts.max === 1 ? "time" : "times"}`
       : `${move.name} hits ${hitCounts.min}-${hitCounts.max} times`);
   }
 
@@ -391,6 +394,7 @@ export function calculateDamage({
     hitDamage = Math.floor(hitDamage * burnModifier);
     hitDamage = Math.floor(hitDamage * spreadModifier);
     hitDamage = Math.floor(hitDamage * damageModifier);
+    hitDamage = Math.floor(hitDamage * sourceDamageMultiplier);
     return Math.max(1, hitDamage);
   };
   const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {

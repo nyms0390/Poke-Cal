@@ -348,12 +348,14 @@ function handlePick(event) {
       kind: "ability",
       value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
     });
+    renderMovePicks();
   }
   if (id === "builder-item") {
     stageUserSetup({
       kind: "item",
       value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
     });
+    renderMovePicks();
   }
   if (id === "builder-status") stageUserSetup({ kind: "status", value });
 }
@@ -377,7 +379,7 @@ function stageUserSetup(control) {
       userSetupDraft = null;
       updatePage(() => {
         state = { ...state, user: setup };
-      });
+      }, { refreshMoves: true });
     });
   }
   const setup = userSetupDraft.stage((current) => applyControl(current, control));

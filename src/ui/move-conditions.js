@@ -21,6 +21,7 @@ const BOOLEAN_LABELS = {
   round: "battle.condition.priorRound",
   earthquake: "battle.condition.targetDigging",
   surf: "battle.condition.targetDiving",
+  whirlpool: "battle.condition.targetDiving",
   bodyslam: "battle.condition.targetMinimized",
   dragonrush: "battle.condition.targetMinimized",
   flyingpress: "battle.condition.targetMinimized",
