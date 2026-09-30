@@ -3402,6 +3402,22 @@ test("Dig, Dive, and Minimize double final damage rolls rather than base power",
   assert.deepEqual([diving.minDamage, diving.maxDamage], [68, 82]);
 });
 
+test("Dive damage and singles Light Screen cancel in one final rounding step", () => {
+  const species = { id: "neutral", name: "Neutral", types: ["Normal"],
+    baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 } };
+  const move = { id: "surf", name: "Surf", type: "Water", category: "Special", basePower: 90 };
+  for (const item of [null, { id: "lifeorb", name: "Life Orb" }]) {
+    const input = { attacker: species, defender: species, move,
+      attackerState: { ...neutralState, item }, defenderState: neutralState,
+      field: createField({ format: "singles" }) };
+    const baseline = calculateDamage(input);
+    const screenedDive = calculateDamage({ ...input,
+      field: createField({ format: "singles", defenderSide: { lightScreen: true } }),
+      moveOptions: { conditionOverride: true } });
+    assert.deepEqual(screenedDive.rolls, baseline.rolls, item?.id ?? "no item");
+  }
+});
+
 test("Minimize damage follows weight power and actual Technician eligibility", () => {
   const user = { id: "heavy", name: "Heavy", types: ["Normal"], weightkg: 100,
     baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 } };
