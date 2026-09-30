@@ -324,6 +324,8 @@ export function calculateDamage({
 
   let hitCounts = hitCountRange(ctx);
   ctx.hitCountRange = hitCounts;
+  const hasExplicitHitCount = moveOptions.hitCount !== null && moveOptions.hitCount !== undefined;
+  const selectedHitCount = Number(moveOptions.hitCount);
   const modifiers = collectModifiers({
     ...ctx,
     typeMultiplier,
@@ -334,6 +336,7 @@ export function calculateDamage({
     critical: effectiveCritical,
   });
   for (const modifier of modifiers) {
+    if (modifier.kind === "hits" && hasExplicitHitCount && Number.isFinite(selectedHitCount)) continue;
     notes.push(modifier.label);
     if (modifier.kind === "attack") attackModifier *= modifier.value;
     if (modifier.kind === "defense") defenseModifier *= modifier.value;
@@ -344,8 +347,6 @@ export function calculateDamage({
     if (modifier.kind === "hitPowerMultipliers") hitPowerMultipliers = modifier.value;
   }
 
-  const hasExplicitHitCount = moveOptions.hitCount !== null && moveOptions.hitCount !== undefined;
-  const selectedHitCount = Number(moveOptions.hitCount);
   if (hasExplicitHitCount && Number.isFinite(selectedHitCount)) {
     const count = Math.max(hitCounts.min, Math.min(hitCounts.max, Math.trunc(selectedHitCount)));
     hitCounts = { min: count, max: count };

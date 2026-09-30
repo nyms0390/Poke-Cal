@@ -3578,7 +3578,7 @@ test("supports standard ranged multi-hit moves with a selected hit count", () =>
   assert.equal(scaleShot.notes.includes("-1 Def / +1 Spe after use"), true);
 });
 
-test("Skill Link and Loaded Dice clamp ranged multi-hit counts", () => {
+test("Skill Link and Loaded Dice set automatic hits but allow an exact hit count", () => {
   const attacker = {
     id: "multiuser",
     name: "Multiuser",
@@ -3605,6 +3605,20 @@ test("Skill Link and Loaded Dice clamp ranged multi-hit counts", () => {
     attackerState: neutralState,
     defenderState: neutralState,
   });
+  const loadedDiceAuto = calculateDamage({
+    attacker,
+    defender,
+    move: rockBlast,
+    attackerState: { ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } },
+    defenderState: neutralState,
+  });
+  const skillLinkAuto = calculateDamage({
+    attacker,
+    defender,
+    move: rockBlast,
+    attackerState: { ...neutralState, ability: { id: "skilllink", name: "Skill Link" } },
+    defenderState: neutralState,
+  });
   const loadedDice = calculateDamage({
     attacker,
     defender,
@@ -3622,10 +3636,12 @@ test("Skill Link and Loaded Dice clamp ranged multi-hit counts", () => {
     moveOptions: { hitCount: 3 },
   });
 
-  assert.deepEqual([loadedDice.minDamage, loadedDice.maxDamage], [singleHit.minDamage * 4, singleHit.maxDamage * 4]);
-  assert.deepEqual([skillLink.minDamage, skillLink.maxDamage], [singleHit.minDamage * 5, singleHit.maxDamage * 5]);
-  assert.equal(loadedDice.notes.includes("Loaded Dice"), true);
-  assert.equal(skillLink.notes.includes("Skill Link"), true);
+  assert.deepEqual([loadedDiceAuto.minDamage, loadedDiceAuto.maxDamage], [singleHit.minDamage * 4, singleHit.maxDamage * 5]);
+  assert.deepEqual([skillLinkAuto.minDamage, skillLinkAuto.maxDamage], [singleHit.minDamage * 5, singleHit.maxDamage * 5]);
+  assert.deepEqual([loadedDice.minDamage, loadedDice.maxDamage], [singleHit.minDamage * 3, singleHit.maxDamage * 3]);
+  assert.deepEqual([skillLink.minDamage, skillLink.maxDamage], [singleHit.minDamage * 3, singleHit.maxDamage * 3]);
+  assert.equal(loadedDiceAuto.notes.includes("Loaded Dice"), true);
+  assert.equal(skillLinkAuto.notes.includes("Skill Link"), true);
 });
 
 test("Surging Strikes is always critical and bypasses screens", () => {

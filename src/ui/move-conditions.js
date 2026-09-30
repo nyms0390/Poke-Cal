@@ -1,7 +1,6 @@
 import { normalizeId } from "../identifiers.js";
 import { hitCountRange } from "../engine/damage.js";
 import { moveEffect } from "../engine/move-effects.js";
-import { resolveHitCountRange } from "../engine/modifiers.js";
 
 const BOOLEAN_LABELS = {
   acrobatics: "battle.condition.noItem",
@@ -45,7 +44,7 @@ export function moveConditionDescriptors(move, attackerState = {}) {
   const id = normalizeId(move.id ?? move.name);
   const effect = moveEffect(id);
   const controls = [];
-  const hitRange = resolveHitCountRange(hitCountRange({ move, attackerState }), { move, attackerState });
+  const hitRange = hitCountRange({ move, attackerState });
   if (hitRange.min !== hitRange.max) controls.push({
     key: "hitCount", labelKey: "battle.hits",
     choices: [auto, ...Array.from({ length: hitRange.max - hitRange.min + 1 }, (_, offset) => {

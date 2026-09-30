@@ -24,6 +24,21 @@ test("catalog-driven controls expose exact predicates and no ordinary-move contr
     { item: { id: "loadeddice" } })[0].choices.map((choice) => choice.value), ["auto", "1", "2"]);
 });
 
+test("Bullet Seed keeps every exact hit choice with Skill Link or Loaded Dice", () => {
+  const bulletSeed = move("bulletseed", 25);
+  const choices = ["auto", "2", "3", "4", "5"];
+  for (const attackerState of [
+    { ability: { id: "skilllink" } },
+    { item: { id: "loadeddice" } },
+  ]) {
+    const descriptor = moveConditionDescriptors(bulletSeed, attackerState)[0];
+    assert.equal(descriptor.key, "hitCount");
+    assert.deepEqual(descriptor.choices.map((choice) => choice.value), choices);
+    assert.deepEqual(moveOptionsForSlot({ ...attackerState, moveOptionsBySlot: [{ hitCount: "3" }] }, 0, bulletSeed),
+      { hitCount: 3 });
+  }
+});
+
 test("per-slot conditions survive unrelated edits and reset on move replacement", () => {
   const initial = createSideState(pokemon, defaults);
   const exact = applyControl(initial, { kind: "moveOption", index: 0, key: "faintedAllyCount", value: "5" });

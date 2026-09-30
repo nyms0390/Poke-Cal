@@ -345,21 +345,6 @@ export const ABILITY_MODIFIERS = {
       : null,
 };
 
-export function resolveHitCountRange(range, { move, attackerState }) {
-  let resolved = range;
-  const itemId = normalizeId(attackerState?.item?.id ?? attackerState?.item?.name);
-  const abilityId = normalizeId(attackerState?.ability?.id ?? attackerState?.ability?.name);
-  const producers = [
-    itemId === "loadeddice" ? ITEM_MODIFIERS.loadeddice : null,
-    abilityId === "skilllink" ? ABILITY_MODIFIERS.skilllink : null,
-  ];
-  for (const producer of producers) {
-    const modifier = producer?.({ move, attackerState, attackerPerspective: true, hitCountRange: resolved });
-    if (modifier?.kind === "hits") resolved = applyHitCountOverride(resolved, modifier.value);
-  }
-  return resolved;
-}
-
 for (const [abilityId, info] of Object.entries(TYPE_POWER_ABILITIES)) {
   ABILITY_MODIFIERS[abilityId] = (ctx) =>
     ctx.attackerPerspective && info.type === ctx.moveType
