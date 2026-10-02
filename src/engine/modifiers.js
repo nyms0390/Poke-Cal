@@ -278,6 +278,14 @@ export const ABILITY_MODIFIERS = {
     ctx.attackerPerspective && ctx.typeMultiplier < 1 ? { kind: "damage", value: 2, order: 20, label: "Tinted Lens" } : null,
   prismarmor: superEffectiveReductionModifier,
   solidrock: superEffectiveReductionModifier,
+  filter: superEffectiveReductionModifier,
+  fluffy: (ctx) => {
+    if (ctx.attackerPerspective) return null;
+    let value = 1;
+    if (ctx.moveType === "Fire") value *= 2;
+    if (ctx.move.flags?.contact) value /= 2;
+    return value === 1 ? null : { kind: "damage", value, order: 31, label: "Fluffy" };
+  },
   orichalcumpulse: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk" && (normalizeId(ctx.field.weather) === "sunnyday" || normalizeId(ctx.field.weather) === "desolateland")
       ? { kind: "attack", value: FIELD_ABILITY_BOOST, label: ctx.attackerState.ability.name }

@@ -62,6 +62,12 @@ export function typeEffectiveness(moveType, defenderTypes = [], move = null, def
       return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
     }, 1);
   }
+  if (moveType === "Ground" && options.groundedTarget && defenderTypes.includes("Flying")) {
+    return defenderTypes.reduce((multiplier, defenderType) => {
+      if (defenderType === "Flying") return multiplier;
+      return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
+    }, 1);
+  }
   if (["smackdown", "thousandarrows"].includes(moveId) && defenderTypes.includes("Flying")) {
     if (defenderState.grounded !== true) return 1;
     return defenderTypes.reduce((multiplier, defenderType) => {
@@ -158,7 +164,11 @@ export function calculateDamage({
   const defenderTypes = defenderState.teraType
     ? [defenderState.teraType]
     : effectivePokemonTypes(defender, defenderState, effectiveField, suppressDefenderAbility);
-  const rawTypeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, { suppressAttackerAbility });
+  const groundedTarget = Boolean(effectiveField.gravity) || defenderState.grounded === true;
+  const rawTypeMultiplier = typeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, {
+    suppressAttackerAbility,
+    groundedTarget,
+  });
   const defenderMaxHp = calculatePokemonStat(defender, defenderState, "hp");
   const defenderCurrentHp = currentHp(defenderState, defenderMaxHp);
   const attackerMaxHp = calculatePokemonStat(attacker, attackerState, "hp");
@@ -169,9 +179,10 @@ export function calculateDamage({
   ctx.attackerMaxHp = attackerMaxHp;
   const moveId = normalizeId(move.id ?? move.name);
   const alwaysCritical = moveEffect(moveId).alwaysCrit === true;
-  const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility });
+  const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility, groundedTarget });
+  const itemImmunity = abilityImmunity ? null : itemImmunityResult({ moveType, move, defenderState, groundedTarget });
   const teraShell = teraShellTypeMultiplier(rawTypeMultiplier, defenderState, suppressDefenderAbility);
-  const typeMultiplier = abilityImmunity ? 0 : teraShell ?? rawTypeMultiplier;
+  const typeMultiplier = abilityImmunity || itemImmunity ? 0 : teraShell ?? rawTypeMultiplier;
   ctx.typeMultiplier = typeMultiplier;
   const effectiveCritical = (critical || alwaysCritical) &&
     (suppressDefenderAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
@@ -190,8 +201,9 @@ export function calculateDamage({
       critical: effectiveCritical,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
       notes: [
-        abilityImmunity ? "Immune (ability)" : "Immune",
+        abilityImmunity ? "Immune (ability)" : itemImmunity ? "Immune (item)" : "Immune",
         abilityImmunity?.label,
+        itemImmunity?.label,
         ...fieldNotes(effectiveField, attackerState, defenderState),
         ...teraNotes(attackerState, defenderState),
         attackerTypeChange.note,
@@ -288,7 +300,8 @@ export function calculateDamage({
     stagePolicy: criticalStagePolicy("defense", effectiveCritical),
   });
   const sandstormSpDefenseBoost = hasSandstormSpDefenseBoost(defender, defenderState, defenseStat, effectiveField, defenderTypes);
-  const defense = sandstormSpDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
+  const snowDefenseBoost = hasSnowDefenseBoost(defender, defenderState, defenseStat, effectiveField, defenderTypes);
+  const defense = sandstormSpDefenseBoost || snowDefenseBoost ? Math.floor(baseDefense * 1.5) : baseDefense;
   const notes = [
     ...fieldNotes(effectiveField, attackerState, defenderState),
     ...forecastNotes(attacker, attackerState, attackerTypes, suppressAttackerAbility),
@@ -302,6 +315,7 @@ export function calculateDamage({
   if (attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
   if (attackerHasUnaware || defenderHasUnaware) notes.push("Unaware");
   if (sandstormSpDefenseBoost) notes.push("Sandstorm Rock SpD boost");
+  if (snowDefenseBoost) notes.push("Snow Ice Def boost");
   if (moveType !== move.type) notes.push(`${move.name} is ${moveType} type`);
   const moveNote = moveEffect(moveId).note?.(ctx);
   if (moveNote) notes.push(moveNote);
@@ -473,15 +487,19 @@ export function calculateDamage({
   };
 }
 
-function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility }) {
+function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility, groundedTarget = false }) {
   if (suppressDefenderAbility) return null;
   const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
   const abilityName = defenderState.ability?.name ?? defenderState.ability?.id;
   const moveId = normalizeId(move?.id ?? move?.name);
   const types = defenderTypes ?? (defenderState.teraType ? [defenderState.teraType] : defender?.types ?? []);
-  if (abilityId === "levitate" && moveType === "Ground" && defenderState.grounded !== true && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
+  if (abilityId === "levitate" && moveType === "Ground" && !groundedTarget && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
     return { label: abilityName };
   }
+  if (abilityId === "flashfire" && moveType === "Fire") return { label: abilityName };
+  if (abilityId === "eartheater" && moveType === "Ground") return { label: abilityName };
+  if (abilityId === "bulletproof" && move?.flags?.bullet) return { label: abilityName };
+  if (abilityId === "soundproof" && move?.flags?.sound) return { label: abilityName };
   if (["voltabsorb", "motordrive", "lightningrod"].includes(abilityId) && moveType === "Electric") {
     return { label: abilityName };
   }
@@ -492,6 +510,16 @@ function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defen
   if (abilityId === "sapsipper" && moveType === "Grass") return { label: abilityName };
   if (abilityId === "wellbakedbody" && moveType === "Fire") return { label: abilityName };
   if (abilityId === "wonderguard" && typeMultiplier <= 1) return { label: abilityName };
+  return null;
+}
+
+// Item immunities are not ability effects, so Mold Breaker and Neutralizing Gas do not bypass them.
+function itemImmunityResult({ moveType, move, defenderState, groundedTarget }) {
+  const itemId = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
+  const moveId = normalizeId(move?.id ?? move?.name);
+  if (itemId === "airballoon" && moveType === "Ground" && !groundedTarget && moveId !== "thousandarrows") {
+    return { label: defenderState.item?.name ?? "Air Balloon" };
+  }
   return null;
 }
 
@@ -614,6 +642,12 @@ function fieldNotes(field, attackerState, defenderState) {
     notes.push("Primordial Sea treated as Rain");
   }
   return notes;
+}
+
+function hasSnowDefenseBoost(pokemon, state, stat, field, effectiveTypes = null) {
+  if (stat !== "def" || normalizeId(field.weather) !== "snowscape") return false;
+  const types = effectiveTypes ?? (state.teraType ? [state.teraType] : pokemon.types ?? []);
+  return types.includes("Ice");
 }
 
 function hasSandstormSpDefenseBoost(pokemon, state, stat, field, effectiveTypes = null) {
