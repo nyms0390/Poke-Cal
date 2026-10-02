@@ -4,7 +4,15 @@ import {
   mergeNcpSets,
   parseNcpSetdex,
 } from "../src/data/ncp-data.js";
-import { argumentValue, isMainModule, readJson, writeJson } from "./lib/sync-utils.mjs";
+import { METRIC_GROUPS, assertValidCatalogs } from "../src/data/catalog-validation.js";
+import {
+  argumentValue,
+  fetchText as fetchUpstreamText,
+  hasFlag,
+  isMainModule,
+  readJson,
+  writeJson,
+} from "./lib/sync-utils.mjs";
 
 const outputDirectory = new URL("../public/", import.meta.url);
 
@@ -12,30 +20,48 @@ export async function downloadNcpSets({ fetcher = fetchText, url = NCP_SETDEX_UR
   return buildNcpSets(parseNcpSetdex(await fetcher(url)), { dataUrl: url });
 }
 
-export async function updatePublicData(options = {}) {
-  const pokemon = await readJson(outputDirectory, "pokemon");
+// Fails closed: when the merged catalog fails the NCP checks in src/data/catalog-validation.js
+// (e.g. the setdex was `var SETDEX_GEN10 = {};`), nothing is written.
+export async function updatePublicData({
+  directory = outputDirectory,
+  allowShrink = false,
+  minimums,
+  ...options
+} = {}) {
+  const pokemon = await readJson(directory, "pokemon");
   const ncp = await downloadNcpSets(options);
   const merged = mergeNcpSets(pokemon, ncp);
 
-  await writeJson(outputDirectory, "pokemon", merged);
+  assertValidCatalogs(
+    { pokemon: merged },
+    {
+      label: "NCP curated sets",
+      baseline: { pokemon },
+      metrics: METRIC_GROUPS.ncp,
+      allowShrink,
+      ...(minimums ? { minimums } : {}),
+    },
+  );
+
+  await writeJson(directory, "pokemon", merged);
 
   return ncp;
 }
 
-async function fetchText(url) {
-  const response = await fetch(url, {
+function fetchText(url) {
+  return fetchUpstreamText(url, {
     headers: {
       "User-Agent": "PokéCal data sync (+NCP Champions curated sets)",
     },
   });
-  if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
-  return response.text();
 }
 
 if (isMainModule(import.meta.url)) {
   try {
+    const argv = process.argv.slice(2);
     const ncp = await updatePublicData({
-      url: argumentValue(process.argv.slice(2), "--url") ?? NCP_SETDEX_URL,
+      url: argumentValue(argv, "--url") ?? NCP_SETDEX_URL,
+      allowShrink: hasFlag(argv, "--allow-shrink"),
     });
     const setCount = ncp.pokemon.reduce((sum, entry) => sum + entry.sets.length, 0);
     console.log(

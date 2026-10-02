@@ -6,7 +6,14 @@ import {
   extractLearnsetMoves,
   parseShowdownExport,
 } from "../src/data/showdown-data.js";
-import { isMainModule, writeJsonEntries } from "./lib/sync-utils.mjs";
+import { METRIC_GROUPS, assertValidCatalogs } from "../src/data/catalog-validation.js";
+import {
+  fetchText as fetchUpstreamText,
+  hasFlag,
+  isMainModule,
+  readCatalogs,
+  writeJsonEntries,
+} from "./lib/sync-utils.mjs";
 
 const SHOWDOWN_POKEDEX_URL =
   "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/pokedex.ts";
@@ -122,8 +129,30 @@ export async function downloadEverything(fetcher = fetchText) {
   );
 }
 
-export async function writeEverything(data) {
-  await writeJsonEntries(outputDirectory, data);
+export async function writeEverything(data, directory = outputDirectory) {
+  await writeJsonEntries(directory, data);
+}
+
+// Downloads, validates (fail closed: nothing is written when the fresh catalogs fail the
+// Showdown/PokeAPI checks in src/data/catalog-validation.js, using the current files in
+// `directory` as the shrink baseline), then writes.
+export async function syncPokemonData({
+  fetcher = fetchText,
+  directory = outputDirectory,
+  allowShrink = false,
+  minimums,
+} = {}) {
+  const data = await downloadEverything(fetcher);
+  const baseline = await readCatalogs(directory);
+  assertValidCatalogs(data, {
+    label: "Showdown/PokeAPI catalogs",
+    baseline,
+    metrics: METRIC_GROUPS.showdown,
+    allowShrink,
+    ...(minimums ? { minimums } : {}),
+  });
+  await writeEverything(data, directory);
+  return data;
 }
 
 function buildPokemon(pokedex, learnsets, aliasesByNumber) {
@@ -145,10 +174,8 @@ function buildPokemon(pokedex, learnsets, aliasesByNumber) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-async function fetchText(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
-  return response.text();
+function fetchText(url) {
+  return fetchUpstreamText(url);
 }
 
 function parseTraditionalChineseNames(csv) {
@@ -245,10 +272,14 @@ function parseCsvLine(line) {
 }
 
 if (isMainModule(import.meta.url)) {
-  const data = await downloadEverything();
-  await writeEverything(data);
-  console.log(
-    `Wrote ${data.pokemon.length} Pokémon/forms, ${data.items.length} items, ` +
-      `${data.abilities.length} abilities, and ${data.moves.length} moves to public/*.json`,
-  );
+  try {
+    const data = await syncPokemonData({ allowShrink: hasFlag(process.argv, "--allow-shrink") });
+    console.log(
+      `Wrote ${data.pokemon.length} Pokémon/forms, ${data.items.length} items, ` +
+        `${data.abilities.length} abilities, and ${data.moves.length} moves to public/*.json`,
+    );
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
 }

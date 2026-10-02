@@ -5,10 +5,15 @@ export const SMOGON_STATS_URL = "https://www.smogon.com/stats/";
 export const SMOGON_CHAMPIONS_FORMAT_PATTERN = /gen9champions(vgc\d+reg[a-z]+?)(bo3)?/;
 
 export function latestStatsMonth(indexHtml) {
+  return statsMonths(indexHtml)[0] ?? null;
+}
+
+// Monthly stats directories in the Smogon index, newest first, without duplicates.
+export function statsMonths(indexHtml) {
   const months = [...String(indexHtml ?? "").matchAll(/href="(\d{4}-\d{2})\/"/g)].map(
     (match) => match[1],
   );
-  return months.sort().at(-1) ?? null;
+  return [...new Set(months)].sort().reverse();
 }
 
 export function discoverChampionsFormats(chaosIndexHtml, { cutoff }) {

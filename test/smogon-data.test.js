@@ -8,6 +8,7 @@ import {
   discoverChampionsFormats,
   latestStatsMonth,
   mergeSmogonSpreads,
+  statsMonths,
 } from "../src/data/smogon-data.js";
 import { downloadSmogonChampionsSpreads } from "../scripts/sync-champions-spreads.mjs";
 
@@ -185,4 +186,63 @@ test("merges spreads into the Pokémon catalog and clears stale spreads", () => 
 
   assert.equal("spreadsMeta" in pikachu.champions, false);
   assert.equal("usage" in pikachu.champions, false);
+});
+
+test("lists monthly stats directories newest first", () => {
+  assert.deepEqual(statsMonths(statsIndexHtml), ["2026-06", "2026-05"]);
+  assert.deepEqual(statsMonths(""), []);
+});
+
+test("falls back to the previous month when the newest has no Champions formats yet", async () => {
+  const newest = "2026-07";
+  const previous = "2026-06";
+  const bo1Url = chaosUrl({ month: previous, format: "gen9championsvgc2026regmb", cutoff: 1760 });
+  const bo3Url = chaosUrl({ month: previous, format: "gen9championsvgc2026regmbbo3", cutoff: 1760 });
+  const responses = new Map([
+    [SMOGON_STATS_URL, `${statsIndexHtml}<a href="${newest}/">${newest}/</a>`],
+    [`${SMOGON_STATS_URL}${newest}/chaos/`, '<a href="gen9ou-1760.json">gen9ou-1760.json</a>'],
+    [`${SMOGON_STATS_URL}${previous}/chaos/`, chaosIndexHtml],
+    [bo1Url, JSON.stringify(chaosBo1)],
+    [bo3Url, JSON.stringify(chaosBo3)],
+  ]);
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    const usage = await downloadSmogonChampionsSpreads({
+      fetcher: async (url) => {
+        if (!responses.has(url)) throw new Error(`Unexpected request: ${url}`);
+        return responses.get(url);
+      },
+    });
+    assert.equal(usage.month, previous);
+    assert.ok(usage.pokemon.length > 0);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("bounds the month fallback and reports every month it tried", async () => {
+  const months = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05"];
+  const requested = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await assert.rejects(
+      downloadSmogonChampionsSpreads({
+        maxMonthFallback: 3,
+        fetcher: async (url) => {
+          requested.push(url);
+          if (url === SMOGON_STATS_URL) {
+            return months.map((month) => `<a href="${month}/">${month}/</a>`).join("\n");
+          }
+          if (url.endsWith("2026-04/chaos/")) throw new Error("HTTP 404");
+          return "<html>no champions here</html>";
+        },
+      }),
+      /No Champions VGC chaos stats found for 2026-05, 2026-04, 2026-03/,
+    );
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.equal(requested.length, 4);
 });

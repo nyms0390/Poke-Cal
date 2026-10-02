@@ -4,10 +4,15 @@ import {
   mergeLimitlessUsage,
 } from "../src/data/limitless-data.js";
 import { buildLimitlessTeamArchive } from "../src/data/limitless-teams.js";
+import { METRIC_GROUPS, assertValidCatalogs } from "../src/data/catalog-validation.js";
 import {
   argumentValue,
+  delay,
+  fetchJson as fetchUpstreamJson,
+  hasFlag,
   isMainModule,
   readJson,
+  readJsonIfExists,
   writeJson,
   writeJsonEntries,
 } from "./lib/sync-utils.mjs";
@@ -26,18 +31,19 @@ export async function downloadLimitlessChampionsData({
   format = DEFAULT_FORMAT,
   limit = DEFAULT_LIMIT,
   archiveLimit = DEFAULT_ARCHIVE_LIMIT,
+  apiDelayMs = API_DELAY_MS,
   catalogs,
   pokemon,
   items,
 } = {}) {
   let selectedFormat = format;
-  let tournaments = (await fetcher(tournamentsUrl({ game, format, limit }))).filter(
+  let tournaments = tournamentList(await fetcher(tournamentsUrl({ game, format, limit }))).filter(
     (tournament) => !format || tournament.format === format,
   );
   if (tournaments.length === 0 && format === DEFAULT_FORMAT) {
     selectedFormat = DEFAULT_FALLBACK_FORMAT;
-    tournaments = (
-      await fetcher(tournamentsUrl({ game, format: selectedFormat, limit }))
+    tournaments = tournamentList(
+      await fetcher(tournamentsUrl({ game, format: selectedFormat, limit })),
     ).filter((tournament) => tournament.format === selectedFormat);
   }
   const standingsByTournament = new Map();
@@ -49,7 +55,7 @@ export async function downloadLimitlessChampionsData({
       tournament.id,
       await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/standings`),
     );
-    await delay(API_DELAY_MS);
+    await delay(apiDelayMs);
   }
 
   const archiveTournaments = [];
@@ -59,7 +65,7 @@ export async function downloadLimitlessChampionsData({
       await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/details`),
     );
     archiveTournaments.push(tournament);
-    await delay(API_DELAY_MS);
+    await delay(apiDelayMs);
 
     const hasBracket = detailsByTournament.get(tournament.id)?.phases?.some((phase) =>
       /bracket/i.test(String(phase?.type ?? "")),
@@ -70,7 +76,7 @@ export async function downloadLimitlessChampionsData({
       tournament.id,
       await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/pairings`),
     );
-    await delay(API_DELAY_MS);
+    await delay(apiDelayMs);
 
     const partialArchive = buildLimitlessTeamArchive(
       archiveTournaments,
@@ -99,12 +105,20 @@ export async function downloadLimitlessChampionsUsage(options = {}) {
   return usage;
 }
 
-export async function updatePublicData(options = {}) {
-  const [pokemon, abilities, moves, items] = await Promise.all([
-    readJson(outputDirectory, "pokemon"),
-    readJson(outputDirectory, "abilities"),
-    readJson(outputDirectory, "moves"),
-    readJson(outputDirectory, "items"),
+// Fails closed: when the fresh usage/team archive fails the Limitless checks in
+// src/data/catalog-validation.js (e.g. Limitless returned no tournaments), nothing is written.
+export async function updatePublicData({
+  directory = outputDirectory,
+  allowShrink = false,
+  minimums,
+  ...options
+} = {}) {
+  const [pokemon, abilities, moves, items, previousTeams] = await Promise.all([
+    readJson(directory, "pokemon"),
+    readJson(directory, "abilities"),
+    readJson(directory, "moves"),
+    readJson(directory, "items"),
+    readJsonIfExists(directory, "limitless-teams"),
   ]);
   const { usage, teams } = await downloadLimitlessChampionsData({
     ...options,
@@ -112,10 +126,28 @@ export async function updatePublicData(options = {}) {
   });
   const merged = mergeLimitlessUsage({ pokemon, abilities, moves, items }, usage);
 
-  await writeJsonEntries(outputDirectory, merged);
-  await writeJson(outputDirectory, "limitless-teams", teams);
+  assertValidCatalogs(
+    { ...merged, teams },
+    {
+      label: "Limitless usage and team archive",
+      baseline: { pokemon, abilities, moves, items, teams: previousTeams },
+      metrics: METRIC_GROUPS.limitless,
+      allowShrink,
+      ...(minimums ? { minimums } : {}),
+    },
+  );
+
+  await writeJsonEntries(directory, merged);
+  await writeJson(directory, "limitless-teams", teams);
 
   return { usage, teams };
+}
+
+function tournamentList(value) {
+  if (!Array.isArray(value)) {
+    throw new Error("Limitless /tournaments did not return a JSON array.");
+  }
+  return value;
 }
 
 function tournamentsUrl({ game, format, limit }) {
@@ -126,28 +158,12 @@ function tournamentsUrl({ game, format, limit }) {
   return url.href;
 }
 
-async function fetchJson(url) {
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "PokéCal data sync (+https://play.limitlesstcg.com/tournaments; VGC usage)",
-      },
-    });
-    if (response.ok) return response.json();
-    if (response.status !== 429 || attempt === 3) {
-      throw new Error(`Failed to fetch ${url}: ${response.status}`);
-    }
-    await delay(retryDelay(response, attempt));
-  }
-  throw new Error(`Failed to fetch ${url}: rate limit retry exhausted`);
-}
-
-function retryDelay(response, attempt) {
-  const retryAfter = Number(response.headers.get("retry-after"));
-  if (Number.isFinite(retryAfter) && retryAfter >= 0) return retryAfter * 1000;
-  const resetSeconds = Number(/(?:^|;\s*)t=(\d+)/.exec(response.headers.get("ratelimit") ?? "")?.[1]);
-  if (Number.isFinite(resetSeconds) && resetSeconds >= 0) return (resetSeconds + 1) * 1000;
-  return 1000 * 2 ** attempt;
+function fetchJson(url) {
+  return fetchUpstreamJson(url, {
+    headers: {
+      "User-Agent": "PokéCal data sync (+https://play.limitlesstcg.com/tournaments; VGC usage)",
+    },
+  });
 }
 
 function parseArguments(argv) {
@@ -156,11 +172,8 @@ function parseArguments(argv) {
     format: argumentValue(argv, "--format") ?? DEFAULT_FORMAT,
     limit: Number(argumentValue(argv, "--limit") ?? DEFAULT_LIMIT),
     archiveLimit: Number(argumentValue(argv, "--archive-limit") ?? DEFAULT_ARCHIVE_LIMIT),
+    allowShrink: hasFlag(argv, "--allow-shrink"),
   };
-}
-
-function delay(milliseconds) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 if (isMainModule(import.meta.url)) {
