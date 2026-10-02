@@ -78,5 +78,6 @@ test("calculates final Speed from the battle calculator state shape", () => {
   };
 
   assert.equal(finalSpeed(side), 375);
-  assert.equal(finalSpeed({ ...side, speedMultiplier: 1.5 }), 375);
+  // Manual modifier chains with (does not replace) Choice Scarf: 250 × 2 × 1.5 × 1.5 = 1125 → par 562.
+  assert.equal(finalSpeed({ ...side, speedMultiplier: 1.5 }), 562);
 });

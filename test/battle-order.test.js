@@ -63,7 +63,9 @@ test("applies Choice Scarf to final Speed and move order", () => {
   assert.equal(result.firstSide, "tie");
 });
 
-test("does not double-count Choice Scarf and the equivalent manual speed modifier", () => {
+// The manual "Speed modifier" is its own chained modifier and never replaces the held item
+// (Showdown chains Choice Scarf 6144 with any other ModifySpe source; 100 base → 120 × 2.25 = 270).
+test("keeps Choice Scarf when a manual speed modifier is also selected", () => {
   const scarfedSide = {
     pokemon: { baseSpeed: 100 },
     sp: { spe: 0 },
@@ -73,7 +75,7 @@ test("does not double-count Choice Scarf and the equivalent manual speed modifie
   };
 
   assert.equal(finalSpeed({ ...scarfedSide, speedMultiplier: 1 }), 180);
-  assert.equal(finalSpeed({ ...scarfedSide, speedMultiplier: 1.5 }), 180);
+  assert.equal(finalSpeed({ ...scarfedSide, speedMultiplier: 1.5 }), 270);
 });
 
 test("uses field-activated Paradox Speed for move order and suppresses it with Neutralizing Gas", () => {

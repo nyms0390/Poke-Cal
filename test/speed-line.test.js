@@ -126,7 +126,7 @@ test("battle modifiers delegate stacking and stages to calculateSpeed", () => {
     status: "paralysis",
     speedMultiplier: 1.5,
   }).modifiedSpeed;
-  // 130 raw stat -> +1 stage 195 -> Scarf floor(292.5)=292 -> Tailwind 584 -> paralysis 292.
+  // 130 raw stat -> +1 stage 195 -> chained Tailwind×Scarf (12288/4096) 585 -> paralysis floor(292.5)=292.
   assert.equal(expected, 292);
 
   const rows = speedTiers(

@@ -1,5 +1,5 @@
 import { NATURES } from "../engine/natures.js";
-import { calculateSpeed } from "../engine/speed.js";
+import { finalSpeedInField } from "../engine/speed.js";
 import { normalizeId } from "./catalog.js";
 import { megaFamily, pokemonSpriteId } from "./pokemon.js";
 import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
@@ -169,22 +169,30 @@ function minimumSpAbove(user, mods, tierSpeed, nature) {
   return null;
 }
 
+// Every Speed on this page goes through the battle engine's speedBreakdown(), so the Speed
+// tiers and the battle calculator share one modifier chain (4096-based, Showdown order).
 function calculatedSpeed(pokemon, { sp = 0, nature = "Hardy", mods, trickRoom }) {
-  const speedMods = abilitySpeedMods(mods);
-  const itemMultiplier = speedMods.abilityActive && normalizeEntityId(mods.ability) === "unburden"
-    ? 1
-    : mods.itemSpeedMultiplier ?? 1;
-  return calculateSpeed({
-    baseSpeed: baseSpeed(pokemon),
-    sp: clampInteger(sp, 0, 32),
+  const abilityId = normalizeEntityId(mods.ability);
+  const forced = Boolean(mods.abilityActive) && SUPPORTED_SPEED_ABILITIES.has(abilityId);
+  const speedItemId = speedItemIdForSet(mods.speedItem) || (mods.choiceScarf ? "choicescarf" : "");
+  // The Speed-item control decides Scarf/Iron Ball; other held items (Utility Umbrella,
+  // Booster Energy) still reach the engine.
+  const heldItemId = normalizeEntityId(mods.item);
+  const itemId = speedItemId || (SPEED_ITEM_IDS.includes(heldItemId) ? "" : heldItemId);
+  const speed = finalSpeedInField({
+    pokemon,
+    sp: { spe: clampInteger(sp, 0, 32) },
     nature: nature in NATURES ? nature : "Hardy",
-    stage: mods.stage,
-    tailwind: mods.tailwind,
+    stages: { spe: mods.stage ?? 0 },
+    ability: mods.ability ? entity(mods.ability) : null,
+    item: itemId ? { id: itemId, name: mods.item?.name ?? itemId } : null,
+    tailwind: Boolean(mods.tailwind),
     status: mods.paralysis ? "paralysis" : "",
-    speedMultiplier: (speedMods.choiceScarf ? 1.5 : 1) * itemMultiplier *
-      (speedMods.abilityActive ? 2 : 1),
-    trickRoom,
+  }, {}, {
+    abilityActive: forced,
+    itemConsumed: forced && abilityId === "unburden",
   });
+  return { modifiedSpeed: speed, effectiveOrder: trickRoom ? 10000 - speed : speed };
 }
 
 function speedEntry(
@@ -226,6 +234,7 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
     mods: {
       ...opponentMods,
       choiceScarf: false,
+      speedItem: speedItemIdForSet(row.item),
       ability: row.ability,
       item: row.item,
       abilityActive: row.abilityActive,
@@ -400,15 +409,6 @@ export function speedItemMultiplier(item) {
 export function speedItemIdForSet(item) {
   const itemId = normalizeEntityId(item);
   return SPEED_ITEM_IDS.includes(itemId) ? itemId : "";
-}
-
-function abilitySpeedMods(mods = {}) {
-  const abilityId = normalizeEntityId(mods.ability);
-  const abilityActive = Boolean(mods.abilityActive) && SUPPORTED_SPEED_ABILITIES.has(abilityId);
-  return {
-    choiceScarf: Boolean(mods.choiceScarf) && !(abilityActive && abilityId === "unburden"),
-    abilityActive,
-  };
 }
 
 function entity(value) {

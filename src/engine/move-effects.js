@@ -28,6 +28,7 @@
 import { normalizeId } from "../identifiers.js";
 import { isGrounded } from "./field.js";
 import { finalSpeedInField } from "./speed.js";
+import { effectivePriority } from "./battle-order.js";
 
 const WEATHER_BALL_TYPES = {
   desolateland: "Fire",
@@ -448,23 +449,26 @@ function userTargetWeightPowerHandler(ctx) {
     : userTargetWeightBasePower(attackerWeight, defenderWeight);
 }
 
-function gyroBallPower(ctx) {
-  const userSpeed = Math.max(1, finalSpeedInField(ctx.attackerState, ctx.field, {
+// Speed and move order use the shared Speed engine on the ambient field (Mega Sol's move-only
+// sun does not change Speed). Only Neutralizing Gas suppresses Speed/priority abilities here:
+// Mold Breaker-style suppression covers breakable abilities, and no Speed ability is breakable.
+function sideSpeed(ctx, side) {
+  const field = ctx.ambientField ?? ctx.field;
+  return finalSpeedInField(side === "attacker" ? ctx.attackerState : ctx.defenderState, field, {
     suppressAbility: ctx.suppressAttackerAbility,
-  }));
-  const targetSpeed = finalSpeedInField(ctx.defenderState, ctx.field, {
-    suppressAbility: ctx.suppressDefenderAbility,
+    suppressWeather: Boolean(field.weatherSuppressed),
   });
+}
+
+function gyroBallPower(ctx) {
+  const userSpeed = Math.max(1, sideSpeed(ctx, "attacker"));
+  const targetSpeed = sideSpeed(ctx, "defender");
   return Math.min(150, Math.floor((25 * targetSpeed) / userSpeed) + 1);
 }
 
 function electroBallPower(ctx) {
-  const userSpeed = finalSpeedInField(ctx.attackerState, ctx.field, {
-    suppressAbility: ctx.suppressAttackerAbility,
-  });
-  const targetSpeed = Math.max(1, finalSpeedInField(ctx.defenderState, ctx.field, {
-    suppressAbility: ctx.suppressDefenderAbility,
-  }));
+  const userSpeed = sideSpeed(ctx, "attacker");
+  const targetSpeed = Math.max(1, sideSpeed(ctx, "defender"));
   const ratio = userSpeed / targetSpeed;
   if (ratio >= 4) return 150;
   if (ratio >= 3) return 120;
@@ -478,18 +482,17 @@ function targetMovedForOrder(ctx) {
   const opponentMove = ctx.moveOptions?.opponentMove;
   if (!opponentMove) return false;
 
-  const attackerPriority = Number(ctx.move.priority ?? 0);
-  const defenderPriority = Number(opponentMove.priority ?? 0);
+  // Ability/terrain priority (Prankster, Gale Wings, Triage, Grassy Glide) decides who moves first.
+  const field = ctx.ambientField ?? ctx.field;
+  const priorityOptions = { suppressAbility: ctx.suppressAttackerAbility };
+  const attackerPriority = effectivePriority(ctx.move, ctx.attackerState, field, priorityOptions);
+  const defenderPriority = effectivePriority(opponentMove, ctx.defenderState, field, priorityOptions);
   if (attackerPriority !== defenderPriority) return defenderPriority > attackerPriority;
 
-  const attackerSpeed = finalSpeedInField(ctx.attackerState, ctx.field, {
-    suppressAbility: ctx.suppressAttackerAbility,
-  });
-  const defenderSpeed = finalSpeedInField(ctx.defenderState, ctx.field, {
-    suppressAbility: ctx.suppressDefenderAbility,
-  });
+  const attackerSpeed = sideSpeed(ctx, "attacker");
+  const defenderSpeed = sideSpeed(ctx, "defender");
   if (attackerSpeed === defenderSpeed) return false;
-  return ctx.field.trickRoom ? defenderSpeed < attackerSpeed : defenderSpeed > attackerSpeed;
+  return field.trickRoom ? defenderSpeed < attackerSpeed : defenderSpeed > attackerSpeed;
 }
 
 function orderConditionalPower(ctx) {
