@@ -1,6 +1,6 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { normalizeId } from "../identifiers.js";
-import { loadCatalogs } from "./bootstrap.js";
+import { loadCatalogs, loadWithRecovery } from "./bootstrap.js";
 import { pokemonSpriteUrls } from "./components.js";
 import {
   applyDocumentTranslations,
@@ -39,7 +39,16 @@ async function initialize() {
           elements.status.textContent = text;
         },
       }),
-      loadLimitlessTeamArchive(),
+      loadWithRecovery(() => loadLimitlessTeamArchive(), {
+        messageKey: "loadError.teams",
+        devHint: "PokéCal tournament-team archive load failed. Locally, run `npm run sync-champions-data`.",
+        onFailure: () => {
+          elements.source.textContent = t("teams.sourceError");
+        },
+        onRetry: () => {
+          elements.source.textContent = t("catalog.loading");
+        },
+      }),
     ]);
     if (!loadedCatalogs) return;
     catalogs = loadedCatalogs;

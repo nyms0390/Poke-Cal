@@ -503,3 +503,54 @@ function statNumberInput({ stat, side, value, onChange, kind, label: labelText, 
   label.append(input);
   return label;
 }
+
+// Shared data-load error panel. Text uses data-i18n keys so applyDocumentTranslations()
+// re-localizes it when the language changes. `messageKeys` lists one sentence per failed
+// source; `onRetry` runs when the Retry button is pressed.
+export function loadErrorPanel({ messageKeys = [], onRetry } = {}) {
+  const panel = document.createElement("section");
+  panel.className = "load-error";
+  panel.setAttribute("role", "alert");
+  panel.setAttribute("aria-labelledby", "load-error-title");
+  panel.dataset.loadError = "";
+
+  const title = document.createElement("h2");
+  title.id = "load-error-title";
+  title.className = "load-error-title";
+  title.dataset.i18n = "loadError.title";
+  title.textContent = t("loadError.title");
+
+  const messages = document.createElement("div");
+  messages.className = "load-error-messages";
+
+  const retry = document.createElement("button");
+  retry.type = "button";
+  retry.className = "load-error-retry";
+  retry.addEventListener("click", () => {
+    if (retry.getAttribute("aria-disabled") === "true") return;
+    onRetry?.();
+  });
+
+  panel.append(title, messages, retry);
+  updateLoadErrorPanel(panel, { messageKeys, retrying: false });
+  return panel;
+}
+
+export function updateLoadErrorPanel(panel, { messageKeys, retrying = false } = {}) {
+  const messages = panel.querySelector(".load-error-messages");
+  if (messageKeys) {
+    messages.replaceChildren(...messageKeys.map((key) => {
+      const message = document.createElement("p");
+      message.dataset.i18n = key;
+      message.textContent = t(key);
+      return message;
+    }));
+  }
+  const retry = panel.querySelector(".load-error-retry");
+  const labelKey = retrying ? "loadError.retrying" : "loadError.retry";
+  retry.dataset.i18n = labelKey;
+  retry.textContent = t(labelKey);
+  // aria-disabled (not disabled) keeps keyboard focus on the button during a retry.
+  retry.setAttribute("aria-disabled", String(retrying));
+  panel.setAttribute("aria-busy", String(retrying));
+}

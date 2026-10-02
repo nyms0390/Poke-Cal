@@ -4568,3 +4568,75 @@ textarea:focus-visible {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ---------- Data-load error (shared by all routes) ---------- */
+
+.load-error {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding: 16px 24px 20px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--danger);
+  border-bottom: 0;
+  background: var(--surface);
+}
+
+.lookup-header + .load-error {
+  margin-top: 12px;
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.load-error-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  line-height: 1.35;
+}
+
+.load-error-messages p {
+  max-width: 85ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.load-error-retry {
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 8px 20px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.load-error-retry:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
+.load-error-retry:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.load-error-retry[aria-disabled="true"] {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+[data-load-blocked] {
+  opacity: 0.55;
+}
+
+@media (max-width: 720px) {
+  .load-error {
+    padding: 14px 16px 16px;
+  }
+}
