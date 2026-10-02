@@ -142,3 +142,17 @@ test("Mold Breaker only bypasses breakable abilities", () => {
 function dragoniteLike() {
   return { id: "dragonite", name: "Dragonite", types: ["Dragon", "Flying"], baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 } };
 }
+
+test("Tera raises weak moves of the Tera type to 60 power", () => {
+  const incineroarState = (teraType) => ({ nature: "Modest", sp: { spa: 32 }, stages: {}, ability: null, item: null, teraType });
+  const snarl = { id: "snarl", name: "Snarl", type: "Dark", category: "Special", basePower: 55, target: "allAdjacentFoes", flags: { sound: 1 }, priority: 0 };
+  const quickAttack = { id: "quickattack", name: "Quick Attack", type: "Normal", category: "Physical", basePower: 40, target: "normal", flags: { contact: 1 }, priority: 1 };
+  const tera = calculateDamage({ attacker: incineroar, defender: garchomp, move: snarl, attackerState: incineroarState("Dark"), defenderState: bulky(), field: singles });
+  const otherTera = calculateDamage({ attacker: incineroar, defender: garchomp, move: snarl, attackerState: incineroarState("Fire"), defenderState: bulky(), field: singles });
+  const priority = calculateDamage({ attacker: incineroar, defender: garchomp, move: quickAttack, attackerState: incineroarState("Normal"), defenderState: bulky(), field: singles });
+
+  assert.equal(tera.notes.includes("Tera Dark raises Snarl to 60 power"), true);
+  assert.equal(otherTera.notes.some((note) => note.includes("to 60 power")), false);
+  // Priority moves keep their base power.
+  assert.equal(priority.notes.some((note) => note.includes("to 60 power")), false);
+});

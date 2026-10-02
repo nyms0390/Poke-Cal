@@ -292,7 +292,9 @@ export function calculateDamage({
   const attackSource = move.overrideOffensivePokemon === "target"
     ? { pokemon: defender, state: defenderState }
     : { pokemon: attacker, state: attackerState };
-  const attackIgnoresStage = move.overrideOffensivePokemon === "target" ? attackerHasUnaware : defenderHasUnaware;
+  // Showdown reads attack boosts through the move user's ModifyBoost event, so only the target's
+  // Unaware ignores them — including Foul Play, where the boosts are the target's own.
+  const attackIgnoresStage = defenderHasUnaware;
   const attack = calculatePokemonStat(attackSource.pokemon, attackSource.state, attackStat, {
     ignoreStage: attackIgnoresStage,
     stagePolicy: criticalStagePolicy("attack", effectiveCritical),
@@ -322,6 +324,10 @@ export function calculateDamage({
   const moveNote = moveEffect(moveId).note?.(ctx);
   if (moveNote) notes.push(moveNote);
   let power = dynamicPower ?? move.basePower;
+  if (teraPowerFloorApplies({ move, moveType, attackerState, power, hasPowerCallback: dynamicPower !== undefined })) {
+    power = 60;
+    notes.push(`Tera ${moveType} raises ${move.name} to 60 power`);
+  }
   ctx.power = power;
   if (dynamicPower !== undefined) {
     notes.push(`${move.name} power ${dynamicPower}`);
@@ -813,6 +819,15 @@ function hasAnyAbility(state, abilityIds) {
 function normalizeStatusForAbility(state, suppressed) {
   if (suppressed || state?.status !== "burn" || !hasAbility(state, "waterbubble")) return state;
   return { ...state, status: "" };
+}
+
+// Showdown: a Terastallized user's moves of its Tera type below 60 BP become 60 BP, except
+// priority moves, multi-hit moves, and 0/150 BP moves whose power comes from a callback.
+function teraPowerFloorApplies({ move, moveType, attackerState, power, hasPowerCallback }) {
+  if (!attackerState.teraType || attackerState.teraType === "Stellar" || attackerState.teraType !== moveType) return false;
+  if (!(power < 60) || Number(move.priority ?? 0) > 0 || move.multihit) return false;
+  if (hasPowerCallback && (move.basePower === 0 || move.basePower === 150)) return false;
+  return true;
 }
 
 // Catalog abilities carry Showdown's `flags.breakable`; a bare { id, name } without flags is
