@@ -15,6 +15,7 @@ import {
   yourDamageAnalysis,
 } from "../data/break-points.js";
 import {
+  bulkBaseline,
   bulkCoverage,
   bulkCoverageTable,
   bulkPointMatchups,
@@ -45,11 +46,17 @@ import { applyControl } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
+  analysisRenderKey,
+  analysisSignature,
   applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
+  breakAnalysisContextSignature,
   breakCoverage,
+  bulkAnalysisContextSignature,
+  bulkTableContextSignature,
   canApplySpTargets,
+  createAnalysisMemo,
   createBuilderState,
   detachFamilyForms,
   finalStats,
@@ -57,6 +64,7 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
+  threatAnalysisSignature,
 } from "./builder-state.js";
 import {
   attachCombobox,
@@ -133,7 +141,15 @@ let userSetupDraft = null;
 const threatOverrides = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
-let bulkCoverageTableCache = { signature: "", tables: new Map() };
+// Analyses are memoized per threat under a context signature (user, field, budget); see
+// builder-state.js. Only the visible tab is computed synchronously; the hidden tab is warmed
+// in small time slices afterwards so switching tabs reuses its results.
+const bulkMatchupMemo = createAnalysisMemo();
+const bulkTableMemo = createAnalysisMemo();
+const bulkBaselineMemo = createAnalysisMemo();
+const breakMemo = createAnalysisMemo();
+const renderedAnalysisKeys = { bulk: "", break: "" };
+let warmGeneration = 0;
 const updatePage = createLiveUpdater(render);
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
@@ -472,10 +488,18 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   renderSpBudget(displayedSetup.sp);
   elements.applySpread.disabled = !userSetupDraft;
   renderCustomThreats();
-  const threats = selectedThreats();
-  const field = createField(state.field);
-  renderBulkPoints(threats, field);
-  renderBreakPoints(threats, field);
+  const inputs = analysisInputs();
+  elements.breakCount.textContent = t("builder.breakCount", {
+    pokemon: inputs.threats.length,
+    moves: inputs.breakMoves.length,
+  });
+  if (state.analysisTab === "bulk") {
+    renderBulkPoints(inputs);
+    warmHiddenAnalysis(breakWarmTasks(inputs));
+  } else {
+    renderBreakPoints(inputs);
+    renderHiddenBulkCount(inputs);
+  }
   applyDocumentTranslations();
   const analysisPanel = state.analysisTab === "bulk" ? elements.bulkPanel : elements.breakPanel;
   restoreBuilderCardFocus(analysisPanel, focusKey, {
@@ -484,6 +508,72 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   if (focusAnalysisTab) {
     elements.analysisTabs.find((tab) => tab.dataset.builderAnalysis === state.analysisTab)?.focus();
   }
+}
+
+function analysisInputs() {
+  const user = state.user;
+  const threats = selectedThreats();
+  const field = createField(state.field);
+  return {
+    user,
+    threats,
+    field,
+    budget: availableBulkSpBudget(user.sp),
+    breakMoves: selectedMoves(user).filter(({ category }) =>
+      category === "Physical" || category === "Special"),
+    bulkContext: bulkAnalysisContextSignature(user, field),
+    bulkTableContext: bulkTableContextSignature(user, field),
+    breakContext: breakAnalysisContextSignature(user, field),
+    bulkThreatKeys: threats.map((threat) => threatAnalysisSignature(threat, "bulk")),
+    breakThreatKeys: threats.map((threat) => threatAnalysisSignature(threat, "break")),
+  };
+}
+
+// Runs memo-filling tasks in short slices after the visible tab has rendered. A newer render
+// bumps the generation, which stops an outdated warm-up; results are keyed by their full input
+// signature, so anything already computed stays valid.
+function warmHiddenAnalysis(tasks, onDone) {
+  const generation = ++warmGeneration;
+  if (tasks.length === 0) {
+    onDone?.();
+    return;
+  }
+  let index = 0;
+  const step = () => {
+    if (generation !== warmGeneration) return;
+    const deadline = performance.now() + 8;
+    while (index < tasks.length) {
+      tasks[index]();
+      index += 1;
+      if (performance.now() >= deadline) break;
+    }
+    if (index < tasks.length) setTimeout(step, 0);
+    else onDone?.();
+  };
+  setTimeout(step, 0);
+}
+
+function renderHiddenBulkCount(inputs) {
+  const pending = inputs.threats
+    .map((threat, index) => ({ threat, threatKey: inputs.bulkThreatKeys[index] }))
+    .filter(({ threatKey }) => !bulkMatchupMemo.has(inputs.bulkContext, threatKey));
+  if (pending.length > 0) elements.bulkCount.textContent = "—";
+  warmHiddenAnalysis(
+    pending.map(({ threat, threatKey }) => () => bulkThreatResult(inputs, threat, threatKey)),
+    () => {
+      const results = inputs.threats.map((threat, index) =>
+        bulkThreatResult(inputs, threat, inputs.bulkThreatKeys[index]));
+      renderBulkCount(results);
+    },
+  );
+}
+
+function breakWarmTasks(inputs) {
+  if (inputs.breakMoves.length === 0) return [];
+  return inputs.threats
+    .map((threat, index) => ({ threat, threatKey: inputs.breakThreatKeys[index] }))
+    .filter(({ threatKey }) => !breakMemo.has(inputs.breakContext, threatKey))
+    .map(({ threat, threatKey }) => () => breakThreatResult(inputs, threat, threatKey));
 }
 
 function renderSpBudget(sp) {
@@ -705,26 +795,30 @@ function renderCustomThreats() {
   }));
 }
 
-function renderBulkPoints(threats, field) {
-  const budget = availableBulkSpBudget(state.user.sp);
-  renderGeneralBulkRecommendation(generalBulkRecommendation(state.user, { budget }));
-  const matchups = bulkPointMatchups(state.user, threats, { budget, field });
-  const tables = cachedBulkCoverageTables(threats, matchups);
-  const families = bulkMatchupFamilies(threats, matchups).map((family) => ({
+function renderBulkPoints(inputs) {
+  const { user, threats, budget } = inputs;
+  const renderKey = analysisRenderKey({
+    context: inputs.bulkContext,
+    threatKeys: inputs.bulkThreatKeys,
+    locale: getLocale(),
+  });
+  const results = threats.map((threat, index) =>
+    bulkThreatResult(inputs, threat, inputs.bulkThreatKeys[index]));
+  renderBulkCount(results);
+  if (renderedAnalysisKeys.bulk === renderKey) return;
+  renderedAnalysisKeys.bulk = renderKey;
+
+  renderGeneralBulkRecommendation(generalBulkRecommendation(user, { budget }));
+  const resultsByThreat = new Map(threats.map((threat, index) => [threat, results[index]]));
+  const families = threatFamilies(threats).map((family) => ({
     ...family,
-    forms: family.forms.map((form) => ({
-      ...form,
-      coverage: bulkCoverage(state.user, form.matchups, {
-        budget,
-        tables: form.matchups.map((matchup) => tables.get(matchup)),
-      }),
-    })),
-  }));
+    forms: family.forms
+      .map((threat) => ({ threat, ...resultsByThreat.get(threat) }))
+      .filter(({ matchups }) => matchups.length > 0),
+  })).filter(({ forms }) => forms.length > 0);
   const forms = rankBulkCoverageGroups(detachFamilyForms(families));
-  const spreadCount = matchups.reduce((total, { points }) => total + points.length, 0);
   const sections = partitionBulkCoverageGroups(forms);
 
-  elements.bulkCount.textContent = t("builder.bulkCount", { spreads: spreadCount, matchups: matchups.length });
   elements.bulkPoints.replaceChildren(
     ...(forms.length === 0
       ? [emptyText(t("builder.noThreatMoves"))]
@@ -732,6 +826,39 @@ function renderBulkPoints(threats, field) {
         .filter((status) => sections[status].length > 0)
         .map((status) => coverageSection(sections[status], status, "bulk", bulkThreatCards))),
   );
+}
+
+function renderBulkCount(results) {
+  const matchupCount = results.reduce((total, { matchups }) => total + matchups.length, 0);
+  const spreadCount = results.reduce((total, { matchups }) =>
+    total + matchups.reduce((sum, { points }) => sum + points.length, 0), 0);
+  elements.bulkCount.textContent = t("builder.bulkCount", {
+    spreads: spreadCount,
+    matchups: matchupCount,
+  });
+}
+
+// One threat's defensive matchups and coverage, memoized by the bulk context and threat.
+function bulkThreatResult(inputs, threat, threatKey) {
+  const { user, field, budget } = inputs;
+  return bulkMatchupMemo.get(inputs.bulkContext, threatKey, () => {
+    // Zero-bulk baselines and coverage tables ignore the user's HP/Def/SpD SP, so they are
+    // shared across defensive SP edits.
+    const scenarioKey = (scenario) => `${threatKey}:${analysisSignature(scenario.move)}`;
+    const baseline = (scenario) => bulkBaselineMemo.get(
+      `${inputs.bulkTableContext}:${budget}`,
+      scenarioKey(scenario),
+      () => bulkBaseline(user, scenario, { budget, field }),
+    );
+    const matchups = bulkPointMatchups(user, [threat], { budget, field, baseline });
+    if (matchups.length === 0) return { matchups, coverage: null };
+    const tables = matchups.map((matchup) => bulkTableMemo.get(
+      inputs.bulkTableContext,
+      scenarioKey(matchup.scenario),
+      () => bulkCoverageTable(user, matchup),
+    ));
+    return { matchups, coverage: bulkCoverage(user, matchups, { budget, tables }) };
+  });
 }
 
 function renderGeneralBulkRecommendation(recommendation) {
@@ -798,63 +925,6 @@ function generalBulkStatGroup(label, values) {
   return group;
 }
 
-function cachedBulkCoverageTables(threats, matchups) {
-  const signature = bulkCoverageSignature(state.user, threats, state.field);
-  if (signature !== bulkCoverageTableCache.signature) {
-    bulkCoverageTableCache = { signature, tables: new Map() };
-  }
-  const tables = new Map();
-  for (const matchup of matchups) {
-    const threatId = normalizeId(matchup.scenario.threat.pokemon.id);
-    const moveId = normalizeId(matchup.scenario.move.id);
-    const key = `${threatId}:${moveId}`;
-    if (!bulkCoverageTableCache.tables.has(key)) {
-      bulkCoverageTableCache.tables.set(key, bulkCoverageTable(state.user, matchup));
-    }
-    tables.set(matchup, bulkCoverageTableCache.tables.get(key));
-  }
-  return tables;
-}
-
-function bulkCoverageSignature(user, threats, field) {
-  return JSON.stringify({
-    user: {
-      pokemon: normalizeId(user.pokemon.id),
-      nature: user.nature,
-      ability: normalizeId(user.ability?.id ?? user.ability?.name),
-      item: normalizeId(user.item?.id ?? user.item?.name),
-      teraType: user.teraType,
-      status: user.status,
-      soaked: user.soaked,
-      stages: user.stages,
-      offenseSp: {
-        atk: user.sp.atk,
-        spa: user.sp.spa,
-        spe: user.sp.spe,
-      },
-      selectedMoveIds: user.selectedMoveIds,
-      allyPlusMinus: user.allyPlusMinus,
-      rivalry: user.rivalry,
-      switchedIn: user.switchedIn,
-      faintedAllyCount: user.faintedAllyCount,
-      boosterEnergy: user.boosterEnergy,
-      iceFaceIntact: user.iceFaceIntact,
-    },
-    field,
-    threats: threats.map((threat) => ({
-      pokemon: normalizeId(threat.pokemon.id),
-      nature: threat.nature,
-      ability: normalizeId(threat.ability?.id ?? threat.ability?.name),
-      item: normalizeId(threat.item?.id ?? threat.item?.name),
-      teraType: threat.teraType,
-      status: threat.status,
-      soaked: threat.soaked,
-      spPresets: threat.spPresets,
-      moves: threat.moves.slice(0, 2).map((move) => normalizeId(move.id ?? move.name)),
-    })),
-  });
-}
-
 function threatFamilies(threats) {
   const families = new Map();
   for (const threat of threats) {
@@ -863,26 +933,6 @@ function threatFamilies(threats) {
     families.get(familyId).forms.push(threat);
   }
   return [...families.values()];
-}
-
-function bulkMatchupFamilies(threats, matchups) {
-  const matchupsByThreat = new Map();
-  for (const matchup of matchups) {
-    const threatId = normalizeId(matchup.scenario.threat.pokemon.id);
-    if (!matchupsByThreat.has(threatId)) matchupsByThreat.set(threatId, []);
-    matchupsByThreat.get(threatId).push(matchup);
-  }
-
-  return threatFamilies(threats).map((family) => {
-    const forms = family.forms.map((threat) => ({
-      threat,
-      matchups: matchupsByThreat.get(normalizeId(threat.pokemon.id)) ?? [],
-    })).filter(({ matchups: formMatchups }) => formMatchups.length > 0);
-    return {
-      ...family,
-      forms,
-    };
-  }).filter(({ forms }) => forms.length > 0);
 }
 
 function bulkThreatCards(forms) {
@@ -1045,11 +1095,16 @@ function statChip(stat, value) {
   return chip;
 }
 
-function renderBreakPoints(threats, field) {
-  const setup = state.user;
-  const moves = selectedMoves(setup).filter(({ category }) => category === "Physical" || category === "Special");
-  const families = threatFamilies(threats);
-  elements.breakCount.textContent = t("builder.breakCount", { pokemon: threats.length, moves: moves.length });
+function renderBreakPoints(inputs) {
+  const { threats, breakMoves: moves } = inputs;
+  const renderKey = analysisRenderKey({
+    context: inputs.breakContext,
+    threatKeys: inputs.breakThreatKeys,
+    sort: state.analysisSort,
+    locale: getLocale(),
+  });
+  if (renderedAnalysisKeys.break === renderKey) return;
+  renderedAnalysisKeys.break = renderKey;
   if (threats.length === 0) {
     elements.breakPoints.replaceChildren(emptyText(t("builder.addThreat")));
     return;
@@ -1059,24 +1114,12 @@ function renderBreakPoints(threats, field) {
     return;
   }
 
-  const groups = families.map((family) => ({
+  const groups = threatFamilies(threats).map((family) => ({
     ...family,
-    forms: family.forms.map((threat) => {
-      const scenarios = moves.map((move) => ({
-        threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]),
-        moveOptions: moveOptionsForSlot(setup, move.slotIndex, move),
-      }));
-      const analyses = moves.map((move, index) => ({
-        move,
-        ...yourDamageAnalysis(setup, move, scenarios[index]),
-        points: breakPoints(setup, move, scenarios[index]),
-      }));
-      return {
-        threat,
-        analyses,
-        coverage: breakCoverage(setup, analyses),
-      };
-    }),
+    forms: family.forms.map((threat) => ({
+      threat,
+      ...breakThreatResult(inputs, threat, inputs.breakThreatKeys[threats.indexOf(threat)]),
+    })),
   }));
   const detachedForms = detachFamilyForms(groups);
   const orderedForms = state.analysisSort === "breakpoint"
@@ -1088,6 +1131,23 @@ function renderBreakPoints(threats, field) {
       .filter((status) => sections[status].length > 0)
       .map((status) => coverageSection(sections[status], status, "break", breakThreatCards)),
   );
+}
+
+// One threat's offensive analyses and coverage, memoized by the break context and threat.
+function breakThreatResult(inputs, threat, threatKey) {
+  const { user: setup, field, breakMoves: moves } = inputs;
+  return breakMemo.get(inputs.breakContext, threatKey, () => {
+    const scenarios = moves.map((move) => ({
+      threat, field, critical: Boolean(setup.critMoves?.[move.slotIndex]),
+      moveOptions: moveOptionsForSlot(setup, move.slotIndex, move),
+    }));
+    const analyses = moves.map((move, index) => ({
+      move,
+      ...yourDamageAnalysis(setup, move, scenarios[index]),
+      points: breakPoints(setup, move, scenarios[index]),
+    }));
+    return { analyses, coverage: breakCoverage(setup, analyses) };
+  });
 }
 
 function breakThreatCards(forms) {
@@ -1180,11 +1240,15 @@ function analysisCard({ threat, renderMovePanels, relatedForms, analysis }, card
   const moves = document.createElement("div");
   moves.className = "builder-analysis-moves";
   moves.append(...movePanels);
+  // Expanding only adds or removes this card's build editor; analyses are not recomputed.
   heading.addEventListener("click", () => {
-    updatePage(() => {
-      if (expandedCards.has(cardKey)) expandedCards.delete(cardKey);
-      else expandedCards.add(cardKey);
-    });
+    const nextExpanded = !expandedCards.has(cardKey);
+    if (nextExpanded) expandedCards.add(cardKey);
+    else expandedCards.delete(cardKey);
+    card.classList.toggle("build-open", nextExpanded);
+    heading.setAttribute("aria-expanded", String(nextExpanded));
+    card.querySelector(":scope > .builder-threat-build")?.remove();
+    if (nextExpanded) moves.before(threatBuildEditor(threat, cardKey));
   });
   card.append(heading, ...(formLinks ? [formLinks] : []), ...(editor ? [editor] : []), moves);
   return card;
@@ -1405,26 +1469,40 @@ function analysisMovePanel({
     `builder-spread-prompt${covered ? " covered" : ""}`,
   );
   summary.append(heading, range, prompt);
-  panel.open = openAnalysisPanels.has(panelKey);
-  const context = panel.open && loadContext ? loadContext() : null;
-  if (panel.open) {
+  panel.append(summary, list);
+  let context = null;
+  let loadedOpen = false;
+  // Thresholds load lazily from the already computed analysis when the panel opens.
+  const syncOpenContent = () => {
+    if (panel.open === loadedOpen) return;
+    loadedOpen = panel.open;
+    context?.remove();
+    context = null;
+    if (!panel.open) {
+      list.replaceChildren();
+      prompt.textContent = t(covered ? "builder.coveredPrompt" : "builder.viewThresholds");
+      return;
+    }
+    context = loadContext ? loadContext() : null;
+    if (context) summary.after(context);
     const loadedChoices = loadChoices();
     renderSpreadChoices(list, loadedChoices, emptyMessage);
     prompt.textContent = t("builder.thresholdCount", { count: loadedChoices.length });
-  }
+  };
+  panel.open = openAnalysisPanels.has(panelKey);
+  syncOpenContent();
   panel.addEventListener("toggle", () => {
     setPanelOpen(panelKey, panel.open);
+    syncOpenContent();
   });
-  panel.append(summary, ...(context ? [context] : []), list);
   return panel;
 }
 
+// Disclosure state is DOM state plus this set (so rebuilt panels reopen); no re-render needed.
 function setPanelOpen(panelKey, open) {
-  if (!panelKey || openAnalysisPanels.has(panelKey) === open) return;
-  updatePage(() => {
-    if (open) openAnalysisPanels.add(panelKey);
-    else openAnalysisPanels.delete(panelKey);
-  });
+  if (!panelKey) return;
+  if (open) openAnalysisPanels.add(panelKey);
+  else openAnalysisPanels.delete(panelKey);
 }
 
 function deletePanelKeysForPokemon(keys, pokemonId) {

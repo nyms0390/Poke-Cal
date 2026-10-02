@@ -4,12 +4,20 @@ import assert from "node:assert/strict";
 import { breakPoints, yourDamage, yourDamageAnalysis } from "../src/data/break-points.js";
 import { createSideState } from "../src/ui/battle-state.js";
 
+import { bulkBaseline, bulkPointMatchups } from "../src/data/bulk-points.js";
+import { createField } from "../src/engine/field.js";
 import {
+  analysisRenderKey,
+  analysisSignature,
   applyGlobalThreatStatus,
   applyThreatControl,
   availableBulkSpBudget,
+  breakAnalysisContextSignature,
   breakCoverage,
+  bulkAnalysisContextSignature,
+  bulkTableContextSignature,
   canApplySpTargets,
+  createAnalysisMemo,
   createBuilderState,
   detachFamilyForms,
   finalStats,
@@ -18,6 +26,7 @@ import {
   selectBuilderAnalysis,
   selectBuilderSort,
   significantBreakPoints,
+  threatAnalysisSignature,
 } from "../src/ui/builder-state.js";
 
 const pikachu = {
@@ -572,4 +581,246 @@ test("Tera Blast coverage budgets its actual Attack target and preserves damage 
   assert.ok(chancePoints.some(({ sp, achieves, requiresPlusNature }) =>
     sp === 16 && achieves === "guaranteed OHKO" && requiresPlusNature));
   assert.deepEqual(breakCoverage(chanceAssigned, [{ move, ...chanceDetail, points: chancePoints }]), { status: "possible" });
+});
+
+const memoMove = {
+  id: "megapunch",
+  name: "Mega Punch",
+  type: "Normal",
+  category: "Physical",
+  basePower: 110,
+  target: "normal",
+};
+const memoSpecialMove = {
+  id: "hypervoice",
+  name: "Hyper Voice",
+  type: "Normal",
+  category: "Special",
+  basePower: 100,
+  target: "normal",
+};
+
+function memoUser() {
+  return createBuilderState({ ...pikachu, types: ["Electric"] }, usageDefaults).user;
+}
+
+function memoThreat(overrides = {}) {
+  return {
+    pokemon: { id: "attacker", name: "Attacker", types: ["Normal"], baseStats: { hp: 90, atk: 115, def: 80, spa: 120, spd: 80, spe: 90 } },
+    usagePercent: 12,
+    nature: "Adamant",
+    ability: null,
+    item: null,
+    teraType: "",
+    status: "",
+    soaked: false,
+    moves: [memoMove, memoSpecialMove, { ...memoMove, id: "thirdmove", name: "Third Move" }],
+    spPresets: { offense: { atk: 32, spa: 32 }, bulk: { hp: 2, def: 0, spd: 0 }, speed: [] },
+    ...overrides,
+  };
+}
+
+test("analysis signatures identify Pokémon by id and compare other inputs by value", () => {
+  const user = memoUser();
+  const copy = { ...user, pokemon: { ...user.pokemon, extra: "ignored" }, sp: { ...user.sp } };
+  assert.equal(analysisSignature({ user }), analysisSignature({ user: copy }));
+  assert.match(analysisSignature({ user }), /"pokemon":"pokemon:pikachu"/);
+  assert.notEqual(
+    analysisSignature({ user }),
+    analysisSignature({ user: { ...user, ability: { id: "lightningrod", name: "Lightning Rod" } } }),
+  );
+});
+
+test("bulk analysis signature tracks defensive inputs but ignores attacker move slots", () => {
+  const user = memoUser();
+  const field = createField();
+  const key = bulkAnalysisContextSignature(user, field);
+
+  for (const unchanged of [
+    { ...user, critMoves: [true, false, false, false] },
+    { ...user, selectedMoveIds: ["", "", "", ""] },
+    { ...user, moveOptionsBySlot: [{ hits: 2 }, {}, {}, {}] },
+  ]) {
+    assert.equal(bulkAnalysisContextSignature(unchanged, field), key);
+  }
+  for (const changed of [
+    { ...user, sp: { ...user.sp, hp: user.sp.hp + 1 } },
+    { ...user, sp: { ...user.sp, spa: user.sp.spa + 1 } },
+    { ...user, nature: "Bold" },
+    { ...user, status: "burn" },
+    { ...user, stages: { ...user.stages, def: 1 } },
+    { ...user, item: { id: "assaultvest", name: "Assault Vest" } },
+    { ...user, teraType: "Water" },
+  ]) {
+    assert.notEqual(bulkAnalysisContextSignature(changed, field), key);
+  }
+  assert.notEqual(
+    bulkAnalysisContextSignature(user, createField({ weather: "SunnyDay" })),
+    key,
+  );
+});
+
+test("bulk coverage tables ignore defensive SP but not other defender inputs", () => {
+  const user = memoUser();
+  const field = createField();
+  const key = bulkTableContextSignature(user, field);
+  assert.equal(
+    bulkTableContextSignature({ ...user, sp: { ...user.sp, hp: 20, def: 12, spd: 4 } }, field),
+    key,
+  );
+  assert.notEqual(bulkTableContextSignature({ ...user, nature: "Bold" }, field), key);
+  assert.notEqual(
+    bulkTableContextSignature(user, createField({ terrain: "Electric Terrain" })),
+    key,
+  );
+});
+
+test("break analysis signature tracks attacker move slots, SP, and field", () => {
+  const user = memoUser();
+  const field = createField();
+  const key = breakAnalysisContextSignature(user, field);
+  for (const changed of [
+    { ...user, critMoves: [true, false, false, false] },
+    { ...user, selectedMoveIds: ["thunderbolt", "", "", ""] },
+    { ...user, moveOptionsBySlot: [{ hits: 2 }, {}, {}, {}] },
+    { ...user, sp: { ...user.sp, atk: user.sp.atk + 1 } },
+    { ...user, nature: "Modest" },
+  ]) {
+    assert.notEqual(breakAnalysisContextSignature(changed, field), key);
+  }
+  assert.notEqual(breakAnalysisContextSignature(user, createField({ weather: "RainDance" })), key);
+});
+
+test("threat signatures only include the inputs each analysis uses", () => {
+  const threat = memoThreat();
+  const bulk = threatAnalysisSignature(threat, "bulk");
+  const breakKey = threatAnalysisSignature(threat, "break");
+
+  // Bulk analyses the first two moves with offensive SP.
+  assert.equal(threatAnalysisSignature({ ...threat, moves: threat.moves.slice(0, 2) }, "bulk"), bulk);
+  assert.equal(threatAnalysisSignature({ ...threat, usagePercent: 1 }, "bulk"), bulk);
+  assert.equal(threatAnalysisSignature(applyThreatControl(threat, { kind: "sp", stat: "hp", value: 20 }), "bulk"), bulk);
+  assert.notEqual(threatAnalysisSignature(applyThreatControl(threat, { kind: "sp", stat: "atk", value: 0 }), "bulk"), bulk);
+  assert.notEqual(threatAnalysisSignature(applyThreatControl(threat, { kind: "move", index: 1, value: memoMove }), "bulk"), bulk);
+
+  // Break points use the threat's defensive SP, not its moves.
+  assert.equal(threatAnalysisSignature(applyThreatControl(threat, { kind: "move", index: 0, value: memoSpecialMove }), "break"), breakKey);
+  assert.equal(threatAnalysisSignature(applyThreatControl(threat, { kind: "sp", stat: "atk", value: 0 }), "break"), breakKey);
+  assert.notEqual(threatAnalysisSignature(applyThreatControl(threat, { kind: "sp", stat: "def", value: 12 }), "break"), breakKey);
+
+  for (const control of [
+    { kind: "nature", value: "Modest" },
+    { kind: "ability", value: { id: "intimidate", name: "Intimidate" } },
+    { kind: "item", value: { id: "choiceband", name: "Choice Band" } },
+    { kind: "status", value: "burn" },
+    { kind: "status", value: "soak" },
+  ]) {
+    const changed = applyThreatControl(threat, control);
+    assert.notEqual(threatAnalysisSignature(changed, "bulk"), bulk, control.kind);
+    assert.notEqual(threatAnalysisSignature(changed, "break"), breakKey, control.kind);
+  }
+  assert.notEqual(
+    threatAnalysisSignature({ ...threat, pokemon: { ...threat.pokemon, id: "attackermega" } }, "bulk"),
+    bulk,
+  );
+});
+
+test("analysis memo reuses per-item results within a context and recomputes on new inputs", () => {
+  const memo = createAnalysisMemo({ contextLimit: 2 });
+  let calls = 0;
+  const compute = (value) => () => {
+    calls += 1;
+    return { value };
+  };
+
+  const first = memo.get("ctx-a", "threat-1", compute(1));
+  assert.equal(memo.get("ctx-a", "threat-1", compute(99)), first);
+  assert.equal(calls, 1);
+  memo.get("ctx-a", "threat-2", compute(2));
+  assert.equal(calls, 2);
+  assert.equal(memo.has("ctx-a", "threat-1"), true);
+  assert.equal(memo.has("ctx-a", "threat-3"), false);
+  assert.equal(memo.peek("ctx-a", "threat-3"), undefined);
+
+  // A different context (for example new weather) computes its own results...
+  assert.equal(memo.get("ctx-b", "threat-1", compute(3)).value, 3);
+  assert.equal(calls, 3);
+  // ...while returning to the previous context reuses them.
+  assert.equal(memo.get("ctx-a", "threat-1", compute(99)), first);
+  assert.equal(calls, 3);
+
+  // The least recently used context is evicted beyond the limit.
+  memo.get("ctx-c", "threat-1", compute(4));
+  assert.equal(memo.contextCount, 2);
+  assert.equal(memo.has("ctx-b", "threat-1"), false);
+  assert.equal(memo.has("ctx-a", "threat-1"), true);
+
+  memo.clear();
+  assert.equal(memo.contextCount, 0);
+});
+
+test("analysis memo bounds items per context", () => {
+  const memo = createAnalysisMemo({ itemLimit: 2 });
+  memo.get("ctx", "a", () => 1);
+  memo.get("ctx", "b", () => 2);
+  memo.get("ctx", "a", () => 0);
+  memo.get("ctx", "c", () => 3);
+  assert.equal(memo.has("ctx", "a"), true);
+  assert.equal(memo.has("ctx", "b"), false);
+  assert.equal(memo.has("ctx", "c"), true);
+});
+
+test("analysis render keys change with context, threats, sort, and locale", () => {
+  const base = { context: "ctx", threatKeys: ["a", "b"], sort: "breakpoint", locale: "en" };
+  const key = analysisRenderKey(base);
+  assert.equal(analysisRenderKey({ ...base, threatKeys: ["a", "b"] }), key);
+  for (const changed of [
+    { context: "ctx-2" },
+    { threatKeys: ["a"] },
+    { threatKeys: ["b", "a"] },
+    { sort: "default" },
+    { locale: "zh-TW" },
+  ]) {
+    assert.notEqual(analysisRenderKey({ ...base, ...changed }), key);
+  }
+});
+
+test("per-threat bulk matchups match the combined analysis for each threat", () => {
+  const user = memoUser();
+  const field = createField();
+  const threats = [
+    memoThreat(),
+    memoThreat({
+      pokemon: { id: "other", name: "Other", types: ["Normal"], baseStats: { hp: 80, atk: 130, def: 80, spa: 60, spd: 80, spe: 100 } },
+      moves: [memoSpecialMove, memoMove],
+    }),
+  ];
+  const combined = bulkPointMatchups(user, threats, { budget: 66, field });
+  for (const threat of threats) {
+    assert.deepEqual(
+      bulkPointMatchups(user, [threat], { budget: 66, field }),
+      combined.filter(({ scenario }) => scenario.threat === threat),
+    );
+  }
+});
+
+test("memoized zero-bulk baselines give the same bulk matchups across defensive SP edits", () => {
+  const field = createField();
+  const threats = [memoThreat()];
+  const baselines = new Map();
+  const user = memoUser();
+  const baselineFor = (state) => (scenario) => {
+    const key = scenario.move.id;
+    if (!baselines.has(key)) baselines.set(key, bulkBaseline(state, scenario, { budget: 66, field }));
+    return baselines.get(key);
+  };
+  const first = bulkPointMatchups(user, threats, { budget: 66, field, baseline: baselineFor(user) });
+  assert.deepEqual(first, bulkPointMatchups(user, threats, { budget: 66, field }));
+
+  const edited = { ...user, sp: { ...user.sp, hp: 12, def: 8 } };
+  assert.deepEqual(
+    bulkPointMatchups(edited, threats, { budget: 66, field, baseline: baselineFor(edited) }),
+    bulkPointMatchups(edited, threats, { budget: 66, field }),
+  );
+  assert.equal(baselines.size, 2);
 });

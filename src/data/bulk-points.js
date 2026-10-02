@@ -73,16 +73,25 @@ export function threatDamage(userState, scenario) {
   };
 }
 
+// Zero-bulk reference for one scenario. It ignores the user's HP/Def/SpD SP, so callers may
+// memoize it across defensive SP edits (pass `options.baseline`).
+export function bulkBaseline(userState, scenario, options) {
+  const baselineState = zeroBulkState(userState);
+  return {
+    baselineDamage: threatDamage(baselineState, scenario),
+    baselinePoints: bulkPoints(baselineState, scenario, options),
+  };
+}
+
 export function bulkPointMatchups(userState, threats, options) {
   const field = options?.field ?? createField();
-  const baselineState = zeroBulkState(userState);
+  const baselineFor = options?.baseline ?? ((scenario) => bulkBaseline(userState, scenario, options));
   return threats
     .flatMap((threat) => threat.moves.slice(0, 2).map((move) => ({ threat, move, field })))
     .map((scenario) => {
       const damage = threatDamage(userState, scenario);
       if (!Number.isFinite(damage.maxPct)) return null;
-      const baselineDamage = threatDamage(baselineState, scenario);
-      const baselinePoints = bulkPoints(baselineState, scenario, options);
+      const { baselineDamage, baselinePoints } = baselineFor(scenario);
       const points = bulkPoints(userState, scenario, options);
       return {
         scenario,
