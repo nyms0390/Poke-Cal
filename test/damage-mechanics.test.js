@@ -156,3 +156,19 @@ test("Tera raises weak moves of the Tera type to 60 power", () => {
   // Priority moves keep their base power.
   assert.equal(priority.notes.some((note) => note.includes("to 60 power")), false);
 });
+
+test("Foul Play uses the target's Attack boosts unless the target has Unaware", () => {
+  const grimmsnarl = { id: "grimmsnarl", name: "Grimmsnarl", types: ["Dark", "Fairy"], baseStats: { hp: 95, atk: 120, def: 65, spa: 95, spd: 75, spe: 60 } };
+  const clefable = { id: "clefable", name: "Clefable", types: ["Fairy"], baseStats: { hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60 } };
+  const foulPlay = { id: "foulplay", name: "Foul Play", type: "Dark", category: "Physical", basePower: 95, target: "normal", flags: { contact: 1 }, overrideOffensivePokemon: "target" };
+  const neutral = { nature: "Hardy", sp: {}, stages: {}, ability: null, item: null };
+  const unaware = { id: "unaware", name: "Unaware", flags: { breakable: 1 } };
+  const boostedTarget = (ability) => ({ ...neutral, ability, stages: { atk: 2 } });
+
+  // Matches @smogon/calc: the Unaware target ignores its own +2 (26-31) ...
+  const unawareTarget = calculateDamage({ attacker: grimmsnarl, defender: clefable, move: foulPlay, attackerState: neutral, defenderState: boostedTarget(unaware), field: singles });
+  assert.deepEqual([unawareTarget.minDamage, unawareTarget.maxDamage], [26, 31]);
+  // ... while an Unaware user still suffers the target's +2 (94-111).
+  const unawareUser = calculateDamage({ attacker: clefable, defender: garchomp, move: foulPlay, attackerState: { ...neutral, ability: unaware }, defenderState: boostedTarget(null), field: singles });
+  assert.deepEqual([unawareUser.minDamage, unawareUser.maxDamage], [94, 111]);
+});
