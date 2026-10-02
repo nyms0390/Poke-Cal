@@ -26,6 +26,10 @@ const STAT_IDS = {
 };
 const STAT_ORDER = ["hp", "atk", "def", "spa", "spd", "spe"];
 const NATURE_PATTERN = /^(.+?)\s+Nature$/i;
+// Showdown export lines that carry no PokéCal data and must never be read as the header.
+const IGNORED_LINE_PATTERN = /^(Level|Shiny|Happiness|Friendship|IVs|Gigantamax|Dynamax Level|Pokeball|Poké Ball|Hidden Power)\s*:/i;
+const GENDER_SUFFIX_PATTERN = /\s+\((?:M|F)\)$/i;
+const LOOKUP_RANK = { id: 0, name: 1, alias: 2, baseSpecies: 3 };
 
 export function parseSetPaste(text, catalogs = {}) {
   const lookup = buildSetLookup(catalogs);
@@ -42,6 +46,7 @@ export function parseSetPaste(text, catalogs = {}) {
     warnings,
   };
 
+  let headerSeen = false;
   for (const rawLine of String(text ?? "").split(/\r?\n/)) {
     const line = rawLine.trim();
     if (!line) continue;
@@ -84,9 +89,12 @@ export function parseSetPaste(text, catalogs = {}) {
       continue;
     }
 
-    if (!parsed.pokemon) {
+    if (IGNORED_LINE_PATTERN.test(line)) continue;
+
+    if (!headerSeen) {
+      headerSeen = true;
       const { name, itemName } = parseHeader(line);
-      const pokemon = lookup.pokemon.get(lookupKey(name));
+      const pokemon = resolveHeaderPokemon(name, lookup.pokemon);
       if (pokemon) parsed.pokemon = pokemon;
       else warnings.push(`Unknown Pokémon: ${name}`);
       if (itemName) {
@@ -124,15 +132,41 @@ function buildSetLookup({ pokemon = [], abilities = [], items = [], moves = [] }
   };
 }
 
+// Exact ids and names always win over aliases, and aliases over a form's base-species name,
+// so "Gengar" resolves to Gengar rather than whichever Gengar form was listed last. Within one
+// rank the base form (no baseSpecies, or baseSpecies equal to its own name) wins.
 function entriesByAlias(entries) {
-  const lookup = new Map();
-  for (const entry of entries ?? []) {
-    for (const value of [entry.id, entry.name, entry.baseSpecies, ...(entry.aliases ?? [])]) {
-      const key = lookupKey(value);
-      if (key) lookup.set(key, entry);
+  const ranked = new Map();
+  const offer = (value, entry, rank) => {
+    const key = lookupKey(value);
+    if (!key) return;
+    const current = ranked.get(key);
+    if (!current || rank < current.rank || (rank === current.rank && isBaseForm(entry) && !isBaseForm(current.entry))) {
+      ranked.set(key, { entry, rank });
     }
+  };
+  for (const entry of entries ?? []) {
+    offer(entry.id, entry, LOOKUP_RANK.id);
+    offer(entry.name, entry, LOOKUP_RANK.name);
+    for (const alias of entry.aliases ?? []) offer(alias, entry, LOOKUP_RANK.alias);
+    offer(entry.baseSpecies, entry, LOOKUP_RANK.baseSpecies);
   }
-  return lookup;
+  return new Map([...ranked].map(([key, { entry }]) => [key, entry]));
+}
+
+function isBaseForm(entry) {
+  return !entry?.baseSpecies || lookupKey(entry.baseSpecies) === lookupKey(entry.name);
+}
+
+// Accepts "Species", "Species (M)", "Nickname (Species)" and "Nickname (Species) (F)".
+function resolveHeaderPokemon(name, pokemonLookup) {
+  const withoutGender = name.replace(GENDER_SUFFIX_PATTERN, "").trim();
+  const nicknamed = /^(.*\S)\s+\(([^()]+)\)$/.exec(withoutGender);
+  if (nicknamed) {
+    const species = pokemonLookup.get(lookupKey(nicknamed[2]));
+    if (species) return species;
+  }
+  return pokemonLookup.get(lookupKey(withoutGender)) ?? pokemonLookup.get(lookupKey(name)) ?? null;
 }
 
 function resolvedMoves(sideState, moveLookup) {
