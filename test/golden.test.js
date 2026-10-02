@@ -293,7 +293,7 @@ const P2_GOLDEN_CASES = [
   },
   {
     name: "P2-05 Hadron Engine boosts Special Attack in Electric Terrain",
-    // 120 SpA becomes floor(120 * 4915/4096) = 143; Normal STAB yields 54-64.
+    // 120 SpA becomes pokeRound(120 * 4915/4096) = 144; Normal STAB yields 55-66.
     input: {
       attacker: p2Attacker,
       defender: p2Defender,
@@ -302,7 +302,7 @@ const P2_GOLDEN_CASES = [
       defenderState: oneHpState,
       field: createField({ terrain: "Electric Terrain" }),
     },
-    expected: { min: 54, max: 64, koText: "guaranteed OHKO" },
+    expected: { min: 55, max: 66, koText: "guaranteed OHKO" },
   },
   {
     name: "P2-06 Pixilate converts type and boosts power",
@@ -370,8 +370,9 @@ const P2_GOLDEN_CASES = [
     expected: { min: 50, max: 59, koText: "guaranteed OHKO" },
   },
   {
-    name: "P2-08 Parental Bond adds a quarter-power second hit",
-    // 80 BP Normal STAB gives 46-55; the 20 BP second hit adds 12-15 for 58-70.
+    name: "P2-08 Parental Bond adds a quarter-damage second hit",
+    // 80 BP Normal STAB gives 46-55; the child hit quarters base damage (1024/4096) before the
+    // roll and adds 10-13 for 56-68 (Showdown/@smogon/calc rule, not a 20 BP hit).
     input: {
       attacker: p2Attacker,
       defender: p2Defender,
@@ -379,7 +380,7 @@ const P2_GOLDEN_CASES = [
       attackerState: { ...p2State, ability: { id: "parentalbond", name: "Parental Bond" } },
       defenderState: oneHpState,
     },
-    expected: { min: 58, max: 70, koText: "guaranteed OHKO" },
+    expected: { min: 56, max: 68, koText: "guaranteed OHKO" },
   },
 ];
 

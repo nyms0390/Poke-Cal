@@ -4,7 +4,14 @@
 //   ctx = { move, attacker, defender, attackerState, defenderState, field,
 //           typeMultiplier, moveType, attackStat, isPhysical, attackerPerspective }
 // and return a modifier ({ kind, value, label }), an array of modifiers, or null/undefined.
-// kind ∈ "power" | "attack" | "defense" | "damage" | "stab" | "hits"
+// kind ∈ "power" | "attack" | "defense" | "weather" | "damage" | "stab" | "hits" | "hitDamageModifiers"
+//
+// Values are applied the way Pokémon Showdown does: every modifier of one kind is chained
+// as a 4096-based integer (`chainValue`) and the chain is applied once with half-down
+// rounding. `value4096` overrides the rounded `value × 4096` where the game uses a
+// specific integer (Life Orb 5324, doubles screens 2732, Muscle Band 4505, ...).
+// "damage" modifiers are the final modifiers; their optional `order` follows Showdown's
+// ModifyDamage order.
 //
 // `collectModifiers(ctx)` runs each registry once for the attacker's own ability/item
 // (attackerPerspective: true) and once for the defender's (attackerPerspective: false) —
@@ -126,17 +133,21 @@ export const ITEM_MODIFIERS = {
     ctx.attackerPerspective && ctx.attackStat === "atk" ? { kind: "attack", value: 1.5, label: "Choice Band" } : null,
   choicespecs: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "spa" ? { kind: "attack", value: 1.5, label: "Choice Specs" } : null,
-  lifeorb: (ctx) => (ctx.attackerPerspective ? { kind: "damage", value: 1.3, label: "Life Orb" } : null),
+  lifeorb: (ctx) => (ctx.attackerPerspective
+    ? { kind: "damage", value: 1.3, value4096: 5324, order: 60, label: "Life Orb" }
+    : null),
   lightball: (ctx) =>
     ctx.attackerPerspective && normalizeId(ctx.attacker.name) === "pikachu"
       ? { kind: "attack", value: 2, label: "Light Ball" }
       : null,
   expertbelt: (ctx) =>
-    ctx.attackerPerspective && ctx.typeMultiplier > 1 ? { kind: "damage", value: 1.2, label: "Expert Belt" } : null,
+    ctx.attackerPerspective && ctx.typeMultiplier > 1
+      ? { kind: "damage", value: 1.2, order: 50, label: "Expert Belt" }
+      : null,
   muscleband: (ctx) =>
-    ctx.attackerPerspective && ctx.isPhysical ? { kind: "power", value: 1.1, label: "Muscle Band" } : null,
+    ctx.attackerPerspective && ctx.isPhysical ? { kind: "power", value: 1.1, value4096: 4505, label: "Muscle Band" } : null,
   wiseglasses: (ctx) =>
-    ctx.attackerPerspective && !ctx.isPhysical ? { kind: "power", value: 1.1, label: "Wise Glasses" } : null,
+    ctx.attackerPerspective && !ctx.isPhysical ? { kind: "power", value: 1.1, value4096: 4505, label: "Wise Glasses" } : null,
   loadeddice: (ctx) => {
     if (!ctx.attackerPerspective || ctx.hitCountRange?.max <= 1 || normalizeId(ctx.move.id) === "dragondarts") return null;
     return {
@@ -159,7 +170,12 @@ for (const [itemId, type] of Object.entries(RESIST_BERRIES)) {
     if (ctx.attackerPerspective || type !== ctx.moveType) return null;
     if (itemId !== "chilanberry" && ctx.typeMultiplier <= 1) return null;
     const ripen = hasActiveAbility(ctx.defenderState, "ripen", ctx.suppressDefenderAbility);
-    return { kind: "damage", value: ripen ? 0.25 : 0.5, label: ripen ? "Ripen" : ctx.defenderState.item.name };
+    return {
+      kind: "damage",
+      value: ripen ? 0.25 : 0.5,
+      order: 70,
+      label: ripen ? "Ripen" : ctx.defenderState.item.name,
+    };
   };
 }
 
@@ -210,7 +226,7 @@ export const ABILITY_MODIFIERS = {
     if (!ctx.move.flags?.sound) return null;
     return ctx.attackerPerspective
       ? { kind: "power", value: 1.3, label: "Punk Rock" }
-      : { kind: "damage", value: 0.5, label: "Punk Rock" };
+      : { kind: "damage", value: 0.5, order: 32, label: "Punk Rock" };
   },
   reckless: (ctx) =>
     ctx.attackerPerspective && (ctx.move.recoil || ctx.move.hasCrashDamage)
@@ -259,15 +275,9 @@ export const ABILITY_MODIFIERS = {
     return null;
   },
   tintedlens: (ctx) =>
-    ctx.attackerPerspective && ctx.typeMultiplier < 1 ? { kind: "damage", value: 2, label: "Tinted Lens" } : null,
-  prismarmor: (ctx) =>
-    !ctx.attackerPerspective && ctx.typeMultiplier > 1
-      ? { kind: "damage", value: 0.75, label: ctx.defenderState.ability.name }
-      : null,
-  solidrock: (ctx) =>
-    !ctx.attackerPerspective && ctx.typeMultiplier > 1
-      ? { kind: "damage", value: 0.75, label: ctx.defenderState.ability.name }
-      : null,
+    ctx.attackerPerspective && ctx.typeMultiplier < 1 ? { kind: "damage", value: 2, order: 20, label: "Tinted Lens" } : null,
+  prismarmor: superEffectiveReductionModifier,
+  solidrock: superEffectiveReductionModifier,
   orichalcumpulse: (ctx) =>
     ctx.attackerPerspective && ctx.attackStat === "atk" && (normalizeId(ctx.field.weather) === "sunnyday" || normalizeId(ctx.field.weather) === "desolateland")
       ? { kind: "attack", value: FIELD_ABILITY_BOOST, label: ctx.attackerState.ability.name }
@@ -278,7 +288,7 @@ export const ABILITY_MODIFIERS = {
       : null,
   multiscale: (ctx) =>
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
-      ? { kind: "damage", value: 0.5, label: "Multiscale" }
+      ? { kind: "damage", value: 0.5, order: 30, label: "Multiscale" }
       : null,
   auraguard: (ctx) =>
     !ctx.attackerPerspective && ctx.move.flags?.contact
@@ -286,7 +296,7 @@ export const ABILITY_MODIFIERS = {
       : null,
   shadowshield: (ctx) =>
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
-      ? { kind: "damage", value: 0.5, label: "Shadow Shield" }
+      ? { kind: "damage", value: 0.5, order: 30, label: "Shadow Shield" }
       : null,
   thickfat: (ctx) =>
     !ctx.attackerPerspective && (ctx.moveType === "Fire" || ctx.moveType === "Ice")
@@ -294,7 +304,7 @@ export const ABILITY_MODIFIERS = {
       : null,
   heatproof: (ctx) =>
     !ctx.attackerPerspective && ctx.moveType === "Fire"
-      ? { kind: "damage", value: 0.5, label: "Heatproof" }
+      ? { kind: "attack", value: 0.5, label: "Heatproof" }
       : null,
   purifyingsalt: (ctx) =>
     !ctx.attackerPerspective && ctx.moveType === "Ghost"
@@ -337,11 +347,11 @@ export const ABILITY_MODIFIERS = {
   flowergift: flowerGiftModifier,
   dryskin: (ctx) =>
     !ctx.attackerPerspective && ctx.moveType === "Fire"
-      ? { kind: "damage", value: 1.25, label: "Dry Skin" }
+      ? { kind: "power", value: 1.25, label: "Dry Skin" }
       : null,
   parentalbond: (ctx) =>
     ctx.attackerPerspective && ctx.hitCountRange?.min === 1 && ctx.hitCountRange?.max === 1
-      ? { kind: "hitPowerMultipliers", value: [1, 0.25], label: "Parental Bond" }
+      ? { kind: "hitDamageModifiers", value: [4096, 1024], label: "Parental Bond" }
       : null,
 };
 
@@ -390,7 +400,7 @@ function weatherDamageLabel(weather, move) {
 function weatherModifier(ctx) {
   const value = weatherDamageValue(ctx.field.weather, ctx.move, ctx.moveType, ctx.attackerState.item);
   if (value === 1) return null;
-  return { kind: "damage", value, label: weatherDamageLabel(ctx.field.weather, ctx.move) };
+  return { kind: "weather", value, label: weatherDamageLabel(ctx.field.weather, ctx.move) };
 }
 
 // Collision Course / Electro Drift: +33% damage on a super-effective hit. Not an ability or
@@ -398,7 +408,7 @@ function weatherModifier(ctx) {
 function superEffectiveMoveModifier(ctx) {
   const moveId = normalizeId(ctx.move.id ?? ctx.move.name);
   if ((moveId === "collisioncourse" || moveId === "electrodrift") && ctx.typeMultiplier > 1) {
-    return { kind: "damage", value: 4 / 3, label: `${ctx.move.name} super-effective boost` };
+    return { kind: "power", value: 4 / 3, value4096: 5461, label: `${ctx.move.name} super-effective boost` };
   }
   return null;
 }
@@ -428,7 +438,7 @@ function auraPowerModifier(ctx) {
   if (!auraType) return null;
   if (!hasActiveAbility(ctx.attackerState, auraType, ctx.suppressAttackerAbility) &&
     !hasActiveAbility(ctx.defenderState, auraType, ctx.suppressDefenderAbility)) return null;
-  return { kind: "power", value: 1.33, label: auraType === "fairyaura" ? "Fairy Aura" : "Dark Aura" };
+  return { kind: "power", value: 1.33, value4096: 5448, label: auraType === "fairyaura" ? "Fairy Aura" : "Dark Aura" };
 }
 
 // Misty Terrain halves Dragon-type damage against grounded targets.
@@ -436,7 +446,7 @@ function mistyTerrainDragonModifier(ctx) {
   if (normalizeId(ctx.field.terrain) !== "mistyterrain") return null;
   if (ctx.moveType !== "Dragon") return null;
   if (!isGrounded(ctx.defender, ctx.defenderState, ctx.field)) return null;
-  return { kind: "damage", value: 0.5, label: "Misty Terrain weakens Dragon moves" };
+  return { kind: "power", value: 0.5, label: "Misty Terrain weakens Dragon moves" };
 }
 
 // Grassy Terrain halves ground-shaking moves against grounded targets.
@@ -446,7 +456,7 @@ function grassyTerrainGroundMoveModifier(ctx) {
   if (normalizeId(ctx.field.terrain) !== "grassyterrain") return null;
   if (!GRASSY_TERRAIN_HALVED_MOVE_IDS.has(normalizeId(ctx.move.id ?? ctx.move.name))) return null;
   if (!isGrounded(ctx.defender, ctx.defenderState, ctx.field)) return null;
-  return { kind: "damage", value: 0.5, label: "Grassy Terrain weakens ground-shaking moves" };
+  return { kind: "power", value: 0.5, label: "Grassy Terrain weakens ground-shaking moves" };
 }
 
 // -- Side conditions (field.js task P0-03, wired up in P1-02) -------------------------------
@@ -478,16 +488,17 @@ function defenderSideConditionModifiers(ctx) {
   if (!side) return [];
   const modifiers = [];
   if (!ctx.critical) {
-    const screenValue = ctx.field?.format === "doubles" ? 2 / 3 : 0.5;
+    const doubles = ctx.field?.format === "doubles";
+    const screen = { kind: "damage", value: doubles ? 2732 / 4096 : 0.5, value4096: doubles ? 2732 : 2048, order: 10 };
     if (side.auroraVeil) {
-      modifiers.push({ kind: "damage", value: screenValue, label: "Aurora Veil" });
+      modifiers.push({ ...screen, label: "Aurora Veil" });
     } else if (side.reflect && ctx.isPhysical) {
-      modifiers.push({ kind: "damage", value: screenValue, label: "Reflect" });
+      modifiers.push({ ...screen, label: "Reflect" });
     } else if (side.lightScreen && !ctx.isPhysical) {
-      modifiers.push({ kind: "damage", value: screenValue, label: "Light Screen" });
+      modifiers.push({ ...screen, label: "Light Screen" });
     }
   }
-  if (side.friendGuard) modifiers.push({ kind: "damage", value: 0.75, label: "Friend Guard" });
+  if (side.friendGuard) modifiers.push({ kind: "damage", value: 0.75, order: 40, label: "Friend Guard" });
   if (side.flowerGift && isSun((ctx.ambientField ?? ctx.field).weather) && ctx.defenseStat === "spd") {
     modifiers.push({ kind: "defense", value: 1.5, label: "Flower Gift" });
   }
@@ -510,6 +521,29 @@ const GENERIC_DEFENDER_MODIFIERS = [defenderSideConditionModifiers];
 function toList(result) {
   if (!result) return [];
   return Array.isArray(result) ? result : [result];
+}
+
+function superEffectiveReductionModifier(ctx) {
+  return !ctx.attackerPerspective && ctx.typeMultiplier > 1
+    ? { kind: "damage", value: 0.75, order: 33, label: ctx.defenderState.ability.name }
+    : null;
+}
+
+/** 4096-based integer for one modifier (Showdown's chainModify numerator). */
+export function chainValue(modifier) {
+  if (Number.isInteger(modifier?.value4096)) return modifier.value4096;
+  return Math.round(Number(modifier?.value ?? 1) * 4096);
+}
+
+/** Chain 4096-based modifiers with Showdown's rounding: ((a × b) + 2048) >> 12. */
+export function chainModifiers(values) {
+  return values.reduce((chain, value) => (value === 4096 ? chain : Math.floor((chain * value + 2048) / 4096)), 4096);
+}
+
+/** Apply a 4096-based modifier with Showdown's half-down rounding (pokeRound). */
+export function applyModifier(amount, modifier) {
+  if (modifier === 4096) return amount;
+  return Math.floor((amount * modifier + 2047) / 4096);
 }
 
 function adaptabilityModifier(ctx) {
@@ -541,8 +575,8 @@ function plusMinusModifier(ctx) {
 
 function rivalryModifier(ctx) {
   if (!ctx.attackerPerspective) return null;
-  if (ctx.attackerState.rivalry === "same") return { kind: "damage", value: 1.25, label: "Rivalry same gender" };
-  if (ctx.attackerState.rivalry === "opposite") return { kind: "damage", value: 0.75, label: "Rivalry opposite gender" };
+  if (ctx.attackerState.rivalry === "same") return { kind: "power", value: 1.25, label: "Rivalry same gender" };
+  if (ctx.attackerState.rivalry === "opposite") return { kind: "power", value: 0.75, label: "Rivalry opposite gender" };
   return null;
 }
 

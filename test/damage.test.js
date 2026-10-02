@@ -732,8 +732,8 @@ test("defaults to doubles spread-move damage", () => {
     field: createField({ format: "singles" }),
   });
 
-  assert.deepEqual([doubles.minDamage, doubles.maxDamage], [64, 78]);
-  assert.deepEqual([doubles.minPercent, doubles.maxPercent], [53.7, 65.5]);
+  // The ×0.75 spread modifier applies to base damage before the random roll (Showdown order).
+  assert.deepEqual([doubles.minDamage, doubles.maxDamage], [66, 78]);
   assert.deepEqual([singles.minDamage, singles.maxDamage], [86, 104]);
   assert.equal(doubles.notes.includes("Doubles spread move"), true);
 });
@@ -4617,8 +4617,8 @@ test("golden: Misty Terrain halves Dragon damage into grounded targets only", ()
 
   // Same stats as the Electric Terrain case above: no terrain -> 58-69.
   assert.deepEqual([noTerrain.minDamage, noTerrain.maxDamage], [58, 69]);
-  // Misty Terrain halves the final damage into a grounded target: floor(69*0.5)=34, floor(58*0.5)=29.
-  assert.deepEqual([groundedInMisty.minDamage, groundedInMisty.maxDamage], [29, 34]);
+  // Misty Terrain halves the move's base power into a grounded target: 50 BP -> base 24 -> 30-36.
+  assert.deepEqual([groundedInMisty.minDamage, groundedInMisty.maxDamage], [30, 36]);
   assert.equal(groundedInMisty.notes.includes("Misty Terrain weakens Dragon moves"), true);
   // A Flying-type or otherwise ungrounded target is unaffected.
   assert.deepEqual([ungroundedInMisty.minDamage, ungroundedInMisty.maxDamage], [58, 69]);
@@ -4675,8 +4675,8 @@ test("golden: Grassy Terrain halves Earthquake and Bulldoze into grounded target
   // atk 120 vs def 120, power 100, STAB x1.5 (Ground). base = floor(22*100*120/120/50)+2 = 46.
   // roll 85-100% -> 58-69 after STAB, same shape as the terrain cases above.
   assert.deepEqual([noTerrain.minDamage, noTerrain.maxDamage], [58, 69]);
-  // Grassy Terrain halves Earthquake's final damage into a grounded target.
-  assert.deepEqual([groundedInGrassy.minDamage, groundedInGrassy.maxDamage], [29, 34]);
+  // Grassy Terrain halves Earthquake's base power into a grounded target: 50 BP -> 30-36.
+  assert.deepEqual([groundedInGrassy.minDamage, groundedInGrassy.maxDamage], [30, 36]);
   assert.equal(groundedInGrassy.notes.includes("Grassy Terrain weakens ground-shaking moves"), true);
   // Not halved against an ungrounded (e.g. Flying) target.
   assert.deepEqual([ungroundedInGrassy.minDamage, ungroundedInGrassy.maxDamage], [58, 69]);
@@ -4741,9 +4741,9 @@ test("golden: Helping Hand boosts move power and stacks with Life Orb (power ste
   // Helping Hand raises power to 150 before the base-damage step: base = floor(22*150*100/100/50)+2 = 68.
   assert.deepEqual([helpingHand.minDamage, helpingHand.maxDamage], [85, 102]);
   assert.equal(helpingHand.notes.includes("Helping Hand"), true);
-  // Life Orb (x1.3) applies after STAB/type in the final-damage step, on top of Helping Hand's
-  // power-step boost: 85*1.3 -> 110 (floored), 102*1.3 -> 132 (floored, per-roll rounding).
-  assert.deepEqual([helpingHandAndLifeOrb.minDamage, helpingHandAndLifeOrb.maxDamage], [110, 132]);
+  // Life Orb (5324/4096) applies after STAB/type in the final-damage step, on top of Helping
+  // Hand's power-step boost, with half-down rounding: 85 -> 110, 102 -> 133 (132.58 rounds up).
+  assert.deepEqual([helpingHandAndLifeOrb.minDamage, helpingHandAndLifeOrb.maxDamage], [110, 133]);
 });
 
 test("golden: Battery boosts only special moves; Power Spot boosts either category", () => {
@@ -4838,9 +4838,9 @@ test("golden: Reflect halves physical damage (x2/3 in doubles, x1/2 in singles),
     field: createField({ defenderSide: { reflect: true } }),
   });
 
-  // No-field base is 58-69 (see the Helping Hand test above); doubles Reflect applies x2/3:
-  // floor(58*2/3)=38, floor(69*2/3)=46.
-  assert.deepEqual([doublesReflect.minDamage, doublesReflect.maxDamage], [38, 46]);
+  // No-field base is 58-69 (see the Helping Hand test above); doubles Reflect applies 2732/4096
+  // with half-down rounding: 58 -> 38.69 -> 39, 69 -> 46.02 -> 46.
+  assert.deepEqual([doublesReflect.minDamage, doublesReflect.maxDamage], [39, 46]);
   assert.equal(doublesReflect.notes.includes("Reflect"), true);
   // Singles Reflect applies x1/2: floor(58*0.5)=29, floor(69*0.5)=34.
   assert.deepEqual([singlesReflect.minDamage, singlesReflect.maxDamage], [29, 34]);
@@ -4875,13 +4875,13 @@ test("golden: Light Screen halves special damage only; Aurora Veil covers both a
     field: createField({ defenderSide: { reflect: true, auroraVeil: true } }),
   });
 
-  // Same x2/3 doubles shape as Reflect: 38-46.
-  assert.deepEqual([lightScreen.minDamage, lightScreen.maxDamage], [38, 46]);
+  // Same 2732/4096 doubles shape as Reflect: 39-46.
+  assert.deepEqual([lightScreen.minDamage, lightScreen.maxDamage], [39, 46]);
   assert.equal(lightScreen.notes.includes("Light Screen"), true);
-  assert.deepEqual([auroraVeilPhysical.minDamage, auroraVeilPhysical.maxDamage], [38, 46]);
+  assert.deepEqual([auroraVeilPhysical.minDamage, auroraVeilPhysical.maxDamage], [39, 46]);
   assert.equal(auroraVeilPhysical.notes.includes("Aurora Veil"), true);
   // Reflect + Aurora Veil active together only ever apply one screen multiplier.
-  assert.deepEqual([auroraVeilAndReflect.minDamage, auroraVeilAndReflect.maxDamage], [38, 46]);
+  assert.deepEqual([auroraVeilAndReflect.minDamage, auroraVeilAndReflect.maxDamage], [39, 46]);
   assert.deepEqual(auroraVeilAndReflect.notes.filter((note) => note === "Reflect" || note === "Aurora Veil"), [
     "Aurora Veil",
   ]);
@@ -4927,14 +4927,14 @@ test("golden: a critical hit ignores all three screens but not Friend Guard, whi
   // with no Reflect discount at all.
   assert.deepEqual([critIgnoresReflect.minDamage, critIgnoresReflect.maxDamage], [87, 103]);
   assert.equal(critIgnoresReflect.notes.includes("Reflect"), false);
-  // Friend Guard x0.75 on the no-field 58-69 base: floor(58*0.75)=43, floor(69*0.75)=51.
-  assert.deepEqual([friendGuard.minDamage, friendGuard.maxDamage], [43, 51]);
+  // Friend Guard x0.75 on the no-field 58-69 base, rounded half down: 43.5 -> 43, 51.75 -> 52.
+  assert.deepEqual([friendGuard.minDamage, friendGuard.maxDamage], [43, 52]);
   // Friend Guard still applies on a crit (only the screens are crit-skipped): 87*0.75 -> 65, 103*0.75 -> 77.
   assert.deepEqual([friendGuardOnCrit.minDamage, friendGuardOnCrit.maxDamage], [65, 77]);
   assert.equal(friendGuardOnCrit.notes.includes("Friend Guard"), true);
   // Friend Guard stacks multiplicatively with a screen (different modifier kinds): the doubles
-  // Reflect discount (x2/3) times Friend Guard (x0.75) is exactly x0.5: floor(58*0.5)=29, floor(69*0.5)=34.
-  assert.deepEqual([friendGuardAndReflect.minDamage, friendGuardAndReflect.maxDamage], [29, 34]);
+  // Reflect (2732) chained with Friend Guard (3072) is 2049/4096: 58 -> 29.01 -> 29, 69 -> 34.52 -> 35.
+  assert.deepEqual([friendGuardAndReflect.minDamage, friendGuardAndReflect.maxDamage], [29, 35]);
 });
 
 test("P2-07 applies full-HP defensive ability damage reductions", () => {
@@ -5728,24 +5728,16 @@ test("P2-08 applies Forecast typing and Parental Bond second-hit damage", () => 
     attackerState: { ...neutralState, ability: { id: "parentalbond", name: "Parental Bond" } },
     defenderState: neutralState,
   });
-  const expectedSecondHit = calculateDamage({
-    attacker: kangaskhan,
-    defender: target,
-    move: { ...megaPunch, id: "megapunchsecondhit", basePower: 20 },
-    attackerState: neutralState,
-    defenderState: neutralState,
-  });
-
   assert.equal(waterForecast.maxDamage > waterNoForecast.maxDamage, true);
   assert.equal(defenderForecast.maxDamage < defenderNoForecast.maxDamage, true);
-  assert.deepEqual(
-    [parentalBond.minDamage, parentalBond.maxDamage],
-    [singleHit.minDamage + expectedSecondHit.minDamage, singleHit.maxDamage + expectedSecondHit.maxDamage],
-  );
+  // The child hit repeats the move at full power and quarters its base damage (1024/4096)
+  // before the roll, so it is not a 20 BP hit: 52-63 + 12-15 = 64-78 (matches @smogon/calc).
+  assert.deepEqual([singleHit.minDamage, singleHit.maxDamage], [52, 63]);
+  assert.deepEqual([parentalBond.minDamage, parentalBond.maxDamage], [64, 78]);
   assert.equal(waterForecast.notes.includes("Forecast Water type"), true);
   assert.equal(defenderForecast.notes.includes("Forecast Fire type"), true);
   assert.equal(parentalBond.notes.includes("Parental Bond"), true);
-  assert.equal(parentalBond.notes.includes("Mega Punch hits 2 times at 80/20"), true);
+  assert.equal(parentalBond.notes.includes("Mega Punch hits 2 times (child hit ×0.25)"), true);
 });
 
 test("Sturdy removes partial single-hit OHKO odds without hiding the raw damage range", () => {

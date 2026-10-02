@@ -11,11 +11,14 @@ import {
   TARGET_WEIGHT_POWER_MOVE_IDS,
   USER_TARGET_WEIGHT_POWER_MOVE_IDS,
 } from "./move-effects.js";
-import { applyHitCountOverride, collectModifiers } from "./modifiers.js";
+import { applyHitCountOverride, applyModifier, chainModifiers, chainValue, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
+const SPREAD_MODIFIER = 3072;
+// Final ("damage") modifiers without an explicit order sit between Friend Guard and Expert Belt.
+const DEFAULT_FINAL_MODIFIER_ORDER = 45;
 const ABILITY_SUPPRESSING_ATTACKER_ABILITIES = new Set(["moldbreaker", "teravolt", "turboblaze"]);
 const HISTORY_BASE_POWER_MOVE_IDS = new Set([
   "echoedvoice",
@@ -311,11 +314,12 @@ export function calculateDamage({
   } else if (TARGET_WEIGHT_POWER_MOVE_IDS.has(moveId)) {
     notes.push(`${move.name} power ${power}`);
   }
-  let attackModifier = 1;
-  let defenseModifier = 1;
+  const attackModifiers = [];
+  const defenseModifiers = [];
   const powerModifiers = [];
-  let damageModifier = 1;
-  let hitPowerMultipliers = null;
+  const weatherModifiers = [];
+  const finalModifiers = [];
+  let hitDamageModifiers = null;
   let stab = stabMultiplier(attackerTypes, attackerState, moveType);
   if (pledgeCombo && isPledgeMove(move)) {
     stab = Math.max(stab, 1.5);
@@ -338,13 +342,14 @@ export function calculateDamage({
   for (const modifier of modifiers) {
     if (modifier.kind === "hits" && hasExplicitHitCount && Number.isFinite(selectedHitCount)) continue;
     notes.push(modifier.label);
-    if (modifier.kind === "attack") attackModifier *= modifier.value;
-    if (modifier.kind === "defense") defenseModifier *= modifier.value;
-    if (modifier.kind === "power") powerModifiers.push(modifier.value);
-    if (modifier.kind === "damage") damageModifier *= modifier.value;
+    if (modifier.kind === "attack") attackModifiers.push(chainValue(modifier));
+    if (modifier.kind === "defense") defenseModifiers.push(chainValue(modifier));
+    if (modifier.kind === "power") powerModifiers.push(chainValue(modifier));
+    if (modifier.kind === "weather") weatherModifiers.push(chainValue(modifier));
+    if (modifier.kind === "damage") finalModifiers.push(modifier);
     if (modifier.kind === "stab") stab = modifier.value;
     if (modifier.kind === "hits") hitCounts = applyHitCountOverride(hitCounts, modifier.value);
-    if (modifier.kind === "hitPowerMultipliers") hitPowerMultipliers = modifier.value;
+    if (modifier.kind === "hitDamageModifiers") hitDamageModifiers = modifier.value;
   }
 
   if (hasExplicitHitCount && Number.isFinite(selectedHitCount)) {
@@ -356,30 +361,36 @@ export function calculateDamage({
   const successiveHits = baseHitPowers.length > 1;
   const defaultHits = moveEffect(moveId).defaultHits;
   if (!hasExplicitHitCount && Number.isInteger(defaultHits)) hitCounts = { min: defaultHits, max: defaultHits };
-  const scaledHitPowers = hitPowerMultipliers && baseHitPowers.length === 1 && hitCounts.min === 1 && hitCounts.max === 1
-    ? hitPowerMultipliers.map((multiplier) => Math.max(1, Math.floor(baseHitPowers[0] * multiplier)))
-    : baseHitPowers;
+  // Parental Bond: the child hit repeats the move at full power and quarters its base damage.
+  const perHitDamageModifiers = hitDamageModifiers && baseHitPowers.length === 1 && hitCounts.min === 1 && hitCounts.max === 1
+    ? hitDamageModifiers
+    : null;
+  const powerChain = chainModifiers(powerModifiers);
+  const scaledHitPowers = perHitDamageModifiers ? perHitDamageModifiers.map(() => baseHitPowers[0]) : baseHitPowers;
   const hitPowers = (successiveHits ? scaledHitPowers.slice(0, hitCounts.max) : scaledHitPowers)
-    .map((hitPower) => applyPowerModifiers(hitPower, powerModifiers));
-  if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
+    .map((hitPower) => applyPowerModifiers(hitPower, powerChain));
+  if (perHitDamageModifiers) {
+    notes.push(`${move.name} hits ${hitPowers.length} times (child hit ×${perHitDamageModifiers[1] / 4096})`);
+  } else if (hitPowers.length > 1) notes.push(`${move.name} hits ${hitPowers.length} times at ${hitPowers.join("/")}`);
   else if (baseHitPowers.length > 1) notes.push(`${move.name} hits 1 time at ${hitPowers[0]}`);
   power = hitPowers[0];
-  const modifiedAttack = Math.max(1, Math.floor(attack * attackModifier));
-  const modifiedDefense = Math.max(1, Math.floor(defense * defenseModifier));
-  const criticalModifier = effectiveCritical
-    ? !suppressAttackerAbility && hasAbility(attackerState, "sniper") ? 2.25 : 1.5
-    : 1;
-  const burnModifier =
+  const modifiedAttack = Math.max(1, applyModifier(attack, chainModifiers(attackModifiers)));
+  const modifiedDefense = Math.max(1, applyModifier(defense, chainModifiers(defenseModifiers)));
+  if (effectiveCritical && !suppressAttackerAbility && hasAbility(attackerState, "sniper")) {
+    finalModifiers.push({ kind: "damage", value: 1.5, order: 15, label: "Sniper" });
+    notes.push("Sniper");
+  }
+  const burned =
     attackerState.status === "burn" && isPhysical &&
-      (suppressAttackerAbility || !hasAbility(attackerState, "guts")) && !moveEffect(moveId).ignoreBurn
-      ? 0.5
-      : 1;
-  const spreadModifier =
-    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget ? 0.75 : 1;
+      (suppressAttackerAbility || !hasAbility(attackerState, "guts")) && !moveEffect(moveId).ignoreBurn;
+  const spreadHit =
+    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget;
   const sourceDamageMultiplier = moveEffect(moveId).sourceDamageMultiplier?.(ctx) ?? 1;
-  if (sourceDamageMultiplier !== 1) notes.push(`${move.name} target-state damage ×${sourceDamageMultiplier}`);
-  damageModifier *= sourceDamageMultiplier;
-  if (spreadModifier !== 1) notes.push("Doubles spread move");
+  if (sourceDamageMultiplier !== 1) {
+    notes.push(`${move.name} target-state damage ×${sourceDamageMultiplier}`);
+    finalModifiers.push({ kind: "damage", value: sourceDamageMultiplier, order: 5 });
+  }
+  if (spreadHit) notes.push("Doubles spread move");
   if (!successiveHits && hitPowers.length === 1 &&
     (hitCounts.min > 1 || hitCounts.max > 1 || (hasExplicitHitCount && ctx.hitCountRange.max > 1))) {
     notes.push(hitCounts.min === hitCounts.max
@@ -387,15 +398,25 @@ export function calculateDamage({
       : `${move.name} hits ${hitCounts.min}-${hitCounts.max} times`);
   }
 
-  const damageForHit = (hitPower, roll) => {
+  // Showdown's modifyDamage order: base → spread → Parental Bond child → weather → crit →
+  // random roll → STAB → type → burn → chained final modifiers, each step rounded.
+  const weatherChain = chainModifiers(weatherModifiers);
+  const stabModifier = Math.round(stab * 4096);
+  const orderedFinalModifiers = [...finalModifiers]
+    .sort((a, b) => (a.order ?? DEFAULT_FINAL_MODIFIER_ORDER) - (b.order ?? DEFAULT_FINAL_MODIFIER_ORDER));
+  const finalChain = chainModifiers(orderedFinalModifiers.map(chainValue));
+
+  const damageForHit = (hitPower, roll, hitIndex = 0) => {
     let hitDamage = baseDamageForPower(hitPower, modifiedAttack, modifiedDefense);
-    hitDamage = Math.floor(hitDamage * criticalModifier);
+    if (spreadHit) hitDamage = applyModifier(hitDamage, SPREAD_MODIFIER);
+    if (perHitDamageModifiers) hitDamage = applyModifier(hitDamage, perHitDamageModifiers[hitIndex] ?? 4096);
+    hitDamage = applyModifier(hitDamage, weatherChain);
+    if (effectiveCritical) hitDamage = Math.floor(hitDamage * 1.5);
     hitDamage = Math.floor(hitDamage * roll / 100);
-    hitDamage = Math.floor(hitDamage * stab);
+    hitDamage = applyModifier(hitDamage, stabModifier);
     hitDamage = Math.floor(hitDamage * typeMultiplier);
-    hitDamage = Math.floor(hitDamage * burnModifier);
-    hitDamage = Math.floor(hitDamage * spreadModifier);
-    hitDamage = Math.floor(hitDamage * damageModifier);
+    if (burned) hitDamage = Math.floor(hitDamage / 2);
+    hitDamage = applyModifier(hitDamage, finalChain);
     return Math.max(1, hitDamage);
   };
   const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {
@@ -403,7 +424,7 @@ export function calculateDamage({
       ? hitPowers.slice(0, hitCount)
       : hitPowers.length > 1 ? hitPowers : Array.from({ length: hitCount }, () => hitPowers[0]);
     return powers.reduce((total, hitPower, index) =>
-      total + (negateFirstHit && index === 0 ? 0 : damageForHit(hitPower, roll)), 0);
+      total + (negateFirstHit && index === 0 ? 0 : damageForHit(hitPower, roll, index)), 0);
   };
   const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, iceFaceActive));
   const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, iceFaceActive));
@@ -525,8 +546,8 @@ function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHi
     damage: negateFirstHit && index === 0
       ? 0
       : index === 0 && Number.isFinite(firstHitCap)
-        ? Math.min(damageForHit(power, roll), firstHitCap)
-        : damageForHit(power, roll),
+        ? Math.min(damageForHit(power, roll, index), firstHitCap)
+        : damageForHit(power, roll, index),
     chance: 1 / DAMAGE_ROLLS.length,
   }))));
 }
@@ -661,8 +682,8 @@ function successiveHitBasePowers(ctx) {
   return hitPowers ?? [ctx.power];
 }
 
-function applyPowerModifiers(power, modifiers) {
-  return modifiers.reduce((modifiedPower, modifier) => Math.floor(modifiedPower * modifier), power);
+function applyPowerModifiers(power, powerChain) {
+  return Math.max(1, applyModifier(power, powerChain));
 }
 
 function baseDamageForPower(power, attack, defense) {
