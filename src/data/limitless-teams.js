@@ -4,7 +4,7 @@ export const LIMITLESS_TEAM_ARCHIVE_VERSION = 1;
 export const LIMITLESS_TEAM_SOURCE_URL = "https://play.limitlesstcg.com/tournaments";
 
 export async function loadLimitlessTeamArchive(fetcher = fetch) {
-  const response = await fetcher("./public/limitless-teams.json");
+  const response = await fetcher("./public/web/limitless-teams.json");
   if (!response.ok) throw new Error(`Team archive request failed: ${response.status}`);
   return response.json();
 }

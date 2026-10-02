@@ -7,7 +7,7 @@ test("keeps Mega forms for Champions-used base Pokémon", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
     const data = {
-      "./public/pokemon.json": [
+      "./public/web/pokemon.json": [
         {
           id: "charizard",
           name: "Charizard",
@@ -35,15 +35,15 @@ test("keeps Mega forms for Champions-used base Pokémon", async () => {
           champions: { source: "Limitless", usageCount: 1 },
         },
       ],
-      "./public/abilities.json": [
+      "./public/web/abilities.json": [
         { id: "blaze", name: "Blaze", champions: { legal: true, usageCount: 5 } },
         { id: "toughclaws", name: "Tough Claws", shortDesc: "Powers up contact moves." },
         { id: "static", name: "Static", champions: { legal: false } },
       ],
-      "./public/moves.json": [
+      "./public/web/moves.json": [
         { id: "fakeout", name: "Fake Out", champions: { legal: false } },
       ],
-      "./public/items.json": [
+      "./public/web/items.json": [
         { id: "leftovers", name: "Leftovers", champions: { legal: false } },
       ],
     };
