@@ -6,6 +6,7 @@ import {
   activeSetFromState,
   applyActiveSet,
   createActiveSetStore,
+  isActiveSetUnconsumed,
 } from "../src/data/active-set.js";
 
 const pokemon = { id: "miraidon", name: "Miraidon" };
@@ -42,6 +43,7 @@ test("persists one versioned active Pokémon set", () => {
   assert.deepEqual(createActiveSetStore(storage).readSet(), activeSet);
   assert.deepEqual(JSON.parse(storage.getItem(ACTIVE_SET_STORAGE_KEY)), {
     version: 1,
+    revision: 1,
     set: activeSet,
   });
 
@@ -103,4 +105,38 @@ test("does not add unsupported fields to a page state", () => {
 
   const restored = applyActiveSet(calculatorState, activeSetFromState(state));
   assert.equal("teraType" in restored, false);
+});
+
+test("bumps the active-set revision only when its content changes", () => {
+  const storage = memoryStorage();
+  const store = createActiveSetStore(storage);
+  const activeSet = activeSetFromState(state);
+
+  assert.deepEqual(store.readEntry(), { set: null, revision: 0 });
+  assert.equal(store.writeEntry(activeSet).revision, 1);
+  assert.equal(store.writeEntry(activeSet).revision, 1, "rewriting the same set is not a hand-off");
+  assert.equal(store.writeEntry({ ...activeSet, nature: "Timid" }).revision, 2);
+  assert.equal(store.clearSet(), 3);
+  assert.equal(store.clearSet(), 3);
+  assert.deepEqual(createActiveSetStore(storage).readEntry(), { set: null, revision: 3 });
+});
+
+test("treats only a newer, non-empty active-set revision as unconsumed", () => {
+  const set = activeSetFromState(state);
+
+  assert.equal(isActiveSetUnconsumed({ set, revision: 4 }, 3), true);
+  assert.equal(isActiveSetUnconsumed({ set, revision: 4 }, 4), false, "plain reload");
+  assert.equal(isActiveSetUnconsumed({ set, revision: 4 }, null), true, "never consumed");
+  assert.equal(isActiveSetUnconsumed({ set, revision: 0 }, null), false, "legacy blob");
+  assert.equal(isActiveSetUnconsumed({ set: null, revision: 5 }, 4), false);
+  assert.equal(isActiveSetUnconsumed(null, 4), false);
+});
+
+test("reads a pre-revision blob as revision 0", () => {
+  const storage = memoryStorage();
+  storage.setItem(ACTIVE_SET_STORAGE_KEY, JSON.stringify({ version: 1, set: activeSetFromState(state) }));
+  const store = createActiveSetStore(storage);
+
+  assert.equal(store.readEntry().revision, 0);
+  assert.equal(store.writeEntry({ ...activeSetFromState(state), nature: "Timid" }).revision, 1);
 });

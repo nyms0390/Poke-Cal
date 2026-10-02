@@ -8,9 +8,13 @@ import {
   clearTeamSlot,
   createSideState,
   createTeamsState,
+  planIncomingTeamSlot,
   setTeamSlot,
+  spreadMatchesState,
+  spreadSelectionForState,
   swapTeamsState,
   updateActiveTeamSlot,
+  urlWithoutConsumedParams,
 } from "../src/ui/battle-state.js";
 import { calculateDamage } from "../src/engine/damage.js";
 
@@ -409,4 +413,56 @@ test("buildCalcInput direction handling changes calculated damage: side A's Help
   assert.equal(sideAAttacks.notes.includes("Helping Hand"), true);
   assert.equal(sideBAttacks.notes.includes("Helping Hand"), false);
   assert.equal(sideAAttacks.maxDamage > sideBAttacks.maxDamage, true);
+});
+
+function slotState(id, hp = 0) {
+  return { pokemon: { id }, nature: "Hardy", sp: { hp, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } };
+}
+
+test("plans incoming Pokémon without overwriting existing team members", () => {
+  const team = {
+    slots: [slotState("pikachu", 7), slotState("blastoise"), null, null, null, null],
+    activeIndex: 0,
+  };
+
+  assert.deepEqual(planIncomingTeamSlot(team, "Pikachu"), { outcome: "kept", index: 0 });
+  assert.deepEqual(planIncomingTeamSlot(team, "blastoise"), { outcome: "activated", index: 1 });
+  assert.deepEqual(planIncomingTeamSlot(team, "garchomp"), { outcome: "placed", index: 2 });
+  assert.deepEqual(planIncomingTeamSlot({ ...team, activeIndex: 3 }, "garchomp"), { outcome: "placed", index: 2 });
+  assert.deepEqual(planIncomingTeamSlot(team, ""), { outcome: "ignored", index: -1 });
+
+  const full = {
+    slots: ["a", "b", "c", "d", "e", "f"].map((id) => slotState(id)),
+    activeIndex: 2,
+  };
+  assert.deepEqual(planIncomingTeamSlot(full, "garchomp"), { outcome: "full", index: -1 });
+  assert.deepEqual(planIncomingTeamSlot(full, "e"), { outcome: "activated", index: 4 });
+  assert.deepEqual(planIncomingTeamSlot(createTeamsState().attacker, "garchomp"), { outcome: "placed", index: 0 });
+});
+
+test("derives the spread dropdown selection from the side's nature and SP", () => {
+  const names = ["Jolly:1/32/1/0/0/32", "Timid:31/0/24/0/0/11", "Jolly:1/32/1/0/0/32"];
+  const jolly = { nature: "Jolly", sp: { hp: 1, atk: 32, def: 1, spa: 0, spd: 0, spe: 32 } };
+
+  assert.equal(spreadMatchesState(names[0], jolly), true);
+  assert.equal(spreadSelectionForState(jolly, names), "Jolly:1/32/1/0/0/32");
+  assert.equal(spreadSelectionForState({ ...jolly, nature: "Timid" }, names), "", "nature differs");
+  assert.equal(spreadSelectionForState({ ...jolly, sp: { ...jolly.sp, hp: 7 } }, names), "", "SP differs");
+  assert.equal(spreadSelectionForState(jolly, []), "");
+  assert.equal(spreadMatchesState("not a spread", jolly), false);
+
+  const picked = applyControl({ ...jolly, nature: "Bold" }, { kind: "spread", value: names[1] });
+  assert.equal(spreadSelectionForState(picked, names), "Timid:31/0/24/0/0/11");
+  const edited = applyControl(picked, { kind: "sp", stat: "spe", value: 12 });
+  assert.equal(spreadSelectionForState(edited, names), "");
+});
+
+test("strips consumed battle query parameters for history.replaceState", () => {
+  assert.equal(urlWithoutConsumedParams("http://127.0.0.1:4173/battle.html?left=garchomp"), "/battle.html");
+  assert.equal(
+    urlWithoutConsumedParams("http://127.0.0.1:4173/battle.html?left=garchomp&x=1#damage"),
+    "/battle.html?x=1#damage",
+  );
+  assert.equal(urlWithoutConsumedParams("http://127.0.0.1:4173/battle.html?x=1"), null);
+  assert.equal(urlWithoutConsumedParams("not a url"), null);
 });

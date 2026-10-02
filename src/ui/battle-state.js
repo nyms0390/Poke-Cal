@@ -51,6 +51,57 @@ export function clearTeamSlot(teams, side, index) {
   return { ...teams, [side]: { ...team, slots, activeIndex } };
 }
 
+// Decides where a Pokémon handed over from another page (the shared active set or a `?left=`
+// link) goes in a team without ever destroying an existing member:
+// - "kept":      the active slot already holds it — keep that slot and its edits untouched;
+// - "activated": another slot holds it — switch to that slot (its edits are kept);
+// - "placed":    seed it into the first empty slot (`index`) and make that slot active;
+// - "full":      every slot holds a different Pokémon — change nothing (the page tells the
+//                user; picking it in the Pokémon search replaces the active slot explicitly).
+export function planIncomingTeamSlot(team, pokemonId) {
+  const id = normalizeId(pokemonId);
+  if (!team || !Array.isArray(team.slots) || !id) return { outcome: "ignored", index: -1 };
+  const holds = (slot) => normalizeId(slot?.pokemon?.id) === id;
+  if (holds(team.slots[team.activeIndex])) return { outcome: "kept", index: team.activeIndex };
+  const existing = team.slots.findIndex(holds);
+  if (existing >= 0) return { outcome: "activated", index: existing };
+  const empty = team.slots.findIndex((slot) => !slot);
+  if (empty >= 0) return { outcome: "placed", index: empty };
+  return { outcome: "full", index: -1 };
+}
+
+// True when `spreadName` ("Nature:hp/atk/def/spa/spd/spe") is exactly the side's nature + SP.
+export function spreadMatchesState(spreadName, state) {
+  const spread = parseUsageSpread(spreadName);
+  if (!spread || !state) return false;
+  return spread.nature === state.nature &&
+    Object.entries(spread.sp).every(([stat, value]) => Number(state.sp?.[stat] ?? 0) === value);
+}
+
+// The spread dropdown value for a side: the first preset that exactly matches its nature + SP,
+// otherwise "" (the localized "Custom spread" option).
+export function spreadSelectionForState(state, spreadNames = []) {
+  return spreadNames.find((name) => spreadMatchesState(name, state)) ?? "";
+}
+
+// Query parameters the battle page consumes on load. They are removed afterwards (via
+// history.replaceState) so a reload restores the saved team instead of re-seeding from the URL.
+export const CONSUMED_QUERY_PARAMS = ["left"];
+
+// Returns the URL (path + remaining query + hash) with the consumed parameters removed, or
+// null when none of them are present (no history update needed).
+export function urlWithoutConsumedParams(href, keys = CONSUMED_QUERY_PARAMS) {
+  let url;
+  try {
+    url = new URL(href);
+  } catch {
+    return null;
+  }
+  if (!keys.some((key) => url.searchParams.has(key))) return null;
+  for (const key of keys) url.searchParams.delete(key);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
 function clampInteger(value, minimum, maximum) {
   const number = Number(value);
   if (!Number.isFinite(number)) return minimum;

@@ -150,3 +150,27 @@ test("prefers per-Pokemon Limitless usage defaults when available", () => {
   assert.equal(defaults.item.name, "Raichunite Y");
   assert.deepEqual(defaults.moves.map(({ id }) => id), ["fakeout", "protect"]);
 });
+
+test("applies the default spread's own nature so defaults match a spread preset", () => {
+  const defaults = usageDefaultsForPokemon(
+    { id: "pikachu", moves: [] },
+    {
+      natures: [{ id: "timid", name: "Timid", usagePercent: 60 }],
+      spreads: [
+        { name: "Jolly:1/32/1/0/0/32", usagePercent: 19 },
+        { name: "Timid:31/0/24/0/0/11", usagePercent: 14 },
+      ],
+    },
+  );
+
+  assert.equal(defaults.spreadName, "Jolly:1/32/1/0/0/32");
+  assert.equal(defaults.nature, "Jolly");
+  assert.deepEqual(defaults.sp, { hp: 1, atk: 32, def: 1, spa: 0, spd: 0, spe: 32 });
+
+  const unparsable = usageDefaultsForPokemon(
+    { id: "pikachu", moves: [] },
+    { natures: [{ name: "Timid", usagePercent: 60 }], spreads: [{ name: "Timid:252/0/0/0/0/0", usagePercent: 50 }] },
+  );
+  assert.equal(unparsable.spreadName, "");
+  assert.equal(unparsable.nature, "Timid");
+});

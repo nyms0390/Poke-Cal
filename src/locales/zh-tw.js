@@ -157,6 +157,7 @@ export const ZH_TW_MESSAGES = {
   "battle.noItem": "無道具修正",
   "battle.addSlot": ({ number }) => `在第 ${number} 個欄位加入寶可夢`,
   "battle.clearSlot": ({ number }) => `清除第 ${number} 個欄位`,
+  "battle.teamFull": ({ name }) => `攻擊方隊伍已滿，未加入${name}。在寶可夢搜尋中選擇它即可取代目前的寶可夢。`,
   "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability}已發動`,
   "battle.typeChangeCurrentType": ({ ability }) => `${ability}目前屬性`,
   "battle.smogonSpreadGroup": "Smogon 對戰梯能力分配",

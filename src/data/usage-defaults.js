@@ -30,16 +30,23 @@ export function parseUsageSpread(name) {
 }
 
 export function usageDefaultsForPokemon(entry, usage, { abilityLookup, itemLookup, moveLookup } = {}) {
-  const spread = parseUsageSpread(topUsageEntry(usage?.spreads)?.name) ?? EMPTY_SPREAD;
-  const nature = topUsageEntry(usage?.natures)?.name;
+  const topSpreadName = topUsageEntry(usage?.spreads)?.name ?? "";
+  const parsedSpread = parseUsageSpread(topSpreadName);
+  const spread = parsedSpread ?? EMPTY_SPREAD;
+  // A default spread carries its own nature: pairing its SP with the separately ranked top
+  // Limitless nature would describe a set that matches neither source nor any spread preset.
+  const topNature = topUsageEntry(usage?.natures)?.name;
+  const nature = parsedSpread
+    ? parsedSpread.nature
+    : topNature && topNature in NATURES ? topNature : spread.nature;
   const ability = resolveUsageEntry(topUsageEntry(usage?.abilities), abilityLookup);
   const item = resolveUsageEntry(topUsageEntry(usage?.items), itemLookup);
   const topMoves = (usage?.moves ?? []).slice(0, 4).map((move) => resolveUsageEntry(move, moveLookup));
 
   return {
     pokemon: entry,
-    spreadName: topUsageEntry(usage?.spreads)?.name ?? "",
-    nature: nature && nature in NATURES ? nature : spread.nature,
+    spreadName: parsedSpread ? topSpreadName : "",
+    nature,
     sp: { ...spread.sp },
     ability,
     item,

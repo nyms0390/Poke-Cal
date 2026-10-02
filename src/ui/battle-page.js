@@ -20,6 +20,7 @@ import {
   activeSetFromState,
   applyActiveSet,
   createActiveSetStore,
+  isActiveSetUnconsumed,
 } from "../data/active-set.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { searchPokemon } from "../data/pokemon.js";
@@ -53,9 +54,12 @@ import {
   createTeamsState,
   isTypeChangeAbility,
   normalizeTypeChangeState,
+  planIncomingTeamSlot,
+  spreadSelectionForState,
   swapTeamsState,
   TEAM_SIZE,
   updateActiveTeamSlot,
+  urlWithoutConsumedParams,
 } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
@@ -159,6 +163,14 @@ const teamStore = createStorageStore(browserStorage(), {
   createEmpty: () => ({ version: 1, teams: {} }),
   isValid: (value) => value?.version === 1 && value.teams,
 });
+// Revision of the shared active set (src/data/active-set.js) that this page last consumed or
+// wrote itself. Only a newer revision written by another page is handed into the team.
+const ACTIVE_SET_CONSUMED_KEY = "pokecal.battle.active-set-consumed.v1";
+const activeSetConsumedStore = createStorageStore(browserStorage(), {
+  key: ACTIVE_SET_CONSUMED_KEY,
+  createEmpty: () => ({ version: 1, revision: null }),
+  isValid: (value) => value?.version === 1,
+});
 
 // Maps a control element's id suffix (after "attacker-"/"defender-") to the `kind` passed to
 // applyControl. Kept in sync with battle.html's control ids.
@@ -242,14 +254,39 @@ async function initialize() {
   const storedTeams = loadStoredTeams();
   teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
   const requestedLeftId = new URLSearchParams(globalThis.location?.search ?? "").get("left");
-  const requestedLeft = pokemon.find(
-    ({ id }) => normalizeDamageId(id) === normalizeDamageId(requestedLeftId),
-  );
-  const activeSet = activeSetStore.readSet();
-  const activePokemon = pokemon.find(
-    ({ id }) => normalizeDamageId(id) === normalizeDamageId(activeSet?.pokemonId),
-  );
-  renderDamageShell({ requestedLeft, activeSet: requestedLeft ? null : activeSet, activePokemon });
+  const requestedLeft = findPokemon(requestedLeftId);
+  const activeEntry = activeSetStore.readEntry();
+  const activePokemon = isActiveSetUnconsumed(activeEntry, activeSetConsumedStore.read().revision)
+    ? findPokemon(activeEntry.set.pokemonId)
+    : null;
+  const incoming = requestedLeft ?? activePokemon ?? null;
+  const incomingSet = incoming && activeEntry.set?.pokemonId === normalizeDamageId(incoming.id)
+    ? activeEntry.set
+    : null;
+  markActiveSetConsumed(activeEntry.revision);
+  removeConsumedUrlParams();
+  renderDamageShell({ incoming, incomingSet });
+}
+
+function findPokemon(id) {
+  if (!id) return undefined;
+  return pokemon.find((entry) => normalizeDamageId(entry.id) === normalizeDamageId(id));
+}
+
+function markActiveSetConsumed(revision) {
+  activeSetConsumedStore.write({ version: 1, revision });
+}
+
+// Builder and Speed keep their state in storage and treat `?pokemon=` as a one-off hand-off;
+// do the same here so a reload after editing restores the saved team, not the URL's defaults.
+function removeConsumedUrlParams() {
+  const next = urlWithoutConsumedParams(globalThis.location?.href ?? "");
+  if (next === null) return;
+  try {
+    globalThis.history?.replaceState(globalThis.history.state, "", next);
+  } catch {
+    // Some embedded or file:// contexts refuse history updates; the page still works.
+  }
 }
 
 for (const control of [
@@ -318,7 +355,7 @@ for (const side of ["attacker", "defender"]) {
   });
 }
 
-function renderDamageShell({ requestedLeft, activeSet, activePokemon } = {}) {
+function renderDamageShell({ incoming = null, incomingSet = null } = {}) {
   const natureOptions = Object.keys(NATURES).map((nature) =>
     optionElement(nature, getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature)),
   );
@@ -329,12 +366,32 @@ function renderDamageShell({ requestedLeft, activeSet, activePokemon } = {}) {
   renderSideInputs("defender");
 
   for (const side of ["attacker", "defender"]) {
-    if (side === "attacker" && requestedLeft) seedDamageSide(side, requestedLeft);
-    else if (side === "attacker" && activePokemon) seedDamageSide(side, activePokemon, { activeSet });
+    if (side === "attacker" && incoming) placeIncomingAttacker(incoming, incomingSet);
     else if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
     else seedDamageSide(side, defaultPokemonForSide(side));
   }
   renderDamage();
+}
+
+// Hands a Pokémon from another page (lookup, builder, speed, or a `?left=` link) to the
+// attacker team without replacing an existing member; see planIncomingTeamSlot.
+function placeIncomingAttacker(entry, activeSet) {
+  const side = "attacker";
+  const { outcome, index } = planIncomingTeamSlot(teams[side], entry.id);
+  if (outcome === "placed") {
+    teams = activateTeamSlotState(teams, side, index);
+    seedDamageSide(side, entry, { activeSet });
+    return;
+  }
+  if (outcome === "activated") {
+    teams = activateTeamSlotState(teams, side, index);
+    persistTeams();
+  }
+  if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
+  else seedDamageSide(side, defaultPokemonForSide(side));
+  if (outcome === "full") {
+    elements.status.textContent = t("battle.teamFull", { name: localizedName(entry) });
+  }
 }
 
 function swapSides() {
@@ -424,17 +481,12 @@ function renderActiveTeamSlot(side) {
     return;
   }
 
-  const defaults = championsDefaultsForPokemon(state.pokemon, {
-    abilityLookup,
-    moveLookup,
-    items,
-  });
   setSideControlsDisabled(side, false);
   elements[`${side}Pokemon`].value = state.pokemon.id;
   elements[`${side}PokemonSearch`].value = localizedName(state.pokemon);
   renderPokemonSprite(side, state);
   hidePokemonSearchResults(side);
-  renderSideSelects(side, defaults);
+  renderSideSelects(side);
   syncSideInputs(side);
   if (side === "attacker") persistActiveAttacker(state);
 }
@@ -521,7 +573,7 @@ function renderEmptySide(side) {
   elements[`${side}StatEditor`].replaceChildren();
   elements[`${side}MovePicks`].replaceChildren();
   hidePokemonSearchResults(side);
-  if (side === "attacker") activeSetStore.clearSet();
+  if (side === "attacker") markActiveSetConsumed(activeSetStore.clearSet());
 }
 
 function renderPokemonSprite(side, state) {
@@ -554,13 +606,13 @@ function renderPokemonSprite(side, state) {
 
 function persistActiveAttacker(state, fallback = activeSetStore.readSet()) {
   if (!state?.pokemon) {
-    activeSetStore.clearSet();
+    markActiveSetConsumed(activeSetStore.clearSet());
     return;
   }
-  activeSetStore.writeSet(activeSetFromState(state, fallback));
+  markActiveSetConsumed(activeSetStore.writeEntry(activeSetFromState(state, fallback)).revision);
 }
 
-function renderSideSelects(side, defaults) {
+function renderSideSelects(side) {
   const spreadSelect = elements[`${side}Spread`];
   const natureSelect = elements[`${side}Nature`];
   const abilitySelect = elements[`${side}Ability`];
@@ -580,7 +632,7 @@ function renderSideSelects(side, defaults) {
     ),
     ...spreadOptionGroups(usageSpreads, ncpSets),
   );
-  spreadSelect.value = defaults.spreadName;
+  syncSpreadSelect(side);
   natureSelect.value = damageState[side].nature;
   abilitySelect.replaceChildren(
     optionElement("", t("battle.noAbility")),
@@ -646,10 +698,21 @@ function renderSavedSetSelect(side, selectedName = "") {
   elements[`${side}DeleteSet`].disabled = !elements[`${side}SavedSet`].value;
 }
 
+// The spread dropdown always reflects the side's actual nature + SP: the matching preset, or
+// the "Custom spread" option when no preset matches exactly.
+function syncSpreadSelect(side) {
+  const select = elements[`${side}Spread`];
+  const state = damageState[side];
+  if (!select || !state) return;
+  const names = [...select.options].map((option) => option.value).filter(Boolean);
+  select.value = spreadSelectionForState(state, names);
+}
+
 function syncSideInputs(side) {
   const state = damageState[side];
   if (!state) return;
   elements[`${side}Nature`].value = state.nature;
+  syncSpreadSelect(side);
   elements[`${side}SpeedMultiplier`].value = String(state.speedMultiplier);
   elements[`${side}Status`].value = state.soaked ? "soak" : state.status;
   syncCurrentHpInputs(side);
@@ -695,6 +758,7 @@ function handleDamageControl(event) {
     if (state) {
       writeActiveTeamState(control.side, applyControl(state, control));
       if (control.kind === "spread") syncSideInputs(control.side);
+      if (control.kind === "nature") syncSpreadSelect(control.side);
       if (control.kind === "ability") {
         applyAbilityImpliedField(damageState[control.side].ability);
         applyAbilityImpliedStages();
@@ -711,6 +775,7 @@ function handleDamageControl(event) {
       if (control.kind === "sp" || control.kind === "stage") {
         const key = control.kind === "stage" ? "stages" : "sp";
         event.target.value = damageState[control.side][key][control.stat];
+        if (control.kind === "sp") syncSpreadSelect(control.side);
       }
     }
   }
@@ -837,7 +902,7 @@ function applyParsedSet(side, parsed) {
         : state.selectedMoveIds,
     });
     normalizeTypeChangeForSide(side);
-    renderSideSelects(side, { spreadName: "" });
+    renderSideSelects(side);
     syncSideInputs(side);
     applyAbilityImpliedField(damageState[side].ability);
     applyAbilityImpliedStages();

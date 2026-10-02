@@ -6,8 +6,15 @@ export const ACTIVE_SET_STORAGE_KEY = "pokecal.active-set.v1";
 const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const MOVE_SLOTS = 4;
 
-function emptyBlob() {
-  return { version: 1, set: null };
+// `revision` increases only when the stored set's content changes, so a page can remember the
+// revision it last consumed and tell a genuine cross-page hand-off from a plain reload.
+function emptyBlob(revision = 0) {
+  return { version: 1, revision, set: null };
+}
+
+function blobRevision(blob) {
+  const revision = Number(blob?.revision);
+  return Number.isInteger(revision) && revision >= 0 ? revision : 0;
 }
 
 function clampSp(value) {
@@ -49,17 +56,52 @@ export function createActiveSetStore(storage = null) {
     return normalizeActiveSet(storageStore.read().set);
   }
 
+  // Returns `{ set, revision }`; revision is 0 for a never-written or pre-revision blob.
+  function readEntry() {
+    const blob = storageStore.read();
+    return { set: normalizeActiveSet(blob.set), revision: blobRevision(blob) };
+  }
+
+  function writeBlobSet(set) {
+    const blob = storageStore.read();
+    const previous = normalizeActiveSet(blob.set);
+    const revision = activeSetsEqual(previous, set) ? blobRevision(blob) : blobRevision(blob) + 1;
+    storageStore.write({ version: 1, revision, set });
+    return revision;
+  }
+
   function writeSet(value) {
     const set = normalizeActiveSet(value);
-    storageStore.write({ version: 1, set });
+    writeBlobSet(set);
     return set;
   }
 
-  function clearSet() {
-    storageStore.write(emptyBlob());
+  // Same as writeSet but returns the resulting revision, for pages that track consumption.
+  function writeEntry(value) {
+    const set = normalizeActiveSet(value);
+    return { set, revision: writeBlobSet(set) };
   }
 
-  return { readSet, writeSet, clearSet };
+  function clearSet() {
+    return writeBlobSet(null);
+  }
+
+  return { readSet, readEntry, writeSet, writeEntry, clearSet };
+}
+
+export function activeSetsEqual(a, b) {
+  return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+}
+
+// True when the shared active set holds a Pokémon written since `consumedRevision` (the
+// revision a page last consumed or wrote itself). A missing marker never re-seeds a legacy
+// (revision 0) blob, so a plain reload restores the page's own saved state.
+export function isActiveSetUnconsumed(entry, consumedRevision) {
+  if (!entry?.set?.pokemonId) return false;
+  const revision = Number(entry.revision);
+  if (!Number.isInteger(revision) || revision <= 0) return false;
+  const consumed = Number(consumedRevision);
+  return !Number.isInteger(consumed) || revision !== consumed;
 }
 
 export function activeSetFromState(state, fallback = null) {

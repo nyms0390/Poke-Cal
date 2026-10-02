@@ -6,6 +6,7 @@ import {
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
   sortMoves,
+  normalizeId,
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { megaFamily } from "../data/pokemon.js";
@@ -335,6 +336,8 @@ function renderSelectedSprite(entry) {
 }
 
 function persistActiveDefaults(entry) {
+  // Re-selecting the Pokémon already shared across pages must not reset its edited set to defaults.
+  if (activeSetStore.readSet()?.pokemonId === normalizeId(entry?.id)) return;
   const defaults = championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items });
   activeSetStore.writeSet(activeSetFromState(defaults));
 }

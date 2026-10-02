@@ -154,6 +154,7 @@ export const EN_MESSAGES = {
   "battle.noItem": "No item modifier",
   "battle.addSlot": ({ number }) => `Add Pokémon to slot ${number}`,
   "battle.clearSlot": ({ number }) => `Clear slot ${number}`,
+  "battle.teamFull": ({ name }) => `Attacker team is full, so ${name} was not added. Pick it in the Pokémon search to replace the current Pokémon.`,
   "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability} already activated`,
   "battle.typeChangeCurrentType": ({ ability }) => `${ability} current type`,
   "battle.smogonSpreadGroup": "Smogon ladder SP spreads",
