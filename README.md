@@ -4,7 +4,7 @@ A compact, dependency-free competitive Pokémon toolkit: species and move lookup
 
 ## Overview
 
-PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases.
+PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases; the pages load slim, minified Champions-only copies from `public/web/*.json`.
 
 ## Project Structure
 
@@ -35,7 +35,9 @@ PokéCal/
 │   │   ├── speed.js            # Speed calculation (Tailwind, paralysis, items, ...)
 │   │   └── battle-order.js     # Move order (priority, Speed, Trick Room)
 │   ├── data/                   # loading, parsing, usage
-│   │   ├── data.js              # Data loading helpers
+│   │   ├── data.js              # Data loading helpers (fetches public/web/*.json)
+│   │   ├── web-catalogs.js      # Pure slim browser-catalog derivation (Champions selection)
+│   │   ├── catalog-validation.js # Pure catalog metrics, minimums, and max-shrink checks
 │   │   ├── catalog.js           # Catalog search/sort helpers
 │   │   ├── pokemon.js           # Species helpers
 │   │   ├── showdown-data.js     # Pokémon Showdown export parsing
@@ -70,24 +72,30 @@ PokéCal/
 │   │   ├── speed-page.js        # Speed tiers controller
 │   │   └── teams-page.js        # Tournament-team browser controller
 │   └── styles.css              # Shared styles
-├── public/                    # Generated catalogs plus Limitless tournament teams
+├── public/                    # Generated full catalogs plus Limitless tournament teams (MCP, scripts, skills)
+│   ├── web/                   # Generated slim, minified browser catalogs (npm run build-web-catalogs)
+│   └── icons/                 # Type and move-category icons
 ├── scripts/
-│   ├── lib/sync-utils.mjs                  # Shared sync CLI and JSON-file utilities
+│   ├── lib/sync-utils.mjs                  # Shared sync CLI/JSON utilities and timeout/retry fetch helper
 │   ├── sync-pokemon-data.mjs              # Regenerate public/*.json from Showdown (+ Champions mod) + PokeAPI
 │   ├── sync-limitless-champions-usage.mjs # Overlay usage and build the team archive
 │   ├── sync-champions-spreads.mjs         # Overlay Smogon ladder SP spreads
 │   ├── sync-ncp-spreads.mjs               # Overlay NCP curated Champions sets
+│   ├── build-web-catalogs.mjs             # Derive public/web/*.json from public/*.json
+│   ├── validate-data.mjs                  # Validate catalogs (minimums, --baseline shrink check)
+│   ├── stage-site.mjs                     # Stage the GitHub Pages site into _site/
 │   └── serve.mjs                          # Static file server (127.0.0.1:4173)
 ├── test/                      # Node built-in test runner suites (node --test)
-├── .github/workflows/pages.yml # Deploys repo root to GitHub Pages on push to main
+├── .github/workflows/pages.yml # Tests, stages _site/, and deploys it to GitHub Pages
+├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
 ├── ROADMAP.md                  # Completed implementation roadmap
 └── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
 ```
 
 ## Requirements
 
-- Node.js 20 or newer (uses `node --test`, `fetch`, ES modules)
-- No npm dependencies (`npm install` is unnecessary)
+- Node.js 22 (uses `node --test` globs, `fetch`, ES modules, and the permission model for the Showdown parsing sandbox; the MCP Worker also needs Node 22)
+- No npm dependencies for the app (`npm install` is unnecessary). Only the MCP tests need `npm ci --prefix mcp --ignore-scripts`.
 
 ## Setup
 
@@ -96,10 +104,14 @@ npm run sync-data              # regenerate public/*.json from Showdown (incl. C
 npm run sync-champions-data    # overlay Limitless usage and rebuild the team archive (run after sync-data)
 npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run after sync-champions-data)
 npm run sync-ncp-spreads       # overlay NCP curated sets (run after sync-champions-spreads)
-npm run sync-all               # all four, in order
+npm run sync-all               # all four, in order, then build-web-catalogs
+npm run build-web-catalogs     # regenerate the slim browser catalogs in public/web/
+npm run validate-data          # check catalog metrics (add -- --baseline <dir> to compare against a copy)
 ```
 
 Generated catalogs are committed, so syncing is only needed to refresh data.
+
+Syncs fail closed: each script validates its own freshly built output (`src/data/catalog-validation.js`: absolute minimums such as at least 150 Champions-legal Pokémon with Limitless usage, 100 with Smogon spreads, 40 with NCP sets, 1000 Pokémon with Traditional Chinese aliases, 3 archived tournaments; and no metric may shrink by more than 25% versus the files being replaced) and exits non-zero without writing anything when a check fails. Pass `--allow-shrink` (e.g. `npm run sync-ncp-spreads -- --allow-shrink`) only when a large drop is a legitimate upstream change; minimums still apply. Upstream requests use a shared helper with timeouts, bounded retries with backoff for network errors/429/5xx, and rejection of HTML error pages. Showdown `.ts` files are evaluated in a child Node process started with the permission model (no file, child-process, or worker access and an empty environment).
 
 ## Usage
 
@@ -122,7 +134,7 @@ Then open one of the six tools:
 | `/speed.html` | Interactive Speed tiers and breakpoints |
 | `/teams.html` | Recent Limitless Champions tournament teams |
 
-Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173). The battle calculator stores named sets in browser local storage, imports PokéCal SP or Pokémon Showdown EV set text, and exports PokéCal SP set text.
+Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173) and `SERVE_ROOT` to serve another directory (for example `_site` after `npm run stage-site`). The server only serves files inside its root (no dotfiles) and sends ETag/Last-Modified for revalidation. The battle calculator stores named sets in browser local storage, imports PokéCal SP or Pokémon Showdown EV set text, and exports PokéCal SP set text.
 
 ### Builder workflow and assumptions
 
@@ -172,20 +184,23 @@ sort toggle; the Bulk tab always uses its fixed section order and joint-coverage
 - NCP (Nimbasa City Post) damage calculator (hand-curated Champions sets): <https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/>. `sync-ncp-spreads` parses its maintained JavaScript setdex and writes normalized sets to `champions.ncp` in `public/pokemon.json`.
 - PokeAPI CSVs (Traditional Chinese search aliases only): `pokemon_species_names.csv`, `move_names.csv`, `ability_names.csv`, `items.csv`, `item_names.csv`
 
-Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.json`, `public/items.json`, and `public/limitless-teams.json`. Re-run `npm run sync-data` when Showdown data changes, `npm run sync-champions-data` when Limitless has new Champions tournaments, `npm run sync-champions-spreads` when Smogon publishes new monthly stats, and `npm run sync-ncp-spreads` when NCP sets change. `.github/workflows/update-data.yml` runs all four weekly and commits changes.
+Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.json`, `public/items.json`, and `public/limitless-teams.json` (full catalogs, used by the MCP Worker, scripts, and agent skills), plus the derived `public/web/*.json` the browser loads: only the Champions-legal entries the pages keep (legal Pokémon and their Mega forms, legal moves and items, and abilities those Pokémon use), minified and without Showdown's per-generation history fields. That cuts the four catalogs every page fetches from about 6.0 MB raw / 0.68 MB gzip to about 1.95 MB raw / 0.29 MB gzip. Re-run `npm run sync-data` when Showdown data changes, `npm run sync-champions-data` when Limitless has new Champions tournaments, `npm run sync-champions-spreads` when Smogon publishes new monthly stats (it falls back up to three months if the newest has no Champions formats yet), and `npm run sync-ncp-spreads` when NCP sets change, then `npm run build-web-catalogs`. `.github/workflows/update-data.yml` runs all of them weekly in a read-only job, validates the result against the committed data, and a separate job commits `public/` and triggers the Pages deploy.
 
 ## Development
 
 ```sh
-npm test                 # full suite (node --test)
+npm test                 # app suite (node --test "test/**/*.test.js"); no MCP dependencies needed
+npm run test:mcp         # MCP Worker suite (run npm ci --prefix mcp --ignore-scripts first)
+npm run test:all         # both (plain node --test)
+npm run test:server      # static server tests
 npm run test:battle      # battle-order, damage, speed
 npm run test:builder     # threats/preferences, builder state, speed line, bulk/break points, cross-check
 npm run test:catalog     # battle-state, catalog, identifiers, pokemon, stats, ui
-npm run test:data        # sync/parser/merge/data-loading suites, including Limitless teams, NCP, and sync utilities
+npm run test:data        # sync/parser/merge/data-loading suites, incl. Limitless teams, NCP, sync utilities, validation, web catalogs
 npm run test:damage      # damage only
 npm run test:pokemon     # pokemon only
 ```
 
 `test/damage-reference.test.js` compares all 16 damage rolls of about 280 scenarios against `test/fixtures/damage-reference.json`, which is generated from `@smogon/calc` (Gen 9 rules, level 50, SP `s` = EV `min(252, 8s)`). The app and tests stay dependency-free; to add scenarios, run `npm install --no-save @smogon/calc@0.12.0 && node scripts/dev/generate-damage-reference.mjs` and commit the regenerated fixture.
 
-No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` publishes the repository root to GitHub Pages on every push to `main`.
+No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the six pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs.

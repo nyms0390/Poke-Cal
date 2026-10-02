@@ -45,7 +45,8 @@ finished product.
 ## Hard constraints (never violate)
 
 - **No build step, no npm dependencies.** Plain ES modules served statically. Tests run with
-  `node --test`. Deployment is GitHub Pages serving the repo root.
+  `node --test`. Deployment is GitHub Pages serving a staged copy of the browser files
+  (`npm run stage-site`: pages, `src/`, `public/icons/`, and the generated `public/web/` catalogs).
 - **Stat model is Champions "SP"**: one integer 0–32 per stat, level fixed at 50.
   HP = `base + sp + 75`; other stats = `floor((base + sp + 20) × nature)`. Do NOT add EV/IV inputs.
 - **`public/*.json` is generated.** Never hand-edit; fix sync scripts / parsers and regenerate.
