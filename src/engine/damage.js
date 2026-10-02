@@ -116,9 +116,11 @@ export function calculateDamage({
   const neutralizingGasActive = hasAnyAbility(attackerState, ["neutralizinggas"]) ||
     hasAnyAbility(defenderState, ["neutralizinggas"]);
   const suppressAttackerAbility = neutralizingGasActive;
-  const suppressDefenderAbility = neutralizingGasActive ||
-    move.ignoreAbility ||
+  // Mold Breaker-style abilities and ability-ignoring moves only bypass "breakable" abilities.
+  const moldBreakerActive = Boolean(move.ignoreAbility) ||
     attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility);
+  const abilityBroken = moldBreakerActive && isBreakableAbility(defenderState.ability);
+  const suppressDefenderAbility = neutralizingGasActive || abilityBroken;
   attackerState = normalizeStatusForAbility(attackerState, suppressAttackerAbility);
   defenderState = normalizeStatusForAbility(defenderState, suppressDefenderAbility);
   const weatherSuppressed = !neutralizingGasActive && (
@@ -312,7 +314,7 @@ export function calculateDamage({
   if (iceFaceActive) notes.push("Ice Face intact (first hit negated)");
   if (megaSolActive) notes.push("Mega Sol treats this move as Sunny Day");
   if (teraShell !== null) notes.push("Tera Shell");
-  if (attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
+  if (abilityBroken && attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
   if (attackerHasUnaware || defenderHasUnaware) notes.push("Unaware");
   if (sandstormSpDefenseBoost) notes.push("Sandstorm Rock SpD boost");
   if (snowDefenseBoost) notes.push("Snow Ice Def boost");
@@ -811,6 +813,14 @@ function hasAnyAbility(state, abilityIds) {
 function normalizeStatusForAbility(state, suppressed) {
   if (suppressed || state?.status !== "burn" || !hasAbility(state, "waterbubble")) return state;
   return { ...state, status: "" };
+}
+
+// Catalog abilities carry Showdown's `flags.breakable`; a bare { id, name } without flags is
+// treated as breakable so callers that omit catalog metadata keep the old behaviour.
+function isBreakableAbility(ability) {
+  if (!ability) return false;
+  if (!ability.flags) return true;
+  return Boolean(ability.flags.breakable);
 }
 
 function attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility) {

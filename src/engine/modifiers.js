@@ -638,7 +638,7 @@ export function collectModifiers(ctx) {
     ? ""
     : normalizeId(ctx.attackerState.ability?.id ?? ctx.attackerState.ability?.name);
   const attackerItemId = normalizeId(ctx.attackerState.item?.id ?? ctx.attackerState.item?.name);
-  const defenderAbilityId = ctx.suppressDefenderAbility || ctx.move.ignoreAbility
+  const defenderAbilityId = ctx.suppressDefenderAbility
     ? ""
     : normalizeId(ctx.defenderState.ability?.id ?? ctx.defenderState.ability?.name);
   const defenderItemId = normalizeId(ctx.defenderState.item?.id ?? ctx.defenderState.item?.name);

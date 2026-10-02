@@ -122,3 +122,23 @@ test("Snow raises the Defense of Ice types", () => {
   assert.ok(snow.maxDamage < clear.maxDamage);
   assert.equal(snow.notes.includes("Snow Ice Def boost"), true);
 });
+
+test("Mold Breaker only bypasses breakable abilities", () => {
+  const lunala = { id: "lunala", name: "Lunala", types: ["Psychic", "Ghost"], baseStats: { hp: 137, atk: 113, def: 89, spa: 137, spd: 107, spe: 97 } };
+  const shadowClaw = { id: "shadowclaw", name: "Shadow Claw", type: "Ghost", category: "Physical", basePower: 70, target: "normal", flags: { contact: 1 } };
+  const moldBreaker = { ...jollyGarchomp, ability: { id: "moldbreaker", name: "Mold Breaker" } };
+  const calc = (attackerState, ability, defender = lunala) => calculateDamage({ attacker: garchomp, defender, move: shadowClaw, attackerState, defenderState: bulky({ ability }), field: singles });
+  const shadowShield = { id: "shadowshield", name: "Shadow Shield", flags: {} };
+  const multiscale = { id: "multiscale", name: "Multiscale", flags: { breakable: 1 } };
+
+  // Shadow Shield is not breakable: Mold Breaker still takes half damage.
+  assert.deepEqual(calc(moldBreaker, shadowShield).rolls, calc(jollyGarchomp, shadowShield).rolls);
+  assert.equal(calc(moldBreaker, shadowShield).notes.includes("Mold Breaker"), false);
+  // Multiscale is breakable: Mold Breaker deals full damage.
+  assert.deepEqual(calc(moldBreaker, multiscale, dragoniteLike()).rolls, calc(jollyGarchomp, null, dragoniteLike()).rolls);
+  assert.ok(calc(jollyGarchomp, multiscale, dragoniteLike()).maxDamage < calc(moldBreaker, multiscale, dragoniteLike()).maxDamage);
+});
+
+function dragoniteLike() {
+  return { id: "dragonite", name: "Dragonite", types: ["Dragon", "Flying"], baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 } };
+}
