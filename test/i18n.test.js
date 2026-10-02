@@ -77,6 +77,15 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatKoResult({ hits: 1, chance: 1, text: "guaranteed OHKO" }, "zh-TW"), "必定一擊倒下");
   assert.equal(formatKoResult({ hits: 2, chance: 0.5, text: "50.0% chance to 2HKO" }, "zh-TW"), "50.0% 機率兩擊倒下");
   assert.equal(formatKoText("guaranteed 2HKO (Sturdy)", "zh-TW"), "必定兩擊倒下（結實）");
+  assert.equal(formatKoText("guaranteed 2HKO after Leftovers recovery", "zh-TW"), "必定兩擊倒下（計入吃剩的東西回復）");
+  assert.equal(
+    formatKoResult({ hits: 4, chance: 1, text: "guaranteed 4HKO after Sitrus Berry and Grassy Terrain recovery" }, "zh-TW"),
+    "必定四擊倒下（計入文柚果、青草場地回復）",
+  );
+  assert.equal(
+    formatKoResult({ hits: 3, chance: 0.002, text: "0.2% chance to 3HKO after Leftovers recovery" }, "en"),
+    "0.2% chance to 3HKO after Leftovers recovery",
+  );
   assert.equal(
     formatMoveOrderResult({
       firstSide: "attacker",

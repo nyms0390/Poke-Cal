@@ -1,7 +1,7 @@
 import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
 import { calculateStat } from "./stats.js";
-import { createField } from "./field.js";
+import { createField, isGrounded } from "./field.js";
 import {
   moveEffect,
   abilityTypeConversion,
@@ -418,9 +418,13 @@ export function calculateDamage({
   const stabModifier = Math.round(stab * 4096);
   const orderedFinalModifiers = [...finalModifiers]
     .sort((a, b) => (a.order ?? DEFAULT_FINAL_MODIFIER_ORDER) - (b.order ?? DEFAULT_FINAL_MODIFIER_ORDER));
-  const finalChain = chainModifiers(orderedFinalModifiers.map(chainValue));
+  const firstHitFinalChain = chainModifiers(orderedFinalModifiers.map(chainValue));
+  const laterHitFinalChain = chainModifiers(orderedFinalModifiers
+    .filter((modifier) => !modifier.firstHitOnly)
+    .map(chainValue));
+  const firstHitDiffers = firstHitFinalChain !== laterHitFinalChain;
 
-  const damageForHit = (hitPower, roll, hitIndex = 0) => {
+  const damageForHit = (hitPower, roll, hitIndex = 0, firstUse = true) => {
     let hitDamage = baseDamageForPower(hitPower, modifiedAttack, modifiedDefense);
     if (spreadHit) hitDamage = applyModifier(hitDamage, SPREAD_MODIFIER);
     if (perHitDamageModifiers) hitDamage = applyModifier(hitDamage, perHitDamageModifiers[hitIndex] ?? 4096);
@@ -430,7 +434,7 @@ export function calculateDamage({
     hitDamage = applyModifier(hitDamage, stabModifier);
     hitDamage = Math.floor(hitDamage * typeMultiplier);
     if (burned) hitDamage = Math.floor(hitDamage / 2);
-    hitDamage = applyModifier(hitDamage, finalChain);
+    hitDamage = applyModifier(hitDamage, firstUse && hitIndex === 0 ? firstHitFinalChain : laterHitFinalChain);
     return Math.max(1, hitDamage);
   };
   const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {
@@ -443,12 +447,13 @@ export function calculateDamage({
   const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, iceFaceActive));
   const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, iceFaceActive));
   const baseRollDistribution = hitCounts.min === hitCounts.max
-    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit)
+    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit, { firstUse: false })
     : null;
-  const firstRollDistribution = hitCounts.min === hitCounts.max && (iceFaceActive || sturdyActive)
+  const firstRollDistribution = hitCounts.min === hitCounts.max && (iceFaceActive || sturdyActive || firstHitDiffers)
     ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit, {
       negateFirstHit: iceFaceActive,
       firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
+      firstUse: true,
     })
     : baseRollDistribution;
   const rolls = hitCounts.min === hitCounts.max && hitCounts.min > 1
@@ -461,12 +466,18 @@ export function calculateDamage({
   const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
     ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
     : null;
+  const recovery = sturdyText || !baseRollDistribution
+    ? null
+    : defenderRecovery({ defender, defenderState, defenderTypes, defenderMaxHp, defenderCurrentHp, field: effectiveField, suppressDefenderAbility, attackerState, suppressAttackerAbility });
   let ko = sturdyText ??
     (baseRollDistribution
-      ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution)
+      ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution, recovery)
       : unavailableKoSummary("KO chance unavailable for variable hit count"));
   if (sturdyAffectsKo && !sturdyText) {
     ko = { ...ko, text: `${ko.text} (Sturdy)` };
+  }
+  if (recovery && ko.hits !== 1) {
+    ko = { ...ko, text: `${ko.text} after ${recovery.labels.join(" and ")} recovery` };
   }
 
   return {
@@ -523,6 +534,33 @@ function itemImmunityResult({ moveType, move, defenderState, groundedTarget }) {
   return null;
 }
 
+// End-of-turn and pinch-berry healing the defender gets between hits (Leftovers, Black Sludge,
+// Grassy Terrain, Sitrus Berry). Applied after each full move use in the KO calculation.
+function defenderRecovery({ defender, defenderState, defenderTypes, defenderMaxHp, defenderCurrentHp, field, suppressDefenderAbility, attackerState, suppressAttackerAbility }) {
+  const itemId = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
+  const itemName = defenderState.item?.name ?? defenderState.item?.id;
+  const labels = [];
+  let perTurn = 0;
+  const sixteenth = Math.max(1, Math.floor(defenderMaxHp / 16));
+  if (itemId === "leftovers" || (itemId === "blacksludge" && defenderTypes.includes("Poison"))) {
+    perTurn += sixteenth;
+    labels.push(itemName);
+  }
+  if (normalizeId(field.terrain) === "grassyterrain" && isGrounded(defender, defenderState, field)) {
+    perTurn += sixteenth;
+    labels.push("Grassy Terrain");
+  }
+  let pinchHeal = 0;
+  const berriesBlocked = !suppressAttackerAbility && hasAnyAbility(attackerState, ["unnerve", "asoneglastrier", "asonespectrier"]);
+  if (itemId === "sitrusberry" && !berriesBlocked && defenderCurrentHp > defenderMaxHp / 2) {
+    const ripen = !suppressDefenderAbility && hasAbility(defenderState, "ripen");
+    pinchHeal = Math.floor(defenderMaxHp / 4) * (ripen ? 2 : 1);
+    labels.push(itemName);
+  }
+  if (!perTurn && !pinchHeal) return null;
+  return { maxHp: defenderMaxHp, perTurn, pinchHeal, labels };
+}
+
 function teraShellTypeMultiplier(typeMultiplier, defenderState, suppressDefenderAbility) {
   if (suppressDefenderAbility || !hasAbility(defenderState, "terashell")) return null;
   if (Number(defenderState.currentHpFraction ?? 1) !== 1 || typeMultiplier <= 1) return null;
@@ -533,8 +571,8 @@ function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppres
   return !suppressDefenderAbility && hasAbility(defenderState, "sturdy") && defenderCurrentHp === defenderMaxHp;
 }
 
-function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribution) {
-  const chances = koChance({ rolls, rollDistribution, firstRollDistribution, targetHp });
+function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribution, recovery = null) {
+  const chances = koChance({ rolls, rollDistribution, firstRollDistribution, targetHp, recovery });
   const firstKo = chances.find(({ chance }) => chance > 0);
   return {
     hits: firstKo?.hits ?? null,
@@ -566,7 +604,7 @@ function unavailableKoSummary(text) {
   return { hits: null, chance: null, text };
 }
 
-function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHit = false, firstHitCap = null } = {}) {
+function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHit = false, firstHitCap = null, firstUse = true } = {}) {
   const powers = hitPowers.length > 1
     ? hitPowers
     : Array.from({ length: hitCount }, () => hitPowers[0]);
@@ -574,8 +612,8 @@ function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHi
     damage: negateFirstHit && index === 0
       ? 0
       : index === 0 && Number.isFinite(firstHitCap)
-        ? Math.min(damageForHit(power, roll, index), firstHitCap)
-        : damageForHit(power, roll, index),
+        ? Math.min(damageForHit(power, roll, index, firstUse), firstHitCap)
+        : damageForHit(power, roll, index, firstUse),
     chance: 1 / DAMAGE_ROLLS.length,
   }))));
 }

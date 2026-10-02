@@ -22,6 +22,7 @@ export const ZH_TW_MESSAGES = {
   "count.warnings": ({ count }) => `${count} 個警告`,
   "ko.guaranteed": ({ label }) => `必定${label}`,
   "ko.chance": ({ chance, label }) => `${chance}% 機率${label}`,
+  "ko.afterRecovery": ({ sources }) => `（計入${sources}回復）`,
   "ko.notWithin": ({ hits }) => `${hits} 次攻擊內無法擊倒`,
   "ko.ohko": "一擊倒下",
   "ko.hko": ({ hits }) => `${["", "一", "兩", "三", "四", "五"][hits] ?? hits}擊倒下`,

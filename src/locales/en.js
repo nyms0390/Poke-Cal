@@ -19,6 +19,7 @@ export const EN_MESSAGES = {
   "count.warnings": ({ count }) => `${count} ${count === 1 ? "warning" : "warnings"}`,
   "ko.guaranteed": ({ label }) => `guaranteed ${label}`,
   "ko.chance": ({ chance, label }) => `${chance}% chance to ${label}`,
+  "ko.afterRecovery": ({ sources }) => ` after ${sources} recovery`,
   "ko.notWithin": ({ hits }) => `not a KO within ${hits} hits`,
   "ko.ohko": "OHKO",
   "ko.hko": ({ hits }) => `${hits}HKO`,

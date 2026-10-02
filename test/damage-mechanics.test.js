@@ -5,12 +5,14 @@ import { calculateDamage } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
 
 const garchomp = { id: "garchomp", name: "Garchomp", types: ["Dragon", "Ground"], baseStats: { hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102 } };
+const dragonite = { id: "dragonite", name: "Dragonite", types: ["Dragon", "Flying"], baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 } };
 const kingambit = { id: "kingambit", name: "Kingambit", types: ["Dark", "Steel"], baseStats: { hp: 100, atk: 135, def: 120, spa: 60, spd: 85, spe: 50 } };
 const incineroar = { id: "incineroar", name: "Incineroar", types: ["Fire", "Dark"], baseStats: { hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60 } };
 const corviknight = { id: "corviknight", name: "Corviknight", types: ["Flying", "Steel"], baseStats: { hp: 98, atk: 87, def: 105, spa: 53, spd: 85, spe: 67 } };
 const arcanine = { id: "arcanine", name: "Arcanine", types: ["Fire"], baseStats: { hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95 } };
 
 const earthquake = { id: "earthquake", name: "Earthquake", type: "Ground", category: "Physical", basePower: 100, target: "allAdjacent", flags: {} };
+const dragonClaw = { id: "dragonclaw", name: "Dragon Claw", type: "Dragon", category: "Physical", basePower: 80, target: "normal", flags: { contact: 1 } };
 const fireFang = { id: "firefang", name: "Fire Fang", type: "Fire", category: "Physical", basePower: 65, target: "normal", flags: { bite: 1, contact: 1 } };
 
 const jollyGarchomp = { nature: "Jolly", sp: { atk: 32, spe: 32 }, stages: {}, ability: null, item: null };
@@ -59,6 +61,57 @@ test("Flash Fire, Earth Eater, Bulletproof and Soundproof grant immunities", () 
     assert.equal(result.maxDamage, 0);
     assert.equal(result.notes.includes("Immune (ability)"), true);
   }
+});
+
+test("Multiscale only reduces the first hit when counting hits to KO", () => {
+  const result = calculateDamage({
+    attacker: garchomp,
+    defender: dragonite,
+    move: dragonClaw,
+    attackerState: jollyGarchomp,
+    defenderState: bulky({ ability: { id: "multiscale", name: "Multiscale" } }),
+    field: singles,
+  });
+
+  // 72-85 with Multiscale, then 144-170 into 198 HP: always a 2HKO.
+  assert.deepEqual([result.minDamage, result.maxDamage], [72, 85]);
+  assert.equal(result.ko.text, "guaranteed 2HKO");
+});
+
+test("a resist berry is consumed by the first hit", () => {
+  const result = calculateDamage({
+    attacker: garchomp,
+    defender: kingambit,
+    move: earthquake,
+    attackerState: jollyGarchomp,
+    defenderState: bulky({ item: { id: "shucaberry", name: "Shuca Berry" } }),
+    field: singles,
+  });
+
+  assert.deepEqual([result.minDamage, result.maxDamage], [75, 88]);
+  assert.equal(result.ko.text, "guaranteed 2HKO");
+});
+
+test("Leftovers and Sitrus Berry recovery are included in KO chances", () => {
+  const defensive = (item) => bulky({ sp: { hp: 32, def: 20 }, item });
+  const plain = calculateDamage({ attacker: garchomp, defender: incineroar, move: dragonClaw, attackerState: jollyGarchomp, defenderState: defensive(null), field: singles });
+  const leftovers = calculateDamage({ attacker: garchomp, defender: incineroar, move: dragonClaw, attackerState: jollyGarchomp, defenderState: defensive({ id: "leftovers", name: "Leftovers" }), field: singles });
+  const sitrus = calculateDamage({ attacker: garchomp, defender: incineroar, move: dragonClaw, attackerState: jollyGarchomp, defenderState: defensive({ id: "sitrusberry", name: "Sitrus Berry" }), field: singles });
+  const unnerved = calculateDamage({
+    attacker: garchomp,
+    defender: incineroar,
+    move: dragonClaw,
+    attackerState: { ...jollyGarchomp, ability: { id: "unnerve", name: "Unnerve" } },
+    defenderState: defensive({ id: "sitrusberry", name: "Sitrus Berry" }),
+    field: singles,
+  });
+
+  // 64-76 into 202 HP. Leftovers text and odds match @smogon/calc.
+  assert.equal(plain.ko.text, "87.1% chance to 3HKO");
+  assert.equal(leftovers.ko.text, "0.2% chance to 3HKO after Leftovers recovery");
+  // Sitrus (+50 once HP drops to 101 or less) always buys a fourth hit.
+  assert.equal(sitrus.ko.text, "guaranteed 4HKO after Sitrus Berry recovery");
+  assert.equal(unnerved.ko.text, plain.ko.text);
 });
 
 test("Snow raises the Defense of Ice types", () => {

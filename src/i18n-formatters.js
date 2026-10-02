@@ -10,20 +10,42 @@ export function formatChampionsUsage(entry, locale = "en") {
   return Number.isFinite(percent) ? `${percent.toFixed(1)}% · ${uses}` : uses;
 }
 
+const RECOVERY_PATTERN = / after (.+) recovery$/;
+const RECOVERY_SOURCE_ZH = {
+  "Black Sludge": "黑色污泥",
+  "Grassy Terrain": "青草場地",
+  Leftovers: "吃剩的東西",
+  "Sitrus Berry": "文柚果",
+};
+
+function recoverySuffix(text, locale) {
+  const match = RECOVERY_PATTERN.exec(text ?? "");
+  if (!match) return "";
+  const sources = match[1].split(" and ");
+  const label = locale === "zh-TW"
+    ? sources.map((source) => RECOVERY_SOURCE_ZH[source] ?? source).join("、")
+    : sources.join(" and ");
+  return tFor(locale, "ko.afterRecovery", { sources: label });
+}
+
 export function formatKoResult(ko, locale = "en", maxHits = 5) {
+  const suffix = recoverySuffix(ko?.text, locale);
   if (!ko || !Number.isFinite(ko.chance) || !ko.hits) {
     if (locale === "zh-TW" && /variable hit count/i.test(ko?.text ?? "")) return "連續招式次數不定，無法計算擊倒機率";
     if (locale === "zh-TW" && /Sturdy/i.test(ko?.text ?? "")) return "滿 HP 時靠結實存活";
-    return locale === "en" && ko?.text ? ko.text : tFor(locale, "ko.notWithin", { hits: maxHits });
+    return locale === "en" && ko?.text ? ko.text : `${tFor(locale, "ko.notWithin", { hits: maxHits })}${suffix}`;
   }
   const label = ko.hits === 1 ? tFor(locale, "ko.ohko") : tFor(locale, "ko.hko", { hits: ko.hits });
-  return ko.chance === 1
+  const text = ko.chance === 1
     ? tFor(locale, "ko.guaranteed", { label })
     : tFor(locale, "ko.chance", { chance: (ko.chance * 100).toFixed(1), label });
+  return `${text}${suffix}`;
 }
 
 export function formatKoText(text, locale = "en") {
   if (locale !== "zh-TW") return text;
+  const recovery = RECOVERY_PATTERN.exec(text ?? "");
+  if (recovery) return `${formatKoText(text.slice(0, recovery.index), locale)}${recoverySuffix(text, locale)}`;
   const guaranteed = /^guaranteed (OHKO|([2-5])HKO)( \(Sturdy\))?$/i.exec(text);
   if (guaranteed) {
     const hits = guaranteed[1].toUpperCase() === "OHKO" ? 1 : Number(guaranteed[2]);

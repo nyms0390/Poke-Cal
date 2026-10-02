@@ -11,7 +11,8 @@
 // rounding. `value4096` overrides the rounded `value × 4096` where the game uses a
 // specific integer (Life Orb 5324, doubles screens 2732, Muscle Band 4505, ...).
 // "damage" modifiers are the final modifiers; their optional `order` follows Showdown's
-// ModifyDamage order.
+// ModifyDamage order and `firstHitOnly` marks effects that end after the first hit
+// (Multiscale, Shadow Shield, resist berries).
 //
 // `collectModifiers(ctx)` runs each registry once for the attacker's own ability/item
 // (attackerPerspective: true) and once for the defender's (attackerPerspective: false) —
@@ -174,6 +175,7 @@ for (const [itemId, type] of Object.entries(RESIST_BERRIES)) {
       kind: "damage",
       value: ripen ? 0.25 : 0.5,
       order: 70,
+      firstHitOnly: true,
       label: ripen ? "Ripen" : ctx.defenderState.item.name,
     };
   };
@@ -296,7 +298,7 @@ export const ABILITY_MODIFIERS = {
       : null,
   multiscale: (ctx) =>
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
-      ? { kind: "damage", value: 0.5, order: 30, label: "Multiscale" }
+      ? { kind: "damage", value: 0.5, order: 30, firstHitOnly: true, label: "Multiscale" }
       : null,
   auraguard: (ctx) =>
     !ctx.attackerPerspective && ctx.move.flags?.contact
@@ -304,7 +306,7 @@ export const ABILITY_MODIFIERS = {
       : null,
   shadowshield: (ctx) =>
     !ctx.attackerPerspective && Number(ctx.defenderState.currentHpFraction ?? 1) === 1
-      ? { kind: "damage", value: 0.5, order: 30, label: "Shadow Shield" }
+      ? { kind: "damage", value: 0.5, order: 30, firstHitOnly: true, label: "Shadow Shield" }
       : null,
   thickfat: (ctx) =>
     !ctx.attackerPerspective && (ctx.moveType === "Fire" || ctx.moveType === "Ice")

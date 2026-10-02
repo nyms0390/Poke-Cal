@@ -66,3 +66,21 @@ test("reports when a target is not KO'd within the configured limit", () => {
   assert.deepEqual(result, [1, 2, 3, 4, 5].map((hits) => ({ hits, chance: 0 })));
   assert.equal(koText(result), "not a KO within 5 hits");
 });
+
+test("end-of-turn recovery delays a KO and caps healing at max HP", () => {
+  // 34 per hit: 100 -> 66 -> 32 -> KO without healing. With 6 HP each turn:
+  // 100 -> 66 (+6) 72 -> 38 (+6) 44 -> 10 (+6) 16 -> KO on the fourth hit.
+  assert.equal(koText(koChance({ rolls: [34], targetHp: 100 })), "guaranteed 3HKO");
+  assert.equal(koText(koChance({ rolls: [34], targetHp: 100, recovery: { maxHp: 100, perTurn: 6 } })), "guaranteed 4HKO");
+  // Healing never pushes HP above max, so 1 damage against 50 HP per turn never KOs.
+  assert.equal(koText(koChance({ rolls: [1], targetHp: 100, maxHits: 3, recovery: { maxHp: 100, perTurn: 50 } })), "not a KO within 3 hits");
+});
+
+test("a pinch berry heals once after HP falls to half or less", () => {
+  // 50 per hit: a 2HKO without the berry; with it 100 -> 50 (+25) 75 -> 25 -> KO on hit 3.
+  assert.equal(koText(koChance({ rolls: [50], targetHp: 100 })), "guaranteed 2HKO");
+  assert.equal(koText(koChance({ rolls: [50], targetHp: 100, recovery: { maxHp: 100, pinchHeal: 25 } })), "guaranteed 3HKO");
+  // The berry is used once: 30 per hit goes 100 -> 70 -> 40 (+25) 65 -> 35 -> 5 -> KO on hit 5,
+  // where it would be a 4HKO without the berry.
+  assert.equal(koText(koChance({ rolls: [30], targetHp: 100, recovery: { maxHp: 100, pinchHeal: 25 } })), "guaranteed 5HKO");
+});
