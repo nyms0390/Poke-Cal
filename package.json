@@ -19,6 +19,7 @@
     "build-web-catalogs": "node scripts/build-web-catalogs.mjs",
     "validate-data": "node scripts/validate-data.mjs",
     "stage-site": "node scripts/stage-site.mjs",
-    "start": "node scripts/serve.mjs"
+    "start": "node scripts/serve.mjs",
+    "test:server": "node --test test/serve.test.js"
   }
 }
