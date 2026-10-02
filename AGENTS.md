@@ -46,6 +46,7 @@ npm run sync-all               # all four syncs in order
 - `src/ui/builder-page.js` / `src/ui/builder-state.js` — builder controller and pure one-Pokémon state/final-stat helpers.
 - `src/ui/speed-page.js` / `src/data/speed-line.js` — Speed-tier controller and pure ranking/breakpoint calculations.
 - `src/data/bulk-points.js` / `src/data/break-points.js` — defensive and offensive SP breakpoint searches built on `calculateDamage`.
+- `test/damage-reference.test.js` / `test/fixtures/damage-reference.json` — roll-for-roll damage checks against `@smogon/calc`; regenerate with `scripts/dev/generate-damage-reference.mjs` (dev-only, `npm install --no-save @smogon/calc@0.12.0` first) instead of hand-editing expected rolls.
 - `test/builder-crosscheck.test.js` — independently assembles builder scenarios against the damage/KO engine to prevent builder/calculator drift.
 - `src/engine/damage.js` / `src/engine/speed.js` / `src/engine/battle-order.js` — battle math engine.
 - `src/engine/move-effects.js` — per-move registry (`MOVE_EFFECTS`/`moveEffect()`) replacing moveId ladders.
