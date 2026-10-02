@@ -4,26 +4,63 @@ on:
   push:
     branches:
       - main
+  # Also dispatched by update-data.yml after it commits new catalogs.
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # Never cancel an in-flight deployment; queued runs deploy afterwards.
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install MCP test dependencies
+        run: npm ci --prefix mcp --ignore-scripts
+
+      - name: Run app tests
+        run: npm test
+
+      - name: Run MCP tests
+        run: npm run test:mcp
+
+      - name: Validate committed catalogs
+        run: npm run validate-data
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      # Publish only the browser site: the six pages, src/, public/icons/, and the slim
+      # public/web/ catalogs (not tests, docs, MCP, scripts, agent skills, or full catalogs).
+      - name: Stage site
+        run: npm run stage-site
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -31,8 +68,19 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

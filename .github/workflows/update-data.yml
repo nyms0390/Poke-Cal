@@ -7,19 +7,26 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
   group: update-data
   cancel-in-progress: false
 
 jobs:
-  update:
+  # Downloads and evaluates third-party upstream data (Showdown TypeScript is executed in a
+  # permission-restricted child process). This job therefore gets read-only contents, no
+  # persisted git credentials, and no tokens in its environment.
+  sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -28,6 +35,9 @@ jobs:
 
       - name: Install MCP test dependencies
         run: npm ci --prefix mcp --ignore-scripts
+
+      - name: Snapshot committed catalogs as the validation baseline
+        run: cp -R public "$RUNNER_TEMP/baseline"
 
       - name: Sync Showdown + Champions catalogs
         run: npm run sync-data
@@ -41,17 +51,82 @@ jobs:
       - name: Sync NCP Champions curated sets
         run: npm run sync-ncp-spreads
 
+      - name: Build slim browser catalogs
+        run: npm run build-web-catalogs
+
+      - name: Validate against the committed baseline
+        run: npm run validate-data -- --baseline "$RUNNER_TEMP/baseline"
+
       - name: Run tests
-        run: npm test
+        run: npm run test:all
+
+      - name: Upload synced catalogs
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-data
+          path: public/
+          if-no-files-found: error
+          retention-days: 3
+
+  # Runs only first-party code on the artifact: re-validates it, commits public/ only, pushes,
+  # and triggers the Pages deploy (pushes made with GITHUB_TOKEN do not trigger workflows).
+  commit:
+    needs: sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Download synced catalogs
+        uses: actions/download-artifact@v5
+        with:
+          name: public-data
+          path: ${{ runner.temp }}/synced
+
+      - name: Re-validate synced catalogs against the committed baseline
+        run: node scripts/validate-data.mjs --dir "$RUNNER_TEMP/synced" --baseline public
+
+      # Only generated JSON (and icon PNGs) may come from the sync job.
+      - name: Replace public/ with the synced catalogs
+        run: >-
+          rsync -a --delete --include='*/' --include='*.json' --include='*.png' --exclude='*'
+          "$RUNNER_TEMP/synced/" public/
 
       - name: Commit and push changes
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/
+          git add -A public/
           if git diff --cached --quiet; then
             echo "No data changes."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage/teams, Smogon SP spreads, NCP sets)"
-          git push
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "committed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt); rebasing onto origin/main."
+            sleep $((attempt * 5))
+            git pull --rebase origin main
+          done
+          echo "Failed to push after 5 attempts." >&2
+          exit 1
+
+      - name: Deploy Pages
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main

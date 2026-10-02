@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:mcp": "node --test \"mcp/test/**/*.test.js\"",
+    "test:all": "node --test",
     "test:battle": "node --test test/battle-order.test.js test/damage.test.js test/speed.test.js",
     "test:builder": "node --test test/threats.test.js test/threat-preferences.test.js test/builder-state.test.js test/speed-line.test.js test/bulk-points.test.js test/break-points.test.js test/builder-crosscheck.test.js",
     "test:catalog": "node --test test/battle-state.test.js test/catalog.test.js test/identifiers.test.js test/pokemon.test.js test/stats.test.js test/ui.test.js",
@@ -21,5 +23,8 @@
     "stage-site": "node scripts/stage-site.mjs",
     "start": "node scripts/serve.mjs",
     "test:server": "node --test test/serve.test.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
