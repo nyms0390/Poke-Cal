@@ -5884,3 +5884,50 @@ test("Neutralizing Gas suppresses Paradox Speed in speed-scaled move power", () 
 
   assert.equal(result.notes.includes("Electro Ball power 80"), true);
 });
+
+test("Flying Press adds Flying to its effectiveness but keeps Fighting immunity", () => {
+  // Reference rolls: @smogon/calc 0.12.0, Gen 9, level 50, Adamant 32 Atk SP Hawlucha vs Hardy 0 SP targets.
+  const hawlucha = {
+    id: "hawlucha",
+    name: "Hawlucha",
+    types: ["Fighting", "Flying"],
+    baseStats: { hp: 78, atk: 92, def: 75, spa: 74, spd: 63, spe: 118 },
+  };
+  const flyingPress = { id: "flyingpress", name: "Flying Press", type: "Fighting", category: "Physical", basePower: 100 };
+  const attackerState = { ...neutralState, nature: "Adamant", sp: { ...neutralState.sp, atk: 32 } };
+  const cases = [
+    {
+      defender: { id: "breloom", name: "Breloom", types: ["Grass", "Fighting"], baseStats: { hp: 60, atk: 130, def: 80, spa: 60, spd: 60, spe: 70 } },
+      typeMultiplier: 4,
+      rolls: [360, 364, 364, 372, 376, 376, 384, 388, 396, 396, 400, 408, 408, 412, 420, 424],
+    },
+    {
+      defender: { id: "amoonguss", name: "Amoonguss", types: ["Grass", "Poison"], baseStats: { hp: 114, atk: 85, def: 70, spa: 85, spd: 80, spe: 30 } },
+      typeMultiplier: 1,
+      rolls: [100, 100, 102, 103, 105, 106, 106, 108, 109, 111, 112, 112, 114, 115, 117, 118],
+    },
+    {
+      defender: { id: "kingambit", name: "Kingambit", types: ["Dark", "Steel"], baseStats: { hp: 100, atk: 135, def: 120, spa: 60, spd: 85, spe: 50 } },
+      typeMultiplier: 2,
+      rolls: [128, 128, 132, 132, 134, 134, 138, 138, 140, 140, 144, 144, 146, 146, 150, 152],
+    },
+  ];
+  for (const { defender, typeMultiplier, rolls } of cases) {
+    const result = calculateDamage({ attacker: hawlucha, defender, move: flyingPress, attackerState, defenderState: neutralState });
+    assert.equal(result.typeMultiplier, typeMultiplier, defender.name);
+    assert.deepEqual(result.rolls, rolls, defender.name);
+  }
+
+  const gengar = { id: "gengar", name: "Gengar", types: ["Ghost", "Poison"], baseStats: { hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110 } };
+  const immune = calculateDamage({ attacker: hawlucha, defender: gengar, move: flyingPress, attackerState, defenderState: neutralState });
+  assert.equal(immune.typeMultiplier, 0);
+  const scrappy = calculateDamage({
+    attacker: hawlucha,
+    defender: gengar,
+    move: flyingPress,
+    attackerState: { ...attackerState, ability: { id: "scrappy", name: "Scrappy" } },
+    defenderState: neutralState,
+  });
+  assert.equal(scrappy.typeMultiplier, 0.5);
+  assert.deepEqual(scrappy.rolls, [55, 56, 57, 57, 58, 59, 60, 60, 60, 61, 62, 63, 63, 64, 65, 66]);
+});

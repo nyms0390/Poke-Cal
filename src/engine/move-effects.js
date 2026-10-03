@@ -250,7 +250,12 @@ export const MOVE_EFFECTS = {
   whirlpool: { condition: { label: "Target using Dive" }, sourceDamageMultiplier: targetStateDamageMultiplier },
   bodyslam: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
   dragonrush: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
-  flyingpress: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
+  // Flying Press stays Fighting-type (STAB, immunity, Chople Berry) but adds Flying to its effectiveness.
+  flyingpress: {
+    additionalEffectivenessType: "Flying",
+    condition: { label: "Target minimized" },
+    sourceDamageMultiplier: targetStateDamageMultiplier,
+  },
   supercellslam: { condition: { label: "Target minimized" }, sourceDamageMultiplier: targetStateDamageMultiplier },
 
   // -- sun/rain-halved charge moves ---------------------------------------

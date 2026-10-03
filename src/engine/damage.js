@@ -55,6 +55,17 @@ const UNSUPPORTED_MOVE_REASONS = {
 };
 
 export function typeEffectiveness(moveType, defenderTypes = [], move = null, defenderState = {}, attackerState = {}, options = {}) {
+  const multiplier = singleTypeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, options);
+  // Immunity comes from the move's own type only (Showdown runImmunity), so a 0 stays 0.
+  const extraType = moveEffect(normalizeId(move?.id ?? move?.name)).additionalEffectivenessType;
+  if (!extraType || multiplier === 0) return multiplier;
+  return defenderTypes.reduce(
+    (total, defenderType) => total * (TYPE_EFFECTIVENESS[extraType]?.[defenderType] ?? 1),
+    multiplier,
+  );
+}
+
+function singleTypeEffectiveness(moveType, defenderTypes, move, defenderState, attackerState, options) {
   const moveId = normalizeId(move?.id ?? move?.name);
   if (!options.suppressAttackerAbility && hasScrappyBypass(moveType, defenderTypes, attackerState)) {
     return defenderTypes.reduce((multiplier, defenderType) => {
