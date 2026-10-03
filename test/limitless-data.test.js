@@ -46,6 +46,33 @@ test("falls back to M-B usage when M-C has no tournaments", async () => {
   assert.equal(usage.pokemon[0].id, "raichu");
 });
 
+test("archives beyond ten by default while retaining configurable limits and the usage sample", async () => {
+  const tournaments = Array.from({ length: 12 }, (_, index) => ({
+    id: `event-${index}`, format: "M-C", date: `2026-09-${String(20 - index).padStart(2, "0")}`,
+  }));
+  const requestedLimits = [];
+  const fetcher = async (url) => {
+    const parsed = new URL(url);
+    if (parsed.pathname === "/api/tournaments") {
+      requestedLimits.push(parsed.searchParams.get("limit"));
+      return tournaments;
+    }
+    if (parsed.pathname.endsWith("/standings")) return [{
+      player: "winner", placing: 1, decklist: [{ id: "raichu", name: "Raichu" }],
+    }];
+    if (parsed.pathname.endsWith("/details")) return { phases: [{ phase: 1, type: "SINGLE_BRACKET" }] };
+    if (parsed.pathname.endsWith("/pairings")) return [{ phase: 1, player1: "winner" }];
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+  const defaults = await downloadLimitlessChampionsData({ fetcher, apiDelayMs: 0 });
+  assert.equal(defaults.teams.tournaments.length, 12);
+  assert.equal(defaults.usage.tournamentCount, 12);
+  const limited = await downloadLimitlessChampionsData({ fetcher, apiDelayMs: 0, archiveLimit: 3 });
+  assert.equal(limited.teams.tournaments.length, 3);
+  assert.equal(limited.usage.tournamentCount, 12);
+  assert.deepEqual(requestedLimits, ["50", "50"]);
+});
+
 test("aggregates Limitless standings into usage rates", () => {
   const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];
   const standings = new Map([

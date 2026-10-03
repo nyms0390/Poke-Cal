@@ -17,18 +17,38 @@ const elements = {
   source: document.querySelector("#teams-source"),
   count: document.querySelector("#teams-count"),
   archive: document.querySelector("#teams-archive"),
+  more: document.querySelector("#teams-more"),
   status: document.querySelector("#status"),
 };
 
 let catalogs = null;
 let archive = null;
+const TOURNAMENT_BATCH_SIZE = 10;
+let visibleCount = TOURNAMENT_BATCH_SIZE;
+
+elements.more.addEventListener("click", () => {
+  const tournaments = archive?.tournaments ?? [];
+  if (visibleCount >= tournaments.length) return;
+  const nextCount = Math.min(visibleCount + TOURNAMENT_BATCH_SIZE, tournaments.length);
+  const addedTournaments = tournaments.slice(visibleCount, nextCount).map(renderTournament);
+  elements.archive.append(...addedTournaments);
+  if (nextCount === tournaments.length && document.activeElement === elements.more) {
+    addedTournaments[0].firstElementChild.focus();
+  }
+  visibleCount = nextCount;
+  updateArchiveControls(tournaments.length);
+});
 
 initI18n();
 initialize();
 
 onLocaleChange(() => {
   if (!archive) return;
+  const openDetails = [...elements.archive.querySelectorAll("details")].map((details) => details.open);
   renderPage();
+  elements.archive.querySelectorAll("details").forEach((details, index) => {
+    details.open = openDetails[index] ?? false;
+  });
 });
 
 async function initialize() {
@@ -68,13 +88,23 @@ function renderPage() {
     count: tournaments.length,
     limit: archive?.format ?? "M-C",
   });
-  elements.count.textContent = t("teams.tournamentCount", { count: tournaments.length });
+  updateArchiveControls(tournaments.length);
   elements.archive.replaceChildren(
     ...(tournaments.length > 0
-      ? tournaments.map(renderTournament)
+      ? tournaments.slice(0, visibleCount).map(renderTournament)
       : [messagePanel(t("teams.noTournaments"))]),
   );
   applyDocumentTranslations();
+}
+
+function updateArchiveControls(total) {
+  elements.count.textContent = t("teams.visibleCount", { count: Math.min(visibleCount, total), total });
+  const remaining = Math.max(0, total - visibleCount);
+  elements.more.hidden = total <= TOURNAMENT_BATCH_SIZE;
+  elements.more.disabled = remaining === 0;
+  elements.more.textContent = remaining > 0
+    ? t("teams.showMore", { count: Math.min(TOURNAMENT_BATCH_SIZE, remaining) })
+    : t("teams.allShown");
 }
 
 function renderTournament(tournament) {

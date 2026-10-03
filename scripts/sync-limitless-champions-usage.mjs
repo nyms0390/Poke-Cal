@@ -22,7 +22,7 @@ const DEFAULT_GAME = "VGC";
 const DEFAULT_FORMAT = "M-C";
 const DEFAULT_FALLBACK_FORMAT = "M-B";
 const DEFAULT_LIMIT = 50;
-const DEFAULT_ARCHIVE_LIMIT = 10;
+const DEFAULT_ARCHIVE_LIMIT = 50;
 const API_DELAY_MS = 1250;
 
 export async function downloadLimitlessChampionsData({

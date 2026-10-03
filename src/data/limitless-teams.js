@@ -14,7 +14,7 @@ export function buildLimitlessTeamArchive(
   detailsByTournament = new Map(),
   standingsByTournament = new Map(),
   pairingsByTournament = new Map(),
-  { limit = 10, format } = {},
+  { limit = 50, format } = {},
 ) {
   const orderedTournaments = [...tournaments]
     .filter(Boolean)

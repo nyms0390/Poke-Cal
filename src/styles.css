@@ -302,6 +302,15 @@ footer {
   min-width: 0;
 }
 
+.teams-archive-panel .teams-more {
+  min-height: 44px;
+  margin-top: 16px;
+}
+
+#teams-count {
+  font-variant-numeric: tabular-nums;
+}
+
 .teams-note {
   margin: -4px 0 18px;
   color: var(--muted);
@@ -631,6 +640,7 @@ input[type="radio"] {
 }
 
 /* Secondary button: white, hairline border, accent on hover. */
+.teams-more,
 .panel-heading button,
 .saved-set-controls button,
 .set-paste-actions button,
@@ -647,6 +657,8 @@ input[type="radio"] {
   box-shadow: var(--shadow-micro);
 }
 
+.teams-more:hover:not(:disabled),
+.teams-more:focus-visible,
 .panel-heading button:hover,
 .panel-heading button:focus-visible,
 .saved-set-controls button:hover,

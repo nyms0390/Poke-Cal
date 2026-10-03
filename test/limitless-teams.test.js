@@ -156,3 +156,11 @@ test("infers the format from the first tournament when not requested", () => {
   const archive = buildLimitlessTeamArchive([tournament("legacy", "2026-08-01T17:00:00.000Z")]);
   assert.equal(archive.format, "M-B");
 });
+
+test("the archive builder retains more than ten qualifying tournaments by default", () => {
+  const tournaments = Array.from({ length: 12 }, (_, index) => tournament(`event-${index}`, "2026-08-01"));
+  const detailsByTournament = new Map(tournaments.map(({ id }) => [id, details()]));
+  const standings = new Map(tournaments.map(({ id }) => [id, [standing("winner", 1, [set("raichu", "Raichu")])]]));
+  const pairings = new Map(tournaments.map(({ id }) => [id, [{ phase: 2, player1: "winner" }]]));
+  assert.equal(buildLimitlessTeamArchive(tournaments, detailsByTournament, standings, pairings).tournaments.length, 12);
+});
