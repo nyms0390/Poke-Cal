@@ -236,7 +236,7 @@ Output both the number and NCP-style text: `"43.8% chance to 2HKO"`, `"guarantee
 |---|---|---|---|
 | 0 | Restructure — no behavior change | P0-01 … P0-07 | — |
 | 1 | Calculator foundations (field, status, Tera, KO %) | P1-01 … P1-07 | Phase 0 |
-| 2 | Mechanics burn-down (MECHANICS_CHECKLIST.md) | P2-01 … P2-08 | Phase 1 |
+| 2 | Mechanics burn-down (originally tracked in MECHANICS_CHECKLIST.md, since retired) | P2-01 … P2-08 | Phase 1 |
 | 3 | Calculator UX parity with NCP | P3-01 … P3-05 | Phase 1 (P3-02+ need P1-06) |
 | 4 | Snapshot page polish | P4-01 … P4-03 | Phase 0 only |
 | 5 | Builder utility (bulk/break points) + speed tiers tab | P5-01 … P5-06 | Phases 1 + 2 |
@@ -249,6 +249,11 @@ P5-06 closed the roadmap.
 - `test/golden.test.js` (created in P1-06) holds end-to-end scenarios recorded from the NCP
   calculator: full attacker/defender/field setups with exact expected min–max damage and KO text.
   Every Phase 2 task adds at least two golden cases for its mechanics.
+- `MECHANICS_CHECKLIST.md`, the Phase 2 burn-down tracker, has been retired in favour of the
+  `@smogon/calc` reference tests, which are now the accuracy record: `test/damage-reference.test.js`
+  (all 16 rolls per scenario, `test/fixtures/damage-reference.json`) and
+  `test/speed-reference.test.js` (final Speed, `test/fixtures/speed-reference.json`), regenerated
+  with `scripts/dev/generate-*-reference.mjs`.
 - The builder (Phase 5) reuses the same engine functions the battle page uses — never a second
   implementation of damage math. P5-06 cross-checks builder output against battle-page output.
 
