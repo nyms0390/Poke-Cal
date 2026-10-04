@@ -674,12 +674,15 @@ function renderMovePicks() {
     const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
     const label = document.createElement("span");
     label.textContent = String(index + 1);
+    // The visible number is decorative; the input carries the full name, as on Battle.
+    label.setAttribute("aria-hidden", "true");
     const input = document.createElement("input");
     input.type = "search";
     input.autocomplete = "off";
     input.role = "combobox";
     input.value = selected ? localizedName(selected) : "";
     input.placeholder = t("label.chooseMove");
+    input.setAttribute("aria-label", t("battle.moveNumber", { number: index + 1 }));
     const results = document.createElement("div");
     results.className = "search-results move-search-results";
     results.hidden = true;

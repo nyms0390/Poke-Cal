@@ -284,6 +284,18 @@ export function searchResultFocusIndex(currentIndex, count, key) {
   return -1;
 }
 
+let comboboxIdCounter = 0;
+
+// Give a popup list a document-unique id so option ids, aria-controls and
+// aria-activedescendant never collide between pickers (move pickers have no static id).
+function ensureListboxId(resultsEl) {
+  if (!resultsEl.id) {
+    comboboxIdCounter += 1;
+    resultsEl.id = `pokecal-listbox-${comboboxIdCounter}`;
+  }
+  return resultsEl.id;
+}
+
 export function attachCombobox({
   input,
   resultsEl,
@@ -294,17 +306,24 @@ export function attachCombobox({
   renderRow,
 }) {
   let expanded = false;
+  const listboxId = ensureListboxId(resultsEl);
   resultsEl.setAttribute("role", "listbox");
   input.setAttribute("aria-autocomplete", "list");
   input.setAttribute("aria-haspopup", "listbox");
+  input.setAttribute("aria-controls", listboxId);
+  input.setAttribute("aria-expanded", String(!resultsEl.hidden));
 
+  // A closed popup keeps no options, so nothing (including aria-activedescendant) can point
+  // into a hidden list.
   function hide() {
     resultsEl.hidden = true;
+    resultsEl.replaceChildren();
     input.setAttribute("aria-expanded", "false");
     input.removeAttribute("aria-activedescendant");
   }
 
   function render() {
+    input.removeAttribute("aria-activedescendant");
     const allMatches = getAllMatches ? getAllMatches(input.value) ?? [] : null;
     const matches = allMatches ?? (getMatches(input.value) ?? []);
     const visible = allMatches
@@ -318,7 +337,7 @@ export function attachCombobox({
           hide();
           onSelect(selected);
         });
-        row.id = `${resultsEl.id}-option-${index}`;
+        row.id = `${listboxId}-option-${index}`;
         row.setAttribute("role", "option");
         row.setAttribute("aria-selected", "false");
         return row;
@@ -349,8 +368,12 @@ export function attachCombobox({
       resultsEl.append(empty);
     }
     const isOpen = visible.matches.length > 0 || hasQuery;
-    resultsEl.hidden = !isOpen;
-    input.setAttribute("aria-expanded", String(isOpen));
+    if (!isOpen) {
+      hide();
+      return visible.matches;
+    }
+    resultsEl.hidden = false;
+    input.setAttribute("aria-expanded", "true");
     return visible.matches;
   }
 

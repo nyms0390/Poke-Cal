@@ -1108,3 +1108,80 @@ test("builder and speed tiers offer the same popular-threat dropdown choices", (
   assert.deepEqual(optionValues(builderHtml, "builder-threat-count"), [10, 20, 30, 40, 50]);
   assert.deepEqual(optionValues(speedHtml, "speed-popular-count"), [10, 20, 30, 40, 50]);
 });
+
+test("comboboxes without a list id get unique option ids, aria-controls, and no stale options", () => {
+  class FakeTarget {
+    constructor() {
+      this.attributes = new Map();
+      this.listeners = new Map();
+      this.children = [];
+      this.hidden = true;
+      this.id = "";
+      this.value = "";
+    }
+    addEventListener(type, listener) {
+      const listeners = this.listeners.get(type) ?? new Set();
+      listeners.add(listener);
+      this.listeners.set(type, listeners);
+    }
+    removeEventListener(type, listener) { this.listeners.get(type)?.delete(listener); }
+    dispatch(type, event = { target: this }) {
+      for (const listener of this.listeners.get(type) ?? []) listener(event);
+    }
+    setAttribute(name, value) { this.attributes.set(name, String(value)); }
+    removeAttribute(name) { this.attributes.delete(name); }
+    contains(target) { return target === this || this.children.includes(target); }
+    append(...children) { this.children.push(...children); }
+    replaceChildren(...children) { this.children = children; }
+    focus() { globalThis.document.activeElement = this; }
+    querySelectorAll(selector) {
+      return selector === ".search-result" ? this.children.filter((child) => child.className === "search-result") : [];
+    }
+  }
+
+  const previousDocument = globalThis.document;
+  const fakeDocument = new FakeTarget();
+  fakeDocument.createElement = () => new FakeTarget();
+  globalThis.document = fakeDocument;
+  try {
+    const pickers = [0, 1].map(() => {
+      const input = new FakeTarget();
+      const results = new FakeTarget();
+      attachCombobox({
+        input,
+        resultsEl: results,
+        getMatches: () => ["Earthquake", "Rock Slide"],
+        onSelect: () => {},
+        renderRow: () => Object.assign(new FakeTarget(), { className: "search-result" }),
+      });
+      return { input, results };
+    });
+    const [first, second] = pickers;
+    assert.ok(first.results.id);
+    assert.notEqual(first.results.id, second.results.id);
+    for (const { input, results } of pickers) {
+      assert.equal(input.attributes.get("aria-controls"), results.id);
+      assert.equal(input.attributes.get("aria-expanded"), "false");
+    }
+
+    first.input.value = "e";
+    first.input.dispatch("input");
+    second.input.value = "e";
+    second.input.dispatch("input");
+    const firstIds = first.results.children.map(({ id }) => id);
+    const secondIds = second.results.children.map(({ id }) => id);
+    assert.equal(firstIds.length, 2);
+    assert.equal(new Set([...firstIds, ...secondIds]).size, 4, "option ids are unique across pickers");
+    assert.equal(first.input.attributes.get("aria-expanded"), "true");
+
+    first.input.dispatch("keydown", { key: "ArrowDown", preventDefault() {} });
+    assert.equal(first.input.attributes.get("aria-activedescendant"), firstIds[0]);
+    first.input.dispatch("keydown", { key: "Escape", preventDefault() {} });
+    assert.equal(first.results.hidden, true);
+    assert.equal(first.results.children.length, 0, "a closed list keeps no stale options");
+    assert.equal(first.input.attributes.has("aria-activedescendant"), false);
+    assert.equal(first.input.attributes.get("aria-expanded"), "false");
+  } finally {
+    globalThis.document = previousDocument;
+  }
+});
