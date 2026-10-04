@@ -11,11 +11,9 @@
   "ratelimits": [
     {
       "name": "MCP_RATE_LIMITER",
-      // OWNER ACTION REQUIRED: "1001" is the placeholder from the Cloudflare rate-limiting
-      // docs, not a PokéCal-specific value. namespace_id must be a positive integer that is
-      // unique among the rate-limit namespaces in YOUR Cloudflare account; reusing an id
-      // shares the counter with any other Worker using it. Pick your own id before deploying.
-      "namespace_id": "1001",
+      // namespace_id only needs to be unique among the rate-limit namespaces in the
+      // owner's Cloudflare account; Workers sharing an id share one counter.
+      "namespace_id": "20261",
       "simple": {
         "limit": 120,
         "period": 60

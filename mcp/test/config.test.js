@@ -17,12 +17,16 @@ test("Wrangler runs the Worker for MCP and health paths without a zone route", a
   assert.deepEqual(config.assets.run_worker_first, ["/mcp", "/health"]);
 });
 
-test("Wrangler rate-limit namespace id is flagged as an owner-specific placeholder", async () => {
+test("Wrangler rate-limit namespace uses the project's own id, not the docs example", async () => {
   const text = await readFile(configPath, "utf8");
   const config = parseJsonc(text);
   const limiter = config.ratelimits.find(({ name }) => name === "MCP_RATE_LIMITER");
   assert.ok(limiter);
-  assert.match(text, /OWNER ACTION REQUIRED[\s\S]*unique[\s\S]*"namespace_id"/);
+  assert.equal(limiter.namespace_id, "20261");
+  assert.deepEqual(limiter.simple, { limit: 120, period: 60 });
+  assert.doesNotMatch(text, /OWNER ACTION REQUIRED/);
+  assert.match(text, /unique[\s\S]*"namespace_id"/);
   const readme = await readFile(fileURLToPath(new URL("../README.md", import.meta.url)), "utf8");
   assert.match(readme, /namespace_id/);
+  assert.match(readme, /"20261"/);
 });

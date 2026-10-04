@@ -15,7 +15,7 @@ npx wrangler dev           # local Worker at /mcp
 npx wrangler deploy        # explicit production deployment
 ```
 
-Before the first deployment, set your own rate-limit namespace: `wrangler.jsonc` ships `ratelimits[0].namespace_id` as `"1001"`, which is only the example value from the Cloudflare rate-limiting documentation. The id must be unique among rate-limit namespaces in your Cloudflare account (Workers sharing an id share one counter), so choose a positive integer of your own and replace it. The binding (`MCP_RATE_LIMITER`, 120 requests per 60 seconds per `CF-Connecting-IP`) is otherwise ready to use.
+The `MCP_RATE_LIMITER` binding in `wrangler.jsonc` allows 120 requests per 60 seconds per `CF-Connecting-IP` under rate-limit `namespace_id` `"20261"`. The id only needs to be unique among the rate-limit namespaces in the owner's Cloudflare account; Workers sharing an id share one counter.
 
 The production command is intentionally explicit. This repository does not include an account ID, zone ID, custom domain, or a deployment token. The Worker serves the MCP endpoint at `https://<worker-subdomain>.workers.dev/mcp` after deployment; configure that URL in an MCP-capable agent.
 
