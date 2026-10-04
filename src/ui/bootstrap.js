@@ -11,18 +11,19 @@ const CATALOG_DEV_HINT =
 // role="alert" panel near the top of `main` with a Retry button and its working controls
 // are disabled; the returned promise stays pending until a retry succeeds, so callers keep
 // their simple `const data = await loadCatalogs(...)` flow without a page reload.
-// `onStatus` receives the status text; `onLoaded` (optional) receives the loaded data on
+// `onStatus` receives the status text and its phase ("failed", "loading" or "loaded") so a
+// page can re-localize or prioritize it; `onLoaded` (optional) receives the loaded data on
 // success, before `loadCatalogs` resolves. The `null` return is kept for environments
 // without a DOM, where no recovery UI can be shown.
 export async function loadCatalogs({ onStatus, onLoaded } = {}) {
   const data = await loadWithRecovery(() => loadPokemonData(), {
     messageKey: "loadError.catalog",
     devHint: CATALOG_DEV_HINT,
-    onFailure: () => onStatus?.(t("catalog.missing")),
-    onRetry: () => onStatus?.(t("catalog.loading")),
+    onFailure: () => onStatus?.(t("catalog.missing"), "failed"),
+    onRetry: () => onStatus?.(t("catalog.loading"), "loading"),
   });
   if (!data) return null;
-  onStatus?.(catalogLoadedStatus(data));
+  onStatus?.(catalogLoadedStatus(data), "loaded");
   onLoaded?.(data);
   return data;
 }

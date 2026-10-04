@@ -38,7 +38,16 @@ async function page(total, { failure = false, topCut = 0 } = {}) {
     initI18n() {}, applyDocumentTranslations() {}, getLocale: () => locale,
     t: (key, params) => tFor(locale, key, params),
     onLocaleChange: (callback) => { changeLocale = callback; },
-    loadCatalogs: async () => ({}),
+    catalogLoadedStatus: ({ pokemon, abilities, moves }) =>
+      tFor(locale, "catalog.loaded", { pokemon: pokemon.length, abilities: abilities.length, moves: moves.length }),
+    loadCatalogs: async ({ onStatus, onLoaded }) => {
+      // Catalogs finish after the archive has already settled, as on a slow connection.
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      const data = { pokemon: { length: 358 }, abilities: { length: 2 }, moves: { length: 3 } };
+      onStatus?.(tFor(locale, "catalog.loaded", { pokemon: 358, abilities: 2, moves: 3 }), "loaded");
+      onLoaded?.(data);
+      return data;
+    },
     loadLimitlessTeamArchive: async () => {
       if (failure) throw new Error("offline");
       return { format: "M-C", tournaments: Array.from({ length: total }, (_, index) => ({
@@ -54,6 +63,7 @@ async function page(total, { failure = false, topCut = 0 } = {}) {
   };
   runInNewContext(source, context);
   await context.ready;
+  await new Promise((resolve) => setTimeout(resolve, 10));
   return { elements, document, locale(next) { locale = next; changeLocale(); } };
 }
 
@@ -142,4 +152,21 @@ test("tournament and team cards build their content only when first opened", asy
   assert.equal(relocalizedTeams[1].open, true);
   assert.equal(relocalizedTeams[1].children.length, 2);
   assert.equal(view.elements.archive.children[1].children.length, 1);
+});
+
+test("the status line keeps an archive failure and follows the language", async () => {
+  const failed = await page(25, { failure: true });
+  assert.equal(failed.elements.status.textContent, tFor("en", "teams.loadError"));
+  failed.locale("zh-TW");
+  assert.equal(failed.elements.status.textContent, tFor("zh-TW", "teams.loadError"));
+  assert.equal(failed.elements.source.textContent, tFor("zh-TW", "teams.sourceError"));
+  assert.equal(failed.elements.archive.children[0].textContent, tFor("zh-TW", "teams.archiveError"));
+
+  const loaded = await page(3);
+  const counts = { pokemon: 358, abilities: 2, moves: 3 };
+  assert.equal(loaded.elements.status.textContent, tFor("en", "catalog.loaded", counts));
+  loaded.locale("zh-TW");
+  assert.equal(loaded.elements.status.textContent, tFor("zh-TW", "catalog.loaded", counts));
+  loaded.locale("en");
+  assert.equal(loaded.elements.status.textContent, tFor("en", "catalog.loaded", counts));
 });

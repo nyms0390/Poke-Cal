@@ -1,6 +1,6 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { normalizeId } from "../identifiers.js";
-import { loadCatalogs, loadWithRecovery } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
 import { pokemonSpriteUrls } from "./components.js";
 import {
   getLocale,
@@ -22,6 +22,9 @@ const elements = {
 
 let catalogs = null;
 let archive = null;
+// Load phases behind the footer status line, kept as state rather than text so a later
+// success cannot hide an earlier failure and the line can be re-localized.
+const loadState = { catalogs: "loading", archive: "loading", failed: false };
 const TOURNAMENT_BATCH_SIZE = 10;
 let visibleCount = TOURNAMENT_BATCH_SIZE;
 
@@ -43,6 +46,9 @@ initI18n();
 initialize();
 
 onLocaleChange(() => {
+  renderStatus();
+  if (loadState.failed) renderFailure();
+  else if (loadState.archive === "failed") elements.source.textContent = t("teams.sourceError");
   if (!archive) return;
   const openKeys = [...elements.archive.querySelectorAll("details")]
     .filter((details) => details.open)
@@ -68,19 +74,32 @@ async function initialize() {
   try {
     const [loadedCatalogs, loadedArchive] = await Promise.all([
       loadCatalogs({
-        onStatus: (text) => {
-          elements.status.textContent = text;
+        onStatus: (_text, phase) => {
+          loadState.catalogs = phase;
+          renderStatus();
+        },
+        onLoaded: (data) => {
+          catalogs = data;
+          renderStatus();
         },
       }),
       loadWithRecovery(() => loadLimitlessTeamArchive(), {
         messageKey: "loadError.teams",
         devHint: "PokéCal tournament-team archive load failed. Locally, run `npm run sync-champions-data`.",
         onFailure: () => {
+          loadState.archive = "failed";
           elements.source.textContent = t("teams.sourceError");
+          renderStatus();
         },
         onRetry: () => {
+          loadState.archive = "loading";
           elements.source.textContent = t("catalog.loading");
+          renderStatus();
         },
+      }).then((loaded) => {
+        loadState.archive = loaded ? "loaded" : "failed";
+        renderStatus();
+        return loaded;
       }),
     ]);
     if (!loadedCatalogs) return;
@@ -88,11 +107,25 @@ async function initialize() {
     archive = loadedArchive;
     renderPage();
   } catch (error) {
-    elements.status.textContent = t("teams.loadError");
-    elements.source.textContent = t("teams.sourceError");
-    elements.archive.replaceChildren(messagePanel(t("teams.archiveError")));
+    loadState.failed = true;
+    renderStatus();
+    renderFailure();
     console.error(error);
   }
+}
+
+function renderStatus() {
+  const { catalogs: catalogPhase, archive: archivePhase, failed } = loadState;
+  let text = t("catalog.loading");
+  if (failed || archivePhase === "failed") text = t("teams.loadError");
+  else if (catalogPhase === "failed") text = t("catalog.missing");
+  else if (catalogPhase === "loaded" && catalogs) text = catalogLoadedStatus(catalogs);
+  elements.status.textContent = text;
+}
+
+function renderFailure() {
+  elements.source.textContent = t("teams.sourceError");
+  elements.archive.replaceChildren(messagePanel(t("teams.archiveError")));
 }
 
 function renderPage() {
