@@ -116,6 +116,65 @@ test("generic storage wrapper persists versioned JSON and falls back to memory",
   assert.deepEqual(failingStore.read(), { version: 1, teams: { defender: { activeIndex: 1 } } });
 });
 
+test("a corrupt stored value reads as empty, is backed up, and is repaired by the next write", () => {
+  const storage = memoryStorage();
+  storage.setItem(SAVED_SETS_STORAGE_KEY, "{not json");
+  const store = createSavedSetStore(storage);
+
+  assert.deepEqual(store.listSets("miraidon"), []);
+  assert.equal(storage.getItem(`${SAVED_SETS_STORAGE_KEY}.corrupt`), "{not json");
+  assert.equal(storage.getItem(SAVED_SETS_STORAGE_KEY), "{not json");
+
+  store.saveSet("miraidon", "Repaired", sideState);
+  const persisted = JSON.parse(storage.getItem(SAVED_SETS_STORAGE_KEY));
+  assert.deepEqual(Object.keys(persisted.sets.miraidon), ["Repaired"]);
+
+  // A fresh store (e.g. after a reload) sees the repaired value from storage.
+  const reloaded = createSavedSetStore(storage);
+  assert.deepEqual(reloaded.listSets("miraidon").map((set) => set.name), ["Repaired"]);
+});
+
+test("generic storage wrapper keeps persisting after a parse failure", () => {
+  const storage = memoryStorage();
+  const options = {
+    key: "pokecal.test.v1",
+    createEmpty: () => ({ version: 1, teams: {} }),
+    isValid: (value) => value?.version === 1 && value.teams,
+  };
+  storage.setItem(options.key, "\u0000garbage");
+  const store = createStorageStore(storage, options);
+
+  assert.deepEqual(store.read(), { version: 1, teams: {} });
+  store.write({ version: 1, teams: { attacker: { activeIndex: 2 } } });
+  assert.deepEqual(JSON.parse(storage.getItem(options.key)), {
+    version: 1,
+    teams: { attacker: { activeIndex: 2 } },
+  });
+  assert.deepEqual(createStorageStore(storage, options).read(), {
+    version: 1,
+    teams: { attacker: { activeIndex: 2 } },
+  });
+});
+
+test("a failing corrupt-value backup does not break reads or writes", () => {
+  const values = new Map([["pokecal.test.v1", "{"]]);
+  const storage = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem(key, value) {
+      if (key.endsWith(".corrupt")) throw new Error("quota");
+      values.set(key, value);
+    },
+  };
+  const store = createStorageStore(storage, {
+    key: "pokecal.test.v1",
+    createEmpty: () => ({ version: 1, teams: {} }),
+  });
+
+  assert.deepEqual(store.read(), { version: 1, teams: {} });
+  store.write({ version: 1, teams: { defender: {} } });
+  assert.equal(values.get("pokecal.test.v1"), JSON.stringify({ version: 1, teams: { defender: {} } }));
+});
+
 test("ignores blank pokemon ids and set names", () => {
   const store = createSavedSetStore(memoryStorage());
 
