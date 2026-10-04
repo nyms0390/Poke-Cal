@@ -8,7 +8,9 @@ import {
   checkSurvival,
   compareSpeed,
   loadQuickContext,
+  parseOptions,
 } from "../.agents/skills/poke-strategy/scripts/quick.mjs";
+import { parseBooleanOption } from "../src/data/strategy-tools.js";
 
 const context = await loadQuickContext();
 const quickScript = fileURLToPath(new URL(
@@ -172,4 +174,82 @@ test("Quick mode CLI prints only the compact answer", () => {
 
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stdout, "Eelektross-Mega is faster — 145 vs 96.\n");
+});
+
+test("boolean options parse CLI words instead of treating any string as true", () => {
+  for (const value of [true, 1, "true", "1", "yes", "on", "TRUE", " On "]) {
+    assert.equal(parseBooleanOption(value), true, String(value));
+  }
+  for (const value of [undefined, null, false, 0, "false", "0", "no", "off", "OFF"]) {
+    assert.equal(parseBooleanOption(value), false, String(value));
+  }
+  assert.throws(() => parseBooleanOption("maybe", "trickRoom"), /trickRoom must be true or false/);
+});
+
+test("Quick mode CLI options keep bare flags true and pass values through", () => {
+  assert.deepEqual(
+    parseOptions(["--trick-room", "false", "--critical", "--left-speed-stage", "-1", "--json"]),
+    { trickRoom: "false", critical: true, leftSpeedStage: "-1", json: true },
+  );
+});
+
+test("Quick mode treats --trick-room false as no Trick Room", () => {
+  const base = {
+    left: "pelipper",
+    right: "eelektrossmega",
+    leftSpread: "Modest:31/0/1/5/18/11",
+    rightSpread: "Timid:2/0/0/32/0/32",
+  };
+  const plain = compareSpeed(context, base);
+  for (const off of ["false", "0", "no", "off"]) {
+    assert.deepEqual(compareSpeed(context, { ...base, trickRoom: off }), plain, off);
+  }
+  for (const on of ["true", "1", "yes", "on", true]) {
+    const result = compareSpeed(context, { ...base, trickRoom: on });
+    assert.equal(result.verdict, "LEFT", String(on));
+    assert.equal(result.summary, "Pelipper moves first in Trick Room — 96 vs 145.");
+  }
+  assert.deepEqual(compareSpeed(context, { ...base, leftTailwind: "false" }), plain);
+});
+
+test("Quick mode treats --critical false as a normal hit", () => {
+  const base = {
+    attacker: "eelektrossmega",
+    defender: "milotic",
+    move: "thunder",
+    attackerSpread: "Quiet:32/2/0/32/0/0",
+    defenderSpread: "Calm:20/0/20/4/8/14",
+    targetType: "Water",
+    weather: "RainDance",
+  };
+  const normal = checkSurvival(context, base);
+  const critical = checkSurvival(context, { ...base, critical: true });
+  assert.notDeepEqual(critical, normal);
+  assert.deepEqual(checkSurvival(context, { ...base, critical: "false" }), normal);
+  assert.deepEqual(checkSurvival(context, { ...base, critical: "off", lightScreen: "no" }), normal);
+  assert.deepEqual(checkSurvival(context, { ...base, critical: "yes" }), critical);
+});
+
+test("Quick mode CLI honours explicit false boolean values", () => {
+  const run = (...flags) => spawnSync(process.execPath, [
+    quickScript,
+    "speed",
+    "--left", "pelipper",
+    "--right", "eelektrossmega",
+    "--left-spread", "Modest:31/0/1/5/18/11",
+    "--right-spread", "Timid:2/0/0/32/0/32",
+    ...flags,
+  ], { encoding: "utf8" });
+
+  const off = run("--trick-room", "false", "--json", "no");
+  assert.equal(off.status, 0, off.stderr);
+  assert.equal(off.stdout, "Eelektross-Mega is faster — 145 vs 96.\n");
+
+  const on = run("--trick-room");
+  assert.equal(on.status, 0, on.stderr);
+  assert.equal(on.stdout, "Pelipper moves first in Trick Room — 96 vs 145.\n");
+
+  const invalid = run("--trick-room", "maybe");
+  assert.equal(invalid.status, 1);
+  assert.match(invalid.stderr, /trickRoom must be true or false/);
 });

@@ -2,7 +2,13 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createStrategyContext, compareSpeed, calculateDamageMatchup, checkSurvival } from "../../../../src/data/strategy-tools.js";
+import {
+  calculateDamageMatchup,
+  checkSurvival,
+  compareSpeed,
+  createStrategyContext,
+  parseBooleanOption,
+} from "../../../../src/data/strategy-tools.js";
 
 const DATA_URL = new URL("../../../../public/", import.meta.url);
 
@@ -29,17 +35,18 @@ export async function runCli(argv = process.argv.slice(2)) {
     throw new Error("Usage: quick.mjs speed|survive [--option value]");
   }
 
-  process.stdout.write(options.json ? `${JSON.stringify(result)}\n` : `${result.summary}\n`);
+  process.stdout.write(parseBooleanOption(options.json, "json") ? `${JSON.stringify(result)}\n` : `${result.summary}\n`);
   return result;
 }
 
-function parseOptions(args) {
+// `--flag` alone is true; `--flag value` keeps the string, and boolean options are parsed by
+// parseBooleanOption in strategy-tools ("false"/"0"/"no"/"off" -> false).
+export function parseOptions(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 1) {
     const token = args[index];
     if (!token.startsWith("--")) throw new Error(`Unexpected argument: ${token}`);
     const key = token.slice(2).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
-    if (key === "json") { options.json = true; continue; }
     const value = args[index + 1];
     if (value === undefined || value.startsWith("--")) {
       options[key] = true;

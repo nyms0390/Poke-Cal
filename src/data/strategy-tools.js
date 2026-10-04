@@ -10,6 +10,19 @@ import { finalSpeed } from "../engine/speed.js";
 import { normalizeId } from "../identifiers.js";
 
 const NEUTRAL_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+const TRUE_WORDS = new Set(["true", "1", "yes", "on"]);
+const FALSE_WORDS = new Set(["false", "0", "no", "off"]);
+
+// Parses a boolean option that may arrive as a CLI string. Missing values are false; "false",
+// "0", "no" and "off" are false (Boolean("false") would be true); anything else is rejected.
+export function parseBooleanOption(value, name = "option") {
+  if (value === undefined || value === null || value === false || value === 0) return false;
+  if (value === true || value === 1) return true;
+  const word = String(value).trim().toLowerCase();
+  if (TRUE_WORDS.has(word)) return true;
+  if (FALSE_WORDS.has(word)) return false;
+  throw new TypeError(`${name} must be true or false (got ${String(value).slice(0, 40)}).`);
+}
 
 export function createStrategyContext({ pokemon = [], abilities = [], moves = [], items = [] } = {}) {
   const pokemonLookup = new Map();
@@ -50,7 +63,7 @@ export function compareSpeed(context, options = {}) {
     ability: options.leftAbility,
     item: options.leftItem,
     status: options.leftStatus,
-    tailwind: options.leftTailwind,
+    tailwind: parseBooleanOption(options.leftTailwind, "leftTailwind"),
     stages: { spe: options.leftSpeedStage },
   });
   const right = sideState(context, options.right, {
@@ -58,13 +71,13 @@ export function compareSpeed(context, options = {}) {
     ability: options.rightAbility,
     item: options.rightItem,
     status: options.rightStatus,
-    tailwind: options.rightTailwind,
+    tailwind: parseBooleanOption(options.rightTailwind, "rightTailwind"),
     stages: { spe: options.rightSpeedStage },
   });
   const field = createField({
     weather: options.weather ?? "",
     terrain: options.terrain ?? "",
-    trickRoom: Boolean(options.trickRoom),
+    trickRoom: parseBooleanOption(options.trickRoom, "trickRoom"),
   });
   const leftSpeed = finalSpeed(left, field);
   const rightSpeed = finalSpeed(right, field);
@@ -79,11 +92,11 @@ export function compareSpeed(context, options = {}) {
   }
 
   const faster = leftSpeed > rightSpeed ? left : right;
-  const first = options.trickRoom
+  const first = field.trickRoom
     ? leftSpeed < rightSpeed ? left : right
     : faster;
   const verdict = first === left ? "LEFT" : "RIGHT";
-  const summary = options.trickRoom
+  const summary = field.trickRoom
     ? `${first.pokemon.name} moves first in Trick Room — ${leftSpeed} vs ${rightSpeed}.`
     : `${faster.pokemon.name} is faster — ${Math.max(leftSpeed, rightSpeed)} vs ${Math.min(leftSpeed, rightSpeed)}.`;
 
@@ -128,22 +141,22 @@ export function calculateDamageMatchup(context, options = {}) {
     format: options.format ?? "doubles",
     weather: options.weather ?? "",
     terrain: options.terrain ?? "",
-    gravity: Boolean(options.gravity),
+    gravity: parseBooleanOption(options.gravity, "gravity"),
     attackerSide: {
-      helpingHand: Boolean(options.helpingHand),
-      powerSpot: Boolean(options.powerSpot),
-      battery: Boolean(options.battery),
-      steelySpirit: Boolean(options.steelySpirit),
-      flowerGift: Boolean(options.attackerFlowerGift),
-      tailwind: Boolean(options.attackerTailwind),
+      helpingHand: parseBooleanOption(options.helpingHand, "helpingHand"),
+      powerSpot: parseBooleanOption(options.powerSpot, "powerSpot"),
+      battery: parseBooleanOption(options.battery, "battery"),
+      steelySpirit: parseBooleanOption(options.steelySpirit, "steelySpirit"),
+      flowerGift: parseBooleanOption(options.attackerFlowerGift, "attackerFlowerGift"),
+      tailwind: parseBooleanOption(options.attackerTailwind, "attackerTailwind"),
     },
     defenderSide: {
-      reflect: Boolean(options.reflect),
-      lightScreen: Boolean(options.lightScreen),
-      auroraVeil: Boolean(options.auroraVeil),
-      friendGuard: Boolean(options.friendGuard),
-      flowerGift: Boolean(options.defenderFlowerGift),
-      tailwind: Boolean(options.defenderTailwind),
+      reflect: parseBooleanOption(options.reflect, "reflect"),
+      lightScreen: parseBooleanOption(options.lightScreen, "lightScreen"),
+      auroraVeil: parseBooleanOption(options.auroraVeil, "auroraVeil"),
+      friendGuard: parseBooleanOption(options.friendGuard, "friendGuard"),
+      flowerGift: parseBooleanOption(options.defenderFlowerGift, "defenderFlowerGift"),
+      tailwind: parseBooleanOption(options.defenderTailwind, "defenderTailwind"),
     },
   });
   const result = calculateDamage({
@@ -153,8 +166,8 @@ export function calculateDamageMatchup(context, options = {}) {
     attackerState,
     defenderState,
     field,
-    critical: Boolean(options.critical),
-    moveOptions: options.moveOptions ?? {},
+    critical: parseBooleanOption(options.critical, "critical"),
+    moveOptions: normalizedMoveOptions(options.moveOptions),
   });
   return {
     ...result,
@@ -239,7 +252,7 @@ export function sideState(context, pokemonName, overrides = {}) {
     status: overrides.status ?? "",
     currentHpFraction: clampFraction(overrides.currentHpFraction),
     teraType: overrides.teraType ?? "",
-    tailwind: Boolean(overrides.tailwind),
+    tailwind: parseBooleanOption(overrides.tailwind, "tailwind"),
     speedMultiplier: 1,
   };
 }
@@ -274,6 +287,14 @@ function normalizedStages(stages = {}) {
     normalized[stat] = stage;
   }
   return normalized;
+}
+
+function normalizedMoveOptions(moveOptions = {}) {
+  if (moveOptions?.singleTarget === undefined) return moveOptions ?? {};
+  return {
+    ...moveOptions,
+    singleTarget: parseBooleanOption(moveOptions.singleTarget, "singleTarget"),
+  };
 }
 
 function formatPercent(value) {
