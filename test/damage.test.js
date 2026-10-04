@@ -6146,3 +6146,32 @@ test("calculateDamage clamps stages and coerces SP at the engine boundary", () =
   assert.deepEqual(boosted({ spa: 9, spd: 6 }).rolls.length, 16);
   assert.match(boosted({ spa: 9, spd: 6 }).notes.join(" "), /power 260/);
 });
+
+test("an SP total above 66 is still calculated but warned about", () => {
+  const tackle = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 40 };
+  const run = (attackerSp, defenderSp, move = tackle) => calculateDamage({ attacker: pikachu, defender: squirtle, move,
+    attackerState: { ...neutralState, sp: attackerSp }, defenderState: { ...neutralState, sp: defenderSp } });
+  const legal = run({ hp: 2, atk: 32, spe: 32 }, { hp: 32, def: 32, spd: 2 });
+  assert.deepEqual(legal.warnings, []);
+  assert.equal(legal.notes.some((note) => /SP total/.test(note)), false);
+
+  const over = run({ hp: 16, atk: 32, spe: 32 }, { hp: 32, def: 32, spd: 32, spe: "32" });
+  assert.equal(over.supported, true);
+  assert.deepEqual(over.rolls, run({ hp: 16, atk: 32, spe: 32 }, { hp: 32, def: 32 }).rolls);
+  assert.equal(over.notes.includes("Attacker SP total 80 exceeds 66"), true);
+  assert.equal(over.notes.includes("Defender SP total 128 exceeds 66"), true);
+  assert.deepEqual(over.warnings, [
+    { code: "sp-total-exceeded", side: "attacker", total: 80, limit: 66, message: "Attacker SP total 80 exceeds 66" },
+    { code: "sp-total-exceeded", side: "defender", total: 128, limit: 66, message: "Defender SP total 128 exceeds 66" },
+  ]);
+
+  const immune = calculateDamage({ attacker: pikachu, defender: { ...squirtle, types: ["Ghost"] }, move: tackle,
+    attackerState: { ...neutralState, sp: { hp: 16, atk: 32, spe: 32 } }, defenderState: neutralState });
+  assert.equal(immune.typeMultiplier, 0);
+  assert.deepEqual(immune.warnings.map(({ side }) => side), ["attacker"]);
+  assert.equal(calculateDamage({ attacker: pikachu, defender: squirtle, move: null,
+    attackerState: { ...neutralState, sp: { hp: 32, atk: 32, spe: 32 } } }).warnings, undefined);
+  const fixed = run({ hp: 16, atk: 32, spe: 32 }, {},
+    { id: "dragonrage", name: "Dragon Rage", type: "Dragon", category: "Special", basePower: 0, damage: 40 });
+  assert.equal(fixed.notes.includes("Attacker SP total 80 exceeds 66"), true);
+});

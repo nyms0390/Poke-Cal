@@ -1,6 +1,7 @@
 import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
+import { STAT_KEYS } from "./constants.js";
 import { createField, isGrounded } from "./field.js";
 import {
   moveEffect,
@@ -14,6 +15,7 @@ import {
 import { applyHitCountOverride, applyModifier, chainModifiers, chainValue, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 
+const SP_TOTAL_LIMIT = 66;
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const SPREAD_MODIFIER = 3072;
@@ -113,8 +115,39 @@ export function unsupportedMoveReason(move) {
 /**
  * @param {object} input
  * @param {{singleTarget?: boolean}} [input.moveOptions] Override spread targeting for this move.
+ * Supported results carry `warnings` (machine-readable, e.g. an SP total above 66) whose
+ * messages are also appended to `notes`; the damage is still calculated.
  */
-export function calculateDamage({
+export function calculateDamage(input = {}) {
+  const result = calculateDamageUnchecked(input ?? {});
+  if (!result.supported) return result;
+  const warnings = spTotalWarnings(input ?? {});
+  return {
+    ...result,
+    notes: [...result.notes, ...warnings.map(({ message }) => message)],
+    warnings,
+  };
+}
+
+/** Champions caps a Pokémon's SP at 66 in total; over-limit spreads are calculated with a warning. */
+export function spTotalWarnings({ attackerState, defenderState } = {}) {
+  return [["attacker", "Attacker", attackerState], ["defender", "Defender", defenderState]]
+    .map(([side, label, state]) => ({ side, label, total: spTotal(state?.sp) }))
+    .filter(({ total }) => total > SP_TOTAL_LIMIT)
+    .map(({ side, label, total }) => ({
+      code: "sp-total-exceeded",
+      side,
+      total,
+      limit: SP_TOTAL_LIMIT,
+      message: `${label} SP total ${total} exceeds ${SP_TOTAL_LIMIT}`,
+    }));
+}
+
+function spTotal(sp) {
+  return STAT_KEYS.reduce((total, stat) => total + normalizeSp(sp?.[stat]), 0);
+}
+
+function calculateDamageUnchecked({
   attacker,
   defender,
   move,
