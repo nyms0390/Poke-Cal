@@ -468,11 +468,19 @@ export function calculateDamage({
   };
   const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, iceFaceActive));
   const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, iceFaceActive));
-  const baseRollDistribution = hitCounts.min === hitCounts.max
-    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit, { firstUse: false })
-    : null;
-  const firstRollDistribution = hitCounts.min === hitCounts.max && (iceFaceActive || sturdyActive || firstHitDiffers)
-    ? fullMoveDistribution(hitPowers, hitCounts.min, damageForHit, {
+  // One use of the move: a weighted mixture over hit counts, each hit an independent roll.
+  const hitWeights = hitCountWeights(move, ctx.hitCountRange, hitCounts);
+  const accuracyChained = hitWeights.length > 1 && hitCountsAreAccuracyChained(move, hitCounts);
+  if (accuracyChained) {
+    notes.push(`${move.name} hit count assumes ${multiAccuracyPercent(move)}% accuracy for each hit after the first`);
+  }
+  const moveDistribution = (options) => mixHitCountDistributions(hitWeights.map(({ hits, chance }) => ({
+    chance,
+    distribution: fullMoveDistribution(successiveHits ? hitPowers.slice(0, hits) : hitPowers, hits, damageForHit, options),
+  })));
+  const baseRollDistribution = moveDistribution({ firstUse: false });
+  const firstRollDistribution = iceFaceActive || sturdyActive || firstHitDiffers
+    ? moveDistribution({
       negateFirstHit: iceFaceActive,
       firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
       firstUse: true,
@@ -483,18 +491,16 @@ export function calculateDamage({
     : hitCounts.min === hitCounts.max
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
-  const actualHitCount = successiveHits ? hitCounts.min : hitPowers.length > 1 ? hitPowers.length : hitCounts.min;
-  const sturdyAffectsKo = sturdyActive && actualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
+  const maxActualHitCount = successiveHits ? hitCounts.max : hitPowers.length > 1 ? hitPowers.length : hitCounts.max;
+  const sturdyAffectsKo = sturdyActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
   const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
     ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
     : null;
-  const recovery = sturdyText || !baseRollDistribution
+  const recovery = sturdyText
     ? null
     : defenderRecovery({ defender, defenderState, defenderTypes, defenderMaxHp, defenderCurrentHp, field: effectiveField, suppressDefenderAbility, attackerState, suppressAttackerAbility });
   let ko = sturdyText ??
-    (baseRollDistribution
-      ? koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution, recovery)
-      : unavailableKoSummary("KO chance unavailable for variable hit count"));
+    koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution, recovery);
   if (sturdyAffectsKo && !sturdyText) {
     ko = { ...ko, text: `${ko.text} (Sturdy)` };
   }
@@ -510,9 +516,10 @@ export function calculateDamage({
     minPercent: percent(Math.min(...rolls), defenderMaxHp),
     maxPercent: percent(Math.max(...rolls), defenderMaxHp),
     // Weighted damage of this use of the move (all hits, first-hit effects such as Multiscale,
-    // Sturdy and Ice Face included). `rolls` stays the per-roll display list; for multi-hit moves
-    // it is not a set of equally likely outcomes. null when the hit count is variable.
-    distribution: firstRollDistribution ? sortedDistribution(firstRollDistribution) : null,
+    // Sturdy and Ice Face included; variable hit counts weighted as Showdown samples them).
+    // `rolls` stays the per-roll display list; for multi-hit moves it is not a set of equally
+    // likely outcomes, and for variable hit counts it spans the fewest to the most hits.
+    distribution: sortedDistribution(firstRollDistribution),
     defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
@@ -645,8 +652,55 @@ function koSummaryForRecalculatedFixedDamage(ctx, firstDamage, maxHits = 5) {
   };
 }
 
-function unavailableKoSummary(text) {
-  return { hits: null, chance: null, text };
+// Showdown (gen 5+) samples 2-5 hit moves from [2×7, 3×7, 4×3, 5×3] out of 20.
+const STANDARD_MULTIHIT_WEIGHTS = [
+  { hits: 2, chance: 0.35 },
+  { hits: 3, chance: 0.35 },
+  { hits: 4, chance: 0.15 },
+  { hits: 5, chance: 0.15 },
+];
+
+/**
+ * Probability of each hit count for one use of the move, given the resolved hit-count range.
+ * - Unmodified 2-5 hit moves: 35/35/15/15 (Showdown's sample table).
+ * - Loaded Dice on a 2-5 hit move (range 4-5): Showdown rerolls 2-3 to 4 or 5, so 50/50.
+ * - Population Bomb (multiaccuracy, range 1-10): every hit after the first checks accuracy
+ *   and the move stops at the first miss; the damage calc assumes the first hit lands.
+ * - Loaded Dice on Population Bomb (range 4-10): uniform, as Showdown's 10 - random(7).
+ * - Skill Link / explicit hit counts collapse the range to one count.
+ * Any other range falls back to uniform weights.
+ */
+export function hitCountWeights(move, baseRange, hitCounts) {
+  const { min, max } = hitCounts;
+  if (min === max) return [{ hits: min, chance: 1 }];
+  if (baseRange?.min === 2 && baseRange?.max === 5 && min === 2 && max === 5) return STANDARD_MULTIHIT_WEIGHTS;
+  if (hitCountsAreAccuracyChained(move, hitCounts)) {
+    const accuracy = multiAccuracyPercent(move) / 100;
+    return Array.from({ length: max - min + 1 }, (_, index) => {
+      const hits = min + index;
+      return { hits, chance: hits === max ? accuracy ** (hits - 1) : accuracy ** (hits - 1) * (1 - accuracy) };
+    }).filter(({ chance }) => chance > 0);
+  }
+  return Array.from({ length: max - min + 1 }, (_, index) => ({ hits: min + index, chance: 1 / (max - min + 1) }));
+}
+
+function hitCountsAreAccuracyChained(move, hitCounts) {
+  return Boolean(move?.multiaccuracy) && hitCounts.min === 1 && hitCounts.max > 1;
+}
+
+function multiAccuracyPercent(move) {
+  const accuracy = Number(move?.accuracy);
+  if (move?.accuracy === true || !Number.isFinite(accuracy)) return 100;
+  return Math.max(0, Math.min(100, accuracy));
+}
+
+function mixHitCountDistributions(weighted) {
+  if (weighted.length === 1 && weighted[0].chance === 1) return weighted[0].distribution;
+  const totals = new Map();
+  for (const { chance: weight, distribution } of weighted) {
+    for (const { damage, chance } of distribution) totals.set(damage, (totals.get(damage) ?? 0) + weight * chance);
+  }
+  return [...totals].map(([damage, chance]) => ({ damage, chance }));
 }
 
 function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHit = false, firstHitCap = null, firstUse = true } = {}) {

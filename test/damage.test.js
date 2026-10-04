@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   calculateDamage,
   formatDamageResult,
+  survivalChance,
   unsupportedMoveReason,
 } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
@@ -3482,6 +3483,7 @@ test("displays Population Bomb's accuracy-chained hit damage range", () => {
     type: "Normal",
     category: "Physical",
     basePower: 20,
+    accuracy: 90,
     multihit: 10,
     multiaccuracy: true,
   };
@@ -3523,8 +3525,9 @@ test("displays Population Bomb's accuracy-chained hit damage range", () => {
     [singleHitResult.minDamage, singleHitResult.maxDamage * 10],
   );
   assert.equal(standard.notes.includes("Population Bomb hits 1-10 times"), true);
-  assert.equal(standard.ko.chance, null);
-  assert.equal(standard.ko.text, "KO chance unavailable for variable hit count");
+  assert.equal(standard.notes.includes("Population Bomb hit count assumes 90% accuracy for each hit after the first"), true);
+  assert.equal(Number.isFinite(standard.ko.chance), true);
+  assert.doesNotMatch(standard.ko.text, /unavailable/);
   assert.deepEqual(
     [loadedDice.minDamage, loadedDice.maxDamage],
     [singleHitResult.minDamage * 4, singleHitResult.maxDamage * 10],
@@ -3535,6 +3538,158 @@ test("displays Population Bomb's accuracy-chained hit damage range", () => {
     [singleHitResult.minDamage * 10, singleHitResult.maxDamage * 10],
   );
   assert.equal(skillLink.notes.includes("Population Bomb hits 10 times"), true);
+});
+
+// Independent brute force for variable hit counts: enumerate every roll combination for every
+// hit count (no convolution) and weight each hit count as Showdown samples it.
+function bruteForceMoveUse(weights, firstHitRolls, laterHitRolls, firstHitCap = Infinity) {
+  const group = (rolls) => [...rolls.reduce((map, damage) => map.set(damage, (map.get(damage) ?? 0) + 1), new Map())]
+    .map(([damage, count]) => ({ damage, chance: count / rolls.length }));
+  const first = group(firstHitRolls.map((damage) => Math.min(damage, firstHitCap)));
+  const later = group(laterHitRolls);
+  const totals = new Map();
+  for (const { hits, chance } of weights) {
+    const visit = (index, sum, probability) => {
+      if (index === hits) {
+        totals.set(sum, (totals.get(sum) ?? 0) + chance * probability);
+        return;
+      }
+      for (const outcome of index === 0 ? first : later) visit(index + 1, sum + outcome.damage, probability * outcome.chance);
+    };
+    visit(0, 0, 1);
+  }
+  return totals;
+}
+
+function assertDistributionMatches(distribution, expected, label) {
+  assert.deepEqual(distribution.map(({ damage }) => damage), [...expected.keys()].sort((a, b) => a - b), label);
+  for (const { damage, chance } of distribution) {
+    assert.ok(Math.abs(chance - expected.get(damage)) < 1e-12, `${label}: P(${damage})`);
+  }
+  assert.ok(Math.abs(distribution.reduce((sum, { chance }) => sum + chance, 0) - 1) < 1e-12, `${label}: total`);
+}
+
+function bruteForceKoChance(firstUse, laterUse, hp, uses) {
+  let states = new Map([[0, 1]]);
+  for (let use = 0; use < uses; use += 1) {
+    const next = new Map();
+    for (const [sum, probability] of states) {
+      for (const [damage, chance] of use === 0 ? firstUse : laterUse) {
+        next.set(sum + damage, (next.get(sum + damage) ?? 0) + probability * chance);
+      }
+    }
+    states = next;
+  }
+  return [...states].filter(([sum]) => sum >= hp).reduce((total, [, chance]) => total + chance, 0);
+}
+
+const SHOWDOWN_2_TO_5_WEIGHTS = [
+  { hits: 2, chance: 0.35 }, { hits: 3, chance: 0.35 }, { hits: 4, chance: 0.15 }, { hits: 5, chance: 0.15 },
+];
+
+test("2-5 hit moves weight 35/35/15/15 hit counts with independent rolls and first-hit effects", () => {
+  const attacker = { id: "seeder", name: "Seeder", types: ["Grass"],
+    baseStats: { hp: 80, atk: 130, def: 80, spa: 80, spd: 80, spe: 80 } };
+  const bulletSeed = { id: "bulletseed", name: "Bullet Seed", type: "Grass", category: "Physical", basePower: 25,
+    multihit: [2, 5] };
+  const singleHit = { id: "bulletseedsinglehit", name: "Single Seed", type: "Grass", category: "Physical", basePower: 25 };
+  const multiscale = { id: "multiscale", name: "Multiscale" };
+  for (const [baseHp, ability] of [[50, null], [70, multiscale]]) {
+    const defender = { id: "seedtarget", name: "Seedtarget", types: ["Water"],
+      baseStats: { hp: baseHp, atk: 80, def: 60, spa: 80, spd: 80, spe: 80 } };
+    const run = (move, defenderAbility = ability) => calculateDamage({ attacker, defender, move,
+      attackerState: neutralState, defenderState: { ...neutralState, ability: defenderAbility } });
+    const result = run(bulletSeed);
+    const firstHitRolls = run(singleHit).rolls;
+    const laterHitRolls = run(singleHit, null).rolls;
+    const firstUse = bruteForceMoveUse(SHOWDOWN_2_TO_5_WEIGHTS, firstHitRolls, laterHitRolls);
+    const laterUse = bruteForceMoveUse(SHOWDOWN_2_TO_5_WEIGHTS, laterHitRolls, laterHitRolls);
+    const label = ability?.name ?? "no ability";
+    assertDistributionMatches(result.distribution, firstUse, label);
+    const ohko = bruteForceKoChance(firstUse, laterUse, result.defenderCurrentHp, 1);
+    assert.ok(ohko > 0 && ohko < 1, label);
+    assert.equal(result.ko.hits, 1, label);
+    assert.ok(Math.abs(result.ko.chance - ohko) < 1e-12, label);
+    assert.equal(result.ko.text, `${(ohko * 100).toFixed(1)}% chance to OHKO`, label);
+    assert.ok(Math.abs(survivalChance(result) - (1 - ohko)) < 1e-12, label);
+    // Display semantics are unchanged: fewest-hit minimum to most-hit maximum.
+    assert.equal(result.minDamage, Math.min(...firstHitRolls) + Math.min(...laterHitRolls));
+    assert.equal(result.maxDamage, Math.max(...firstHitRolls) + 4 * Math.max(...laterHitRolls));
+  }
+});
+
+test("Loaded Dice and Skill Link reweight 2-5 hit counts like Showdown", () => {
+  const attacker = { id: "seeder", name: "Seeder", types: ["Grass"],
+    baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 80 } };
+  const defender = { id: "seedtank", name: "Seedtank", types: ["Water"],
+    baseStats: { hp: 110, atk: 80, def: 90, spa: 80, spd: 80, spe: 80 } };
+  const bulletSeed = { id: "bulletseed", name: "Bullet Seed", type: "Grass", category: "Physical", basePower: 25,
+    multihit: [2, 5] };
+  const singleHit = { id: "bulletseedsinglehit", name: "Single Seed", type: "Grass", category: "Physical", basePower: 25 };
+  const perHit = calculateDamage({ attacker, defender, move: singleHit,
+    attackerState: neutralState, defenderState: neutralState }).rolls;
+  for (const [attackerState, weights, label] of [
+    [{ ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } },
+      [{ hits: 4, chance: 0.5 }, { hits: 5, chance: 0.5 }], "Loaded Dice"],
+    [{ ...neutralState, ability: { id: "skilllink", name: "Skill Link" } }, [{ hits: 5, chance: 1 }], "Skill Link"],
+  ]) {
+    const result = calculateDamage({ attacker, defender, move: bulletSeed, attackerState, defenderState: neutralState });
+    const use = bruteForceMoveUse(weights, perHit, perHit);
+    assertDistributionMatches(result.distribution, use, label);
+    const hits = [1, 2, 3, 4, 5].find((uses) => bruteForceKoChance(use, use, result.defenderCurrentHp, uses) > 0);
+    assert.equal(result.ko.hits, hits, label);
+    assert.ok(Math.abs(result.ko.chance - bruteForceKoChance(use, use, result.defenderCurrentHp, hits)) < 1e-12, label);
+  }
+});
+
+test("Sturdy caps only the first hit of a variable multi-hit move", () => {
+  const attacker = { id: "seeder", name: "Seeder", types: ["Grass"],
+    baseStats: { hp: 80, atk: 150, def: 80, spa: 80, spd: 80, spe: 80 } };
+  const defender = { id: "sturdyrock", name: "Sturdyrock", types: ["Water", "Ground"],
+    baseStats: { hp: 20, atk: 80, def: 30, spa: 80, spd: 80, spe: 80 } };
+  const sturdy = { id: "sturdy", name: "Sturdy" };
+  const bulletSeed = { id: "bulletseed", name: "Bullet Seed", type: "Grass", category: "Physical", basePower: 25,
+    multihit: [2, 5] };
+  const singleHit = { id: "bulletseedsinglehit", name: "Single Seed", type: "Grass", category: "Physical", basePower: 25 };
+  const perHit = calculateDamage({ attacker, defender, move: singleHit,
+    attackerState: neutralState, defenderState: neutralState }).rolls;
+  const result = calculateDamage({ attacker, defender, move: bulletSeed,
+    attackerState: neutralState, defenderState: { ...neutralState, ability: sturdy } });
+  assert.ok(Math.max(...perHit) >= result.defenderHp, "a single hit can exceed max HP");
+  const use = bruteForceMoveUse(SHOWDOWN_2_TO_5_WEIGHTS, perHit, perHit, result.defenderHp - 1);
+  assertDistributionMatches(result.distribution, use, "Sturdy");
+  assert.equal(result.ko.text, "guaranteed OHKO");
+});
+
+test("Population Bomb weights accuracy-chained hits, Loaded Dice 4-10 and Skill Link 10", () => {
+  const maushold = { id: "maushold", name: "Maushold", types: ["Normal"],
+    baseStats: { hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111 } };
+  const target = { id: "bombtarget", name: "Bombtarget", types: ["Normal"],
+    baseStats: { hp: 100, atk: 80, def: 110, spa: 80, spd: 80, spe: 50 } };
+  const populationBomb = { id: "populationbomb", name: "Population Bomb", type: "Normal", category: "Physical",
+    basePower: 20, accuracy: 90, multihit: 10, multiaccuracy: true };
+  const singleHit = { id: "populationbombsinglehit", name: "Single Bomb", type: "Normal", category: "Physical",
+    basePower: 20 };
+  const perHit = calculateDamage({ attacker: maushold, defender: target, move: singleHit,
+    attackerState: neutralState, defenderState: neutralState }).rolls;
+  const chained = Array.from({ length: 10 }, (_, index) => ({
+    hits: index + 1,
+    chance: index === 9 ? 0.9 ** 9 : 0.9 ** index * 0.1,
+  }));
+  const uniform = Array.from({ length: 7 }, (_, index) => ({ hits: index + 4, chance: 1 / 7 }));
+  for (const [attackerState, weights, label] of [
+    [neutralState, chained, "accuracy chain"],
+    [{ ...neutralState, item: { id: "loadeddice", name: "Loaded Dice" } }, uniform, "Loaded Dice"],
+    [{ ...neutralState, ability: { id: "skilllink", name: "Skill Link" } }, [{ hits: 10, chance: 1 }], "Skill Link"],
+  ]) {
+    const result = calculateDamage({ attacker: maushold, defender: target, move: populationBomb,
+      attackerState, defenderState: neutralState });
+    const use = bruteForceMoveUse(weights, perHit, perHit);
+    assertDistributionMatches(result.distribution, use, label);
+    const ko = result.ko;
+    assert.ok(Math.abs(ko.chance - bruteForceKoChance(use, use, result.defenderCurrentHp, ko.hits)) < 1e-12, label);
+    assert.ok(ko.hits === 1 || bruteForceKoChance(use, use, result.defenderCurrentHp, ko.hits - 1) === 0, label);
+  }
 });
 
 test("supports standard ranged multi-hit moves with a selected hit count", () => {

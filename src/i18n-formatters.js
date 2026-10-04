@@ -31,7 +31,6 @@ function recoverySuffix(text, locale) {
 export function formatKoResult(ko, locale = "en", maxHits = 5) {
   const suffix = recoverySuffix(ko?.text, locale);
   if (!ko || !Number.isFinite(ko.chance) || !ko.hits) {
-    if (locale === "zh-TW" && /variable hit count/i.test(ko?.text ?? "")) return "連續招式次數不定，無法計算擊倒機率";
     if (locale === "zh-TW" && /Sturdy/i.test(ko?.text ?? "")) return "滿 HP 時靠結實存活";
     return locale === "en" && ko?.text ? ko.text : `${tFor(locale, "ko.notWithin", { hits: maxHits })}${suffix}`;
   }
@@ -64,7 +63,6 @@ export function formatKoText(text, locale = "en") {
   if (surviveChance) return `${surviveChance[1]}% 機率擋下一擊`;
   if (/survives 1 hit \(guaranteed\)/i.test(text)) return "必定擋下一擊";
   if (/survives with Sturdy at full HP/i.test(text)) return "滿 HP 時靠結實存活";
-  if (/KO chance unavailable for variable hit count/i.test(text)) return "連續招式次數不定，無法計算擊倒機率";
   return formatDamageReason(text, locale);
 }
 
