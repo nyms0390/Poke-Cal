@@ -2,7 +2,7 @@ import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
 import { STAT_KEYS } from "./constants.js";
-import { createField, isGrounded } from "./field.js";
+import { createField, isGrounded, normalizeField } from "./field.js";
 import {
   moveEffect,
   abilityTypeConversion,
@@ -918,7 +918,7 @@ export function resolveMoveType({ attacker, defender, move, attackerState = {}, 
     move,
     attackerState,
     defenderState,
-    field,
+    field: normalizeField(field),
     suppressAttackerAbility,
   });
 }

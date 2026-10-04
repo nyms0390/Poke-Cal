@@ -1,6 +1,7 @@
 import { normalizeId } from "../identifiers.js";
 import { applyModifier, chainModifiers } from "./modifiers.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
+import { normalizeField } from "./field.js";
 
 const PARADOX_STATS = ["atk", "def", "spa", "spd", "spe"];
 const PARADOX_STAT_LABELS = {
@@ -99,6 +100,7 @@ export function speedBreakdown(state, field = {}, options = {}) {
 /** Ordered ModifySpe modifiers ({ label, value4096, source }) for one side. */
 export function speedModifiers(state, field = {}, options = {}) {
   if (!state?.pokemon) return [];
+  field = normalizeField(field);
   const suppressAbility = Boolean(options.suppressAbility);
   const weather = options.suppressWeather ? "" : normalizeId(field.weather);
   const terrain = normalizeId(field.terrain);
@@ -147,6 +149,7 @@ export function finalSpeed(state, field = {}, options = {}) {
 
 export function paradoxBoost(pokemon, state = {}, field = {}, { suppressAbility = false } = {}) {
   if (suppressAbility) return null;
+  field = normalizeField(field);
   const abilityId = normalizeId(state.ability?.id ?? state.ability?.name);
   const abilityName = state.ability?.name ?? state.ability?.id;
   const boosterEnergy = Boolean(state.boosterEnergy) || hasItem(state, "boosterenergy");

@@ -1,5 +1,5 @@
 import { normalizeId } from "../identifiers.js";
-import { isGrounded } from "./field.js";
+import { isGrounded, normalizeTerrain } from "./field.js";
 import { finalSpeed } from "./speed.js";
 
 export function formatMovePriority(priority) {
@@ -18,7 +18,7 @@ export function effectivePriority(move, state = {}, field = {}, { suppressAbilit
   if (!move) return 0;
   let priority = Number(move.priority ?? 0);
   const moveId = normalizeId(move.id ?? move.name);
-  if (moveId === "grassyglide" && normalizeId(field.terrain) === "grassyterrain" &&
+  if (moveId === "grassyglide" && normalizeId(normalizeTerrain(field?.terrain)) === "grassyterrain" &&
     isGrounded(state?.pokemon, state ?? {}, field)) {
     priority += 1;
   }

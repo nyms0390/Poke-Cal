@@ -7,7 +7,9 @@ import {
   survivalChance,
   unsupportedMoveReason,
 } from "../src/engine/damage.js";
-import { createField } from "../src/engine/field.js";
+import { createField, normalizeField, normalizeTerrain, normalizeWeather } from "../src/engine/field.js";
+import { finalSpeed } from "../src/engine/speed.js";
+import { effectivePriority } from "../src/engine/battle-order.js";
 import { impliedField, impliedStageDefaults } from "../src/engine/modifiers.js";
 
 const pikachu = {
@@ -6174,4 +6176,31 @@ test("an SP total above 66 is still calculated but warned about", () => {
   const fixed = run({ hp: 16, atk: 32, spe: 32 }, {},
     { id: "dragonrage", name: "Dragon Rage", type: "Dragon", category: "Special", basePower: 0, damage: 40 });
   assert.equal(fixed.notes.includes("Attacker SP total 80 exceeds 66"), true);
+});
+
+test("field weather and terrain accept documented short aliases case-insensitively", () => {
+  assert.deepEqual(["sun", "Sun", "SUNNY", "SunnyDay", "rain", "Rain Dance", "sand", "snow", "hail", "", null, "DesolateLand"]
+    .map(normalizeWeather),
+  ["SunnyDay", "SunnyDay", "SunnyDay", "SunnyDay", "RainDance", "RainDance", "Sandstorm", "Snowscape", "Snowscape", "", "", "DesolateLand"]);
+  assert.deepEqual(["electric", "Grassy", "MISTY", "psychic-terrain", "Electric Terrain", ""].map(normalizeTerrain),
+    ["Electric Terrain", "Grassy Terrain", "Misty Terrain", "Psychic Terrain", "Electric Terrain", ""]);
+  assert.deepEqual(createField({ weather: "rain", terrain: "electric" }),
+    createField({ weather: "RainDance", terrain: "Electric Terrain" }));
+  assert.equal(normalizeField({ weather: "snow" }).weather, "Snowscape");
+
+  const ember = { id: "ember", name: "Ember", type: "Fire", category: "Special", basePower: 40 };
+  const damage = (field) => calculateDamage({ attacker: pikachu, defender: pikachu, move: ember,
+    attackerState: neutralState, defenderState: neutralState, field }).rolls;
+  assert.deepEqual(damage({ weather: "SUN" }), damage(createField({ weather: "SunnyDay" })));
+  assert.notDeepEqual(damage({ weather: "sun" }), damage(createField()));
+  assert.deepEqual(damage({ weather: "rain" }), damage(createField({ weather: "RainDance" })));
+
+  const venusaur = { id: "venusaur", name: "Venusaur", types: ["Grass", "Poison"],
+    baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 } };
+  const chlorophyll = { pokemon: venusaur, sp: { spe: 32 }, ability: { id: "chlorophyll", name: "Chlorophyll" } };
+  assert.equal(finalSpeed(chlorophyll, { weather: "sun" }), 2 * finalSpeed(chlorophyll));
+  const surger = { ...chlorophyll, ability: { id: "surgesurfer", name: "Surge Surfer" } };
+  assert.equal(finalSpeed(surger, { terrain: "Electric" }), 2 * finalSpeed(surger));
+  const grassyGlide = { id: "grassyglide", name: "Grassy Glide", type: "Grass", category: "Physical", priority: 0 };
+  assert.equal(effectivePriority(grassyGlide, { pokemon: venusaur }, { terrain: "grassy" }), 1);
 });
