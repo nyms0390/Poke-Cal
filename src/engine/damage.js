@@ -120,10 +120,20 @@ export function calculateDamage({
   move,
   attackerState,
   defenderState,
-  field = createField(),
+  field,
   critical = false,
-  moveOptions = {},
-}) {
+  moveOptions,
+} = {}) {
+  // Validate before anything reads move/state fields, so bad input returns a reason instead of throwing.
+  const unsupported = unsupportedMoveReason(move);
+  if (unsupported) return { supported: false, reason: unsupported };
+  if (!attacker?.baseStats || !defender?.baseStats) {
+    return { supported: false, reason: "Missing attacker or defender data." };
+  }
+  attackerState = attackerState ?? {};
+  defenderState = defenderState ?? {};
+  field = createField(field ?? {});
+  moveOptions = moveOptions ?? {};
   const neutralizingGasActive = hasAnyAbility(attackerState, ["neutralizinggas"]) ||
     hasAnyAbility(defenderState, ["neutralizinggas"]);
   const suppressAttackerAbility = neutralizingGasActive;
@@ -148,8 +158,6 @@ export function calculateDamage({
     ? { ...effectiveField, weather: "SunnyDay", megaSolActive: true }
     : effectiveField;
   const { format: battleFormat, pledgeCombo = false } = effectiveField;
-  const unsupported = unsupportedMoveReason(move);
-  if (unsupported) return { supported: false, reason: unsupported };
 
   const ctx = {
     move,

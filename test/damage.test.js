@@ -6104,3 +6104,29 @@ test("Flying Press adds Flying to its effectiveness but keeps Fighting immunity"
   assert.equal(scrappy.typeMultiplier, 0.5);
   assert.deepEqual(scrappy.rolls, [55, 56, 57, 57, 58, 59, 60, 60, 60, 61, 62, 63, 63, 64, 65, 66]);
 });
+
+test("calculateDamage returns a reason instead of throwing on missing input", () => {
+  assert.deepEqual(calculateDamage({ attacker: pikachu, defender: squirtle, move: null,
+    attackerState: neutralState, defenderState: neutralState }), { supported: false, reason: "Missing move data." });
+  assert.deepEqual(calculateDamage({ attacker: pikachu, defender: squirtle }),
+    { supported: false, reason: "Missing move data." });
+  assert.deepEqual(calculateDamage(), { supported: false, reason: "Missing move data." });
+  const tackle = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 40 };
+  assert.deepEqual(calculateDamage({ attacker: null, defender: squirtle, move: tackle }),
+    { supported: false, reason: "Missing attacker or defender data." });
+});
+
+test("calculateDamage defaults missing states, field and move options", () => {
+  const tackle = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 40 };
+  const expected = calculateDamage({ attacker: pikachu, defender: squirtle, move: tackle,
+    attackerState: neutralState, defenderState: neutralState });
+  for (const input of [
+    { attackerState: undefined, defenderState: undefined },
+    { attackerState: null, defenderState: null, field: null, moveOptions: null },
+    { attackerState: {}, defenderState: {}, field: { format: "doubles" } },
+  ]) {
+    const result = calculateDamage({ attacker: pikachu, defender: squirtle, move: tackle, ...input });
+    assert.equal(result.supported, true);
+    assert.deepEqual(result.rolls, expected.rolls);
+  }
+});
