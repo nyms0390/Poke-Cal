@@ -169,6 +169,8 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     "Mega Sol treats this move as Sunny Day": "超級太陽將此招式視為大晴天",
     "Sandstorm Rock SpD boost": "沙暴提升岩石屬性特防",
     "Immune (ability)": "因特性免疫",
+    "Immune (item)": "因道具免疫",
+    "Snow Ice Def boost": "下雪提升冰屬性防禦",
     "Sun": "大晴天",
     "Rain": "下雨",
     "Sand": "沙暴",
@@ -210,8 +212,19 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     if (hits) return `${moveName}攻擊 ${hits[1]} 次`;
     const hitPowers = /^ hits (\d+) times at (.+)$/.exec(suffix);
     if (hitPowers) return `${moveName}以威力 ${hitPowers[2]} 攻擊 ${hitPowers[1]} 次`;
+    const childHit = /^ hits (\d+) times \(child hit ×(.+)\)$/.exec(suffix);
+    if (childHit) return `${moveName}攻擊 ${childHit[1]} 次（第二擊 ×${childHit[2]}）`;
+    const accuracyChain = /^ hit count assumes (.+)% accuracy for each hit after the first$/.exec(suffix);
+    if (accuracyChain) return `${moveName}的攻擊次數假設第一擊之後每擊命中率為 ${accuracyChain[1]}%`;
     const variableHits = /^ hits (\d+)-(\d+) times$/.exec(suffix);
     if (variableHits) return `${moveName}攻擊 ${variableHits[1]}-${variableHits[2]} 次`;
+  }
+  const spTotal = /^(Attacker|Defender) SP total (\d+) exceeds (\d+)$/.exec(note);
+  if (spTotal) return `${spTotal[1] === "Attacker" ? "攻擊方" : "防守方"} SP 總和 ${spTotal[2]} 超過 ${spTotal[3]}`;
+  const teraFloor = /^Tera (.+) raises (.+) to 60 power$/.exec(note);
+  if (teraFloor) {
+    const teraMove = move?.name === teraFloor[2] ? localizedName(move, locale) : teraFloor[2];
+    return `太晶${localizedTerm("type", teraFloor[1], locale)}使${teraMove}威力提升至 60`;
   }
   const targetMoved = /^Assumes target (already moved|has not moved)$/.exec(note);
   if (targetMoved) return targetMoved[1] === "already moved" ? "假設目標已行動" : "假設目標尚未行動";

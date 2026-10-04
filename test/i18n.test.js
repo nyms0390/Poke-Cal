@@ -168,3 +168,13 @@ test("translateSubtree touches only the given subtree and never third-party cont
     setLocale(previous, { persist: false });
   }
 });
+
+test("formats newer engine notes in zh-TW", () => {
+  const move = { id: "snarl", name: "Snarl", aliases: ["大聲咆哮"] };
+  assert.equal(formatDamageNote("Immune (item)", "zh-TW"), "因道具免疫");
+  assert.equal(formatDamageNote("Snow Ice Def boost", "zh-TW"), "下雪提升冰屬性防禦");
+  assert.equal(formatDamageNote("Attacker SP total 80 exceeds 66", "zh-TW"), "攻擊方 SP 總和 80 超過 66");
+  assert.match(formatDamageNote("Tera Dark raises Snarl to 60 power", "zh-TW", { move }), /^太晶.+使.+威力提升至 60$/);
+  assert.match(formatDamageNote("Snarl hits 2 times (child hit ×0.25)", "zh-TW", { move }), /攻擊 2 次（第二擊 ×0.25）$/);
+  assert.match(formatDamageNote("Snarl hit count assumes 90% accuracy for each hit after the first", "zh-TW", { move }), /每擊命中率為 90%$/);
+});
