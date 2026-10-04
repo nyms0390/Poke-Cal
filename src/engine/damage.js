@@ -416,8 +416,9 @@ export function calculateDamage({
   const burned =
     attackerState.status === "burn" && isPhysical &&
       (suppressAttackerAbility || !hasAbility(attackerState, "guts")) && !moveEffect(moveId).ignoreBurn;
+  const moveTarget = moveEffect(moveId).target?.(ctx) ?? move.target;
   const spreadHit =
-    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(move.target) && !moveOptions.singleTarget;
+    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(moveTarget) && !moveOptions.singleTarget;
   const sourceDamageMultiplier = moveEffect(moveId).sourceDamageMultiplier?.(ctx) ?? 1;
   if (sourceDamageMultiplier !== 1) {
     notes.push(`${move.name} target-state damage ×${sourceDamageMultiplier}`);

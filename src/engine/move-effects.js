@@ -220,6 +220,10 @@ export const MOVE_EFFECTS = {
 
   // -- other terrain/weather power boosts ---------------------------------
   expandingforce: {
+    // In Psychic Terrain a grounded user's Expanding Force hits all adjacent foes (Showdown onModifyMove).
+    target: (ctx) => (normalizeId(ctx.field.terrain) === "psychicterrain" && isGrounded(ctx.attacker, ctx.attackerState, ctx.field)
+      ? "allAdjacentFoes"
+      : undefined),
     basePower: (ctx) => {
       if (normalizeId(ctx.field.terrain) !== "psychicterrain" || !isGrounded(ctx.attacker, ctx.attackerState, ctx.field)) return undefined;
       return Math.floor(ctx.move.basePower * 1.5);

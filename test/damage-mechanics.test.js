@@ -172,3 +172,23 @@ test("Foul Play uses the target's Attack boosts unless the target has Unaware", 
   const unawareUser = calculateDamage({ attacker: clefable, defender: garchomp, move: foulPlay, attackerState: { ...neutral, ability: unaware }, defenderState: boostedTarget(null), field: singles });
   assert.deepEqual([unawareUser.minDamage, unawareUser.maxDamage], [94, 111]);
 });
+
+test("Expanding Force becomes a spread move in Psychic Terrain", () => {
+  const indeedee = { id: "indeedee", name: "Indeedee", types: ["Psychic", "Normal"], baseStats: { hp: 60, atk: 65, def: 55, spa: 105, spd: 95, spe: 95 } };
+  const expandingForce = { id: "expandingforce", name: "Expanding Force", type: "Psychic", category: "Special", basePower: 80, target: "normal", flags: {} };
+  const modest = { nature: "Modest", sp: { spa: 32 }, stages: {}, ability: null, item: null };
+  const calc = (field) => calculateDamage({ attacker: indeedee, defender: garchomp, move: expandingForce, attackerState: modest, defenderState: { nature: "Hardy", sp: {}, stages: {}, ability: null, item: null }, field });
+
+  // Matches @smogon/calc: 120 BP and the doubles spread modifier in Psychic Terrain.
+  const doublesTerrain = calc(createField({ terrain: "Psychic Terrain" }));
+  assert.deepEqual([doublesTerrain.minDamage, doublesTerrain.maxDamage], [108, 127]);
+  assert.equal(doublesTerrain.notes.includes("Doubles spread move"), true);
+  // Without terrain it stays single-target; in singles there is no spread modifier.
+  assert.equal(calc(createField({})).notes.includes("Doubles spread move"), false);
+  const singlesTerrain = calc(createField({ format: "singles", terrain: "Psychic Terrain" }));
+  assert.deepEqual([singlesTerrain.minDamage, singlesTerrain.maxDamage], [144, 171]);
+  // An ungrounded user gets neither the boost nor the spread.
+  const floating = calculateDamage({ attacker: indeedee, defender: garchomp, move: expandingForce, attackerState: { ...modest, grounded: false }, defenderState: { nature: "Hardy", sp: {}, stages: {}, ability: null, item: null }, field: createField({ terrain: "Psychic Terrain" }) });
+  assert.equal(floating.notes.includes("Doubles spread move"), false);
+});
+
