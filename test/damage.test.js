@@ -6130,3 +6130,19 @@ test("calculateDamage defaults missing states, field and move options", () => {
     assert.deepEqual(result.rolls, expected.rolls);
   }
 });
+
+test("calculateDamage clamps stages and coerces SP at the engine boundary", () => {
+  const tackle = { id: "tackle", name: "Tackle", type: "Normal", category: "Physical", basePower: 40 };
+  const run = (attackerState, defenderState) => calculateDamage({ attacker: pikachu, defender: squirtle, move: tackle,
+    attackerState: { ...neutralState, ...attackerState }, defenderState: { ...neutralState, ...defenderState } });
+  const clean = run({ sp: { atk: 32 }, stages: { atk: 6 } }, { sp: { hp: 32, def: 0 }, stages: { def: -6 } });
+  const messy = run({ sp: { atk: "32" }, stages: { atk: 8 } }, { sp: { hp: 40, def: "-2" }, stages: { def: -6.5 } });
+  assert.equal(messy.supported, true);
+  assert.deepEqual(messy.rolls, clean.rolls);
+  assert.equal(messy.defenderHp, clean.defenderHp);
+  const storedPower = { id: "storedpower", name: "Stored Power", type: "Psychic", category: "Special", basePower: 20 };
+  const boosted = (stages) => calculateDamage({ attacker: pikachu, defender: squirtle, move: storedPower,
+    attackerState: { ...neutralState, stages }, defenderState: neutralState });
+  assert.deepEqual(boosted({ spa: 9, spd: 6 }).rolls.length, 16);
+  assert.match(boosted({ spa: 9, spd: 6 }).notes.join(" "), /power 260/);
+});

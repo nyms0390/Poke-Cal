@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { natureMultiplier, natureOptionLabel } from "../src/engine/natures.js";
-import { totalBaseStats, calculateStat, applyStage } from "../src/engine/stats.js";
+import { totalBaseStats, calculateStat, applyStage, normalizeSp, normalizeStage } from "../src/engine/stats.js";
 
 test("totals all six Pokémon base stats", () => {
   assert.equal(
@@ -61,4 +61,22 @@ test("applyStage scales by the Gen 9 stage table", () => {
   assert.equal(applyStage(120, -1), 80); // -1 -> x2/3
   assert.equal(applyStage(120, 2), 240); // +2 -> x2
   assert.equal(applyStage(120, -2), 60); // -2 -> x1/2
+});
+
+test("engine-boundary SP and stage coercion clamps instead of throwing", () => {
+  assert.equal(normalizeSp("32"), 32);
+  assert.equal(normalizeSp(" 12 "), 12);
+  assert.equal(normalizeSp(40), 32);
+  assert.equal(normalizeSp(-3), 0);
+  assert.equal(normalizeSp(10.7), 10);
+  assert.equal(normalizeSp("abc"), 0);
+  assert.equal(normalizeSp(undefined), 0);
+  assert.equal(normalizeSp(null), 0);
+  assert.equal(normalizeStage(7), 6);
+  assert.equal(normalizeStage(-9), -6);
+  assert.equal(normalizeStage("2"), 2);
+  assert.equal(normalizeStage(1.5), 1);
+  assert.equal(normalizeStage(-1.5), -1);
+  assert.equal(normalizeStage(Number.NaN), 0);
+  assert.equal(normalizeStage(Infinity), 6);
 });

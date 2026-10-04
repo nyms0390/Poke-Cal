@@ -1,6 +1,6 @@
 import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
-import { calculateStat } from "./stats.js";
+import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
 import { createField, isGrounded } from "./field.js";
 import {
   moveEffect,
@@ -808,11 +808,11 @@ export function formatDamageResult(result) {
 
 function calculatePokemonStat(pokemon, state, stat, { ignoreStage = false, stagePolicy = sameStage } = {}) {
   const stages = state.stages ?? {};
-  const stage = stat === "hp" || ignoreStage ? 0 : stagePolicy(stages[stat] ?? 0);
+  const stage = stat === "hp" || ignoreStage ? 0 : stagePolicy(normalizeStage(stages[stat]));
   return calculateStat({
     base: pokemon.baseStats[stat],
     stat,
-    sp: state.sp?.[stat] ?? 0,
+    sp: normalizeSp(state.sp?.[stat]),
     nature: state.nature ?? "Hardy",
     stage,
   });

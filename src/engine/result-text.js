@@ -1,4 +1,5 @@
 import { normalizeId } from "../identifiers.js";
+import { normalizeSp, normalizeStage } from "./stats.js";
 
 const STAT_LABELS = {
   hp: "HP",
@@ -55,15 +56,15 @@ function defaultDefenseStat(move) {
 }
 
 function statPrefix(state, stat) {
-  return [stagePrefix(state.stages?.[stat] ?? 0), state.sp?.[stat] ?? 0, STAT_LABELS[stat] ?? stat]
+  return [stagePrefix(normalizeStage(state.stages?.[stat])), normalizeSp(state.sp?.[stat]), STAT_LABELS[stat] ?? stat]
     .filter((part) => part !== "")
     .join(" ");
 }
 
 function defenderSpread(state, defenseStat) {
   return [
-    stagePrefix(state.stages?.[defenseStat] ?? 0),
-    `${state.sp?.hp ?? 0} HP / ${state.sp?.[defenseStat] ?? 0} ${STAT_LABELS[defenseStat] ?? defenseStat}`,
+    stagePrefix(normalizeStage(state.stages?.[defenseStat])),
+    `${normalizeSp(state.sp?.hp)} HP / ${normalizeSp(state.sp?.[defenseStat])} ${STAT_LABELS[defenseStat] ?? defenseStat}`,
   ].filter(Boolean).join(" ");
 }
 

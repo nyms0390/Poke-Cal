@@ -129,3 +129,13 @@ test("Slow Start halves physical Attack only while active (matches @smogon/calc)
   assert.equal(run(hyperVoice).notes.includes("Slow Start"), false);
   assert.equal(run(bodySlam, { slowStartActive: false }).maxDamage > 100, true);
 });
+
+test("Speed clamps out-of-range stages and coerces string SP instead of throwing", () => {
+  const species = { id: "speedy", name: "Speedy", baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 100 } };
+  const clean = finalSpeed({ pokemon: species, sp: { spe: 32 }, stages: { spe: 6 } });
+  assert.equal(finalSpeed({ pokemon: species, sp: { spe: "32" }, stages: { spe: 9 } }), clean);
+  assert.equal(finalSpeed({ pokemon: species, sp: { spe: 40 }, stages: { spe: "6" } }), clean);
+  assert.equal(finalSpeed({ pokemon: species, sp: { spe: 32.9 }, stages: { spe: 6.5 } }), clean);
+  assert.equal(finalSpeed({ pokemon: species, sp: { spe: -5 }, stages: { spe: -8 } }),
+    finalSpeed({ pokemon: species, sp: { spe: 0 }, stages: { spe: -6 } }));
+});

@@ -1,6 +1,6 @@
 import { normalizeId } from "../identifiers.js";
 import { applyModifier, chainModifiers } from "./modifiers.js";
-import { calculateStat } from "./stats.js";
+import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
 
 const PARADOX_STATS = ["atk", "def", "spa", "spd", "spe"];
 const PARADOX_STAT_LABELS = {
@@ -26,7 +26,8 @@ const DOUBLING_SPEED_ABILITIES = {
 
 /**
  * Pure stat-sheet Speed with optional generic modifiers. Kept for callers that pass raw numbers;
- * it routes through the same 4096-based chain as speedBreakdown().
+ * it routes through the same 4096-based chain as speedBreakdown(). Like calculateStat it is
+ * strict (RangeError on out-of-range SP/stages); speedBreakdown() coerces and clamps instead.
  */
 export function calculateSpeed({
   baseSpeed,
@@ -84,9 +85,9 @@ export function speedBreakdown(state, field = {}, options = {}) {
   const stagedSpeed = calculateStat({
     base: baseSpeed,
     stat: "spe",
-    sp: state.sp?.spe ?? 0,
+    sp: normalizeSp(state.sp?.spe),
     nature: state.nature ?? "Hardy",
-    stage: state.stages?.spe ?? 0,
+    stage: normalizeStage(state.stages?.spe),
   });
   const modifiers = speedModifiers(state, field, options);
   const paralysed = state.status === "paralysis";
@@ -216,7 +217,7 @@ function highestParadoxStat(pokemon, state) {
     const value = calculateStat({
       base,
       stat,
-      sp: state.sp?.[stat] ?? 0,
+      sp: normalizeSp(state.sp?.[stat]),
       nature: state.nature ?? "Hardy",
     });
     if (value > winnerValue) {

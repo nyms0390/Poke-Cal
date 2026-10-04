@@ -28,6 +28,7 @@
 import { normalizeId } from "../identifiers.js";
 import { isGrounded } from "./field.js";
 import { finalSpeedInField } from "./speed.js";
+import { normalizeStage } from "./stats.js";
 import { effectivePriority } from "./battle-order.js";
 
 const WEATHER_BALL_TYPES = {
@@ -120,7 +121,7 @@ function lowUserHpBasePower(attackerHp, attackerMaxHp) {
 }
 
 function positiveStageCount(state) {
-  return BOOSTABLE_STAGE_KEYS.reduce((total, key) => total + Math.max(0, state.stages?.[key] ?? 0), 0);
+  return BOOSTABLE_STAGE_KEYS.reduce((total, key) => total + Math.max(0, normalizeStage(state.stages?.[key])), 0);
 }
 
 function targetWeightKg(defender, defenderState, suppressAbility = false) {

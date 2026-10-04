@@ -19,6 +19,26 @@ export function calculateStat({ base, stat, sp = 0, nature = "Hardy", stage = 0 
   return applyStage(trained, stage);
 }
 
+/**
+ * Engine-boundary coercion for user-supplied SP: numeric strings are accepted, fractions are
+ * truncated, the result is clamped to 0-32 and anything non-numeric becomes 0.
+ * calculateStat itself stays strict.
+ */
+export function normalizeSp(value) {
+  return clampInteger(value, 0, 32);
+}
+
+/** Engine-boundary coercion for stat stages: integer, clamped to -6..+6, non-numeric → 0. */
+export function normalizeStage(value) {
+  return clampInteger(value, -6, 6);
+}
+
+function clampInteger(value, min, max) {
+  const number = Number(value ?? 0);
+  if (Number.isNaN(number)) return 0;
+  return Math.max(min, Math.min(max, Math.trunc(number)));
+}
+
 export function applyStage(value, stage) {
   if (stage >= 0) return Math.floor((value * (2 + stage)) / 2);
   return Math.floor((value * 2) / (2 - stage));
