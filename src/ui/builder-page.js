@@ -32,13 +32,13 @@ import { createField } from "../engine/field.js";
 import { moveEffect } from "../engine/move-effects.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import {
-  applyDocumentTranslations,
   getLocale,
   initI18n,
   localizedName,
   localizedNatureOptionLabel,
   localizedTerm,
   onLocaleChange,
+  translateSubtree,
   t,
 } from "../i18n.js";
 import { formatKoText } from "../i18n-formatters.js";
@@ -500,7 +500,14 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
     renderBreakPoints(inputs);
     renderHiddenBulkCount(inputs);
   }
-  applyDocumentTranslations();
+  translateSubtree(
+    elements.stats,
+    elements.spBudget,
+    elements.movePicks,
+    elements.customThreats,
+    elements.bulkPanel,
+    elements.breakPanel,
+  );
   const analysisPanel = state.analysisTab === "bulk" ? elements.bulkPanel : elements.breakPanel;
   restoreBuilderCardFocus(analysisPanel, focusKey, {
     onOpenPanel: (panelKey) => openAnalysisPanels.add(panelKey),

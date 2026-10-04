@@ -13,6 +13,7 @@ import {
   resolveLocale,
   setLocale,
   tFor,
+  translateSubtree,
   toTraditionalChinese,
 } from "../src/i18n.js";
 import {
@@ -146,6 +147,23 @@ test("keyed aria-labels follow every language switch instead of the load-time va
     setLocale("zh-TW", { persist: false });
     applyDocumentTranslations(root);
     assert.equal(keyed.getAttribute("aria-label"), "招式圖鑑");
+  } finally {
+    setLocale(previous, { persist: false });
+  }
+});
+
+test("translateSubtree touches only the given subtree and never third-party containers", () => {
+  const previous = getLocale();
+  const inside = fakeElement({ "aria-label": "Speed" });
+  const outside = fakeElement({ "aria-label": "Speed" });
+  const thirdParty = Object.assign(fakeElement({ "aria-label": "Speed" }), { closest: () => ({}) });
+  const subtree = { ...fakeRoot([inside, thirdParty]), matches: () => false };
+  try {
+    setLocale("zh-TW", { persist: false });
+    translateSubtree(subtree, null);
+    assert.equal(inside.getAttribute("aria-label"), STATIC_ZH_TW.Speed);
+    assert.equal(outside.getAttribute("aria-label"), "Speed");
+    assert.equal(thirdParty.getAttribute("aria-label"), "Speed");
   } finally {
     setLocale(previous, { persist: false });
   }

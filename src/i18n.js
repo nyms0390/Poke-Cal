@@ -56,9 +56,8 @@ export function setLocale(nextLocale, { persist = true } = {}) {
   if (persist) writeStoredLocale(normalized);
   const changed = normalized !== locale;
   locale = normalized;
-  applyDocumentTranslations();
   if (changed) for (const listener of listeners) listener(locale);
-  if (changed) applyDocumentTranslations();
+  applyDocumentTranslations();
   return locale;
 }
 
@@ -130,55 +129,95 @@ export function initI18n() {
   return locale;
 }
 
+// Translate the whole document: data-i18n keys, the language switch, and unmarked static
+// copy. Run on load and after a language switch; after a partial re-render, translate only the
+// re-rendered elements with translateSubtree().
 export function applyDocumentTranslations(root = globalThis.document) {
   if (!root?.querySelectorAll) return;
   if (root.documentElement) root.documentElement.lang = locale;
-  for (const element of root.querySelectorAll("[data-i18n]")) element.textContent = t(element.dataset.i18n);
-  for (const [attribute, selector] of [
-    ["placeholder", "[data-i18n-placeholder]"],
-    ["aria-label", "[data-i18n-aria-label]"],
-    ["title", "[data-i18n-title]"],
-    ["content", "[data-i18n-content]"],
-  ]) {
-    const dataKey = `i18n${attribute.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase())}`;
-    for (const element of root.querySelectorAll(selector)) element.setAttribute(attribute, t(element.dataset[dataKey]));
-  }
+  translateTree(root);
   for (const select of root.querySelectorAll("[data-language-switch]")) select.value = locale;
-  translateUnmarkedDocumentCopy(root);
-}
-
-function translateUnmarkedDocumentCopy(root) {
-  const nodeFilter = root.defaultView?.NodeFilter ?? globalThis.NodeFilter;
-  if (root.createTreeWalker && nodeFilter) {
-    const walker = root.createTreeWalker(root.body ?? root, nodeFilter.SHOW_TEXT);
-    let node = walker.nextNode();
-    while (node) {
-      if (!['SCRIPT', 'STYLE'].includes(node.parentElement?.tagName)) {
-        const original = node.__pokecalEnglishText ?? node.nodeValue;
-        node.__pokecalEnglishText = original;
-        node.nodeValue = localizedStaticValue(original);
-      }
-      node = walker.nextNode();
-    }
-  }
-  for (const element of root.querySelectorAll("[placeholder], [aria-label], [title], meta[name='description']")) {
-    for (const attribute of ["placeholder", "aria-label", "title", "content"]) {
-      if (!element.hasAttribute(attribute)) continue;
-      const camelAttribute = attribute.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase());
-      // Attributes with a data-i18n-* key were just set from the message catalog; caching
-      // and re-applying their first value here would pin them to the load-time language.
-      if (element.dataset[`i18n${camelAttribute}`] !== undefined) continue;
-      const property = `pokecalEnglish${camelAttribute}`;
-      const original = element.dataset[property] ?? element.getAttribute(attribute);
-      element.dataset[property] = original;
-      element.setAttribute(attribute, localizedStaticValue(original));
-    }
-  }
   const title = root.querySelector?.("title");
   if (title) {
     const original = title.dataset.pokecalEnglishTitle ?? title.textContent;
     title.dataset.pokecalEnglishTitle = original;
     title.textContent = localizedStaticValue(original);
+  }
+}
+
+// Translate only the given elements and their descendants (for example, a results list a page
+// has just rebuilt), instead of walking the whole document after every render.
+export function translateSubtree(...elements) {
+  for (const element of elements) {
+    if (element?.querySelectorAll) translateTree(element);
+  }
+}
+
+const KEYED_ATTRIBUTES = ["placeholder", "aria-label", "title", "content"].map((attribute) => ({
+  attribute,
+  selector: `[data-i18n-${attribute}]`,
+  dataKey: `i18n${camelCase(attribute)}`,
+  cacheKey: `pokecalEnglish${camelCase(attribute)}`,
+}));
+const STATIC_ATTRIBUTE_SELECTOR = "[placeholder], [aria-label], [title], meta[name='description']";
+// Containers of third-party text (player names, tournament names) that must never be matched
+// against the static English copy table. Their own copy comes from t() when rendered.
+const SKIP_STATIC_SELECTOR = "[data-i18n-skip]";
+
+function camelCase(attribute) {
+  return attribute.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase());
+}
+
+function selfAndDescendants(root, selector) {
+  const descendants = [...root.querySelectorAll(selector)];
+  return root.matches?.(selector) ? [root, ...descendants] : descendants;
+}
+
+function translateTree(root) {
+  for (const element of selfAndDescendants(root, "[data-i18n]")) element.textContent = t(element.dataset.i18n);
+  for (const { attribute, selector, dataKey } of KEYED_ATTRIBUTES) {
+    for (const element of selfAndDescendants(root, selector)) element.setAttribute(attribute, t(element.dataset[dataKey]));
+  }
+  translateUnmarkedCopy(root);
+}
+
+function insideSkippedContainer(element) {
+  return Boolean(element?.closest?.(SKIP_STATIC_SELECTOR));
+}
+
+function translateUnmarkedCopy(root) {
+  if (insideSkippedContainer(root)) return;
+  const document = root.ownerDocument ?? root;
+  const nodeFilter = document.defaultView?.NodeFilter ?? globalThis.NodeFilter;
+  if (document.createTreeWalker && nodeFilter) {
+    const walker = document.createTreeWalker(root.body ?? root, nodeFilter.SHOW_ELEMENT | nodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (node.nodeType !== 1) return nodeFilter.FILTER_ACCEPT;
+        if (node.tagName === "SCRIPT" || node.tagName === "STYLE" || node.matches(SKIP_STATIC_SELECTOR)) {
+          return nodeFilter.FILTER_REJECT;
+        }
+        return nodeFilter.FILTER_SKIP;
+      },
+    });
+    let node = walker.nextNode();
+    while (node) {
+      const original = node.__pokecalEnglishText ?? node.nodeValue;
+      node.__pokecalEnglishText = original;
+      node.nodeValue = localizedStaticValue(original);
+      node = walker.nextNode();
+    }
+  }
+  for (const element of selfAndDescendants(root, STATIC_ATTRIBUTE_SELECTOR)) {
+    if (insideSkippedContainer(element)) continue;
+    for (const { attribute, dataKey, cacheKey } of KEYED_ATTRIBUTES) {
+      if (!element.hasAttribute(attribute)) continue;
+      // Attributes with a data-i18n-* key were just set from the message catalog; caching
+      // and re-applying their first value here would pin them to the load-time language.
+      if (element.dataset[dataKey] !== undefined) continue;
+      const original = element.dataset[cacheKey] ?? element.getAttribute(attribute);
+      element.dataset[cacheKey] = original;
+      element.setAttribute(attribute, localizedStaticValue(original));
+    }
   }
 }
 

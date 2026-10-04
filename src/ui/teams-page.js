@@ -3,7 +3,6 @@ import { normalizeId } from "../identifiers.js";
 import { loadCatalogs, loadWithRecovery } from "./bootstrap.js";
 import { pokemonSpriteUrls } from "./components.js";
 import {
-  applyDocumentTranslations,
   getLocale,
   initI18n,
   localizedName,
@@ -30,7 +29,8 @@ elements.more.addEventListener("click", () => {
   const tournaments = archive?.tournaments ?? [];
   if (visibleCount >= tournaments.length) return;
   const nextCount = Math.min(visibleCount + TOURNAMENT_BATCH_SIZE, tournaments.length);
-  const addedTournaments = tournaments.slice(visibleCount, nextCount).map(renderTournament);
+  const addedTournaments = tournaments.slice(visibleCount, nextCount)
+    .map((tournament, offset) => renderTournament(tournament, visibleCount + offset));
   elements.archive.append(...addedTournaments);
   if (nextCount === tournaments.length && document.activeElement === elements.more) {
     addedTournaments[0].firstElementChild.focus();
@@ -44,12 +44,25 @@ initialize();
 
 onLocaleChange(() => {
   if (!archive) return;
-  const openDetails = [...elements.archive.querySelectorAll("details")].map((details) => details.open);
+  const openKeys = [...elements.archive.querySelectorAll("details")]
+    .filter((details) => details.open)
+    .map((details) => details.dataset.teamsKey);
   renderPage();
-  elements.archive.querySelectorAll("details").forEach((details, index) => {
-    details.open = openDetails[index] ?? false;
-  });
+  restoreOpenDetails(openKeys);
 });
+
+// Re-open the disclosures that were open before a re-render, parents first so that their
+// lazily built children exist when the children are looked up.
+function restoreOpenDetails(keys) {
+  const ordered = [...keys].sort((a, b) => a.split("-").length - b.split("-").length);
+  for (const key of ordered) {
+    const details = [...elements.archive.querySelectorAll("details")]
+      .find((candidate) => candidate.dataset.teamsKey === key);
+    if (!details) continue;
+    ensureDetailsContent(details);
+    details.open = true;
+  }
+}
 
 async function initialize() {
   try {
@@ -91,10 +104,36 @@ function renderPage() {
   updateArchiveControls(tournaments.length);
   elements.archive.replaceChildren(
     ...(tournaments.length > 0
-      ? tournaments.slice(0, visibleCount).map(renderTournament)
+      ? tournaments.slice(0, visibleCount).map((tournament, index) => renderTournament(tournament, index))
       : [messagePanel(t("teams.noTournaments"))]),
   );
-  applyDocumentTranslations();
+}
+
+// A disclosure whose content is built the first time it opens. The full archive is tens of
+// thousands of nodes; most cards are never opened, so only their summaries are rendered.
+const detailsContent = new WeakMap();
+
+function lazyDetails({ className, key, summary, buildContent }) {
+  const details = document.createElement("details");
+  details.className = className;
+  details.dataset.teamsKey = key;
+  details.append(summary);
+  detailsContent.set(details, buildContent);
+  // Build before the summary's default action opens the disclosure (pointer and keyboard both
+  // dispatch click), so the content is present in the first opened frame; `toggle` covers
+  // programmatic opening.
+  summary.addEventListener("click", () => ensureDetailsContent(details));
+  details.addEventListener("toggle", () => {
+    if (details.open) ensureDetailsContent(details);
+  });
+  return details;
+}
+
+function ensureDetailsContent(details) {
+  const buildContent = detailsContent.get(details);
+  if (!buildContent) return;
+  detailsContent.delete(details);
+  details.append(buildContent());
 }
 
 function updateArchiveControls(total) {
@@ -107,10 +146,8 @@ function updateArchiveControls(total) {
     : t("teams.allShown");
 }
 
-function renderTournament(tournament) {
-  const details = document.createElement("details");
-  details.className = "teams-tournament-card";
-
+function renderTournament(tournament, index) {
+  const key = String(index);
   const summary = document.createElement("summary");
   summary.className = "teams-tournament-summary";
   const title = document.createElement("span");
@@ -127,21 +164,24 @@ function renderTournament(tournament) {
   count.textContent = t("teams.topCutCount", { count: tournament.topCut.length });
   summary.append(summaryText(title, meta), count);
 
-  const content = document.createElement("div");
-  content.className = "teams-tournament-content";
-  content.append(tournamentMeta(tournament));
-  const topCut = document.createElement("div");
-  topCut.className = "teams-top-cut";
-  topCut.append(...tournament.topCut.map(renderTeam));
-  content.append(topCut);
-  details.append(summary, content);
-  return details;
+  return lazyDetails({
+    className: "teams-tournament-card",
+    key,
+    summary,
+    buildContent: () => {
+      const content = document.createElement("div");
+      content.className = "teams-tournament-content";
+      content.append(tournamentMeta(tournament));
+      const topCut = document.createElement("div");
+      topCut.className = "teams-top-cut";
+      topCut.append(...tournament.topCut.map((team, teamIndex) => renderTeam(team, `${key}-${teamIndex}`)));
+      content.append(topCut);
+      return content;
+    },
+  });
 }
 
-function renderTeam(team) {
-  const details = document.createElement("details");
-  details.className = "teams-team-card";
-
+function renderTeam(team, key) {
   const summary = document.createElement("summary");
   summary.className = "teams-team-summary";
   const placement = document.createElement("strong");
@@ -164,26 +204,28 @@ function renderTeam(team) {
   }
   summary.append(placement, summaryText(player, playerMeta), preview);
 
-  const content = document.createElement("div");
-  content.className = "teams-team-content";
-  const sourceLink = externalLink(team.url, t("teams.openTeamList"));
-  content.append(sourceLink);
-  const pokemonGrid = document.createElement("div");
-  pokemonGrid.className = "teams-pokemon-grid";
-  if (team.pokemon.length > 0) {
-    pokemonGrid.append(...team.pokemon.map(renderPokemon));
-  } else {
-    pokemonGrid.append(messagePanel(t("teams.teamUnavailable")));
-  }
-  content.append(pokemonGrid);
-  details.append(summary, content);
-  return details;
+  return lazyDetails({
+    className: "teams-team-card",
+    key,
+    summary,
+    buildContent: () => {
+      const content = document.createElement("div");
+      content.className = "teams-team-content";
+      content.append(externalLink(team.url, t("teams.openTeamList")));
+      const pokemonGrid = document.createElement("div");
+      pokemonGrid.className = "teams-pokemon-grid";
+      if (team.pokemon.length > 0) {
+        pokemonGrid.append(...team.pokemon.map((submitted, index) => renderPokemon(submitted, `${key}-${index}`)));
+      } else {
+        pokemonGrid.append(messagePanel(t("teams.teamUnavailable")));
+      }
+      content.append(pokemonGrid);
+      return content;
+    },
+  });
 }
 
-function renderPokemon(submitted) {
-  const details = document.createElement("details");
-  details.className = "teams-pokemon-card";
-
+function renderPokemon(submitted, key) {
   const summary = document.createElement("summary");
   summary.className = "teams-pokemon-summary";
   summary.append(teamPreviewSprite(submitted, { showName: true }));
@@ -191,6 +233,15 @@ function renderPokemon(submitted) {
   item.textContent = submitted.item ? `@ ${displayCatalogValue(submitted.item, catalogs.itemLookup)}` : "";
   summary.append(item);
 
+  return lazyDetails({
+    className: "teams-pokemon-card",
+    key,
+    summary,
+    buildContent: () => pokemonContent(submitted),
+  });
+}
+
+function pokemonContent(submitted) {
   const content = document.createElement("div");
   content.className = "teams-pokemon-content";
   content.append(factGrid([
@@ -219,8 +270,7 @@ function renderPokemon(submitted) {
   }
   moves.append(movesLabel, moveList);
   content.append(moves);
-  details.append(summary, content);
-  return details;
+  return content;
 }
 
 function tournamentMeta(tournament) {

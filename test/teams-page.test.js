@@ -5,13 +5,13 @@ import { runInNewContext } from "node:vm";
 import { tFor } from "../src/i18n.js";
 
 // A small DOM fixture runs the real page controller without an extra test dependency.
-async function page(total, { failure = false } = {}) {
+async function page(total, { failure = false, topCut = 0 } = {}) {
   const source = readFileSync(new URL("../src/ui/teams-page.js", import.meta.url), "utf8")
     .replace(/import[\s\S]*?from "[^"]+";\n/g, "")
     .replace("initialize();", "globalThis.ready = initialize();");
   const document = { activeElement: null };
   const node = (tagName = "div") => ({
-    tagName, children: [], textContent: "", hidden: false, disabled: false, open: false,
+    tagName, children: [], textContent: "", hidden: false, disabled: false, open: false, dataset: {},
     classList: { add() {} }, attributes: {}, listeners: {},
     get firstElementChild() { return this.children[0]; },
     querySelectorAll(tag) {
@@ -42,7 +42,10 @@ async function page(total, { failure = false } = {}) {
     loadLimitlessTeamArchive: async () => {
       if (failure) throw new Error("offline");
       return { format: "M-C", tournaments: Array.from({ length: total }, (_, index) => ({
-        name: `Tournament ${index}`, date: "2026-10-02", players: 40, topCut: [], url: "https://example.test", phases: [],
+        name: `Tournament ${index}`, date: "2026-10-02", players: 40, url: "https://example.test", phases: [],
+        topCut: Array.from({ length: topCut }, (_, place) => ({
+          placing: place + 1, playerName: `Player ${place}`, pokemon: [], url: "https://example.test/team",
+        })),
       })) };
     },
     loadWithRecovery: async (load, { onFailure }) => {
@@ -109,4 +112,34 @@ test("short, empty, and failed archives do not offer expansion", async () => {
   assert.equal(elements.more.hidden, true);
   assert.equal(elements.more.disabled, true);
   assert.equal(elements.archive.children[0].textContent, tFor("en", "teams.archiveError"));
+});
+
+test("tournament and team cards build their content only when first opened", async () => {
+  const view = await page(3, { topCut: 2 });
+  const openCard = (details) => {
+    details.firstElementChild.listeners.click();
+    details.open = true;
+    return details;
+  };
+  const tournament = view.elements.archive.children[0];
+  assert.equal(tournament.children.length, 1, "only the summary is rendered up front");
+  openCard(tournament);
+  assert.equal(tournament.children.length, 2);
+  const teams = tournament.children[1].children[1].children;
+  assert.equal(teams.length, 2);
+  assert.equal(teams[1].children.length, 1);
+  openCard(teams[1]);
+  assert.equal(teams[1].children.length, 2);
+  tournament.firstElementChild.listeners.click();
+  assert.equal(tournament.children.length, 2, "content is built once");
+
+  view.locale("zh-TW");
+  const [relocalized] = view.elements.archive.children;
+  assert.notEqual(relocalized, tournament);
+  assert.equal(relocalized.open, true);
+  const relocalizedTeams = relocalized.children[1].children[1].children;
+  assert.equal(relocalizedTeams[0].open, false);
+  assert.equal(relocalizedTeams[1].open, true);
+  assert.equal(relocalizedTeams[1].children.length, 2);
+  assert.equal(view.elements.archive.children[1].children.length, 1);
 });

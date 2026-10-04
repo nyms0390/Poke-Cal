@@ -16,13 +16,13 @@ import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaul
 import { totalBaseStats } from "../engine/stats.js";
 import { defensiveMatchups } from "../engine/type-chart.js";
 import {
-  applyDocumentTranslations,
   getLocale,
   initI18n,
   localizedName,
   localizedSpreadName,
   localizedTerm,
   onLocaleChange,
+  translateSubtree,
   t,
   toTraditionalChinese,
 } from "../i18n.js";
@@ -356,7 +356,15 @@ function renderCatalog() {
   renderAbilities(abilities);
   renderItems(rankedItems);
   renderMoveList();
-  applyDocumentTranslations();
+  translateSubtree(
+    elements.commonBuildCard,
+    elements.typeMatchupCard,
+    elements.speedTierList,
+    elements.spreadList,
+    elements.abilityList,
+    elements.itemList,
+    elements.moveList,
+  );
 }
 
 function renderCommonBuild() {

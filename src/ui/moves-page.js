@@ -6,11 +6,11 @@ import {
 } from "../data/catalog.js";
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import {
-  applyDocumentTranslations,
   getLocale,
   initI18n,
   localizedTerm,
   onLocaleChange,
+  translateSubtree,
   t,
 } from "../i18n.js";
 import { loadCatalogs, catalogLoadedStatus } from "./bootstrap.js";
@@ -64,7 +64,7 @@ function renderPage() {
   elements.source.textContent = t("moves.source");
   renderFilterOptions();
   renderMoveList();
-  applyDocumentTranslations();
+  translateSubtree(elements.type, elements.category, elements.property, elements.list);
 }
 
 function renderFilterOptions() {

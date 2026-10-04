@@ -27,7 +27,6 @@ import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import {
-  applyDocumentTranslations,
   getLocale,
   initI18n,
   localizedName,
@@ -35,6 +34,7 @@ import {
   localizedSpreadName,
   localizedTerm,
   onLocaleChange,
+  translateSubtree,
   t,
 } from "../i18n.js";
 import {
@@ -1123,7 +1123,6 @@ function renderDamage() {
     elements.speedSummary.textContent = "";
     elements.damageCount.textContent = "—";
     elements.damageList.replaceChildren();
-    applyDocumentTranslations();
     return;
   }
 
@@ -1156,7 +1155,7 @@ function renderDamage() {
     damageColumn(t("battle.attackerMoves"), attackerRows),
     damageColumn(t("battle.defenderMoves"), defenderRows),
   );
-  applyDocumentTranslations();
+  translateSubtree(elements.attackerStatEditor, elements.defenderStatEditor, elements.damageList);
 }
 
 function targetMovedForMove(side, index, move) {

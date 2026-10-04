@@ -14,7 +14,6 @@ import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import {
-  applyDocumentTranslations,
   formatNumber,
   getLocale,
   initI18n,
@@ -22,6 +21,7 @@ import {
   localizedNatureOptionLabel,
   localizedTerm,
   onLocaleChange,
+  translateSubtree,
   t,
 } from "../i18n.js";
 import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
@@ -320,7 +320,7 @@ function render() {
   elements.rowCount.textContent = t("speed.tierCount", { count: rows.length });
   elements.axis.replaceChildren(...rows.map((row) => renderSpeedRow(row, breakpoints.get(row.speed))));
   renderLikelihoodLegend(rows);
-  applyDocumentTranslations();
+  translateSubtree(elements.axis, elements.likelyLegend, elements.manualOpponents);
 }
 
 function browserStorage() {
