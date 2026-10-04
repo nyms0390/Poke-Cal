@@ -153,9 +153,9 @@ Atk/SpA thresholds that improve your selected moves' KO tier. Opponent cards are
 the Speed tiers link carries the chosen Pokémon to `/speed.html`.
 
 In builder and Speed-tier copy, a "threat" is a Pokémon selected by Limitless Champions usage.
-Limitless provides observed nature, ability, item, move, and Tera
-choices but no SP spreads. Threats therefore start with the most-used nature, ability, item, and
-damaging moves, with Tera inactive. Offensive checks assume 32 Atk and 32 SpA. Defensive checks
+PokéCal keeps Limitless's observed nature, ability, item, and move
+choices (Tera usage is not kept), and Limitless has no SP spreads. Threats therefore start with
+the most-used nature, ability, item, and damaging moves, with Tera inactive. Offensive checks assume 32 Atk and 32 SpA. Defensive checks
 use the top Smogon ladder SP spread when available, otherwise the explicit fast-offense fallback
 of 2 HP / 0 Def / 0 SpD. The four Speed presets are max +Speed, max neutral, uninvested neutral,
 and minimum −Speed. These defaults are editable comparison assumptions, not submitted Limitless
@@ -187,7 +187,7 @@ sort toggle; the Bulk tab always uses its fixed section order and joint-coverage
 
 - Pokémon Showdown (mechanics/catalog seed: pokedex, learnsets, abilities, moves, items, text descriptions): <https://github.com/smogon/pokemon-showdown/tree/master/data>, fetched at the commit pinned in `scripts/showdown-pin.json`.
 - Pokémon Showdown Champions mod (Champions legality and balance overrides: per-species legality/tier from `formats-data.ts`, Champions learnsets, move/item/ability availability and stat changes): <https://github.com/smogon/pokemon-showdown/tree/master/data/mods/champions>, at the same pinned commit. Applied during `sync-data`; catalogs get a `champions.legal` flag and Champions-legal Pokémon get Champions learnsets and move/item stats.
-- Limitless tournament API (Champions usage counts and rates plus per-Pokémon items, abilities, moves, natures, and Tera choices): <https://play.limitlesstcg.com/tournaments> (`VGC` game, `M-C` format, last 50 tournaments by default). The same sync also archives up to 10 recent completed brackets with published top-cut team lists; Limitless does not publish SP or EV spreads for those teams.
+- Limitless tournament API (Champions usage counts and rates plus per-Pokémon items, abilities, moves, and natures; Tera usage is dropped during the merge): <https://play.limitlesstcg.com/tournaments> (`VGC` game, `M-C` format, last 50 tournaments by default). The same sync also archives up to 10 recent completed brackets with published top-cut team lists; Limitless does not publish SP or EV spreads for those teams.
 - Smogon ladder usage stats (popular SP spreads per Pokémon, `Nature:HP/Atk/Def/SpA/SpD/Spe` with usage rates): <https://www.smogon.com/stats/> chaos JSON for the Champions VGC ladder. `sync-champions-spreads` auto-detects the latest month and newest regulation (Bo1 + Bo3, rating cutoff 1760 by default; override with `--month`, `--formats`, `--cutoff`, `--top`) and writes top spreads to `champions.usage.spreads` in `public/pokemon.json`.
 - NCP (Nimbasa City Post) damage calculator (hand-curated Champions sets): <https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/>. `sync-ncp-spreads` parses its maintained JavaScript setdex and writes normalized sets to `champions.ncp` in `public/pokemon.json`.
 - PokeAPI CSVs (Traditional Chinese search aliases only): `pokemon_species_names.csv`, `move_names.csv`, `ability_names.csv`, `items.csv`, `item_names.csv`
