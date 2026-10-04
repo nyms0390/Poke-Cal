@@ -201,6 +201,11 @@ export const ABILITY_MODIFIERS = {
     ctx.attackerPerspective && ctx.attackStat === "atk"
       ? { kind: "attack", value: 2, label: ctx.attackerState.ability.name }
       : null,
+  // Showdown: Slow Start halves the user's Attack for 5 turns (state.slowStartActive, default true).
+  slowstart: (ctx) =>
+    ctx.attackerPerspective && ctx.attackStat === "atk" && ctx.attackerState.slowStartActive !== false
+      ? { kind: "attack", value: 0.5, label: ctx.attackerState.ability.name }
+      : null,
   guts: (ctx) =>
     ctx.attackerPerspective && ctx.attackerState.status === "burn" && ctx.attackStat === "atk"
       ? { kind: "attack", value: 1.5, label: "Guts" }

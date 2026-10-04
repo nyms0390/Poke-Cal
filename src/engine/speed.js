@@ -66,7 +66,9 @@ export function calculateSpeed({
  *
  * state: { pokemon, sp: { spe }, nature, stages: { spe }, ability, item, status, tailwind,
  *          speedMultiplier (manual, chained separately; never replaces the item),
- *          itemConsumed, boosterEnergy, currentHpFraction }
+ *          itemConsumed, boosterEnergy, currentHpFraction,
+ *          transformed (default false: Ditto's Quick Powder only works untransformed),
+ *          slowStartActive (default true while the ability is present; false once it ends) }
  * field: { weather, terrain }
  * options: {
  *   suppressAbility  – Neutralizing Gas etc.: ignore the holder's ability,
@@ -117,6 +119,10 @@ export function speedModifiers(state, field = {}, options = {}) {
   if (!itemConsumed && !unburdenActive) {
     if (itemId === "choicescarf") modifiers.push({ label: "Choice Scarf", value4096: 6144, source: "item" });
     else if (itemId === "ironball") modifiers.push({ label: "Iron Ball", value4096: 2048, source: "item" });
+    // Showdown: Quick Powder doubles Speed when held by an untransformed Ditto.
+    else if (itemId === "quickpowder" && isDitto(state.pokemon) && !state.transformed) {
+      modifiers.push({ label: "Quick Powder", value4096: 8192, source: "item" });
+    }
   }
 
   const manual = Number(state.speedMultiplier ?? 1);
@@ -170,6 +176,10 @@ function abilitySpeedModifier(abilityId, state, ctx) {
     // Showdown: volatile 'unburden' and no held item. Forcing the ability implies the item is gone.
     return ctx.itemConsumed || ctx.forced ? { id: abilityId, label: "Unburden", value4096: 8192 } : null;
   }
+  if (abilityId === "slowstart") {
+    // Showdown: Slow Start halves Speed (and Attack) for the first 5 turns after switching in.
+    return state.slowStartActive !== false ? { id: abilityId, label: "Slow Start", value4096: 2048 } : null;
+  }
   if (abilityId === "quickfeet") {
     return state.status ? { id: abilityId, label: "Quick Feet", value4096: 6144 } : null;
   }
@@ -215,6 +225,10 @@ function highestParadoxStat(pokemon, state) {
     }
   }
   return winner;
+}
+
+function isDitto(pokemon) {
+  return normalizeId(pokemon?.id ?? pokemon?.name) === "ditto";
 }
 
 function abilityIdOf(state) {
