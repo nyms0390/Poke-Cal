@@ -145,6 +145,7 @@ export function createSideState(pokemon, usageDefaults) {
     faintedAllyCount: 0,
     boosterEnergy: false,
     iceFaceIntact: true,
+    itemConsumed: false,
     speedMultiplier: 1,
     typeChangeUsed: false,
     typeChangeType: "",
@@ -165,10 +166,12 @@ export function applyControl(state, { kind, stat, index, key, value, maxHp, effe
     }
     case "nature":
       return { ...state, nature: value };
-    case "ability":
+    case "ability": {
+      const itemConsumed = isUnburdenAbility(value) && Boolean(state.itemConsumed);
       return isTypeChangeAbility(value)
-        ? { ...state, ability: value }
-        : { ...state, ability: value, typeChangeUsed: false, typeChangeType: "" };
+        ? { ...state, ability: value, itemConsumed }
+        : { ...state, ability: value, itemConsumed, typeChangeUsed: false, typeChangeType: "" };
+    }
     case "item":
       return { ...state, item: value };
     case "speedMultiplier":
@@ -191,6 +194,8 @@ export function applyControl(state, { kind, stat, index, key, value, maxHp, effe
       return { ...state, boosterEnergy: Boolean(value) };
     case "iceFaceIntact":
       return { ...state, iceFaceIntact: Boolean(value) };
+    case "itemConsumed":
+      return { ...state, itemConsumed: isUnburdenAbility(state.ability) && Boolean(value) };
     case "typeChangeUsed":
       return value
         ? { ...state, typeChangeUsed: true }
@@ -273,6 +278,18 @@ export function applyControl(state, { kind, stat, index, key, value, maxHp, effe
   }
 }
 
+export function isUnburdenAbility(ability) {
+  return normalizeId(ability?.id ?? ability?.name) === "unburden";
+}
+
+// Unburden's "item used up": the side no longer holds its item, so the item stops applying to
+// damage (and Acrobatics, Knock Off and similar see no item) while the Speed engine doubles
+// Speed from state.itemConsumed. Only meaningful while the ability is Unburden.
+export function sideStateForCalc(state) {
+  if (!state?.itemConsumed || !isUnburdenAbility(state.ability)) return state;
+  return { ...state, item: null };
+}
+
 export function isTypeChangeAbility(ability) {
   return TYPE_CHANGE_ABILITIES.has(normalizeId(ability?.id ?? ability?.name));
 }
@@ -334,11 +351,11 @@ export function buildCalcInput(damageState, fieldInputs = {}) {
   const defenderBoosts = pickFields(defenderPanel, BOOST_FIELD_KEYS);
   const defenderScreens = pickFields(defenderPanel, SCREEN_FIELD_KEYS);
   const attackerState = {
-    ...damageState.attacker,
+    ...sideStateForCalc(damageState.attacker),
     tailwind: Boolean(attackerPanel?.tailwind),
   };
   const defenderState = {
-    ...damageState.defender,
+    ...sideStateForCalc(damageState.defender),
     tailwind: Boolean(defenderPanel?.tailwind),
   };
 

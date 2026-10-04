@@ -50,8 +50,10 @@ import {
   createSideState,
   createTeamsState,
   isTypeChangeAbility,
+  isUnburdenAbility,
   normalizeTypeChangeState,
   planIncomingTeamSlot,
+  sideStateForCalc,
   spreadSelectionForState,
   swapTeamsState,
   TEAM_SIZE,
@@ -133,13 +135,17 @@ const elements = {
   defenderTypeChangeTypeLabel: document.querySelector("#defender-type-change-type-label"),
   attackerSpeedReadout: document.querySelector("#attacker-speed-readout"),
   defenderSpeedReadout: document.querySelector("#defender-speed-readout"),
+  attackerItemConsumed: document.querySelector("#attacker-item-consumed"),
+  attackerItemConsumedLabel: document.querySelector("#attacker-item-consumed-label"),
+  defenderItemConsumed: document.querySelector("#defender-item-consumed"),
+  defenderItemConsumedLabel: document.querySelector("#defender-item-consumed-label"),
   trickRoom: document.querySelector("#trick-room"),
   trickRoomToggle: document.querySelector("#trick-room-toggle"),
   swapSides: document.querySelector("#swap-sides"),
   ambientField: document.querySelector("#battle-ambient-field"),
   fieldSideInputs: document.querySelectorAll('input[data-kind="field-side"]'),
   assumptionInputs: document.querySelectorAll(
-    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], input[data-kind="type-change-used"], select[data-kind="type-change-type"], select[data-kind="rivalry"]',
+    'input[data-kind="ally-plus-minus"], input[data-kind="switched-in"], input[data-kind="fainted-allies"], input[data-kind="booster-energy"], input[data-kind="ice-face-intact"], input[data-kind="item-consumed"], input[data-kind="type-change-used"], select[data-kind="type-change-type"], select[data-kind="rivalry"]',
   ),
   setPaste: document.querySelector("#set-paste"),
   setPasteStatus: document.querySelector("#set-paste-status"),
@@ -950,6 +956,9 @@ function controlFromTarget(target) {
   if (target.dataset.kind === "ice-face-intact") {
     return { kind: "iceFaceIntact", side: target.dataset.side, value: target.checked };
   }
+  if (target.dataset.kind === "item-consumed") {
+    return { kind: "itemConsumed", side: target.dataset.side, value: target.checked };
+  }
   if (target.dataset.kind === "type-change-used") {
     return { kind: "typeChangeUsed", side: target.dataset.side, value: target.checked };
   }
@@ -1135,7 +1144,7 @@ function renderStatEditor(side, field = {}, speedOptions = {}) {
   }
   const nature = NATURES[state.nature] ?? {};
   const fieldStateForSide = {
-    ...state,
+    ...sideStateForCalc(state),
     tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
   };
   elements[`${side}SpeedReadout`].textContent = t("battle.speed", { value: finalSpeed(fieldStateForSide, field, speedOptions) });
@@ -1203,6 +1212,15 @@ function syncAssumptionInputs(side) {
     currentLabel.textContent = t("battle.typeChangeCurrentType", { ability: abilityName });
     current.replaceChildren(...effectiveTypes.map((type) => optionElement(type, localizedTerm("type", type))));
     current.value = state.typeChangeType;
+  }
+  const itemConsumed = elements[`${side}ItemConsumed`];
+  if (itemConsumed) {
+    const unburden = isUnburdenAbility(state?.ability);
+    itemConsumed.closest("label").hidden = !unburden;
+    itemConsumed.checked = unburden && Boolean(state.itemConsumed);
+    if (unburden) {
+      elements[`${side}ItemConsumedLabel`].textContent = t("battle.itemConsumed", { ability: localizedName(state.ability) });
+    }
   }
   for (const input of elements.assumptionInputs) {
     if (input.dataset.side !== side) continue;

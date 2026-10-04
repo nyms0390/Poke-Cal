@@ -166,6 +166,7 @@ export const ZH_TW_MESSAGES = {
   "battle.teamFull": ({ name }) => `攻擊方隊伍已滿，未加入${name}。在寶可夢搜尋中選擇它即可取代目前的寶可夢。`,
   "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability}已發動`,
   "battle.typeChangeCurrentType": ({ ability }) => `${ability}目前屬性`,
+  "battle.itemConsumed": ({ ability }) => `道具已用完（${ability}發動中）`,
   "battle.smogonSpreadGroup": "Smogon 對戰梯能力分配",
   "battle.ncpSpreadGroup": "NCP 精選配招",
   "battle.championsDefault": "Champions 預設",

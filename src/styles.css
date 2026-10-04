@@ -2128,6 +2128,13 @@ button:disabled {
 
 /* ---------- Battle: speed + assumptions ---------- */
 
+/* Full-width checkbox row under the Speed modifier and readout (shown only for Unburden). */
+.speed-row .unburden-control {
+  display: inline-flex;
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
 .speed-row output {
   display: flex;
   align-items: center;

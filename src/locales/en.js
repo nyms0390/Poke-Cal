@@ -163,6 +163,7 @@ export const EN_MESSAGES = {
   "battle.teamFull": ({ name }) => `Attacker team is full, so ${name} was not added. Pick it in the Pokémon search to replace the current Pokémon.`,
   "battle.typeChangeAlreadyActivated": ({ ability }) => `${ability} already activated`,
   "battle.typeChangeCurrentType": ({ ability }) => `${ability} current type`,
+  "battle.itemConsumed": ({ ability }) => `Item used up (${ability} active)`,
   "battle.smogonSpreadGroup": "Smogon ladder SP spreads",
   "battle.ncpSpreadGroup": "NCP curated sets",
   "battle.championsDefault": "Champions default",

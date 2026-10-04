@@ -129,6 +129,10 @@
                 </select>
               </label>
               <output id="attacker-speed-readout" aria-label="Attacker final Speed">Speed —</output>
+              <label class="inline-toggle unburden-control" hidden>
+                <input id="attacker-item-consumed" type="checkbox" data-kind="item-consumed" data-side="attacker" />
+                <span id="attacker-item-consumed-label">Item used up (Unburden active)</span>
+              </label>
             </div>
             <details class="assumption-panel">
               <summary>Assumptions</summary>
@@ -280,6 +284,10 @@
                 </select>
               </label>
               <output id="defender-speed-readout" aria-label="Defender final Speed">Speed —</output>
+              <label class="inline-toggle unburden-control" hidden>
+                <input id="defender-item-consumed" type="checkbox" data-kind="item-consumed" data-side="defender" />
+                <span id="defender-item-consumed-label">Item used up (Unburden active)</span>
+              </label>
             </div>
             <details class="assumption-panel">
               <summary>Assumptions</summary>

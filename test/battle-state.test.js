@@ -17,6 +17,7 @@ import {
   urlWithoutConsumedParams,
 } from "../src/ui/battle-state.js";
 import { calculateDamage } from "../src/engine/damage.js";
+import { compareMoveOrder } from "../src/engine/battle-order.js";
 
 const pikachu = {
   id: "pikachu",
@@ -465,4 +466,45 @@ test("strips consumed battle query parameters for history.replaceState", () => {
   );
   assert.equal(urlWithoutConsumedParams("http://127.0.0.1:4173/battle.html?x=1"), null);
   assert.equal(urlWithoutConsumedParams("not a url"), null);
+});
+
+test("Unburden's item-used-up control doubles Speed in move order and drops the item from the calc", () => {
+  const hawlucha = {
+    id: "hawlucha",
+    name: "Hawlucha",
+    types: ["Fighting", "Flying"],
+    baseStats: { hp: 78, atk: 92, def: 75, spa: 74, spd: 63, spe: 118 },
+  };
+  const garchomp = {
+    id: "garchomp",
+    name: "Garchomp",
+    types: ["Dragon", "Ground"],
+    baseStats: { hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102 },
+  };
+  const unburden = { id: "unburden", name: "Unburden" };
+  const sitrus = { id: "sitrusberry", name: "Sitrus Berry" };
+  const defaults = { nature: "Adamant", sp: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 }, ability: unburden, item: sitrus, moves: [] };
+  const attacker = createSideState(hawlucha, defaults);
+  assert.equal(attacker.itemConsumed, false);
+  const defender = createSideState(garchomp, { ...defaults, nature: "Jolly", sp: { ...defaults.sp, spe: 32 }, ability: null, item: null });
+  const move = { id: "tackle", name: "Tackle", priority: 0 };
+  const orderFor = (state) => {
+    const input = buildCalcInput({ attacker: state, defender }, {});
+    return compareMoveOrder({ attacker: input.attackerState, defender: input.defenderState, attackerMove: move, defenderMove: move });
+  };
+
+  const before = orderFor(attacker);
+  assert.equal(before.firstSide, "defender");
+  const consumed = applyControl(attacker, { kind: "itemConsumed", value: true });
+  assert.equal(consumed.itemConsumed, true);
+  const after = orderFor(consumed);
+  assert.equal(after.attackerSpeed, before.attackerSpeed * 2);
+  assert.equal(after.firstSide, "attacker");
+  assert.equal(buildCalcInput({ attacker: consumed, defender }, {}).attackerState.item, null);
+  assert.equal(buildCalcInput({ attacker, defender }, {}).attackerState.item, sitrus);
+
+  const otherAbility = applyControl(consumed, { kind: "ability", value: { id: "limber", name: "Limber" } });
+  assert.equal(otherAbility.itemConsumed, false, "leaving Unburden clears the flag");
+  assert.equal(applyControl(otherAbility, { kind: "itemConsumed", value: true }).itemConsumed, false);
+  assert.equal(applyControl(consumed, { kind: "ability", value: unburden }).itemConsumed, true);
 });
