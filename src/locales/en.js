@@ -45,6 +45,7 @@ export const EN_MESSAGES = {
   "catalog.loaded": ({ pokemon, abilities, moves }) => `${pokemon} Pokémon/forms, ${abilities} abilities, ${moves} moves loaded`,
   "catalog.missing": "Pokémon data is unavailable.",
   "catalog.loading": "Loading Pokémon data…",
+  "catalog.requestedUnavailable": ({ id }) => `No Champions-legal Pokémon matches “${id}”.`,
   "loadError.title": "PokéCal couldn’t load its data",
   "loadError.catalog": "The Pokémon, move, ability, and item catalogs didn’t load, so this page’s tools are paused. Check your connection and try again.",
   "loadError.teams": "The tournament-team archive didn’t load. Check your connection and try again.",

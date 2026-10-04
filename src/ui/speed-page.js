@@ -23,10 +23,11 @@ import {
   translateSubtree,
   t,
 } from "../i18n.js";
-import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
+import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
 import {
   attachCombobox,
   browserStorage,
+  consumeQueryParam,
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
@@ -74,6 +75,7 @@ const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let popularOpponents = [];
 let manualOpponents = [];
+let unavailableRequestId = "";
 const updatePage = createLiveUpdater(render);
 
 initI18n();
@@ -81,7 +83,7 @@ initialize();
 
 onLocaleChange(() => {
   if (!catalogs) return;
-  elements.status.textContent = catalogLoadedStatus(catalogs);
+  renderStatus();
   renderNatureOptions();
   if (user) render();
 });
@@ -116,7 +118,11 @@ async function initialize() {
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
     ...pokemonSearchMatchers(() => catalogs),
-    onSelect: seedUser,
+    onSelect: (pokemon) => {
+      unavailableRequestId = "";
+      renderStatus();
+      seedUser(pokemon);
+    },
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
   attachCombobox({
@@ -146,8 +152,13 @@ async function initialize() {
     ...elements.presetInputs,
   ]) input.addEventListener("input", handleControl);
 
-  const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
-  const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
+  // `?pokemon=` is a one-off hand-off: consume it so a reload restores the saved active set.
+  const requestedId = consumeQueryParam("pokemon");
+  const requested = requestedId
+    ? catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId))
+    : undefined;
+  unavailableRequestId = requestedId && !requested ? requestedId : "";
+  renderStatus();
   const activeSet = activeSetStore.readSet();
   const activePokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === activeSet?.pokemonId);
   const initialPokemon = requested ?? activePokemon ?? popularOpponents[0]?.pokemon ?? catalogs.pokemon[0];
@@ -167,6 +178,10 @@ function renderNatureOptions() {
   if (selected) elements.nature.value = selected;
 }
 
+
+function renderStatus() {
+  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+}
 
 function seedUser(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;

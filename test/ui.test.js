@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 import {
   attachCombobox,
+  consumeQueryParam,
   damagePercentColor,
   ensureRenderedRows,
   itemLabel,
@@ -19,7 +20,7 @@ import {
   typeClassName,
   typeIconPath,
 } from "../src/ui/components.js";
-import { rankObservedUsage } from "../src/ui/bootstrap.js";
+import { rankObservedUsage, requestedPokemonStatus } from "../src/ui/bootstrap.js";
 import { restoreBuilderCardFocus } from "../src/ui/builder-focus.js";
 import { createDeferredUpdater, createLiveUpdater } from "../src/ui/live-update.js";
 import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "../src/ui/battle-results.js";
@@ -1188,5 +1189,37 @@ test("comboboxes without a list id get unique option ids, aria-controls, and no 
     assert.equal(first.input.attributes.get("aria-expanded"), "false");
   } finally {
     globalThis.document = previousDocument;
+  }
+});
+
+test("a ?pokemon= hand-off is consumed once and an unknown id is reported, not ignored", () => {
+  const previous = { location: globalThis.location, history: globalThis.history };
+  const replaced = [];
+  globalThis.location = {
+    href: "http://127.0.0.1:4173/builder.html?pokemon=amoonguss&tab=break#bulk",
+    search: "?pokemon=amoonguss&tab=break",
+  };
+  globalThis.history = { state: null, replaceState: (_state, _title, url) => replaced.push(url) };
+  try {
+    assert.equal(consumeQueryParam("pokemon"), "amoonguss");
+    assert.deepEqual(replaced, ["/builder.html?tab=break#bulk"]);
+    globalThis.location = { href: "http://127.0.0.1:4173/builder.html", search: "" };
+    assert.equal(consumeQueryParam("pokemon"), null);
+    assert.equal(replaced.length, 1, "no history update without the parameter");
+  } finally {
+    globalThis.location = previous.location;
+    globalThis.history = previous.history;
+  }
+
+  const catalogs = { pokemon: { length: 358 }, abilities: { length: 317 }, moves: { length: 515 } };
+  const locale = getLocale();
+  try {
+    setLocale("en", { persist: false });
+    assert.equal(requestedPokemonStatus(catalogs, "amoonguss"), "No Champions-legal Pokémon matches “amoonguss”.");
+    assert.equal(requestedPokemonStatus(catalogs), tFor("en", "catalog.loaded", { pokemon: 358, abilities: 317, moves: 515 }));
+    setLocale("zh-TW", { persist: false });
+    assert.equal(requestedPokemonStatus(catalogs, "amoonguss"), "Champions 圖鑑中沒有符合「amoonguss」的寶可夢。");
+  } finally {
+    setLocale(locale, { persist: false });
   }
 });

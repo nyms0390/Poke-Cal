@@ -47,6 +47,7 @@ export const ZH_TW_MESSAGES = {
   "paste.mappedEvs": "已將 EV 換算為 Champions SP。",
   "catalog.loaded": ({ pokemon, abilities, moves }) => `已載入 ${pokemon} 隻寶可夢/形態、${abilities} 個特性與 ${moves} 個招式`,
   "catalog.missing": "目前無法取得寶可夢資料。",
+  "catalog.requestedUnavailable": ({ id }) => `Champions 圖鑑中沒有符合「${id}」的寶可夢。`,
   "catalog.loading": "正在載入寶可夢資料…",
   "loadError.title": "PokéCal 無法載入資料",
   "loadError.catalog": "寶可夢、招式、特性與道具資料未能載入，此頁面的工具已暫停。請檢查網路連線後再試一次。",

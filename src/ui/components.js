@@ -5,6 +5,7 @@ import { formatMovePriority } from "../engine/battle-order.js";
 import { moveEffect } from "../engine/move-effects.js";
 import { normalizeId } from "../identifiers.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
+import { urlWithoutConsumedParams } from "./battle-state.js";
 
 const ITEM_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png?v1";
 
@@ -338,6 +339,22 @@ export function browserStorage() {
   } catch {
     return null;
   }
+}
+
+// Reads a one-off `?key=` hand-off from another page and removes it from the address bar, so
+// a reload restores the page's saved state instead of re-seeding from the link (as Battle
+// does for `?left=`).
+export function consumeQueryParam(key) {
+  const value = new URLSearchParams(globalThis.location?.search ?? "").get(key);
+  const next = urlWithoutConsumedParams(globalThis.location?.href ?? "", [key]);
+  if (next !== null) {
+    try {
+      globalThis.history?.replaceState(globalThis.history.state, "", next);
+    } catch {
+      // Some embedded or file:// contexts refuse history updates; the page still works.
+    }
+  }
+  return value;
 }
 
 // Move search-result row: name, type and category, and base power.

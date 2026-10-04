@@ -41,7 +41,7 @@ import {
 } from "../i18n.js";
 import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
-import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { loadCatalogs, rankByUsage, requestedPokemonStatus } from "./bootstrap.js";
 import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
   analysisRenderKey,
@@ -67,6 +67,7 @@ import {
 import {
   attachCombobox,
   browserStorage,
+  consumeQueryParam,
   critToggleButton,
   damagePercentColor,
   ensureRenderedRows,
@@ -139,6 +140,7 @@ const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let moveComboboxCleanups = [];
 let customThreats = [];
 let userSetupDraft = null;
+let unavailableRequestId = "";
 const threatOverrides = new Map();
 const expandedCards = new Set();
 const openAnalysisPanels = new Set();
@@ -164,7 +166,7 @@ initialize();
 
 onLocaleChange(() => {
   if (!catalogs) return;
-  elements.status.textContent = catalogLoadedStatus(catalogs);
+  renderStatus();
   renderLocaleOptions();
   if (state.user) {
     renderPicks();
@@ -187,7 +189,11 @@ async function initialize() {
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
     ...pokemonSearchMatchers(() => catalogs),
-    onSelect: seedPokemon,
+    onSelect: (pokemon) => {
+      unavailableRequestId = "";
+      renderStatus();
+      seedPokemon(pokemon);
+    },
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
   attachCombobox({
@@ -206,8 +212,13 @@ async function initialize() {
   elements.threatCount.addEventListener("input", handleThreatCount);
   elements.threatStatus.addEventListener("input", handleThreatStatus);
 
-  const requestedId = new URLSearchParams(globalThis.location?.search ?? "").get("pokemon");
-  const requested = catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId));
+  // `?pokemon=` is a one-off hand-off: consume it so a reload restores the saved active set.
+  const requestedId = consumeQueryParam("pokemon");
+  const requested = requestedId
+    ? catalogs.pokemon.find(({ id }) => normalizeId(id) === normalizeId(requestedId))
+    : undefined;
+  unavailableRequestId = requestedId && !requested ? requestedId : "";
+  renderStatus();
   const activeSet = activeSetStore.readSet();
   const activePokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === activeSet?.pokemonId);
   const defaultThreat = threatList(catalogs.pokemon, { count: 1, moveLookup: catalogs.moveLookup })[0];
@@ -215,6 +226,10 @@ async function initialize() {
   seedPokemon(initialPokemon, {
     activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
   });
+}
+
+function renderStatus() {
+  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
 }
 
 function initializeAnalysisTabs() {

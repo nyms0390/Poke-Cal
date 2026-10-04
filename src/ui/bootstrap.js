@@ -152,6 +152,15 @@ export function catalogLoadedStatus(data) {
   });
 }
 
+// Footer status for a page that resolves a `?pokemon=` hand-off: the catalog summary, or a
+// notice when the requested id is not in the Champions catalog (for example a Pokémon that is
+// not Champions-legal), so the fallback Pokémon is not shown silently.
+export function requestedPokemonStatus(data, unavailableId = "") {
+  return unavailableId
+    ? t("catalog.requestedUnavailable", { id: String(unavailableId).slice(0, 60) })
+    : catalogLoadedStatus(data);
+}
+
 // Shared "rank a catalog list by Champions usage" composition, repeated for abilities, items,
 // and moves on both pages.
 export function rankByUsage(entries, scope) {
