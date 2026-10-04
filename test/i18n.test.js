@@ -4,11 +4,14 @@ import assert from "node:assert/strict";
 import { EN_MESSAGES } from "../src/locales/en.js";
 import { STATIC_ZH_TW, ZH_TW_MESSAGES } from "../src/locales/zh-tw.js";
 import {
+  applyDocumentTranslations,
   formatNumber,
+  getLocale,
   localizedName,
   localizedSpreadName,
   localizedTerm,
   resolveLocale,
+  setLocale,
   tFor,
   toTraditionalChinese,
 } from "../src/i18n.js";
@@ -102,4 +105,48 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatDamageNote("Assumes target already moved", "zh-TW"), "假設目標已行動");
   assert.equal(formatDamageNote("Protean changed type to Fighting", "zh-TW"), "Protean將屬性變為格鬥");
   assert.equal(formatSetWarning("Unknown move: Missing Move", "zh-TW"), "未知招式：Missing Move");
+});
+
+// Minimal attribute-only DOM stand-in: enough for applyDocumentTranslations' selectors.
+function fakeElement(attributes, dataset = {}) {
+  return {
+    attributes: { ...attributes },
+    dataset: { ...dataset },
+    hasAttribute(name) { return name in this.attributes; },
+    getAttribute(name) { return this.attributes[name] ?? null; },
+    setAttribute(name, value) { this.attributes[name] = String(value); },
+  };
+}
+
+function fakeRoot(elements) {
+  const matches = (element, selector) => selector.split(",").some((part) => {
+    const attribute = part.trim().match(/^\[([a-z0-9-]+)\]$/)?.[1];
+    if (!attribute) return false;
+    if (!attribute.startsWith("data-")) return element.hasAttribute(attribute);
+    const key = attribute.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    return element.dataset[key] !== undefined;
+  });
+  return { querySelectorAll: (selector) => elements.filter((element) => matches(element, selector)) };
+}
+
+test("keyed aria-labels follow every language switch instead of the load-time value", () => {
+  const previous = getLocale();
+  const keyed = fakeElement({ "aria-label": "Move catalog" }, { i18nAriaLabel: "moves.ariaLabel" });
+  const unmarked = fakeElement({ "aria-label": "Move catalog" });
+  const root = fakeRoot([keyed, unmarked]);
+  try {
+    setLocale("zh-TW", { persist: false });
+    applyDocumentTranslations(root);
+    assert.equal(keyed.getAttribute("aria-label"), "招式圖鑑");
+    assert.equal(unmarked.getAttribute("aria-label"), STATIC_ZH_TW["Move catalog"] ?? "Move catalog");
+    setLocale("en", { persist: false });
+    applyDocumentTranslations(root);
+    assert.equal(keyed.getAttribute("aria-label"), "Move catalog");
+    assert.equal(unmarked.getAttribute("aria-label"), "Move catalog");
+    setLocale("zh-TW", { persist: false });
+    applyDocumentTranslations(root);
+    assert.equal(keyed.getAttribute("aria-label"), "招式圖鑑");
+  } finally {
+    setLocale(previous, { persist: false });
+  }
 });

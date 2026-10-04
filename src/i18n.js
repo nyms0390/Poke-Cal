@@ -165,6 +165,9 @@ function translateUnmarkedDocumentCopy(root) {
     for (const attribute of ["placeholder", "aria-label", "title", "content"]) {
       if (!element.hasAttribute(attribute)) continue;
       const camelAttribute = attribute.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase());
+      // Attributes with a data-i18n-* key were just set from the message catalog; caching
+      // and re-applying their first value here would pin them to the load-time language.
+      if (element.dataset[`i18n${camelAttribute}`] !== undefined) continue;
       const property = `pokecalEnglish${camelAttribute}`;
       const original = element.dataset[property] ?? element.getAttribute(attribute);
       element.dataset[property] = original;
