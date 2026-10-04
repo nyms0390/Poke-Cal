@@ -108,8 +108,8 @@ PokéCal/
 npm run sync-data              # regenerate public/*.json from Showdown (incl. Champions mod, pinned commit) + PokeAPI (needs internet)
 npm run sync-champions-data    # overlay Limitless usage and rebuild the team archive (run after sync-data)
 npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run after sync-champions-data)
-npm run sync-ncp-spreads       # overlay NCP curated sets (run after sync-champions-spreads)
-npm run sync-all               # all four, in order, then build-web-catalogs
+npm run sync-ncp-spreads       # overlay NCP curated sets (needs only sync-data; independent of the usage/spread overlays)
+npm run sync-all               # all four (sync-data, champions-data, champions-spreads, ncp-spreads), then build-web-catalogs
 npm run build-web-catalogs     # regenerate the slim browser catalogs in public/web/ and the MCP catalogs in public/mcp-catalogs/
 npm run validate-data          # check catalog metrics (add -- --baseline <dir> to compare against a copy)
 npm run bump-showdown          # move scripts/showdown-pin.json to the latest Showdown master (-- --commit <sha> to pick one)
