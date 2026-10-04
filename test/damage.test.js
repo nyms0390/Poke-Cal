@@ -1976,6 +1976,24 @@ test("applies weather and terrain ability boosts only in their active fields", (
   assert.equal(hadronTerrain.maxDamage > hadronNoTerrain.maxDamage, true);
 });
 
+test("Hadron Engine and Orichalcum Pulse use Showdown's 5461/4096 boost (matches @smogon/calc)", () => {
+  // Rolls from @smogon/calc 0.12.0: Mew overridden to Normal type with 100 base stats, 0 SP,
+  // Hardy, singles; Swift (60 BP Special) in Electric Terrain and Body Slam (85 BP) in Sun.
+  const species = { id: "fieldboostmew", name: "Fieldboostmew", types: ["Normal"],
+    baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 50 } };
+  const run = (ability, move, field) => calculateDamage({ attacker: species, defender: species, move,
+    attackerState: { ...neutralState, ability }, defenderState: neutralState,
+    field: createField({ format: "singles", ...field }) });
+  const hadron = run({ id: "hadronengine", name: "Hadron Engine" },
+    { id: "swift", name: "Swift", type: "Normal", category: "Special", basePower: 60, target: "normal" },
+    { terrain: "Electric Terrain" });
+  const orichalcum = run({ id: "orichalcumpulse", name: "Orichalcum Pulse" },
+    { id: "bodyslam", name: "Body Slam", type: "Normal", category: "Physical", basePower: 85, target: "normal" },
+    { weather: "SunnyDay" });
+  assert.deepEqual(hadron.rolls, [46, 46, 48, 48, 48, 49, 49, 51, 51, 51, 52, 52, 52, 54, 54, 55]);
+  assert.deepEqual(orichalcum.rolls, [64, 64, 66, 66, 67, 67, 69, 69, 70, 70, 72, 72, 73, 73, 75, 76]);
+});
+
 test("suppresses weather effects when Cloud Nine or Air Lock is active", () => {
   const waterUser = {
     id: "wateruser",

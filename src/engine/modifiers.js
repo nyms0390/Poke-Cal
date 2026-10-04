@@ -96,7 +96,8 @@ export const MOVE_FLAG_POWER_ABILITIES = {
   strongjaw: { flag: "bite", value: 1.5 },
   toughclaws: { flag: "contact", value: 1.3 },
 };
-const FIELD_ABILITY_BOOST = 4915 / 4096;
+// Showdown: Orichalcum Pulse (Atk in Sun) and Hadron Engine (SpA in Electric Terrain) are 5461/4096.
+const FIELD_ABILITY_BOOST = 5461 / 4096;
 const IMPLIED_FIELDS = {
   drizzle: { weather: "RainDance" },
   drought: { weather: "SunnyDay" },

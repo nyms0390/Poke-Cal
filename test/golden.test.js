@@ -293,7 +293,8 @@ const P2_GOLDEN_CASES = [
   },
   {
     name: "P2-05 Hadron Engine boosts Special Attack in Electric Terrain",
-    // 120 SpA becomes pokeRound(120 * 4915/4096) = 144; Normal STAB yields 55-66.
+    // 120 SpA becomes pokeRound(120 * 5461/4096) = 160 (Showdown's 5461/4096, not 1.2x);
+    // Normal STAB yields 60-72, matching @smogon/calc roll for roll.
     input: {
       attacker: p2Attacker,
       defender: p2Defender,
@@ -302,7 +303,7 @@ const P2_GOLDEN_CASES = [
       defenderState: oneHpState,
       field: createField({ terrain: "Electric Terrain" }),
     },
-    expected: { min: 55, max: 66, koText: "guaranteed OHKO" },
+    expected: { min: 60, max: 72, koText: "guaranteed OHKO" },
   },
   {
     name: "P2-06 Pixilate converts type and boosts power",
