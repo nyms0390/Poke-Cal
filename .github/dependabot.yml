@@ -1,0 +1,15 @@
+# Keeps the SHA-pinned GitHub Actions in .github/workflows current: Dependabot understands the
+# `uses: owner/action@<sha> # vX.Y.Z` form and updates the SHA and the version comment together.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ci

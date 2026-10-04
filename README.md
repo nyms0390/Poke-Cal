@@ -93,6 +93,7 @@ PokéCal/
 ├── .github/workflows/pages.yml # Tests, stages _site/, and deploys it to GitHub Pages
 ├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
 ├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
+├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions
 ├── ROADMAP.md                  # Completed implementation roadmap
 └── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
 ```
