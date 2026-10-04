@@ -56,4 +56,4 @@ Pokémon Champions doubles is the default format. Results are deterministic and 
 - NCP (Nimbasa City Post) — curated Champions sets.
 - PokeAPI — Traditional Chinese aliases only.
 
-The Worker reads the generated `../public/pokemon.json`, `moves.json`, `abilities.json`, and `items.json` through the Cloudflare `ASSETS` binding and caches parsed catalogs per Worker isolate. No user model token is required by PokéCal, and agent callers' AI-provider tokens are never sent to this service.
+The Worker reads the generated `../public/mcp-catalogs/pokemon.json`, `moves.json`, `abilities.json`, and `items.json` through the Cloudflare `ASSETS` binding and caches parsed catalogs per Worker isolate. These are minified copies of the full `public/*.json` catalogs that keep every entry (so non-Champions-legal lookups still work) but drop fields the Worker never reads, cutting about 6.0 MB to 1.0 MB and the cold JSON parse by roughly 4x. Regenerate them with `npm run build-web-catalogs` from the repository root after any data sync. No user model token is required by PokéCal, and agent callers' AI-provider tokens are never sent to this service.
