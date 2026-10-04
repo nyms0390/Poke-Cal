@@ -39,7 +39,9 @@ jobs:
       - name: Snapshot committed catalogs as the validation baseline
         run: cp -R public "$RUNNER_TEMP/baseline"
 
-      - name: Sync Showdown + Champions catalogs
+      # Showdown base data, text, and the Champions mod come from the commit pinned in
+      # scripts/showdown-pin.json (bumped by bump-showdown.yml pull requests), not from master.
+      - name: Sync Showdown + Champions catalogs (pinned commit)
         run: npm run sync-data
 
       - name: Sync Limitless Champions usage and tournament teams

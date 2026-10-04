@@ -1,0 +1,71 @@
+name: Bump Showdown Pin
+
+on:
+  schedule:
+    # Same weekly slot as update-data.yml (Mondays 06:00 UTC). That sync keeps using the pinned
+    # commit; this only proposes moving the pin, so Showdown catalog changes land after review.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: bump-showdown
+  cancel-in-progress: false
+
+jobs:
+  # Runs only first-party code (scripts/bump-showdown-pin.mjs resolves the latest master SHA with
+  # git ls-remote; no upstream data is downloaded or evaluated) and keeps a single open pull
+  # request on a fixed branch up to date.
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BRANCH: bot/showdown-pin
+      TITLE: Bump Showdown pin
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Resolve the latest Showdown master commit
+        id: bump
+        run: node scripts/bump-showdown-pin.mjs --body-file "$RUNNER_TEMP/pr-body.md"
+
+      - name: Open or update the pull request
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          NEW_SHA: ${{ steps.bump.outputs.new }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          git add scripts/showdown-pin.json
+          git commit -m "data: bump Showdown pin to ${NEW_SHA:0:12}"
+          git push --force origin "$BRANCH"
+          number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --title "$TITLE" --body-file "$RUNNER_TEMP/pr-body.md"
+            echo "Updated pull request #$number."
+          else
+            gh pr create --base main --head "$BRANCH" --title "$TITLE" --body-file "$RUNNER_TEMP/pr-body.md"
+          fi
+
+      - name: Close a superseded pull request
+        if: steps.bump.outputs.changed == 'false'
+        run: |
+          number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh pr close "$number" --delete-branch \
+              --comment "main already pins the latest Showdown master; nothing to bump."
+          fi

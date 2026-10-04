@@ -78,6 +78,9 @@ PokéCal/
 │   └── icons/                 # Type and move-category icons
 ├── scripts/
 │   ├── lib/sync-utils.mjs                  # Shared sync CLI/JSON utilities and timeout/retry fetch helper
+│   ├── lib/showdown-pin.mjs                # Read/validate/write the Showdown commit pin
+│   ├── showdown-pin.json                  # Pinned smogon/pokemon-showdown commit used by sync-data
+│   ├── bump-showdown-pin.mjs              # Move the pin to the latest Showdown master (npm run bump-showdown)
 │   ├── sync-pokemon-data.mjs              # Regenerate public/*.json from Showdown (+ Champions mod) + PokeAPI
 │   ├── sync-limitless-champions-usage.mjs # Overlay usage and build the team archive
 │   ├── sync-champions-spreads.mjs         # Overlay Smogon ladder SP spreads
@@ -89,6 +92,7 @@ PokéCal/
 ├── test/                      # Node built-in test runner suites (node --test)
 ├── .github/workflows/pages.yml # Tests, stages _site/, and deploys it to GitHub Pages
 ├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
+├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
 ├── ROADMAP.md                  # Completed implementation roadmap
 └── MECHANICS_CHECKLIST.md     # Battle-calculator accuracy tracker
 ```
@@ -101,16 +105,19 @@ PokéCal/
 ## Setup
 
 ```sh
-npm run sync-data              # regenerate public/*.json from Showdown (incl. Champions mod) + PokeAPI (needs internet)
+npm run sync-data              # regenerate public/*.json from Showdown (incl. Champions mod, pinned commit) + PokeAPI (needs internet)
 npm run sync-champions-data    # overlay Limitless usage and rebuild the team archive (run after sync-data)
 npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run after sync-champions-data)
 npm run sync-ncp-spreads       # overlay NCP curated sets (run after sync-champions-spreads)
 npm run sync-all               # all four, in order, then build-web-catalogs
 npm run build-web-catalogs     # regenerate the slim browser catalogs in public/web/ and the MCP catalogs in public/mcp-catalogs/
 npm run validate-data          # check catalog metrics (add -- --baseline <dir> to compare against a copy)
+npm run bump-showdown          # move scripts/showdown-pin.json to the latest Showdown master (-- --commit <sha> to pick one)
 ```
 
 Generated catalogs are committed, so syncing is only needed to refresh data.
+
+Showdown is pinned: `sync-data` fetches the Showdown base data, text, and Champions mod from the commit in `scripts/showdown-pin.json` (`{"repo": "smogon/pokemon-showdown", "commit": "<40-hex SHA>"}`), never from `master`, so stats, moves, and legality only change after a reviewed bump. `.github/workflows/bump-showdown.yml` runs `npm run bump-showdown` weekly (and on demand) and, when master has moved, opens or updates a single "Bump Showdown pin" pull request from `bot/showdown-pin` with the upstream compare link; merging it pulls those catalog changes into the next weekly sync. The usage sources (Limitless, Smogon stats, NCP) and PokeAPI are not pinned and keep updating weekly.
 
 Syncs fail closed: each script validates its own freshly built output (`src/data/catalog-validation.js`: absolute minimums such as at least 150 Champions-legal Pokémon with Limitless usage, 100 with Smogon spreads, 40 with NCP sets, 1000 Pokémon with Traditional Chinese aliases, 3 archived tournaments; and no metric may shrink by more than 25% versus the files being replaced) and exits non-zero without writing anything when a check fails. Pass `--allow-shrink` (e.g. `npm run sync-ncp-spreads -- --allow-shrink`) only when a large drop is a legitimate upstream change; minimums still apply. Upstream requests use a shared helper with timeouts, bounded retries with backoff for network errors/429/5xx, and rejection of HTML error pages. Showdown `.ts` files are evaluated in a child Node process started with the permission model (no file, child-process, or worker access and an empty environment).
 
@@ -178,14 +185,14 @@ sort toggle; the Bulk tab always uses its fixed section order and joint-coverage
 
 ## Data Sources
 
-- Pokémon Showdown (mechanics/catalog seed: pokedex, learnsets, abilities, moves, items, text descriptions): <https://github.com/smogon/pokemon-showdown/tree/master/data>
-- Pokémon Showdown Champions mod (Champions legality and balance overrides: per-species legality/tier from `formats-data.ts`, Champions learnsets, move/item/ability availability and stat changes): <https://github.com/smogon/pokemon-showdown/tree/master/data/mods/champions>. Applied during `sync-data`; catalogs get a `champions.legal` flag and Champions-legal Pokémon get Champions learnsets and move/item stats.
+- Pokémon Showdown (mechanics/catalog seed: pokedex, learnsets, abilities, moves, items, text descriptions): <https://github.com/smogon/pokemon-showdown/tree/master/data>, fetched at the commit pinned in `scripts/showdown-pin.json`.
+- Pokémon Showdown Champions mod (Champions legality and balance overrides: per-species legality/tier from `formats-data.ts`, Champions learnsets, move/item/ability availability and stat changes): <https://github.com/smogon/pokemon-showdown/tree/master/data/mods/champions>, at the same pinned commit. Applied during `sync-data`; catalogs get a `champions.legal` flag and Champions-legal Pokémon get Champions learnsets and move/item stats.
 - Limitless tournament API (Champions usage counts and rates plus per-Pokémon items, abilities, moves, natures, and Tera choices): <https://play.limitlesstcg.com/tournaments> (`VGC` game, `M-C` format, last 50 tournaments by default). The same sync also archives up to 10 recent completed brackets with published top-cut team lists; Limitless does not publish SP or EV spreads for those teams.
 - Smogon ladder usage stats (popular SP spreads per Pokémon, `Nature:HP/Atk/Def/SpA/SpD/Spe` with usage rates): <https://www.smogon.com/stats/> chaos JSON for the Champions VGC ladder. `sync-champions-spreads` auto-detects the latest month and newest regulation (Bo1 + Bo3, rating cutoff 1760 by default; override with `--month`, `--formats`, `--cutoff`, `--top`) and writes top spreads to `champions.usage.spreads` in `public/pokemon.json`.
 - NCP (Nimbasa City Post) damage calculator (hand-curated Champions sets): <https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/>. `sync-ncp-spreads` parses its maintained JavaScript setdex and writes normalized sets to `champions.ncp` in `public/pokemon.json`.
 - PokeAPI CSVs (Traditional Chinese search aliases only): `pokemon_species_names.csv`, `move_names.csv`, `ability_names.csv`, `items.csv`, `item_names.csv`
 
-Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.json`, `public/items.json`, and `public/limitless-teams.json` (full catalogs, used by scripts and agent skills), plus `public/mcp-catalogs/*.json` for the MCP Worker (every entry, minified, without fields the Worker never reads: about 6.0 MB raw down to about 1.0 MB), plus the derived `public/web/*.json` the browser loads: only the Champions-legal entries the pages keep (legal Pokémon and their Mega forms, legal moves and items, and abilities those Pokémon use), minified and without Showdown's per-generation history fields. That cuts the four catalogs every page fetches from about 6.0 MB raw / 0.68 MB gzip to about 1.95 MB raw / 0.29 MB gzip. Re-run `npm run sync-data` when Showdown data changes, `npm run sync-champions-data` when Limitless has new Champions tournaments, `npm run sync-champions-spreads` when Smogon publishes new monthly stats (it falls back up to three months if the newest has no Champions formats yet), and `npm run sync-ncp-spreads` when NCP sets change, then `npm run build-web-catalogs`. `.github/workflows/update-data.yml` runs all of them weekly in a read-only job, validates the result against the committed data, and a separate job commits `public/` and triggers the Pages deploy.
+Generated files: `public/pokemon.json`, `public/abilities.json`, `public/moves.json`, `public/items.json`, and `public/limitless-teams.json` (full catalogs, used by scripts and agent skills), plus `public/mcp-catalogs/*.json` for the MCP Worker (every entry, minified, without fields the Worker never reads: about 6.0 MB raw down to about 1.0 MB), plus the derived `public/web/*.json` the browser loads: only the Champions-legal entries the pages keep (legal Pokémon and their Mega forms, legal moves and items, and abilities those Pokémon use), minified and without Showdown's per-generation history fields. That cuts the four catalogs every page fetches from about 6.0 MB raw / 0.68 MB gzip to about 1.95 MB raw / 0.29 MB gzip. Re-run `npm run sync-data` after bumping the Showdown pin, `npm run sync-champions-data` when Limitless has new Champions tournaments, `npm run sync-champions-spreads` when Smogon publishes new monthly stats (it falls back up to three months if the newest has no Champions formats yet), and `npm run sync-ncp-spreads` when NCP sets change, then `npm run build-web-catalogs`. `.github/workflows/update-data.yml` runs all of them weekly in a read-only job (Showdown at the pinned commit), validates the result against the committed data, and a separate job commits `public/` and triggers the Pages deploy; `.github/workflows/bump-showdown.yml` proposes pin bumps as a pull request.
 
 ## Development
 

@@ -1,8 +1,34 @@
 import { normalizeId } from "../identifiers.js";
 import { extractLearnsetMoves } from "./showdown-data.js";
 
-export const CHAMPIONS_MOD_BASE_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mods/champions";
+// Showdown data is fetched from a pinned commit (scripts/showdown-pin.json), never a branch, so a
+// weekly sync only picks up catalog changes after the pin is bumped in a reviewed pull request.
+const SHOWDOWN_REPO_PATTERN = /^(?!\.+\/)[A-Za-z0-9_.-]+\/(?!\.+$)[A-Za-z0-9_.-]+$/;
+const COMMIT_SHA_PATTERN = /^[0-9a-f]{40}$/;
+
+export function isValidShowdownPin(pin) {
+  return (
+    typeof pin?.repo === "string" &&
+    SHOWDOWN_REPO_PATTERN.test(pin.repo) &&
+    typeof pin?.commit === "string" &&
+    COMMIT_SHA_PATTERN.test(pin.commit)
+  );
+}
+
+// `https://raw.githubusercontent.com/<repo>/<commit>/data` for a `{ repo, commit }` pin. Throws
+// unless `commit` is a full 40-character lowercase SHA (branch names and short SHAs are refused).
+export function showdownDataBaseUrl(pin) {
+  if (!isValidShowdownPin(pin)) {
+    throw new Error(
+      `Invalid Showdown pin ${JSON.stringify(pin)}: expected { repo: "owner/name", commit: <40-hex SHA> }`,
+    );
+  }
+  return `https://raw.githubusercontent.com/${pin.repo}/${pin.commit}/data`;
+}
+
+export function championsModBaseUrl(pin) {
+  return `${showdownDataBaseUrl(pin)}/mods/champions`;
+}
 
 export function isChampionsLegalFormatsEntry(formatsEntry) {
   if (!formatsEntry) return false;

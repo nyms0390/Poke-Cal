@@ -264,6 +264,31 @@ test("downloads Pokémon, item, ability, and move catalogs from source files", a
   assert.equal("usage-stats" in data, false);
 });
 
+test("fetches Showdown and the Champions mod at the pinned commit and PokeAPI from master", async () => {
+  const commit = "0123456789abcdef0123456789abcdef01234567";
+  const urls = [];
+  await downloadEverything(
+    async (url) => {
+      urls.push(url);
+      const [key] = [...fixtures.keys()]
+        .filter((candidate) => url.endsWith(candidate))
+        .sort((a, b) => b.length - a.length);
+      return fixtures.get(key);
+    },
+    { pin: { repo: "smogon/pokemon-showdown", commit } },
+  );
+
+  const showdown = urls.filter((url) => url.includes("/smogon/pokemon-showdown/"));
+  assert.equal(showdown.length, 13);
+  for (const url of showdown) {
+    assert.ok(url.startsWith(`https://raw.githubusercontent.com/smogon/pokemon-showdown/${commit}/data/`), url);
+  }
+  const pokeApi = urls.filter((url) => url.includes("/PokeAPI/pokeapi/"));
+  assert.equal(pokeApi.length, 5);
+  for (const url of pokeApi) assert.ok(url.includes("/PokeAPI/pokeapi/master/"), url);
+  assert.equal(urls.length, 18);
+});
+
 test("extracts only slot 0 for Mega forms while retaining all normal slots", () => {
   assert.deepEqual(
     extractAbilities({ name: "Baxcalibur-Mega-Z", abilities: { 0: "Thermal Exchange", H: "Ice Body" } }),

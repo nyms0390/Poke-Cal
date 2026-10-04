@@ -1,4 +1,8 @@
-import { CHAMPIONS_MOD_BASE_URL, applyChampionsData } from "../src/data/champions-data.js";
+import {
+  applyChampionsData,
+  championsModBaseUrl,
+  showdownDataBaseUrl,
+} from "../src/data/champions-data.js";
 import { normalizeId } from "../src/identifiers.js";
 import {
   extractAbilities,
@@ -14,28 +18,30 @@ import {
   readCatalogs,
   writeJsonEntries,
 } from "./lib/sync-utils.mjs";
+import { readShowdownPin } from "./lib/showdown-pin.mjs";
 
-const SHOWDOWN_POKEDEX_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/pokedex.ts";
-const SHOWDOWN_LEARNSETS_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/learnsets.ts";
-const SHOWDOWN_ABILITIES_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/abilities.ts";
-const SHOWDOWN_MOVES_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/moves.ts";
-const SHOWDOWN_ITEMS_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/items.ts";
-const SHOWDOWN_ABILITIES_TEXT_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/abilities.ts";
-const SHOWDOWN_MOVES_TEXT_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/moves.ts";
-const SHOWDOWN_ITEMS_TEXT_URL =
-  "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/text/items.ts";
-const CHAMPIONS_FORMATS_DATA_URL = `${CHAMPIONS_MOD_BASE_URL}/formats-data.ts`;
-const CHAMPIONS_LEARNSETS_URL = `${CHAMPIONS_MOD_BASE_URL}/learnsets.ts`;
-const CHAMPIONS_ABILITIES_URL = `${CHAMPIONS_MOD_BASE_URL}/abilities.ts`;
-const CHAMPIONS_MOVES_URL = `${CHAMPIONS_MOD_BASE_URL}/moves.ts`;
-const CHAMPIONS_ITEMS_URL = `${CHAMPIONS_MOD_BASE_URL}/items.ts`;
+// Showdown base data, text, and the Champions mod are fetched from the commit pinned in
+// scripts/showdown-pin.json (see scripts/bump-showdown-pin.mjs). PokeAPI stays on `master`.
+export function showdownUrls(pin) {
+  const data = showdownDataBaseUrl(pin);
+  const mod = championsModBaseUrl(pin);
+  return {
+    pokedex: `${data}/pokedex.ts`,
+    learnsets: `${data}/learnsets.ts`,
+    abilities: `${data}/abilities.ts`,
+    moves: `${data}/moves.ts`,
+    items: `${data}/items.ts`,
+    abilitiesText: `${data}/text/abilities.ts`,
+    movesText: `${data}/text/moves.ts`,
+    itemsText: `${data}/text/items.ts`,
+    championsFormatsData: `${mod}/formats-data.ts`,
+    championsLearnsets: `${mod}/learnsets.ts`,
+    championsAbilities: `${mod}/abilities.ts`,
+    championsMoves: `${mod}/moves.ts`,
+    championsItems: `${mod}/items.ts`,
+  };
+}
+
 const SPECIES_NAMES_URL =
   "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv";
 const MOVE_NAMES_URL =
@@ -49,7 +55,9 @@ const ITEM_NAMES_URL =
 const outputDirectory = new URL("../public/", import.meta.url);
 const TRADITIONAL_CHINESE_LANGUAGE_ID = 4;
 
-export async function downloadEverything(fetcher = fetchText) {
+// `pin` defaults to scripts/showdown-pin.json; pass `{ repo, commit }` to sync another commit.
+export async function downloadEverything(fetcher = fetchText, { pin } = {}) {
+  const showdown = showdownUrls(pin ?? (await readShowdownPin()));
   const [
     pokedexSource,
     learnsetsSource,
@@ -70,19 +78,19 @@ export async function downloadEverything(fetcher = fetchText) {
     itemsCsv,
     itemNamesCsv,
   ] = await Promise.all([
-    fetcher(SHOWDOWN_POKEDEX_URL),
-    fetcher(SHOWDOWN_LEARNSETS_URL),
-    fetcher(SHOWDOWN_ABILITIES_URL),
-    fetcher(SHOWDOWN_MOVES_URL),
-    fetcher(SHOWDOWN_ITEMS_URL),
-    fetcher(SHOWDOWN_ABILITIES_TEXT_URL),
-    fetcher(SHOWDOWN_MOVES_TEXT_URL),
-    fetcher(SHOWDOWN_ITEMS_TEXT_URL),
-    fetcher(CHAMPIONS_FORMATS_DATA_URL),
-    fetcher(CHAMPIONS_LEARNSETS_URL),
-    fetcher(CHAMPIONS_ABILITIES_URL),
-    fetcher(CHAMPIONS_MOVES_URL),
-    fetcher(CHAMPIONS_ITEMS_URL),
+    fetcher(showdown.pokedex),
+    fetcher(showdown.learnsets),
+    fetcher(showdown.abilities),
+    fetcher(showdown.moves),
+    fetcher(showdown.items),
+    fetcher(showdown.abilitiesText),
+    fetcher(showdown.movesText),
+    fetcher(showdown.itemsText),
+    fetcher(showdown.championsFormatsData),
+    fetcher(showdown.championsLearnsets),
+    fetcher(showdown.championsAbilities),
+    fetcher(showdown.championsMoves),
+    fetcher(showdown.championsItems),
     fetcher(SPECIES_NAMES_URL),
     fetcher(MOVE_NAMES_URL),
     fetcher(ABILITY_NAMES_URL),
@@ -141,8 +149,9 @@ export async function syncPokemonData({
   directory = outputDirectory,
   allowShrink = false,
   minimums,
+  pin,
 } = {}) {
-  const data = await downloadEverything(fetcher);
+  const data = await downloadEverything(fetcher, { pin });
   const baseline = await readCatalogs(directory);
   assertValidCatalogs(data, {
     label: "Showdown/PokeAPI catalogs",
@@ -273,10 +282,12 @@ function parseCsvLine(line) {
 
 if (isMainModule(import.meta.url)) {
   try {
-    const data = await syncPokemonData({ allowShrink: hasFlag(process.argv, "--allow-shrink") });
+    const pin = await readShowdownPin();
+    const data = await syncPokemonData({ pin, allowShrink: hasFlag(process.argv, "--allow-shrink") });
     console.log(
       `Wrote ${data.pokemon.length} Pokémon/forms, ${data.items.length} items, ` +
-        `${data.abilities.length} abilities, and ${data.moves.length} moves to public/*.json`,
+        `${data.abilities.length} abilities, and ${data.moves.length} moves to public/*.json ` +
+        `(Showdown ${pin.repo}@${pin.commit})`,
     );
   } catch (error) {
     console.error(error.message);
