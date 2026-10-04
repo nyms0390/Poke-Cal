@@ -210,6 +210,7 @@ export function calculateDamage({
       maxPercent: 0,
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
+      distribution: [{ damage: 0, chance: 1 }],
       typeMultiplier,
       critical: effectiveCritical,
       ko: koSummaryForRolls(rolls, defenderCurrentHp),
@@ -251,6 +252,7 @@ export function calculateDamage({
       maxDamage: damage,
       minPercent: percent(damage, defenderMaxHp),
       maxPercent: percent(damage, defenderMaxHp),
+      distribution: firstDistribution,
       defenderHp: defenderMaxHp,
       defenderCurrentHp,
       typeMultiplier,
@@ -507,6 +509,10 @@ export function calculateDamage({
     maxDamage: Math.max(...rolls),
     minPercent: percent(Math.min(...rolls), defenderMaxHp),
     maxPercent: percent(Math.max(...rolls), defenderMaxHp),
+    // Weighted damage of this use of the move (all hits, first-hit effects such as Multiscale,
+    // Sturdy and Ice Face included). `rolls` stays the per-roll display list; for multi-hit moves
+    // it is not a set of equally likely outcomes. null when the hit count is variable.
+    distribution: firstRollDistribution ? sortedDistribution(firstRollDistribution) : null,
     defenderHp: defenderMaxHp,
     defenderCurrentHp,
     typeMultiplier,
@@ -516,6 +522,25 @@ export function calculateDamage({
     ko,
     notes,
   };
+}
+
+function sortedDistribution(distribution) {
+  return [...distribution].sort((a, b) => a.damage - b.damage);
+}
+
+/**
+ * Probability that the target is left with HP after one use of the move. Uses the weighted
+ * `distribution` when available and falls back to treating `rolls` as equally likely.
+ */
+export function survivalChance(result, targetHp = result?.defenderCurrentHp) {
+  if (!result?.supported) return null;
+  const distribution = Array.isArray(result.distribution) && result.distribution.length > 0
+    ? result.distribution
+    : (result.rolls ?? []).map((damage) => ({ damage, chance: 1 / result.rolls.length }));
+  const chance = distribution
+    .filter(({ damage }) => damage < targetHp)
+    .reduce((sum, { chance: weight }) => sum + weight, 0);
+  return chance >= 1 - Number.EPSILON ? 1 : chance;
 }
 
 function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility, groundedTarget = false }) {

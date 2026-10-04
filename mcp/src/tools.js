@@ -8,6 +8,7 @@ import {
 } from "../../src/data/strategy-tools.js";
 
 import { TYPE_EFFECTIVENESS } from "../../src/engine/type-chart.js";
+import { survivalChance } from "../../src/engine/damage.js";
 
 // Free-text inputs are bounded so a caller cannot make the Worker parse, search, or echo
 // arbitrarily large strings. Error messages quote at most ECHO_LIMIT characters of input.
@@ -226,7 +227,11 @@ function assertDamage(result) {
 }
 
 function serializeDamage(result) {
-  const distribution = [...new Set(result.rolls)].map((damage) => ({ damage, chance: result.rolls.filter((roll) => roll === damage).length / result.rolls.length }));
+  // Weighted per-use damage from the engine; for multi-hit moves the 16 display rolls are not
+  // equally likely outcomes. Variable hit counts fall back to the rolls.
+  const distribution = Array.isArray(result.distribution) && result.distribution.length > 0
+    ? result.distribution.map(({ damage, chance }) => ({ damage, chance }))
+    : [...new Set(result.rolls)].map((damage) => ({ damage, chance: result.rolls.filter((roll) => roll === damage).length / result.rolls.length }));
   return {
     supported: true,
     ...legality([result.attackerState.pokemon, result.defenderState.pokemon], [result.move]),
@@ -255,7 +260,7 @@ function checkSurvivalFromResult(result) {
   const immune = result.maxDamage === 0;
   const guaranteed = focusSash || sturdy || immune || result.maxDamage < result.defenderCurrentHp;
   const possible = guaranteed || result.minDamage < result.defenderCurrentHp;
-  const chance = guaranteed ? 1 : result.rolls.filter((damage) => damage < result.defenderCurrentHp).length / result.rolls.length;
+  const chance = guaranteed ? 1 : survivalChance(result);
   const name = result.defender.name;
   const range = `${result.minPercent}–${result.maxPercent}%`;
   if (focusSash) return { verdict: "YES", reason: "Focus Sash", summary: `YES — ${name} survives with Focus Sash (${range}).` };

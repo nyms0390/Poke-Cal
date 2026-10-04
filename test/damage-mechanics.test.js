@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { calculateDamage } from "../src/engine/damage.js";
+import { calculateDamage, survivalChance } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
 
 const garchomp = { id: "garchomp", name: "Garchomp", types: ["Dragon", "Ground"], baseStats: { hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102 } };
@@ -192,3 +192,22 @@ test("Expanding Force becomes a spread move in Psychic Terrain", () => {
   assert.equal(floating.notes.includes("Doubles spread move"), false);
 });
 
+test("survival chance weights multi-hit outcomes instead of treating rolls as equally likely", () => {
+  const twoHits = { id: "dualwingbeat", name: "Dual Wingbeat", type: "Flying", category: "Physical", basePower: 40, target: "normal", flags: { contact: 1 }, multihit: 2 };
+  const oneHit = { ...twoHits, id: "singlewingbeat", name: "Single Wingbeat", multihit: undefined };
+  const adamant = { nature: "Adamant", sp: { atk: 32 }, stages: {}, ability: null, item: null };
+  const neutral = { nature: "Hardy", sp: {}, stages: {}, ability: null, item: null };
+  const both = calculateDamage({ attacker: dragoniteLike(), defender: incineroar, move: twoHits, attackerState: adamant, defenderState: neutral, field: singles });
+  const single = calculateDamage({ attacker: dragoniteLike(), defender: incineroar, move: oneHit, attackerState: adamant, defenderState: neutral, field: singles });
+
+  const totalChance = both.distribution.reduce((sum, { chance }) => sum + chance, 0);
+  assert.ok(Math.abs(totalChance - 1) < 1e-12);
+  for (const hp of [80, 89, 93, 99, 110]) {
+    let survive = 0;
+    for (const first of single.rolls) for (const second of single.rolls) if (first + second < hp) survive += 1;
+    assert.ok(Math.abs(survivalChance(both, hp) - survive / 256) < 1e-12, `HP ${hp}`);
+  }
+  // Single-hit moves keep the plain 16-roll answer.
+  const hp = single.rolls[8];
+  assert.equal(survivalChance(single, hp), single.rolls.filter((damage) => damage < hp).length / 16);
+});

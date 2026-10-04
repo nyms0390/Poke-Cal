@@ -4,7 +4,7 @@ import {
   buildMoveLookup,
 } from "./catalog.js";
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
-import { calculateDamage } from "../engine/damage.js";
+import { calculateDamage, survivalChance as damageSurvivalChance } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { finalSpeed } from "../engine/speed.js";
 import { normalizeId } from "../identifiers.js";
@@ -179,7 +179,7 @@ export function checkSurvival(context, options = {}) {
   const possible = guaranteed || result.minDamage < result.defenderCurrentHp;
   const survivalChance = guaranteed
     ? 1
-    : result.rolls.filter((damage) => damage < result.defenderCurrentHp).length / result.rolls.length;
+    : damageSurvivalChance(result);
   const verdict = guaranteed ? "YES" : possible ? "ROLL" : "NO";
   const reason = focusSash ? "Focus Sash" : sturdy ? "Sturdy" : immune ? "Immune" : "";
   const name = result.defenderState.pokemon.name;
