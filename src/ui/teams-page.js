@@ -1,7 +1,7 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { pokemonSpriteUrls } from "./components.js";
+import { pokemonSpriteElements } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -349,28 +349,7 @@ function teamPreviewSprite(submitted, { showName = false } = {}) {
   wrap.className = "teams-sprite";
   const resolved = resolvePokemon(submitted);
   if (resolved) {
-    const [source, fallbackSource] = pokemonSpriteUrls(resolved);
-    const image = document.createElement("img");
-    image.loading = "lazy";
-    image.alt = "";
-    image.width = 42;
-    image.height = 42;
-    image.src = source;
-    let nextSource = fallbackSource;
-    const fallback = document.createElement("span");
-    fallback.setAttribute("aria-hidden", "true");
-    fallback.hidden = true;
-    fallback.textContent = localizedName(resolved).slice(0, 1);
-    image.addEventListener("error", () => {
-      if (nextSource) {
-        image.src = nextSource;
-        nextSource = "";
-        return;
-      }
-      image.remove();
-      fallback.hidden = false;
-    });
-    wrap.append(image, fallback);
+    wrap.append(...pokemonSpriteElements(resolved, { size: 42, lazy: true }));
     if (!showName) {
       wrap.setAttribute("role", "img");
       wrap.setAttribute("aria-label", localizedName(resolved));

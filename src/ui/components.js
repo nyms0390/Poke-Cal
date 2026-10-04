@@ -1,6 +1,9 @@
-import { pokemonSpriteId } from "../data/pokemon.js";
+import { filterMoves } from "../data/catalog.js";
+import { pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
+import { moveEffect } from "../engine/move-effects.js";
+import { normalizeId } from "../identifiers.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 
 const ITEM_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png?v1";
@@ -194,6 +197,46 @@ export function pokemonSpriteUrls(pokemon) {
   return [`${baseUrl}/gen5/${spriteId}.png`, `${baseUrl}/ani/${spriteId}.gif`];
 }
 
+// A Pokémon sprite image with the shared fallback chain: Showdown's gen5 sprite, then its
+// animated sprite, then the localized initial in a span (hidden until both images fail).
+// Returns [image, fallback]; the caller places them.
+export function pokemonSpriteElements(pokemon, { size, lazy = false, className = "", fetchPriority = "" } = {}) {
+  const image = document.createElement("img");
+  if (lazy) image.loading = "lazy";
+  image.alt = "";
+  image.width = size;
+  image.height = size;
+  if (className) image.className = className;
+  if (fetchPriority) image.fetchPriority = fetchPriority;
+  const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
+  image.src = source;
+
+  const fallback = document.createElement("span");
+  fallback.setAttribute("aria-hidden", "true");
+  fallback.hidden = true;
+  fallback.textContent = localizedName(pokemon).slice(0, 1);
+
+  let nextSource = fallbackSource;
+  image.addEventListener("error", () => {
+    if (nextSource) {
+      image.src = nextSource;
+      nextSource = "";
+      return;
+    }
+    image.remove();
+    fallback.hidden = false;
+  });
+  return [image, fallback];
+}
+
+// The 42px lazily loaded sprite used in Builder and Speed result rows.
+export function pokemonMiniSprite(pokemon) {
+  const wrap = document.createElement("span");
+  wrap.className = "pokemon-minisprite";
+  wrap.append(...pokemonSpriteElements(pokemon, { size: 42, lazy: true }));
+  return wrap;
+}
+
 export function itemSpritePosition(item) {
   const left = (item.spritenum % 16) * 24;
   const top = Math.floor(item.spritenum / 16) * 24;
@@ -264,6 +307,123 @@ export function searchResultButton(entry, onSelect, {
   if (preventBlur) button.addEventListener("pointerdown", (event) => event.preventDefault());
   button.addEventListener("click", () => onSelect(entry));
   return button;
+}
+
+export const POKEMON_RESULT_LIMIT = 8;
+
+// Pokémon search callbacks for attachCombobox: the first POKEMON_RESULT_LIMIT matches, and
+// every match for "Show all". `getCatalogs` returns the current { pokemon, abilityLookup,
+// moveLookup, itemLookup } so pickers can be attached before or after catalogs load.
+export function pokemonSearchMatchers(getCatalogs) {
+  const search = (query, limit) => {
+    const { pokemon, abilityLookup, moveLookup, itemLookup } = getCatalogs();
+    return searchPokemon(pokemon, query, {
+      abilityLookup,
+      moveLookup,
+      itemLookup,
+      limit: limit ?? pokemon.length,
+    });
+  };
+  return {
+    getMatches: (query) => search(query, POKEMON_RESULT_LIMIT),
+    getAllMatches: (query) => search(query),
+    resultLimit: POKEMON_RESULT_LIMIT,
+  };
+}
+
+// localStorage, or null where storage is unavailable (privacy modes, sandboxed frames).
+export function browserStorage() {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// Move search-result row: name, type and category, and base power.
+export function moveSearchResultRow(move, onSelect) {
+  const details = document.createDocumentFragment();
+  details.append(typeBadge(move.type), " · ", moveCategoryMark(move.category));
+  return searchResultButton(move, onSelect, {
+    preventBlur: true,
+    small: details,
+    strong: move.basePower ?? "—",
+  });
+}
+
+// One move slot's search combobox (Battle and Builder), named "Move 1"…"Move 4".
+// `showSelection` puts the selected move in the input's "value" (Builder) or only in its
+// "placeholder" (Battle). With `resultLimit`, the list shows that many moves plus
+// "Show all". `onSelect(move, input)` runs after a pick. Returns the .move-combobox
+// element, its input, and a cleanup for the document listener.
+export function moveSlotCombobox({ index, moves, selectedMove, showSelection = "value", resultLimit = null, onSelect }) {
+  const input = document.createElement("input");
+  input.type = "search";
+  input.autocomplete = "off";
+  input.role = "combobox";
+  if (showSelection === "placeholder") {
+    input.placeholder = selectedMove ? localizedName(selectedMove) : t("label.chooseMove");
+  } else {
+    input.value = selectedMove ? localizedName(selectedMove) : "";
+    input.placeholder = t("label.chooseMove");
+  }
+  input.setAttribute("aria-label", t("battle.moveNumber", { number: index + 1 }));
+  const results = document.createElement("div");
+  results.className = "search-results move-search-results";
+  results.hidden = true;
+  const element = document.createElement("div");
+  element.className = "move-combobox";
+  element.append(input, results);
+  const allMatches = (query) => filterMoves(moves, { query });
+  const combobox = attachCombobox({
+    input,
+    resultsEl: results,
+    getMatches: resultLimit ? (query) => allMatches(query).slice(0, resultLimit) : allMatches,
+    getAllMatches: resultLimit ? allMatches : null,
+    resultLimit,
+    onSelect: (move) => onSelect(move, input),
+    renderRow: moveSearchResultRow,
+  });
+  return { element, input, destroy: combobox.destroy };
+}
+
+// The per-slot critical-hit toggle. Always-crit moves are shown pressed and disabled.
+// `onToggle(pressed, button)` runs after aria-pressed flips.
+export function critToggleButton({ index, side = "", selectedMove, manual = false, onToggle }) {
+  const crit = document.createElement("button");
+  crit.type = "button";
+  crit.className = "move-toggle";
+  crit.textContent = t("battle.crit");
+  crit.dataset.kind = "crit";
+  if (side) crit.dataset.side = side;
+  crit.dataset.index = String(index);
+  const alwaysCrit = selectedMove && moveEffect(normalizeId(selectedMove.id)).alwaysCrit === true;
+  crit.disabled = Boolean(alwaysCrit);
+  crit.setAttribute("aria-pressed", String(alwaysCrit || Boolean(manual)));
+  crit.addEventListener("click", () => {
+    const pressed = crit.getAttribute("aria-pressed") !== "true";
+    crit.setAttribute("aria-pressed", String(pressed));
+    onToggle(pressed, crit);
+  });
+  return crit;
+}
+
+// A labelled select for one move-condition descriptor (see move-conditions.js).
+export function moveConditionSelect(descriptor, { index, side = "", value, onInput }) {
+  const label = document.createElement("label");
+  label.className = "move-inline-control";
+  label.textContent = t(descriptor.labelKey);
+  const select = document.createElement("select");
+  select.dataset.kind = "move-option";
+  if (side) select.dataset.side = side;
+  select.dataset.index = String(index);
+  select.dataset.key = descriptor.key;
+  select.replaceChildren(...descriptor.choices.map((choice) =>
+    optionElement(choice.value, choice.labelKey ? t(choice.labelKey) : choice.label)));
+  select.value = value;
+  select.addEventListener("input", onInput);
+  label.append(select);
+  return label;
 }
 
 export function visibleSearchResults(matches, { limit = 12, expanded = false } = {}) {

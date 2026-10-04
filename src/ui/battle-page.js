@@ -1,5 +1,4 @@
 import {
-  filterMoves,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
 } from "../data/catalog.js";
@@ -13,7 +12,6 @@ import {
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import { impliedField, impliedStageDefaults } from "../engine/modifiers.js";
-import { moveEffect } from "../engine/move-effects.js";
 import { moveConditionDescriptors, moveConditionValue, moveOptionsForSlot } from "./move-conditions.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
 import {
@@ -23,7 +21,6 @@ import {
   isActiveSetUnconsumed,
 } from "../data/active-set.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
-import { searchPokemon } from "../data/pokemon.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import {
@@ -63,11 +60,15 @@ import {
 } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
 import {
-  ensureRenderedRows,
-  moveCategoryMark,
-  optionElement,
-  pokemonSpriteUrls,
   attachCombobox,
+  browserStorage,
+  critToggleButton,
+  ensureRenderedRows,
+  moveConditionSelect,
+  moveSlotCombobox,
+  optionElement,
+  pokemonSearchMatchers,
+  pokemonSpriteElements,
   searchResultButton,
   statEditorRow,
   STAT_LABELS,
@@ -337,19 +338,7 @@ for (const side of ["attacker", "defender"]) {
   attachCombobox({
     input,
     resultsEl: elements[`${side}PokemonResults`],
-    getMatches: (query) => searchPokemon(pokemon, query, {
-      abilityLookup,
-      moveLookup,
-      itemLookup,
-      limit: 8,
-    }),
-    getAllMatches: (query) => searchPokemon(pokemon, query, {
-      abilityLookup,
-      moveLookup,
-      itemLookup,
-      limit: pokemon.length,
-    }),
-    resultLimit: 8,
+    ...pokemonSearchMatchers(() => ({ pokemon, abilityLookup, moveLookup, itemLookup })),
     onSelect: (picked) => seedDamageSide(side, picked),
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -577,31 +566,7 @@ function renderEmptySide(side) {
 }
 
 function renderPokemonSprite(side, state) {
-  const statePokemon = state.pokemon;
-  const image = document.createElement("img");
-  image.alt = "";
-  image.width = 56;
-  image.height = 56;
-  const [source, fallbackSource] = pokemonSpriteUrls(state.pokemon);
-  image.src = source;
-
-  const fallback = document.createElement("span");
-  fallback.setAttribute("aria-hidden", "true");
-  fallback.hidden = true;
-  fallback.textContent = localizedName(statePokemon).slice(0, 1);
-
-  let nextSource = fallbackSource;
-  image.addEventListener("error", () => {
-    if (nextSource) {
-      image.src = nextSource;
-      nextSource = "";
-      return;
-    }
-    image.remove();
-    fallback.hidden = false;
-  });
-
-  elements[`${side}PokemonSprite`].replaceChildren(image, fallback);
+  elements[`${side}PokemonSprite`].replaceChildren(...pokemonSpriteElements(state.pokemon, { size: 56 }));
 }
 
 function persistActiveAttacker(state, fallback = activeSetStore.readSet()) {
@@ -1025,8 +990,6 @@ function renderDamageMovePickers(side) {
       moveLabel.className = "damage-move-number";
       moveLabel.textContent = t("battle.moveNumber", { number: index + 1 });
 
-      const combobox = document.createElement("div");
-      combobox.className = "move-combobox";
       const selectedId = state.selectedMoveIds[index] ?? sideMoves[index]?.id ?? "";
       const selectedMove = sideMoves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(selectedId));
       const hidden = document.createElement("input");
@@ -1035,70 +998,37 @@ function renderDamageMovePickers(side) {
       hidden.dataset.kind = "damage-move";
       hidden.dataset.side = side;
       hidden.dataset.index = String(index);
-      const search = document.createElement("input");
-      search.type = "search";
-      search.autocomplete = "off";
-      search.role = "combobox";
-      search.placeholder = selectedMove ? localizedName(selectedMove) : t("label.chooseMove");
-      search.setAttribute("aria-label", t("battle.moveNumber", { number: index + 1 }));
-      const results = document.createElement("div");
-      results.className = "search-results move-search-results";
-      results.hidden = true;
-      combobox.append(hidden, search, results);
-      const moveCombobox = attachCombobox({
-        input: search,
-        resultsEl: results,
-        getMatches: (query) => filterMoves(sideMoves, { query }),
-        onSelect: (picked) => {
+      const combobox = moveSlotCombobox({
+        index,
+        moves: sideMoves,
+        selectedMove,
+        showSelection: "placeholder",
+        onSelect: (picked, search) => {
           hidden.value = picked.id;
           search.value = localizedName(picked);
           search.placeholder = localizedName(picked);
           handleDamageControl({ target: hidden });
         },
-        renderRow: (move, onSelect) => {
-          const details = document.createDocumentFragment();
-          details.append(typeBadge(move.type), " · ", moveCategoryMark(move.category));
-          return searchResultButton(move, onSelect, {
-            preventBlur: true,
-            small: details,
-            strong: move.basePower ?? "—",
-          });
-        },
       });
-      moveComboboxCleanups[side].push(moveCombobox.destroy);
-      row.append(moveLabel, combobox);
+      combobox.element.prepend(hidden);
+      moveComboboxCleanups[side].push(combobox.destroy);
+      row.append(moveLabel, combobox.element);
 
-      const crit = document.createElement("button");
-      crit.type = "button";
-      crit.className = "move-toggle";
-      crit.textContent = t("battle.crit");
-      crit.dataset.kind = "crit";
-      crit.dataset.side = side;
-      crit.dataset.index = String(index);
-      const alwaysCrit = selectedMove && moveEffect(normalizeDamageId(selectedMove.id)).alwaysCrit === true;
-      crit.disabled = Boolean(alwaysCrit);
-      crit.setAttribute("aria-pressed", String(alwaysCrit || Boolean(state.critMoves?.[index])));
-      crit.addEventListener("click", () => {
-        crit.setAttribute("aria-pressed", String(crit.getAttribute("aria-pressed") !== "true"));
-        handleDamageControl({ target: crit });
-      });
-      row.append(crit);
+      row.append(critToggleButton({
+        index,
+        side,
+        selectedMove,
+        manual: state.critMoves?.[index],
+        onToggle: (_pressed, crit) => handleDamageControl({ target: crit }),
+      }));
 
       for (const descriptor of moveConditionDescriptors(selectedMove, state)) {
-        const label = document.createElement("label");
-        label.className = "move-inline-control";
-        label.textContent = t(descriptor.labelKey);
-        const select = document.createElement("select");
-        select.dataset.kind = "move-option";
-        select.dataset.side = side;
-        select.dataset.index = String(index);
-        select.dataset.key = descriptor.key;
-        select.replaceChildren(...descriptor.choices.map((choice) =>
-          optionElement(choice.value, choice.labelKey ? t(choice.labelKey) : choice.label)));
-        select.value = moveConditionValue(state, index, descriptor);
-        select.addEventListener("input", handleDamageControl);
-        label.append(select);
-        row.append(label);
+        row.append(moveConditionSelect(descriptor, {
+          index,
+          side,
+          value: moveConditionValue(state, index, descriptor),
+          onInput: handleDamageControl,
+        }));
       }
       return row;
     }),
@@ -1597,12 +1527,4 @@ function restoreSideState(storedState) {
 
 function resolveStoredEntry(storedEntry, lookup) {
   return lookup.get(normalizeDamageId(storedEntry.id ?? storedEntry.name)) ?? storedEntry;
-}
-
-function browserStorage() {
-  try {
-    return globalThis.localStorage ?? null;
-  } catch {
-    return null;
-  }
 }

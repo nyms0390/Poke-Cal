@@ -70,9 +70,12 @@ test("builder exposes per-move critical-hit controls for offensive breakpoint an
   const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/builder-page.js", import.meta.url), "utf8");
 
+  const components = readFileSync(new URL("../src/ui/components.js", import.meta.url), "utf8");
+
   assert.doesNotMatch(html, /builder-critical-toggle/);
-  assert.match(source, /crit\.dataset\.kind = "crit"/);
-  assert.match(source, /const next = crit\.getAttribute\("aria-pressed"\) !== "true";[\s\S]*?crit\.setAttribute\("aria-pressed", String\(next\)\)/);
+  assert.match(source, /critToggleButton\(\{[\s\S]*?onToggle: \(next\) =>/);
+  assert.match(components, /crit\.dataset\.kind = "crit"/);
+  assert.match(components, /const pressed = crit\.getAttribute\("aria-pressed"\) !== "true";[\s\S]*?crit\.setAttribute\("aria-pressed", String\(pressed\)\)/);
   assert.match(source, /critical: Boolean\(setup\.critMoves\?\./);
   assert.doesNotMatch(source, /breakCritical/);
 });
@@ -941,7 +944,7 @@ test("battle page shows each Pokémon name and icon together in the side heading
     );
     assert.match(source, new RegExp(`${side}PokemonSprite`));
   }
-  assert.match(source, /pokemonSpriteUrls\(state\.pokemon\)/);
+  assert.match(source, /pokemonSpriteElements\(state\.pokemon, \{ size: 56 \}\)/);
   assert.match(
     source,
     /function sideSummary\(state\) \{\s*return localizedName\(state\.pokemon\);\s*\}/,
@@ -956,13 +959,15 @@ test("lookup selection clears a search query and restores the persistent catalog
 });
 
 test("battle and builder move-search results render type badges before category metadata", () => {
+  const components = readFileSync(new URL("../src/ui/components.js", import.meta.url), "utf8");
+  assert.match(
+    components,
+    /export function moveSearchResultRow\(move, onSelect\) \{\s*const details = document\.createDocumentFragment\(\);\s*details\.append\(typeBadge\(move\.type\), " · ", moveCategoryMark\(move\.category\)\);/,
+  );
+  assert.match(components, /renderRow: moveSearchResultRow/);
   for (const page of ["battle-page", "builder-page"]) {
     const source = readFileSync(new URL(`../src/ui/${page}.js`, import.meta.url), "utf8");
-    assert.match(
-      source,
-      /details\.append\(typeBadge\(move\.type\), " · ", moveCategoryMark\(move\.category\)\);/,
-      page,
-    );
+    assert.match(source, /moveSlotCombobox\(\{/, page);
   }
 });
 

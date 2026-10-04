@@ -1,6 +1,5 @@
 import { normalizeId } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
-import { searchPokemon } from "../data/pokemon.js";
 import {
   popularOpponentPool,
   speedBreakpoints,
@@ -25,7 +24,14 @@ import {
   t,
 } from "../i18n.js";
 import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
-import { attachCombobox, optionElement, pokemonSpriteUrls, searchResultButton } from "./components.js";
+import {
+  attachCombobox,
+  browserStorage,
+  optionElement,
+  pokemonMiniSprite,
+  pokemonSearchMatchers,
+  searchResultButton,
+} from "./components.js";
 import { createLiveUpdater } from "./live-update.js";
 
 const elements = {
@@ -109,18 +115,14 @@ async function initialize() {
   attachCombobox({
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
-    getMatches: pokemonMatches,
-    getAllMatches: allPokemonMatches,
-    resultLimit: 8,
+    ...pokemonSearchMatchers(() => catalogs),
     onSelect: seedUser,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
   attachCombobox({
     input: elements.opponentSearch,
     resultsEl: elements.opponentResults,
-    getMatches: pokemonMatches,
-    getAllMatches: allPokemonMatches,
-    resultLimit: 8,
+    ...pokemonSearchMatchers(() => catalogs),
     onSelect: addOpponent,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -165,23 +167,6 @@ function renderNatureOptions() {
   if (selected) elements.nature.value = selected;
 }
 
-function pokemonMatches(query) {
-  return searchPokemon(catalogs.pokemon, query, {
-    abilityLookup: catalogs.abilityLookup,
-    moveLookup: catalogs.moveLookup,
-    itemLookup: catalogs.itemLookup,
-    limit: 8,
-  });
-}
-
-function allPokemonMatches(query) {
-  return searchPokemon(catalogs.pokemon, query, {
-    abilityLookup: catalogs.abilityLookup,
-    moveLookup: catalogs.moveLookup,
-    itemLookup: catalogs.itemLookup,
-    limit: catalogs.pokemon.length,
-  });
-}
 
 function seedUser(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
@@ -323,14 +308,6 @@ function render() {
   translateSubtree(elements.axis, elements.likelyLegend, elements.manualOpponents);
 }
 
-function browserStorage() {
-  try {
-    return globalThis.localStorage ?? null;
-  } catch {
-    return null;
-  }
-}
-
 function selectedOpponents() {
   return popularOpponentPool(
     popularOpponents,
@@ -386,7 +363,7 @@ function renderManualOpponents() {
   elements.manualOpponents.replaceChildren(...manualOpponents.map(({ pokemon }) => {
     const chip = document.createElement("span");
     chip.className = "speed-opponent-chip";
-    chip.append(sprite(pokemon));
+    chip.append(pokemonMiniSprite(pokemon));
     const name = document.createElement("span");
     name.textContent = localizedName(pokemon);
     const remove = document.createElement("button");
@@ -417,7 +394,7 @@ function renderSpeedRow(row, breakpoint) {
       chip.type = "button";
       chip.setAttribute("aria-expanded", "false");
     }
-    chip.append(sprite(entry));
+    chip.append(pokemonMiniSprite(entry));
     const label = document.createElement("span");
     label.textContent = localizedName(entry);
     const details = document.createElement("span");
@@ -491,32 +468,4 @@ function renderBreakpointChoices(point) {
     choices.append(button);
   }
   return choices;
-}
-
-function sprite(entry) {
-  const wrap = document.createElement("span");
-  wrap.className = "pokemon-minisprite";
-  const image = document.createElement("img");
-  image.loading = "lazy";
-  image.alt = "";
-  image.width = 42;
-  image.height = 42;
-  const [source, fallbackSource] = pokemonSpriteUrls(entry);
-  image.src = source;
-  const fallback = document.createElement("span");
-  fallback.setAttribute("aria-hidden", "true");
-  fallback.textContent = localizedName(entry).slice(0, 1);
-  let nextSource = fallbackSource;
-  image.addEventListener("error", () => {
-    if (nextSource) {
-      image.src = nextSource;
-      nextSource = "";
-      return;
-    }
-    image.remove();
-    fallback.hidden = false;
-  });
-  fallback.hidden = true;
-  wrap.append(image, fallback);
-  return wrap;
 }

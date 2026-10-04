@@ -34,12 +34,14 @@ import {
   rankObservedUsage,
 } from "./bootstrap.js";
 import {
+  browserStorage,
   FULL_STAT_LABELS,
   itemLabel,
   moveCategoryMark,
   moveNameCell,
   movePropertyCell,
   optionElement,
+  pokemonSpriteElements,
   pokemonSpriteUrls,
   searchResultFocusIndex,
   textCell,
@@ -307,32 +309,11 @@ function handleBrowseKeydown(event) {
 }
 
 function renderSelectedSprite(entry) {
-  const image = document.createElement("img");
-  image.alt = "";
-  image.width = 96;
-  image.height = 96;
-  if (entry.id === "pikachu") image.className = "compact-sprite";
-  image.fetchPriority = "high";
-  const [source, fallbackSource] = pokemonSpriteUrls(entry);
-  image.src = source;
-
-  const fallback = document.createElement("span");
-  fallback.setAttribute("aria-hidden", "true");
-  fallback.hidden = true;
-  fallback.textContent = localizedName(entry).slice(0, 1);
-
-  let nextSource = fallbackSource;
-  image.addEventListener("error", () => {
-    if (nextSource) {
-      image.src = nextSource;
-      nextSource = "";
-      return;
-    }
-    image.remove();
-    fallback.hidden = false;
-  });
-
-  elements.selectedSprite.replaceChildren(image, fallback);
+  elements.selectedSprite.replaceChildren(...pokemonSpriteElements(entry, {
+    size: 96,
+    className: entry.id === "pikachu" ? "compact-sprite" : "",
+    fetchPriority: "high",
+  }));
 }
 
 function persistActiveDefaults(entry) {
@@ -449,14 +430,6 @@ function commonBuildMoves(moves) {
   );
   row.append(label, list);
   return row;
-}
-
-function browserStorage() {
-  try {
-    return globalThis.localStorage ?? null;
-  } catch {
-    return null;
-  }
 }
 
 function renderDefensiveMatchups() {

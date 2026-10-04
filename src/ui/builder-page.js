@@ -1,5 +1,4 @@
 import {
-  filterMoves,
   normalizeId,
   resolveChampionsPokemonMoves,
   resolvePokemonAbilities,
@@ -23,13 +22,12 @@ import {
   koHitCount,
   rankBulkCoverageGroups,
 } from "../data/bulk-points.js";
-import { megaFamilyId, searchPokemon } from "../data/pokemon.js";
+import { megaFamilyId } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { createField } from "../engine/field.js";
-import { moveEffect } from "../engine/move-effects.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
 import {
   getLocale,
@@ -68,14 +66,17 @@ import {
 } from "./builder-state.js";
 import {
   attachCombobox,
+  browserStorage,
+  critToggleButton,
   damagePercentColor,
   ensureRenderedRows,
-  moveCategoryMark,
+  moveConditionSelect,
+  moveSlotCombobox,
   optionElement,
-  pokemonSpriteUrls,
+  pokemonMiniSprite,
+  pokemonSearchMatchers,
   searchResultButton,
   STAT_LABELS,
-  typeBadge,
 } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl } from "./field-state.js";
@@ -185,18 +186,14 @@ async function initialize() {
   attachCombobox({
     input: elements.pokemonSearch,
     resultsEl: elements.pokemonResults,
-    getMatches: pokemonMatches,
-    getAllMatches: allPokemonMatches,
-    resultLimit: 8,
+    ...pokemonSearchMatchers(() => catalogs),
     onSelect: seedPokemon,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
   attachCombobox({
     input: elements.threatSearch,
     resultsEl: elements.threatResults,
-    getMatches: pokemonMatches,
-    getAllMatches: allPokemonMatches,
-    resultLimit: 8,
+    ...pokemonSearchMatchers(() => catalogs),
     onSelect: addCustomThreat,
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -281,23 +278,6 @@ function renderLocaleOptions() {
   );
 }
 
-function pokemonMatches(query) {
-  return searchPokemon(catalogs.pokemon, query, {
-    abilityLookup: catalogs.abilityLookup,
-    moveLookup: catalogs.moveLookup,
-    itemLookup: catalogs.itemLookup,
-    limit: 8,
-  });
-}
-
-function allPokemonMatches(query) {
-  return searchPokemon(catalogs.pokemon, query, {
-    abilityLookup: catalogs.abilityLookup,
-    moveLookup: catalogs.moveLookup,
-    itemLookup: catalogs.itemLookup,
-    limit: catalogs.pokemon.length,
-  });
-}
 
 function seedPokemon(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
@@ -590,14 +570,6 @@ function renderSpBudget(sp) {
   elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
 }
 
-function browserStorage() {
-  try {
-    return globalThis.localStorage ?? null;
-  } catch {
-    return null;
-  }
-}
-
 function renderStats(user, stats, setup = user) {
   const rows = ensureRenderedRows(
     elements.stats,
@@ -676,82 +648,42 @@ function renderMovePicks() {
     label.textContent = String(index + 1);
     // The visible number is decorative; the input carries the full name, as on Battle.
     label.setAttribute("aria-hidden", "true");
-    const input = document.createElement("input");
-    input.type = "search";
-    input.autocomplete = "off";
-    input.role = "combobox";
-    input.value = selected ? localizedName(selected) : "";
-    input.placeholder = t("label.chooseMove");
-    input.setAttribute("aria-label", t("battle.moveNumber", { number: index + 1 }));
-    const results = document.createElement("div");
-    results.className = "search-results move-search-results";
-    results.hidden = true;
-    const combobox = document.createElement("div");
-    combobox.className = "move-combobox";
-    combobox.append(input, results);
-    const attached = attachCombobox({
-      input,
-      resultsEl: results,
-      getMatches: (query) => filterMoves(moves, { query }).slice(0, 12),
-      getAllMatches: (query) => filterMoves(moves, { query }),
+    const combobox = moveSlotCombobox({
+      index,
+      moves,
+      selectedMove: selected,
       resultLimit: 12,
-      onSelect: (move) => {
+      onSelect: (move, input) => {
         stageUserSetup({ kind: "move", index, value: move.id });
         input.value = localizedName(move);
         renderMovePicks();
       },
-      renderRow: (move, onSelect) => {
-        const details = document.createDocumentFragment();
-        details.append(typeBadge(move.type), " · ", moveCategoryMark(move.category));
-        return searchResultButton(move, onSelect, {
-          preventBlur: true,
-          small: details,
-          strong: move.basePower ?? "—",
+    });
+    moveComboboxCleanups.push(combobox.destroy);
+    const setup = userSetupDraft?.current() ?? state.user;
+    const crit = critToggleButton({
+      index,
+      selectedMove: selected,
+      manual: setup.critMoves?.[index],
+      onToggle: (next) => {
+        updatePage(() => {
+          if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, {
+            kind: "crit", index, value: next,
+          }));
+          state = { ...state, user: applyControl(state.user, { kind: "crit", index, value: next }) };
         });
       },
     });
-    moveComboboxCleanups.push(attached.destroy);
-    const crit = document.createElement("button");
-    crit.type = "button";
-    crit.className = "move-toggle";
-    crit.textContent = t("battle.crit");
-    crit.dataset.kind = "crit";
-    crit.dataset.index = String(index);
-    const setup = userSetupDraft?.current() ?? state.user;
-    const manualCrit = Boolean(setup.critMoves?.[index]);
-    const alwaysCrit = selected && moveEffect(normalizeId(selected.id)).alwaysCrit === true;
-    crit.disabled = alwaysCrit;
-    crit.setAttribute("aria-pressed", String(alwaysCrit || manualCrit));
-    crit.addEventListener("click", () => {
-      const next = crit.getAttribute("aria-pressed") !== "true";
-      crit.setAttribute("aria-pressed", String(next));
-      updatePage(() => {
-        if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, {
-          kind: "crit", index, value: next,
-        }));
-        state = { ...state, user: applyControl(state.user, { kind: "crit", index, value: next }) };
-      });
-    });
-    row.append(label, combobox, crit);
+    row.append(label, combobox.element, crit);
     if (selected) {
       for (const descriptor of moveConditionDescriptors(selected, setup)) {
-        const conditionLabel = document.createElement("label");
-        conditionLabel.className = "move-inline-control";
-        conditionLabel.textContent = t(descriptor.labelKey);
-        const select = document.createElement("select");
-        select.dataset.kind = "move-option";
-        select.dataset.index = String(index);
-        select.dataset.key = descriptor.key;
-        select.replaceChildren(...descriptor.choices.map((choice) => optionElement(
-          choice.value,
-          choice.labelKey ? t(choice.labelKey) : choice.label,
-        )));
-        select.value = moveConditionValue(setup, index, descriptor);
-        select.addEventListener("input", () => {
-          stageUserSetup({ kind: "moveOption", index, key: descriptor.key, value: select.value });
-        });
-        conditionLabel.append(select);
-        row.append(conditionLabel);
+        row.append(moveConditionSelect(descriptor, {
+          index,
+          value: moveConditionValue(setup, index, descriptor),
+          onInput: (event) => {
+            stageUserSetup({ kind: "moveOption", index, key: descriptor.key, value: event.target.value });
+          },
+        }));
       }
     }
     return row;
@@ -792,7 +724,7 @@ function renderCustomThreats() {
   elements.customThreats.replaceChildren(...customThreats.map(({ pokemon }) => {
     const chip = document.createElement("span");
     chip.className = "builder-threat-chip";
-    chip.append(pokemonSprite(pokemon));
+    chip.append(pokemonMiniSprite(pokemon));
     const name = document.createElement("span");
     name.textContent = localizedName(pokemon);
     const remove = document.createElement("button");
@@ -1583,39 +1515,11 @@ function damageMeter(minPct, maxPct, { defensive = false } = {}) {
 function pokemonLabel(pokemon, { compact = false } = {}) {
   const label = document.createElement("span");
   label.className = `builder-pokemon-label${compact ? " compact" : ""}`;
-  label.append(pokemonSprite(pokemon));
+  label.append(pokemonMiniSprite(pokemon));
   const name = document.createElement("span");
   name.textContent = localizedName(pokemon);
   label.append(name);
   return label;
-}
-
-function pokemonSprite(pokemon) {
-  const wrap = document.createElement("span");
-  wrap.className = "pokemon-minisprite";
-  const image = document.createElement("img");
-  image.loading = "lazy";
-  image.alt = "";
-  image.width = 42;
-  image.height = 42;
-  const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
-  image.src = source;
-  const fallback = document.createElement("span");
-  fallback.setAttribute("aria-hidden", "true");
-  fallback.hidden = true;
-  fallback.textContent = localizedName(pokemon).slice(0, 1);
-  let nextSource = fallbackSource;
-  image.addEventListener("error", () => {
-    if (nextSource) {
-      image.src = nextSource;
-      nextSource = "";
-      return;
-    }
-    image.remove();
-    fallback.hidden = false;
-  });
-  wrap.append(image, fallback);
-  return wrap;
 }
 
 function textSpan(text, className) {
