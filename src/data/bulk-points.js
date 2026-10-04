@@ -159,12 +159,20 @@ export function bulkCoverageTable(userState, { scenario }) {
   return { defenseStat, tiers };
 }
 
-export function bulkPoints(userState, scenario, { budget = 64 } = {}) {
+// `budget` is the SP still available for HP + Def + SpD together (the builder passes
+// 66 - Atk - SpA - Spe). Only HP and the attacked defence stat move here, so the SP already
+// in the other defence stat is spent and cannot be offered again; each stat also caps at 32.
+export function bulkPoints(userState, scenario, { budget = 66 } = {}) {
   const initial = damageResult(userState, scenario);
   if (!initial.supported) return [];
 
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
-  const maximumBudget = Math.max(0, Math.min(64, Math.trunc(Number(budget) || 0)));
+  const otherDefenseStat = defenseStat === "def" ? "spd" : "def";
+  const otherDefenseSp = clampSp(userState.sp?.[otherDefenseStat]);
+  const maximumBudget = Math.max(0, Math.min(
+    64,
+    Math.trunc(Number(budget) || 0) - otherDefenseSp,
+  ));
   const currentHpSp = clampSp(userState.sp?.hp);
   const currentDefSp = clampSp(userState.sp?.[defenseStat]);
   const currentTotalSp = currentHpSp + currentDefSp;

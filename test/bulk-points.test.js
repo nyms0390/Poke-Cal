@@ -14,6 +14,7 @@ import {
 } from "../src/data/bulk-points.js";
 import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
+import { availableBulkSpBudget, canApplySpTargets } from "../src/ui/builder-state.js";
 
 const defender = {
   id: "defender",
@@ -508,6 +509,74 @@ test("uses the selected ambient field for threat damage and every bulk matchup",
   assert.equal(sunny.maxPct > neutral.maxPct, true);
   assert.deepEqual(matchup.damage, sunny);
   assert.equal(matchup.scenario.field, sunnyField);
+});
+
+test("offers only bulk points that fit beside SP already in the other defence stat", () => {
+  const heavyMove = { ...physicalMove, id: "heavyhit", name: "Heavy Hit", basePower: 250 };
+  const scenario = { threat, move: heavyMove };
+  const state = withBulk(userState(), 0, 30, "spd");
+  const budget = availableBulkSpBudget(state.sp);
+
+  // With an empty SpD the same threat has a reachable 62-SP frontier point.
+  assert.deepEqual(
+    bulkPoints(userState(), scenario, { budget }).map(({ totalSp }) => totalSp),
+    [62],
+  );
+  // 30 SpD leaves only 36 SP for HP + Def, so that point must not be offered.
+  assert.deepEqual(bulkPoints(state, scenario, { budget }), []);
+
+  const midMove = { ...physicalMove, id: "midhit", name: "Mid Hit", basePower: 110 };
+  assert.deepEqual(bulkPoints(state, { threat, move: midMove }, { budget }), []);
+  assert.deepEqual(
+    bulkPoints(withBulk(userState(), 0, 20, "spd"), { threat, move: midMove }, { budget })
+      .map(({ hpSp, defSp, totalSp }) => [hpSp, defSp, totalSp]),
+    [[6, 32, 38]],
+  );
+});
+
+test("every offered bulk point is applicable within the builder SP budget", () => {
+  const moves = [physicalMove, specialMove, ohkoMove,
+    { ...physicalMove, id: "heavyhit", name: "Heavy Hit", basePower: 250 },
+    { ...specialMove, id: "heavyvoice", name: "Heavy Voice", basePower: 200 }];
+  const spreads = [
+    { atk: 0, spa: 0, spe: 0, def: 0, spd: 0 },
+    { atk: 0, spa: 0, spe: 0, def: 0, spd: 30 },
+    { atk: 0, spa: 0, spe: 0, def: 24, spd: 0 },
+    { atk: 10, spa: 0, spe: 20, def: 8, spd: 12 },
+    { atk: 32, spa: 0, spe: 32, def: 0, spd: 2 },
+  ];
+  let offered = 0;
+  for (const spread of spreads) {
+    const state = { ...userState(), sp: { ...userState().sp, ...spread } };
+    const budget = availableBulkSpBudget(state.sp);
+    for (const move of moves) {
+      const defenseStat = move.category === "Physical" ? "def" : "spd";
+      for (const point of bulkPoints(state, { threat, move }, { budget })) {
+        offered += 1;
+        assert.equal(point.hpSp <= 32 && point.defSp <= 32, true);
+        assert.equal(
+          canApplySpTargets(state.sp, { hp: point.hpSp, [defenseStat]: point.defSp }),
+          true,
+          `${move.name} ${JSON.stringify(spread)} -> ${JSON.stringify(point)}`,
+        );
+      }
+    }
+  }
+  assert.equal(offered > 0, true);
+});
+
+test("general bulk and joint coverage stay within the HP + Def + SpD budget", () => {
+  const state = { ...userState(), sp: { ...userState().sp, atk: 20, spe: 20, spd: 10 } };
+  const budget = availableBulkSpBudget(state.sp);
+  const recommendation = generalBulkRecommendation(state, { budget });
+  assert.equal(recommendation.sp.hp + recommendation.sp.def + recommendation.sp.spd, budget);
+  assert.equal(canApplySpTargets(state.sp, recommendation.sp), true);
+
+  const matchups = bulkPointMatchups(state, [{ ...threat, moves: [physicalMove, specialMove] }], {
+    budget,
+  });
+  const coverage = bulkCoverage(state, matchups, { budget });
+  if (Number.isFinite(coverage.requiredSp)) assert.equal(coverage.requiredSp <= budget, true);
 });
 
 function withBulk(state, hpSp, defenseSp, defenseStat) {
