@@ -2,9 +2,10 @@ import { spawnSync } from "node:child_process";
 
 import { normalizeId } from "../identifiers.js";
 
-// Showdown data files are TypeScript modules fetched from upstream `master`, so parsing them means
-// executing third-party code. `vm` is not a security boundary (a `this.constructor.constructor`
-// escape reaches the host `process`), so the code runs in a short-lived child Node process that:
+// Showdown data files are TypeScript modules fetched from the commit pinned in
+// scripts/showdown-pin.json, so parsing them means executing third-party code. `vm` is not a
+// security boundary (a `this.constructor.constructor` escape reaches the host `process`), so the
+// code runs in a short-lived child Node process that:
 //   - is started with Node's permission model (`--permission`, or `--experimental-permission` on
 //     older Node), granting no file-system read/write, child-process, worker, addon, or WASI access;
 //   - gets an empty environment (no tokens or other secrets to read);
