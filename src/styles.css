@@ -298,6 +298,96 @@ footer {
   background: var(--line);
 }
 
+.teams-search-fields {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.teams-search-fields label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.teams-regulation-field {
+  flex: 0 1 180px;
+}
+
+.teams-query-field {
+  flex: 1 1 280px;
+}
+
+.teams-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.teams-search-actions button {
+  min-height: 44px;
+  border-radius: var(--radius-control);
+}
+
+.teams-search-submit {
+  padding: 8px 14px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--surface);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.teams-search-submit:hover:not(:disabled) {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
+.teams-search-submit:active:not(:disabled) {
+  background: var(--accent-dark);
+}
+
+.teams-search-help,
+.teams-search-status {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.teams-search-status:empty {
+  display: none;
+}
+
+.teams-search:has([aria-invalid="true"]) .teams-search-status {
+  color: var(--danger);
+}
+
+.teams-search input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+@media (max-width: 600px) {
+  .teams-search-fields {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .teams-regulation-field,
+  .teams-query-field {
+    flex: auto;
+  }
+
+  .teams-search-fields input,
+  .teams-search-fields select {
+    min-height: 44px;
+  }
+}
+
 .teams-archive-panel {
   min-width: 0;
 }

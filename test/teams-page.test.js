@@ -2,16 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
+import { archiveRegulations, searchTeamArchive } from "../src/data/team-search.js";
 import { tFor } from "../src/i18n.js";
 
 // A small DOM fixture runs the real page controller without an extra test dependency.
-async function page(total, { failure = false, topCut = 0 } = {}) {
+async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
   const source = readFileSync(new URL("../src/ui/teams-page.js", import.meta.url), "utf8")
     .replace(/import[\s\S]*?from "[^"]+";\n/g, "")
     .replace("initialize();", "globalThis.ready = initialize();");
   const document = { activeElement: null };
   const node = (tagName = "div") => ({
-    tagName, children: [], textContent: "", hidden: false, disabled: false, open: false, dataset: {},
+    tagName, children: [], textContent: "", hidden: false, disabled: false, open: false, dataset: {}, value: "",
     classList: { add() {} }, attributes: {}, listeners: {},
     get firstElementChild() { return this.children[0]; },
     querySelectorAll(tag) {
@@ -22,11 +23,13 @@ async function page(total, { failure = false, topCut = 0 } = {}) {
     append(...children) { this.children.push(...children); },
     replaceChildren(...children) { this.children = children; },
     setAttribute(name, value) { this.attributes[name] = value; },
+    getAttribute(name) { return this.attributes[name]; },
+    removeAttribute(name) { delete this.attributes[name]; },
     addEventListener(name, listener) { this.listeners[name] = listener; },
     focus() { document.activeElement = this; },
     click() { if (!this.disabled && !this.hidden) this.listeners.click?.(); },
   });
-  const elements = Object.fromEntries(["source", "count", "archive", "status", "more"].map((key) => [key, node()]));
+  const elements = Object.fromEntries(["source", "count", "archive", "status", "more", "search-form", "regulation", "query", "search-status", "search-submit", "reset"].map((key) => [key, node()]));
   elements.more.hidden = true;
   elements.more.disabled = true;
   document.querySelector = (selector) => elements[selector.replace(/^#teams-/, "").replace(/^#/, "")];
@@ -34,8 +37,13 @@ async function page(total, { failure = false, topCut = 0 } = {}) {
   let locale = "en";
   let changeLocale;
   const context = {
-    document, console: { error() {} }, Intl,
+    document, console: { error() {} }, Intl, archiveRegulations, searchTeamArchive,
+    translateSubtree() {},
+    optionElement(value, text) { const option = node("option"); option.value = value; option.textContent = text; return option; },
+    normalizeId: (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, ""),
+    pokemonSpriteElements: () => [],
     initI18n() {}, applyDocumentTranslations() {}, getLocale: () => locale,
+    localizedName: (entry) => entry.name,
     t: (key, params) => tFor(locale, key, params),
     onLocaleChange: (callback) => { changeLocale = callback; },
     catalogLoadedStatus: ({ pokemon, abilities, moves }) =>
@@ -43,14 +51,21 @@ async function page(total, { failure = false, topCut = 0 } = {}) {
     loadCatalogs: async ({ onStatus, onLoaded }) => {
       // Catalogs finish after the archive has already settled, as on a slow connection.
       await new Promise((resolve) => setTimeout(resolve, 5));
-      const data = { pokemon: { length: 358 }, abilities: { length: 2 }, moves: { length: 3 } };
+      const namedPokemon = [
+        { id: "incineroar", name: "Incineroar", aliases: ["熾焰咆哮虎"] },
+        { id: "rillaboom", name: "Rillaboom", aliases: ["轟擂金剛猩"] },
+      ];
+      const data = {
+        pokemon: Array.from({ length: 358 }, (_, i) => namedPokemon[i] ?? { id: `fixture${i}`, name: `Fixture ${i}` }),
+        abilities: { length: 2 }, moves: { length: 3 },
+      };
       onStatus?.(tFor(locale, "catalog.loaded", { pokemon: 358, abilities: 2, moves: 3 }), "loaded");
       onLoaded?.(data);
       return data;
     },
     loadLimitlessTeamArchive: async () => {
       if (failure) throw new Error("offline");
-      return { format: "M-C", tournaments: Array.from({ length: total }, (_, index) => ({
+      return { format: "M-C", tournaments: tournaments ?? Array.from({ length: total }, (_, index) => ({
         name: `Tournament ${index}`, date: "2026-10-02", players: 40, url: "https://example.test", phases: [],
         topCut: Array.from({ length: topCut }, (_, place) => ({
           placing: place + 1, playerName: `Player ${place}`, pokemon: [], url: "https://example.test/team",
@@ -169,4 +184,60 @@ test("the status line keeps an archive failure and follows the language", async 
   assert.equal(loaded.elements.status.textContent, tFor("zh-TW", "catalog.loaded", counts));
   loaded.locale("en");
   assert.equal(loaded.elements.status.textContent, tFor("en", "catalog.loaded", counts));
+});
+
+const searchTournaments = Array.from({ length: 12 }, (_, i) => ({
+  id: `event-${i}`, name: `Tournament ${i}`, date: "2026-10-02", format: i === 0 ? "M-B" : "M-C",
+  topCut: [
+    { playerName: "Only Incineroar", pokemon: [{ id: "incineroar", name: "Incineroar" }], url: "https://example.test/team" },
+    ...(i === 11 || i === 0 ? [{ playerName: "Both Pokémon", pokemon: [{ id: "incineroar", name: "Incineroar" }, { id: "rillaboom", name: "Rillaboom" }], url: "https://example.test/team" }] : []),
+  ],
+}));
+const submit = (view, query) => {
+  view.elements.query.value = query;
+  view.elements["search-form"].listeners.submit({ preventDefault() {} });
+};
+test("submitted search finds later tournaments and hides unrelated teams, with localized result status", async () => {
+  const view = await page(0, { tournaments: searchTournaments });
+  assert.equal(view.elements.regulation.value, "M-C");
+  assert.deepEqual(view.elements.regulation.children.map((option) => option.value), ["M-B", "M-C"]);
+  view.elements.more.click();
+  submit(view, "Incineroar + Rillaboom");
+  assert.equal(view.elements.archive.children.length, 1);
+  assert.match(view.elements.archive.children[0].firstElementChild.firstElementChild.children[0].textContent, /Tournament 11/);
+  const tournament = view.elements.archive.children[0];
+  tournament.firstElementChild.listeners.click();
+  assert.equal(tournament.children[1].children[1].children.length, 1);
+  assert.equal(view.elements.count.textContent, "1 / 1 tournament");
+  assert.match(view.elements["search-status"].textContent, /1 matching team/);
+  view.locale("zh-TW");
+  assert.match(view.elements["search-status"].textContent, /1 組符合/);
+  assert.equal(view.elements.query.value, "Incineroar + Rillaboom");
+});
+test("regulation switches and reset recompute submitted filters and reset pagination", async () => {
+  const view = await page(0, { tournaments: searchTournaments });
+  submit(view, "熾焰咆哮虎 + 轟擂金剛猩");
+  view.elements.regulation.value = "M-B";
+  view.elements.regulation.listeners.change();
+  assert.equal(view.elements.archive.children.length, 1);
+  assert.match(view.elements.archive.children[0].firstElementChild.firstElementChild.children[0].textContent, /Tournament 0/);
+  view.elements.reset.click();
+  assert.equal(view.elements.query.value, "");
+  assert.equal(view.elements.regulation.value, "M-B");
+  assert.equal(view.document.activeElement, view.elements.query);
+  view.elements.regulation.value = "M-C";
+  view.elements.regulation.listeners.change();
+  assert.equal(view.elements.archive.children.length, 10);
+  assert.equal(view.elements.count.textContent, "10 / 11 tournaments");
+});
+test("invalid input clears results and provides nearby recovery without broadening", async () => {
+  const view = await page(0, { tournaments: searchTournaments });
+  submit(view, "Incineroar + Missing");
+  assert.equal(view.elements.query.attributes["aria-invalid"], "true");
+  assert.match(view.elements["search-status"].textContent, /Missing/);
+  assert.equal(view.elements.archive.children.length, 0);
+  assert.equal(view.document.activeElement, view.elements.query);
+  view.elements.reset.click();
+  assert.equal(view.elements.query.attributes["aria-invalid"], undefined);
+  assert.equal(view.elements.archive.children.length, 10);
 });

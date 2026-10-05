@@ -1,7 +1,8 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
+import { archiveRegulations, searchTeamArchive } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { pokemonSpriteElements } from "./components.js";
+import { optionElement, pokemonSpriteElements } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -10,6 +11,7 @@ import {
   localizedTerm,
   onLocaleChange,
   t,
+  translateSubtree,
 } from "../i18n.js";
 
 const elements = {
@@ -18,10 +20,19 @@ const elements = {
   archive: document.querySelector("#teams-archive"),
   more: document.querySelector("#teams-more"),
   status: document.querySelector("#status"),
+  form: document.querySelector("#teams-search-form"),
+  regulation: document.querySelector("#teams-regulation"),
+  query: document.querySelector("#teams-query"),
+  searchStatus: document.querySelector("#teams-search-status"),
+  submit: document.querySelector("#teams-search-submit"),
+  reset: document.querySelector("#teams-reset"),
 };
 
 let catalogs = null;
 let archive = null;
+let selectedFormat = null;
+let submittedQuery = "";
+let filteredTournaments = [];
 // Load phases behind the footer status line, kept as state rather than text so a later
 // success cannot hide an earlier failure and the line can be re-localized.
 const loadState = { catalogs: "loading", archive: "loading", failed: false };
@@ -29,7 +40,7 @@ const TOURNAMENT_BATCH_SIZE = 10;
 let visibleCount = TOURNAMENT_BATCH_SIZE;
 
 elements.more.addEventListener("click", () => {
-  const tournaments = archive?.tournaments ?? [];
+  const tournaments = filteredTournaments;
   if (visibleCount >= tournaments.length) return;
   const nextCount = Math.min(visibleCount + TOURNAMENT_BATCH_SIZE, tournaments.length);
   const addedTournaments = tournaments.slice(visibleCount, nextCount)
@@ -40,6 +51,27 @@ elements.more.addEventListener("click", () => {
   }
   visibleCount = nextCount;
   updateArchiveControls(tournaments.length);
+});
+
+elements.form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!archive) return;
+  submittedQuery = elements.query.value;
+  visibleCount = TOURNAMENT_BATCH_SIZE;
+  renderPage();
+  if (elements.query.getAttribute("aria-invalid") === "true") elements.query.focus();
+});
+elements.regulation.addEventListener("change", () => {
+  selectedFormat = elements.regulation.value;
+  visibleCount = TOURNAMENT_BATCH_SIZE;
+  renderPage();
+});
+elements.reset.addEventListener("click", () => {
+  elements.query.value = "";
+  submittedQuery = "";
+  visibleCount = TOURNAMENT_BATCH_SIZE;
+  renderPage();
+  elements.query.focus();
 });
 
 initI18n();
@@ -129,17 +161,33 @@ function renderFailure() {
 }
 
 function renderPage() {
-  const tournaments = archive?.tournaments ?? [];
-  elements.source.textContent = t("teams.source", {
-    count: tournaments.length,
-    limit: archive?.format ?? "M-C",
-  });
-  updateArchiveControls(tournaments.length);
-  elements.archive.replaceChildren(
-    ...(tournaments.length > 0
-      ? tournaments.slice(0, visibleCount).map((tournament, index) => renderTournament(tournament, index))
-      : [messagePanel(t("teams.noTournaments"))]),
-  );
+  const formats = archiveRegulations(archive);
+  if (!formats.includes(selectedFormat)) {
+    selectedFormat = formats.includes(archive?.format) ? archive.format : formats.at(-1) ?? "";
+  }
+  elements.regulation.replaceChildren(...(formats.length
+    ? formats.map((format) => optionElement(format, format))
+    : [optionElement("", t("teams.noRegulations"))]));
+  elements.regulation.value = selectedFormat;
+  for (const control of [elements.regulation, elements.query, elements.submit, elements.reset]) {
+    control.disabled = formats.length === 0;
+  }
+  const result = searchTeamArchive(archive, { format: selectedFormat, query: submittedQuery, pokemon: catalogs?.pokemon });
+  filteredTournaments = result.tournaments;
+  const archivedCount = (archive?.tournaments ?? []).filter((tournament) =>
+    (tournament.format ?? archive.format) === selectedFormat).length;
+  elements.source.textContent = t("teams.source", { count: archivedCount, limit: selectedFormat || "—" });
+  if (result.error) elements.query.setAttribute("aria-invalid", "true");
+  else elements.query.removeAttribute("aria-invalid");
+  elements.searchStatus.textContent = result.error
+    ? t(`teams.queryError.${result.error.code}`, { terms: result.error.terms.join(" + ") })
+    : result.searching ? t("teams.searchResults", { count: result.teamCount, tournaments: filteredTournaments.length, format: selectedFormat }) : "";
+  updateArchiveControls(filteredTournaments.length);
+  elements.archive.replaceChildren(...(result.error ? [] : filteredTournaments.length > 0
+    ? filteredTournaments.slice(0, visibleCount).map((tournament, index) => renderTournament(tournament, index))
+    : [messagePanel(t(result.searching ? "teams.noMatches" : "teams.noTournaments"))]));
+  translateSubtree(elements.form);
+  translateSubtree(elements.archive);
 }
 
 // A disclosure whose content is built the first time it opens. The full archive is tens of
@@ -189,6 +237,7 @@ function renderTournament(tournament, index) {
   const meta = document.createElement("span");
   meta.className = "teams-tournament-meta";
   meta.textContent = [
+    tournament.format ?? archive.format,
     formatDate(tournament.date),
     tournament.players ? t("teams.playerCount", { count: tournament.players }) : "",
     t("teams.topCutCount", { count: tournament.topCut.length }),

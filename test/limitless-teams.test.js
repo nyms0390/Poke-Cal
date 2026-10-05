@@ -164,3 +164,24 @@ test("the archive builder retains more than ten qualifying tournaments by defaul
   const pairings = new Map(tournaments.map(({ id }) => [id, [{ phase: 2, player1: "winner" }]]));
   assert.equal(buildLimitlessTeamArchive(tournaments, detailsByTournament, standings, pairings).tournaments.length, 12);
 });
+
+
+test("retains each tournament regulation and applies the archive limit per regulation", () => {
+  const tournaments = ["M-A", "M-B", "M-C"].flatMap((format, formatIndex) =>
+    Array.from({ length: 3 }, (_, index) => ({
+      ...tournament(`${format}-${index}`, `2026-09-${10 + formatIndex * 3 + index}`), format,
+    })),
+  );
+  const detailsByTournament = new Map(tournaments.map(({ id }) => [id, details()]));
+  const standings = new Map(tournaments.map(({ id }) => [id, [standing("winner", 1, [set("raichu", "Raichu")])]]));
+  const pairings = new Map(tournaments.map(({ id }) => [id, [{ phase: 2, player1: "winner" }]]));
+  const archive = buildLimitlessTeamArchive(tournaments, detailsByTournament, standings, pairings, {
+    limit: 2, format: "M-C",
+  });
+  assert.equal(archive.format, "M-C");
+  assert.deepEqual(archive.tournaments.map(({ id, format }) => [id, format]), [
+    ["M-C-2", "M-C"], ["M-C-1", "M-C"],
+    ["M-B-2", "M-B"], ["M-B-1", "M-B"],
+    ["M-A-2", "M-A"], ["M-A-1", "M-A"],
+  ]);
+});

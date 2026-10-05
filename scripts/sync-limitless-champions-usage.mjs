@@ -21,6 +21,7 @@ const outputDirectory = new URL("../public/", import.meta.url);
 const DEFAULT_GAME = "VGC";
 const DEFAULT_FORMAT = "M-C";
 const DEFAULT_FALLBACK_FORMAT = "M-B";
+const CHAMPIONS_FORMATS = ["M-C", "M-B", "M-A"];
 const DEFAULT_LIMIT = 50;
 const DEFAULT_ARCHIVE_LIMIT = 50;
 const API_DELAY_MS = 1250;
@@ -37,55 +38,78 @@ export async function downloadLimitlessChampionsData({
   items,
 } = {}) {
   let selectedFormat = format;
-  let tournaments = tournamentList(await fetcher(tournamentsUrl({ game, format, limit }))).filter(
-    (tournament) => !format || tournament.format === format,
-  );
-  if (tournaments.length === 0 && format === DEFAULT_FORMAT) {
-    selectedFormat = DEFAULT_FALLBACK_FORMAT;
-    tournaments = tournamentList(
-      await fetcher(tournamentsUrl({ game, format: selectedFormat, limit })),
-    ).filter((tournament) => tournament.format === selectedFormat);
-  }
+  const tournamentsByFormat = new Map();
   const standingsByTournament = new Map();
   const detailsByTournament = new Map();
   const pairingsByTournament = new Map();
+  const archiveTournaments = [];
 
-  for (const tournament of tournaments) {
-    standingsByTournament.set(
-      tournament.id,
-      await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/standings`),
-    );
-    await delay(apiDelayMs);
+  async function downloadTournaments(requestedFormat) {
+    if (!tournamentsByFormat.has(requestedFormat)) {
+      const tournaments = tournamentList(
+        await fetcher(tournamentsUrl({ game, format: requestedFormat, limit })),
+      ).filter((tournament) => !requestedFormat || tournament.format === requestedFormat)
+        .sort((a, b) => dateValue(b.date) - dateValue(a.date) || String(b.id).localeCompare(String(a.id)))
+        .slice(0, limit);
+      tournamentsByFormat.set(requestedFormat, tournaments);
+    }
+    return tournamentsByFormat.get(requestedFormat);
   }
 
-  const archiveTournaments = [];
-  for (const tournament of tournaments) {
-    detailsByTournament.set(
-      tournament.id,
-      await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/details`),
-    );
-    archiveTournaments.push(tournament);
-    await delay(apiDelayMs);
+  let tournaments = await downloadTournaments(selectedFormat);
+  if (tournaments.length === 0 && format === DEFAULT_FORMAT) {
+    selectedFormat = DEFAULT_FALLBACK_FORMAT;
+    tournaments = await downloadTournaments(selectedFormat);
+  }
 
-    const hasBracket = detailsByTournament.get(tournament.id)?.phases?.some((phase) =>
-      /bracket/i.test(String(phase?.type ?? "")),
-    );
-    if (!hasBracket) continue;
+  async function downloadStandings(tournament) {
+    if (!standingsByTournament.has(tournament.id)) {
+      standingsByTournament.set(
+        tournament.id,
+        await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/standings`),
+      );
+      await delay(apiDelayMs);
+    }
+  }
 
-    pairingsByTournament.set(
-      tournament.id,
-      await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/pairings`),
-    );
-    await delay(apiDelayMs);
+  // Every selected-regulation standing contributes to usage, including events
+  // without a qualifying public top-cut archive.
+  for (const tournament of tournaments) await downloadStandings(tournament);
 
-    const partialArchive = buildLimitlessTeamArchive(
-      archiveTournaments,
-      detailsByTournament,
-      standingsByTournament,
-      pairingsByTournament,
-      { limit: archiveLimit, format: selectedFormat },
-    );
-    if (partialArchive.tournaments.length >= archiveLimit) break;
+  // Explicit non-Champions overrides retain their single-format behavior.
+  // Selecting an earlier Champions regulation includes only it and its predecessors.
+  const formatIndex = game === DEFAULT_GAME ? CHAMPIONS_FORMATS.indexOf(selectedFormat) : -1;
+  const archiveFormats = formatIndex === -1 ? [selectedFormat] : CHAMPIONS_FORMATS.slice(formatIndex);
+  for (const archiveFormat of archiveFormats) {
+    const candidates = await downloadTournaments(archiveFormat);
+    const collected = [];
+    for (const tournament of candidates) {
+      detailsByTournament.set(
+        tournament.id,
+        await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/details`),
+      );
+      collected.push(tournament);
+      await delay(apiDelayMs);
+
+      const hasBracket = detailsByTournament.get(tournament.id)?.phases?.some((phase) =>
+        /bracket/i.test(String(phase?.type ?? "")),
+      );
+      if (!hasBracket) continue;
+
+      await downloadStandings(tournament);
+      pairingsByTournament.set(
+        tournament.id,
+        await fetcher(`${LIMITLESS_API_BASE_URL}/tournaments/${tournament.id}/pairings`),
+      );
+      await delay(apiDelayMs);
+
+      const partialArchive = buildLimitlessTeamArchive(
+        collected, detailsByTournament, standingsByTournament, pairingsByTournament,
+        { limit: archiveLimit, format: archiveFormat },
+      );
+      if (partialArchive.tournaments.length >= archiveLimit) break;
+    }
+    archiveTournaments.push(...collected);
   }
 
   return {
@@ -98,6 +122,11 @@ export async function downloadLimitlessChampionsData({
       { limit: archiveLimit, format: selectedFormat },
     ),
   };
+}
+
+function dateValue(value) {
+  const parsed = Date.parse(value ?? "");
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 export async function downloadLimitlessChampionsUsage(options = {}) {

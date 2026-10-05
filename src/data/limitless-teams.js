@@ -20,17 +20,20 @@ export function buildLimitlessTeamArchive(
     .filter(Boolean)
     .sort((a, b) => dateValue(b.date) - dateValue(a.date) || String(b.id).localeCompare(String(a.id)));
   const qualifying = [];
+  const countsByFormat = new Map();
 
   for (const tournament of orderedTournaments) {
+    const tournamentFormat = tournament.format ?? format ?? null;
+    if ((countsByFormat.get(tournamentFormat) ?? 0) >= limit) continue;
     const archiveTournament = buildArchiveTournament(
-      tournament,
+      { ...tournament, format: tournamentFormat },
       detailsByTournament.get(tournament.id),
       standingsByTournament.get(tournament.id),
       pairingsByTournament.get(tournament.id),
     );
     if (!archiveTournament) continue;
     qualifying.push(archiveTournament);
-    if (qualifying.length >= limit) break;
+    countsByFormat.set(tournamentFormat, (countsByFormat.get(tournamentFormat) ?? 0) + 1);
   }
 
   return {
@@ -71,6 +74,7 @@ function buildArchiveTournament(tournament, details, standings = [], pairings = 
 
   return {
     id: tournament.id,
+    format: tournament.format,
     name: tournament.name ?? tournament.id,
     date: tournament.date ?? null,
     players: tournament.players ?? null,

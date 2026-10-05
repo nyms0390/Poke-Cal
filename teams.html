@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
-      content="Recent Limitless Champions tournament teams with submitted items, abilities, moves, natures, and Tera data."
+      content="Search Limitless Champions tournament team lists by Pokémon and regulation, with submitted builds."
     />
     <title>PokéCal — Tournament Teams</title>
     <link rel="stylesheet" href="./src/styles.css" />
@@ -33,14 +33,33 @@
         </nav>
       </header>
       <div class="page-intro">
-        <h1 data-i18n="teams.title">Browse recent tournament teams.</h1>
+        <h1 data-i18n="teams.title">Find tournament teams.</h1>
         <p class="intro" data-i18n="teams.intro">
-          Explore the latest completed Champions brackets, then open a player and each submitted Pokémon build.
+          Search for Pokémon together on a submitted team, or browse completed Champions brackets.
         </p>
       </div>
 
       <section class="calculator teams-tool" aria-label="Tournament teams">
         <p id="teams-source" class="usage-source">Loading Limitless tournament teams…</p>
+
+        <form id="teams-search-form" class="catalog-panel teams-search" aria-label="Team search" data-i18n-aria-label="teams.searchLabel">
+          <div class="teams-search-fields">
+            <label class="teams-regulation-field" for="teams-regulation">
+              <span data-i18n="teams.regulation">Champions regulation</span>
+              <select id="teams-regulation" name="regulation" disabled></select>
+            </label>
+            <label class="teams-query-field" for="teams-query">
+              <span data-i18n="teams.pokemonQuery">Pokémon on the same team</span>
+              <input id="teams-query" name="pokemon" type="search" autocomplete="off" spellcheck="false" aria-describedby="teams-search-help teams-search-status" placeholder="Incineroar + Rillaboom…" data-i18n-placeholder="teams.queryPlaceholder" disabled />
+            </label>
+            <div class="teams-search-actions">
+              <button id="teams-search-submit" class="teams-search-submit" type="submit" data-i18n="teams.search" disabled>Search teams</button>
+              <button id="teams-reset" class="teams-more" type="button" data-i18n="teams.clear" disabled>Clear search</button>
+            </div>
+          </div>
+          <p id="teams-search-help" class="teams-search-help" data-i18n="teams.searchHelp">Use exact English or Chinese names separated by +, up to 6 distinct Pokémon. Leave blank to browse.</p>
+          <p id="teams-search-status" class="teams-search-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
 
         <section class="catalog-panel teams-archive-panel" aria-labelledby="teams-archive-heading">
           <div class="panel-heading">
@@ -57,7 +76,7 @@
 
       <footer>
         <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
-        <span data-i18n="teams.footer">Limitless Champions team lists · submitted builds only · no inferred spreads</span>
+        <span data-i18n="teams.footer">Limitless Champions tournament team lists · submitted builds only · no inferred spreads</span>
       </footer>
     </main>
     <script type="module" src="./src/ui/teams-page.js"></script>

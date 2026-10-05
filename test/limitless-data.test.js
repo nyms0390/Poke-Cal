@@ -11,7 +11,7 @@ test("falls back to M-B usage when M-C has no tournaments", async () => {
       requestedUrls.push(url);
       const parsed = new URL(url);
       if (parsed.pathname === "/api/tournaments") {
-        if (parsed.searchParams.get("format") === "M-C") return [];
+        if (parsed.searchParams.get("format") !== "M-B") return [];
         return [
           {
             id: "mb-event",
@@ -39,7 +39,7 @@ test("falls back to M-B usage when M-C has no tournaments", async () => {
     requestedUrls
       .filter((url) => new URL(url).pathname === "/api/tournaments")
       .map((url) => new URL(url).searchParams.get("format")),
-    ["M-C", "M-B"],
+    ["M-C", "M-B", "M-A"],
   );
   assert.equal(teams.format, "M-B");
   assert.equal(usage.tournamentCount, 1);
@@ -55,7 +55,7 @@ test("archives beyond ten by default while retaining configurable limits and the
     const parsed = new URL(url);
     if (parsed.pathname === "/api/tournaments") {
       requestedLimits.push(parsed.searchParams.get("limit"));
-      return tournaments;
+      return parsed.searchParams.get("format") === "M-C" ? tournaments : [];
     }
     if (parsed.pathname.endsWith("/standings")) return [{
       player: "winner", placing: 1, decklist: [{ id: "raichu", name: "Raichu" }],
@@ -70,7 +70,7 @@ test("archives beyond ten by default while retaining configurable limits and the
   const limited = await downloadLimitlessChampionsData({ fetcher, apiDelayMs: 0, archiveLimit: 3 });
   assert.equal(limited.teams.tournaments.length, 3);
   assert.equal(limited.usage.tournamentCount, 12);
-  assert.deepEqual(requestedLimits, ["50", "50"]);
+  assert.deepEqual(requestedLimits, ["50", "50", "50", "50", "50", "50"]);
 });
 
 test("aggregates Limitless standings into usage rates", () => {
@@ -605,4 +605,130 @@ test("keeps Smogon SP spreads when merging or clearing Limitless usage", () => {
   assert.equal(pikachu.champions.usageCount, undefined);
   assert.equal(pikachu.champions.spreadsMeta.source, "Smogon");
   assert.equal(pikachu.champions.legal, true);
+});
+
+
+function regulationFetcher(eventsByFormat, requestedUrls = []) {
+  return async (url) => {
+    requestedUrls.push(url);
+    const parsed = new URL(url);
+    if (parsed.pathname === "/api/tournaments") {
+      return eventsByFormat[parsed.searchParams.get("format")] ?? [];
+    }
+    const id = parsed.pathname.split("/").at(-2);
+    const tournament = Object.values(eventsByFormat).flat().find((event) => event.id === id);
+    if (!tournament) throw new Error(`Unexpected URL: ${url}`);
+    if (parsed.pathname.endsWith("/standings")) return [{
+      player: "winner", placing: 1,
+      decklist: [{ id: tournament.format === "M-C" ? "raichu" : "pikachu", name: tournament.format === "M-C" ? "Raichu" : "Pikachu" }],
+    }];
+    if (parsed.pathname.endsWith("/details")) return { phases: [{ phase: 1, type: "SINGLE_BRACKET" }] };
+    if (parsed.pathname.endsWith("/pairings")) return [{ phase: 1, player1: "winner" }];
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+}
+
+function regulationEvents(format, count = 3) {
+  return Array.from({ length: count }, (_, index) => ({
+    id: `${format}-${index}`, game: "VGC", format,
+    date: `2026-09-${String(10 + index).padStart(2, "0")}`,
+  }));
+}
+
+test("archives all Champions regulations with independent limits and current-only usage", async () => {
+  const requestedUrls = [];
+  const events = Object.fromEntries(["M-C", "M-B", "M-A"].map((format) => [format, regulationEvents(format)]));
+  // A query response may contain unrelated rows; these must not leak into either output.
+  events["M-C"].push({ id: "sv-event", game: "VGC", format: "I", date: "2026-10-01" });
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    fetcher: regulationFetcher(events, requestedUrls), apiDelayMs: 0, archiveLimit: 2,
+  });
+  assert.equal(teams.format, "M-C");
+  assert.equal(teams.tournaments.length, 6);
+  for (const format of ["M-C", "M-B", "M-A"]) {
+    assert.deepEqual(teams.tournaments.filter((event) => event.format === format).map(({ id }) => id), [
+      `${format}-2`, `${format}-1`,
+    ]);
+  }
+  assert.equal(usage.tournamentCount, 3);
+  assert.equal(usage.teamCount, 3);
+  assert.deepEqual(usage.pokemon.map(({ id }) => id), ["raichu"]);
+  const queries = requestedUrls.filter((url) => new URL(url).pathname === "/api/tournaments");
+  assert.deepEqual(queries.map((url) => new URL(url).searchParams.get("format")), ["M-C", "M-B", "M-A"]);
+  assert.ok(queries.every((url) => new URL(url).searchParams.get("limit") === "50"));
+  assert.equal(new Set(requestedUrls).size, requestedUrls.length, "each resource is downloaded once");
+  assert.equal(requestedUrls.some((url) => url.includes("sv-event")), false);
+});
+
+test("fallback reuses M-B resources and archives M-A without mixing usage", async () => {
+  const requestedUrls = [];
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    fetcher: regulationFetcher({ "M-B": regulationEvents("M-B", 1), "M-A": regulationEvents("M-A", 1) }, requestedUrls),
+    apiDelayMs: 0,
+  });
+  assert.equal(teams.format, "M-B");
+  assert.deepEqual(new Set(teams.tournaments.map(({ format }) => format)), new Set(["M-B", "M-A"]));
+  assert.equal(usage.tournamentCount, 1);
+  assert.equal(usage.teamCount, 1);
+  assert.equal(new Set(requestedUrls).size, requestedUrls.length);
+});
+
+test("an explicit earlier regulation archives only it and its predecessors", async () => {
+  const requestedUrls = [];
+  const { teams, usage } = await downloadLimitlessChampionsData({
+    format: "M-B", apiDelayMs: 0,
+    fetcher: regulationFetcher({ "M-B": regulationEvents("M-B", 1), "M-A": regulationEvents("M-A", 1) }, requestedUrls),
+  });
+  assert.equal(teams.format, "M-B");
+  assert.equal(usage.tournamentCount, 1);
+  assert.deepEqual(requestedUrls.filter((url) => new URL(url).pathname === "/api/tournaments")
+    .map((url) => new URL(url).searchParams.get("format")), ["M-B", "M-A"]);
+});
+
+test("explicit non-Champions overrides preserve single-format downloads", async () => {
+  const requestedUrls = [];
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    format: "I", apiDelayMs: 0,
+    fetcher: regulationFetcher({ I: regulationEvents("I", 1) }, requestedUrls),
+  });
+  assert.equal(teams.format, "I");
+  assert.equal(usage.tournamentCount, 1);
+  assert.deepEqual(requestedUrls.filter((url) => new URL(url).pathname === "/api/tournaments")
+    .map((url) => new URL(url).searchParams.get("format")), ["I"]);
+});
+
+
+test("bounds each regulation query to its requested sample and archive cap", async () => {
+  const requestedUrls = [];
+  const events = Object.fromEntries(["M-C", "M-B", "M-A"].map((format) => [format,
+    Array.from({ length: 52 }, (_, index) => ({
+      id: `${format}-${index}`, game: "VGC", format,
+      date: new Date(Date.UTC(2026, 8, 1 + index)).toISOString(),
+    })),
+  ]));
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    fetcher: regulationFetcher(events, requestedUrls), apiDelayMs: 0,
+  });
+  assert.equal(usage.tournamentCount, 50);
+  assert.equal(teams.tournaments.length, 150);
+  for (const format of ["M-C", "M-B", "M-A"]) {
+    const tournaments = teams.tournaments.filter((event) => event.format === format);
+    assert.equal(tournaments.length, 50);
+    assert.equal(tournaments[0].id, `${format}-51`);
+    assert.equal(tournaments.at(-1).id, `${format}-2`);
+    assert.equal(requestedUrls.some((url) => url.includes(`/tournaments/${format}-0/`)), false);
+  }
+});
+
+
+test("an explicit game override retains the existing fallback without Champions expansion", async () => {
+  const requestedUrls = [];
+  const { usage, teams } = await downloadLimitlessChampionsData({
+    game: "OTHER", apiDelayMs: 0,
+    fetcher: regulationFetcher({ "M-B": regulationEvents("M-B", 1) }, requestedUrls),
+  });
+  assert.equal(usage.tournamentCount, 1);
+  assert.equal(teams.format, "M-B");
+  assert.deepEqual(requestedUrls.filter((url) => new URL(url).pathname === "/api/tournaments")
+    .map((url) => new URL(url).searchParams.get("format")), ["M-C", "M-B"]);
 });

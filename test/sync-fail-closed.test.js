@@ -91,7 +91,7 @@ test("Limitless sync refuses an empty tournament list (after the M-B fallback) a
       }),
       /Limitless usage and team archive failed validation[\s\S]*legalPokemonWithUsage: 0[\s\S]*teamTournaments: 0/,
     );
-    assert.deepEqual(formats, ["M-C", "M-B"]);
+    assert.deepEqual(formats, ["M-C", "M-B", "M-A"]);
     assert.deepEqual(await snapshot(), before);
   });
 });
@@ -185,5 +185,33 @@ test("validate-data passes the committed catalogs and fails a shrunken copy agai
     assert.equal(result.ok, false);
     assert.ok(result.errors.some((error) => error.startsWith("teamTournaments: 0 is below")));
     assert.ok(result.errors.some((error) => /teamCount: 0 shrank 100%/.test(error)));
+  });
+});
+
+
+test("Limitless earlier-regulation download failure leaves all catalogs untouched", async () => {
+  await withCommittedCatalogs(async ({ directory, snapshot }) => {
+    const before = await snapshot();
+    const formats = [];
+    await assert.rejects(updateLimitless({
+      directory, apiDelayMs: 0,
+      fetcher: async (url) => {
+        const parsed = new URL(url);
+        if (parsed.pathname === "/api/tournaments") {
+          const format = parsed.searchParams.get("format");
+          formats.push(format);
+          if (format === "M-A") throw new Error("M-A unavailable");
+          return [{ id: format, game: "VGC", format, date: "2026-09-01" }];
+        }
+        if (parsed.pathname.endsWith("/standings")) return [{
+          player: "winner", placing: 1, decklist: [{ id: "raichu", name: "Raichu" }],
+        }];
+        if (parsed.pathname.endsWith("/details")) return { phases: [{ phase: 1, type: "SINGLE_BRACKET" }] };
+        if (parsed.pathname.endsWith("/pairings")) return [{ phase: 1, player1: "winner" }];
+        throw new Error(`Unexpected URL: ${url}`);
+      },
+    }), /M-A unavailable/);
+    assert.deepEqual(formats, ["M-C", "M-B", "M-A"]);
+    assert.deepEqual(await snapshot(), before);
   });
 });
