@@ -6,7 +6,6 @@ export const LOCALE_STORAGE_KEY = "pokecal.locale.v1";
 
 const CATALOGS = { en: EN_MESSAGES, "zh-TW": ZH_TW_MESSAGES };
 const listeners = new Set();
-const ZH_TW_NAME_OVERRIDES = { terashell: "太晶甲殼" };
 const SIMPLIFIED_TO_TRADITIONAL = {
   压: "壓", 针: "針", 热: "熱", 冲: "衝", 叶: "葉", 绿: "綠", 开: "開", 电: "電", 双: "雙", 击: "擊",
   闪: "閃", 场: "場", 变: "變", 万: "萬", 锤: "鎚", 剑: "劍", 飞: "飛", 扑: "撲", 强: "強", 钻: "鑽",
@@ -83,8 +82,8 @@ export function formatNumber(value, requestedLocale = locale, options) {
 export function localizedName(entry, requestedLocale = locale) {
   if (!entry) return "";
   if (requestedLocale !== "zh-TW") return entry.name ?? entry.id ?? "";
-  const translated = ZH_TW_NAME_OVERRIDES[entry.id]
-    ?? entry.localizations?.["zh-TW"]?.name
+  // Hand-fixed names live in src/locales/zh-tw-name-overrides.js and are baked into aliases.
+  const translated = entry.localizations?.["zh-TW"]?.name
     ?? entry.aliases?.[0];
   if (!translated) return entry.name ?? entry.id ?? "";
   const baseSpecies = String(entry.baseSpecies ?? "");

@@ -4,6 +4,7 @@ import {
   showdownDataBaseUrl,
 } from "../src/data/champions-data.js";
 import { normalizeId } from "../src/identifiers.js";
+import { applyZhTwNameOverrides } from "../src/locales/zh-tw-name-overrides.js";
 import {
   extractAbilities,
   extractCatalogEntries,
@@ -119,7 +120,8 @@ export async function downloadEverything(fetcher = fetchText, { pin } = {}) {
   const itemIdsByIdentifier = parsePokeApiItemIds(itemsCsv);
   const itemAliasesByNumber = parseLocalizedNamesByNumber(itemNamesCsv);
 
-  return applyChampionsData(
+  // Hand-maintained zh-TW names (src/locales/zh-tw-name-overrides.js) win over PokeAPI.
+  return applyZhTwNameOverrides(applyChampionsData(
     {
       pokemon: buildPokemon(pokedex, learnsets, aliasesByNumber),
       abilities: attachNumberedAliases(
@@ -134,7 +136,7 @@ export async function downloadEverything(fetcher = fetchText, { pin } = {}) {
       ),
     },
     championsMod,
-  );
+  ));
 }
 
 export async function writeEverything(data, directory = outputDirectory) {

@@ -69,7 +69,7 @@ test("localizes domain terms and locale-sensitive numbers", () => {
   assert.equal(formatNumber(12345, "en"), "12,345");
   assert.equal(formatNumber(12345, "zh-TW"), "12,345");
   assert.equal(toTraditionalChinese("波动冲 · 特性护具"), "波動衝 · 特性護具");
-  assert.equal(localizedName({ id: "terashell", name: "Tera Shell", aliases: ["貫穿鑽"] }, "zh-TW"), "太晶甲殼");
+  assert.equal(localizedName({ id: "terashell", name: "Tera Shell", aliases: ["太晶甲殼"] }, "zh-TW"), "太晶甲殼");
   assert.equal(localizedSpreadName("Jolly:2/32/0/0/0/32", "zh-TW"), "爽朗:2/32/0/0/0/32");
 });
 

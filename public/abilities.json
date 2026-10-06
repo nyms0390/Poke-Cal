@@ -5846,7 +5846,7 @@
     "shortDesc": "Terapagos: If full HP, attacks taken have 0.5× effectiveness unless naturally immune.",
     "activate": "  {POKEMON} made its shell gleam! It's distorting type matchups!",
     "aliases": [
-      "貫穿鑽"
+      "太晶甲殼"
     ],
     "champions": {
       "legal": true
