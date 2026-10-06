@@ -476,6 +476,7 @@ function ensureListboxId(resultsEl) {
 export function attachCombobox({
   input,
   resultsEl,
+  getQuery = (value) => value,
   getMatches,
   getAllMatches = null,
   resultLimit = null,
@@ -501,8 +502,9 @@ export function attachCombobox({
 
   function render() {
     input.removeAttribute("aria-activedescendant");
-    const allMatches = getAllMatches ? getAllMatches(input.value) ?? [] : null;
-    const matches = allMatches ?? (getMatches(input.value) ?? []);
+    const query = getQuery(input.value);
+    const allMatches = getAllMatches ? getAllMatches(query) ?? [] : null;
+    const matches = allMatches ?? (getMatches(query) ?? []);
     const visible = allMatches
       ? visibleSearchResults(allMatches, { limit: resultLimit ?? matches.length, expanded })
       : { matches, canExpand: false };
@@ -535,7 +537,7 @@ export function attachCombobox({
       });
       resultsEl.append(more);
     }
-    const hasQuery = input.value.trim().length > 0;
+    const hasQuery = query.trim().length > 0;
     if (hasQuery && visible.matches.length === 0) {
       const empty = document.createElement("p");
       empty.className = "search-results-empty";
@@ -562,6 +564,7 @@ export function attachCombobox({
   input.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Escape") {
+      if (!resultsEl.hidden) event.preventDefault();
       hide();
       return;
     }
@@ -575,8 +578,8 @@ export function attachCombobox({
       }
       return;
     }
-    if (event.key !== "Enter") return;
-    const [first] = getMatches(input.value) ?? [];
+    if (event.key !== "Enter" || resultsEl.hidden) return;
+    const [first] = getMatches(getQuery(input.value)) ?? [];
     if (!first) return;
     event.preventDefault();
     hide();

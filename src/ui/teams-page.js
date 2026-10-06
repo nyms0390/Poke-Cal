@@ -1,8 +1,8 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
-import { archiveRegulations, searchTeamArchive } from "../data/team-search.js";
+import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { optionElement, pokemonSpriteElements } from "./components.js";
+import { attachCombobox, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -23,6 +23,7 @@ const elements = {
   form: document.querySelector("#teams-search-form"),
   regulation: document.querySelector("#teams-regulation"),
   query: document.querySelector("#teams-query"),
+  suggestions: document.querySelector("#teams-suggestions"),
   searchStatus: document.querySelector("#teams-search-status"),
   submit: document.querySelector("#teams-search-submit"),
   reset: document.querySelector("#teams-reset"),
@@ -32,6 +33,7 @@ let catalogs = null;
 let archive = null;
 let selectedFormat = null;
 let submittedQuery = "";
+let queryPicker = null;
 let filteredTournaments = [];
 // Load phases behind the footer status line, kept as state rather than text so a later
 // success cannot hide an earlier failure and the line can be re-localized.
@@ -55,6 +57,7 @@ elements.more.addEventListener("click", () => {
 
 elements.form.addEventListener("submit", (event) => {
   event.preventDefault();
+  queryPicker?.hide();
   if (!archive) return;
   submittedQuery = elements.query.value;
   visibleCount = TOURNAMENT_BATCH_SIZE;
@@ -72,12 +75,14 @@ elements.reset.addEventListener("click", () => {
   visibleCount = TOURNAMENT_BATCH_SIZE;
   renderPage();
   elements.query.focus();
+  queryPicker?.hide();
 });
 
 initI18n();
 initialize();
 
 onLocaleChange(() => {
+  queryPicker?.hide();
   renderStatus();
   if (loadState.failed) renderFailure();
   else if (loadState.archive === "failed") elements.source.textContent = t("teams.sourceError");
@@ -137,6 +142,7 @@ async function initialize() {
     if (!loadedCatalogs) return;
     catalogs = loadedCatalogs;
     archive = loadedArchive;
+    initializeQueryPicker();
     renderPage();
   } catch (error) {
     loadState.failed = true;
@@ -144,6 +150,27 @@ async function initialize() {
     renderFailure();
     console.error(error);
   }
+}
+
+function initializeQueryPicker() {
+  const historical = (archive?.tournaments ?? []).flatMap((tournament) =>
+    tournament.topCut.flatMap((team) => team.pokemon ?? []));
+  const pokemon = [...catalogs.pokemon, ...historical];
+  const getAllMatches = (query) => teamPokemonSuggestions(query, pokemon);
+  queryPicker = attachCombobox({
+    input: elements.query,
+    resultsEl: elements.suggestions,
+    getQuery: (value) => value.split("+").at(-1).trim(),
+    getMatches: (query) => getAllMatches(query).slice(0, POKEMON_RESULT_LIMIT),
+    getAllMatches,
+    resultLimit: POKEMON_RESULT_LIMIT,
+    renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { strong: "" }),
+    onSelect: (entry) => {
+      elements.query.value = completeTeamQuery(elements.query.value, localizedName(entry));
+      elements.query.focus();
+      queryPicker.hide();
+    },
+  });
 }
 
 function renderStatus() {

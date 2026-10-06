@@ -13,6 +13,34 @@ export function archiveRegulations(archive) {
     .filter((format) => /^M-[A-Z]+$/.test(format ?? "")))].sort();
 }
 
+export function teamPokemonSuggestions(query, pokemon = []) {
+  const key = searchKey(query);
+  if (!key) return [];
+  const unique = new Map();
+  for (const entry of pokemon) {
+    const id = normalizeId(entry.id ?? entry.name);
+    if (id && !unique.has(id)) unique.set(id, entry);
+  }
+  return [...unique.values()]
+    .map((entry) => {
+      const names = [entry.id, entry.name, localizedName(entry, "zh-TW"), ...(entry.aliases ?? [])]
+        .map(searchKey).filter(Boolean);
+      const score = names.includes(key) ? 0
+        : names.some((name) => name.startsWith(key)) ? 1
+          : names.some((name) => name.includes(key)) ? 2 : Infinity;
+      return { entry, score };
+    })
+    .filter(({ score }) => score < Infinity)
+    .sort((a, b) => a.score - b.score || localizedName(a.entry).localeCompare(localizedName(b.entry)))
+    .map(({ entry }) => entry);
+}
+
+export function completeTeamQuery(query, name) {
+  const text = String(query ?? "");
+  const prefix = text.slice(0, text.lastIndexOf("+") + 1);
+  return prefix ? `${prefix} ${name}` : name;
+}
+
 export function resolveTeamQuery(query, pokemon = []) {
   const text = String(query ?? "").trim();
   const terms = text.split("+").map((term) => term.trim()).filter(Boolean);

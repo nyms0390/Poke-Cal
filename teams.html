@@ -48,16 +48,19 @@
               <span data-i18n="teams.regulation">Champions regulation</span>
               <select id="teams-regulation" name="regulation" disabled></select>
             </label>
-            <label class="teams-query-field" for="teams-query">
-              <span data-i18n="teams.pokemonQuery">Pokémon on the same team</span>
-              <input id="teams-query" name="pokemon" type="search" autocomplete="off" spellcheck="false" aria-describedby="teams-search-help teams-search-status" placeholder="Incineroar + Rillaboom…" data-i18n-placeholder="teams.queryPlaceholder" disabled />
-            </label>
+            <div class="teams-query-field">
+              <label for="teams-query" data-i18n="teams.pokemonQuery">Pokémon on the same team</label>
+              <div class="teams-query-combobox">
+                <input id="teams-query" name="pokemon" type="search" role="combobox" aria-expanded="false" aria-controls="teams-suggestions" autocomplete="off" spellcheck="false" aria-describedby="teams-search-help teams-search-status" placeholder="Incineroar + Rillaboom…" data-i18n-placeholder="teams.queryPlaceholder" disabled />
+                <div id="teams-suggestions" class="search-results pokemon-search-results" aria-label="Pokémon name suggestions" data-i18n-aria-label="teams.suggestions" data-i18n-skip hidden></div>
+              </div>
+            </div>
             <div class="teams-search-actions">
               <button id="teams-search-submit" class="teams-search-submit" type="submit" data-i18n="teams.search" disabled>Search teams</button>
               <button id="teams-reset" class="teams-more" type="button" data-i18n="teams.clear" disabled>Clear search</button>
             </div>
           </div>
-          <p id="teams-search-help" class="teams-search-help" data-i18n="teams.searchHelp">Use exact English or Chinese names separated by +, up to 6 distinct Pokémon. Leave blank to browse.</p>
+          <p id="teams-search-help" class="teams-search-help" data-i18n="teams.searchHelp">Type part of an English or Chinese name and choose a suggestion. Separate up to 6 Pokémon with +. Leave blank to browse.</p>
           <p id="teams-search-status" class="teams-search-status" role="status" aria-live="polite" aria-atomic="true"></p>
         </form>
 

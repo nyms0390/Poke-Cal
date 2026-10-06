@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { archiveRegulations, resolveTeamQuery, searchTeamArchive } from "../src/data/team-search.js";
+import { archiveRegulations, completeTeamQuery, resolveTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../src/data/team-search.js";
 
 const pokemon = [
   { id: "incineroar", name: "Incineroar", aliases: ["熾焰咆哮虎"] },
@@ -74,4 +74,32 @@ test("ambiguous aliases require a specific form instead of silently choosing one
   ];
   assert.equal(resolveTeamQuery("洛托姆", forms).error.code, "ambiguous");
   assert.deepEqual(resolveTeamQuery("洛托姆（Wash）", forms).ids, ["rotomwash"]);
+});
+
+test("name suggestions match English and Chinese fragments and keep specific forms", () => {
+  assert.deepEqual(teamPokemonSuggestions("inci", pokemon).map(({ id }) => id), ["incineroar"]);
+  assert.deepEqual(teamPokemonSuggestions("金剛", pokemon).map(({ id }) => id), ["rillaboom"]);
+  assert.deepEqual(teamPokemonSuggestions("噴火龍", pokemon).map(({ id }) => id), ["charizard", "charizardmegax"]);
+  assert.deepEqual(teamPokemonSuggestions("超級X", pokemon).map(({ id }) => id), ["charizardmegax"]);
+  assert.deepEqual(teamPokemonSuggestions("Nidoran♀", pokemon).map(({ id }) => id), ["nidoranf"]);
+  assert.deepEqual(teamPokemonSuggestions("", pokemon), []);
+  assert.deepEqual(teamPokemonSuggestions("Missing", pokemon), []);
+});
+
+test("name suggestions rank exact names before prefixes and deduplicate archive entries", () => {
+  const candidates = [
+    { id: "xraichu", name: "X-Raichu" },
+    { id: "raichumegax", name: "Raichu-Mega-X" },
+    { id: "raichu", name: "Raichu", aliases: ["雷丘"] },
+    { id: "raichu", name: "Raichu" },
+    { id: "unrelated", name: "Unrelated", types: ["Raichu"] },
+  ];
+  assert.deepEqual(teamPokemonSuggestions("raichu", candidates).map(({ id }) => id), ["raichu", "raichumegax", "xraichu"]);
+  assert.deepEqual(teamPokemonSuggestions("雷", candidates).map(({ id }) => id), ["raichu"]);
+});
+
+test("completing a name preserves the terms before the final plus separator", () => {
+  assert.equal(completeTeamQuery(" inci ", "Incineroar"), "Incineroar");
+  assert.equal(completeTeamQuery("熾焰咆哮虎 +  rill", "Rillaboom"), "熾焰咆哮虎 + Rillaboom");
+  assert.equal(completeTeamQuery("Incineroar+Rillaboom+噴", "噴火龍（超級X）"), "Incineroar+Rillaboom+ 噴火龍（超級X）");
 });

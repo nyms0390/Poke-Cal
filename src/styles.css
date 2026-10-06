@@ -295,6 +295,7 @@ footer {
 .teams-tool {
   display: grid;
   gap: 1px;
+  overflow: visible;
   background: var(--line);
 }
 
@@ -318,7 +319,18 @@ footer {
 }
 
 .teams-query-field {
+  display: grid;
   flex: 1 1 280px;
+  gap: 8px;
+  min-width: 0;
+}
+
+.teams-query-combobox {
+  position: relative;
+}
+
+.teams-query-combobox input {
+  width: 100%;
 }
 
 .teams-search-actions {
@@ -382,7 +394,7 @@ footer {
     flex: auto;
   }
 
-  .teams-search-fields input,
+  .teams-search-fields input[type="search"],
   .teams-search-fields select {
     min-height: 44px;
   }

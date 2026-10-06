@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
-import { archiveRegulations, searchTeamArchive } from "../src/data/team-search.js";
-import { tFor } from "../src/i18n.js";
+import * as teamSearch from "../src/data/team-search.js";
+import { localizedName, tFor, toTraditionalChinese } from "../src/i18n.js";
 
 // A small DOM fixture runs the real page controller without an extra test dependency.
 async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
@@ -17,33 +17,38 @@ async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
     get firstElementChild() { return this.children[0]; },
     querySelectorAll(tag) {
       return this.children.flatMap((child) => [
-        ...(child.tagName === tag ? [child] : []), ...child.querySelectorAll(tag),
+        ...(child.tagName === tag || (tag.startsWith(".") && child.className?.split(" ").includes(tag.slice(1))) ? [child] : []), ...child.querySelectorAll(tag),
       ]);
     },
+    contains(target) { return target === this || this.children.some((child) => child.contains(target)); },
+    closest(selector) { return selector.startsWith(".") && this.className?.split(" ").includes(selector.slice(1)) ? this : null; },
     append(...children) { this.children.push(...children); },
     replaceChildren(...children) { this.children = children; },
     setAttribute(name, value) { this.attributes[name] = value; },
     getAttribute(name) { return this.attributes[name]; },
     removeAttribute(name) { delete this.attributes[name]; },
     addEventListener(name, listener) { this.listeners[name] = listener; },
-    focus() { document.activeElement = this; },
+    focus() { document.activeElement = this; this.listeners.focus?.(); },
     click() { if (!this.disabled && !this.hidden) this.listeners.click?.(); },
   });
-  const elements = Object.fromEntries(["source", "count", "archive", "status", "more", "search-form", "regulation", "query", "search-status", "search-submit", "reset"].map((key) => [key, node()]));
+  const elements = Object.fromEntries(["source", "count", "archive", "status", "more", "search-form", "regulation", "query", "suggestions", "search-status", "search-submit", "reset"].map((key) => [key, node()]));
+  elements.suggestions.hidden = true;
   elements.more.hidden = true;
   elements.more.disabled = true;
   document.querySelector = (selector) => elements[selector.replace(/^#teams-/, "").replace(/^#/, "")];
   document.createElement = node;
+  document.listeners = {};
+  document.addEventListener = (name, listener) => { document.listeners[name] = listener; };
   let locale = "en";
   let changeLocale;
   const context = {
-    document, console: { error() {} }, Intl, archiveRegulations, searchTeamArchive,
+    document, console: { error() {} }, Intl, queueMicrotask, ...teamSearch, toTraditionalChinese,
     translateSubtree() {},
     optionElement(value, text) { const option = node("option"); option.value = value; option.textContent = text; return option; },
     normalizeId: (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, ""),
     pokemonSpriteElements: () => [],
     initI18n() {}, applyDocumentTranslations() {}, getLocale: () => locale,
-    localizedName: (entry) => entry.name,
+    localizedName: (entry) => localizedName(entry, locale),
     t: (key, params) => tFor(locale, key, params),
     onLocaleChange: (callback) => { changeLocale = callback; },
     catalogLoadedStatus: ({ pokemon, abilities, moves }) =>
@@ -76,6 +81,10 @@ async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
       try { return await load(); } catch (error) { onFailure(error); throw error; }
     },
   };
+  const components = readFileSync(new URL("../src/ui/components.js", import.meta.url), "utf8")
+    .replace(/import[^;]+;\n/g, "").replace(/export /g, "");
+  runInNewContext(components, context);
+  context.pokemonSpriteElements = () => [];
   runInNewContext(source, context);
   await context.ready;
   await new Promise((resolve) => setTimeout(resolve, 10));
@@ -240,4 +249,63 @@ test("invalid input clears results and provides nearby recovery without broadeni
   view.elements.reset.click();
   assert.equal(view.elements.query.attributes["aria-invalid"], undefined);
   assert.equal(view.elements.archive.children.length, 10);
+});
+
+test("autocomplete completes each Pokémon without submitting, then Enter searches the completed team", async () => {
+  const view = await page(0, { tournaments: searchTournaments });
+  const { query, suggestions } = view.elements;
+  query.value = "inci";
+  query.listeners.input();
+  assert.equal(suggestions.hidden, false);
+  assert.equal(query.getAttribute("aria-expanded"), "true");
+  assert.equal(suggestions.children[0].children[0].textContent, "Incineroar");
+  suggestions.children[0].click();
+  assert.equal(query.value, "Incineroar");
+  assert.equal(suggestions.hidden, true);
+  assert.equal(view.elements.archive.children.length, 10, "selection keeps the submitted search unchanged");
+  query.value += " + rill";
+  query.listeners.input();
+  let prevented = false;
+  query.listeners.keydown({ key: "Enter", preventDefault() { prevented = true; } });
+  assert.equal(prevented, true);
+  assert.equal(query.value, "Incineroar + Rillaboom");
+  assert.equal(suggestions.hidden, true);
+  prevented = false;
+  query.listeners.keydown({ key: "Enter", preventDefault() { prevented = true; } });
+  assert.equal(prevented, false, "Enter with a closed popup remains available to submit the form");
+  view.elements["search-form"].listeners.submit({ preventDefault() {} });
+  assert.match(view.elements["search-status"].textContent, /1 matching team/);
+});
+
+test("autocomplete supports Chinese input, dismissal, empty fragments, and clear recovery", async () => {
+  const view = await page(0, { tournaments: searchTournaments });
+  view.locale("zh-TW");
+  const { query, suggestions } = view.elements;
+  query.value = "熾焰咆哮虎 + 金剛";
+  query.listeners.input();
+  assert.equal(suggestions.children[0].children[0].textContent, "轟擂金剛猩");
+  let escapePrevented = false;
+  query.listeners.keydown({ key: "Escape", preventDefault() { escapePrevented = true; } });
+  assert.equal(escapePrevented, true, "dismissing suggestions must prevent the native search input from clearing the query");
+  assert.equal(query.value, "熾焰咆哮虎 + 金剛");
+  assert.equal(suggestions.hidden, true);
+  query.listeners.input();
+  query.listeners.keydown({ key: "ArrowDown", preventDefault() {} });
+  assert.equal(view.document.activeElement, suggestions.children[0]);
+  suggestions.listeners.keydown({ key: "Escape", preventDefault() {} });
+  assert.equal(view.document.activeElement, query);
+  assert.equal(suggestions.hidden, true);
+  query.listeners.input();
+  suggestions.children[0].click();
+  assert.equal(query.value, "熾焰咆哮虎 + 轟擂金剛猩");
+  query.value += " + ";
+  query.listeners.input();
+  assert.equal(suggestions.hidden, true, "a blank next name must not show a false no-match message");
+  query.value += "missing";
+  query.listeners.input();
+  assert.equal(suggestions.children[0].textContent, tFor("zh-TW", "search.noMatches"));
+  view.elements.reset.click();
+  assert.equal(query.value, "");
+  assert.equal(suggestions.hidden, true);
+  assert.equal(query.getAttribute("aria-expanded"), "false");
 });
