@@ -12,12 +12,14 @@ npm install
 npm test
 npm run check:deploy       # Wrangler dry run only
 npx wrangler dev           # local Worker at /mcp
-npx wrangler deploy        # explicit production deployment
+npm run deploy             # manual production deployment (wrangler deploy)
 ```
+
+Production deploys are automatic once the repository has two Actions secrets: `CLOUDFLARE_API_TOKEN` (a Cloudflare API token from the "Edit Cloudflare Workers" template, scoped to the owner's account) and `CLOUDFLARE_ACCOUNT_ID`. The `deploy-mcp` job in `.github/workflows/pages.yml` then runs `npm run deploy` after the app and MCP tests pass, on every push to `main` and whenever the weekly data update dispatches that workflow, so the Worker always serves the committed engine and `public/mcp-catalogs/`. Without the secrets the job skips with a warning and the manual command above is the only way to deploy.
 
 The `MCP_RATE_LIMITER` binding in `wrangler.jsonc` allows 120 requests per 60 seconds per `CF-Connecting-IP` under rate-limit `namespace_id` `"20261"`. The id only needs to be unique among the rate-limit namespaces in the owner's Cloudflare account; Workers sharing an id share one counter.
 
-The production command is intentionally explicit. This repository does not include an account ID, zone ID, custom domain, or a deployment token. The Worker serves the MCP endpoint at `https://<worker-subdomain>.workers.dev/mcp` after deployment; configure that URL in an MCP-capable agent.
+This repository does not include an account ID, zone ID, custom domain, or a deployment token; CI reads them from the Actions secrets above. The Worker serves the MCP endpoint at `https://<worker-subdomain>.workers.dev/mcp` after deployment; configure that URL in an MCP-capable agent.
 
 ## Tools
 
