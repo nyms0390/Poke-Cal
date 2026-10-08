@@ -36,6 +36,17 @@ const FIELD_GROUPS = [
   },
 ];
 
+// Short labels for a field summary, for example ["Doubles", "Weather: Sun", "Gravity"].
+export function ambientFieldLabels(field = {}) {
+  const labels = [t(field.format === "singles" ? "field.singles" : "field.doubles")];
+  for (const group of FIELD_GROUPS.slice(1)) {
+    const option = group.options.find(([value]) => value && value === field[group.key]);
+    if (option) labels.push(t("matchups.fieldValue", { label: t(group.label), value: t(option[1]) }));
+  }
+  if (field.gravity) labels.push(t("field.gravity"));
+  return labels;
+}
+
 export function mountAmbientFieldControls(
   container,
   { namePrefix = "ambient", onChange = () => {}, toggleElements = [] } = {},

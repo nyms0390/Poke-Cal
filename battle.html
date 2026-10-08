@@ -43,10 +43,15 @@
 
       <section class="calculator battle-tool" aria-label="Battle calculator">
         <p id="damage-source" class="usage-source">Champions defaults loading…</p>
+        <div class="sheet-summary-host battle-sheet-summaries">
+          <div id="attacker-summary-card"></div>
+          <div id="defender-summary-card"></div>
+          <div id="field-summary-card"></div>
+        </div>
 
         <div class="damage-controls">
-          <section class="damage-side" aria-label="Attacker">
-            <div class="panel-heading">
+          <section id="attacker-editor" class="damage-side" aria-label="Attacker">
+            <div class="panel-heading sheet-hidden">
               <span>Attacker</span>
               <div class="battle-side-summary">
                 <strong id="attacker-summary">—</strong>
@@ -164,7 +169,7 @@
             </details>
           </section>
 
-          <section class="field-card" aria-label="Field conditions">
+          <section id="field-editor" class="field-card" aria-label="Field conditions">
             <div class="panel-heading">
               <span>Field</span>
               <button id="swap-sides" type="button" title="Swap attacker and defender sides">⇄ Swap sides</button>
@@ -200,8 +205,8 @@
             </div>
           </section>
 
-          <section class="damage-side" aria-label="Defender">
-            <div class="panel-heading">
+          <section id="defender-editor" class="damage-side" aria-label="Defender">
+            <div class="panel-heading sheet-hidden">
               <span>Defender</span>
               <div class="battle-side-summary">
                 <strong id="defender-summary">—</strong>

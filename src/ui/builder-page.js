@@ -80,6 +80,7 @@ import {
   STAT_LABELS,
 } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
+import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
 import {
@@ -155,6 +156,17 @@ const breakMemo = createAnalysisMemo();
 const renderedAnalysisKeys = { bulk: "", break: "" };
 let warmGeneration = 0;
 const updatePage = createLiveUpdater(render);
+// Phones edit the set in a bottom sheet. Setup edits are staged until "Apply spread", so closing
+// the sheet applies them: the results the sheet's button promises are then up to date.
+const BUILDER_SP_LIMIT = 66;
+const setSheet = mountSetSheet({
+  editor: document.querySelector("#builder-editor"),
+  id: "builder-set-sheet",
+  doneKey: "sheet.viewResults",
+  summaryHost: document.querySelector("#builder-summary-card"),
+  onClose: () => applyUserSetup(),
+});
+const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
   onChange: handleAmbientFieldControl,
@@ -483,6 +495,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
 
   renderStats(user, stats, displayedSetup);
   renderSpBudget(displayedSetup.sp);
+  renderSheetSummary(user);
   elements.applySpread.disabled = !userSetupDraft;
   renderCustomThreats();
   const inputs = analysisInputs();
@@ -585,6 +598,21 @@ function renderSpBudget(sp) {
   // Show assigned SP rather than a remaining value because imported usage-backed spreads can
   // exceed the builder's 66-point recommendation budget.
   elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
+  const over = spent > BUILDER_SP_LIMIT;
+  sheetBar.setStatus(
+    t("matchups.spShort", { count: spent, limit: BUILDER_SP_LIMIT }),
+    over ? "over" : spent === BUILDER_SP_LIMIT ? "ok" : "",
+  );
+}
+
+function renderSheetSummary(user) {
+  setSheet.update({
+    pokemon: user.pokemon,
+    meta: [
+      localizedTerm("nature", user.nature),
+      user.item ? localizedName(user.item) : t("builder.noItem"),
+    ].join(" · "),
+  });
 }
 
 function renderStats(user, stats, setup = user) {

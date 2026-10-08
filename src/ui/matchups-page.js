@@ -46,20 +46,36 @@ import {
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
+  pokemonSpriteElements,
   searchResultButton,
+  typeClassName,
+  typeIconPath,
 } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
+import { SHEET_MEDIA_QUERY, mountSetSheet, mountSheetBar } from "./set-sheet.js";
 
 const SECTION_KEYS = ["threats", "speed", "favorable", "stalemate"];
 const SP_ANALYSIS_DELAY_MS = 150;
 // Champions caps a Pokémon's SP at 66 in total (see SP_TOTAL_LIMIT in the damage engine).
 const SP_LIMIT = 66;
 
+// The outcome filters above the results list, in list order. "all" lists every section in turn.
+const FILTERS = [
+  { key: "all", labelKey: "matchups.filterAll" },
+  { key: "threats", labelKey: "matchups.threats", className: "loss" },
+  { key: "speed", labelKey: "matchups.speedRaces", className: "speed" },
+  { key: "favorable", labelKey: "matchups.favorable", className: "win" },
+  { key: "stalemate", labelKey: "matchups.stalemate", className: "stalemate" },
+];
+const DEFAULT_FILTER = "threats";
+
 const elements = {
+  editor: document.querySelector("#matchups-editor"),
+  summaryCard: document.querySelector("#matchups-summary-card"),
   source: document.querySelector("#matchups-source"),
   status: document.querySelector("#status"),
-  summary: document.querySelector("#matchups-summary"),
+  sprite: document.querySelector("#matchups-sprite"),
   pokemonSearch: document.querySelector("#matchups-pokemon-search"),
   pokemonResults: document.querySelector("#matchups-pokemon-results"),
   nature: document.querySelector("#matchups-nature"),
@@ -67,8 +83,14 @@ const elements = {
   item: document.querySelector("#matchups-item"),
   stats: document.querySelector("#matchups-stats"),
   spTotal: document.querySelector("#matchups-sp-total"),
-  setLine: document.querySelector("#matchups-set-line"),
+  spMeterFill: document.querySelector("#matchups-sp-meter-fill"),
   environmentSummary: document.querySelector("#matchups-environment-summary"),
+  tabs: [...document.querySelectorAll("[data-matchups-tab]")],
+  panels: {
+    common: document.querySelector("#matchups-common-panel"),
+    beyond: document.querySelector("#matchups-beyond-panel"),
+  },
+  beyondTabCount: document.querySelector("#matchups-tab-beyond-count"),
   uncommonList: document.querySelector("#matchups-uncommon"),
   uncommonCount: document.querySelector("#matchups-uncommon-count"),
   uncommonStatus: document.querySelector("#matchups-uncommon-status"),
@@ -76,10 +98,9 @@ const elements = {
   nicheRepeats: document.querySelector("#matchups-niche-repeats"),
   nicheRepeatsSummary: document.querySelector("#matchups-niche-repeats-summary"),
   nicheRepeatsGroups: document.querySelector("#matchups-niche-repeats-groups"),
-  jumpCounts: Object.fromEntries(["threats", "uncommon", "speed", "favorable"].map((key) => [key, document.querySelector(`#matchups-jump-${key}`)])),
   movePicks: document.querySelector("#matchups-move-picks"),
   opponentCount: document.querySelector("#matchups-opponent-count"),
-  speedModeInputs: [...document.querySelectorAll('input[name="matchups-speed-mode"]')],
+  speedMode: document.querySelector("#matchups-speed-mode"),
   speedHelp: document.querySelector("#matchups-speed-help"),
   ambientField: document.querySelector("#matchups-ambient-field"),
   shareBar: document.querySelector("#matchups-share-bar"),
@@ -89,9 +110,14 @@ const elements = {
   filter: document.querySelector("#matchups-filter"),
   filterText: document.querySelector("#matchups-filter-text"),
   filterClear: document.querySelector("#matchups-filter-clear"),
-  lists: Object.fromEntries(SECTION_KEYS.map((key) => [key, document.querySelector(`#matchups-${key}`)])),
-  counts: Object.fromEntries(SECTION_KEYS.map((key) => [key, document.querySelector(`#matchups-${key}-count`)])),
-  stalemateSection: document.querySelector("#matchups-stalemate-section"),
+  outcomeFilter: document.querySelector("#matchups-outcome-filter"),
+  outcomeSelect: document.querySelector("#matchups-outcome-select"),
+  opponentSearch: document.querySelector("#matchups-opponent-search"),
+  viewButtons: [...document.querySelectorAll("[data-matchups-view]")],
+  gridView: document.querySelector("#matchups-grid-view"),
+  listView: document.querySelector("#matchups-list-view"),
+  list: document.querySelector("#matchups-list"),
+  showing: document.querySelector("#matchups-showing"),
 };
 
 const preferencesStore = createMatchupPreferencesStore(browserStorage());
@@ -114,12 +140,26 @@ const uncommon = {
   popularCount: 0, rareCount: 0,
 };
 let lastThreatRows = [];
+// The latest analysis, so the outcome filter and opponent search re-render without re-racing.
+let lastAnalysis = null;
 let state = {
   user: null,
   field: createAmbientFieldState(),
   ...preferencesStore.read(),
   cell: null,
+  filter: DEFAULT_FILTER,
+  query: "",
+  view: "list",
+  tab: "common",
 };
+const phoneQuery = globalThis.matchMedia?.(SHEET_MEDIA_QUERY);
+const setSheet = mountSetSheet({
+  editor: elements.editor,
+  id: "matchups-set-sheet",
+  doneKey: "sheet.viewMatchups",
+  summaryHost: elements.summaryCard,
+});
+const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
 
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "matchups",
@@ -132,6 +172,8 @@ ambientFieldControls.sync(state.field);
 
 initI18n();
 buildGrid();
+buildOutcomeFilter();
+bindResultControls();
 initialize();
 
 onLocaleChange(() => {
@@ -141,6 +183,7 @@ onLocaleChange(() => {
   renderPicks();
   renderMovePicks();
   buildGrid();
+  buildOutcomeFilter();
   render();
 });
 
@@ -178,20 +221,9 @@ async function initialize() {
     state = { ...state, ...preferencesStore.write({ opponentCount: normalizeOpponentCount(event.target.value) }), cell: null };
     renderAnalysis();
   });
-  for (const input of elements.speedModeInputs) {
-    input.addEventListener("input", () => {
-      if (!input.checked) return;
-      state = { ...state, ...preferencesStore.write({ speedMode: normalizeSpeedMode(input.value) }) };
-      renderAnalysis();
-    });
-  }
-  elements.filterClear.addEventListener("click", () => {
-    const previous = state.cell;
-    state = { ...state, cell: null };
+  elements.speedMode.addEventListener("input", (event) => {
+    state = { ...state, ...preferencesStore.write({ speedMode: normalizeSpeedMode(event.target.value) }) };
     renderAnalysis();
-    elements.gridBody
-      .querySelector(`td[data-theirs="${previous?.theirs}"][data-ours="${previous?.ours}"] button`)
-      ?.focus();
   });
 
   // `?pokemon=` is a one-off hand-off (Builder links here); the active set carries the full set.
@@ -313,12 +345,12 @@ function renderMovePicks() {
   const moves = userMoves();
   elements.movePicks.replaceChildren(...[0, 1, 2, 3].map((index) => {
     const row = document.createElement("div");
-    row.className = "builder-move-row";
+    row.className = "matchups-move-row";
     const selectedId = state.user.selectedMoveIds[index] ?? "";
     const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
-    const label = document.createElement("span");
-    label.textContent = String(index + 1);
-    label.setAttribute("aria-hidden", "true");
+    const icon = document.createElement("span");
+    icon.setAttribute("aria-hidden", "true");
+    renderMoveTypeIcon(icon, selected);
     const combobox = moveSlotCombobox({
       index,
       moves,
@@ -326,14 +358,33 @@ function renderMovePicks() {
       resultLimit: 12,
       onSelect: (move, input) => {
         input.value = localizedName(move);
+        renderMoveTypeIcon(icon, move);
         updateUser({ kind: "move", index, value: move.id });
       },
     });
     moveComboboxCleanups.push(combobox.destroy);
-    row.append(label, combobox.element);
+    row.append(icon, combobox.element);
     return row;
   }));
 }
+
+// A round type mark in front of each move slot (the move's base type).
+function renderMoveTypeIcon(icon, move) {
+  icon.className = `matchups-move-type type-badge ${move?.type ? typeClassName(move.type) : "empty"}`;
+  const path = move?.type ? typeIconPath(move.type) : "";
+  if (!path) {
+    icon.replaceChildren();
+    return;
+  }
+  const image = document.createElement("img");
+  image.src = path;
+  image.width = 16;
+  image.height = 16;
+  image.alt = "";
+  icon.replaceChildren(image);
+}
+
+let spriteId = "";
 
 function renderEditor() {
   const user = state.user;
@@ -341,11 +392,14 @@ function renderEditor() {
   elements.nature.value = user.nature;
   elements.ability.value = user.ability?.id ?? "";
   elements.item.value = user.item?.id ?? "";
-  elements.summary.textContent = localizedTerm("nature", user.nature);
-  const rows = ensureRenderedRows(elements.stats, ".builder-stat-row", () => STAT_KEYS.map(statRow), getLocale());
+  if (spriteId !== user.pokemon.id) {
+    spriteId = user.pokemon.id;
+    elements.sprite.replaceChildren(...pokemonSpriteElements(user.pokemon, { size: 56 }));
+  }
+  const rows = ensureRenderedRows(elements.stats, ".matchups-stat-row", () => STAT_KEYS.map(statRow), getLocale());
   for (const [index, stat] of STAT_KEYS.entries()) {
     const row = rows[index];
-    row.querySelector(".builder-stat-base").textContent = String(user.pokemon.baseStats[stat]);
+    row.querySelector(".matchups-stat-base").textContent = String(user.pokemon.baseStats[stat]);
     const input = row.querySelector("input");
     if (document.activeElement !== input) input.value = String(user.sp[stat] ?? 0);
     row.querySelector(".builder-stat-final").textContent = String(calculateStat({
@@ -364,23 +418,30 @@ function renderEditor() {
   for (const input of elements.stats.querySelectorAll("input")) {
     input.setAttribute("aria-invalid", String(over));
   }
-  elements.setLine.textContent = [
-    localizedName(user.pokemon),
-    localizedTerm("nature", user.nature),
-    STAT_KEYS.map((stat) => user.sp[stat] ?? 0).join("/"),
-    user.ability ? localizedName(user.ability) : t("builder.noAbility"),
-    user.item ? localizedName(user.item) : t("builder.noItem"),
-    matchupSetFromSide(user, catalogs.moveLookup).moves.map((move) => localizedName(move)).join(", ") || t("matchups.noMove"),
-  ].join(" · ");
+  elements.spMeterFill.style.width = `${Math.min(1, spent / SP_LIMIT) * 100}%`;
+  elements.spMeterFill.parentElement.classList.toggle("over", over);
+  setSheet.update({
+    pokemon: user.pokemon,
+    meta: [
+      localizedTerm("nature", user.nature),
+      user.item ? localizedName(user.item) : t("builder.noItem"),
+    ].join(" · "),
+  });
+  sheetBar.setStatus(t("matchups.spShort", { count: spent, limit: SP_LIMIT }), over ? "over" : spent === SP_LIMIT ? "ok" : "");
 }
 
 function statRow(stat) {
   const row = document.createElement("div");
-  row.className = "builder-stat-row matchups-stat-row";
+  row.className = "matchups-stat-row";
   const label = document.createElement("span");
-  label.textContent = localizedTerm("stat", STAT_LABELS[stat]);
-  const base = document.createElement("span");
-  base.className = "builder-stat-base";
+  label.className = "matchups-stat-label";
+  const name = document.createElement("span");
+  name.textContent = localizedTerm("stat", STAT_LABELS[stat]);
+  // The base stat stays visible but quiet: SP choices depend on it.
+  const base = document.createElement("small");
+  base.className = "matchups-stat-base";
+  base.title = t("matchups.baseLabel");
+  label.append(name, base);
   const input = document.createElement("input");
   input.type = "number";
   input.min = "0";
@@ -393,7 +454,7 @@ function statRow(stat) {
   input.setAttribute("aria-describedby", "matchups-sp-total");
   const final = document.createElement("strong");
   final.className = "builder-stat-final";
-  row.append(label, base, input, final);
+  row.append(label, input, final);
   return row;
 }
 
@@ -421,14 +482,144 @@ function renderAnalysis() {
   renderOverview(summary);
   renderGrid(summary);
   renderFilter(sections);
-  for (const key of SECTION_KEYS) renderSection(key, sections[key], ours);
-  for (const [key, element] of Object.entries(elements.jumpCounts)) {
-    if (key !== "uncommon") element.textContent = String(sections[key].length);
-  }
+  lastAnalysis = { sections, ours };
+  renderResults();
   lastThreatRows = rows.filter((row) => row.result.outcome === "loss");
   scheduleUncommon(ours);
-  elements.stalemateSection.hidden = sections.stalemate.length === 0;
-  translateSubtree(elements.shareLegend, elements.gridBody, ...Object.values(elements.lists));
+  translateSubtree(elements.shareLegend, elements.gridBody);
+}
+
+// ---------- results list, filters and views ----------
+
+function bindResultControls() {
+  elements.outcomeSelect.addEventListener("input", (event) => setFilter(event.target.value));
+  elements.opponentSearch.addEventListener("input", (event) => {
+    state = { ...state, query: event.target.value };
+    renderResults();
+  });
+  for (const button of elements.viewButtons) {
+    button.addEventListener("click", () => {
+      setView(button.dataset.matchupsView);
+      // On phones the pressed button is hidden, so keep focus on the toggle that is still there.
+      const visible = elements.viewButtons.find((other) => other.offsetParent !== null);
+      if (button.offsetParent === null) visible?.focus();
+    });
+  }
+  elements.filterClear.addEventListener("click", () => {
+    state = { ...state, cell: null };
+    renderAnalysis();
+    elements.outcomeFilter.querySelector("input:checked")?.focus();
+  });
+  for (const tab of elements.tabs) {
+    tab.addEventListener("click", () => setTab(tab.dataset.matchupsTab));
+    tab.addEventListener("keydown", (event) => {
+      const index = elements.tabs.indexOf(tab);
+      const next = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: elements.tabs.length - 1 }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      const target = elements.tabs[(next + elements.tabs.length) % elements.tabs.length];
+      setTab(target.dataset.matchupsTab);
+      target.focus();
+    });
+  }
+  phoneQuery?.addEventListener?.("change", renderSpeedModeOptions);
+}
+
+function setTab(tab) {
+  state = { ...state, tab };
+  for (const button of elements.tabs) {
+    const selected = button.dataset.matchupsTab === tab;
+    button.setAttribute("aria-selected", String(selected));
+    button.tabIndex = selected ? 0 : -1;
+  }
+  for (const [key, panel] of Object.entries(elements.panels)) panel.hidden = key !== tab;
+}
+
+function setFilter(filter) {
+  if (!FILTERS.some(({ key }) => key === filter)) return;
+  state = { ...state, filter };
+  renderResults();
+}
+
+function setView(view) {
+  state = { ...state, view };
+  renderView();
+}
+
+function renderView() {
+  const grid = state.view === "grid";
+  elements.gridView.hidden = !grid;
+  elements.listView.hidden = grid;
+  elements.showing.hidden = grid;
+  for (const button of elements.viewButtons) {
+    button.setAttribute("aria-pressed", String(button.dataset.matchupsView === state.view));
+  }
+}
+
+function buildOutcomeFilter() {
+  elements.outcomeFilter.replaceChildren(...FILTERS.map(({ key, labelKey, className }) => {
+    const option = document.createElement("label");
+    option.className = `matchups-outcome-option ${className ?? "all"}`;
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "matchups-outcome";
+    input.value = key;
+    input.addEventListener("input", () => setFilter(key));
+    const text = document.createElement("span");
+    text.textContent = t(labelKey);
+    const count = document.createElement("strong");
+    count.dataset.count = key;
+    count.textContent = "—";
+    option.append(input, text, count);
+    return option;
+  }));
+  elements.outcomeSelect.replaceChildren(...FILTERS.map(({ key }) => optionElement(key, "")));
+}
+
+function filteredRows(sections) {
+  const rows = state.filter === "all" ? SECTION_KEYS.flatMap((key) => sections[key]) : sections[state.filter];
+  const query = state.query.trim().toLowerCase();
+  if (!query) return rows;
+  return rows.filter((row) => [localizedName(row.pokemon), row.pokemon.name, row.pokemon.id]
+    .some((name) => String(name ?? "").toLowerCase().includes(query)));
+}
+
+function renderResults() {
+  if (!lastAnalysis) return;
+  const { sections, ours } = lastAnalysis;
+  const counts = {
+    all: SECTION_KEYS.reduce((total, key) => total + sections[key].length, 0),
+    ...Object.fromEntries(SECTION_KEYS.map((key) => [key, sections[key].length])),
+  };
+  for (const input of elements.outcomeFilter.querySelectorAll("input")) {
+    input.checked = input.value === state.filter;
+    input.closest("label").classList.toggle("selected", input.checked);
+  }
+  for (const count of elements.outcomeFilter.querySelectorAll("[data-count]")) {
+    count.textContent = String(counts[count.dataset.count]);
+  }
+  for (const option of elements.outcomeSelect.options) {
+    const filter = FILTERS.find(({ key }) => key === option.value);
+    option.textContent = `${t(filter.labelKey)} · ${counts[option.value]}`;
+  }
+  elements.outcomeSelect.value = state.filter;
+  elements.outcomeSelect.className = `matchups-outcome-select ${FILTERS.find(({ key }) => key === state.filter)?.className ?? "all"}`;
+  renderView();
+
+  const rows = filteredRows(sections);
+  const total = counts[state.filter];
+  if (rows.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "matchups-empty";
+    empty.textContent = state.query.trim()
+      ? t("matchups.noSearchMatch", { query: state.query.trim() })
+      : t(state.cell ? "matchups.emptyFiltered" : "matchups.empty", { count: state.opponentCount });
+    elements.list.replaceChildren(empty);
+  } else {
+    elements.list.replaceChildren(...rows.map((row) => matchupRow("common", row, ours)));
+  }
+  elements.showing.textContent = t("matchups.showing", { count: rows.length, total, filter: state.filter });
+  translateSubtree(elements.list);
 }
 
 // ---------- beyond the usual sets ----------
@@ -510,7 +701,7 @@ function renderUncommon(ours) {
   const finished = uncommon.popularDone && uncommon.nicheDone;
   const total = popularRows.length + grouped.novel.length;
   elements.uncommonCount.textContent = finished ? t("matchups.pokemonCount", { count: total }) : "…";
-  elements.jumpCounts.uncommon.textContent = finished ? String(total) : "…";
+  elements.beyondTabCount.textContent = finished ? String(total) : "…";
 
   renderRowList(elements.uncommonList, uncommon.popularDone, popularRows, "matchups.uncommonEmpty", (row) =>
     matchupRow("uncommon", row, ours, { badge: changesBadge(row), facts: popularFacts(row) }));
@@ -560,7 +751,7 @@ function renderNicheRepeats(repeats, ours) {
 }
 
 function outcomeLabel(outcome) {
-  return t({ win: "matchups.youWin", speed: "matchups.speedRaces", loss: "matchups.beatsYou" }[outcome] ?? "matchups.noKoEither");
+  return t({ win: "matchups.youWin", speed: "matchups.speedDecides", loss: "matchups.beatsYou" }[outcome] ?? "matchups.noKoEither");
 }
 
 function popularFacts(row) {
@@ -578,7 +769,7 @@ function nicheFacts(row) {
 
 function changesBadge(row) {
   const badge = document.createElement("span");
-  badge.className = "builder-ko-badge matchups-result matchups-changes";
+  badge.className = "matchups-verdict-label loss matchups-changes";
   badge.textContent = row.usualBeats
     ? t("matchups.usualBeats")
     : row.changes.length === 0
@@ -596,14 +787,30 @@ function changeLabel(change) {
 
 function syncControls() {
   elements.opponentCount.value = String(state.opponentCount);
-  for (const input of elements.speedModeInputs) input.checked = input.value === state.speedMode;
+  renderSpeedModeOptions();
   ambientFieldControls.sync(state.field);
-  elements.environmentSummary.textContent = [
-    t(state.field.format === "singles" ? "field.singles" : "field.doubles"),
+  const overrides = [
     fieldLabel(WEATHER_LABEL_KEYS, "field.weather", state.field.weather),
     fieldLabel(TERRAIN_LABEL_KEYS, "field.terrain", state.field.terrain),
     state.field.gravity ? t("field.gravity") : "",
-  ].filter(Boolean).join(" · ");
+  ].filter(Boolean);
+  elements.environmentSummary.textContent = [
+    t(state.field.format === "singles" ? "field.singles" : "field.doubles"),
+    ...(overrides.length > 0 ? overrides : [t("matchups.noOverride")]),
+  ].join(" · ");
+}
+
+// "Move order: Normal" on wide screens; the shorter "Normal order" fits a half-width phone select.
+function renderSpeedModeOptions() {
+  const short = Boolean(phoneQuery?.matches);
+  for (const option of elements.speedMode.options) {
+    const mode = t(speedModeKey(option.value));
+    option.textContent = short ? t("matchups.orderShort", { mode }) : t("matchups.orderLong", { mode });
+  }
+  for (const option of elements.opponentCount.options) {
+    option.textContent = t("matchups.topCount", { count: option.value });
+  }
+  elements.speedMode.value = state.speedMode;
 }
 
 function renderSpeedHelp() {
@@ -623,7 +830,7 @@ function renderSpeedHelp() {
 
 const OUTCOME_LEGEND = [
   { outcome: "loss", labelKey: "matchups.threats", className: "loss" },
-  { outcome: "speed", labelKey: "matchups.speedRaces", className: "speed" },
+  { outcome: "speed", labelKey: "matchups.speedDecides", className: "speed" },
   { outcome: "win", labelKey: "matchups.favorable", className: "win" },
   { outcome: "stalemate", labelKey: "matchups.stalemate", className: "stalemate" },
 ];
@@ -635,12 +842,15 @@ function renderOverview(summary) {
       const segment = document.createElement("span");
       segment.className = `matchups-share-segment ${className}`;
       segment.style.flexGrow = String(summary.shares[outcome]);
+      // Label a segment only when it is wide enough to hold its percentage.
+      if (summary.shares[outcome] >= 0.07) segment.textContent = percentLabel(summary.shares[outcome]);
       return segment;
     }));
   elements.shareLegend.replaceChildren(...OUTCOME_LEGEND.map(({ outcome, labelKey, className }) => {
     const item = document.createElement("li");
     item.className = `matchups-share-item ${className}`;
     const label = document.createElement("span");
+    label.className = "matchups-share-label";
     label.textContent = t(labelKey);
     const value = document.createElement("strong");
     value.textContent = percentLabel(summary.shares[outcome]);
@@ -648,6 +858,7 @@ function renderOverview(summary) {
     count.className = "matchups-share-count";
     count.textContent = t("matchups.pokemonCount", { count: summary.counts[outcome] });
     item.append(label, value, count);
+    if (outcome === "stalemate" && summary.counts.stalemate === 0) item.classList.add("none");
     return item;
   }));
   const speedPart = summary.speedFirstShare === null
@@ -689,10 +900,13 @@ function hitsBucketLabel(bucket) {
   return bucket === 4 ? "4+" : String(bucket);
 }
 
+// Picking a cell lists exactly those opponents: switch to the list, show every outcome, and
+// keep focus on the control that undoes it.
 function toggleCell(theirs, ours) {
   const same = state.cell?.theirs === theirs && state.cell?.ours === ours;
-  state = { ...state, cell: same ? null : { theirs, ours } };
+  state = same ? { ...state, cell: null } : { ...state, cell: { theirs, ours }, filter: "all", view: "list" };
   renderAnalysis();
+  if (!same) elements.filterClear.focus();
 }
 
 function renderGrid(summary) {
@@ -726,22 +940,10 @@ function renderFilter(sections) {
   });
 }
 
-function renderSection(key, rows, ours) {
-  elements.counts[key].textContent = t("matchups.pokemonCount", { count: rows.length });
-  if (rows.length === 0) {
-    const empty = document.createElement("li");
-    empty.className = "matchups-empty";
-    empty.textContent = t(state.cell ? "matchups.emptyFiltered" : "matchups.empty", { count: state.opponentCount });
-    elements.lists[key].replaceChildren(empty);
-    return;
-  }
-  elements.lists[key].replaceChildren(...rows.map((row) => matchupRow(key, row, ours)));
-}
-
 function matchupRow(sectionKey, row, ours, { badge = null, facts = [] } = {}) {
   const item = document.createElement("li");
   const details = document.createElement("details");
-  details.className = "matchups-row";
+  details.className = `matchups-row ${row.result.outcome}`;
   const expandKey = `${sectionKey}:${row.id}`;
   details.open = expandedRows.has(expandKey);
   details.addEventListener("toggle", () => {
@@ -761,17 +963,17 @@ function matchupRow(sectionKey, row, ours, { badge = null, facts = [] } = {}) {
   const strong = document.createElement("strong");
   strong.textContent = localizedName(row.pokemon);
   const meta = document.createElement("small");
-  meta.textContent = Number.isFinite(row.rank)
-    ? t("matchups.rankUsage", { rank: row.rank, usage: usageLabel(row.usagePercent) })
+  meta.textContent = Number.isFinite(row.rank) && Number(row.usagePercent) > 0
+    ? t("matchups.usageShare", { usage: usageLabel(row.usagePercent) })
     : t("matchups.noUsage");
   nameText.append(strong, meta);
   name.append(pokemonMiniSprite(row.pokemon), nameText);
 
   summary.append(
     name,
-    hitCell(t("matchups.theirHit"), row.result.theirs.best, row.result.theirHits),
-    hitCell(t("matchups.yourHit"), row.result.ours.best, row.result.ourHits),
-    badge ?? resultBadge(row),
+    hitCell(t("matchups.theirMove"), row.result.theirs.best, row.result.theirHits),
+    hitCell(t("matchups.yourMove"), row.result.ours.best, row.result.ourHits),
+    raceCell(row, badge ?? resultBadge(row)),
   );
   details.append(summary);
   if (details.open) details.append(matchupDetail(row, ours, facts));
@@ -779,59 +981,148 @@ function matchupRow(sectionKey, row, ours, { badge = null, facts = [] } = {}) {
   return item;
 }
 
-function hitCell(label, best, hits) {
+function hitCell(label, best, turns) {
   const cell = document.createElement("span");
   cell.className = "matchups-hit";
   const heading = document.createElement("small");
+  heading.className = "matchups-hit-label";
   heading.textContent = label;
   const move = document.createElement("span");
   move.className = "matchups-hit-move";
   move.textContent = best ? localizedName(best.move) : t("matchups.noMove");
   const value = document.createElement("span");
   value.className = "matchups-hit-value";
-  value.textContent = best
-    ? [rangeLabel(best), hitsLabel(best.uses ?? hits), ...raceTiming(best, hits)].join(" · ")
-    : "—";
-  cell.append(heading, move, value);
+  if (best) {
+    const range = document.createElement("span");
+    range.className = "matchups-hit-range";
+    range.textContent = rangeLabel(best);
+    value.append(range, ...raceCaveats(best, turns).map((note) => ` · ${note}`));
+  } else {
+    value.textContent = "—";
+  }
+  // Phones show each side's turns under its move; wide screens show them in the KO race column.
+  const turnCount = document.createElement("span");
+  turnCount.className = "matchups-hit-turns";
+  turnCount.textContent = turnsLabel(turns);
+  cell.append(heading, move, value, turnCount);
+  return cell;
+}
+
+function raceCell(row, badge) {
+  const cell = document.createElement("span");
+  cell.className = "matchups-race";
+  const race = document.createElement("span");
+  race.className = "matchups-race-turns";
+  race.setAttribute("aria-hidden", "true");
+  race.textContent = t("matchups.raceTurns", {
+    theirs: row.result.theirHits,
+    ours: row.result.ourHits,
+  });
+  const spoken = document.createElement("span");
+  spoken.className = "visually-hidden matchups-race-spoken";
+  spoken.textContent = t("matchups.raceSpoken", {
+    theirs: turnsLabel(row.result.theirHits),
+    ours: turnsLabel(row.result.ourHits),
+  });
+  cell.append(race, spoken, badge);
   return cell;
 }
 
 function resultBadge(row) {
   const badge = document.createElement("span");
   const { outcome, decisive } = row.result;
+  badge.className = `matchups-verdict-label ${outcome}`;
   if (outcome === "loss") {
-    badge.className = "builder-ko-badge danger";
     badge.textContent = t(decisive ? "matchups.hardCounter" : "matchups.beatsYou");
   } else if (outcome === "win") {
-    badge.className = "builder-ko-badge safe";
     badge.textContent = t(decisive ? "matchups.hardCheck" : "matchups.youWin");
   } else if (outcome === "speed") {
-    badge.className = "builder-ko-badge warning";
     const { first, ourWinChance } = row.speed ?? {};
     badge.textContent = first === "split"
       ? t("matchups.firstSplit", { share: percentLabel(ourWinChance) })
       : t(first === "ours" ? "matchups.youFirst" : first === "theirs" ? "matchups.theyFirst" : "matchups.speedTie");
   } else {
-    badge.className = "builder-ko-badge muted";
     badge.textContent = t("matchups.noKoEither");
   }
-  badge.classList.add("matchups-result");
   return badge;
+}
+
+// One sentence on how the race goes, as the first line of an opened row.
+function verdictText(row) {
+  const name = localizedName(row.pokemon);
+  const { outcome } = row.result;
+  if (outcome === "loss") return t("matchups.verdict.loss", { name });
+  if (outcome === "win") return t("matchups.verdict.win", { name });
+  if (outcome === "stalemate") return t("matchups.verdict.stalemate");
+  const { first, ourWinChance } = row.speed ?? {};
+  if (first === "split") return t("matchups.verdict.speedSplit", { share: percentLabel(ourWinChance) });
+  if (first === "ours") return t("matchups.verdict.speedOurs");
+  if (first === "theirs") return t("matchups.verdict.speedTheirs", { name });
+  return t("matchups.verdict.speedTie");
 }
 
 function matchupDetail(row, ours, extraFacts = []) {
   const detail = document.createElement("div");
   detail.className = "matchups-detail";
+  const verdict = document.createElement("p");
+  verdict.className = `matchups-verdict ${row.result.outcome}`;
+  verdict.textContent = verdictText(row);
+
+  const set = row.set;
+  const columns = document.createElement("div");
+  columns.className = "matchups-detail-columns";
+  columns.append(
+    detailColumn(t("matchups.theirSet"), [
+      localizedTerm("nature", set.nature),
+      set.ability ? localizedName(set.ability) : t("builder.noAbility"),
+      set.item ? localizedName(set.item) : t("builder.noItem"),
+    ].join(" · ")),
+    detailColumn(t("matchups.theRace"), [
+      raceLine(row.result.theirs.best, row.result.theirHits),
+      raceLine(row.result.ours.best, row.result.ourHits),
+    ].join(" · ")),
+  );
+
+  const note = document.createElement("div");
+  note.className = "matchups-inspect";
+  const noteText = document.createElement("p");
+  noteText.textContent = t("matchups.assumesConnect");
+  const inspect = document.createElement("details");
+  const inspectSummary = document.createElement("summary");
+  inspectSummary.textContent = t("matchups.inspectMoves");
+  inspect.append(inspectSummary);
+  inspect.addEventListener("toggle", () => {
+    if (inspect.open && !inspect.querySelector(".matchups-inspect-body")) inspect.append(inspectBody(row, ours, extraFacts));
+  });
+  note.append(noteText, inspect);
+
+  detail.append(verdict, columns, note);
+  translateSubtree(detail);
+  return detail;
+}
+
+function detailColumn(heading, text) {
+  const column = document.createElement("div");
+  const title = document.createElement("h4");
+  title.textContent = heading;
+  const body = document.createElement("p");
+  body.textContent = text;
+  column.append(title, body);
+  return column;
+}
+
+function raceLine(best, turns) {
+  return best ? `${localizedName(best.move)}: ${turnsLabel(turns)}` : t("matchups.noMove");
+}
+
+function inspectBody(row, ours, extraFacts) {
+  const body = document.createElement("div");
+  body.className = "matchups-inspect-body";
   const facts = document.createElement("dl");
   facts.className = "matchups-facts";
   const set = row.set;
   for (const [term, value] of extraFacts) addFact(facts, term, value);
-  addFact(facts, t("matchups.theirSet"), [
-    localizedTerm("nature", set.nature),
-    STAT_KEYS.map((stat) => set.sp[stat] ?? 0).join("/"),
-    set.ability ? localizedName(set.ability) : t("builder.noAbility"),
-    set.item ? localizedName(set.item) : t("builder.noItem"),
-  ].join(" · "));
+  addFact(facts, t("matchups.spread"), STAT_KEYS.map((stat) => set.sp[stat] ?? 0).join("/"));
   addFact(facts, t("matchups.setSource"), [
     t("matchups.teams", { count: set.source.teams }),
     t({ smogon: "matchups.spreadSmogon", theory: "matchups.spreadTheory" }[set.source.spread] ?? "matchups.spreadPreset"),
@@ -851,13 +1142,13 @@ function matchupDetail(row, ours, extraFacts = []) {
     fieldLabel(TERRAIN_LABEL_KEYS, "field.terrain", row.result.field.terrain),
   ].filter(Boolean);
   if (fieldLabels.length > 0) addFact(facts, t("field.environment"), fieldLabels.join(" · "));
-  detail.append(
+  body.append(
     facts,
     moveTable(t("matchups.theirMoves", { name: localizedName(row.pokemon) }), row.result.theirs.moves),
     moveTable(t("matchups.yourMoves", { name: localizedName(ours.pokemon) }), row.result.ours.moves),
   );
-  translateSubtree(detail);
-  return detail;
+  translateSubtree(body);
+  return body;
 }
 
 const WEATHER_LABEL_KEYS = { SunnyDay: "field.sun", RainDance: "field.rain", Sandstorm: "field.sand", Snowscape: "field.snow" };
@@ -947,6 +1238,16 @@ function raceTiming(entry, turns) {
   return notes;
 }
 
+// Only the move's own caveat (charge, recharge, conditional, …); the turn count is shown apart.
+function raceCaveats(entry, turns) {
+  const recharging = entry.plan?.kind === "recharge" && turns === entry.uses;
+  return entry.plan?.code && !recharging ? [t(`matchups.plan.${entry.plan.code}`)] : [];
+}
+
+function turnsLabel(turns) {
+  return Number.isFinite(turns) ? t("matchups.turnCount", { count: turns }) : t("matchups.noKoTurns");
+}
+
 function exclusionLabel(entry) {
   // Codes come from raceExclusion in src/data/matchups.js.
   if (entry.reasonCode === "unsupported") return formatDamageReason(entry.reason, getLocale());
@@ -957,11 +1258,6 @@ function exclusionLabel(entry) {
 
 function rangeLabel(entry) {
   return `${entry.minPercent}–${entry.maxPercent}%`;
-}
-
-function hitsLabel(hits) {
-  if (!Number.isFinite(hits)) return t("matchups.noKo");
-  return hits === 1 ? t("ko.ohko") : t("ko.hko", { hits });
 }
 
 function percentLabel(fraction) {

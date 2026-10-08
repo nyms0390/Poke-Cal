@@ -76,7 +76,8 @@ import {
   STAT_LABELS,
   typeBadge,
 } from "./components.js";
-import { mountAmbientFieldControls } from "./field-controls.js";
+import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
+import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import {
   applyAmbientFieldControl,
   createAmbientFieldState,
@@ -234,6 +235,31 @@ const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   toggleElements: [elements.trickRoomToggle],
 });
 ambientFieldControls.sync(fieldState);
+
+// Phones edit each side and the field in its own bottom sheet, so the damage results sit right
+// under three summary cards instead of below both full editors.
+const sideSheets = Object.fromEntries(["attacker", "defender"].map((side) => [side, mountSetSheet({
+  editor: document.querySelector(`#${side}-editor`),
+  id: `${side}-sheet`,
+  titleKey: side === "attacker" ? "sheet.editAttacker" : "sheet.editDefender",
+  doneKey: "sheet.viewResults",
+  summaryHost: document.querySelector(`#${side}-summary-card`),
+})]));
+const fieldSheet = mountSetSheet({
+  editor: document.querySelector("#field-editor"),
+  id: "field-sheet",
+  titleKey: "sheet.editField",
+  doneKey: "sheet.viewResults",
+  editKey: "sheet.editFieldShort",
+  summaryHost: document.querySelector("#field-summary-card"),
+});
+const sheetBar = mountSheetBar({
+  actions: [
+    { sheet: sideSheets.attacker, labelKey: "sheet.attacker" },
+    { sheet: sideSheets.defender, labelKey: "sheet.defender" },
+    { sheet: fieldSheet, labelKey: "sheet.field" },
+  ],
+});
 
 initI18n();
 initialize();
@@ -1064,10 +1090,12 @@ function renderDamage() {
     elements.speedSummary.textContent = "";
     elements.damageCount.textContent = "—";
     elements.damageList.replaceChildren();
+    renderSheetSummaries();
     return;
   }
 
   elements.damageSource.textContent = t("battle.defaults");
+  renderSheetSummaries();
 
   elements.attackerSummary.textContent = sideSummary(attacker);
   elements.defenderSummary.textContent = sideSummary(defender);
@@ -1489,6 +1517,32 @@ function damageMovesForSide(side) {
 
 function sideSummary(state) {
   return localizedName(state.pokemon);
+}
+
+function renderSheetSummaries() {
+  const names = ["attacker", "defender"].map((side) => {
+    const state = damageState[side];
+    sideSheets[side].update({
+      pokemon: state?.pokemon ?? null,
+      label: t(side === "attacker" ? "sheet.attacker" : "sheet.defender"),
+      title: state?.pokemon ? localizedName(state.pokemon) : "—",
+      meta: state?.pokemon
+        ? [localizedTerm("nature", state.nature), state.item ? localizedName(state.item) : t("builder.noItem")].join(" · ")
+        : "",
+    });
+    return state?.pokemon ? localizedName(state.pokemon) : "";
+  });
+  const sideConditions = ["attackerSide", "defenderSide"]
+    .reduce((total, side) => total + Object.values(fieldState[side] ?? {}).filter(Boolean).length, 0);
+  fieldSheet.update({
+    label: t("sheet.field"),
+    title: ambientFieldLabels(fieldState).join(" · "),
+    meta: [
+      fieldState.trickRoom ? t("matchups.speedTrickRoom") : "",
+      sideConditions > 0 ? t("sheet.sideConditions", { count: sideConditions }) : "",
+    ].filter(Boolean).join(" · ") || t("sheet.noFieldEffects"),
+  });
+  sheetBar.setNames([...names, ""]);
 }
 
 function normalizeDamageId(value) {

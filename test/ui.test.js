@@ -1064,39 +1064,75 @@ test("every page links Matchups right after Builder, and Matchups marks itself c
   assert.match(builder, /id="builder-matchups-link"[^>]+href="\.\/matchups\.html"/);
 });
 
-test("matchups page exposes the grid, the outcome sections and their headings", () => {
+test("matchups page exposes the overview, one filtered results list and the turn grid", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  for (const id of ["matchups-grid", "matchups-threats", "matchups-speed", "matchups-favorable", "matchups-stalemate", "matchups-share-legend"]) {
+  for (const id of ["matchups-grid", "matchups-list", "matchups-outcome-filter", "matchups-outcome-select", "matchups-opponent-search", "matchups-share-legend", "matchups-showing"]) {
     assert.match(html, new RegExp(`id="${id}"`), id);
   }
-  for (const key of ["matchups.threats", "matchups.speedRaces", "matchups.favorable", "matchups.methodText"]) {
+  for (const key of ["matchups.overview", "matchups.koRace", "matchups.methodText", "matchups.commonSets", "matchups.beyondTab"]) {
     assert.match(html, new RegExp(`data-i18n="${key.replace(".", "\\.")}"`), key);
   }
   assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
-  assert.match(html, /name="matchups-speed-mode" value="auto" checked/);
+  assert.match(html, /<select id="matchups-speed-mode">/);
+  assert.match(html, /data-matchups-view="list" aria-pressed="true"/);
+  assert.match(html, /data-matchups-view="grid" aria-pressed="false"/);
 });
 
-test("matchups page keeps results reachable and the method behind a disclosure", () => {
+test("matchups page keeps the method behind a disclosure and the set editor in one region", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  for (const target of ["matchups-threats-section", "matchups-uncommon-section", "matchups-speed-section", "matchups-favorable-section"]) {
-    assert.match(html, new RegExp(`href="#${target}"`), target);
-    assert.match(html, new RegExp(`id="${target}"`), target);
-  }
+  assert.match(html, /<section id="matchups-editor" class="matchups-editor"/);
   assert.match(html, /href="#matchups-overview"/);
-  assert.match(html, /<details class="builder-field-settings matchups-environment">/);
+  assert.match(html, /<details class="matchups-environment">/);
   assert.match(html, /<details class="matchups-method">\s*<summary data-i18n="matchups\.method">/);
-  assert.match(html, /<label class="matchups-nature">/);
   assert.match(html, /id="matchups-sp-total"[^>]+aria-live="polite"/);
-  assert.ok(html.indexOf("matchups.methodText") < html.indexOf('id="matchups-threats-section"'), "method sits with the overview");
+  assert.match(html, /id="matchups-summary-card"/);
+  assert.ok(html.indexOf("matchups.methodText") < html.indexOf('id="matchups-results"'), "method sits with the overview");
+});
+
+test("matchups page tabs pair each tab with its panel", () => {
+  const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  for (const tab of ["common", "beyond"]) {
+    assert.match(html, new RegExp(`id="matchups-tab-${tab}"[^>]+role="tab"[^>]+aria-controls="matchups-${tab}-panel"`), tab);
+    assert.match(html, new RegExp(`id="matchups-${tab}-panel"[^>]+role="tabpanel"[^>]+aria-labelledby="matchups-tab-${tab}"`), tab);
+  }
+  assert.match(html, /id="matchups-beyond-panel"[^>]+hidden>/);
 });
 
 test("matchups page splits beyond-the-usual-sets into popular and rarely used Pokémon", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  const section = html.match(/<section id="matchups-uncommon-section"[\s\S]*?<\/section>/)?.[0] ?? "";
+  const section = html.match(/<section id="matchups-beyond-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(section, /data-i18n="matchups\.beyond"/);
   assert.ok(section.indexOf('id="matchups-uncommon"') < section.indexOf('id="matchups-niche"'), "popular before rarely used");
   assert.match(section, /<details id="matchups-niche-repeats" class="matchups-repeats" hidden>/);
   assert.match(section, /id="matchups-uncommon-status"[^>]+role="status"/);
+});
+
+test("set-editing pages name the editors and summary hosts the phone sheets use", () => {
+  const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+  const matchups = read("matchups.html");
+  assert.match(matchups, /id="matchups-editor"/);
+  assert.match(matchups, /id="matchups-summary-card"/);
+  const builder = read("builder.html");
+  assert.match(builder, /id="builder-editor"/);
+  assert.match(builder, /id="builder-summary-card"/);
+  const battle = read("battle.html");
+  for (const id of ["attacker-editor", "defender-editor", "field-editor", "attacker-summary-card", "defender-summary-card", "field-summary-card"]) {
+    assert.match(battle, new RegExp(`id="${id}"`), id);
+  }
+  for (const [page, controller] of [["matchups.html", "matchups-page"], ["builder.html", "builder-page"], ["battle.html", "battle-page"]]) {
+    const source = readFileSync(new URL(`../src/ui/${controller}.js`, import.meta.url), "utf8");
+    assert.match(source, /mountSetSheet\(/, page);
+    assert.match(source, /mountSheetBar\(/, page);
+  }
+});
+
+test("the set sheet breakpoint matches the stylesheet", async () => {
+  const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/set-sheet.js", import.meta.url), "utf8");
+  const query = source.match(/SHEET_MEDIA_QUERY = "([^"]+)"/)?.[1];
+  assert.equal(query, "(max-width: 720px)");
+  const sheetSection = css.slice(css.indexOf("/* ---------- Set sheet (phones) ---------- */"));
+  assert.ok(sheetSection.includes(`@media ${query}`), "the sheet CSS uses the same breakpoint");
 });
 
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {

@@ -32,6 +32,8 @@ Tables remain tables for numerical comparison at wider sizes. On phones, move ta
 
 Buttons with the same role share height, padding, radius, border, hover, active, disabled, and focus treatment. Inline links used as explicit next actions receive a practical hit area. Destructive controls retain the existing confirmation safeguard. Motion is optional and only communicates state; any added motion must respect reduced-motion preferences.
 
+Pages that edit a set beside its results (Matchups, Builder, Battle Calculator) keep the editor inline on wide screens and move it into a bottom sheet at phone widths (720px and below) through `src/ui/set-sheet.js`. The sheet is a modal `<dialog>` with a title, a close button and one primary action that returns to the results; the page shows a compact summary card (sprite, name, nature and item) above its results and a pinned bar with the edit action and, where it matters, the SP budget. The editor element itself moves, so its controls and state are never duplicated. Battle Calculator has three sheets: attacker, defender and field.
+
 ## States and responsive behavior
 
 Render real resting, hover, focus, selected, expanded, disabled, loading, empty, error, and success states where the component supports them. Do not invent asynchronous states. Loading and result messages that matter are exposed as polite status updates without announcing every keystroke.
