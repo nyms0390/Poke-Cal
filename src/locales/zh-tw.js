@@ -413,6 +413,7 @@ export const ZH_TW_MESSAGES = {
   "matchups.plan.delayed": "使用後兩回合才命中",
   "matchups.plan.conditional": "假設其使用條件成立",
   "matchups.turns": ({ count }) => `${count} 回合`,
+  "matchups.critical": "必定擊中要害",
 };
 
 // Exact document-shell copy. Runtime sentences with values are formatted through message keys.

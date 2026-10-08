@@ -429,6 +429,9 @@ function raceMoves(attacker, defender, moves = [], field) {
       uses,
       hits: turnsForUses(plan.kind, uses),
       statDrop,
+      // Matchups never assume a lucky crit, so this is only a guaranteed one (Frost Breath,
+      // or Leaf Blade from a Leek Sirfetch'd).
+      critical: Boolean(result.critical),
       minPercent: result.minPercent,
       maxPercent: result.maxPercent,
       koText: result.ko?.text ?? "",

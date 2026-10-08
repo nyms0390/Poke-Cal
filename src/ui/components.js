@@ -2,8 +2,7 @@ import { filterMoves } from "../data/catalog.js";
 import { pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
-import { moveEffect } from "../engine/move-effects.js";
-import { normalizeId } from "../identifiers.js";
+import { isGuaranteedCritical } from "../engine/critical.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 import { urlWithoutConsumedParams } from "./battle-state.js";
 
@@ -404,9 +403,11 @@ export function moveSlotCombobox({ index, moves, selectedMove, showSelection = "
   return { element, input, destroy: combobox.destroy };
 }
 
-// The per-slot critical-hit toggle. Always-crit moves are shown pressed and disabled.
+// The per-slot critical-hit toggle. Guaranteed crits (Frost Breath, or Leaf Blade from a
+// Sirfetch'd holding a Leek) are shown pressed and disabled; pass the user's `pokemon` and
+// `state` (item/ability) so held-item and ability crit stages count.
 // `onToggle(pressed, button)` runs after aria-pressed flips.
-export function critToggleButton({ index, side = "", selectedMove, manual = false, onToggle }) {
+export function critToggleButton({ index, side = "", selectedMove, pokemon = null, state = {}, manual = false, onToggle }) {
   const crit = document.createElement("button");
   crit.type = "button";
   crit.className = "move-toggle";
@@ -414,7 +415,7 @@ export function critToggleButton({ index, side = "", selectedMove, manual = fals
   crit.dataset.kind = "crit";
   if (side) crit.dataset.side = side;
   crit.dataset.index = String(index);
-  const alwaysCrit = selectedMove && moveEffect(normalizeId(selectedMove.id)).alwaysCrit === true;
+  const alwaysCrit = selectedMove && isGuaranteedCritical({ move: selectedMove, attacker: pokemon, attackerState: state });
   crit.disabled = Boolean(alwaysCrit);
   crit.setAttribute("aria-pressed", String(alwaysCrit || Boolean(manual)));
   crit.addEventListener("click", () => {

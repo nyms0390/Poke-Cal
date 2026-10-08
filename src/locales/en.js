@@ -410,4 +410,5 @@ export const EN_MESSAGES = {
   "matchups.plan.delayed": "lands two turns after use",
   "matchups.plan.conditional": "raced as if its condition holds",
   "matchups.turns": ({ count }) => `${count} turns`,
+  "matchups.critical": "always a critical hit",
 };

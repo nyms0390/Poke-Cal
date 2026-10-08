@@ -65,6 +65,7 @@ Every sync script accepts `--allow-shrink` to skip only the max-shrink check (mi
 - `test/builder-crosscheck.test.js` — independently assembles builder scenarios against the damage/KO engine to prevent builder/calculator drift.
 - `src/engine/damage.js` / `src/engine/speed.js` / `src/engine/battle-order.js` — battle math engine.
 - `src/engine/move-effects.js` — per-move registry (`MOVE_EFFECTS`/`moveEffect()`) replacing moveId ladders.
+- `src/engine/critical.js` — Showdown crit ratio (`critRatio`/`isGuaranteedCritical`): willCrit moves, and ratio ≥ 4 from high-crit moves plus Leek/Lucky Punch/Scope Lens/Razor Claw/Super Luck/Merciless. `calculateDamage` applies it, and the shared crit toggle shows guaranteed crits pressed and disabled.
 - `src/engine/modifiers.js` — per-ability/per-item damage-modifier registry (`ABILITY_MODIFIERS`/`ITEM_MODIFIERS`/`collectModifiers()`).
 - `src/data/showdown-data.js` — parses Showdown TypeScript data exports.
 - `src/data/champions-data.js` — applies the Showdown Champions mod overlay; `showdownDataBaseUrl`/`championsModBaseUrl` build raw URLs from a `{repo, commit}` pin and refuse anything but a full SHA.

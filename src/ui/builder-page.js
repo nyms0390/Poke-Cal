@@ -681,6 +681,8 @@ function renderMovePicks() {
     const crit = critToggleButton({
       index,
       selectedMove: selected,
+      pokemon: setup.pokemon,
+      state: setup,
       manual: setup.critMoves?.[index],
       onToggle: (next) => {
         updatePage(() => {

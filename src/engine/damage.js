@@ -14,6 +14,7 @@ import {
 } from "./move-effects.js";
 import { applyHitCountOverride, applyModifier, chainModifiers, chainValue, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
+import { isGuaranteedCritical } from "./critical.js";
 
 const SP_TOTAL_LIMIT = 66;
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
@@ -232,7 +233,7 @@ function calculateDamageUnchecked({
   ctx.attackerHp = attackerCurrentHp;
   ctx.attackerMaxHp = attackerMaxHp;
   const moveId = normalizeId(move.id ?? move.name);
-  const alwaysCritical = moveEffect(moveId).alwaysCrit === true;
+  const alwaysCritical = isGuaranteedCritical({ move, attacker, attackerState, defenderState, suppressAttackerAbility });
   const abilityImmunity = abilityImmunityResult({ moveType, typeMultiplier: rawTypeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility, groundedTarget });
   const itemImmunity = abilityImmunity ? null : itemImmunityResult({ moveType, move, defenderState, groundedTarget });
   const teraShell = teraShellTypeMultiplier(rawTypeMultiplier, defenderState, suppressDefenderAbility);

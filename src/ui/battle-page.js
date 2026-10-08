@@ -1027,6 +1027,8 @@ function renderDamageMovePickers(side) {
         index,
         side,
         selectedMove,
+        pokemon: state.pokemon,
+        state,
         manual: state.critMoves?.[index],
         onToggle: (_pressed, crit) => handleDamageControl({ target: crit }),
       }));

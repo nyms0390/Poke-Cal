@@ -924,6 +924,7 @@ function moveTable(caption, entries) {
       ? formatKoText(entry.koText, getLocale())
       : exclusionLabel(entry);
     if (entry.included && entry.statDrop) ko.textContent += ` · ${t("matchups.statDrop")}`;
+    if (entry.included && entry.critical) ko.textContent += ` · ${t("matchups.critical")}`;
     if (entry.included) for (const note of raceTiming(entry, entry.hits)) ko.textContent += ` · ${note}`;
     if (entry.included && entry.accuracy < 100) {
       ko.textContent += ` · ${t("matchups.accuracy", { accuracy: entry.accuracy })}`;

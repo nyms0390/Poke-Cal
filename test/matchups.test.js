@@ -400,3 +400,22 @@ test("race moves carry the cumulative KO chance per hit count", () => {
   assert.equal(hhp.koChances.at(-1).chance, 1);
 
 });
+
+test("Leek Sirfetch'd races with guaranteed-crit Leaf Blade", () => {
+  const sirfetchd = (heldItem) => ({
+    pokemon: species("Sirfetch’d"),
+    nature: "Adamant",
+    sp: { hp: 32, atk: 32, spd: 2 },
+    ability: ability("Scrappy"),
+    item: heldItem,
+    moves: [move("Leaf Blade"), move("Close Combat")],
+  });
+  const withLeek = matchup({ ours: sirfetchd(item("Leek")), theirs: incineroar() });
+  const without = matchup({ ours: sirfetchd(item("Sitrus Berry")), theirs: incineroar() });
+  const leafBlade = (result) => result.ours.moves.find((entry) => entry.move.name === "Leaf Blade");
+  const closeCombat = (result) => result.ours.moves.find((entry) => entry.move.name === "Close Combat");
+  assert.equal(leafBlade(withLeek).critical, true);
+  assert.equal(leafBlade(without).critical, false);
+  assert.ok(leafBlade(withLeek).minPercent > leafBlade(without).maxPercent);
+  assert.equal(closeCombat(withLeek).critical, false);
+});
