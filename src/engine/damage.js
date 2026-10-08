@@ -281,7 +281,7 @@ function calculateDamageUnchecked({
       chance: 1,
     }];
     const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
-      ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
+      ? sturdySurvivalKo()
       : null;
     const recalculatedKo = moveEffect(moveId).recalculatesFixedDamage
       ? koSummaryForRecalculatedFixedDamage(ctx, firstDistribution[0].damage)
@@ -535,7 +535,7 @@ function calculateDamageUnchecked({
   const maxActualHitCount = successiveHits ? hitCounts.max : hitPowers.length > 1 ? hitPowers.length : hitCounts.max;
   const sturdyAffectsKo = sturdyActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
   const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
-    ? { hits: null, chance: 0, text: "survives with Sturdy at full HP" }
+    ? sturdySurvivalKo()
     : null;
   const recovery = sturdyText
     ? null
@@ -664,6 +664,16 @@ function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppres
   return !suppressDefenderAbility && hasAbility(defenderState, "sturdy") && defenderCurrentHp === defenderMaxHp;
 }
 
+// Every roll would OHKO, Sturdy leaves 1 HP, and the next hit KOs.
+function sturdySurvivalKo() {
+  return {
+    hits: null,
+    chance: 0,
+    text: "survives with Sturdy at full HP",
+    chances: [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }],
+  };
+}
+
 function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribution, recovery = null) {
   const chances = koChance({ rolls, rollDistribution, firstRollDistribution, targetHp, recovery });
   const firstKo = chances.find(({ chance }) => chance > 0);
@@ -671,6 +681,8 @@ function koSummaryForRolls(rolls, targetHp, rollDistribution, firstRollDistribut
     hits: firstKo?.hits ?? null,
     chance: firstKo?.chance ?? 0,
     text: koText(chances),
+    // Cumulative KO chance per hit count (up to 5 hits), for callers that need more than the first KO.
+    chances,
   };
 }
 
@@ -690,6 +702,7 @@ function koSummaryForRecalculatedFixedDamage(ctx, firstDamage, maxHits = 5) {
     hits: firstKo?.hits ?? null,
     chance: firstKo?.chance ?? 0,
     text: koText(chances),
+    chances,
   };
 }
 

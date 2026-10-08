@@ -211,3 +211,30 @@ test("survival chance weights multi-hit outcomes instead of treating rolls as eq
   const hp = single.rolls[8];
   assert.equal(survivalChance(single, hp), single.rolls.filter((damage) => damage < hp).length / 16);
 });
+
+test("ko.chances lists the cumulative KO chance per hit count", () => {
+  const result = calculateDamage({
+    attacker: garchomp, defender: incineroar, move: dragonClaw,
+    attackerState: { pokemon: garchomp, ...jollyGarchomp }, defenderState: { pokemon: incineroar, ...bulky() }, field: singles,
+  });
+  const { chances } = result.ko;
+  assert.deepEqual(chances.map(({ hits }) => hits), chances.map((_, index) => index + 1));
+  assert.equal(chances.find(({ chance }) => chance > 0).hits, result.ko.hits);
+  assert.equal(chances.find(({ chance }) => chance > 0).chance, result.ko.chance);
+  for (let index = 1; index < chances.length; index += 1) assert.ok(chances[index].chance >= chances[index - 1].chance);
+});
+
+test("Sturdy survival reports a guaranteed 2HKO in ko.chances", () => {
+  const hitter = { id: "hitter", name: "Hitter", types: ["Grass"], baseStats: { hp: 100, atk: 150, def: 100, spa: 100, spd: 100, spe: 100 } };
+  const target = { id: "sturdy-target", name: "Sturdy Target", types: ["Water"], baseStats: { hp: 40, atk: 50, def: 40, spa: 50, spd: 50, spe: 50 } };
+  const woodHammer = { id: "woodhammer", name: "Wood Hammer", type: "Grass", category: "Physical", basePower: 120, target: "normal", flags: { contact: 1 } };
+  const result = calculateDamage({
+    attacker: hitter, defender: target, move: woodHammer,
+    attackerState: { pokemon: hitter, nature: "Adamant", sp: { atk: 32 }, stages: {}, ability: null, item: null },
+    defenderState: { pokemon: target, ...bulky({ sp: {}, ability: { id: "sturdy", name: "Sturdy" } }) },
+    field: singles,
+  });
+  assert.equal(result.ko.text, "survives with Sturdy at full HP");
+  assert.equal(result.ko.hits, null);
+  assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
+});
