@@ -4,7 +4,7 @@ PokéCal is a frequently used competitive Pokémon analysis tool. The interface 
 
 ## Product character
 
-The visual direction is calm, precise, compact, readable, and consistent. All six routes share the lookup page's slim brand and navigation header, white working surfaces, quiet dividers, and sparse elevation. Deep teal marks interaction; Pokémon sprites, type colors, move-category marks, and aligned battle data provide the domain character. Avoid generic dashboard styling, decorative gradients, glow, and ornamental icon tiles.
+The visual direction is calm, precise, compact, readable, and consistent. All seven routes share the lookup page's slim brand and navigation header, white working surfaces, quiet dividers, and sparse elevation. Deep teal marks interaction; Pokémon sprites, type colors, move-category marks, and aligned battle data provide the domain character. Avoid generic dashboard styling, decorative gradients, glow, and ornamental icon tiles.
 
 PokéCal uses the system font stack already declared in `src/styles.css`. Do not introduce proprietary or downloaded fonts. The historic Kraken reference in `docs/design-references/kraken/` is visual inspiration only; PokéCal owns the decisions in this file.
 
@@ -36,4 +36,4 @@ Buttons with the same role share height, padding, radius, border, hover, active,
 
 Render real resting, hover, focus, selected, expanded, disabled, loading, empty, error, and success states where the component supports them. Do not invent asynchronous states. Loading and result messages that matter are exposed as polite status updates without announcing every keystroke.
 
-The six supported entry points are `index.html`, `moves.html`, `battle.html`, `builder.html`, `speed.html`, and `teams.html`. Whole-app checks cover English and Traditional Chinese at 390px and 1280px, then stress shared navigation and dense layouts at 320px, 768px, and 1440px. Representative routes must reflow at 200% zoom. Preserve readable labels, localize user-facing interface copy, and leave source-specific English mechanics descriptions marked with `lang="en"` where translations do not exist.
+The seven supported entry points are `index.html`, `moves.html`, `battle.html`, `builder.html`, `matchups.html`, `speed.html`, and `teams.html`. Whole-app checks cover English and Traditional Chinese at 390px and 1280px, then stress shared navigation and dense layouts at 320px, 768px, and 1440px. Representative routes must reflow at 200% zoom. Preserve readable labels, localize user-facing interface copy, and leave source-specific English mechanics descriptions marked with `lang="en"` where translations do not exist.

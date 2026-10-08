@@ -1,4 +1,4 @@
-// Stages the browser site for GitHub Pages into _site/ (or --out <dir>): the six HTML pages,
+// Stages the browser site for GitHub Pages into _site/ (or --out <dir>): the HTML pages,
 // src/, the slim catalogs in public/web/, and public/icons/. Tests, docs, MCP, scripts, agent
 // skills, and the full public/*.json catalogs are deliberately not published.
 import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";

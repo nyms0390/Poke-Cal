@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta
+      name="description"
+      content="Race one Champions set against the most-used Pokémon: which ones beat it, which ones it beats, and where Speed decides."
+    />
+    <title>PokéCal — Matchups</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home" translate="no">Poké<span>Cal</span></a>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./moves.html">Moves</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a href="./builder.html">Builder</a>
+          <a class="active" href="./matchups.html" aria-current="page">Matchups</a>
+          <a href="./speed.html">Speed Tiers</a>
+          <a href="./teams.html">Teams</a>
+          <label class="language-switch">
+            <span>Language</span>
+            <select data-language-switch aria-label="Language">
+              <option value="en">English</option>
+              <option value="zh-TW">繁體中文</option>
+            </select>
+          </label>
+        </nav>
+      </header>
+      <div class="page-intro">
+        <h1 data-i18n="matchups.title">See what your set beats and what beats it.</h1>
+        <p class="intro" data-i18n="matchups.intro">
+          Race one set against the most-used Champions Pokémon: who KOs whom in fewer hits, and who
+          moves first when it is even.
+        </p>
+      </div>
+      <section class="calculator builder-tool matchups-tool" aria-label="Matchups" data-i18n-aria-label="matchups.ariaLabel">
+        <p id="matchups-source" class="usage-source">Champions defaults loading…</p>
+        <div class="builder-layout matchups-layout">
+          <section class="builder-editor" aria-labelledby="matchups-set-heading">
+            <div class="panel-heading">
+              <span id="matchups-set-heading" data-i18n="matchups.yourSet">Your set</span>
+              <strong id="matchups-summary">—</strong>
+            </div>
+            <label class="pokemon-search-label" for="matchups-pokemon-search">Pokémon</label>
+            <div class="pokemon-combobox">
+              <input
+                id="matchups-pokemon-search"
+                name="matchups-pokemon-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="matchups-pokemon-results"
+                aria-expanded="false"
+              />
+              <div id="matchups-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+            </div>
+            <div class="builder-picks">
+              <label>
+                Nature
+                <select id="matchups-nature"></select>
+              </label>
+              <label>
+                Ability
+                <select id="matchups-ability"></select>
+              </label>
+              <label>
+                Item
+                <select id="matchups-item"></select>
+              </label>
+            </div>
+            <div class="builder-stat-heading matchups-stat-heading" aria-hidden="true">
+              <span>Stat</span><span>Base</span><span>SP</span><span>Final</span>
+            </div>
+            <div
+              id="matchups-stats"
+              class="builder-stats"
+              aria-label="Final stats"
+              data-i18n-aria-label="builder.finalStats"
+            ></div>
+            <p id="matchups-sp-total" class="builder-sp-budget">—</p>
+            <section class="builder-moves" aria-label="Your moves">
+              <div class="panel-heading">
+                <span>Your moves</span>
+                <strong>4 slots</strong>
+              </div>
+              <div id="matchups-move-picks" class="builder-move-picks"></div>
+            </section>
+            <section class="builder-field-settings" aria-labelledby="matchups-opponents-heading">
+              <div class="panel-heading">
+                <span id="matchups-opponents-heading" data-i18n="matchups.opponents">Opponents</span>
+              </div>
+              <label class="builder-threat-count" for="matchups-opponent-count">
+                Popular Pokémon
+                <select id="matchups-opponent-count">
+                  <option value="50">Top 50</option>
+                  <option value="100">Top 100</option>
+                </select>
+              </label>
+              <fieldset class="radio-group segmented-tag matchups-speed-mode">
+                <legend data-i18n="matchups.speedMode">Equal hits</legend>
+                <div class="radio-options">
+                  <label class="radio-option">
+                    <input type="radio" name="matchups-speed-mode" value="auto" checked />
+                    <span data-i18n="matchups.speedAuto">Auto</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="matchups-speed-mode" value="normal" />
+                    <span data-i18n="matchups.speedNormal">Normal</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="matchups-speed-mode" value="trickRoom" />
+                    <span data-i18n="matchups.speedTrickRoom">Trick Room</span>
+                  </label>
+                </div>
+              </fieldset>
+              <p id="matchups-speed-help" class="builder-assumption">—</p>
+            </section>
+            <section class="builder-field-settings" aria-label="Battle environment">
+              <div class="panel-heading">
+                <span data-i18n="field.environment">Environment</span>
+              </div>
+              <div id="matchups-ambient-field"></div>
+              <p class="builder-assumption" data-i18n="matchups.environmentAssumption">
+                Weather and terrain abilities apply on top of this environment; the opponent's wins when both sides set one.
+              </p>
+            </section>
+          </section>
+
+          <div class="builder-results matchups-results">
+            <section class="catalog-panel matchups-overview" aria-labelledby="matchups-overview-heading">
+              <h2 id="matchups-overview-heading" class="matchups-heading" data-i18n="matchups.overview">KO race overview</h2>
+              <div id="matchups-share-bar" class="matchups-share-bar" aria-hidden="true"></div>
+              <ul id="matchups-share-legend" class="matchups-share-legend"></ul>
+              <p id="matchups-share-note" class="builder-assumption">—</p>
+              <div class="matchups-grid-wrap">
+                <table id="matchups-grid" class="matchups-grid">
+                  <caption data-i18n="matchups.gridCaption">
+                    Opponents by hits they need to KO you (rows) and hits you need to KO them (columns)
+                  </caption>
+                  <thead>
+                    <tr>
+                      <td></td>
+                      <th scope="colgroup" colspan="4" data-i18n="matchups.youKoIn">You KO them in</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="matchups-grid-corner" data-i18n="matchups.theyKoIn">They KO you in</th>
+                      <th scope="col">1</th>
+                      <th scope="col">2</th>
+                      <th scope="col">3</th>
+                      <th scope="col">4+</th>
+                    </tr>
+                  </thead>
+                  <tbody id="matchups-grid-body"></tbody>
+                </table>
+              </div>
+              <div class="matchups-filter" id="matchups-filter" hidden>
+                <p id="matchups-filter-text" role="status" aria-live="polite"></p>
+                <button id="matchups-filter-clear" type="button" data-i18n="matchups.clearFilter">Show all</button>
+              </div>
+            </section>
+
+            <section class="catalog-panel matchups-section" aria-labelledby="matchups-threats-heading">
+              <div class="matchups-section-heading">
+                <h2 id="matchups-threats-heading" class="matchups-heading" data-i18n="matchups.threats">Beat you</h2>
+                <strong id="matchups-threats-count" class="builder-analysis-count">—</strong>
+              </div>
+              <p class="builder-assumption" data-i18n="matchups.threatsHelp">They KO you in fewer hits than you need, so Speed does not save you.</p>
+              <ul id="matchups-threats" class="matchups-list"></ul>
+            </section>
+
+            <section class="catalog-panel matchups-section" aria-labelledby="matchups-speed-heading">
+              <div class="matchups-section-heading">
+                <h2 id="matchups-speed-heading" class="matchups-heading" data-i18n="matchups.speedRaces">Speed decides</h2>
+                <strong id="matchups-speed-count" class="builder-analysis-count">—</strong>
+              </div>
+              <p class="builder-assumption" data-i18n="matchups.speedHelp">Both sides need the same number of hits, so whoever moves first wins.</p>
+              <ul id="matchups-speed" class="matchups-list"></ul>
+            </section>
+
+            <section class="catalog-panel matchups-section" aria-labelledby="matchups-favorable-heading">
+              <div class="matchups-section-heading">
+                <h2 id="matchups-favorable-heading" class="matchups-heading" data-i18n="matchups.favorable">Does well against</h2>
+                <strong id="matchups-favorable-count" class="builder-analysis-count">—</strong>
+              </div>
+              <p class="builder-assumption" data-i18n="matchups.favorableHelp">You KO them in fewer hits than they need.</p>
+              <ul id="matchups-favorable" class="matchups-list"></ul>
+            </section>
+
+            <section id="matchups-stalemate-section" class="catalog-panel matchups-section" aria-labelledby="matchups-stalemate-heading" hidden>
+              <div class="matchups-section-heading">
+                <h2 id="matchups-stalemate-heading" class="matchups-heading" data-i18n="matchups.stalemate">Neither side KOs</h2>
+                <strong id="matchups-stalemate-count" class="builder-analysis-count">—</strong>
+              </div>
+              <ul id="matchups-stalemate" class="matchups-list"></ul>
+            </section>
+
+            <section class="catalog-panel matchups-section" aria-labelledby="matchups-method-heading">
+              <h2 id="matchups-method-heading" class="matchups-heading" data-i18n="matchups.method">How the race works</h2>
+              <p class="builder-assumption" data-i18n="matchups.methodText">
+                Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest hits with at least a 50% chance; fewer hits wins, and equal hits go to whoever moves first. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.
+              </p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
+        <span data-i18n="matchups.footer">Limitless usage · Smogon ladder spreads · Level 50 · 1 SP = 8 EV</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/matchups-page.js"></script>
+  </body>
+</html>

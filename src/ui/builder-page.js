@@ -109,6 +109,7 @@ const elements = {
   threatSummary: document.querySelector("#builder-threat-summary"),
   customThreats: document.querySelector("#builder-custom-threats"),
   speedLink: document.querySelector("#builder-speed-link"),
+  matchupsLink: document.querySelector("#builder-matchups-link"),
   sortToolbar: document.querySelector("#builder-sort-toolbar"),
   sortToggle: document.querySelector("#builder-sort-toggle"),
   analysisTabs: [...document.querySelectorAll("[data-builder-analysis]")],
@@ -477,6 +478,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   elements.threatSummary.textContent = t("builder.topCustom", { top: state.threatCount, custom: customThreats.length });
   elements.source.textContent = t("builder.source", { top: state.threatCount, custom: customThreats.length });
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
+  elements.matchupsLink.href = `./matchups.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
   renderAnalysisTabs();
 
   renderStats(user, stats, displayedSetup);

@@ -1031,14 +1031,14 @@ test("standalone moves page keeps the four combined filters and full catalog tab
 });
 
 test("all pages expose the Moves navigation link", () => {
-  for (const page of ["index.html", "battle.html", "builder.html", "speed.html", "teams.html"]) {
+  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     assert.match(html, /<a href="\.\/moves\.html">Moves<\/a>/, page);
   }
 });
 
 test("all pages place Moves in the second navigation slot", () => {
-  for (const page of ["index.html", "battle.html", "builder.html", "speed.html", "teams.html", "moves.html"]) {
+  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "moves.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
     assert.deepEqual(
@@ -1047,6 +1047,33 @@ test("all pages place Moves in the second navigation slot", () => {
       page,
     );
   }
+});
+
+test("every page links Matchups right after Builder, and Matchups marks itself current", () => {
+  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+    const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+    const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
+    const links = [...nav.matchAll(/<a(?: class="active")? href="([^"]+)"(?: aria-current="page")?>([^<]+)<\/a>/g)]
+      .map(([, href]) => href);
+    assert.equal(links[links.indexOf("./builder.html") + 1], "./matchups.html", page);
+  }
+  const matchups = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  assert.match(matchups, /<a class="active" href="\.\/matchups\.html" aria-current="page">Matchups<\/a>/);
+  assert.match(matchups, /<script type="module" src="\.\/src\/ui\/matchups-page\.js"><\/script>/);
+  const builder = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
+  assert.match(builder, /id="builder-matchups-link"[^>]+href="\.\/matchups\.html"/);
+});
+
+test("matchups page exposes the grid, the outcome sections and their headings", () => {
+  const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  for (const id of ["matchups-grid", "matchups-threats", "matchups-speed", "matchups-favorable", "matchups-stalemate", "matchups-share-legend"]) {
+    assert.match(html, new RegExp(`id="${id}"`), id);
+  }
+  for (const key of ["matchups.threats", "matchups.speedRaces", "matchups.favorable", "matchups.methodText"]) {
+    assert.match(html, new RegExp(`data-i18n="${key.replace(".", "\\.")}"`), key);
+  }
+  assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
+  assert.match(html, /name="matchups-speed-mode" value="auto" checked/);
 });
 
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
