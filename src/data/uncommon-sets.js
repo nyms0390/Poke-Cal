@@ -195,23 +195,31 @@ export function uncommonCandidates(opponents = [], { minTeams = UNCOMMON_MIN_TEA
 }
 
 /**
- * The uncommon-set row for one opponent, or null when its usual set already beats you, it has
- * no usual set, or no theory set within `maxChanges` beats you.
+ * The row for one popular opponent, or null when it has no usual set or nothing within
+ * `maxChanges` rare choices beats you. When its usual set already beats you, the row is that
+ * set (`usualBeats: true`, no changes), so a popular Pokémon outside the page's top N is not
+ * missed; the page hides the ones its "Beat you" list already shows.
  */
 export function uncommonSetRow({ pokemon, rank, usagePercent }, ours, lookups = {}, { field = {}, maxChanges = MAX_SET_CHANGES } = {}) {
   if (!ours?.pokemon || ours.moves.length === 0) return null;
   const usual = observedMatchupSet(pokemon, lookups);
   if (!usual) return null;
   const usualResult = matchup({ ours, theirs: usual, field });
-  if (usualResult.outcome === "loss") return null;
-  const found = findUncommonSet(pokemon, ours, lookups, { field, maxChanges });
-  if (!found) return null;
-  return {
+  const base = {
     pokemon,
     rank,
     usagePercent,
     id: normalizeId(pokemon.id),
     usualOutcome: usualResult.outcome,
+  };
+  if (usualResult.outcome === "loss") {
+    return { ...base, usualBeats: true, template: null, changes: [], set: usual, result: usualResult };
+  }
+  const found = findUncommonSet(pokemon, ours, lookups, { field, maxChanges });
+  if (!found) return null;
+  return {
+    ...base,
+    usualBeats: false,
     template: found.template,
     changes: found.changes,
     set: { ...found.set, source: { spread: "theory", spreadName: "", teams: pokemon.champions?.usageCount ?? 0 } },
@@ -219,9 +227,10 @@ export function uncommonSetRow({ pokemon, rank, usagePercent }, ours, lookups = 
   };
 }
 
-/** Fewest changes first, then usage. */
+/** Usual sets that beat you first, then fewest changes, then usage. */
 export function sortUncommonRows(rows = []) {
-  return [...rows].sort((a, b) => a.changes.length - b.changes.length || b.usagePercent - a.usagePercent || a.rank - b.rank);
+  return [...rows].sort((a, b) => Number(Boolean(b.usualBeats)) - Number(Boolean(a.usualBeats)) ||
+    a.changes.length - b.changes.length || b.usagePercent - a.usagePercent || a.rank - b.rank);
 }
 
 /** Synchronous convenience over uncommonCandidates / uncommonSetRow / sortUncommonRows. */

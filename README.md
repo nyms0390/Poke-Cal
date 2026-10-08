@@ -55,6 +55,7 @@ PokéCal/
 │   │   ├── matchups.js          # One-on-one KO race, observed opposing sets, Trick Room team shares
 │   │   ├── matchup-analysis.js  # Matchups page analysis: rank, race, summarize, group
 │   │   ├── uncommon-sets.js     # Fewest-rare-choice theory sets that beat a set
+│   │   ├── niche-threats.js     # Rarely used Pokémon: harshest theory sets, grouped by pattern
 │   │   ├── threat-preferences.js # Persisted opponent-count preferences
 │   │   ├── speed-line.js        # Pure Speed-tier rows and breakpoints
 │   │   ├── bulk-points.js       # Defensive SP frontier search
@@ -207,13 +208,20 @@ moves (Last Resort, Focus Punch, Belch, …) race as if their condition holds, w
 that lower the user's attacking stat (Overheat, Draco Meteor) count for at most two uses, the
 second at the lowered stat. It is a one-on-one measure, not a doubles win rate.
 
-**Common Pokémon, uncommon sets** checks opponents with at least 20 Limitless teams whose usual
-set does not beat yours. It tries full-investment theory spreads (an attacker, or a wall against
-the stat your moves hit) with each ability, plausible items (Life Orb, Expert Belt, type boosters,
-Sitrus, Focus Sash, resist berries, observed items) and the strongest viable moves, and reports
-the set that beats you with the fewest rare choices: abilities, items, natures or KO moves on
-fewer than 5% of that Pokémon's Limitless sets (two at most). It runs one opponent at a time in
-the background and restarts when the set or field changes.
+**Beyond the usual sets** checks every Champions Pokémon, not only the top 50 or 100, split at
+20 Limitless teams. Theory sets use full-investment spreads (an attacker, or a wall against the
+stat your moves hit) with each ability, plausible items (Life Orb, Expert Belt, type boosters,
+Sitrus, Focus Sash, resist berries, observed items) and the strongest viable moves.
+
+- **Popular Pokémon, rare choices** (20+ teams): the set that beats you with the fewest rare
+  choices (abilities, items, natures or KO moves on fewer than 5% of that Pokémon's Limitless
+  sets; two at most). Popular Pokémon outside your top list whose usual set already beats you
+  are listed too.
+- **Rarely used Pokémon** (fewer than 20 teams, including none): each gets its harshest theory
+  set. Only threats whose KO move type and category (and whether they wall you) nothing above
+  already covers are listed; the rest are folded by type.
+
+It runs one opponent at a time in the background and restarts when the set or field changes.
 
 ## Data Sources
 

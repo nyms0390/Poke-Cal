@@ -1090,6 +1090,15 @@ test("matchups page keeps results reachable and the method behind a disclosure",
   assert.ok(html.indexOf("matchups.methodText") < html.indexOf('id="matchups-threats-section"'), "method sits with the overview");
 });
 
+test("matchups page splits beyond-the-usual-sets into popular and rarely used Pokémon", () => {
+  const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  const section = html.match(/<section id="matchups-uncommon-section"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(section, /data-i18n="matchups\.beyond"/);
+  assert.ok(section.indexOf('id="matchups-uncommon"') < section.indexOf('id="matchups-niche"'), "popular before rarely used");
+  assert.match(section, /<details id="matchups-niche-repeats" class="matchups-repeats" hidden>/);
+  assert.match(section, /id="matchups-uncommon-status"[^>]+role="status"/);
+});
+
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";

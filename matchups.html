@@ -168,7 +168,7 @@
               </div>
               <nav class="matchups-jump-nav" aria-label="Result groups" data-i18n-aria-label="matchups.resultGroups">
                 <a href="#matchups-threats-section"><span data-i18n="matchups.threats">Beat you</span> <strong id="matchups-jump-threats">—</strong></a>
-                <a href="#matchups-uncommon-section"><span data-i18n="matchups.uncommon">Common Pokémon, uncommon sets</span> <strong id="matchups-jump-uncommon">—</strong></a>
+                <a href="#matchups-uncommon-section"><span data-i18n="matchups.beyond">Beyond the usual sets</span> <strong id="matchups-jump-uncommon">—</strong></a>
                 <a href="#matchups-speed-section"><span data-i18n="matchups.speedRaces">Speed decides</span> <strong id="matchups-jump-speed">—</strong></a>
                 <a href="#matchups-favorable-section"><span data-i18n="matchups.favorable">Does well against</span> <strong id="matchups-jump-favorable">—</strong></a>
               </nav>
@@ -196,14 +196,31 @@
 
             <section id="matchups-uncommon-section" class="catalog-panel matchups-section" aria-labelledby="matchups-uncommon-heading">
               <div class="matchups-section-heading">
-                <h2 id="matchups-uncommon-heading" class="matchups-heading" data-i18n="matchups.uncommon">Common Pokémon, uncommon sets</h2>
+                <h2 id="matchups-uncommon-heading" class="matchups-heading" data-i18n="matchups.beyond">Beyond the usual sets</h2>
                 <strong id="matchups-uncommon-count" class="builder-analysis-count">—</strong>
               </div>
-              <p class="builder-assumption" data-i18n="matchups.uncommonHelp">
-                Their usual set does not beat you, but a set one or two rare choices away does. A rare choice is an ability, item, nature or KO move on fewer than 5% of their Limitless sets; spreads use full investment. Only Pokémon with at least 20 Limitless teams are checked.
+              <p class="builder-assumption" data-i18n="matchups.beyondHelp">
+                Every Champions Pokémon, not only the top 50 or 100, checked with full-investment theory sets: abilities, plausible items and its strongest moves into your types.
               </p>
               <p id="matchups-uncommon-status" class="builder-assumption matchups-uncommon-status" role="status" aria-live="polite"></p>
-              <ul id="matchups-uncommon" class="matchups-list"></ul>
+              <div class="matchups-subsection">
+                <h3 class="matchups-subheading" data-i18n="matchups.uncommon">Popular Pokémon, rare choices</h3>
+                <p class="builder-assumption" data-i18n="matchups.uncommonHelp">
+                  Pokémon with at least 20 Limitless teams whose usual set does not beat you, but a set one or two rare choices away does. A rare choice is an ability, item, nature or KO move on fewer than 5% of their Limitless sets. Popular Pokémon outside your top list whose usual set already beats you are listed too.
+                </p>
+                <ul id="matchups-uncommon" class="matchups-list"></ul>
+              </div>
+              <div class="matchups-subsection">
+                <h3 class="matchups-subheading" data-i18n="matchups.niche">Rarely used Pokémon</h3>
+                <p class="builder-assumption" data-i18n="matchups.nicheHelp">
+                  Pokémon with fewer than 20 Limitless teams, too few to tell rare choices from common ones. Each gets its strongest theory set; only the ways of beating you that nothing above already covers are listed, hard counters first.
+                </p>
+                <ul id="matchups-niche" class="matchups-list"></ul>
+                <details id="matchups-niche-repeats" class="matchups-repeats" hidden>
+                  <summary id="matchups-niche-repeats-summary">—</summary>
+                  <div id="matchups-niche-repeats-groups"></div>
+                </details>
+              </div>
             </section>
 
             <section id="matchups-speed-section" class="catalog-panel matchups-section" aria-labelledby="matchups-speed-heading">

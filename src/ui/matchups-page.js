@@ -17,7 +17,8 @@ import {
   summarizeMatchups,
 } from "../data/matchup-analysis.js";
 import { trickRoomTeamShares } from "../data/matchups.js";
-import { sortUncommonRows, uncommonCandidates, uncommonSetRow } from "../data/uncommon-sets.js";
+import { groupNicheThreats, nicheThreatRow, splitByTeams } from "../data/niche-threats.js";
+import { sortUncommonRows, uncommonSetRow } from "../data/uncommon-sets.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -71,6 +72,10 @@ const elements = {
   uncommonList: document.querySelector("#matchups-uncommon"),
   uncommonCount: document.querySelector("#matchups-uncommon-count"),
   uncommonStatus: document.querySelector("#matchups-uncommon-status"),
+  nicheList: document.querySelector("#matchups-niche"),
+  nicheRepeats: document.querySelector("#matchups-niche-repeats"),
+  nicheRepeatsSummary: document.querySelector("#matchups-niche-repeats-summary"),
+  nicheRepeatsGroups: document.querySelector("#matchups-niche-repeats-groups"),
   jumpCounts: Object.fromEntries(["threats", "uncommon", "speed", "favorable"].map((key) => [key, document.querySelector(`#matchups-jump-${key}`)])),
   movePicks: document.querySelector("#matchups-move-picks"),
   opponentCount: document.querySelector("#matchups-opponent-count"),
@@ -98,10 +103,17 @@ let teamArchiveState = "loading";
 let unavailableRequestId = "";
 let moveComboboxCleanups = [];
 let analysisTimer = null;
-// The uncommon-set search takes about a second for the top 100, so it runs one opponent per
-// task in the background and restarts whenever the inputs change.
+// "Beyond the usual sets" checks every Pokémon (about a second for the popular ones, a few more
+// for the rarely used ones), so it runs one Pokémon per task in the background, popular ones
+// first, and restarts whenever your set or the field changes.
 const UNCOMMON_START_DELAY_MS = 300;
-const uncommon = { key: "", run: 0, timer: null, rows: [], done: 0, total: 0, finished: false };
+const uncommon = {
+  key: "", run: 0, timer: null,
+  phase: "popular", done: 0, total: 0,
+  popularRows: [], nicheRows: [], popularDone: false, nicheDone: false,
+  popularCount: 0, rareCount: 0,
+};
+let lastThreatRows = [];
 let state = {
   user: null,
   field: createAmbientFieldState(),
@@ -413,90 +425,163 @@ function renderAnalysis() {
   for (const [key, element] of Object.entries(elements.jumpCounts)) {
     if (key !== "uncommon") element.textContent = String(sections[key].length);
   }
-  scheduleUncommon(ours, opponents);
+  lastThreatRows = rows.filter((row) => row.result.outcome === "loss");
+  scheduleUncommon(ours);
   elements.stalemateSection.hidden = sections.stalemate.length === 0;
   translateSubtree(elements.shareLegend, elements.gridBody, ...Object.values(elements.lists));
 }
 
-// ---------- uncommon sets ----------
+// ---------- beyond the usual sets ----------
 
-function uncommonKey(ours, opponents) {
+function uncommonKey(ours) {
   return JSON.stringify([
     normalizeId(ours.pokemon.id), ours.nature, ours.sp, ours.ability?.id ?? "", ours.item?.id ?? "",
-    ours.moves.map((move) => move.id), state.field, opponents.length,
+    ours.moves.map((move) => move.id), state.field,
   ]);
 }
 
-function scheduleUncommon(ours, opponents) {
-  const key = uncommonKey(ours, opponents);
+function scheduleUncommon(ours) {
+  const key = uncommonKey(ours);
   if (key === uncommon.key) {
     renderUncommon(ours);
     return;
   }
-  uncommon.key = key;
-  uncommon.run += 1;
-  uncommon.rows = [];
-  uncommon.finished = false;
-  const candidates = uncommonCandidates(opponents);
-  uncommon.done = 0;
-  uncommon.total = candidates.length;
+  const { popular, rare } = splitByTeams(catalogs.pokemon);
+  Object.assign(uncommon, {
+    key, run: uncommon.run + 1, phase: "popular", done: 0, total: popular.length,
+    popularRows: [], nicheRows: [], popularDone: false, nicheDone: false,
+    popularCount: popular.length, rareCount: rare.length,
+  });
   clearTimeout(uncommon.timer);
   renderUncommon(ours);
   const run = uncommon.run;
-  uncommon.timer = setTimeout(() => searchUncommon(run, ours, candidates), UNCOMMON_START_DELAY_MS);
+  uncommon.timer = setTimeout(() => searchBeyond(run, ours, popular, rare), UNCOMMON_START_DELAY_MS);
 }
 
-async function searchUncommon(run, ours, candidates) {
-  for (const opponent of candidates) {
+async function searchBeyond(run, ours, popular, rare) {
+  const field = state.field;
+  for (const opponent of popular) {
     if (run !== uncommon.run) return;
-    const row = uncommonSetRow(opponent, ours, catalogs, { field: state.field });
-    if (row) uncommon.rows.push(row);
+    const row = uncommonSetRow(opponent, ours, catalogs, { field });
+    if (row) uncommon.popularRows.push(row);
     uncommon.done += 1;
     renderUncommonStatus();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTask();
   }
   if (run !== uncommon.run) return;
-  uncommon.rows = sortUncommonRows(uncommon.rows);
-  uncommon.finished = true;
+  uncommon.popularRows = sortUncommonRows(uncommon.popularRows);
+  Object.assign(uncommon, { popularDone: true, phase: "rare", done: 0, total: rare.length });
+  renderUncommon(ours);
+  for (const opponent of rare) {
+    if (run !== uncommon.run) return;
+    const row = nicheThreatRow(opponent, ours, catalogs, { field });
+    if (row) uncommon.nicheRows.push(row);
+    uncommon.done += 1;
+    renderUncommonStatus();
+    await nextTask();
+  }
+  if (run !== uncommon.run) return;
+  uncommon.nicheDone = true;
   renderUncommon(ours);
 }
 
+function nextTask() {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
 function renderUncommonStatus() {
-  elements.uncommonStatus.textContent = uncommon.finished
-    ? t("matchups.uncommonDone", { checked: uncommon.total })
-    : t("matchups.uncommonChecking", { done: uncommon.done, total: uncommon.total });
+  elements.uncommonStatus.textContent = uncommon.nicheDone
+    ? t("matchups.beyondDone", { popular: uncommon.popularCount, rare: uncommon.rareCount })
+    : t(uncommon.phase === "popular" ? "matchups.checkingPopular" : "matchups.checkingRare", { done: uncommon.done, total: uncommon.total });
+}
+
+// Popular rows minus the usual-set threats the "Beat you" list already shows.
+function visiblePopularRows() {
+  const shown = new Set(lastThreatRows.map((row) => row.id));
+  return uncommon.popularRows.filter((row) => !(row.usualBeats && shown.has(row.id)));
 }
 
 function renderUncommon(ours) {
   renderUncommonStatus();
-  const count = uncommon.finished ? String(uncommon.rows.length) : "…";
-  elements.uncommonCount.textContent = uncommon.finished ? t("matchups.pokemonCount", { count: uncommon.rows.length }) : "…";
-  elements.jumpCounts.uncommon.textContent = count;
-  if (!uncommon.finished) {
-    elements.uncommonList.replaceChildren();
+  const popularRows = uncommon.popularDone ? visiblePopularRows() : [];
+  const grouped = uncommon.nicheDone
+    ? groupNicheThreats(uncommon.nicheRows, [...lastThreatRows, ...popularRows].map((row) => row.result))
+    : { novel: [], repeats: [] };
+  const finished = uncommon.popularDone && uncommon.nicheDone;
+  const total = popularRows.length + grouped.novel.length;
+  elements.uncommonCount.textContent = finished ? t("matchups.pokemonCount", { count: total }) : "…";
+  elements.jumpCounts.uncommon.textContent = finished ? String(total) : "…";
+
+  renderRowList(elements.uncommonList, uncommon.popularDone, popularRows, "matchups.uncommonEmpty", (row) =>
+    matchupRow("uncommon", row, ours, { badge: changesBadge(row), facts: popularFacts(row) }));
+  renderRowList(elements.nicheList, uncommon.nicheDone, grouped.novel, "matchups.nicheEmpty", (row) =>
+    matchupRow("niche", row, ours, { facts: nicheFacts(row) }));
+  renderNicheRepeats(grouped.repeats, ours);
+  translateSubtree(elements.uncommonList, elements.nicheList, elements.nicheRepeats);
+}
+
+function renderRowList(list, done, rows, emptyKey, renderRow) {
+  if (!done) {
+    list.replaceChildren();
     return;
   }
-  if (uncommon.rows.length === 0) {
+  if (rows.length === 0) {
     const empty = document.createElement("li");
     empty.className = "matchups-empty";
-    empty.textContent = t("matchups.uncommonEmpty");
-    elements.uncommonList.replaceChildren(empty);
+    empty.textContent = t(emptyKey);
+    list.replaceChildren(empty);
     return;
   }
-  elements.uncommonList.replaceChildren(...uncommon.rows.map((row) => matchupRow("uncommon", row, ours, {
-    badge: changesBadge(row),
-    facts: [
-      [t("matchups.usualSet"), t(row.usualOutcome === "win" ? "matchups.youWin" : row.usualOutcome === "speed" ? "matchups.speedRaces" : "matchups.noKoEither")],
+  list.replaceChildren(...rows.map(renderRow));
+}
+
+function renderNicheRepeats(repeats, ours) {
+  const count = repeats.reduce((total, group) => total + group.rows.length, 0);
+  elements.nicheRepeats.hidden = count === 0;
+  if (count === 0) {
+    elements.nicheRepeatsGroups.replaceChildren();
+    return;
+  }
+  elements.nicheRepeatsSummary.textContent = t("matchups.nicheRepeats", {
+    count,
+    types: repeats.map(({ type, rows }) => `${localizedTerm("type", type)} ${rows.length}`).join(" · "),
+  });
+  elements.nicheRepeatsGroups.replaceChildren(...repeats.map(({ type, rows }) => {
+    const group = document.createElement("section");
+    group.className = "matchups-repeat-group";
+    const heading = document.createElement("h4");
+    heading.textContent = t("matchups.nicheRepeatType", { type: localizedTerm("type", type), count: rows.length });
+    const list = document.createElement("ul");
+    list.className = "matchups-list";
+    list.replaceChildren(...rows.map((row) => matchupRow("niche-repeat", row, ours, { facts: nicheFacts(row) })));
+    group.append(heading, list);
+    return group;
+  }));
+}
+
+function outcomeLabel(outcome) {
+  return t({ win: "matchups.youWin", speed: "matchups.speedRaces", loss: "matchups.beatsYou" }[outcome] ?? "matchups.noKoEither");
+}
+
+function popularFacts(row) {
+  return row.usualBeats
+    ? [[t("matchups.usualSet"), outcomeLabel(row.usualOutcome)]]
+    : [
+      [t("matchups.usualSet"), outcomeLabel(row.usualOutcome)],
       [t("matchups.theorySpread"), t(`matchups.template.${row.template}`)],
-    ],
-  })));
-  translateSubtree(elements.uncommonList);
+    ];
+}
+
+function nicheFacts(row) {
+  return [[t("matchups.theorySpread"), t(`matchups.template.${row.template}`)]];
 }
 
 function changesBadge(row) {
   const badge = document.createElement("span");
   badge.className = "builder-ko-badge matchups-result matchups-changes";
-  badge.textContent = row.changes.length === 0
+  badge.textContent = row.usualBeats
+    ? t("matchups.usualBeats")
+    : row.changes.length === 0
     ? t("matchups.spreadOnly")
     : t("matchups.needs", { list: row.changes.map(changeLabel).join(" + ") });
   return badge;
@@ -676,7 +761,9 @@ function matchupRow(sectionKey, row, ours, { badge = null, facts = [] } = {}) {
   const strong = document.createElement("strong");
   strong.textContent = localizedName(row.pokemon);
   const meta = document.createElement("small");
-  meta.textContent = t("matchups.rankUsage", { rank: row.rank, usage: usageLabel(row.usagePercent) });
+  meta.textContent = Number.isFinite(row.rank)
+    ? t("matchups.rankUsage", { rank: row.rank, usage: usageLabel(row.usagePercent) })
+    : t("matchups.noUsage");
   nameText.append(strong, meta);
   name.append(pokemonMiniSprite(row.pokemon), nameText);
 

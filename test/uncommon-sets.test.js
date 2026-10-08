@@ -108,23 +108,30 @@ test("findUncommonSet's pruning matches an exhaustive search", () => {
   }
 });
 
-test("uncommonSetRow skips opponents whose usual set already beats you", () => {
+test("uncommonSetRow finds the rare choice, or returns the usual set when it already beats you", () => {
   const row = uncommonSetRow({ pokemon: gholdengo, rank: 5, usagePercent: 20 }, rillaboom, lookups);
   assert.equal(row.usualOutcome === "loss", false);
+  assert.equal(row.usualBeats, false);
   assert.equal(row.set.source.spread, "theory");
   assert.deepEqual(row.changes.map(({ id }) => id), ["steelbeam"]);
 
-  // With Steel Beam as a usual move, the usual set wins, so there is nothing uncommon to show.
+  // With Steel Beam as a usual move, the usual set wins: the row is that set with no changes,
+  // so a popular Pokémon outside the page's top N still shows up.
   const steelBeamUsual = withUsage("Gholdengo", {
     ...gholdengo.champions.usage,
     moves: [...gholdengo.champions.usage.moves, { id: "steelbeam", name: "Steel Beam", usagePercent: 30 }],
     spreads: [{ name: "Modest:32/0/2/32/0/0", usagePercent: 20 }],
   });
-  assert.equal(uncommonSetRow({ pokemon: steelBeamUsual, rank: 5, usagePercent: 20 }, rillaboom, lookups), null);
+  const usualRow = uncommonSetRow({ pokemon: steelBeamUsual, rank: 5, usagePercent: 20 }, rillaboom, lookups);
+  assert.equal(usualRow.usualBeats, true);
+  assert.equal(usualRow.usualOutcome, "loss");
+  assert.equal(usualRow.result.outcome, "loss");
+  assert.deepEqual(usualRow.changes, []);
+  assert.notEqual(usualRow.set.source.spread, "theory");
   assert.equal(uncommonSetRow({ pokemon: gholdengo, rank: 5, usagePercent: 20 }, { ...rillaboom, moves: [] }, lookups), null);
 });
 
-test("only well-sampled opponents are checked and rows sort by fewest changes", () => {
+test("only well-sampled opponents are checked and rows sort usual threats first, then fewest changes", () => {
   const small = withUsage("Gholdengo", gholdengo.champions.usage, 19);
   assert.deepEqual(uncommonCandidates([{ pokemon: small }, { pokemon: gholdengo }]).map(({ pokemon }) => pokemon.champions.usageCount), [100]);
   const rows = [
@@ -132,6 +139,7 @@ test("only well-sampled opponents are checked and rows sort by fewest changes", 
     { changes: [], usagePercent: 5, rank: 9 },
     { changes: [1], usagePercent: 10, rank: 4 },
     { changes: [1], usagePercent: 30, rank: 2 },
+    { usualBeats: true, changes: [], usagePercent: 1, rank: 60 },
   ];
-  assert.deepEqual(sortUncommonRows(rows).map(({ rank }) => rank), [9, 2, 4, 1]);
+  assert.deepEqual(sortUncommonRows(rows).map(({ rank }) => rank), [60, 9, 2, 4, 1]);
 });

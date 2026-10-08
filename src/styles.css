@@ -5061,6 +5061,42 @@ textarea:focus-visible {
   text-align: right;
 }
 
+.matchups-subsection {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.matchups-subheading {
+  margin: 0;
+  font-size: var(--text-md);
+}
+
+.matchups-repeats > summary {
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.matchups-repeats[open] > summary {
+  margin-bottom: 8px;
+}
+
+.matchups-repeat-group {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.matchups-repeat-group > h4 {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
 .matchups-uncommon-status:empty {
   display: none;
 }
