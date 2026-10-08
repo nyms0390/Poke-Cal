@@ -363,6 +363,13 @@ export const EN_MESSAGES = {
   "matchups.theirMoves": ({ name }) => `${name} into you`,
   "matchups.yourMoves": ({ name }) => `Your ${name} into them`,
   "matchups.fieldValue": ({ label, value }) => `${label}: ${value}`,
+  "matchups.jumpToResults": "Jump to results ↓",
+  "matchups.editSet": "Edit set ↑",
+  "matchups.resultGroups": "Result groups",
+  "matchups.limits": "One-on-one KO race, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.",
+  "matchups.spTotal": ({ count, limit }) => `${count} / ${limit} SP assigned`,
+  "matchups.spOver": ({ count, limit, over }) =>
+    `${count} / ${limit} SP assigned: ${over} over the Champions limit. Results still use these stats.`,
   "matchups.move": "Move",
   "matchups.damage": "Damage",
   "matchups.ko": "KO",

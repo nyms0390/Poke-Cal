@@ -43,7 +43,8 @@
       <section class="calculator builder-tool matchups-tool" aria-label="Matchups" data-i18n-aria-label="matchups.ariaLabel">
         <p id="matchups-source" class="usage-source">Champions defaults loading…</p>
         <div class="builder-layout matchups-layout">
-          <section class="builder-editor" aria-labelledby="matchups-set-heading">
+          <section id="matchups-editor" class="builder-editor" aria-labelledby="matchups-set-heading">
+            <a class="matchups-jump" href="#matchups-overview" data-i18n="matchups.jumpToResults">Jump to results ↓</a>
             <div class="panel-heading">
               <span id="matchups-set-heading" data-i18n="matchups.yourSet">Your set</span>
               <strong id="matchups-summary">—</strong>
@@ -62,7 +63,7 @@
               <div id="matchups-pokemon-results" class="search-results pokemon-search-results" hidden></div>
             </div>
             <div class="builder-picks">
-              <label>
+              <label class="matchups-nature">
                 Nature
                 <select id="matchups-nature"></select>
               </label>
@@ -84,7 +85,7 @@
               aria-label="Final stats"
               data-i18n-aria-label="builder.finalStats"
             ></div>
-            <p id="matchups-sp-total" class="builder-sp-budget">—</p>
+            <p id="matchups-sp-total" class="builder-sp-budget matchups-sp-total" aria-live="polite">—</p>
             <section class="builder-moves" aria-label="Your moves">
               <div class="panel-heading">
                 <span>Your moves</span>
@@ -122,20 +123,25 @@
               </fieldset>
               <p id="matchups-speed-help" class="builder-assumption">—</p>
             </section>
-            <section class="builder-field-settings" aria-label="Battle environment">
-              <div class="panel-heading">
+            <details class="builder-field-settings matchups-environment">
+              <summary>
                 <span data-i18n="field.environment">Environment</span>
-              </div>
+                <strong id="matchups-environment-summary">—</strong>
+              </summary>
               <div id="matchups-ambient-field"></div>
               <p class="builder-assumption" data-i18n="matchups.environmentAssumption">
                 Weather and terrain abilities apply on top of this environment; the opponent's wins when both sides set one.
               </p>
-            </section>
+            </details>
           </section>
 
           <div class="builder-results matchups-results">
-            <section class="catalog-panel matchups-overview" aria-labelledby="matchups-overview-heading">
-              <h2 id="matchups-overview-heading" class="matchups-heading" data-i18n="matchups.overview">KO race overview</h2>
+            <section id="matchups-overview" class="catalog-panel matchups-overview" aria-labelledby="matchups-overview-heading" tabindex="-1">
+              <div class="matchups-section-heading">
+                <h2 id="matchups-overview-heading" class="matchups-heading" data-i18n="matchups.overview">KO race overview</h2>
+                <a class="matchups-edit-link" href="#matchups-editor" data-i18n="matchups.editSet">Edit set ↑</a>
+              </div>
+              <p id="matchups-set-line" class="matchups-set-line">—</p>
               <div id="matchups-share-bar" class="matchups-share-bar" aria-hidden="true"></div>
               <ul id="matchups-share-legend" class="matchups-share-legend"></ul>
               <p id="matchups-share-note" class="builder-assumption">—</p>
@@ -160,13 +166,25 @@
                   <tbody id="matchups-grid-body"></tbody>
                 </table>
               </div>
+              <nav class="matchups-jump-nav" aria-label="Result groups" data-i18n-aria-label="matchups.resultGroups">
+                <a href="#matchups-threats-section"><span data-i18n="matchups.threats">Beat you</span> <strong id="matchups-jump-threats">—</strong></a>
+                <a href="#matchups-speed-section"><span data-i18n="matchups.speedRaces">Speed decides</span> <strong id="matchups-jump-speed">—</strong></a>
+                <a href="#matchups-favorable-section"><span data-i18n="matchups.favorable">Does well against</span> <strong id="matchups-jump-favorable">—</strong></a>
+              </nav>
+              <p class="builder-assumption" data-i18n="matchups.limits">One-on-one KO race, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.</p>
+              <details class="matchups-method">
+                <summary data-i18n="matchups.method">How the race works</summary>
+                <p class="builder-assumption" data-i18n="matchups.methodText">
+                Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest hits with at least a 50% chance; fewer hits wins, and equal hits go to whoever moves first. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.
+              </p>
+              </details>
               <div class="matchups-filter" id="matchups-filter" hidden>
                 <p id="matchups-filter-text" role="status" aria-live="polite"></p>
                 <button id="matchups-filter-clear" type="button" data-i18n="matchups.clearFilter">Show all</button>
               </div>
             </section>
 
-            <section class="catalog-panel matchups-section" aria-labelledby="matchups-threats-heading">
+            <section id="matchups-threats-section" class="catalog-panel matchups-section" aria-labelledby="matchups-threats-heading">
               <div class="matchups-section-heading">
                 <h2 id="matchups-threats-heading" class="matchups-heading" data-i18n="matchups.threats">Beat you</h2>
                 <strong id="matchups-threats-count" class="builder-analysis-count">—</strong>
@@ -175,7 +193,7 @@
               <ul id="matchups-threats" class="matchups-list"></ul>
             </section>
 
-            <section class="catalog-panel matchups-section" aria-labelledby="matchups-speed-heading">
+            <section id="matchups-speed-section" class="catalog-panel matchups-section" aria-labelledby="matchups-speed-heading">
               <div class="matchups-section-heading">
                 <h2 id="matchups-speed-heading" class="matchups-heading" data-i18n="matchups.speedRaces">Speed decides</h2>
                 <strong id="matchups-speed-count" class="builder-analysis-count">—</strong>
@@ -184,7 +202,7 @@
               <ul id="matchups-speed" class="matchups-list"></ul>
             </section>
 
-            <section class="catalog-panel matchups-section" aria-labelledby="matchups-favorable-heading">
+            <section id="matchups-favorable-section" class="catalog-panel matchups-section" aria-labelledby="matchups-favorable-heading">
               <div class="matchups-section-heading">
                 <h2 id="matchups-favorable-heading" class="matchups-heading" data-i18n="matchups.favorable">Does well against</h2>
                 <strong id="matchups-favorable-count" class="builder-analysis-count">—</strong>
@@ -201,12 +219,6 @@
               <ul id="matchups-stalemate" class="matchups-list"></ul>
             </section>
 
-            <section class="catalog-panel matchups-section" aria-labelledby="matchups-method-heading">
-              <h2 id="matchups-method-heading" class="matchups-heading" data-i18n="matchups.method">How the race works</h2>
-              <p class="builder-assumption" data-i18n="matchups.methodText">
-                Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest hits with at least a 50% chance; fewer hits wins, and equal hits go to whoever moves first. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.
-              </p>
-            </section>
           </div>
         </div>
       </section>

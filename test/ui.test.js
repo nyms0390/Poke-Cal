@@ -1076,6 +1076,20 @@ test("matchups page exposes the grid, the outcome sections and their headings", 
   assert.match(html, /name="matchups-speed-mode" value="auto" checked/);
 });
 
+test("matchups page keeps results reachable and the method behind a disclosure", () => {
+  const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  for (const target of ["matchups-threats-section", "matchups-speed-section", "matchups-favorable-section"]) {
+    assert.match(html, new RegExp(`href="#${target}"`), target);
+    assert.match(html, new RegExp(`id="${target}"`), target);
+  }
+  assert.match(html, /href="#matchups-overview"/);
+  assert.match(html, /<details class="builder-field-settings matchups-environment">/);
+  assert.match(html, /<details class="matchups-method">\s*<summary data-i18n="matchups\.method">/);
+  assert.match(html, /<label class="matchups-nature">/);
+  assert.match(html, /id="matchups-sp-total"[^>]+aria-live="polite"/);
+  assert.ok(html.indexOf("matchups.methodText") < html.indexOf('id="matchups-threats-section"'), "method sits with the overview");
+});
+
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";

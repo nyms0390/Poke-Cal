@@ -51,6 +51,8 @@ import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state
 
 const SECTION_KEYS = ["threats", "speed", "favorable", "stalemate"];
 const SP_ANALYSIS_DELAY_MS = 150;
+// Champions caps a Pokémon's SP at 66 in total (see SP_TOTAL_LIMIT in the damage engine).
+const SP_LIMIT = 66;
 
 const elements = {
   source: document.querySelector("#matchups-source"),
@@ -63,6 +65,9 @@ const elements = {
   item: document.querySelector("#matchups-item"),
   stats: document.querySelector("#matchups-stats"),
   spTotal: document.querySelector("#matchups-sp-total"),
+  setLine: document.querySelector("#matchups-set-line"),
+  environmentSummary: document.querySelector("#matchups-environment-summary"),
+  jumpCounts: Object.fromEntries(["threats", "speed", "favorable"].map((key) => [key, document.querySelector(`#matchups-jump-${key}`)])),
   movePicks: document.querySelector("#matchups-move-picks"),
   opponentCount: document.querySelector("#matchups-opponent-count"),
   speedModeInputs: [...document.querySelectorAll('input[name="matchups-speed-mode"]')],
@@ -331,7 +336,22 @@ function renderEditor() {
     }));
   }
   const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
-  elements.spTotal.textContent = t("builder.spAssigned", { count: spent });
+  const over = spent > SP_LIMIT;
+  elements.spTotal.textContent = over
+    ? t("matchups.spOver", { count: spent, limit: SP_LIMIT, over: spent - SP_LIMIT })
+    : t("matchups.spTotal", { count: spent, limit: SP_LIMIT });
+  elements.spTotal.classList.toggle("over", over);
+  for (const input of elements.stats.querySelectorAll("input")) {
+    input.setAttribute("aria-invalid", String(over));
+  }
+  elements.setLine.textContent = [
+    localizedName(user.pokemon),
+    localizedTerm("nature", user.nature),
+    STAT_KEYS.map((stat) => user.sp[stat] ?? 0).join("/"),
+    user.ability ? localizedName(user.ability) : t("builder.noAbility"),
+    user.item ? localizedName(user.item) : t("builder.noItem"),
+    matchupSetFromSide(user, catalogs.moveLookup).moves.map((move) => localizedName(move)).join(", ") || t("matchups.noMove"),
+  ].join(" · ");
 }
 
 function statRow(stat) {
@@ -350,6 +370,7 @@ function statRow(stat) {
   input.dataset.kind = "matchups-sp";
   input.dataset.stat = stat;
   input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
+  input.setAttribute("aria-describedby", "matchups-sp-total");
   const final = document.createElement("strong");
   final.className = "builder-stat-final";
   row.append(label, base, input, final);
@@ -381,6 +402,7 @@ function renderAnalysis() {
   renderGrid(summary);
   renderFilter(sections);
   for (const key of SECTION_KEYS) renderSection(key, sections[key], ours);
+  for (const [key, element] of Object.entries(elements.jumpCounts)) element.textContent = String(sections[key].length);
   elements.stalemateSection.hidden = sections.stalemate.length === 0;
   translateSubtree(elements.shareLegend, elements.gridBody, ...Object.values(elements.lists));
 }
@@ -389,6 +411,12 @@ function syncControls() {
   elements.opponentCount.value = String(state.opponentCount);
   for (const input of elements.speedModeInputs) input.checked = input.value === state.speedMode;
   ambientFieldControls.sync(state.field);
+  elements.environmentSummary.textContent = [
+    t(state.field.format === "singles" ? "field.singles" : "field.doubles"),
+    fieldLabel(WEATHER_LABEL_KEYS, "field.weather", state.field.weather),
+    fieldLabel(TERRAIN_LABEL_KEYS, "field.terrain", state.field.terrain),
+    state.field.gravity ? t("field.gravity") : "",
+  ].filter(Boolean).join(" · ");
 }
 
 function renderSpeedHelp() {

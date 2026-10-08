@@ -366,6 +366,13 @@ export const ZH_TW_MESSAGES = {
   "matchups.theirMoves": ({ name }) => `${name} 攻擊你`,
   "matchups.yourMoves": ({ name }) => `你的${name}攻擊對手`,
   "matchups.fieldValue": ({ label, value }) => `${label}：${value}`,
+  "matchups.jumpToResults": "跳至結果 ↓",
+  "matchups.editSet": "編輯配置 ↑",
+  "matchups.resultGroups": "結果分組",
+  "matchups.limits": "這是一對一的擊倒競賽，並非雙打勝率：隊友、守住、交換、命中率與追加效果都不計入。",
+  "matchups.spTotal": ({ count, limit }) => `已分配 ${count} / ${limit} SP`,
+  "matchups.spOver": ({ count, limit, over }) =>
+    `已分配 ${count} / ${limit} SP：超出 Champions 上限 ${over} SP。結果仍以這些能力值計算。`,
   "matchups.move": "招式",
   "matchups.damage": "傷害",
   "matchups.ko": "擊倒",

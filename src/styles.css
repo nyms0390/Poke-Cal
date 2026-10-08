@@ -4784,7 +4784,108 @@ textarea:focus-visible {
 }
 
 .matchups-results {
+  container-type: inline-size;
   background: var(--line);
+}
+
+.matchups-tool .builder-picks .matchups-nature {
+  grid-column: 1 / -1;
+}
+
+.matchups-sp-total.over {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.matchups-tool .builder-stat-row input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.matchups-jump,
+.matchups-edit-link {
+  display: none;
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.matchups-jump:hover,
+.matchups-jump:focus-visible,
+.matchups-edit-link:hover,
+.matchups-edit-link:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.matchups-set-line {
+  display: none;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.matchups-environment > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  min-height: 40px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.matchups-environment > summary strong {
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+}
+
+.matchups-environment:not([open]) {
+  padding-bottom: 0;
+}
+
+.matchups-jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.matchups-jump-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.matchups-jump-nav a:hover,
+.matchups-jump-nav a:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.matchups-jump-nav strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.matchups-method > summary {
+  color: var(--accent-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.matchups-method > p {
+  margin-top: 8px;
 }
 
 .matchups-overview,
@@ -4951,7 +5052,11 @@ textarea:focus-visible {
 
 .matchups-grid-cell.speed .matchups-grid-button {
   background: rgb(154 103 0 / 11%);
-  color: var(--warning);
+  color: var(--warning-dark);
+}
+
+.matchups-result.warning {
+  color: var(--warning-dark);
 }
 
 .matchups-grid-cell.win .matchups-grid-button {
@@ -5175,13 +5280,34 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
+@media (max-width: 1024px) {
+  .matchups-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matchups-results {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .matchups-jump,
+  .matchups-edit-link,
+  .matchups-set-line {
+    display: inline-flex;
+  }
+
+  .matchups-set-line {
+    display: block;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .matchups-row-summary::after {
     transition: none;
   }
 }
 
-@media (max-width: 720px) {
+@container (max-width: 620px) {
   .matchups-row-summary {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto 12px;
     grid-template-areas:
@@ -5213,7 +5339,24 @@ textarea:focus-visible {
   .matchups-detail {
     padding-left: 4px;
   }
+}
 
+/* Phone widths: give each hit its own half of a row and the result its own line. */
+@container (max-width: 439px) {
+  .matchups-row-summary {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 12px;
+    grid-template-areas:
+      "pokemon pokemon chevron"
+      "theirs ours chevron"
+      "result result chevron";
+  }
+
+  .matchups-row-summary > .matchups-result {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 720px) {
   .matchups-grid-corner,
   .matchups-grid tbody th {
     width: 72px;
