@@ -18,7 +18,7 @@ Ordinary spacing follows 4, 8, 12, 16, 24, 32, and 48px steps. Small optical adj
 
 ## Typography and data
 
-The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Keep visible field labels legible. The small uppercase label voice is reserved for compact metadata and field labels.
+The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Every page except lookup opens with the same title block as Matchups: the short page name as the title (the navigation label), a one-line subtitle, and the data-source line as quiet supporting text, not a tinted band. Panel headings are bold section titles in sentence case ("Your set", "Attacker", "Tournaments"), with any count beside them in small muted figures. Field labels and table headers are sentence case at the small text size. The small uppercase voice is reserved for compact metadata inside cards and phone rows (for example "Their move" or "Their set" labels) and the lookup stat strip.
 
 Use tabular numerals for stats, percentages, counts, damage ranges, Speed values, and aligned numeric columns. Use an em dash for unavailable values and keep units such as `%`, `SP`, `EV`, and multipliers explicit. Teal may emphasize a selected or primary number; semantic state colors keep their own meanings and must also have text or another non-color cue.
 
@@ -32,7 +32,7 @@ Tables remain tables for numerical comparison at wider sizes. On phones, move ta
 
 Buttons with the same role share height, padding, radius, border, hover, active, disabled, and focus treatment. Inline links used as explicit next actions receive a practical hit area. Destructive controls retain the existing confirmation safeguard. Motion is optional and only communicates state; any added motion must respect reduced-motion preferences.
 
-Pages that edit a set beside its results (Matchups, Builder, Battle Calculator) keep the editor inline on wide screens and move it into a bottom sheet at phone widths (720px and below) through `src/ui/set-sheet.js`. The sheet is a modal `<dialog>` with a title, a close button and one primary action that returns to the results; the page shows a compact summary card (sprite, name, nature and item) above its results and a pinned bar with the edit action and, where it matters, the SP budget. The editor element itself moves, so its controls and state are never duplicated. Battle Calculator has three sheets: attacker, defender and field.
+Matchups and Builder share one frame: a sticky set sidebar on the left, and the page title, source line, underline tabs and results on the right. Pages that edit a set beside its results (Matchups, Builder, Battle Calculator) keep the editor inline on wide screens and move it into a bottom sheet at phone widths (720px and below) through `src/ui/set-sheet.js`. The sheet is a modal `<dialog>` with a title, a close button and one primary action that returns to the results; the page shows a compact summary card (sprite, name, nature and item) above its results and a pinned bar with the edit action and, where it matters, the SP budget. The editor element itself moves, so its controls and state are never duplicated. Battle Calculator has three sheets: attacker, defender and field.
 
 ## States and responsive behavior
 

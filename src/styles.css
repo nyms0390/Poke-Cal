@@ -181,10 +181,26 @@ main {
   white-space: nowrap;
 }
 
-/* Compact metadata and field labels. */
+/* Field labels: sentence case, as on Matchups. */
 label,
-legend,
-.panel-heading span,
+legend {
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+/* Panel headings read as section titles, not metadata. */
+.panel-heading > span:first-child,
+.panel-heading > h2,
+.panel-heading > h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Compact metadata keeps the small uppercase voice. */
 .base-stat-total span {
   color: var(--muted);
   font-size: var(--text-xs);
@@ -216,16 +232,22 @@ h1 {
   line-height: 1.6;
 }
 
+/* The page title: a short page name and a one-line subtitle, as on Matchups. It joins the
+   working surface below into one white frame. */
 .page-intro {
-  padding: 18px 24px 20px;
+  padding: 24px var(--panel-pad) 12px;
   border: 1px solid var(--line);
   border-bottom: 0;
   background: var(--surface);
 }
 
+.page-intro + .calculator {
+  border-top: 0;
+}
+
 .page-intro h1 {
   max-width: none;
-  margin: 0 0 4px;
+  margin: 0 0 2px;
   font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   line-height: 1.25;
 }
@@ -233,6 +255,24 @@ h1 {
 .page-intro .intro {
   max-width: 85ch;
   line-height: 1.45;
+}
+
+/* Phones: the title sits on the canvas above the working surface, as on Matchups. */
+@media (max-width: 720px) {
+  .page-intro {
+    padding: 4px 4px 12px;
+    border: 0;
+    background: transparent;
+  }
+
+  .page-intro + .calculator {
+    border-top: 1px solid var(--line);
+    border-radius: var(--radius-card);
+  }
+
+  .page-intro + .calculator > .usage-source:first-child {
+    padding-top: 14px;
+  }
 }
 
 footer {
@@ -282,14 +322,18 @@ footer {
   background: var(--surface-soft);
 }
 
+/* The data-source line: quiet supporting text under the page title, as on Matchups. */
 .usage-source {
   margin: 0;
-  padding: 12px var(--panel-pad);
-  background: var(--surface-tint);
-  color: var(--accent-dark);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  padding: 0 var(--panel-pad) 14px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.set-page-content > .usage-source {
+  padding: 0;
+  background: transparent;
 }
 
 /* ---------- Limitless tournament teams ---------- */
@@ -703,9 +747,10 @@ footer {
 
 .panel-heading strong {
   min-width: 0;
-  color: var(--accent);
-  font-size: var(--text-lg);
+  color: var(--muted);
+  font-size: var(--text-sm);
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
@@ -1522,12 +1567,10 @@ button:disabled {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: var(--surface-tint);
+  background: var(--surface-soft);
   color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 .move-sort-button {
@@ -2074,12 +2117,10 @@ button:disabled {
 }
 
 .battle-stat-editor-header > span {
-  background: var(--surface-tint);
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 .battle-stat-editor-row:last-child > span {
@@ -2294,12 +2335,9 @@ button:disabled {
 
 .damage-result-column h3 {
   margin: 0 0 6px;
-  color: var(--muted);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-align: center;
-  text-transform: uppercase;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 700;
 }
 
 .damage-result-card {
@@ -2703,13 +2741,6 @@ button:disabled {
   background: var(--line);
 }
 
-.builder-layout {
-  display: grid;
-  grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
-  gap: 1px;
-  background: var(--surface);
-}
-
 .builder-editor,
 .speed-control-panel,
 .speed-toolbar {
@@ -2728,10 +2759,8 @@ button:disabled {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  gap: 1px;
+  gap: 12px;
   min-width: 0;
-  border-left: 1px solid var(--line);
-  background: var(--surface);
 }
 
 .builder-results > *,
@@ -2744,7 +2773,6 @@ button:disabled {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  padding: 10px var(--panel-pad);
   background: var(--surface);
   color: var(--muted);
   font-size: var(--text-sm);
@@ -2770,56 +2798,6 @@ button:disabled {
 .builder-sort-toggle[aria-pressed="true"] {
   background: var(--accent);
   color: white;
-}
-
-.builder-analysis-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
-}
-
-.builder-analysis-tab {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  min-width: 0;
-  border: 0;
-  border-bottom: 3px solid transparent;
-  padding: 14px var(--panel-pad) 11px;
-  background: var(--surface-soft);
-  color: var(--muted);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.builder-analysis-tab:hover,
-.builder-analysis-tab:focus-visible {
-  outline: none;
-  color: var(--accent-dark);
-  background: var(--accent-soft);
-}
-
-.builder-analysis-tab[aria-selected="true"] {
-  border-bottom-color: var(--accent);
-  background: var(--surface);
-  color: var(--ink);
-}
-
-.builder-analysis-tab > span {
-  min-width: 0;
-  font-weight: 700;
-}
-
-.builder-analysis-tab > strong {
-  min-width: 0;
-  color: var(--accent);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  text-align: right;
-  overflow-wrap: anywhere;
 }
 
 .builder-analysis-panel[hidden] {
@@ -2856,11 +2834,9 @@ button:disabled {
 
 .builder-stat-heading {
   margin-bottom: -10px;
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 .builder-stats {
@@ -3829,10 +3805,8 @@ details.builder-analysis-move > .builder-spread-grid {
   border-bottom: 1px solid var(--line);
   background: var(--surface-soft);
   color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 .speed-axis-row {
@@ -4000,17 +3974,11 @@ details.builder-analysis-move > .builder-spread-grid {
     min-height: 40px;
   }
 
-  .builder-layout,
   .speed-controls,
   .builder-picks,
   .builder-threat-filters,
   .speed-spread-controls {
     grid-template-columns: 1fr;
-  }
-
-  .builder-results {
-    border-top: 1px solid var(--line);
-    border-left: 0;
   }
 
   .builder-scenarios,
@@ -4767,11 +4735,11 @@ textarea:focus-visible {
   }
 }
 
-/* ---------- Matchups ---------- */
-/* A sticky set sidebar beside the results. At phone widths the sidebar moves into the set
-   sheet (see "Set sheet") and a summary card takes its place above the results. */
+/* ---------- Set page frame (Matchups, Builder) ---------- */
+/* A sticky set sidebar beside the page title and results. At phone widths the sidebar moves
+   into the set sheet (see "Set sheet") and a summary card takes its place above the results. */
 
-.matchups-page {
+.set-page {
   display: grid;
   grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
   grid-template-areas:
@@ -4785,24 +4753,24 @@ textarea:focus-visible {
 }
 
 /* The intro and results share the column divider, so it runs the full page height. */
-.matchups-intro {
+.set-page-intro {
   grid-area: intro;
   padding: 24px var(--panel-pad) 4px;
   border-left: 1px solid var(--line);
 }
 
-.matchups-intro h1 {
+.set-page-intro h1 {
   max-width: none;
   margin: 0 0 2px;
   font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   line-height: 1.25;
 }
 
-.matchups-intro .intro {
+.set-page-intro .intro {
   line-height: 1.45;
 }
 
-.matchups-content {
+.set-page-content {
   grid-area: content;
   display: grid;
   align-content: start;
@@ -4812,9 +4780,7 @@ textarea:focus-visible {
   border-left: 1px solid var(--line);
 }
 
-/* ----- Set editor (sidebar) ----- */
-
-.matchups-editor {
+.set-page-editor {
   grid-area: editor;
   display: grid;
   align-content: start;
@@ -4825,7 +4791,7 @@ textarea:focus-visible {
 }
 
 @media (min-width: 721px) {
-  .matchups-editor {
+  .set-page-editor {
     position: sticky;
     top: 0;
     align-self: start;
@@ -4835,16 +4801,119 @@ textarea:focus-visible {
   }
 }
 
-.matchups-editor-title {
+@media (max-width: 720px) {
+  .set-page {
+    display: block;
+    border: 0;
+    background: transparent;
+  }
+
+  .set-page-intro {
+    padding: 4px 4px 12px;
+    border-left: 0;
+  }
+
+  .set-page-content {
+    padding: 0;
+    gap: 12px;
+    border-left: 0;
+  }
+
+  .set-page-editor {
+    padding: 16px;
+    border-right: 0;
+  }
+
+  .page-tabs [role="tab"] {
+    flex: 1 1 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0;
+    padding-inline: 8px;
+  }
+
+  .page-tabs [role="tab"] > strong {
+    flex-basis: 100%;
+    text-align: center;
+  }
+}
+
+/* Builder's analyses sit in the frame's padded results column. */
+.builder-page .builder-analysis-panel {
+  padding: 4px 0 0;
+}
+
+/* Underline tabs shared by Matchups (Common / Beyond) and Builder (Bulk / Break). */
+.page-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-tabs [role="tab"] {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 0;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-bottom: -1px;
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--text-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-tabs [role="tab"][aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+.page-tabs [role="tab"]:hover {
+  color: var(--accent-dark);
+}
+
+.page-tabs [role="tab"]:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--accent-ring);
+}
+
+.page-tab-count {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.page-tabs [role="tab"] > strong {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.set-editor-title {
   margin: 0;
   font-size: var(--text-xl);
   letter-spacing: -0.01em;
 }
 
-.matchups-editor-subtitle {
+.set-editor-subtitle {
   margin: 0 0 8px;
   font-size: var(--text-lg);
 }
+
+/* ---------- Matchups ---------- */
 
 .matchups-pokemon-pick {
   display: grid;
@@ -5095,52 +5164,6 @@ textarea:focus-visible {
 }
 
 /* ----- Tabs and toolbar ----- */
-
-.matchups-tabs {
-  display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--line);
-}
-
-.matchups-tabs [role="tab"] {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  margin-bottom: -1px;
-  padding: 8px 16px;
-  border: 0;
-  border-bottom: 3px solid transparent;
-  background: transparent;
-  color: var(--muted);
-  font-size: var(--text-md);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.matchups-tabs [role="tab"][aria-selected="true"] {
-  border-bottom-color: var(--accent);
-  color: var(--accent-dark);
-}
-
-.matchups-tabs [role="tab"]:hover {
-  color: var(--accent-dark);
-}
-
-.matchups-tabs [role="tab"]:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 3px var(--accent-ring);
-}
-
-.matchups-tab-count {
-  min-width: 22px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: var(--surface-soft);
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-variant-numeric: tabular-nums;
-}
 
 .matchups-panel {
   display: grid;
@@ -5504,58 +5527,6 @@ textarea:focus-visible {
     var(--surface);
 }
 
-.matchups-view-toggle {
-  display: inline-flex;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-control);
-}
-
-.matchups-view-toggle button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 6px 14px;
-  border: 0;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.matchups-view-toggle button + button {
-  border-left: 1px solid var(--line);
-}
-
-.matchups-view-toggle button[aria-pressed="true"] {
-  background: var(--accent);
-  color: white;
-}
-
-.matchups-view-toggle button:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 3px var(--accent-ring);
-}
-
-.matchups-view-icon {
-  width: 14px;
-  height: 12px;
-  background: currentColor;
-}
-
-.matchups-view-icon.list {
-  mask: linear-gradient(#000 0 0) 0 0 / 100% 2px no-repeat, linear-gradient(#000 0 0) 0 5px / 100% 2px no-repeat,
-    linear-gradient(#000 0 0) 0 10px / 100% 2px no-repeat;
-}
-
-.matchups-view-icon.grid {
-  height: 14px;
-  mask: conic-gradient(#000 0 0) 0 0 / 6px 6px no-repeat, conic-gradient(#000 0 0) 8px 0 / 6px 6px no-repeat,
-    conic-gradient(#000 0 0) 0 8px / 6px 6px no-repeat, conic-gradient(#000 0 0) 8px 8px / 6px 6px no-repeat;
-}
-
 .matchups-filter {
   display: flex;
   flex-wrap: wrap;
@@ -5575,10 +5546,12 @@ textarea:focus-visible {
   font-weight: 600;
 }
 
+/* The turn grid sits in the overview card, under the share chart. */
 .matchups-grid-view {
   display: grid;
   gap: 8px;
-  padding: 4px 14px 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
 }
 
 .matchups-grid-wrap {
@@ -6240,34 +6213,6 @@ textarea:focus-visible {
 }
 
 @media (max-width: 720px) {
-  .matchups-page {
-    display: block;
-    border: 0;
-    background: transparent;
-  }
-
-  .matchups-intro {
-    padding: 4px 4px 12px;
-    border-left: 0;
-  }
-
-  .matchups-content {
-    padding: 0;
-    gap: 12px;
-    border-left: 0;
-  }
-
-  .matchups-editor {
-    padding: 16px;
-    border-right: 0;
-  }
-
-  .matchups-tabs [role="tab"] {
-    flex: 1 1 0;
-    justify-content: center;
-    padding-inline: 8px;
-  }
-
   .matchups-toolbar {
     display: grid;
   }
@@ -6314,24 +6259,10 @@ textarea:focus-visible {
     overflow: visible;
   }
 
-  /* Phones: [outcome select] [view toggle] on one line, the search under them. */
-  .matchups-results {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 12px 8px;
-  }
-
-  .matchups-results > * {
-    grid-column: 1 / -1;
-  }
-
-  .matchups-results > .matchups-results-bar {
-    grid-row: 1;
-    grid-column: 1;
+  /* Phones: the outcome select, then the search. */
+  .matchups-results-bar,
+  .matchups-results-tools {
     padding: 0;
-  }
-
-  .matchups-results > .matchups-results-tools {
-    display: contents;
   }
 
   .matchups-outcome-filter {
@@ -6362,33 +6293,12 @@ textarea:focus-visible {
     color: var(--success-dark);
   }
 
-  .matchups-results-tools > .matchups-search {
-    grid-row: 2;
-    grid-column: 1 / -1;
+  .matchups-search {
     max-width: none;
   }
 
   .matchups-search input {
     min-height: 44px;
-  }
-
-  /* The toggle shows only the view you can switch to. */
-  .matchups-results-tools > .matchups-view-toggle {
-    grid-row: 1;
-    grid-column: 2;
-    border: 0;
-    overflow: visible;
-  }
-
-  .matchups-view-toggle button,
-  .matchups-view-toggle button + button {
-    min-height: 44px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-control);
-  }
-
-  .matchups-view-toggle button[aria-pressed="true"] {
-    display: none;
   }
 
   .matchups-filter {
@@ -6414,13 +6324,6 @@ textarea:focus-visible {
 
   .matchups-list > li.matchups-empty {
     padding: 14px;
-  }
-
-  .matchups-grid-view {
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--surface);
   }
 
   .matchups-grid-corner,
@@ -6802,4 +6705,63 @@ html:has(dialog.set-sheet[open]) {
   .damage-controls:not(:has(> section)) {
     display: none;
   }
+}
+
+/* Wide overview card: the grid's title and hint sit beside the table instead of above it. */
+.matchups-glance {
+  container-type: inline-size;
+}
+
+@container (min-width: 760px) {
+  .matchups-grid-view {
+    grid-template-columns: minmax(180px, 1fr) minmax(0, 520px);
+    grid-template-areas:
+      "title table"
+      "help table";
+    grid-template-rows: auto 1fr;
+    column-gap: 32px;
+  }
+
+  .matchups-grid-view > h3 {
+    grid-area: title;
+  }
+
+  .matchups-grid-view > .matchups-grid-wrap {
+    grid-area: table;
+    max-width: none;
+  }
+
+  .matchups-grid-view > p {
+    grid-area: help;
+  }
+}
+
+/* Builder's sidebar editor follows the Matchups editor: Nature on its own row and the stats
+   in a bordered table with a shaded header. */
+.builder-page .builder-picks > label:first-child {
+  grid-column: 1 / -1;
+}
+
+.builder-page .builder-stat-heading {
+  margin-bottom: -14px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control) var(--radius-control) 0 0;
+  background: var(--surface-soft);
+}
+
+.builder-page .builder-stats {
+  gap: 0;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 0 0 var(--radius-control) var(--radius-control);
+}
+
+.builder-page .builder-stat-row:last-child {
+  border-bottom: 0;
+}
+
+/* Builder's editor carries a Stage column and Crit toggles, so its sidebar is a little wider. */
+.builder-page.set-page {
+  grid-template-columns: minmax(330px, 390px) minmax(0, 1fr);
 }

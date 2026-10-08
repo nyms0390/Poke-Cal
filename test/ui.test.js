@@ -1074,13 +1074,16 @@ test("matchups page exposes the overview, one filtered results list and the turn
   }
   assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
   assert.match(html, /<select id="matchups-speed-mode">/);
-  assert.match(html, /data-matchups-view="list" aria-pressed="true"/);
-  assert.match(html, /data-matchups-view="grid" aria-pressed="false"/);
+  // The turn grid is overview information: it sits in the overview card, not in a results view toggle.
+  const overview = html.match(/<section id="matchups-overview"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(overview, /id="matchups-grid"/);
+  assert.ok(overview.indexOf('id="matchups-share-legend"') < overview.indexOf('id="matchups-grid"'), "grid under the share chart");
+  assert.doesNotMatch(html, /data-matchups-view/);
 });
 
 test("matchups page keeps the method behind a disclosure and the set editor in one region", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  assert.match(html, /<section id="matchups-editor" class="matchups-editor"/);
+  assert.match(html, /<section id="matchups-editor" class="set-page-editor matchups-editor"/);
   assert.match(html, /href="#matchups-overview"/);
   assert.match(html, /<details class="matchups-environment">/);
   assert.match(html, /<details class="matchups-method">\s*<summary data-i18n="matchups\.method">/);
@@ -1123,6 +1126,21 @@ test("set-editing pages name the editors and summary hosts the phone sheets use"
     const source = readFileSync(new URL(`../src/ui/${controller}.js`, import.meta.url), "utf8");
     assert.match(source, /mountSetSheet\(/, page);
     assert.match(source, /mountSheetBar\(/, page);
+  }
+});
+
+test("Builder shares the Matchups set-page frame and every page title is a short page name", () => {
+  const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+  for (const page of ["builder.html", "matchups.html"]) {
+    const html = read(page);
+    assert.match(html, /class="set-page [^"]*"/, page);
+    assert.match(html, /class="set-page-intro"/, page);
+    assert.match(html, /class="set-page-editor [^"]*"/, page);
+    assert.match(html, /class="set-page-content"/, page);
+  }
+  assert.match(read("builder.html"), /class="page-tabs builder-analysis-tabs" role="tablist"/);
+  for (const [page, title] of [["battle.html", "Battle Calculator"], ["builder.html", "Builder"], ["speed.html", "Speed Tiers"]]) {
+    assert.match(read(page), new RegExp(`<h1>${title}</h1>`), page);
   }
 });
 
