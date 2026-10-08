@@ -33,14 +33,14 @@
           </label>
         </nav>
       </header>
-      <div class="set-page matchups-page">
-        <div class="set-page-intro">
+      <div class="matchups-page">
+        <div class="matchups-intro">
           <h1 data-i18n="matchups.title">Matchups</h1>
           <p class="intro" data-i18n="matchups.intro">Find the threats to your set.</p>
         </div>
 
-        <section id="matchups-editor" class="set-page-editor matchups-editor" aria-labelledby="matchups-set-heading">
-          <h2 id="matchups-set-heading" class="set-editor-title sheet-hidden" data-i18n="matchups.yourSet">Your set</h2>
+        <section id="matchups-editor" class="matchups-editor" aria-labelledby="matchups-set-heading">
+          <h2 id="matchups-set-heading" class="matchups-editor-title sheet-hidden" data-i18n="matchups.yourSet">Your set</h2>
           <div class="matchups-pokemon-pick">
             <span id="matchups-sprite" class="matchups-sprite" aria-hidden="true"></span>
             <div class="matchups-pokemon-field">
@@ -89,7 +89,7 @@
             <span class="matchups-sp-meter" aria-hidden="true"><span id="matchups-sp-meter-fill"></span></span>
           </div>
           <section class="matchups-moves" aria-labelledby="matchups-moves-heading">
-            <h3 id="matchups-moves-heading" class="set-editor-subtitle" data-i18n="matchups.moves">Moves</h3>
+            <h3 id="matchups-moves-heading" class="matchups-editor-subtitle" data-i18n="matchups.moves">Moves</h3>
             <div id="matchups-move-picks" class="matchups-move-picks"></div>
           </section>
           <details class="matchups-environment">
@@ -105,16 +105,16 @@
           <p class="matchups-auto-note" data-i18n="matchups.autoUpdate">Changes update results automatically.</p>
         </section>
 
-        <div class="set-page-content">
+        <div class="matchups-content">
           <div id="matchups-summary-card" class="matchups-summary-card"></div>
 
-          <div class="page-tabs" role="tablist" aria-label="Matchup sets" data-i18n-aria-label="matchups.tabsLabel">
+          <div class="matchups-tabs" role="tablist" aria-label="Matchup sets" data-i18n-aria-label="matchups.tabsLabel">
             <button id="matchups-tab-common" type="button" role="tab" aria-selected="true" aria-controls="matchups-common-panel" data-matchups-tab="common">
               <span data-i18n="matchups.commonSets">Common sets</span>
             </button>
             <button id="matchups-tab-beyond" type="button" role="tab" aria-selected="false" aria-controls="matchups-beyond-panel" data-matchups-tab="beyond" tabindex="-1">
               <span data-i18n="matchups.beyondTab">Beyond usual sets</span>
-              <span id="matchups-tab-beyond-count" class="page-tab-count">…</span>
+              <span id="matchups-tab-beyond-count" class="matchups-tab-count">…</span>
             </button>
           </div>
 
@@ -141,31 +141,6 @@
               <div id="matchups-share-bar" class="matchups-share-bar" aria-hidden="true"></div>
               <ul id="matchups-share-legend" class="matchups-share-legend"></ul>
               <p id="matchups-share-note" class="matchups-share-note">—</p>
-              <div id="matchups-grid-view" class="matchups-grid-view">
-                <h3 class="matchups-subheading" data-i18n="matchups.gridTitle">Turns to KO</h3>
-                <div class="matchups-grid-wrap">
-                  <table id="matchups-grid" class="matchups-grid">
-                    <caption data-i18n="matchups.gridCaption">
-                      Opponents by turns they need to KO you (rows) and turns you need to KO them (columns)
-                    </caption>
-                    <thead>
-                      <tr>
-                        <td></td>
-                        <th scope="colgroup" colspan="4" data-i18n="matchups.youKoIn">You KO them in</th>
-                      </tr>
-                      <tr>
-                        <th scope="col" class="matchups-grid-corner" data-i18n="matchups.theyKoIn">They KO you in</th>
-                        <th scope="col">1</th>
-                        <th scope="col">2</th>
-                        <th scope="col">3</th>
-                        <th scope="col">4+</th>
-                      </tr>
-                    </thead>
-                    <tbody id="matchups-grid-body"></tbody>
-                  </table>
-                </div>
-                <p class="builder-assumption" data-i18n="matchups.gridHelp">Pick a cell to list those opponents.</p>
-              </div>
             </section>
 
             <div class="matchups-model-note">
@@ -202,10 +177,39 @@
                     data-i18n-placeholder="matchups.findOpponent"
                   />
                 </div>
+                <div class="matchups-view-toggle" role="group" aria-label="View" data-i18n-aria-label="matchups.viewLabel">
+                  <button type="button" data-matchups-view="list" aria-pressed="true"><span class="matchups-view-icon list" aria-hidden="true"></span><span data-i18n="matchups.listView">List</span></button>
+                  <button type="button" data-matchups-view="grid" aria-pressed="false"><span class="matchups-view-icon grid" aria-hidden="true"></span><span data-i18n="matchups.gridView">Turn grid</span></button>
+                </div>
               </div>
               <div class="matchups-filter" id="matchups-filter" hidden>
                 <p id="matchups-filter-text" role="status" aria-live="polite"></p>
                 <button id="matchups-filter-clear" type="button" data-i18n="matchups.clearFilter">Show all</button>
+              </div>
+
+              <div id="matchups-grid-view" class="matchups-grid-view" hidden>
+                <div class="matchups-grid-wrap">
+                  <table id="matchups-grid" class="matchups-grid">
+                    <caption data-i18n="matchups.gridCaption">
+                      Opponents by turns they need to KO you (rows) and turns you need to KO them (columns)
+                    </caption>
+                    <thead>
+                      <tr>
+                        <td></td>
+                        <th scope="colgroup" colspan="4" data-i18n="matchups.youKoIn">You KO them in</th>
+                      </tr>
+                      <tr>
+                        <th scope="col" class="matchups-grid-corner" data-i18n="matchups.theyKoIn">They KO you in</th>
+                        <th scope="col">1</th>
+                        <th scope="col">2</th>
+                        <th scope="col">3</th>
+                        <th scope="col">4+</th>
+                      </tr>
+                    </thead>
+                    <tbody id="matchups-grid-body"></tbody>
+                  </table>
+                </div>
+                <p class="builder-assumption" data-i18n="matchups.gridHelp">Pick a cell to list those opponents.</p>
               </div>
 
               <div id="matchups-list-view" class="matchups-list-view">
