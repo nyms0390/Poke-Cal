@@ -33,6 +33,7 @@ import {
   pokemonSearchMatchers,
   searchResultButton,
 } from "./components.js";
+import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { createLiveUpdater } from "./live-update.js";
 
 const elements = {
@@ -77,6 +78,16 @@ let popularOpponents = [];
 let manualOpponents = [];
 let unavailableRequestId = "";
 const updatePage = createLiveUpdater(render);
+
+const settingsSheet = mountSetSheet({
+  editor: document.querySelector("#speed-editor"),
+  id: "speed-settings-sheet",
+  titleKey: "speed.settings",
+  editKey: "speed.editSettings",
+  doneKey: "sheet.viewResults",
+  summaryHost: document.querySelector("#speed-summary-card"),
+});
+mountSheetBar({ actions: [{ sheet: settingsSheet, labelKey: "speed.editSettings" }] });
 
 initI18n();
 initialize();
@@ -300,6 +311,7 @@ function render() {
   elements.userSummary.textContent = battle
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
+  settingsSheet.update({ pokemon: user.pokemon, meta: elements.userSummary.textContent });
   const popularCount = Number(elements.popularCount.value);
   elements.popularSummary.textContent = t("speed.popularSummary", { count: popularCount });
   elements.source.textContent = battle

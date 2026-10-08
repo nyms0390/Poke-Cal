@@ -33,17 +33,13 @@
           </label>
         </nav>
       </header>
-      <div class="page-intro">
-        <h1 data-i18n="teams.title">Find tournament teams.</h1>
-        <p class="intro" data-i18n="teams.intro">
-          Search for Pokémon together on a submitted team, or browse completed Champions brackets.
-        </p>
-      </div>
-
-      <section class="calculator teams-tool" aria-label="Tournament teams">
-        <p id="teams-source" class="usage-source">Loading Limitless tournament teams…</p>
-
-        <form id="teams-search-form" class="catalog-panel teams-search" aria-label="Team search" data-i18n-aria-label="teams.searchLabel">
+      <div class="workspace teams-tool">
+        <div class="workspace-intro">
+          <h1 data-i18n="nav.teams">Teams</h1>
+          <p class="intro" data-i18n="teams.intro">Search for Pokémon together on a submitted team, or browse completed Champions brackets.</p>
+        </div>
+        <form id="teams-search-form" class="workspace-sidebar teams-search" aria-label="Team search" data-i18n-aria-label="teams.searchLabel">
+          <h2 class="workspace-sidebar-title" data-i18n="teams.searchLabel">Team search</h2>
           <div class="teams-search-fields">
             <label class="teams-regulation-field" for="teams-regulation">
               <span data-i18n="teams.regulation">Champions regulation</span>
@@ -64,19 +60,21 @@
           <p id="teams-search-help" class="teams-search-help" data-i18n="teams.searchHelp">Type part of an English or Chinese name and choose a suggestion. Separate up to 6 Pokémon with +. Leave blank to browse.</p>
           <p id="teams-search-status" class="teams-search-status" role="status" aria-live="polite" aria-atomic="true"></p>
         </form>
-
-        <section class="catalog-panel teams-archive-panel" aria-labelledby="teams-archive-heading">
-          <div class="panel-heading">
-            <span id="teams-archive-heading" data-i18n="teams.archive">Tournaments</span>
-            <strong id="teams-count" role="status" aria-live="polite" aria-atomic="true">—</strong>
-          </div>
-          <p id="teams-note" class="teams-note" data-i18n="teams.spNote">
-            Limitless does not publish SP or EV spreads for these team lists.
-          </p>
-          <div id="teams-archive" class="teams-archive" data-i18n-skip></div>
-          <button id="teams-more" class="teams-more" type="button" aria-controls="teams-archive" hidden disabled>Show 10 more</button>
-        </section>
-      </section>
+        <div class="workspace-content">
+          <p id="teams-source" class="usage-source">Loading Limitless tournament teams…</p>
+          <section class="catalog-panel teams-archive-panel" aria-labelledby="teams-archive-heading">
+            <div class="panel-heading">
+              <span id="teams-archive-heading" data-i18n="teams.archive">Tournaments</span>
+              <strong id="teams-count" role="status" aria-live="polite" aria-atomic="true">—</strong>
+            </div>
+            <p id="teams-note" class="teams-note" data-i18n="teams.spNote">
+              Limitless does not publish SP or EV spreads for these team lists.
+            </p>
+            <div id="teams-archive" class="teams-archive" data-i18n-skip></div>
+            <button id="teams-more" class="teams-more" type="button" aria-controls="teams-archive" hidden disabled>Show 10 more</button>
+          </section>
+        </div>
+      </div>
 
       <footer>
         <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>

@@ -1074,13 +1074,16 @@ test("matchups page exposes the overview, one filtered results list and the turn
   }
   assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
   assert.match(html, /<select id="matchups-speed-mode">/);
-  assert.match(html, /data-matchups-view="list" aria-pressed="true"/);
-  assert.match(html, /data-matchups-view="grid" aria-pressed="false"/);
+  const overview = html.match(/<section id="matchups-overview"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(overview, /id="matchups-grid-view"[^>]*>/);
+  assert.doesNotMatch(overview, /id="matchups-grid-view"[^>]*hidden/);
+  assert.ok(overview.indexOf('id="matchups-share-note"') < overview.indexOf('id="matchups-grid-view"'));
+  assert.doesNotMatch(html, /data-matchups-view/);
 });
 
 test("matchups page keeps the method behind a disclosure and the set editor in one region", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  assert.match(html, /<section id="matchups-editor" class="matchups-editor"/);
+  assert.match(html, /<section id="matchups-editor" class="matchups-editor workspace-sidebar"/);
   assert.match(html, /href="#matchups-overview"/);
   assert.match(html, /<details class="matchups-environment">/);
   assert.match(html, /<details class="matchups-method">\s*<summary data-i18n="matchups\.method">/);
@@ -1119,11 +1122,29 @@ test("set-editing pages name the editors and summary hosts the phone sheets use"
   for (const id of ["attacker-editor", "defender-editor", "field-editor", "attacker-summary-card", "defender-summary-card", "field-summary-card"]) {
     assert.match(battle, new RegExp(`id="${id}"`), id);
   }
-  for (const [page, controller] of [["matchups.html", "matchups-page"], ["builder.html", "builder-page"], ["battle.html", "battle-page"]]) {
+  for (const [page, controller] of [["matchups.html", "matchups-page"], ["builder.html", "builder-page"], ["battle.html", "battle-page"], ["speed.html", "speed-page"]]) {
     const source = readFileSync(new URL(`../src/ui/${controller}.js`, import.meta.url), "utf8");
     assert.match(source, /mountSetSheet\(/, page);
     assert.match(source, /mountSheetBar\(/, page);
   }
+});
+
+test("every route uses the shared Matchups workspace", () => {
+  const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+  for (const page of ["moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+    const html = read(page);
+    assert.match(html, /class="workspace[ "]/, page);
+    assert.match(html, /<div class="workspace-intro">\s*<h1/, page);
+    assert.match(html, /class="[^"]*workspace-sidebar[^"]*"/, page);
+    assert.match(html, /<div class="workspace-content">/, page);
+    assert.doesNotMatch(html, /class="page-intro"/, page);
+  }
+  const lookup = read("index.html");
+  assert.match(lookup, /class="search-panel workspace-sidebar"/);
+  assert.match(lookup, /class="tool-page workspace-content"/);
+  const battle = read("battle.html");
+  assert.equal((battle.match(/<details class="battle-set-panel" name="battle-side"/g) ?? []).length, 2);
+  assert.match(battle, /<details class="battle-environment">[\s\S]*id="field-editor"/);
 });
 
 test("the set sheet breakpoint matches the stylesheet", async () => {

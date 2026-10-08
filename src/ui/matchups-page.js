@@ -113,9 +113,6 @@ const elements = {
   outcomeFilter: document.querySelector("#matchups-outcome-filter"),
   outcomeSelect: document.querySelector("#matchups-outcome-select"),
   opponentSearch: document.querySelector("#matchups-opponent-search"),
-  viewButtons: [...document.querySelectorAll("[data-matchups-view]")],
-  gridView: document.querySelector("#matchups-grid-view"),
-  listView: document.querySelector("#matchups-list-view"),
   list: document.querySelector("#matchups-list"),
   showing: document.querySelector("#matchups-showing"),
 };
@@ -149,7 +146,6 @@ let state = {
   cell: null,
   filter: DEFAULT_FILTER,
   query: "",
-  view: "list",
   tab: "common",
 };
 const phoneQuery = globalThis.matchMedia?.(SHEET_MEDIA_QUERY);
@@ -497,14 +493,6 @@ function bindResultControls() {
     state = { ...state, query: event.target.value };
     renderResults();
   });
-  for (const button of elements.viewButtons) {
-    button.addEventListener("click", () => {
-      setView(button.dataset.matchupsView);
-      // On phones the pressed button is hidden, so keep focus on the toggle that is still there.
-      const visible = elements.viewButtons.find((other) => other.offsetParent !== null);
-      if (button.offsetParent === null) visible?.focus();
-    });
-  }
   elements.filterClear.addEventListener("click", () => {
     state = { ...state, cell: null };
     renderAnalysis();
@@ -539,21 +527,6 @@ function setFilter(filter) {
   if (!FILTERS.some(({ key }) => key === filter)) return;
   state = { ...state, filter };
   renderResults();
-}
-
-function setView(view) {
-  state = { ...state, view };
-  renderView();
-}
-
-function renderView() {
-  const grid = state.view === "grid";
-  elements.gridView.hidden = !grid;
-  elements.listView.hidden = grid;
-  elements.showing.hidden = grid;
-  for (const button of elements.viewButtons) {
-    button.setAttribute("aria-pressed", String(button.dataset.matchupsView === state.view));
-  }
 }
 
 function buildOutcomeFilter() {
@@ -604,7 +577,6 @@ function renderResults() {
   }
   elements.outcomeSelect.value = state.filter;
   elements.outcomeSelect.className = `matchups-outcome-select ${FILTERS.find(({ key }) => key === state.filter)?.className ?? "all"}`;
-  renderView();
 
   const rows = filteredRows(sections);
   const total = counts[state.filter];
@@ -900,13 +872,16 @@ function hitsBucketLabel(bucket) {
   return bucket === 4 ? "4+" : String(bucket);
 }
 
-// Picking a cell lists exactly those opponents: switch to the list, show every outcome, and
+// Picking a global grid cell lists exactly those opponents: clear search, show every outcome, and
 // keep focus on the control that undoes it.
 function toggleCell(theirs, ours) {
   const same = state.cell?.theirs === theirs && state.cell?.ours === ours;
-  state = same ? { ...state, cell: null } : { ...state, cell: { theirs, ours }, filter: "all", view: "list" };
+  state = same ? { ...state, cell: null } : { ...state, cell: { theirs, ours }, filter: "all", query: "" };
   renderAnalysis();
-  if (!same) elements.filterClear.focus();
+  if (!same) {
+    elements.opponentSearch.value = "";
+    elements.filterClear.focus();
+  }
 }
 
 function renderGrid(summary) {

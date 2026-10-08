@@ -33,55 +33,116 @@
           </label>
         </nav>
       </header>
-      <div class="page-intro">
-        <h1>Turn matchups into useful SP targets.</h1>
-        <p class="intro">
-          Configure one Pokémon, then compare defensive bulk and offensive break points
-          against the most-used Champions threats.
-        </p>
-      </div>
+      <div class="workspace builder-tool builder-workspace">
+        <div class="workspace-intro">
+          <h1 data-i18n="nav.builder">Builder</h1>
+          <p class="intro">Turn matchups into useful SP targets.</p>
+        </div>
+        <section id="builder-editor" class="builder-editor workspace-sidebar" aria-label="Your Pokémon">
+          <div class="panel-heading sheet-hidden">
+            <span>Your Pokémon</span>
+            <strong id="builder-summary">—</strong>
+          </div>
 
-      <section class="calculator builder-tool" aria-label="Pokémon builder">
-        <p id="builder-source" class="usage-source">Champions defaults loading…</p>
-        <div id="builder-summary-card" class="sheet-summary-host"></div>
+          <label class="pokemon-search-label" for="builder-pokemon-search">Pokémon</label>
+          <div class="pokemon-combobox">
+            <input
+              id="builder-pokemon-search"
+              name="builder-pokemon-search"
+              type="search"
+              autocomplete="off"
+              role="combobox"
+              aria-controls="builder-pokemon-results"
+              aria-expanded="false"
+            />
+            <div id="builder-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+          </div>
 
-        <div class="builder-layout">
-          <section id="builder-editor" class="builder-editor" aria-label="Your Pokémon">
-            <div class="panel-heading sheet-hidden">
-              <span>Your Pokémon</span>
-              <strong id="builder-summary">—</strong>
+          <div class="builder-picks">
+            <label>
+              Nature
+              <select id="builder-nature"></select>
+            </label>
+            <label>
+              Ability
+              <select id="builder-ability"></select>
+            </label>
+            <label>
+              Item
+              <select id="builder-item"></select>
+            </label>
+            <label>
+              Status
+              <select id="builder-status">
+                <option value="">Healthy</option>
+                <option value="burn">Burned</option>
+                <option value="poison">Poisoned</option>
+                <option value="toxic">Badly Poisoned</option>
+                <option value="paralysis">Paralyzed</option>
+                <option value="sleep">Asleep</option>
+                <option value="freeze">Frozen</option>
+                <option value="soak">Soaked</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="builder-stat-heading" aria-hidden="true">
+            <span>Stat</span><span>Base</span><span>SP</span><span>Stage</span><span>Final</span>
+          </div>
+          <div
+            id="builder-stats"
+            class="builder-stats"
+            aria-label="Final stats"
+            data-i18n-aria-label="builder.finalStats"
+          ></div>
+          <p id="builder-sp-budget" class="builder-sp-budget">—</p>
+
+          <section class="builder-moves" aria-label="Selected moves">
+            <div class="panel-heading">
+              <span>Your moves</span>
+              <strong>4 slots</strong>
             </div>
+            <div id="builder-move-picks" class="builder-move-picks"></div>
+          </section>
+          <button
+            id="builder-apply-spread"
+            class="builder-apply-button"
+            type="button"
+            data-i18n="builder.applySpread"
+            disabled
+          >
+            Apply spread
+          </button>
 
-            <label class="pokemon-search-label" for="builder-pokemon-search">Pokémon</label>
-            <div class="pokemon-combobox">
-              <input
-                id="builder-pokemon-search"
-                name="builder-pokemon-search"
-                type="search"
-                autocomplete="off"
-                role="combobox"
-                aria-controls="builder-pokemon-results"
-                aria-expanded="false"
-              />
-              <div id="builder-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+          <section class="builder-field-settings" aria-label="Battle environment">
+            <div class="panel-heading">
+              <span data-i18n="field.environment">Environment</span>
             </div>
+            <div id="builder-ambient-field"></div>
+            <p class="builder-assumption" data-i18n="builder.environmentAssumption">
+              All matchups use this environment. Opponent abilities do not change it automatically.
+            </p>
+          </section>
 
-            <div class="builder-picks">
-              <label>
-                Nature
-                <select id="builder-nature"></select>
+          <section class="builder-threat-controls" aria-label="Test opponents">
+            <div class="panel-heading">
+              <span>Test against</span>
+              <strong id="builder-threat-summary">Top 20</strong>
+            </div>
+            <div class="builder-threat-filters">
+              <label class="builder-threat-count" for="builder-threat-count">
+                Popular Pokémon
+                <select id="builder-threat-count">
+                  <option value="10">Top 10</option>
+                  <option value="20" selected>Top 20</option>
+                  <option value="30">Top 30</option>
+                  <option value="40">Top 40</option>
+                  <option value="50">Top 50</option>
+                </select>
               </label>
-              <label>
-                Ability
-                <select id="builder-ability"></select>
-              </label>
-              <label>
-                Item
-                <select id="builder-item"></select>
-              </label>
-              <label>
-                Status
-                <select id="builder-status">
+              <label class="builder-threat-status" for="builder-threat-status">
+                Threat status
+                <select id="builder-threat-status">
                   <option value="">Healthy</option>
                   <option value="burn">Burned</option>
                   <option value="poison">Poisoned</option>
@@ -93,103 +154,36 @@
                 </select>
               </label>
             </div>
-
-            <div class="builder-stat-heading" aria-hidden="true">
-              <span>Stat</span><span>Base</span><span>SP</span><span>Stage</span><span>Final</span>
+            <label class="pokemon-search-label" for="builder-threat-search">Add custom Pokémon</label>
+            <div class="pokemon-combobox">
+              <input
+                id="builder-threat-search"
+                name="builder-threat-search"
+                type="search"
+                autocomplete="off"
+                role="combobox"
+                aria-controls="builder-threat-results"
+                aria-expanded="false"
+              />
+              <div id="builder-threat-results" class="search-results pokemon-search-results" hidden></div>
             </div>
             <div
-              id="builder-stats"
-              class="builder-stats"
-              aria-label="Final stats"
-              data-i18n-aria-label="builder.finalStats"
+              id="builder-custom-threats"
+              class="builder-threat-chips"
+              aria-label="Custom test opponents"
             ></div>
-            <p id="builder-sp-budget" class="builder-sp-budget">—</p>
-
-            <section class="builder-moves" aria-label="Selected moves">
-              <div class="panel-heading">
-                <span>Your moves</span>
-                <strong>4 slots</strong>
-              </div>
-              <div id="builder-move-picks" class="builder-move-picks"></div>
-            </section>
-            <button
-              id="builder-apply-spread"
-              class="builder-apply-button"
-              type="button"
-              data-i18n="builder.applySpread"
-              disabled
-            >
-              Apply spread
-            </button>
-
-            <section class="builder-field-settings" aria-label="Battle environment">
-              <div class="panel-heading">
-                <span data-i18n="field.environment">Environment</span>
-              </div>
-              <div id="builder-ambient-field"></div>
-              <p class="builder-assumption" data-i18n="builder.environmentAssumption">
-                All matchups use this environment. Opponent abilities do not change it automatically.
-              </p>
-            </section>
-
-            <section class="builder-threat-controls" aria-label="Test opponents">
-              <div class="panel-heading">
-                <span>Test against</span>
-                <strong id="builder-threat-summary">Top 20</strong>
-              </div>
-              <div class="builder-threat-filters">
-                <label class="builder-threat-count" for="builder-threat-count">
-                  Popular Pokémon
-                  <select id="builder-threat-count">
-                    <option value="10">Top 10</option>
-                    <option value="20" selected>Top 20</option>
-                    <option value="30">Top 30</option>
-                    <option value="40">Top 40</option>
-                    <option value="50">Top 50</option>
-                  </select>
-                </label>
-                <label class="builder-threat-status" for="builder-threat-status">
-                  Threat status
-                  <select id="builder-threat-status">
-                    <option value="">Healthy</option>
-                    <option value="burn">Burned</option>
-                    <option value="poison">Poisoned</option>
-                    <option value="toxic">Badly Poisoned</option>
-                    <option value="paralysis">Paralyzed</option>
-                    <option value="sleep">Asleep</option>
-                    <option value="freeze">Frozen</option>
-                    <option value="soak">Soaked</option>
-                  </select>
-                </label>
-              </div>
-              <label class="pokemon-search-label" for="builder-threat-search">Add custom Pokémon</label>
-              <div class="pokemon-combobox">
-                <input
-                  id="builder-threat-search"
-                  name="builder-threat-search"
-                  type="search"
-                  autocomplete="off"
-                  role="combobox"
-                  aria-controls="builder-threat-results"
-                  aria-expanded="false"
-                />
-                <div id="builder-threat-results" class="search-results pokemon-search-results" hidden></div>
-              </div>
-              <div
-                id="builder-custom-threats"
-                class="builder-threat-chips"
-                aria-label="Custom test opponents"
-              ></div>
-            </section>
-
-            <a id="builder-speed-link" class="common-build-calculator" href="./speed.html">
-              Open full speed tiers →
-            </a>
-            <a id="builder-matchups-link" class="common-build-calculator" href="./matchups.html">
-              Check matchups →
-            </a>
           </section>
 
+          <a id="builder-speed-link" class="common-build-calculator" href="./speed.html">
+            Open full speed tiers →
+          </a>
+          <a id="builder-matchups-link" class="common-build-calculator" href="./matchups.html">
+            Check matchups →
+          </a>
+        </section>
+        <div class="workspace-content">
+          <div id="builder-summary-card" class="sheet-summary-host"></div>
+          <p id="builder-source" class="usage-source">Champions defaults loading…</p>
           <div class="builder-results">
             <div id="builder-sort-toolbar" class="builder-analysis-toolbar">
               <span>Sort Pokémon</span>
@@ -271,7 +265,7 @@
             </section>
           </div>
         </div>
-      </section>
+      </div>
 
       <footer>
         <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>

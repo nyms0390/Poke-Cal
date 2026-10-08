@@ -33,332 +33,334 @@
           </label>
         </nav>
       </header>
-      <div class="page-intro">
-        <h1>Compare two Pokémon in battle.</h1>
-        <p class="intro">
-          Set both sides, choose moves, apply battle conditions, and compare
-          move order with damage ranges.
-        </p>
+      <div class="workspace battle-tool">
+        <div class="workspace-intro">
+          <h1 data-i18n="nav.battle">Battle Calculator</h1>
+          <p class="intro">Compare two Pokémon in battle.</p>
+        </div>
+        <div class="workspace-sidebar battle-sidebar">
+          <details class="battle-set-panel" name="battle-side" open>
+            <summary>Attacker</summary>
+            <section id="attacker-editor" class="damage-side" aria-label="Attacker">
+              <div class="panel-heading sheet-hidden">
+                <span>Attacker</span>
+                <div class="battle-side-summary">
+                  <strong id="attacker-summary">—</strong>
+                  <div id="attacker-pokemon-sprite" class="battle-pokemon-sprite"></div>
+                </div>
+              </div>
+              <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
+              <div id="attacker-team-slots" class="team-slots" aria-label="Attacker team slots" hidden></div>
+
+              <label class="pokemon-search-label" for="attacker-pokemon-search">Pokémon</label>
+              <div class="battle-pokemon-picker">
+                <div class="pokemon-combobox">
+                  <input id="attacker-pokemon" type="hidden" />
+                  <input
+                    id="attacker-pokemon-search"
+                    name="attacker-pokemon-search"
+                    type="search"
+                    autocomplete="off"
+                    role="combobox"
+                    aria-controls="attacker-pokemon-results"
+                    aria-expanded="false"
+                  />
+                  <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+                </div>
+              </div>
+              <div class="saved-set-controls">
+                <label>
+                  Set
+                  <select id="attacker-saved-set"></select>
+                </label>
+                <button id="attacker-save-set" type="button">Save set…</button>
+                <button id="attacker-delete-set" type="button">Delete</button>
+                <label>
+                  Spread
+                  <select id="attacker-spread"></select>
+                </label>
+              </div>
+              <div id="attacker-stat-editor" class="battle-stat-editor" aria-label="Attacker stats"></div>
+              <div class="damage-picks">
+                <label>
+                  Nature
+                  <select id="attacker-nature"></select>
+                </label>
+                <label>
+                  Ability
+                  <select id="attacker-ability"></select>
+                </label>
+                <label>
+                  Item
+                  <select id="attacker-item"></select>
+                </label>
+                <label>
+                  Status
+                  <select id="attacker-status">
+                    <option value="">Healthy</option>
+                    <option value="burn">Burned</option>
+                    <option value="poison">Poisoned</option>
+                    <option value="toxic">Badly Poisoned</option>
+                    <option value="paralysis">Paralyzed</option>
+                    <option value="sleep">Asleep</option>
+                    <option value="freeze">Frozen</option>
+                    <option value="soak">Soaked</option>
+                  </select>
+                </label>
+              </div>
+              <div class="stat-inputs hp-inputs" aria-label="Attacker current HP">
+                <label>Current HP
+                  <span><input id="attacker-current-hp" type="number" step="1" /><span id="attacker-max-hp"> / —</span></span>
+                </label>
+                <label>Current HP %<input id="attacker-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
+              </div>
+              <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
+              <div class="damage-picks speed-row">
+                <label>
+                  Speed modifier
+                  <select id="attacker-speed-multiplier">
+                    <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                    <option value="1" selected>None ×1.0</option>
+                    <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                    <option value="2">Swift Swim or equivalent ×2.0</option>
+                  </select>
+                </label>
+                <output id="attacker-speed-readout" aria-label="Attacker final Speed">Speed —</output>
+                <label class="inline-toggle unburden-control" hidden>
+                  <input id="attacker-item-consumed" type="checkbox" data-kind="item-consumed" data-side="attacker" />
+                  <span id="attacker-item-consumed-label">Item used up (Unburden active)</span>
+                </label>
+              </div>
+              <details class="assumption-panel">
+                <summary>Assumptions</summary>
+                <div class="inline-toggles">
+                  <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="attacker" /> Ally has Plus/Minus</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="attacker" /> Switched in this turn</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="booster-energy" data-side="attacker" /> Booster Energy active</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="ice-face-intact" data-side="attacker" checked /> Ice Face intact</label>
+                  <label class="inline-toggle">Rivalry
+                    <select data-kind="rivalry" data-side="attacker">
+                      <option value="off">Off</option>
+                      <option value="same">Same gender</option>
+                      <option value="opposite">Opposite gender</option>
+                    </select>
+                  </label>
+                  <label class="inline-toggle">Fainted allies
+                    <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="attacker" />
+                  </label>
+                  <label class="inline-toggle type-change-control" hidden>
+                    <input id="attacker-type-change-used" type="checkbox" data-kind="type-change-used" data-side="attacker" />
+                    <span id="attacker-type-change-used-label">Already activated</span>
+                  </label>
+                  <label class="inline-toggle type-change-control" hidden>
+                    <span id="attacker-type-change-type-label">Current type</span>
+                    <select id="attacker-type-change-type" data-kind="type-change-type" data-side="attacker"></select>
+                  </label>
+                </div>
+              </details>
+            </section>
+          </details>
+          <details class="battle-set-panel" name="battle-side">
+            <summary>Defender</summary>
+            <section id="defender-editor" class="damage-side" aria-label="Defender">
+              <div class="panel-heading sheet-hidden">
+                <span>Defender</span>
+                <div class="battle-side-summary">
+                  <strong id="defender-summary">—</strong>
+                  <div id="defender-pokemon-sprite" class="battle-pokemon-sprite"></div>
+                </div>
+              </div>
+              <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
+              <div id="defender-team-slots" class="team-slots" aria-label="Defender team slots" hidden></div>
+
+              <label class="pokemon-search-label" for="defender-pokemon-search">Pokémon</label>
+              <div class="battle-pokemon-picker">
+                <div class="pokemon-combobox">
+                  <input id="defender-pokemon" type="hidden" />
+                  <input
+                    id="defender-pokemon-search"
+                    name="defender-pokemon-search"
+                    type="search"
+                    autocomplete="off"
+                    role="combobox"
+                    aria-controls="defender-pokemon-results"
+                    aria-expanded="false"
+                  />
+                  <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+                </div>
+              </div>
+              <div class="saved-set-controls">
+                <label>
+                  Set
+                  <select id="defender-saved-set"></select>
+                </label>
+                <button id="defender-save-set" type="button">Save set…</button>
+                <button id="defender-delete-set" type="button">Delete</button>
+                <label>
+                  Spread
+                  <select id="defender-spread"></select>
+                </label>
+              </div>
+              <div id="defender-stat-editor" class="battle-stat-editor" aria-label="Defender stats"></div>
+              <div class="damage-picks">
+                <label>
+                  Nature
+                  <select id="defender-nature"></select>
+                </label>
+                <label>
+                  Ability
+                  <select id="defender-ability"></select>
+                </label>
+                <label>
+                  Item
+                  <select id="defender-item"></select>
+                </label>
+                <label>
+                  Status
+                  <select id="defender-status">
+                    <option value="">Healthy</option>
+                    <option value="burn">Burned</option>
+                    <option value="poison">Poisoned</option>
+                    <option value="toxic">Badly Poisoned</option>
+                    <option value="paralysis">Paralyzed</option>
+                    <option value="sleep">Asleep</option>
+                    <option value="freeze">Frozen</option>
+                    <option value="soak">Soaked</option>
+                  </select>
+                </label>
+              </div>
+              <div class="stat-inputs hp-inputs" aria-label="Defender current HP">
+                <label>Current HP
+                  <span><input id="defender-current-hp" type="number" step="1" /><span id="defender-max-hp"> / —</span></span>
+                </label>
+                <label>Current HP %<input id="defender-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
+              </div>
+              <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
+              <div class="damage-picks speed-row">
+                <label>
+                  Speed modifier
+                  <select id="defender-speed-multiplier">
+                    <option value="0.5">Iron Ball or equivalent ×0.5</option>
+                    <option value="1" selected>None ×1.0</option>
+                    <option value="1.5">Choice Scarf or equivalent ×1.5</option>
+                    <option value="2">Swift Swim or equivalent ×2.0</option>
+                  </select>
+                </label>
+                <output id="defender-speed-readout" aria-label="Defender final Speed">Speed —</output>
+                <label class="inline-toggle unburden-control" hidden>
+                  <input id="defender-item-consumed" type="checkbox" data-kind="item-consumed" data-side="defender" />
+                  <span id="defender-item-consumed-label">Item used up (Unburden active)</span>
+                </label>
+              </div>
+              <details class="assumption-panel">
+                <summary>Assumptions</summary>
+                <div class="inline-toggles">
+                  <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="defender" /> Ally has Plus/Minus</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="defender" /> Switched in this turn</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="booster-energy" data-side="defender" /> Booster Energy active</label>
+                  <label class="inline-toggle"><input type="checkbox" data-kind="ice-face-intact" data-side="defender" checked /> Ice Face intact</label>
+                  <label class="inline-toggle">Rivalry
+                    <select data-kind="rivalry" data-side="defender">
+                      <option value="off">Off</option>
+                      <option value="same">Same gender</option>
+                      <option value="opposite">Opposite gender</option>
+                    </select>
+                  </label>
+                  <label class="inline-toggle">Fainted allies
+                    <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="defender" />
+                  </label>
+                  <label class="inline-toggle type-change-control" hidden>
+                    <input id="defender-type-change-used" type="checkbox" data-kind="type-change-used" data-side="defender" />
+                    <span id="defender-type-change-used-label">Already activated</span>
+                  </label>
+                  <label class="inline-toggle" hidden>
+                    <span id="defender-type-change-type-label">Current type</span>
+                    <select id="defender-type-change-type" data-kind="type-change-type" data-side="defender"></select>
+                  </label>
+                </div>
+              </details>
+            </section>
+          </details>
+        </div>
+        <div class="workspace-content">
+          <div class="sheet-summary-host battle-sheet-summaries">
+            <div id="attacker-summary-card"></div>
+            <div id="defender-summary-card"></div>
+            <div id="field-summary-card"></div>
+          </div>
+          <p id="damage-source" class="usage-source">Champions defaults loading…</p>
+          <details class="battle-environment"><summary data-i18n="sheet.field">Field</summary>
+            <section id="field-editor" class="field-card" aria-label="Field conditions">
+              <div class="panel-heading">
+                <span>Field</span>
+                <button id="swap-sides" type="button" title="Swap attacker and defender sides">⇄ Swap sides</button>
+              </div>
+
+              <div class="field-grid">
+                <div id="battle-ambient-field"></div>
+                <label id="trick-room-toggle" class="inline-toggle"><input id="trick-room" type="checkbox" /> Trick Room</label>
+
+                <fieldset class="radio-group field-side-panel">
+                  <legend>Attacker's side</legend>
+                  <div class="inline-toggles">
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="helpingHand" /> Helping Hand</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="tailwind" /> Tailwind</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="reflect" /> Reflect</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="lightScreen" /> Light Screen</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="auroraVeil" /> Aurora Veil</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="friendGuard" /> Friend Guard</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="radio-group field-side-panel">
+                  <legend>Defender's side</legend>
+                  <div class="inline-toggles">
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="helpingHand" /> Helping Hand</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="tailwind" /> Tailwind</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="reflect" /> Reflect</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="lightScreen" /> Light Screen</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="auroraVeil" /> Aurora Veil</label>
+                    <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="friendGuard" /> Friend Guard</label>
+                  </div>
+                </fieldset>
+              </div>
+            </section>
+          </details>
+          <section class="catalog-panel" aria-label="Damage ranges">
+            <div class="panel-heading">
+              <span>Move damage</span>
+              <strong id="damage-count">—</strong>
+            </div>
+            <p class="usage-source">Spread moves assume multiple targets in Doubles and use the standard spread damage modifier.</p>
+            <div id="damage-list" class="damage-results"></div>
+            <section class="damage-result-summary" aria-label="Battle summary">
+              <p id="move-order">—</p>
+              <p id="speed-summary">—</p>
+            </section>
+          </section>
+          <section class="set-paste-panel" aria-label="Set import and export">
+            <div class="panel-heading">
+              <label for="set-paste">Set paste</label>
+              <strong id="set-paste-status" role="status" aria-live="polite" aria-atomic="true">—</strong>
+            </div>
+            <textarea
+              id="set-paste"
+              name="set-paste"
+              rows="9"
+              spellcheck="false"
+              placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
+            ></textarea>
+            <div class="set-paste-actions">
+              <button id="import-attacker-set" type="button">Import left</button>
+              <button id="import-defender-set" type="button">Import right</button>
+              <button id="export-attacker-set" type="button">Export left</button>
+              <button id="export-defender-set" type="button">Export right</button>
+            </div>
+            <p id="set-paste-warnings" class="set-paste-warnings" role="status" aria-live="polite" hidden></p>
+          </section>
+        </div>
       </div>
 
-      <section class="calculator battle-tool" aria-label="Battle calculator">
-        <p id="damage-source" class="usage-source">Champions defaults loading…</p>
-        <div class="sheet-summary-host battle-sheet-summaries">
-          <div id="attacker-summary-card"></div>
-          <div id="defender-summary-card"></div>
-          <div id="field-summary-card"></div>
-        </div>
-
-        <div class="damage-controls">
-          <section id="attacker-editor" class="damage-side" aria-label="Attacker">
-            <div class="panel-heading sheet-hidden">
-              <span>Attacker</span>
-              <div class="battle-side-summary">
-                <strong id="attacker-summary">—</strong>
-                <div id="attacker-pokemon-sprite" class="battle-pokemon-sprite"></div>
-              </div>
-            </div>
-            <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
-            <div id="attacker-team-slots" class="team-slots" aria-label="Attacker team slots" hidden></div>
-
-            <label class="pokemon-search-label" for="attacker-pokemon-search">Pokémon</label>
-            <div class="battle-pokemon-picker">
-              <div class="pokemon-combobox">
-                <input id="attacker-pokemon" type="hidden" />
-                <input
-                  id="attacker-pokemon-search"
-                  name="attacker-pokemon-search"
-                  type="search"
-                  autocomplete="off"
-                  role="combobox"
-                  aria-controls="attacker-pokemon-results"
-                  aria-expanded="false"
-                />
-                <div id="attacker-pokemon-results" class="search-results pokemon-search-results" hidden></div>
-              </div>
-            </div>
-            <div class="saved-set-controls">
-              <label>
-                Set
-                <select id="attacker-saved-set"></select>
-              </label>
-              <button id="attacker-save-set" type="button">Save set…</button>
-              <button id="attacker-delete-set" type="button">Delete</button>
-              <label>
-                Spread
-                <select id="attacker-spread"></select>
-              </label>
-            </div>
-            <div id="attacker-stat-editor" class="battle-stat-editor" aria-label="Attacker stats"></div>
-            <div class="damage-picks">
-              <label>
-                Nature
-                <select id="attacker-nature"></select>
-              </label>
-              <label>
-                Ability
-                <select id="attacker-ability"></select>
-              </label>
-              <label>
-                Item
-                <select id="attacker-item"></select>
-              </label>
-              <label>
-                Status
-                <select id="attacker-status">
-                  <option value="">Healthy</option>
-                  <option value="burn">Burned</option>
-                  <option value="poison">Poisoned</option>
-                  <option value="toxic">Badly Poisoned</option>
-                  <option value="paralysis">Paralyzed</option>
-                  <option value="sleep">Asleep</option>
-                  <option value="freeze">Frozen</option>
-                  <option value="soak">Soaked</option>
-                </select>
-              </label>
-            </div>
-            <div class="stat-inputs hp-inputs" aria-label="Attacker current HP">
-              <label>Current HP
-                <span><input id="attacker-current-hp" type="number" step="1" /><span id="attacker-max-hp"> / —</span></span>
-              </label>
-              <label>Current HP %<input id="attacker-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
-            </div>
-            <div id="attacker-move-picks" class="damage-move-picks" aria-label="Attacker moves"></div>
-            <div class="damage-picks speed-row">
-              <label>
-                Speed modifier
-                <select id="attacker-speed-multiplier">
-                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                  <option value="1" selected>None ×1.0</option>
-                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                  <option value="2">Swift Swim or equivalent ×2.0</option>
-                </select>
-              </label>
-              <output id="attacker-speed-readout" aria-label="Attacker final Speed">Speed —</output>
-              <label class="inline-toggle unburden-control" hidden>
-                <input id="attacker-item-consumed" type="checkbox" data-kind="item-consumed" data-side="attacker" />
-                <span id="attacker-item-consumed-label">Item used up (Unburden active)</span>
-              </label>
-            </div>
-            <details class="assumption-panel">
-              <summary>Assumptions</summary>
-              <div class="inline-toggles">
-                <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="attacker" /> Ally has Plus/Minus</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="attacker" /> Switched in this turn</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="booster-energy" data-side="attacker" /> Booster Energy active</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="ice-face-intact" data-side="attacker" checked /> Ice Face intact</label>
-                <label class="inline-toggle">Rivalry
-                  <select data-kind="rivalry" data-side="attacker">
-                    <option value="off">Off</option>
-                    <option value="same">Same gender</option>
-                    <option value="opposite">Opposite gender</option>
-                  </select>
-                </label>
-                <label class="inline-toggle">Fainted allies
-                  <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="attacker" />
-                </label>
-                <label class="inline-toggle type-change-control" hidden>
-                  <input id="attacker-type-change-used" type="checkbox" data-kind="type-change-used" data-side="attacker" />
-                  <span id="attacker-type-change-used-label">Already activated</span>
-                </label>
-                <label class="inline-toggle type-change-control" hidden>
-                  <span id="attacker-type-change-type-label">Current type</span>
-                  <select id="attacker-type-change-type" data-kind="type-change-type" data-side="attacker"></select>
-                </label>
-              </div>
-            </details>
-          </section>
-
-          <section id="field-editor" class="field-card" aria-label="Field conditions">
-            <div class="panel-heading">
-              <span>Field</span>
-              <button id="swap-sides" type="button" title="Swap attacker and defender sides">⇄ Swap sides</button>
-            </div>
-
-            <div class="field-grid">
-            <div id="battle-ambient-field"></div>
-            <label id="trick-room-toggle" class="inline-toggle"><input id="trick-room" type="checkbox" /> Trick Room</label>
-
-            <fieldset class="radio-group field-side-panel">
-              <legend>Attacker's side</legend>
-              <div class="inline-toggles">
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="helpingHand" /> Helping Hand</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="tailwind" /> Tailwind</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="reflect" /> Reflect</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="lightScreen" /> Light Screen</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="auroraVeil" /> Aurora Veil</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="attackerSide" data-key="friendGuard" /> Friend Guard</label>
-              </div>
-            </fieldset>
-
-            <fieldset class="radio-group field-side-panel">
-              <legend>Defender's side</legend>
-              <div class="inline-toggles">
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="helpingHand" /> Helping Hand</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="tailwind" /> Tailwind</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="reflect" /> Reflect</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="lightScreen" /> Light Screen</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="auroraVeil" /> Aurora Veil</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="field-side" data-side="defenderSide" data-key="friendGuard" /> Friend Guard</label>
-              </div>
-            </fieldset>
-            </div>
-          </section>
-
-          <section id="defender-editor" class="damage-side" aria-label="Defender">
-            <div class="panel-heading sheet-hidden">
-              <span>Defender</span>
-              <div class="battle-side-summary">
-                <strong id="defender-summary">—</strong>
-                <div id="defender-pokemon-sprite" class="battle-pokemon-sprite"></div>
-              </div>
-            </div>
-            <!-- Team building is hidden here pending a dedicated team page; state wiring stays active. -->
-            <div id="defender-team-slots" class="team-slots" aria-label="Defender team slots" hidden></div>
-
-            <label class="pokemon-search-label" for="defender-pokemon-search">Pokémon</label>
-            <div class="battle-pokemon-picker">
-              <div class="pokemon-combobox">
-                <input id="defender-pokemon" type="hidden" />
-                <input
-                  id="defender-pokemon-search"
-                  name="defender-pokemon-search"
-                  type="search"
-                  autocomplete="off"
-                  role="combobox"
-                  aria-controls="defender-pokemon-results"
-                  aria-expanded="false"
-                />
-                <div id="defender-pokemon-results" class="search-results pokemon-search-results" hidden></div>
-              </div>
-            </div>
-            <div class="saved-set-controls">
-              <label>
-                Set
-                <select id="defender-saved-set"></select>
-              </label>
-              <button id="defender-save-set" type="button">Save set…</button>
-              <button id="defender-delete-set" type="button">Delete</button>
-              <label>
-                Spread
-                <select id="defender-spread"></select>
-              </label>
-            </div>
-            <div id="defender-stat-editor" class="battle-stat-editor" aria-label="Defender stats"></div>
-            <div class="damage-picks">
-              <label>
-                Nature
-                <select id="defender-nature"></select>
-              </label>
-              <label>
-                Ability
-                <select id="defender-ability"></select>
-              </label>
-              <label>
-                Item
-                <select id="defender-item"></select>
-              </label>
-              <label>
-                Status
-                <select id="defender-status">
-                  <option value="">Healthy</option>
-                  <option value="burn">Burned</option>
-                  <option value="poison">Poisoned</option>
-                  <option value="toxic">Badly Poisoned</option>
-                  <option value="paralysis">Paralyzed</option>
-                  <option value="sleep">Asleep</option>
-                  <option value="freeze">Frozen</option>
-                  <option value="soak">Soaked</option>
-                </select>
-              </label>
-            </div>
-            <div class="stat-inputs hp-inputs" aria-label="Defender current HP">
-              <label>Current HP
-                <span><input id="defender-current-hp" type="number" step="1" /><span id="defender-max-hp"> / —</span></span>
-              </label>
-              <label>Current HP %<input id="defender-hp-percent" type="number" min="0.1" max="100" step="0.1" /></label>
-            </div>
-            <div id="defender-move-picks" class="damage-move-picks" aria-label="Defender moves"></div>
-            <div class="damage-picks speed-row">
-              <label>
-                Speed modifier
-                <select id="defender-speed-multiplier">
-                  <option value="0.5">Iron Ball or equivalent ×0.5</option>
-                  <option value="1" selected>None ×1.0</option>
-                  <option value="1.5">Choice Scarf or equivalent ×1.5</option>
-                  <option value="2">Swift Swim or equivalent ×2.0</option>
-                </select>
-              </label>
-              <output id="defender-speed-readout" aria-label="Defender final Speed">Speed —</output>
-              <label class="inline-toggle unburden-control" hidden>
-                <input id="defender-item-consumed" type="checkbox" data-kind="item-consumed" data-side="defender" />
-                <span id="defender-item-consumed-label">Item used up (Unburden active)</span>
-              </label>
-            </div>
-            <details class="assumption-panel">
-              <summary>Assumptions</summary>
-              <div class="inline-toggles">
-                <label class="inline-toggle"><input type="checkbox" data-kind="ally-plus-minus" data-side="defender" /> Ally has Plus/Minus</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="switched-in" data-side="defender" /> Switched in this turn</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="booster-energy" data-side="defender" /> Booster Energy active</label>
-                <label class="inline-toggle"><input type="checkbox" data-kind="ice-face-intact" data-side="defender" checked /> Ice Face intact</label>
-                <label class="inline-toggle">Rivalry
-                  <select data-kind="rivalry" data-side="defender">
-                    <option value="off">Off</option>
-                    <option value="same">Same gender</option>
-                    <option value="opposite">Opposite gender</option>
-                  </select>
-                </label>
-                <label class="inline-toggle">Fainted allies
-                  <input type="number" min="0" max="5" step="1" value="0" data-kind="fainted-allies" data-side="defender" />
-                </label>
-                <label class="inline-toggle type-change-control" hidden>
-                  <input id="defender-type-change-used" type="checkbox" data-kind="type-change-used" data-side="defender" />
-                  <span id="defender-type-change-used-label">Already activated</span>
-                </label>
-                <label class="inline-toggle" hidden>
-                  <span id="defender-type-change-type-label">Current type</span>
-                  <select id="defender-type-change-type" data-kind="type-change-type" data-side="defender"></select>
-                </label>
-              </div>
-            </details>
-          </section>
-        </div>
-
-        <section class="set-paste-panel" aria-label="Set import and export">
-          <div class="panel-heading">
-            <label for="set-paste">Set paste</label>
-            <strong id="set-paste-status" role="status" aria-live="polite" aria-atomic="true">—</strong>
-          </div>
-          <textarea
-            id="set-paste"
-            name="set-paste"
-            rows="9"
-            spellcheck="false"
-            placeholder="Miraidon @ Choice Specs&#10;Ability: Hadron Engine&#10;SPs: 4 HP / 32 SpA / 32 Spe&#10;Modest Nature&#10;- Electro Drift"
-          ></textarea>
-          <div class="set-paste-actions">
-            <button id="import-attacker-set" type="button">Import left</button>
-            <button id="import-defender-set" type="button">Import right</button>
-            <button id="export-attacker-set" type="button">Export left</button>
-            <button id="export-defender-set" type="button">Export right</button>
-          </div>
-          <p id="set-paste-warnings" class="set-paste-warnings" role="status" aria-live="polite" hidden></p>
-        </section>
-
-        <section class="catalog-panel" aria-label="Damage ranges">
-          <div class="panel-heading">
-            <span>Move damage</span>
-            <strong id="damage-count">—</strong>
-          </div>
-          <p class="usage-source">Spread moves assume multiple targets in Doubles and use the standard spread damage modifier.</p>
-          <div id="damage-list" class="damage-results"></div>
-          <section class="damage-result-summary" aria-label="Battle summary">
-            <p id="move-order">—</p>
-            <p id="speed-summary">—</p>
-          </section>
-        </section>
-      </section>
 
       <footer>
         <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>

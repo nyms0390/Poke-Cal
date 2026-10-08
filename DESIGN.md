@@ -18,13 +18,13 @@ Ordinary spacing follows 4, 8, 12, 16, 24, 32, and 48px steps. Small optical adj
 
 ## Typography and data
 
-The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Keep visible field labels legible. The small uppercase label voice is reserved for compact metadata and field labels.
+The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Keep visible field labels legible. Field labels and table headers use sentence case; the small uppercase voice is reserved for compact metadata. Page names and section headings follow Matchups’ hierarchy, and source attribution is plain muted text.
 
 Use tabular numerals for stats, percentages, counts, damage ranges, Speed values, and aligned numeric columns. Use an em dash for unavailable values and keep units such as `%`, `SP`, `EV`, and multipliers explicit. Teal may emphasize a selected or primary number; semantic state colors keep their own meanings and must also have text or another non-color cue.
 
 ## Components and interaction
 
-Navigation uses the same PokéCal brand, wrapped links, and language control on every page. The current page has both a visible selected state and `aria-current="page"`. Pages other than lookup place a compact title and introduction between navigation and the working surface. Every page begins with a keyboard-visible skip link and has one `main` landmark target.
+Navigation uses the same PokéCal brand, wrapped links, and language control on every page. The current page has both a visible selected state and `aria-current="page"`. All routes share the Matchups workspace: a 280–340px input sidebar, a quiet column divider, and results on the right. The page title and introduction sit at the top of the results column; Lookup uses its selected Pokémon identity in that role. Moves and Teams put their filters in the sidebar; Builder and Speed keep their set controls there. Battle groups attacker and defender in native disclosures, with field settings and damage results on the right. Every page begins with a keyboard-visible skip link and has one `main` landmark target.
 
 Search pickers use a labeled search input and a popup list. They support typing, Arrow Up/Down, Enter, Escape, Tab, Shift+Tab, pointer selection, a visible no-match state, and clear focus. Results must not be clipped by their panel. Forms use native inputs, selects, checkboxes, and radios unless the product needs behavior those controls cannot provide.
 
@@ -32,7 +32,7 @@ Tables remain tables for numerical comparison at wider sizes. On phones, move ta
 
 Buttons with the same role share height, padding, radius, border, hover, active, disabled, and focus treatment. Inline links used as explicit next actions receive a practical hit area. Destructive controls retain the existing confirmation safeguard. Motion is optional and only communicates state; any added motion must respect reduced-motion preferences.
 
-Pages that edit a set beside its results (Matchups, Builder, Battle Calculator) keep the editor inline on wide screens and move it into a bottom sheet at phone widths (720px and below) through `src/ui/set-sheet.js`. The sheet is a modal `<dialog>` with a title, a close button and one primary action that returns to the results; the page shows a compact summary card (sprite, name, nature and item) above its results and a pinned bar with the edit action and, where it matters, the SP budget. The editor element itself moves, so its controls and state are never duplicated. Battle Calculator has three sheets: attacker, defender and field.
+Pages that edit a set beside its results (Matchups, Builder, Battle Calculator, Speed Tiers) keep the editor inline on wide screens and move it into a bottom sheet at phone widths (720px and below) through `src/ui/set-sheet.js`. The sheet is a modal `<dialog>` with a title, a close button and one primary action that returns to the results; the page shows a compact summary card (sprite, name, nature and item) above its results and a pinned bar with the edit action and, where it matters, the SP budget. The editor element itself moves, so its controls and state are never duplicated. Battle Calculator has three sheets: attacker, defender and field. Speed Tiers has one sheet for its Pokémon and opponent settings. Moves and Teams keep their compact filters inline on phones. The Matchups turn grid is always visible directly below the KO race chart in its overview; choosing a cell filters the opponent list, while the chart and grid continue to describe the whole selected opponent pool.
 
 ## States and responsive behavior
 
