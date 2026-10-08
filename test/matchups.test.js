@@ -11,8 +11,10 @@ import {
   matchupField,
   megaStoneFor,
   observedMatchupSet,
+  racePlan,
   raceExclusion,
   raceExclusionReason,
+  turnsForUses,
   resolveSpeedOutcome,
   trickRoomChanceFor,
   trickRoomTeamShares,
@@ -83,16 +85,51 @@ test("likelyHitsToKo reads the cumulative KO chances", () => {
   assert.equal(likelyHitsToKo(null), Infinity);
 });
 
-test("raceExclusionReason leaves out one-turn, charge, recharge and self-KO moves", () => {
-  assert.match(raceExclusionReason(move("Fake Out")), /first turn/);
-  assert.match(raceExclusionReason(move("Solar Beam")), /charge turn/);
-  assert.equal(raceExclusionReason(move("Solar Beam"), { weather: "SunnyDay" }), "");
-  assert.match(raceExclusionReason(move("Hyper Beam")), /recharge/);
-  assert.match(raceExclusionReason(move("Explosion")), /faint/);
+test("racePlan times special moves instead of leaving them out", () => {
+  const plan = (name, field) => {
+    const { kind, code } = racePlan(move(name), field);
+    return [kind, code];
+  };
+  assert.deepEqual(plan("Wood Hammer"), ["normal", ""]);
+  assert.deepEqual(plan("Fake Out"), ["firstTurn", "firstTurn"]);
+  assert.deepEqual(plan("Explosion"), ["oneUse", "selfKo"]);
+  assert.deepEqual(plan("Solar Beam"), ["charge", "charge"]);
+  assert.deepEqual(plan("Solar Beam", { weather: "SunnyDay" }), ["normal", ""]);
+  assert.deepEqual(plan("Hyper Beam"), ["recharge", "recharge"]);
+  assert.deepEqual(plan("Future Sight"), ["delayed", "delayed"]);
+  assert.deepEqual(plan("Focus Punch"), ["normal", "conditional"]);
+  assert.deepEqual(plan("Steel Roller"), ["exclude", "needsTerrain"]);
+  assert.deepEqual(plan("Steel Roller", { terrain: "Grassy Terrain" }), ["oneUse", "endsTerrain"]);
+  assert.deepEqual(plan("Protect"), ["exclude", "status"]);
+
+  // Only exclusions are reported by the older helpers.
   assert.match(raceExclusionReason(move("Protect")), /Status/);
-  assert.equal(raceExclusionReason(move("Wood Hammer")), "");
-  assert.deepEqual(raceExclusion(move("Fake Out")).code, "firstTurn");
-  assert.deepEqual(raceExclusion(move("Wood Hammer")), { code: "", reason: "" });
+  assert.equal(raceExclusionReason(move("Hyper Beam")), "");
+  assert.deepEqual(raceExclusion(move("Fake Out")), { code: "", reason: "" });
+  assert.equal(raceExclusion(move("Steel Roller")).code, "needsTerrain");
+});
+
+test("turnsForUses converts uses into race turns", () => {
+  assert.deepEqual([1, 2, 3].map((uses) => turnsForUses("normal", uses)), [1, 2, 3]);
+  assert.deepEqual([1, 2].map((uses) => turnsForUses("firstTurn", uses)), [1, Infinity]);
+  assert.deepEqual([1, 2].map((uses) => turnsForUses("oneUse", uses)), [1, Infinity]);
+  assert.deepEqual([1, 2, 3].map((uses) => turnsForUses("charge", uses)), [2, 4, Infinity]);
+  assert.deepEqual([1, 2, 3, 4].map((uses) => turnsForUses("recharge", uses)), [1, 3, 5, Infinity]);
+  assert.deepEqual([1, 2, 3].map((uses) => turnsForUses("delayed", uses)), [3, 5, Infinity]);
+  assert.equal(turnsForUses("normal", Infinity), Infinity);
+});
+
+test("recharge moves race with their extra turns, not left out", () => {
+  const sylveon = {
+    pokemon: species("Sylveon"), nature: "Modest", sp: { hp: 32, spa: 32, def: 2 },
+    ability: ability("Pixilate"), item: null, moves: [move("Hyper Beam")],
+  };
+  const result = matchup({ ours: rillaboom(), theirs: sylveon });
+  const hyperBeam = result.theirs.moves[0];
+  assert.equal(hyperBeam.included, true);
+  assert.equal(hyperBeam.plan.kind, "recharge");
+  assert.equal(hyperBeam.hits, turnsForUses("recharge", hyperBeam.uses));
+  assert.equal(result.theirs.best.move.name, "Hyper Beam");
 });
 
 test("a theory-set counter beats Rillaboom regardless of speed", () => {
@@ -110,8 +147,9 @@ test("a theory-set counter beats Rillaboom regardless of speed", () => {
   assert.equal(result.ours.best.move.name, "Wood Hammer");
   assert.equal(result.field.terrain, "Grassy Terrain");
   const fakeOut = result.ours.moves.find((entry) => entry.move.name === "Fake Out");
-  assert.equal(fakeOut.included, false);
-  assert.equal(fakeOut.reasonCode, "firstTurn");
+  assert.equal(fakeOut.included, true);
+  assert.equal(fakeOut.plan.kind, "firstTurn");
+  assert.equal(fakeOut.hits, Infinity, "Fake Out does not OHKO, so it cannot win the race");
 });
 
 test("matchup damage matches an independently assembled calculation", () => {
@@ -205,6 +243,25 @@ test("weather and terrain abilities apply, the opponent's first", () => {
   const field = matchupField({ ours: { ability: ability("Drought") }, theirs: { ability: ability("Drizzle") } });
   assert.equal(field.weather, "RainDance");
   assert.equal(matchupField({ field: { weather: "sand" } }).weather, "Sandstorm");
+});
+
+test("moves that lower the user's attacking stat race as at most a 2HKO at the lowered stat", () => {
+  const hydreigon = (dracoMeteor) => ({
+    pokemon: species("Hydreigon"), nature: "Modest", sp: { hp: 2, spa: 32, spe: 32 },
+    ability: null, item: null, moves: [dracoMeteor],
+  });
+  const target = {
+    pokemon: species("Rillaboom"), nature: "Calm", sp: { hp: 32, spd: 32 },
+    ability: null, item: null, moves: [move("Wood Hammer")],
+  };
+  const options = { abilityField: false, field: { format: "singles" } };
+  const withDrop = matchup({ ours: hydreigon(move("Draco Meteor")), theirs: target, ...options });
+  const withoutDrop = matchup({ ours: hydreigon({ ...move("Draco Meteor"), self: undefined }), theirs: target, ...options });
+
+  assert.deepEqual(withDrop.ours.best.statDrop, { stat: "spa", stages: -2 });
+  assert.equal(withoutDrop.ourHits, 2, "two full-power hits would KO");
+  assert.equal(withDrop.ourHits, Infinity, "the second hit at -2 SpA does not");
+  assert.equal(withDrop.ours.best.minPercent, withoutDrop.ours.best.minPercent);
 });
 
 test("immunity abilities remove moves from the race", () => {

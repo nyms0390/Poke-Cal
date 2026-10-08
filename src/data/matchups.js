@@ -1,6 +1,7 @@
 import { compareMoveOrder, effectivePriority } from "../engine/battle-order.js";
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
+import { koChance } from "../engine/ko-chance.js";
 import { impliedField } from "../engine/modifiers.js";
 import { NATURES } from "../engine/natures.js";
 import { normalizeId } from "../identifiers.js";
@@ -8,8 +9,10 @@ import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
 
 /*
  * One-on-one "KO race" between your set and one opposing set. Each side uses the move that KOs
- * in the fewest likely hits; whoever needs fewer hits wins the race. Only when both need the
- * same number does move order (priority, then Speed, or reversed Speed in Trick Room) decide it.
+ * in the fewest turns (likely hits, adjusted by racePlan for charge, recharge, delayed and
+ * one-use moves); whoever needs fewer turns wins. Only when both need the same number does move
+ * order (priority, then Speed, or reversed Speed in Trick Room) decide it. `ourHits` and
+ * `theirHits` on a result are those turn counts.
  *
  * This is a 1v1 pressure measure, not a doubles win rate: partners, redirection, Protect,
  * switching, accuracy and secondary effects are outside the race. Damage itself follows the
@@ -24,6 +27,12 @@ export const MAX_RACE_HITS = 5;
 export const COMMON_SHARE_PERCENT = 5;
 
 const FIRST_TURN_ONLY_MOVES = new Set(["fakeout", "firstimpression", "matblock"]);
+// Moves that work only when a condition outside the one-on-one race holds (Focus Punch is not
+// hit first, Belch's user has eaten a Berry, Last Resort's user has used its other moves, …).
+// They still race as if it holds, with a caveat, so a real threat is never left out.
+const CONDITIONAL_MOVES = new Set([
+  "focuspunch", "belch", "lastresort", "dreameater", "upperhand", "synchronoise", "skydrop",
+]);
 const SUN_WEATHERS = new Set(["sunnyday", "desolateland"]);
 const RAIN_WEATHERS = new Set(["raindance", "primordialsea"]);
 const INTIMIDATE_BLOCKERS = new Set([
@@ -33,27 +42,59 @@ const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 const STAGE_KEYS = ["atk", "def", "spa", "spd", "spe"];
 
 /**
- * Why a move is left out of the KO race, or "" when it takes part. Fake Out–style moves only
- * work once, charge/recharge moves act every other turn, and self-KO moves end the race.
+ * How a damaging move takes part in the race:
+ * - "normal": one use per turn (`code` "conditional" when it races as if its condition holds).
+ * - "firstTurn" (Fake Out, First Impression) and "oneUse" (Explosion; Steel Roller, which ends
+ *   the terrain): count only when one use KOs on the first turn.
+ * - "charge": two turns per use (no charge for Solar Beam in sun or Electro Shot in rain).
+ * - "recharge": an extra turn between uses (Hyper Beam).
+ * - "delayed": lands two turns after it is used (Future Sight).
+ * - "exclude": deals no damage in the race (status moves, Steel Roller without terrain).
+ * `code` is a stable key for localized caveats and exclusion labels.
  */
+export function racePlan(move, field = {}) {
+  if (!move) return { kind: "exclude", code: "missing", reason: "Missing move data." };
+  if (move.category === "Status") return { kind: "exclude", code: "status", reason: "Status moves deal no direct damage." };
+  const moveId = normalizeId(move.id ?? move.name);
+  const name = move.name ?? moveId;
+  if (FIRST_TURN_ONLY_MOVES.has(moveId)) return { kind: "firstTurn", code: "firstTurn", reason: `${name} only works on the user's first turn.` };
+  if (moveId === "steelroller") {
+    return field?.terrain
+      ? { kind: "oneUse", code: "endsTerrain", reason: `${name} ends the terrain, so it is used once.` }
+      : { kind: "exclude", code: "needsTerrain", reason: `${name} fails without terrain.` };
+  }
+  if (move.selfdestruct) return { kind: "oneUse", code: "selfKo", reason: `${name} makes the user faint.` };
+  if (move.flags?.charge && !chargeSkipped(moveId, field)) return { kind: "charge", code: "charge", reason: `${name} needs a charge turn.` };
+  if (move.flags?.recharge || move.self?.volatileStatus === "mustrecharge") {
+    return { kind: "recharge", code: "recharge", reason: `${name} needs a recharge turn.` };
+  }
+  if (move.flags?.futuremove) return { kind: "delayed", code: "delayed", reason: `${name} lands two turns later.` };
+  if (CONDITIONAL_MOVES.has(moveId)) return { kind: "normal", code: "conditional", reason: `${name} races as if its condition holds.` };
+  return { kind: "normal", code: "", reason: "" };
+}
+
+/** Turns a plan needs for `uses` KO uses; Infinity past MAX_RACE_HITS turns. */
+export function turnsForUses(kind, uses) {
+  if (!Number.isFinite(uses)) return Infinity;
+  const turns = {
+    firstTurn: uses === 1 ? 1 : Infinity,
+    oneUse: uses === 1 ? 1 : Infinity,
+    charge: 2 * uses,
+    recharge: 2 * uses - 1,
+    delayed: 2 * uses + 1,
+  }[kind] ?? uses;
+  return turns <= MAX_RACE_HITS ? turns : Infinity;
+}
+
+/** Why a move deals no damage in the race, or "" when it races (see racePlan). */
 export function raceExclusionReason(move, field = {}) {
   return raceExclusion(move, field).reason;
 }
 
-/** Like raceExclusionReason, plus a stable `code` ("missing", "status", "firstTurn", "charge",
- * "recharge", "selfKo"; "" when the move races) for localized labels. */
+/** { code, reason } for a move racePlan excludes; { code: "", reason: "" } when it races. */
 export function raceExclusion(move, field = {}) {
-  if (!move) return { code: "missing", reason: "Missing move data." };
-  if (move.category === "Status") return { code: "status", reason: "Status moves deal no direct damage." };
-  const moveId = normalizeId(move.id ?? move.name);
-  const name = move.name ?? moveId;
-  if (FIRST_TURN_ONLY_MOVES.has(moveId)) return { code: "firstTurn", reason: `${name} only works on the user's first turn.` };
-  if (move.flags?.charge && !chargeSkipped(moveId, field)) return { code: "charge", reason: `${name} needs a charge turn.` };
-  if (move.flags?.recharge || move.self?.volatileStatus === "mustrecharge") {
-    return { code: "recharge", reason: `${name} needs a recharge turn.` };
-  }
-  if (move.selfdestruct) return { code: "selfKo", reason: `${name} makes the user faint.` };
-  return { code: "", reason: "" };
+  const plan = racePlan(move, field);
+  return plan.kind === "exclude" ? { code: plan.code, reason: plan.reason } : { code: "", reason: "" };
 }
 
 function chargeSkipped(moveId, field) {
@@ -360,8 +401,8 @@ function pickSide(side, keys) {
 
 function raceMoves(attacker, defender, moves = [], field) {
   return moves.filter(Boolean).map((move) => {
-    const excluded = raceExclusion(move, field);
-    if (excluded.code) return { move, included: false, reasonCode: excluded.code, reason: excluded.reason, hits: Infinity };
+    const plan = racePlan(move, field);
+    if (plan.kind === "exclude") return { move, plan, included: false, reasonCode: plan.code, reason: plan.reason, hits: Infinity };
     const result = calculateDamage({
       attacker: attacker.pokemon,
       defender: defender.pokemon,
@@ -371,14 +412,23 @@ function raceMoves(attacker, defender, moves = [], field) {
       field,
     });
     if (!result.supported) {
-      return { move, included: false, reasonCode: "unsupported", reason: result.reason ?? "Unsupported move.", hits: Infinity };
+      return { move, plan, included: false, reasonCode: "unsupported", reason: result.reason ?? "Unsupported move.", hits: Infinity };
     }
+    const statDrop = selfAttackDrop(move);
+    const uses = result.maxDamage > 0
+      ? statDrop ? hitsWithStatDrop(result, { attacker, defender, move, field, statDrop }) : likelyHitsToKo(result.ko)
+      : Infinity;
     return {
       move,
+      plan,
       included: true,
       reasonCode: "",
       reason: "",
-      hits: result.maxDamage > 0 ? likelyHitsToKo(result.ko) : Infinity,
+      // The race is counted in turns: equal to uses except for charge, recharge, delayed and
+      // one-use moves (see racePlan).
+      uses,
+      hits: turnsForUses(plan.kind, uses),
+      statDrop,
       minPercent: result.minPercent,
       maxPercent: result.maxPercent,
       koText: result.ko?.text ?? "",
@@ -388,6 +438,33 @@ function raceMoves(attacker, defender, moves = [], field) {
       notes: result.notes ?? [],
     };
   });
+}
+
+// Overheat, Draco Meteor, Superpower and similar lower the user's attacking stat, so repeated
+// uses hit softer. Returns { stat, stages } for the drop, or null.
+function selfAttackDrop(move) {
+  const stat = move.category === "Special" ? "spa" : "atk";
+  const stages = Number(move.self?.boosts?.[stat] ?? 0);
+  return stages < 0 ? { stat, stages } : null;
+}
+
+// Such a move races as a one-hit KO, or as a two-hit KO with the second use at the lowered
+// stat (end-of-turn recovery is not counted for that second use). Anything slower is Infinity.
+function hitsWithStatDrop(first, { attacker, defender, move, field, statDrop }) {
+  if (likelyHitsToKo(first.ko) === 1) return 1;
+  const lowered = {
+    ...attacker,
+    stages: { ...attacker.stages, [statDrop.stat]: Math.max(-6, (attacker.stages?.[statDrop.stat] ?? 0) + statDrop.stages) },
+  };
+  const second = calculateDamage({ attacker: attacker.pokemon, defender: defender.pokemon, move, attackerState: lowered, defenderState: defender, field });
+  if (!second.supported) return Infinity;
+  const chances = koChance({
+    rollDistribution: second.distribution,
+    firstRollDistribution: first.distribution,
+    targetHp: first.defenderCurrentHp,
+    maxHits: 2,
+  });
+  return (chances[1]?.chance ?? 0) >= LIKELY_KO_CHANCE ? 2 : Infinity;
 }
 
 /**
