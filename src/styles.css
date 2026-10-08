@@ -24,6 +24,8 @@
   --success-dark: #026b3f;
   --danger: #c23b3b;
   --warning: #9a6700;
+  /* Amber text on amber tints; --warning there measures 4.2:1. */
+  --warning-dark: #7a5200;
   --raise: #2563eb;
 
   /* Type scale — the only text sizes in the app (plus display headings). */
@@ -3393,7 +3395,7 @@ details.builder-analysis-move > .builder-spread-grid {
 
 .builder-ko-badge.warning {
   background: rgb(154 103 0 / 11%);
-  color: var(--warning);
+  color: var(--warning-dark);
 }
 
 .builder-ko-badge.safe {
