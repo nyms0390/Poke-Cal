@@ -148,7 +148,7 @@
               <div class="matchups-grid-wrap">
                 <table id="matchups-grid" class="matchups-grid">
                   <caption data-i18n="matchups.gridCaption">
-                    Opponents by hits they need to KO you (rows) and hits you need to KO them (columns)
+                    Opponents by turns they need to KO you (rows) and turns you need to KO them (columns)
                   </caption>
                   <thead>
                     <tr>
@@ -168,6 +168,7 @@
               </div>
               <nav class="matchups-jump-nav" aria-label="Result groups" data-i18n-aria-label="matchups.resultGroups">
                 <a href="#matchups-threats-section"><span data-i18n="matchups.threats">Beat you</span> <strong id="matchups-jump-threats">—</strong></a>
+                <a href="#matchups-uncommon-section"><span data-i18n="matchups.uncommon">Common Pokémon, uncommon sets</span> <strong id="matchups-jump-uncommon">—</strong></a>
                 <a href="#matchups-speed-section"><span data-i18n="matchups.speedRaces">Speed decides</span> <strong id="matchups-jump-speed">—</strong></a>
                 <a href="#matchups-favorable-section"><span data-i18n="matchups.favorable">Does well against</span> <strong id="matchups-jump-favorable">—</strong></a>
               </nav>
@@ -175,7 +176,7 @@
               <details class="matchups-method">
                 <summary data-i18n="matchups.method">How the race works</summary>
                 <p class="builder-assumption" data-i18n="matchups.methodText">
-                Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest hits with at least a 50% chance; fewer hits wins, and equal hits go to whoever moves first. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.
+                Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest turns, counting a hit once its KO chance reaches 50%; fewer turns wins, and equal turns go to whoever moves first. Charge, recharge and delayed moves add their extra turns, Fake Out and Explosion-style moves count only as a first-turn KO, and conditional moves such as Last Resort or Focus Punch race as if their condition holds. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.
               </p>
               </details>
               <div class="matchups-filter" id="matchups-filter" hidden>
@@ -191,6 +192,18 @@
               </div>
               <p class="builder-assumption" data-i18n="matchups.threatsHelp">They KO you in fewer hits than you need, so Speed does not save you.</p>
               <ul id="matchups-threats" class="matchups-list"></ul>
+            </section>
+
+            <section id="matchups-uncommon-section" class="catalog-panel matchups-section" aria-labelledby="matchups-uncommon-heading">
+              <div class="matchups-section-heading">
+                <h2 id="matchups-uncommon-heading" class="matchups-heading" data-i18n="matchups.uncommon">Common Pokémon, uncommon sets</h2>
+                <strong id="matchups-uncommon-count" class="builder-analysis-count">—</strong>
+              </div>
+              <p class="builder-assumption" data-i18n="matchups.uncommonHelp">
+                Their usual set does not beat you, but a set one or two rare choices away does. A rare choice is an ability, item, nature or KO move on fewer than 5% of their Limitless sets; spreads use full investment. Only Pokémon with at least 20 Limitless teams are checked.
+              </p>
+              <p id="matchups-uncommon-status" class="builder-assumption matchups-uncommon-status" role="status" aria-live="polite"></p>
+              <ul id="matchups-uncommon" class="matchups-list"></ul>
             </section>
 
             <section id="matchups-speed-section" class="catalog-panel matchups-section" aria-labelledby="matchups-speed-heading">

@@ -1078,7 +1078,7 @@ test("matchups page exposes the grid, the outcome sections and their headings", 
 
 test("matchups page keeps results reachable and the method behind a disclosure", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
-  for (const target of ["matchups-threats-section", "matchups-speed-section", "matchups-favorable-section"]) {
+  for (const target of ["matchups-threats-section", "matchups-uncommon-section", "matchups-speed-section", "matchups-favorable-section"]) {
     assert.match(html, new RegExp(`href="#${target}"`), target);
     assert.match(html, new RegExp(`id="${target}"`), target);
   }

@@ -17,6 +17,7 @@ import {
   summarizeMatchups,
 } from "../data/matchup-analysis.js";
 import { trickRoomTeamShares } from "../data/matchups.js";
+import { sortUncommonRows, uncommonCandidates, uncommonSetRow } from "../data/uncommon-sets.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { NATURES, natureOptionLabel } from "../engine/natures.js";
@@ -67,7 +68,10 @@ const elements = {
   spTotal: document.querySelector("#matchups-sp-total"),
   setLine: document.querySelector("#matchups-set-line"),
   environmentSummary: document.querySelector("#matchups-environment-summary"),
-  jumpCounts: Object.fromEntries(["threats", "speed", "favorable"].map((key) => [key, document.querySelector(`#matchups-jump-${key}`)])),
+  uncommonList: document.querySelector("#matchups-uncommon"),
+  uncommonCount: document.querySelector("#matchups-uncommon-count"),
+  uncommonStatus: document.querySelector("#matchups-uncommon-status"),
+  jumpCounts: Object.fromEntries(["threats", "uncommon", "speed", "favorable"].map((key) => [key, document.querySelector(`#matchups-jump-${key}`)])),
   movePicks: document.querySelector("#matchups-move-picks"),
   opponentCount: document.querySelector("#matchups-opponent-count"),
   speedModeInputs: [...document.querySelectorAll('input[name="matchups-speed-mode"]')],
@@ -94,6 +98,10 @@ let teamArchiveState = "loading";
 let unavailableRequestId = "";
 let moveComboboxCleanups = [];
 let analysisTimer = null;
+// The uncommon-set search takes about a second for the top 100, so it runs one opponent per
+// task in the background and restarts whenever the inputs change.
+const UNCOMMON_START_DELAY_MS = 300;
+const uncommon = { key: "", run: 0, timer: null, rows: [], done: 0, total: 0, finished: false };
 let state = {
   user: null,
   field: createAmbientFieldState(),
@@ -402,9 +410,103 @@ function renderAnalysis() {
   renderGrid(summary);
   renderFilter(sections);
   for (const key of SECTION_KEYS) renderSection(key, sections[key], ours);
-  for (const [key, element] of Object.entries(elements.jumpCounts)) element.textContent = String(sections[key].length);
+  for (const [key, element] of Object.entries(elements.jumpCounts)) {
+    if (key !== "uncommon") element.textContent = String(sections[key].length);
+  }
+  scheduleUncommon(ours, opponents);
   elements.stalemateSection.hidden = sections.stalemate.length === 0;
   translateSubtree(elements.shareLegend, elements.gridBody, ...Object.values(elements.lists));
+}
+
+// ---------- uncommon sets ----------
+
+function uncommonKey(ours, opponents) {
+  return JSON.stringify([
+    normalizeId(ours.pokemon.id), ours.nature, ours.sp, ours.ability?.id ?? "", ours.item?.id ?? "",
+    ours.moves.map((move) => move.id), state.field, opponents.length,
+  ]);
+}
+
+function scheduleUncommon(ours, opponents) {
+  const key = uncommonKey(ours, opponents);
+  if (key === uncommon.key) {
+    renderUncommon(ours);
+    return;
+  }
+  uncommon.key = key;
+  uncommon.run += 1;
+  uncommon.rows = [];
+  uncommon.finished = false;
+  const candidates = uncommonCandidates(opponents);
+  uncommon.done = 0;
+  uncommon.total = candidates.length;
+  clearTimeout(uncommon.timer);
+  renderUncommon(ours);
+  const run = uncommon.run;
+  uncommon.timer = setTimeout(() => searchUncommon(run, ours, candidates), UNCOMMON_START_DELAY_MS);
+}
+
+async function searchUncommon(run, ours, candidates) {
+  for (const opponent of candidates) {
+    if (run !== uncommon.run) return;
+    const row = uncommonSetRow(opponent, ours, catalogs, { field: state.field });
+    if (row) uncommon.rows.push(row);
+    uncommon.done += 1;
+    renderUncommonStatus();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  if (run !== uncommon.run) return;
+  uncommon.rows = sortUncommonRows(uncommon.rows);
+  uncommon.finished = true;
+  renderUncommon(ours);
+}
+
+function renderUncommonStatus() {
+  elements.uncommonStatus.textContent = uncommon.finished
+    ? t("matchups.uncommonDone", { checked: uncommon.total })
+    : t("matchups.uncommonChecking", { done: uncommon.done, total: uncommon.total });
+}
+
+function renderUncommon(ours) {
+  renderUncommonStatus();
+  const count = uncommon.finished ? String(uncommon.rows.length) : "…";
+  elements.uncommonCount.textContent = uncommon.finished ? t("matchups.pokemonCount", { count: uncommon.rows.length }) : "…";
+  elements.jumpCounts.uncommon.textContent = count;
+  if (!uncommon.finished) {
+    elements.uncommonList.replaceChildren();
+    return;
+  }
+  if (uncommon.rows.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "matchups-empty";
+    empty.textContent = t("matchups.uncommonEmpty");
+    elements.uncommonList.replaceChildren(empty);
+    return;
+  }
+  elements.uncommonList.replaceChildren(...uncommon.rows.map((row) => matchupRow("uncommon", row, ours, {
+    badge: changesBadge(row),
+    facts: [
+      [t("matchups.usualSet"), t(row.usualOutcome === "win" ? "matchups.youWin" : row.usualOutcome === "speed" ? "matchups.speedRaces" : "matchups.noKoEither")],
+      [t("matchups.theorySpread"), t(`matchups.template.${row.template}`)],
+    ],
+  })));
+  translateSubtree(elements.uncommonList);
+}
+
+function changesBadge(row) {
+  const badge = document.createElement("span");
+  badge.className = "builder-ko-badge matchups-result matchups-changes";
+  badge.textContent = row.changes.length === 0
+    ? t("matchups.spreadOnly")
+    : t("matchups.needs", { list: row.changes.map(changeLabel).join(" + ") });
+  return badge;
+}
+
+function changeLabel(change) {
+  if (change.kind === "nature") return localizedTerm("nature", change.name);
+  const lookup = { move: catalogs.moveLookup, ability: catalogs.abilityLookup, item: catalogs.itemLookup }[change.kind];
+  const entry = lookup?.get(change.id);
+  return entry ? localizedName(entry) : change.name;
 }
 
 function syncControls() {
@@ -551,7 +653,7 @@ function renderSection(key, rows, ours) {
   elements.lists[key].replaceChildren(...rows.map((row) => matchupRow(key, row, ours)));
 }
 
-function matchupRow(sectionKey, row, ours) {
+function matchupRow(sectionKey, row, ours, { badge = null, facts = [] } = {}) {
   const item = document.createElement("li");
   const details = document.createElement("details");
   details.className = "matchups-row";
@@ -560,7 +662,7 @@ function matchupRow(sectionKey, row, ours) {
   details.addEventListener("toggle", () => {
     if (details.open) {
       expandedRows.add(expandKey);
-      if (!details.querySelector(".matchups-detail")) details.append(matchupDetail(row, ours));
+      if (!details.querySelector(".matchups-detail")) details.append(matchupDetail(row, ours, facts));
     } else {
       expandedRows.delete(expandKey);
     }
@@ -582,10 +684,10 @@ function matchupRow(sectionKey, row, ours) {
     name,
     hitCell(t("matchups.theirHit"), row.result.theirs.best, row.result.theirHits),
     hitCell(t("matchups.yourHit"), row.result.ours.best, row.result.ourHits),
-    resultBadge(row),
+    badge ?? resultBadge(row),
   );
   details.append(summary);
-  if (details.open) details.append(matchupDetail(row, ours));
+  if (details.open) details.append(matchupDetail(row, ours, facts));
   item.append(details);
   return item;
 }
@@ -601,7 +703,7 @@ function hitCell(label, best, hits) {
   const value = document.createElement("span");
   value.className = "matchups-hit-value";
   value.textContent = best
-    ? `${rangeLabel(best)} · ${hitsLabel(hits)}`
+    ? [rangeLabel(best), hitsLabel(best.uses ?? hits), ...raceTiming(best, hits)].join(" · ")
     : "—";
   cell.append(heading, move, value);
   return cell;
@@ -630,12 +732,13 @@ function resultBadge(row) {
   return badge;
 }
 
-function matchupDetail(row, ours) {
+function matchupDetail(row, ours, extraFacts = []) {
   const detail = document.createElement("div");
   detail.className = "matchups-detail";
   const facts = document.createElement("dl");
   facts.className = "matchups-facts";
   const set = row.set;
+  for (const [term, value] of extraFacts) addFact(facts, term, value);
   addFact(facts, t("matchups.theirSet"), [
     localizedTerm("nature", set.nature),
     STAT_KEYS.map((stat) => set.sp[stat] ?? 0).join("/"),
@@ -644,7 +747,7 @@ function matchupDetail(row, ours) {
   ].join(" · "));
   addFact(facts, t("matchups.setSource"), [
     t("matchups.teams", { count: set.source.teams }),
-    t(set.source.spread === "smogon" ? "matchups.spreadSmogon" : "matchups.spreadPreset"),
+    t({ smogon: "matchups.spreadSmogon", theory: "matchups.spreadTheory" }[set.source.spread] ?? "matchups.spreadPreset"),
   ].join(" · "));
   addFact(facts, t("matchups.moveOrder"), [
     orderLabel("matchups.speedNormal", row.result.order.normal),
@@ -733,6 +836,8 @@ function moveTable(caption, entries) {
     ko.textContent = entry.included
       ? formatKoText(entry.koText, getLocale())
       : exclusionLabel(entry);
+    if (entry.included && entry.statDrop) ko.textContent += ` · ${t("matchups.statDrop")}`;
+    if (entry.included) for (const note of raceTiming(entry, entry.hits)) ko.textContent += ` · ${note}`;
     if (entry.included && entry.accuracy < 100) {
       ko.textContent += ` · ${t("matchups.accuracy", { accuracy: entry.accuracy })}`;
     }
@@ -743,7 +848,19 @@ function moveTable(caption, entries) {
   return table;
 }
 
+// The race-timing caveats for a move: its plan (charge, recharge, conditional, …) and, when the
+// turns differ from the uses, the turn count the race uses.
+function raceTiming(entry, turns) {
+  const notes = [];
+  // A recharge only matters once a second use is needed.
+  const recharging = entry.plan?.kind === "recharge" && turns === entry.uses;
+  if (entry.plan?.code && !recharging) notes.push(t(`matchups.plan.${entry.plan.code}`));
+  if (Number.isFinite(entry.uses) && Number.isFinite(turns) && turns !== entry.uses) notes.push(t("matchups.turns", { count: turns }));
+  return notes;
+}
+
 function exclusionLabel(entry) {
+  // Codes come from raceExclusion in src/data/matchups.js.
   if (entry.reasonCode === "unsupported") return formatDamageReason(entry.reason, getLocale());
   return t(`matchups.excluded.${entry.reasonCode || "missing"}`);
 }

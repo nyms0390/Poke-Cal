@@ -5055,6 +5055,16 @@ textarea:focus-visible {
   color: var(--warning-dark);
 }
 
+.matchups-result.matchups-changes {
+  max-width: 220px;
+  white-space: normal;
+  text-align: right;
+}
+
+.matchups-uncommon-status:empty {
+  display: none;
+}
+
 .matchups-result.warning {
   color: var(--warning-dark);
 }

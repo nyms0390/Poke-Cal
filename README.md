@@ -54,6 +54,7 @@ PokéCal/
 │   │   ├── threats.js           # Usage-backed threat sets and SP presets
 │   │   ├── matchups.js          # One-on-one KO race, observed opposing sets, Trick Room team shares
 │   │   ├── matchup-analysis.js  # Matchups page analysis: rank, race, summarize, group
+│   │   ├── uncommon-sets.js     # Fewest-rare-choice theory sets that beat a set
 │   │   ├── threat-preferences.js # Persisted opponent-count preferences
 │   │   ├── speed-line.js        # Pure Speed-tier rows and breakpoints
 │   │   ├── bulk-points.js       # Defensive SP frontier search
@@ -198,9 +199,21 @@ when the ladder has none. Each side races with the move that KOs in the fewest h
 least a 50% chance; fewer hits wins, and equal hits go to whoever moves first (priority, then
 Speed, reversed in Trick Room). **Auto** weights normal and Trick Room order by the share of
 the opponent's submitted Limitless teams that run Trick Room. Weather and terrain abilities
-apply on top of the chosen environment, Intimidate is applied on entry, and Fake Out, charge,
-recharge and self-KO moves are left out of the race. It is a one-on-one measure, not a
-doubles win rate.
+apply on top of the chosen environment, and Intimidate is applied on entry. The race counts
+turns, so no damaging move is left out: charge moves take two turns per use (none in Sun for
+Solar Beam), recharge moves add a turn between uses, Future Sight lands two turns later, Fake
+Out, First Impression, Explosion and Steel Roller count only as a first-turn KO, and conditional
+moves (Last Resort, Focus Punch, Belch, …) race as if their condition holds, with a caveat. Moves
+that lower the user's attacking stat (Overheat, Draco Meteor) count for at most two uses, the
+second at the lowered stat. It is a one-on-one measure, not a doubles win rate.
+
+**Common Pokémon, uncommon sets** checks opponents with at least 20 Limitless teams whose usual
+set does not beat yours. It tries full-investment theory spreads (an attacker, or a wall against
+the stat your moves hit) with each ability, plausible items (Life Orb, Expert Belt, type boosters,
+Sitrus, Focus Sash, resist berries, observed items) and the strongest viable moves, and reports
+the set that beats you with the fewest rare choices: abilities, items, natures or KO moves on
+fewer than 5% of that Pokémon's Limitless sets (two at most). It runs one opponent at a time in
+the background and restarts when the set or field changes.
 
 ## Data Sources
 
