@@ -1093,7 +1093,7 @@ test("matchups page exposes the overview, one filtered results list and the turn
   for (const id of ["matchups-grid", "matchups-list", "matchups-outcome-filter", "matchups-outcome-select", "matchups-opponent-search", "matchups-share-legend", "matchups-showing"]) {
     assert.match(html, new RegExp(`id="${id}"`), id);
   }
-  for (const key of ["matchups.overview", "matchups.koRace", "matchups.methodText", "matchups.commonSets", "matchups.beyondTab"]) {
+  for (const key of ["matchups.overview", "matchups.koRace", "matchups.methodText"]) {
     assert.match(html, new RegExp(`data-i18n="${key.replace(".", "\\.")}"`), key);
   }
   assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
@@ -1125,12 +1125,19 @@ test("matchups page tabs pair each tab with its panel", () => {
     assert.match(html, new RegExp(`id="matchups-${tab}-panel"[^>]+role="tabpanel"[^>]+aria-labelledby="matchups-tab-${tab}"`), tab);
   }
   assert.match(html, /id="matchups-beyond-panel"[^>]+hidden>/);
+  // Tab labels follow the Top N control, so they are set by the page, not data-i18n.
+  assert.match(html, /id="matchups-tab-common-label"/);
+  assert.match(html, /id="matchups-tab-beyond-label"/);
+  for (const [key, en, zh] of [["matchups.topTab", "Top 100", "前 100 名"], ["matchups.beyondTab", "Beyond top 100", "前 100 名之外"]]) {
+    assert.equal(tFor("en", key, { count: 100 }), en);
+    assert.equal(tFor("zh-TW", key, { count: 100 }), zh);
+  }
 });
 
 test("matchups page splits beyond-the-usual-sets into popular and rarely used Pokémon", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
   const section = html.match(/<section id="matchups-beyond-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(section, /data-i18n="matchups\.beyond"/);
+  assert.match(section, /id="matchups-uncommon-heading"/);
   assert.ok(section.indexOf('id="matchups-uncommon"') < section.indexOf('id="matchups-niche"'), "popular before rarely used");
   assert.match(section, /<details id="matchups-niche-repeats" class="matchups-repeats" hidden>/);
   assert.match(section, /id="matchups-uncommon-status"[^>]+role="status"/);

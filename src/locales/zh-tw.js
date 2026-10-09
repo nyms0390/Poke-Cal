@@ -372,7 +372,6 @@ export const ZH_TW_MESSAGES = {
   "matchups.spTotal": ({ count, limit }) => `已分配 ${count} / ${limit} SP`,
   "matchups.spOver": ({ count, limit, over }) =>
     `已分配 ${count} / ${limit} SP：超出 Champions 上限 ${over} SP。結果仍以這些能力值計算。`,
-  "matchups.beyond": "常見配置之外",
   "matchups.beyondHelp": "檢查所有 Champions 寶可夢，不只前 50 或 100 名，採用滿投資的理論配置：各特性、合理道具，以及對你屬性最強的招式。",
   "matchups.beyondDone": ({ popular, rare }) => `已檢查 ${popular} 隻熱門與 ${rare} 隻少見寶可夢。`,
   "matchups.checkingPopular": ({ done, total }) => `正在檢查熱門寶可夢：${done} / ${total}…`,
@@ -417,8 +416,8 @@ export const ZH_TW_MESSAGES = {
   "matchups.moves": "招式",
   "matchups.autoUpdate": "變更會自動更新結果。",
   "matchups.tabsLabel": "對位配置",
-  "matchups.beyondTab": "常見配置之外",
-  "matchups.commonSets": "常見配置",
+  "matchups.topTab": ({ count }) => `前 ${count} 名`,
+  "matchups.beyondTab": ({ count }) => `前 ${count} 名之外`,
   "matchups.showLabel": "顯示",
   "matchups.findOpponent": "搜尋對手…",
   "matchups.viewLabel": "檢視",

@@ -59,10 +59,10 @@
 
           <div class="matchups-tabs" role="tablist" aria-label="Matchup sets" data-i18n-aria-label="matchups.tabsLabel">
             <button id="matchups-tab-common" type="button" role="tab" aria-selected="true" aria-controls="matchups-common-panel" data-matchups-tab="common">
-              <span data-i18n="matchups.commonSets">Common sets</span>
+              <span id="matchups-tab-common-label">Top 50</span>
             </button>
             <button id="matchups-tab-beyond" type="button" role="tab" aria-selected="false" aria-controls="matchups-beyond-panel" data-matchups-tab="beyond" tabindex="-1">
-              <span data-i18n="matchups.beyondTab">Beyond usual sets</span>
+              <span id="matchups-tab-beyond-label">Beyond top 50</span>
               <span id="matchups-tab-beyond-count" class="matchups-tab-count">…</span>
             </button>
           </div>
@@ -178,7 +178,7 @@
           <section id="matchups-beyond-panel" class="matchups-panel" role="tabpanel" aria-labelledby="matchups-tab-beyond" hidden>
             <div id="matchups-uncommon-section" class="matchups-card matchups-beyond">
               <div class="matchups-section-heading">
-                <h2 id="matchups-uncommon-heading" class="matchups-heading" data-i18n="matchups.beyond">Beyond the usual sets</h2>
+                <h2 id="matchups-uncommon-heading" class="matchups-heading">Beyond top 50</h2>
                 <strong id="matchups-uncommon-count" class="matchups-count">—</strong>
               </div>
               <p class="builder-assumption" data-i18n="matchups.beyondHelp">

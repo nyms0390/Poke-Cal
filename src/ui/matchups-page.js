@@ -61,7 +61,10 @@ const elements = {
     common: document.querySelector("#matchups-common-panel"),
     beyond: document.querySelector("#matchups-beyond-panel"),
   },
+  commonTabLabel: document.querySelector("#matchups-tab-common-label"),
+  beyondTabLabel: document.querySelector("#matchups-tab-beyond-label"),
   beyondTabCount: document.querySelector("#matchups-tab-beyond-count"),
+  uncommonHeading: document.querySelector("#matchups-uncommon-heading"),
   uncommonList: document.querySelector("#matchups-uncommon"),
   uncommonCount: document.querySelector("#matchups-uncommon-count"),
   uncommonStatus: document.querySelector("#matchups-uncommon-status"),
@@ -598,6 +601,11 @@ function changeLabel(change) {
 
 function syncControls() {
   elements.opponentCount.value = String(state.opponentCount);
+  // Tabs name the selected top N: its usual sets, and everything beyond them.
+  const count = state.opponentCount;
+  elements.commonTabLabel.textContent = t("matchups.topTab", { count });
+  elements.beyondTabLabel.textContent = t("matchups.beyondTab", { count });
+  elements.uncommonHeading.textContent = t("matchups.beyondTab", { count });
   renderSpeedModeOptions();
   ambientFieldControls.sync(state.field);
   const overrides = [

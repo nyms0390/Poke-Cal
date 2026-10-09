@@ -369,7 +369,6 @@ export const EN_MESSAGES = {
   "matchups.spTotal": ({ count, limit }) => `${count} / ${limit} SP assigned`,
   "matchups.spOver": ({ count, limit, over }) =>
     `${count} / ${limit} SP assigned: ${over} over the Champions limit. Results still use these stats.`,
-  "matchups.beyond": "Beyond the usual sets",
   "matchups.beyondHelp": "Every Champions Pokémon, not only the top 50 or 100, checked with full-investment theory sets: abilities, plausible items and its strongest moves into your types.",
   "matchups.beyondDone": ({ popular, rare }) => `Checked ${popular} popular and ${rare} rarely used Pokémon.`,
   "matchups.checkingPopular": ({ done, total }) => `Checking popular Pokémon: ${done} of ${total}…`,
@@ -414,8 +413,8 @@ export const EN_MESSAGES = {
   "matchups.moves": "Moves",
   "matchups.autoUpdate": "Changes update results automatically.",
   "matchups.tabsLabel": "Matchup sets",
-  "matchups.beyondTab": "Beyond usual sets",
-  "matchups.commonSets": "Common sets",
+  "matchups.topTab": ({ count }) => `Top ${count}`,
+  "matchups.beyondTab": ({ count }) => `Beyond top ${count}`,
   "matchups.showLabel": "Show",
   "matchups.findOpponent": "Find an opponent…",
   "matchups.viewLabel": "View",
