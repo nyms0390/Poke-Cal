@@ -148,3 +148,29 @@ test("analyzeMatchups races a page set against observed opponent sets", () => {
   }
   assert.deepEqual(analyzeMatchups({ ours: null, opponents }), { rows: [], skipped: [] });
 });
+
+test("matchupSetFromSide keeps stages, status and per-slot move settings aligned with moves", () => {
+  const side = {
+    pokemon: species("Rillaboom"),
+    nature: "Adamant",
+    sp: { hp: 32, atk: 32, def: 0, spa: 0, spd: 2, spe: 0 },
+    stages: { atk: 1, def: 0, spa: 0, spd: 0, spe: -1 },
+    ability: lookups.abilityLookup.get("grassysurge"),
+    item: lookups.itemLookup.get("miracleseed"),
+    status: "",
+    soaked: true,
+    selectedMoveIds: ["fakeout", "", "woodhammer", "grassyglide"],
+    critMoves: [false, true, true, false],
+  };
+  const ours = matchupSetFromSide(side, lookups.moveLookup, {
+    moveOptions: (index, move) => ({ slot: index, id: move.id }),
+  });
+  assert.deepEqual(ours.moves.map(({ id }) => id), ["fakeout", "woodhammer", "grassyglide"]);
+  assert.deepEqual(ours.moveSettings, [
+    { critical: false, moveOptions: { slot: 0, id: "fakeout" } },
+    { critical: true, moveOptions: { slot: 2, id: "woodhammer" } },
+    { critical: false, moveOptions: { slot: 3, id: "grassyglide" } },
+  ]);
+  assert.deepEqual(ours.stages, side.stages);
+  assert.equal(ours.soaked, true);
+});

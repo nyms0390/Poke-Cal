@@ -1,8 +1,4 @@
-import {
-  normalizeId,
-  resolveChampionsPokemonMoves,
-  resolvePokemonAbilities,
-} from "../data/catalog.js";
+import { normalizeId } from "../data/catalog.js";
 import { activeSetFromState, applyActiveSet, createActiveSetStore } from "../data/active-set.js";
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import {
@@ -21,13 +17,10 @@ import { groupNicheThreats, nicheThreatRow, splitByTeams } from "../data/niche-t
 import { sortUncommonRows, uncommonSetRow } from "../data/uncommon-sets.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
-import { NATURES, natureOptionLabel } from "../engine/natures.js";
-import { calculateStat } from "../engine/stats.js";
 import {
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureOptionLabel,
   localizedTerm,
   onLocaleChange,
   t,
@@ -35,30 +28,16 @@ import {
 } from "../i18n.js";
 import { formatDamageReason, formatKoText } from "../i18n-formatters.js";
 import { applyControl, createSideState } from "./battle-state.js";
-import { loadCatalogs, rankByUsage, requestedPokemonStatus } from "./bootstrap.js";
-import {
-  STAT_LABELS,
-  attachCombobox,
-  browserStorage,
-  consumeQueryParam,
-  ensureRenderedRows,
-  moveSlotCombobox,
-  optionElement,
-  pokemonMiniSprite,
-  pokemonSearchMatchers,
-  pokemonSpriteElements,
-  searchResultButton,
-  typeClassName,
-  typeIconPath,
-} from "./components.js";
+import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
+import { browserStorage, consumeQueryParam, optionElement, pokemonMiniSprite } from "./components.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
+import { moveOptionsForSlot } from "./move-conditions.js";
+import { SET_SP_LIMIT, mountSetEditor, spSpent } from "./set-editor.js";
 import { SHEET_MEDIA_QUERY, mountSetSheet, mountSheetBar } from "./set-sheet.js";
 
 const SECTION_KEYS = ["threats", "speed", "favorable", "stalemate"];
 const SP_ANALYSIS_DELAY_MS = 150;
-// Champions caps a Pokémon's SP at 66 in total (see SP_TOTAL_LIMIT in the damage engine).
-const SP_LIMIT = 66;
 
 // The outcome filters above the results list, in list order. "all" lists every section in turn.
 const FILTERS = [
@@ -75,15 +54,6 @@ const elements = {
   summaryCard: document.querySelector("#matchups-summary-card"),
   source: document.querySelector("#matchups-source"),
   status: document.querySelector("#status"),
-  sprite: document.querySelector("#matchups-sprite"),
-  pokemonSearch: document.querySelector("#matchups-pokemon-search"),
-  pokemonResults: document.querySelector("#matchups-pokemon-results"),
-  nature: document.querySelector("#matchups-nature"),
-  ability: document.querySelector("#matchups-ability"),
-  item: document.querySelector("#matchups-item"),
-  stats: document.querySelector("#matchups-stats"),
-  spTotal: document.querySelector("#matchups-sp-total"),
-  spMeterFill: document.querySelector("#matchups-sp-meter-fill"),
   environmentSummary: document.querySelector("#matchups-environment-summary"),
   tabs: [...document.querySelectorAll("[data-matchups-tab]")],
   panels: {
@@ -98,7 +68,6 @@ const elements = {
   nicheRepeats: document.querySelector("#matchups-niche-repeats"),
   nicheRepeatsSummary: document.querySelector("#matchups-niche-repeats-summary"),
   nicheRepeatsGroups: document.querySelector("#matchups-niche-repeats-groups"),
-  movePicks: document.querySelector("#matchups-move-picks"),
   opponentCount: document.querySelector("#matchups-opponent-count"),
   speedMode: document.querySelector("#matchups-speed-mode"),
   speedHelp: document.querySelector("#matchups-speed-help"),
@@ -124,7 +93,6 @@ let catalogs = null;
 let trickRoomShares = null;
 let teamArchiveState = "loading";
 let unavailableRequestId = "";
-let moveComboboxCleanups = [];
 let analysisTimer = null;
 // "Beyond the usual sets" checks every Pokémon (about a second for the popular ones, a few more
 // for the rarely used ones), so it runs one Pokémon per task in the background, popular ones
@@ -157,6 +125,18 @@ const setSheet = mountSetSheet({
 });
 const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
 
+const setEditor = mountSetEditor(document.querySelector("#matchups-set-editor"), {
+  prefix: "matchups",
+  getCatalogs: () => catalogs,
+  getSetup: () => state.user,
+  onPokemonSelect: (pokemon) => {
+    unavailableRequestId = "";
+    renderStatus();
+    seedPokemon(pokemon);
+  },
+  // SP typing waits a moment before re-racing; every other edit re-races at once.
+  onControl: (control) => updateUser(control, { immediate: control.kind !== "sp" }),
+});
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "matchups",
   onChange: (control) => {
@@ -175,9 +155,7 @@ initialize();
 onLocaleChange(() => {
   if (!catalogs || !state.user) return;
   renderStatus();
-  renderNatureOptions();
-  renderPicks();
-  renderMovePicks();
+  setEditor.renderOptions();
   buildGrid();
   buildOutcomeFilter();
   render();
@@ -191,28 +169,6 @@ async function initialize() {
   });
   if (!catalogs) return;
 
-  renderNatureOptions();
-  attachCombobox({
-    input: elements.pokemonSearch,
-    resultsEl: elements.pokemonResults,
-    ...pokemonSearchMatchers(() => catalogs),
-    onSelect: (pokemon) => {
-      unavailableRequestId = "";
-      renderStatus();
-      seedPokemon(pokemon);
-    },
-    renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
-  });
-  elements.nature.addEventListener("input", (event) => updateUser({ kind: "nature", value: event.target.value }));
-  elements.ability.addEventListener("input", (event) => updateUser({
-    kind: "ability",
-    value: catalogs.abilityLookup.get(normalizeId(event.target.value)) ?? null,
-  }));
-  elements.item.addEventListener("input", (event) => updateUser({
-    kind: "item",
-    value: catalogs.itemLookup.get(normalizeId(event.target.value)) ?? null,
-  }));
-  elements.stats.addEventListener("input", handleSpInput);
   elements.opponentCount.addEventListener("input", (event) => {
     state = { ...state, ...preferencesStore.write({ opponentCount: normalizeOpponentCount(event.target.value) }), cell: null };
     renderAnalysis();
@@ -269,25 +225,17 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
   }
   state = { ...state, user, cell: null };
   expandedRows.clear();
-  renderPicks();
-  renderMovePicks();
+  setEditor.renderOptions();
   render();
 }
 
 function updateUser(control, { immediate = true } = {}) {
   if (!state.user) return;
   state = { ...state, user: applyControl(state.user, control) };
-  if (control.kind === "ability" || control.kind === "item") renderMovePicks();
   activeSetStore.writeSet(activeSetFromState(state.user));
   renderEditor();
   if (immediate) renderAnalysis();
   else scheduleAnalysis();
-}
-
-function handleSpInput(event) {
-  const stat = event.target.dataset.stat;
-  if (event.target.dataset.kind !== "matchups-sp" || !stat) return;
-  updateUser({ kind: "sp", stat, value: event.target.value }, { immediate: false });
 }
 
 function scheduleAnalysis() {
@@ -304,118 +252,10 @@ function render() {
 
 // ---------- editor ----------
 
-function renderNatureOptions() {
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(
-      nature,
-      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
-    )),
-  );
-}
-
-function renderPicks() {
-  const user = state.user;
-  const usage = user.pokemon.champions?.usage;
-  const abilities = rankByUsage(resolvePokemonAbilities(user.pokemon, catalogs.abilityLookup), usage?.abilities);
-  const items = rankByUsage(catalogs.items, usage?.items);
-  elements.ability.replaceChildren(
-    optionElement("", t("builder.noAbility")),
-    ...abilities.map((ability) => optionElement(ability.id, localizedName(ability))),
-  );
-  elements.item.replaceChildren(
-    optionElement("", t("builder.noItem")),
-    ...items.map((item) => optionElement(item.id, localizedName(item))),
-  );
-}
-
-function userMoves() {
-  return rankByUsage(
-    resolveChampionsPokemonMoves(state.user.pokemon, catalogs.moveLookup),
-    state.user.pokemon.champions?.usage?.moves,
-  );
-}
-
-function renderMovePicks() {
-  for (const cleanup of moveComboboxCleanups) cleanup();
-  moveComboboxCleanups = [];
-  const moves = userMoves();
-  elements.movePicks.replaceChildren(...[0, 1, 2, 3].map((index) => {
-    const row = document.createElement("div");
-    row.className = "matchups-move-row";
-    const selectedId = state.user.selectedMoveIds[index] ?? "";
-    const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
-    const icon = document.createElement("span");
-    icon.setAttribute("aria-hidden", "true");
-    renderMoveTypeIcon(icon, selected);
-    const combobox = moveSlotCombobox({
-      index,
-      moves,
-      selectedMove: selected,
-      resultLimit: 12,
-      onSelect: (move, input) => {
-        input.value = localizedName(move);
-        renderMoveTypeIcon(icon, move);
-        updateUser({ kind: "move", index, value: move.id });
-      },
-    });
-    moveComboboxCleanups.push(combobox.destroy);
-    row.append(icon, combobox.element);
-    return row;
-  }));
-}
-
-// A round type mark in front of each move slot (the move's base type).
-function renderMoveTypeIcon(icon, move) {
-  icon.className = `matchups-move-type type-badge ${move?.type ? typeClassName(move.type) : "empty"}`;
-  const path = move?.type ? typeIconPath(move.type) : "";
-  if (!path) {
-    icon.replaceChildren();
-    return;
-  }
-  const image = document.createElement("img");
-  image.src = path;
-  image.width = 16;
-  image.height = 16;
-  image.alt = "";
-  icon.replaceChildren(image);
-}
-
-let spriteId = "";
-
 function renderEditor() {
   const user = state.user;
-  elements.pokemonSearch.value = localizedName(user.pokemon);
-  elements.nature.value = user.nature;
-  elements.ability.value = user.ability?.id ?? "";
-  elements.item.value = user.item?.id ?? "";
-  if (spriteId !== user.pokemon.id) {
-    spriteId = user.pokemon.id;
-    elements.sprite.replaceChildren(...pokemonSpriteElements(user.pokemon, { size: 56 }));
-  }
-  const rows = ensureRenderedRows(elements.stats, ".matchups-stat-row", () => STAT_KEYS.map(statRow), getLocale());
-  for (const [index, stat] of STAT_KEYS.entries()) {
-    const row = rows[index];
-    row.querySelector(".matchups-stat-base").textContent = String(user.pokemon.baseStats[stat]);
-    const input = row.querySelector("input");
-    if (document.activeElement !== input) input.value = String(user.sp[stat] ?? 0);
-    row.querySelector(".builder-stat-final").textContent = String(calculateStat({
-      base: user.pokemon.baseStats[stat],
-      stat,
-      sp: user.sp[stat] ?? 0,
-      nature: user.nature,
-    }));
-  }
-  const spent = STAT_KEYS.reduce((total, stat) => total + (user.sp[stat] ?? 0), 0);
-  const over = spent > SP_LIMIT;
-  elements.spTotal.textContent = over
-    ? t("matchups.spOver", { count: spent, limit: SP_LIMIT, over: spent - SP_LIMIT })
-    : t("matchups.spTotal", { count: spent, limit: SP_LIMIT });
-  elements.spTotal.classList.toggle("over", over);
-  for (const input of elements.stats.querySelectorAll("input")) {
-    input.setAttribute("aria-invalid", String(over));
-  }
-  elements.spMeterFill.style.width = `${Math.min(1, spent / SP_LIMIT) * 100}%`;
-  elements.spMeterFill.parentElement.classList.toggle("over", over);
+  setEditor.render();
+  const spent = spSpent(user.sp);
   setSheet.update({
     pokemon: user.pokemon,
     meta: [
@@ -423,35 +263,7 @@ function renderEditor() {
       user.item ? localizedName(user.item) : t("builder.noItem"),
     ].join(" · "),
   });
-  sheetBar.setStatus(t("matchups.spShort", { count: spent, limit: SP_LIMIT }), over ? "over" : spent === SP_LIMIT ? "ok" : "");
-}
-
-function statRow(stat) {
-  const row = document.createElement("div");
-  row.className = "matchups-stat-row";
-  const label = document.createElement("span");
-  label.className = "matchups-stat-label";
-  const name = document.createElement("span");
-  name.textContent = localizedTerm("stat", STAT_LABELS[stat]);
-  // The base stat stays visible but quiet: SP choices depend on it.
-  const base = document.createElement("small");
-  base.className = "matchups-stat-base";
-  base.title = t("matchups.baseLabel");
-  label.append(name, base);
-  const input = document.createElement("input");
-  input.type = "number";
-  input.min = "0";
-  input.max = "32";
-  input.step = "1";
-  input.inputMode = "numeric";
-  input.dataset.kind = "matchups-sp";
-  input.dataset.stat = stat;
-  input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
-  input.setAttribute("aria-describedby", "matchups-sp-total");
-  const final = document.createElement("strong");
-  final.className = "builder-stat-final";
-  row.append(label, input, final);
-  return row;
+  sheetBar.setStatus(t("matchups.spShort", { count: spent, limit: SET_SP_LIMIT }), spent > SET_SP_LIMIT ? "over" : spent === SET_SP_LIMIT ? "ok" : "");
 }
 
 // ---------- analysis ----------
@@ -460,7 +272,9 @@ function renderAnalysis() {
   clearTimeout(analysisTimer);
   if (!catalogs || !state.user) return;
   syncControls();
-  const ours = matchupSetFromSide(state.user, catalogs.moveLookup);
+  const ours = matchupSetFromSide(state.user, catalogs.moveLookup, {
+    moveOptions: (index, move) => moveOptionsForSlot(state.user, index, move),
+  });
   const opponents = rankedOpponents(catalogs.pokemon, state.opponentCount);
   const { rows, skipped } = analyzeMatchups({
     ours,
@@ -599,7 +413,7 @@ function renderResults() {
 function uncommonKey(ours) {
   return JSON.stringify([
     normalizeId(ours.pokemon.id), ours.nature, ours.sp, ours.ability?.id ?? "", ours.item?.id ?? "",
-    ours.moves.map((move) => move.id), state.field,
+    ours.moves.map((move) => move.id), ours.status, ours.soaked, ours.stages, ours.moveSettings, state.field,
   ]);
 }
 
@@ -1190,7 +1004,9 @@ function moveTable(caption, entries) {
       ? formatKoText(entry.koText, getLocale())
       : exclusionLabel(entry);
     if (entry.included && entry.statDrop) ko.textContent += ` · ${t("matchups.statDrop")}`;
-    if (entry.included && entry.critical) ko.textContent += ` · ${t("matchups.critical")}`;
+    if (entry.included && entry.critical) {
+      ko.textContent += ` · ${t(entry.alwaysCritical ? "matchups.critical" : "matchups.criticalChosen")}`;
+    }
     if (entry.included) for (const note of raceTiming(entry, entry.hits)) ko.textContent += ` · ${note}`;
     if (entry.included && entry.accuracy < 100) {
       ko.textContent += ` · ${t("matchups.accuracy", { accuracy: entry.accuracy })}`;

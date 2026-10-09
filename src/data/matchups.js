@@ -1,4 +1,5 @@
 import { compareMoveOrder, effectivePriority } from "../engine/battle-order.js";
+import { isGuaranteedCritical } from "../engine/critical.js";
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { koChance } from "../engine/ko-chance.js";
@@ -161,8 +162,9 @@ export function entryStageChanges(ownAbility, opposingAbility) {
 /**
  * Runs the KO race between two sets.
  *
- * A set is `{ pokemon, nature, sp, ability, item, moves, status?, teraType?, stages?, side? }`
- * where `side` holds that side's field flags (reflect, lightScreen, auroraVeil, friendGuard,
+ * A set is `{ pokemon, nature, sp, ability, item, moves, moveSettings?, status?, soaked?, teraType?,
+ * stages?, side? }` where `moveSettings[i]` (`{ critical, moveOptions }`) applies to `moves[i]`, and
+ * `side` holds that side's field flags (reflect, lightScreen, auroraVeil, friendGuard,
  * tailwind, helpingHand, …). `field` holds the shared field (format, weather, terrain, gravity).
  *
  * Returns per-move results for both sides, each side's best race move, move order without and
@@ -177,8 +179,8 @@ export function matchup({ ours, theirs, field = {}, abilityField = true, entrySt
   const ourAttackField = directionalField(sharedField, ours.side, theirs.side);
   const theirAttackField = directionalField(sharedField, theirs.side, ours.side);
 
-  const ourMoves = raceMoves(ourState, theirState, ours.moves, ourAttackField);
-  const theirMoves = raceMoves(theirState, ourState, theirs.moves, theirAttackField);
+  const ourMoves = raceMoves(ourState, theirState, ours.moves, ourAttackField, ours.moveSettings);
+  const theirMoves = raceMoves(theirState, ourState, theirs.moves, theirAttackField, theirs.moveSettings);
   const ourBest = bestRaceMove(ourMoves);
   const theirBest = bestRaceMove(theirMoves);
 
@@ -378,6 +380,7 @@ function engineState(set, stageChanges = {}) {
     ability: set.ability ?? null,
     item: set.item ?? null,
     status: set.status ?? "",
+    soaked: Boolean(set.soaked),
     currentHpFraction: 1,
     teraType: set.teraType ?? "",
     tailwind: Boolean(set.side?.tailwind),
@@ -399,8 +402,10 @@ function pickSide(side, keys) {
   return picked;
 }
 
-function raceMoves(attacker, defender, moves = [], field) {
-  return moves.filter(Boolean).map((move) => {
+function raceMoves(attacker, defender, moves = [], field, settings = []) {
+  return moves.flatMap((move, index) => (move ? [{ move, setting: settings?.[index] ?? {} }] : [])).map(({ move, setting }) => {
+    const critical = Boolean(setting.critical);
+    const moveOptions = setting.moveOptions ?? {};
     const plan = racePlan(move, field);
     if (plan.kind === "exclude") return { move, plan, included: false, reasonCode: plan.code, reason: plan.reason, hits: Infinity };
     const result = calculateDamage({
@@ -410,13 +415,15 @@ function raceMoves(attacker, defender, moves = [], field) {
       attackerState: attacker,
       defenderState: defender,
       field,
+      critical,
+      moveOptions,
     });
     if (!result.supported) {
       return { move, plan, included: false, reasonCode: "unsupported", reason: result.reason ?? "Unsupported move.", hits: Infinity };
     }
     const statDrop = selfAttackDrop(move);
     const uses = result.maxDamage > 0
-      ? statDrop ? hitsWithStatDrop(result, { attacker, defender, move, field, statDrop }) : likelyHitsToKo(result.ko)
+      ? statDrop ? hitsWithStatDrop(result, { attacker, defender, move, field, statDrop, critical, moveOptions }) : likelyHitsToKo(result.ko)
       : Infinity;
     return {
       move,
@@ -429,9 +436,10 @@ function raceMoves(attacker, defender, moves = [], field) {
       uses,
       hits: turnsForUses(plan.kind, uses),
       statDrop,
-      // Matchups never assume a lucky crit, so this is only a guaranteed one (Frost Breath,
-      // or Leaf Blade from a Leek Sirfetch'd).
+      // Opponents never assume a lucky crit; your side crits only where you turn it on, or where
+      // the crit is guaranteed (Frost Breath, or Leaf Blade from a Leek Sirfetch'd).
       critical: Boolean(result.critical),
+      alwaysCritical: isGuaranteedCritical({ move, attacker: attacker.pokemon, attackerState: attacker }),
       minPercent: result.minPercent,
       maxPercent: result.maxPercent,
       koText: result.ko?.text ?? "",
@@ -453,13 +461,13 @@ function selfAttackDrop(move) {
 
 // Such a move races as a one-hit KO, or as a two-hit KO with the second use at the lowered
 // stat (end-of-turn recovery is not counted for that second use). Anything slower is Infinity.
-function hitsWithStatDrop(first, { attacker, defender, move, field, statDrop }) {
+function hitsWithStatDrop(first, { attacker, defender, move, field, statDrop, critical = false, moveOptions = {} }) {
   if (likelyHitsToKo(first.ko) === 1) return 1;
   const lowered = {
     ...attacker,
     stages: { ...attacker.stages, [statDrop.stat]: Math.max(-6, (attacker.stages?.[statDrop.stat] ?? 0) + statDrop.stages) },
   };
-  const second = calculateDamage({ attacker: attacker.pokemon, defender: defender.pokemon, move, attackerState: lowered, defenderState: defender, field });
+  const second = calculateDamage({ attacker: attacker.pokemon, defender: defender.pokemon, move, attackerState: lowered, defenderState: defender, field, critical, moveOptions });
   if (!second.supported) return Infinity;
   const chances = koChance({
     rollDistribution: second.distribution,

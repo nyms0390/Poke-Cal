@@ -49,16 +49,18 @@ test("builder exposes user and global threat status controls without per-threat 
     ["soak", "Soaked"],
   ];
 
-  for (const id of ["builder-status", "builder-threat-status"]) {
-    const select = html.match(new RegExp(`<select id="${id}">[\\s\\S]*?<\\/select>`))?.[0] ?? "";
-    assert.ok(select, `${id} exists`);
-    assert.deepEqual(
-      [...select.matchAll(/<option value="([^"]*)">([^<]+)<\/option>/g)]
-        .map(([, value, label]) => [value, label]),
-      expectedOptions,
-    );
-  }
-  const statusOptions = source.match(/const STATUS_OPTIONS = \[([\s\S]*?)\];/)?.[1] ?? "";
+  const select = html.match(/<select id="builder-threat-status">[\s\S]*?<\/select>/)?.[0] ?? "";
+  assert.ok(select, "builder-threat-status exists");
+  assert.deepEqual(
+    [...select.matchAll(/<option value="([^"]*)">([^<]+)<\/option>/g)]
+      .map(([, value, label]) => [value, label]),
+    expectedOptions,
+  );
+  // Your own status lives in the shared set editor, with the same options.
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+  assert.match(editor, /<select id="\$\{id\("status"\)\}" data-kind="status">/);
+  assert.match(source, /statusOptions/);
+  const statusOptions = editor.match(/export const STATUS_OPTIONS = \[([\s\S]*?)\];/)?.[1] ?? "";
   assert.deepEqual(
     [...statusOptions.matchAll(/\["([^"]*)", "([^"]+)"\]/g)].map(([, value, label]) => [value, label]),
     expectedOptions,
@@ -73,8 +75,11 @@ test("builder exposes per-move critical-hit controls for offensive breakpoint an
 
   const components = readFileSync(new URL("../src/ui/components.js", import.meta.url), "utf8");
 
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+
   assert.doesNotMatch(html, /builder-critical-toggle/);
-  assert.match(source, /critToggleButton\(\{[\s\S]*?onToggle: \(next\) =>/);
+  assert.match(editor, /critToggleButton\(\{[\s\S]*?onToggle: \(pressed\) => edit\(\{ kind: "crit"/);
+  assert.match(source, /if \(control\.kind === "crit"\)/);
   assert.match(components, /crit\.dataset\.kind = "crit"/);
   assert.match(components, /const pressed = crit\.getAttribute\("aria-pressed"\) !== "true";[\s\S]*?crit\.setAttribute\("aria-pressed", String\(pressed\)\)/);
   assert.match(source, /critical: Boolean\(setup\.critMoves\?\./);
@@ -148,20 +153,21 @@ test("stages editor changes without committing until Apply", () => {
 
 test("builder target spread includes stages and applies after move setup", () => {
   const html = readFileSync(new URL("../builder.html", import.meta.url), "utf8");
-  const statHeader = html.match(/<div class="builder-stat-heading"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+  const statHeader = editor.match(/<div class="set-editor-stat-heading"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
 
   assert.match(
     html,
     /<button[^>]+id="builder-apply-spread"[^>]+data-i18n="builder\.applySpread"[^>]*>/,
   );
-  assert.match(html, /id="builder-stats"[^>]+aria-label="Final stats"/);
+  assert.match(editor, /id="\$\{id\("stats"\)\}"[^>]+aria-label="Final stats"/);
   assert.match(html, /id="builder-general-bulk"/);
   assert.deepEqual(
     [...statHeader.matchAll(/<span>([^<]+)<\/span>/g)].map(([, label]) => label),
     ["Stat", "Base", "SP", "Stage", "Final"],
   );
   assert.ok(
-    html.indexOf('id="builder-apply-spread"') > html.indexOf('id="builder-move-picks"'),
+    html.indexOf('id="builder-apply-spread"') > html.indexOf('id="builder-set-editor"'),
     "Apply spread should follow the move setup",
   );
   assert.ok(
@@ -966,7 +972,7 @@ test("battle and builder move-search results render type badges before category 
     /export function moveSearchResultRow\(move, onSelect\) \{\s*const details = document\.createDocumentFragment\(\);\s*details\.append\(typeBadge\(move\.type\), " · ", moveCategoryMark\(move\.category\)\);/,
   );
   assert.match(components, /renderRow: moveSearchResultRow/);
-  for (const page of ["battle-page", "builder-page"]) {
+  for (const page of ["battle-page", "set-editor"]) {
     const source = readFileSync(new URL(`../src/ui/${page}.js`, import.meta.url), "utf8");
     assert.match(source, /moveSlotCombobox\(\{/, page);
   }
@@ -1087,7 +1093,9 @@ test("matchups page keeps the method behind a disclosure and the set editor in o
   assert.match(html, /href="#matchups-overview"/);
   assert.match(html, /<details class="matchups-environment">/);
   assert.match(html, /<details class="matchups-method">\s*<summary data-i18n="matchups\.method">/);
-  assert.match(html, /id="matchups-sp-total"[^>]+aria-live="polite"/);
+  assert.match(html, /<div id="matchups-set-editor"><\/div>/);
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+  assert.match(editor, /id="\$\{id\("sp-total"\)\}"[^>]+aria-live="polite"/);
   assert.match(html, /id="matchups-summary-card"/);
   assert.ok(html.indexOf("matchups.methodText") < html.indexOf('id="matchups-results"'), "method sits with the overview");
 });
@@ -1348,4 +1356,24 @@ test("a ?pokemon= hand-off is consumed once and an unknown id is reported, not i
   } finally {
     setLocale(locale, { persist: false });
   }
+});
+
+test("Builder and Matchups edit the set with the same shared editor", () => {
+  const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+  const editor = read("src/ui/set-editor.js");
+  for (const [page, controller, prefix] of [["builder.html", "builder-page", "builder"], ["matchups.html", "matchups-page", "matchups"]]) {
+    const html = read(page);
+    assert.match(html, new RegExp(`<section id="${prefix}-editor"[^>]+aria-labelledby="${prefix}-set-heading"`), page);
+    assert.match(html, new RegExp(`<div id="${prefix}-set-editor"></div>`), page);
+    const source = read(`src/ui/${controller}.js`);
+    assert.match(source, new RegExp(`mountSetEditor\\(document\\.querySelector\\("#${prefix}-set-editor"\\), \\{\\s*prefix: "${prefix}"`), controller);
+    assert.doesNotMatch(source, /moveSlotCombobox|critToggleButton/, controller);
+  }
+  // Sprite beside the search, no nature summary beside the heading, Stat/Base/SP/Stage/Final,
+  // and each move slot led by its type mark (no slot number) with crit and condition controls.
+  assert.match(editor, /class="set-editor-sprite"/);
+  assert.doesNotMatch(editor, /builder\.summary/);
+  assert.match(editor, /<span>Stat<\/span><span>Base<\/span><span>SP<\/span><span>Stage<\/span><span>Final<\/span>/);
+  assert.match(editor, /row\.append\(icon, combobox\.element, crit\)/);
+  assert.match(editor, /moveConditionSelect\(descriptor/);
 });

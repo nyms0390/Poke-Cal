@@ -419,3 +419,22 @@ test("Leek Sirfetch'd races with guaranteed-crit Leaf Blade", () => {
   assert.ok(leafBlade(withLeek).minPercent > leafBlade(without).maxPercent);
   assert.equal(closeCombat(withLeek).critical, false);
 });
+
+test("your crit toggle, stat stages and status reach the race", () => {
+  const base = matchup({ ours: rillaboom(), theirs: skarmory() });
+  const woodHammer = (result) => result.ours.moves.find(({ move: { id } }) => id === "woodhammer");
+  const crit = matchup({
+    ours: rillaboom({ moveSettings: [{}, {}, { critical: true }, {}, {}] }),
+    theirs: skarmory(),
+  });
+  assert.ok(woodHammer(crit).critical);
+  assert.equal(woodHammer(crit).alwaysCritical, false);
+  assert.ok(woodHammer(crit).maxPercent > woodHammer(base).maxPercent);
+  assert.equal(woodHammer(base).critical, false);
+
+  const boosted = matchup({ ours: rillaboom({ stages: { atk: 2 } }), theirs: skarmory() });
+  assert.ok(woodHammer(boosted).maxPercent > woodHammer(base).maxPercent);
+
+  const burned = matchup({ ours: rillaboom({ status: "burn" }), theirs: skarmory() });
+  assert.ok(woodHammer(burned).maxPercent < woodHammer(base).maxPercent);
+});

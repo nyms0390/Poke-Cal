@@ -176,10 +176,8 @@ export const ZH_TW_MESSAGES = {
   "battle.baseHeader": "種族值",
   "battle.finalHeader": "最終",
   "battle.stageHeader": "階級",
-  "builder.summary": ({ nature }) => nature,
   "builder.topCustom": ({ top, custom }) => `前 ${top} 名 + ${custom} 個自訂`,
   "builder.source": ({ top, custom }) => `Limitless Champions 預設 · 前 ${top} 名威脅 + 合法超級形態 + ${custom} 個自訂 · 可編輯威脅配招`,
-  "builder.spAssigned": ({ count }) => `已分配 ${count} SP`,
   "builder.finalStats": "最終能力",
   "builder.noAbility": "無特性",
   "builder.noItem": "無道具",
@@ -415,6 +413,7 @@ export const ZH_TW_MESSAGES = {
   "matchups.plan.conditional": "假設其使用條件成立",
   "matchups.turns": ({ count }) => `${count} 回合`,
   "matchups.critical": "必定擊中要害",
+  "matchups.criticalChosen": "擊中要害",
   "matchups.moves": "招式",
   "matchups.autoUpdate": "變更會自動更新結果。",
   "matchups.tabsLabel": "對位配置",
@@ -438,7 +437,6 @@ export const ZH_TW_MESSAGES = {
   "matchups.orderLong": ({ mode }) => `行動順序：${mode}`,
   "matchups.topCount": ({ count }) => `前 ${count} 名`,
   "matchups.spShort": ({ count, limit }) => `${count} / ${limit} SP`,
-  "matchups.baseLabel": "種族值",
   "matchups.noSearchMatch": ({ query }) => `這裡沒有符合「${query}」的對手。`,
   "matchups.showing": ({ count, total, filter }) => {
     const noun = { all: "隻寶可夢", threats: "個威脅", speed: "場看行動順序的對位", favorable: "隻你能贏的寶可夢", stalemate: "隻無法擊倒的寶可夢" }[filter] ?? "隻寶可夢";

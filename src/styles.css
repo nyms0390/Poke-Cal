@@ -1655,7 +1655,6 @@ button:disabled {
 .stat-cell-base,
 .stat-cell-final,
 .damage-percent,
-.builder-stat-row,
 .builder-damage-percent,
 .builder-spread-stats,
 .speed-axis-row > strong,
@@ -2783,58 +2782,17 @@ button:disabled {
   gap: 12px;
 }
 
-.builder-picks,
 .speed-spread-controls {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
-.builder-picks label,
 .speed-spread-controls label {
   display: grid;
   gap: 5px;
 }
 
-.builder-stat-heading,
-.builder-stat-row {
-  display: grid;
-  grid-template-columns: minmax(40px, 1fr) 30px minmax(46px, 0.8fr) minmax(48px, 0.8fr) 44px;
-  gap: 6px;
-  align-items: center;
-}
-
-.builder-stat-heading {
-  margin-bottom: -10px;
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: normal;
-  text-transform: none;
-}
-
-.builder-stats {
-  display: grid;
-  gap: 6px;
-}
-
-.builder-stat-row {
-  min-height: 42px;
-  border-bottom: 1px solid var(--line);
-}
-
-.builder-stat-row input,
-.builder-stat-row select {
-  width: 100%;
-  min-width: 0;
-}
-
-.builder-stat-row strong {
-  color: var(--accent-dark);
-  text-align: right;
-}
-
-.builder-sp-budget,
 .builder-assumption,
 .builder-scenarios > p,
 .builder-breakpoints > p,
@@ -2845,7 +2803,6 @@ button:disabled {
   line-height: 1.5;
 }
 
-.builder-moves,
 .builder-field-settings {
   display: grid;
   gap: 10px;
@@ -2907,24 +2864,6 @@ button:disabled {
 .builder-threat-chip .pokemon-minisprite img {
   max-width: 34px;
   max-height: 34px;
-}
-
-.builder-move-picks {
-  display: grid;
-  gap: 8px;
-}
-
-.builder-move-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.builder-move-row > span {
-  color: var(--subtle);
-  font-size: var(--text-xs);
-  font-weight: 700;
 }
 
 .builder-scenarios,
@@ -3950,7 +3889,6 @@ details.builder-analysis-move > .builder-spread-grid {
   }
 
   .speed-controls,
-  .builder-picks,
   .builder-threat-filters,
   .speed-spread-controls {
     grid-template-columns: 1fr;
@@ -5200,10 +5138,6 @@ textarea:focus-visible {
   }
 }
 
-.builder-picks > label:first-child {
-  grid-column: 1 / -1;
-}
-
 @media (max-width: 720px) {
   .workspace-sidebar .move-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5242,25 +5176,33 @@ textarea:focus-visible {
   }
 }
 
-.matchups-editor-title {
+/* ----- Shared set editor (Builder and Matchups, src/ui/set-editor.js) ----- */
+
+.set-editor {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.set-editor-title {
   margin: 0;
   font-size: var(--text-xl);
   letter-spacing: -0.01em;
 }
 
-.matchups-editor-subtitle {
+.set-editor-subtitle {
   margin: 0 0 8px;
   font-size: var(--text-lg);
 }
 
-.matchups-pokemon-pick {
+.set-editor-pokemon {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
 }
 
-.matchups-sprite {
+.set-editor-sprite {
   display: grid;
   place-items: center;
   width: 56px;
@@ -5270,17 +5212,17 @@ textarea:focus-visible {
   font-weight: 700;
 }
 
-.matchups-sprite img {
+.set-editor-sprite img {
   max-width: 64px;
   max-height: 64px;
   image-rendering: pixelated;
 }
 
-.matchups-pokemon-field {
+.set-editor-pokemon-field {
   min-width: 0;
 }
 
-.matchups-field {
+.set-editor-field {
   display: grid;
   gap: 6px;
   min-width: 0;
@@ -5291,91 +5233,102 @@ textarea:focus-visible {
   text-transform: none;
 }
 
-.matchups-field-pair {
+.set-editor-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
-.matchups-stats-table {
+/* Stat / Base / SP / Stage / Final. Columns stay narrow enough for a 280px sidebar. */
+.set-editor-stats {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
 }
 
-.matchups-stat-heading,
-.matchups-stat-row {
+.set-editor-stat-heading,
+.set-editor-stat-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(64px, 1fr) minmax(48px, 0.8fr);
+  grid-template-columns: minmax(32px, 1fr) minmax(28px, auto) minmax(48px, 1.1fr) minmax(54px, 1.1fr) 36px;
+  column-gap: 6px;
   align-items: center;
+  padding: 0 10px;
+  font-variant-numeric: tabular-nums;
 }
 
-.matchups-stat-heading {
-  background: var(--surface-soft);
+.set-editor-stat-heading {
+  padding-block: 7px;
+  white-space: nowrap;
   border-bottom: 1px solid var(--line);
-  font-size: var(--text-sm);
-  font-weight: 700;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
 }
 
-.matchups-stat-heading > span {
-  padding: 8px 12px;
+.set-editor-stat-heading > span:nth-child(2),
+.set-editor-stat-heading > span:last-child {
+  text-align: right;
 }
 
-.matchups-stat-heading > span:not(:first-child),
-.matchups-stat-row > :not(:first-child) {
-  border-left: 1px solid var(--line);
+.set-editor-stat-row {
+  min-height: 44px;
+  padding-block: 4px;
 }
 
-.matchups-stat-heading > span:not(:first-child) {
-  text-align: center;
-}
-
-.matchups-stat-row + .matchups-stat-row {
+.set-editor-stat-row + .set-editor-stat-row {
   border-top: 1px solid var(--line);
 }
 
-.matchups-stat-label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 0 12px;
+.set-editor-stat-label {
+  min-width: 0;
   font-size: var(--text-md);
 }
 
-.matchups-stat-base {
+.set-editor-stat-base {
   color: var(--subtle);
-  font-size: var(--text-xs);
-  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  text-align: right;
 }
 
-.matchups-stat-row input[type="number"] {
-  width: calc(100% - 16px);
+.set-editor-stat-row input,
+.set-editor-stat-row select {
+  width: 100%;
+  min-width: 0;
   min-height: 34px;
-  margin: 5px 8px;
-  padding: 4px 6px 4px 10px;
-  font-variant-numeric: tabular-nums;
   box-shadow: none;
 }
 
-.matchups-stat-row input[aria-invalid="true"] {
+.set-editor-stat-row input {
+  padding: 4px 6px 4px 9px;
+}
+
+.set-editor-stat-row select {
+  padding: 4px 6px;
+}
+
+.set-editor-stat-row input[aria-invalid="true"] {
   border-color: var(--danger);
 }
 
-.matchups-stat-row .builder-stat-final {
-  padding: 0 12px;
-  color: var(--ink);
-  font-size: var(--text-md);
-  font-variant-numeric: tabular-nums;
+.set-editor-stat-stage {
+  min-width: 0;
+  color: var(--subtle);
   text-align: center;
 }
 
-.matchups-sp-budget {
+.set-editor-stat-final {
+  color: var(--accent-dark);
+  font-size: var(--text-md);
+  text-align: right;
+}
+
+.set-editor-sp-budget {
   display: grid;
   gap: 8px;
 }
 
-.matchups-sp-total {
+.set-editor-sp-total {
   margin: 0;
   color: var(--accent-dark);
   font-size: var(--text-sm);
@@ -5383,46 +5336,60 @@ textarea:focus-visible {
   font-variant-numeric: tabular-nums;
 }
 
-.matchups-sp-total.over {
+.set-editor-sp-total.over {
   color: var(--danger);
 }
 
-.matchups-sp-meter {
+.set-editor-sp-meter {
   height: 6px;
   overflow: hidden;
   border-radius: 999px;
   background: var(--surface-tint);
 }
 
-.matchups-sp-meter > span {
+.set-editor-sp-meter > span {
   display: block;
   height: 100%;
   border-radius: inherit;
   background: var(--accent);
 }
 
-.matchups-sp-meter.over > span {
+.set-editor-sp-meter.over > span {
   background: var(--danger);
 }
 
-.matchups-moves {
+.set-editor-moves {
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
 
-.matchups-move-picks {
+.set-editor-move-picks {
   display: grid;
-  gap: 8px;
-}
-
-.matchups-move-row {
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  align-items: center;
   gap: 10px;
 }
 
-.matchups-move-type.type-badge {
+/* Type mark, move search and crit toggle on one line; move conditions wrap under the search. */
+.set-editor-move-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.set-editor-move-row .move-toggle {
+  min-height: 40px;
+}
+
+.set-editor-move-conditions {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.set-editor-move-type.type-badge {
   width: 30px;
   min-width: 0;
   height: 30px;
@@ -5430,12 +5397,12 @@ textarea:focus-visible {
   border-radius: 50%;
 }
 
-.matchups-move-type.empty {
+.set-editor-move-type.empty {
   border: 1px dashed var(--line);
   background: var(--surface-soft);
 }
 
-.matchups-move-type img {
+.set-editor-move-type img {
   width: 16px;
   height: 16px;
 }

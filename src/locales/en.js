@@ -173,10 +173,8 @@ export const EN_MESSAGES = {
   "battle.baseHeader": "Base",
   "battle.finalHeader": "Final",
   "battle.stageHeader": "Stage",
-  "builder.summary": ({ nature }) => nature,
   "builder.topCustom": ({ top, custom }) => `Top ${top} + ${custom} custom`,
   "builder.source": ({ top, custom }) => `Limitless Champions defaults · top-${top} threats + legal Mega forms + ${custom} custom · editable threat builds`,
-  "builder.spAssigned": ({ count }) => `${count} SP assigned`,
   "builder.finalStats": "Final stats",
   "builder.noAbility": "No ability",
   "builder.noItem": "No item",
@@ -412,6 +410,7 @@ export const EN_MESSAGES = {
   "matchups.plan.conditional": "raced as if its condition holds",
   "matchups.turns": ({ count }) => `${count} turns`,
   "matchups.critical": "always a critical hit",
+  "matchups.criticalChosen": "critical hit",
   "matchups.moves": "Moves",
   "matchups.autoUpdate": "Changes update results automatically.",
   "matchups.tabsLabel": "Matchup sets",
@@ -435,7 +434,6 @@ export const EN_MESSAGES = {
   "matchups.orderLong": ({ mode }) => `Move order: ${mode}`,
   "matchups.topCount": ({ count }) => `Top ${count}`,
   "matchups.spShort": ({ count, limit }) => `${count} / ${limit} SP`,
-  "matchups.baseLabel": "Base stat",
   "matchups.noSearchMatch": ({ query }) => `No opponent here matches “${query}”.`,
   "matchups.showing": ({ count, total, filter }) => {
     const noun = { all: "Pokémon", threats: "threats", speed: "move-order races", favorable: "Pokémon you beat", stalemate: "Pokémon with no KO" }[filter] ?? "Pokémon";

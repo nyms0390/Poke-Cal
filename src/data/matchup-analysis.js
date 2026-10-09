@@ -57,19 +57,31 @@ export function rankedOpponents(pokemonCatalog = [], count = DEFAULT_OPPONENT_CO
     .map((pokemon, index) => ({ pokemon, rank: index + 1, usagePercent: pokemon.champions.usagePercent }));
 }
 
-/** A matchup set from a page side state (nature, SP, ability, item, selected move ids). */
-export function matchupSetFromSide(side, moveLookup) {
+/**
+ * A matchup set from a page side state: nature, SP, stat stages, ability, item, status and the
+ * selected moves. `moveSettings` lines up with `moves` and carries each slot's crit toggle and
+ * move conditions; `moveOptions(slotIndex, move)` turns a slot's conditions into engine options
+ * (the page passes move-conditions.js `moveOptionsForSlot`).
+ */
+export function matchupSetFromSide(side, moveLookup, { moveOptions = null } = {}) {
   if (!side?.pokemon) return null;
-  const moves = (side.selectedMoveIds ?? [])
-    .map((id) => (id ? moveLookup?.get(normalizeId(id)) : null))
-    .filter(Boolean);
+  const slots = (side.selectedMoveIds ?? [])
+    .map((id, index) => ({ move: id ? moveLookup?.get(normalizeId(id)) : null, index }))
+    .filter(({ move }) => move);
   return {
     pokemon: side.pokemon,
     nature: side.nature,
     sp: { ...side.sp },
+    stages: { ...(side.stages ?? {}) },
     ability: side.ability ?? null,
     item: side.item ?? null,
-    moves,
+    status: side.status ?? "",
+    soaked: Boolean(side.soaked),
+    moves: slots.map(({ move }) => move),
+    moveSettings: slots.map(({ move, index }) => ({
+      critical: Boolean(side.critMoves?.[index]),
+      moveOptions: moveOptions ? moveOptions(index, move) : {},
+    })),
   };
 }
 

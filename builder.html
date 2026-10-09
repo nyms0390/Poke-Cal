@@ -38,72 +38,8 @@
           <h1 data-i18n="nav.builder">Builder</h1>
           <p class="intro">Turn matchups into useful SP targets.</p>
         </div>
-        <section id="builder-editor" class="builder-editor workspace-sidebar" aria-label="Your Pokémon">
-          <div class="panel-heading sheet-hidden">
-            <span>Your Pokémon</span>
-            <strong id="builder-summary">—</strong>
-          </div>
-
-          <label class="pokemon-search-label" for="builder-pokemon-search">Pokémon</label>
-          <div class="pokemon-combobox">
-            <input
-              id="builder-pokemon-search"
-              name="builder-pokemon-search"
-              type="search"
-              autocomplete="off"
-              role="combobox"
-              aria-controls="builder-pokemon-results"
-              aria-expanded="false"
-            />
-            <div id="builder-pokemon-results" class="search-results pokemon-search-results" hidden></div>
-          </div>
-
-          <div class="builder-picks">
-            <label>
-              Nature
-              <select id="builder-nature"></select>
-            </label>
-            <label>
-              Ability
-              <select id="builder-ability"></select>
-            </label>
-            <label>
-              Item
-              <select id="builder-item"></select>
-            </label>
-            <label>
-              Status
-              <select id="builder-status">
-                <option value="">Healthy</option>
-                <option value="burn">Burned</option>
-                <option value="poison">Poisoned</option>
-                <option value="toxic">Badly Poisoned</option>
-                <option value="paralysis">Paralyzed</option>
-                <option value="sleep">Asleep</option>
-                <option value="freeze">Frozen</option>
-                <option value="soak">Soaked</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="builder-stat-heading" aria-hidden="true">
-            <span>Stat</span><span>Base</span><span>SP</span><span>Stage</span><span>Final</span>
-          </div>
-          <div
-            id="builder-stats"
-            class="builder-stats"
-            aria-label="Final stats"
-            data-i18n-aria-label="builder.finalStats"
-          ></div>
-          <p id="builder-sp-budget" class="builder-sp-budget">—</p>
-
-          <section class="builder-moves" aria-label="Selected moves">
-            <div class="panel-heading">
-              <span>Your moves</span>
-              <strong>4 slots</strong>
-            </div>
-            <div id="builder-move-picks" class="builder-move-picks"></div>
-          </section>
+        <section id="builder-editor" class="builder-editor workspace-sidebar" aria-labelledby="builder-set-heading">
+          <div id="builder-set-editor"></div>
           <button
             id="builder-apply-spread"
             class="builder-apply-button"

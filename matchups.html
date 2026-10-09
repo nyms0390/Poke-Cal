@@ -40,58 +40,7 @@
         </div>
 
         <section id="matchups-editor" class="matchups-editor workspace-sidebar" aria-labelledby="matchups-set-heading">
-          <h2 id="matchups-set-heading" class="matchups-editor-title sheet-hidden" data-i18n="matchups.yourSet">Your set</h2>
-          <div class="matchups-pokemon-pick">
-            <span id="matchups-sprite" class="matchups-sprite" aria-hidden="true"></span>
-            <div class="matchups-pokemon-field">
-              <label class="visually-hidden" for="matchups-pokemon-search">Pokémon</label>
-              <div class="pokemon-combobox">
-                <input
-                  id="matchups-pokemon-search"
-                  name="matchups-pokemon-search"
-                  type="search"
-                  autocomplete="off"
-                  role="combobox"
-                  aria-controls="matchups-pokemon-results"
-                  aria-expanded="false"
-                />
-                <div id="matchups-pokemon-results" class="search-results pokemon-search-results" hidden></div>
-              </div>
-            </div>
-          </div>
-          <label class="matchups-field">
-            Nature
-            <select id="matchups-nature"></select>
-          </label>
-          <div class="matchups-field-pair">
-            <label class="matchups-field">
-              Ability
-              <select id="matchups-ability"></select>
-            </label>
-            <label class="matchups-field">
-              Item
-              <select id="matchups-item"></select>
-            </label>
-          </div>
-          <div class="matchups-stats-table">
-            <div class="matchups-stat-heading" aria-hidden="true">
-              <span>Stat</span><span>SP</span><span>Final</span>
-            </div>
-            <div
-              id="matchups-stats"
-              class="matchups-stats"
-              aria-label="Final stats"
-              data-i18n-aria-label="builder.finalStats"
-            ></div>
-          </div>
-          <div class="matchups-sp-budget">
-            <p id="matchups-sp-total" class="matchups-sp-total" aria-live="polite">—</p>
-            <span class="matchups-sp-meter" aria-hidden="true"><span id="matchups-sp-meter-fill"></span></span>
-          </div>
-          <section class="matchups-moves" aria-labelledby="matchups-moves-heading">
-            <h3 id="matchups-moves-heading" class="matchups-editor-subtitle" data-i18n="matchups.moves">Moves</h3>
-            <div id="matchups-move-picks" class="matchups-move-picks"></div>
-          </section>
+          <div id="matchups-set-editor"></div>
           <details class="matchups-environment">
             <summary>
               <span class="matchups-environment-title" data-i18n="field.environment">Environment</span>

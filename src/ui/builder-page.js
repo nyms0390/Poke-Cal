@@ -57,7 +57,6 @@ import {
   createAnalysisMemo,
   createBuilderState,
   detachFamilyForms,
-  finalStats,
   partitionBulkCoverageGroups,
   selectBuilderAnalysis,
   selectBuilderSort,
@@ -68,11 +67,7 @@ import {
   attachCombobox,
   browserStorage,
   consumeQueryParam,
-  critToggleButton,
   damagePercentColor,
-  ensureRenderedRows,
-  moveConditionSelect,
-  moveSlotCombobox,
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
@@ -83,25 +78,12 @@ import { mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
-import {
-  moveConditionDescriptors,
-  moveConditionValue,
-  moveOptionsForSlot,
-} from "./move-conditions.js";
+import { moveOptionsForSlot } from "./move-conditions.js";
+import { SET_SP_LIMIT, mountSetEditor, setEditorMoves, spSpent, statusOptions } from "./set-editor.js";
 
 const elements = {
   source: document.querySelector("#builder-source"),
-  summary: document.querySelector("#builder-summary"),
-  pokemonSearch: document.querySelector("#builder-pokemon-search"),
-  pokemonResults: document.querySelector("#builder-pokemon-results"),
-  nature: document.querySelector("#builder-nature"),
-  ability: document.querySelector("#builder-ability"),
-  item: document.querySelector("#builder-item"),
-  userStatus: document.querySelector("#builder-status"),
-  stats: document.querySelector("#builder-stats"),
-  spBudget: document.querySelector("#builder-sp-budget"),
   applySpread: document.querySelector("#builder-apply-spread"),
-  movePicks: document.querySelector("#builder-move-picks"),
   ambientField: document.querySelector("#builder-ambient-field"),
   threatCount: document.querySelector("#builder-threat-count"),
   threatStatus: document.querySelector("#builder-threat-status"),
@@ -124,22 +106,10 @@ const elements = {
   status: document.querySelector("#status"),
 };
 
-const STATUS_OPTIONS = [
-  ["", "Healthy"],
-  ["burn", "Burned"],
-  ["poison", "Poisoned"],
-  ["toxic", "Badly Poisoned"],
-  ["paralysis", "Paralyzed"],
-  ["sleep", "Asleep"],
-  ["freeze", "Frozen"],
-  ["soak", "Soaked"],
-];
-
 let catalogs = null;
 let state = createBuilderState();
 const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
-let moveComboboxCleanups = [];
 let customThreats = [];
 let userSetupDraft = null;
 let unavailableRequestId = "";
@@ -158,7 +128,6 @@ let warmGeneration = 0;
 const updatePage = createLiveUpdater(render);
 // Phones edit the set in a bottom sheet. Setup edits are staged until "Apply spread", so closing
 // the sheet applies them: the results the sheet's button promises are then up to date.
-const BUILDER_SP_LIMIT = 66;
 const setSheet = mountSetSheet({
   editor: document.querySelector("#builder-editor"),
   id: "builder-set-sheet",
@@ -167,6 +136,17 @@ const setSheet = mountSetSheet({
   onClose: () => applyUserSetup(),
 });
 const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
+const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), {
+  prefix: "builder",
+  getCatalogs: () => catalogs,
+  getSetup: () => userSetupDraft?.current() ?? state.user,
+  onPokemonSelect: (pokemon) => {
+    unavailableRequestId = "";
+    renderStatus();
+    seedPokemon(pokemon);
+  },
+  onControl: handleSetupControl,
+});
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
   onChange: handleAmbientFieldControl,
@@ -180,11 +160,7 @@ initialize();
 onLocaleChange(() => {
   if (!catalogs) return;
   renderStatus();
-  renderLocaleOptions();
-  if (state.user) {
-    renderPicks();
-    render();
-  }
+  if (state.user) render({ refreshPicks: true });
 });
 
 async function initialize() {
@@ -196,19 +172,6 @@ async function initialize() {
   if (!catalogs) return;
 
   state = { ...state, threatCount: threatPreferencesStore.readThreatCount() };
-  renderLocaleOptions();
-
-  attachCombobox({
-    input: elements.pokemonSearch,
-    resultsEl: elements.pokemonResults,
-    ...pokemonSearchMatchers(() => catalogs),
-    onSelect: (pokemon) => {
-      unavailableRequestId = "";
-      renderStatus();
-      seedPokemon(pokemon);
-    },
-    renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
-  });
   attachCombobox({
     input: elements.threatSearch,
     resultsEl: elements.threatResults,
@@ -217,10 +180,6 @@ async function initialize() {
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
 
-  for (const control of [elements.nature, elements.ability, elements.item, elements.userStatus]) {
-    control.addEventListener("input", handlePick);
-  }
-  elements.stats.addEventListener("input", handleSetupInput);
   elements.applySpread.addEventListener("click", applyUserSetup);
   elements.threatCount.addEventListener("input", handleThreatCount);
   elements.threatStatus.addEventListener("input", handleThreatStatus);
@@ -297,15 +256,6 @@ function renderAnalysisTabs() {
   elements.breakPanel.hidden = state.analysisTab !== "break";
 }
 
-function renderLocaleOptions() {
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(
-      nature,
-      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
-    )),
-  );
-}
-
 
 function seedPokemon(pokemon, { activeSet = null } = {}) {
   if (!pokemon) return;
@@ -335,64 +285,18 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
   }, { refreshPicks: true });
 }
 
-function renderPicks() {
-  const user = state.user;
-  const setup = userSetupDraft?.current() ?? user;
-  const usage = user.pokemon.champions?.usage;
-  const abilities = rankByUsage(
-    resolvePokemonAbilities(user.pokemon, catalogs.abilityLookup),
-    usage?.abilities,
-  );
-  const items = rankByUsage(catalogs.items, usage?.items);
-
-  elements.ability.replaceChildren(
-    optionElement("", t("builder.noAbility")),
-    ...abilities.map((ability) => optionElement(ability.id, localizedName(ability))),
-  );
-  elements.item.replaceChildren(
-    optionElement("", t("builder.noItem")),
-    ...items.map((item) => optionElement(item.id, localizedName(item))),
-  );
-  elements.nature.value = setup.nature;
-  elements.ability.value = setup.ability?.id ?? "";
-  elements.item.value = setup.item?.id ?? "";
-  elements.userStatus.replaceChildren(...statusOptions().map(({ value, label }) => optionElement(value, label)));
-  elements.userStatus.value = setup.soaked ? "soak" : setup.status;
-  renderMovePicks();
-}
-
-function handlePick(event) {
+// Setup edits are staged until "Apply spread"; a crit toggle applies at once, as before.
+function handleSetupControl(control) {
   if (!state.user) return;
-  const { id, value } = event.target;
-  if (id === "builder-nature") stageUserSetup({ kind: "nature", value });
-  if (id === "builder-ability") {
-    stageUserSetup({
-      kind: "ability",
-      value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
+  if (control.kind === "crit") {
+    updatePage(() => {
+      if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, control));
+      state = { ...state, user: applyControl(state.user, control) };
     });
-    renderMovePicks();
+    return;
   }
-  if (id === "builder-item") {
-    stageUserSetup({
-      kind: "item",
-      value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
-    });
-    renderMovePicks();
-  }
-  if (id === "builder-status") stageUserSetup({ kind: "status", value });
-}
-
-function handleSetupInput(event) {
-  const kind = event.target.dataset.kind === "builder-sp"
-    ? "sp"
-    : event.target.dataset.kind === "builder-stage"
-      ? "stage"
-      : "";
-  if (!kind || !state.user) return;
-  const stat = event.target.dataset.stat;
-  const setup = stageUserSetup({ kind, stat, value: event.target.value });
-  event.target.value = String(setup[kind === "sp" ? "sp" : "stages"][stat]);
-  if (kind === "sp") renderSpBudget(setup.sp);
+  const setup = stageUserSetup(control);
+  renderSheetStatus(setup.sp);
 }
 
 function stageUserSetup(control) {
@@ -471,31 +375,28 @@ function removeCustomThreat(id) {
 function render({ refreshPicks = false, refreshMoves = false, focusKey = "", focusAnalysisTab = false } = {}) {
   const user = state.user;
   if (!user) return;
-  if (refreshPicks) renderPicks();
-  else if (refreshMoves) renderMovePicks();
+  if (refreshPicks) setEditor.renderOptions();
+  else if (refreshMoves) setEditor.renderMoves();
   activeSetStore.writeSet(activeSetFromState(user));
-  const stats = finalStats(state);
   const displayedSetup = userSetupDraft?.current() ?? user;
-  elements.pokemonSearch.value = localizedName(user.pokemon);
-  elements.nature.value = displayedSetup.nature;
-  elements.ability.value = displayedSetup.ability?.id ?? "";
-  elements.item.value = displayedSetup.item?.id ?? "";
-  elements.userStatus.value = displayedSetup.soaked ? "soak" : displayedSetup.status;
+  setEditor.render();
   elements.threatCount.value = String(state.threatCount);
   elements.threatStatus.value = state.threatStatus;
   ambientFieldControls.sync(state.field);
-  elements.summary.textContent = t("builder.summary", {
-    nature: localizedTerm("nature", user.nature),
-  });
   elements.threatSummary.textContent = t("builder.topCustom", { top: state.threatCount, custom: customThreats.length });
   elements.source.textContent = t("builder.source", { top: state.threatCount, custom: customThreats.length });
   elements.speedLink.href = `./speed.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
   elements.matchupsLink.href = `./matchups.html?pokemon=${encodeURIComponent(user.pokemon.id)}`;
   renderAnalysisTabs();
 
-  renderStats(user, stats, displayedSetup);
-  renderSpBudget(displayedSetup.sp);
-  renderSheetSummary(user);
+  renderSheetStatus(displayedSetup.sp);
+  setSheet.update({
+    pokemon: user.pokemon,
+    meta: [
+      localizedTerm("nature", user.nature),
+      user.item ? localizedName(user.item) : t("builder.noItem"),
+    ].join(" · "),
+  });
   elements.applySpread.disabled = !userSetupDraft;
   renderCustomThreats();
   const inputs = analysisInputs();
@@ -511,9 +412,6 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
     renderHiddenBulkCount(inputs);
   }
   translateSubtree(
-    elements.stats,
-    elements.spBudget,
-    elements.movePicks,
     elements.customThreats,
     elements.bulkPanel,
     elements.breakPanel,
@@ -593,155 +491,16 @@ function breakWarmTasks(inputs) {
     .map(({ threat, threatKey }) => () => breakThreatResult(inputs, threat, threatKey));
 }
 
-function renderSpBudget(sp) {
-  const spent = STAT_KEYS.reduce((total, stat) => total + (sp[stat] ?? 0), 0);
-  // Show assigned SP rather than a remaining value because imported usage-backed spreads can
-  // exceed the builder's 66-point recommendation budget.
-  elements.spBudget.textContent = t("builder.spAssigned", { count: spent });
-  const over = spent > BUILDER_SP_LIMIT;
+function renderSheetStatus(sp) {
+  const spent = spSpent(sp);
   sheetBar.setStatus(
-    t("matchups.spShort", { count: spent, limit: BUILDER_SP_LIMIT }),
-    over ? "over" : spent === BUILDER_SP_LIMIT ? "ok" : "",
+    t("matchups.spShort", { count: spent, limit: SET_SP_LIMIT }),
+    spent > SET_SP_LIMIT ? "over" : spent === SET_SP_LIMIT ? "ok" : "",
   );
-}
-
-function renderSheetSummary(user) {
-  setSheet.update({
-    pokemon: user.pokemon,
-    meta: [
-      localizedTerm("nature", user.nature),
-      user.item ? localizedName(user.item) : t("builder.noItem"),
-    ].join(" · "),
-  });
-}
-
-function renderStats(user, stats, setup = user) {
-  const rows = ensureRenderedRows(
-    elements.stats,
-    ".builder-stat-row",
-    () => STAT_KEYS.map((stat) => statRow(stat, user, stats)),
-    getLocale(),
-  );
-  for (const [index, stat] of STAT_KEYS.entries()) {
-    const row = rows[index];
-    row.querySelector(".builder-stat-base").textContent = String(user.pokemon.baseStats[stat]);
-    row.querySelector("input").value = String(setup.sp[stat] ?? 0);
-    row.querySelector(".builder-stat-final").textContent = String(stats[stat]);
-    const stage = row.querySelector('select[data-kind="builder-stage"]');
-    if (stage) stage.value = String(setup.stages[stat] ?? 0);
-  }
-}
-
-function statRow(stat, user, stats) {
-  const row = document.createElement("div");
-  row.className = "builder-stat-row";
-
-  const label = document.createElement("span");
-  label.textContent = localizedTerm("stat", STAT_LABELS[stat]);
-  const base = document.createElement("span");
-  base.className = "builder-stat-base";
-  base.textContent = String(user.pokemon.baseStats[stat]);
-  const input = document.createElement("input");
-  input.type = "number";
-  input.min = "0";
-  input.max = "32";
-  input.step = "1";
-  input.value = String(user.sp[stat] ?? 0);
-  input.dataset.kind = "builder-sp";
-  input.dataset.stat = stat;
-  input.setAttribute("aria-label", `${localizedTerm("stat", STAT_LABELS[stat])} SP`);
-  const final = document.createElement("strong");
-  final.className = "builder-stat-final";
-  final.textContent = String(stats[stat]);
-  const stage = document.createElement("span");
-  stage.className = "builder-stat-stage";
-  if (stat === "hp") {
-    stage.textContent = "—";
-  } else {
-    const select = document.createElement("select");
-    select.dataset.kind = "builder-stage";
-    select.dataset.stat = stat;
-    select.setAttribute(
-      "aria-label",
-      `${localizedTerm("stat", STAT_LABELS[stat])} ${getLocale() === "zh-TW" ? "階級" : "stage"}`,
-    );
-    select.replaceChildren(
-      ...Array.from({ length: 13 }, (_, index) => {
-        const value = index - 6;
-        return optionElement(value, value > 0 ? `+${value}` : String(value));
-      }),
-    );
-    select.value = String(user.stages[stat] ?? 0);
-    stage.append(select);
-  }
-
-  row.append(label, base, input, stage, final);
-  return row;
-}
-
-function renderMovePicks() {
-  for (const cleanup of moveComboboxCleanups) cleanup();
-  moveComboboxCleanups = [];
-  const moves = builderMoves();
-
-  elements.movePicks.replaceChildren(...[0, 1, 2, 3].map((index) => {
-    const row = document.createElement("div");
-    row.className = "builder-move-row";
-    const selectedId = (userSetupDraft?.current() ?? state.user).selectedMoveIds[index] ?? "";
-    const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
-    const label = document.createElement("span");
-    label.textContent = String(index + 1);
-    // The visible number is decorative; the input carries the full name, as on Battle.
-    label.setAttribute("aria-hidden", "true");
-    const combobox = moveSlotCombobox({
-      index,
-      moves,
-      selectedMove: selected,
-      resultLimit: 12,
-      onSelect: (move, input) => {
-        stageUserSetup({ kind: "move", index, value: move.id });
-        input.value = localizedName(move);
-        renderMovePicks();
-      },
-    });
-    moveComboboxCleanups.push(combobox.destroy);
-    const setup = userSetupDraft?.current() ?? state.user;
-    const crit = critToggleButton({
-      index,
-      selectedMove: selected,
-      pokemon: setup.pokemon,
-      state: setup,
-      manual: setup.critMoves?.[index],
-      onToggle: (next) => {
-        updatePage(() => {
-          if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, {
-            kind: "crit", index, value: next,
-          }));
-          state = { ...state, user: applyControl(state.user, { kind: "crit", index, value: next }) };
-        });
-      },
-    });
-    row.append(label, combobox.element, crit);
-    if (selected) {
-      for (const descriptor of moveConditionDescriptors(selected, setup)) {
-        row.append(moveConditionSelect(descriptor, {
-          index,
-          value: moveConditionValue(setup, index, descriptor),
-          onInput: (event) => {
-            stageUserSetup({ kind: "moveOption", index, key: descriptor.key, value: event.target.value });
-          },
-        }));
-      }
-    }
-    return row;
-  }));
 }
 
 function builderMoves() {
-  return rankByUsage(
-    resolveChampionsPokemonMoves(state.user.pokemon, catalogs.moveLookup),
-    state.user.pokemon.champions?.usage?.moves,
-  );
+  return setEditorMoves(state.user.pokemon, catalogs.moveLookup);
 }
 
 function selectedMoves(setup = state.user) {
@@ -1399,13 +1158,6 @@ function threatSelect(labelText, options, selectedValue, onChange) {
   select.addEventListener("input", () => onChange(select.value));
   label.append(select);
   return label;
-}
-
-function statusOptions() {
-  return STATUS_OPTIONS.map(([value, label]) => ({
-    value,
-    label: localizedTerm("status", label),
-  }));
 }
 
 function commitThreatBuild(threat, { cardKey, focusKey }) {
