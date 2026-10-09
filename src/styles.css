@@ -4147,25 +4147,18 @@ textarea:focus-visible {
   background: var(--surface);
 }
 
-.lookup-page .search-panel > label {
-  display: block;
-  margin: 0;
-  color: var(--ink);
-  font-size: var(--text-md);
-  letter-spacing: 0;
-  text-transform: none;
-}
-
+/* The sidebar title, field label, and search input share the Builder / Speed sidebar styles. */
 .lookup-page .search-wrap {
-  margin: 10px 0 14px;
+  margin: 0;
 }
 
 .lookup-page #pokemon-search {
-  min-height: 44px;
+  padding: 10px 12px;
 }
 
 .lookup-browse-context {
-  margin: 0 0 8px;
+  /* Sits close to the list it captions, inside the sidebar's 14px grid gap. */
+  margin: 0 0 -6px;
   color: var(--muted);
   font-size: var(--text-xs);
   line-height: 1.35;
