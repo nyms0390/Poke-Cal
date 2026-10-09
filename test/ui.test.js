@@ -1070,6 +1070,24 @@ test("every page links Matchups right after Builder, and Matchups marks itself c
   assert.match(builder, /id="builder-matchups-link"[^>]+href="\.\/matchups\.html"/);
 });
 
+test("every page orders the nav as the tuning flow: Speed Tiers, Builder, Matchups", () => {
+  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+    const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
+    const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
+    const links = [...nav.matchAll(/<a(?: class="active")? href="([^"]+)"(?: aria-current="page")?>([^<]+)<\/a>/g)]
+      .map(([, href]) => href);
+    assert.deepEqual(links, [
+      "./index.html",
+      "./moves.html",
+      "./battle.html",
+      "./speed.html",
+      "./builder.html",
+      "./matchups.html",
+      "./teams.html",
+    ], page);
+  }
+});
+
 test("matchups page exposes the overview, one filtered results list and the turn grid", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
   for (const id of ["matchups-grid", "matchups-list", "matchups-outcome-filter", "matchups-outcome-select", "matchups-opponent-search", "matchups-share-legend", "matchups-showing"]) {

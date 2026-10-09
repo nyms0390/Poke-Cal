@@ -77,6 +77,7 @@ import {
   typeBadge,
   moveTypeIcon,
 } from "./components.js";
+import { watchActiveSet } from "./active-set-sync.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import {
@@ -322,6 +323,21 @@ async function initialize() {
   markActiveSetConsumed(activeEntry.revision);
   removeConsumedUrlParams();
   renderDamageShell({ incoming, incomingSet });
+  // Battle keeps its own team copies, so it takes a hand-off only when shown again by Back /
+  // Forward (as a fresh load would), never from a background tab: placing a Pokémon already on
+  // the team writes Battle's copy to the shared set, which would undo edits made elsewhere.
+  watchActiveSet(takePendingHandOff, { crossTab: false });
+}
+
+// Back / Forward restored this page: take a hand-off written since it was last shown.
+function takePendingHandOff() {
+  const activeEntry = activeSetStore.readEntry();
+  if (!isActiveSetUnconsumed(activeEntry, activeSetConsumedStore.read().revision)) return;
+  const incoming = findPokemon(activeEntry.set.pokemonId);
+  markActiveSetConsumed(activeEntry.revision);
+  if (!incoming) return;
+  placeIncomingAttacker(incoming, activeEntry.set);
+  renderDamage();
 }
 
 function findPokemon(id) {

@@ -93,6 +93,17 @@ export function activeSetsEqual(a, b) {
   return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 }
 
+// What a page should do when the shared set may have changed on another page or tab, given
+// the set this page would write now: "none" when they already match (or the store is empty),
+// "apply" to update the same Pokémon in place, "seed" to switch to the stored Pokémon.
+export function planActiveSetRefresh(stored, current) {
+  const next = normalizeActiveSet(stored);
+  if (!next) return "none";
+  const mine = normalizeActiveSet(current);
+  if (activeSetsEqual(next, mine)) return "none";
+  return mine?.pokemonId === next.pokemonId ? "apply" : "seed";
+}
+
 // True when the shared active set holds a Pokémon written since `consumedRevision` (the
 // revision a page last consumed or wrote itself). A missing marker never re-seeds a legacy
 // (revision 0) blob, so a plain reload restores the page's own saved state.

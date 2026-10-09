@@ -7,6 +7,7 @@ import {
   activeSetFromState,
   applyActiveSet,
   createActiveSetStore,
+  planActiveSetRefresh,
 } from "../data/active-set.js";
 import {
   breakPoints,
@@ -78,6 +79,7 @@ import { mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
+import { watchActiveSet } from "./active-set-sync.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
 import { SET_SP_LIMIT, mountSetEditor, setEditorMoves, spSpent, statusOptions } from "./set-editor.js";
 
@@ -198,6 +200,7 @@ async function initialize() {
   seedPokemon(initialPokemon, {
     activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
   });
+  watchActiveSet(refreshFromActiveSet);
 }
 
 function renderStatus() {
@@ -282,6 +285,31 @@ function seedPokemon(pokemon, { activeSet = null } = {}) {
         }),
       };
     }
+  }, { refreshPicks: true });
+}
+
+// Another page or tab changed the shared set (or Back restored this page): show the stored set.
+// The shared set wins over unapplied edits here, which were staged against the old set.
+function refreshFromActiveSet() {
+  if (!catalogs || !state.user) return;
+  const stored = activeSetStore.readSet();
+  const plan = planActiveSetRefresh(stored, activeSetFromState(state.user));
+  if (plan === "none") return;
+  const pokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === stored.pokemonId);
+  if (!pokemon) return;
+  if (plan === "seed") {
+    seedPokemon(pokemon, { activeSet: stored });
+    return;
+  }
+  resetUserSetupDraft();
+  updatePage(() => {
+    state = {
+      ...state,
+      user: applyActiveSet(state.user, stored, {
+        abilityLookup: catalogs.abilityLookup,
+        itemLookup: catalogs.itemLookup,
+      }),
+    };
   }, { refreshPicks: true });
 }
 

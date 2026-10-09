@@ -1,5 +1,5 @@
 import { normalizeId } from "../data/catalog.js";
-import { activeSetFromState, applyActiveSet, createActiveSetStore } from "../data/active-set.js";
+import { activeSetFromState, applyActiveSet, createActiveSetStore, planActiveSetRefresh } from "../data/active-set.js";
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import {
   HIT_BUCKETS,
@@ -30,6 +30,7 @@ import { formatDamageReason, formatKoText } from "../i18n-formatters.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
 import { browserStorage, consumeQueryParam, optionElement, pokemonMiniSprite } from "./components.js";
+import { watchActiveSet } from "./active-set-sync.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
@@ -191,7 +192,31 @@ async function initialize() {
   seedPokemon(initialPokemon, {
     activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
   });
+  watchActiveSet(refreshFromActiveSet);
   loadTrickRoomShares();
+}
+
+// Another page or tab changed the shared set (or Back restored this page): show the stored set.
+function refreshFromActiveSet() {
+  if (!catalogs || !state.user) return;
+  const stored = activeSetStore.readSet();
+  const plan = planActiveSetRefresh(stored, activeSetFromState(state.user));
+  if (plan === "none") return;
+  const pokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === stored.pokemonId);
+  if (!pokemon) return;
+  if (plan === "seed") {
+    seedPokemon(pokemon, { activeSet: stored });
+    return;
+  }
+  state = {
+    ...state,
+    user: applyActiveSet(state.user, stored, {
+      abilityLookup: catalogs.abilityLookup,
+      itemLookup: catalogs.itemLookup,
+    }),
+  };
+  setEditor.renderOptions();
+  render();
 }
 
 async function loadTrickRoomShares() {

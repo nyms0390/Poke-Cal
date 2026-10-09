@@ -1,5 +1,5 @@
 import { normalizeId } from "../data/catalog.js";
-import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
+import { activeSetFromState, createActiveSetStore, planActiveSetRefresh } from "../data/active-set.js";
 import {
   popularOpponentPool,
   speedBreakpoints,
@@ -35,6 +35,7 @@ import {
 } from "./components.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { createLiveUpdater } from "./live-update.js";
+import { watchActiveSet } from "./active-set-sync.js";
 
 const elements = {
   source: document.querySelector("#speed-source"),
@@ -176,6 +177,30 @@ async function initialize() {
   seedUser(initialPokemon, {
     activeSet: activeSet?.pokemonId === normalizeId(initialPokemon?.id) ? activeSet : null,
   });
+  watchActiveSet(refreshFromActiveSet);
+}
+
+// The part of the shared set this page owns (nature, Speed SP, ability, item); the other stats'
+// SP and the moves come from `fallback`, the stored set.
+function speedActiveSet(fallback) {
+  return activeSetFromState({
+    pokemon: user.pokemon,
+    nature: user.nature,
+    sp: { spe: user.spe },
+    ability: user.ability,
+    item: user.item,
+  }, fallback);
+}
+
+// Another page or tab changed the shared set (or Back restored this page): show the stored set.
+function refreshFromActiveSet() {
+  if (!catalogs || !user) return;
+  const stored = activeSetStore.readSet();
+  const plan = planActiveSetRefresh(stored, speedActiveSet(stored));
+  if (plan === "none") return;
+  const pokemon = catalogs.pokemon.find(({ id }) => normalizeId(id) === stored.pokemonId);
+  if (!pokemon) return;
+  seedUser(pokemon, { activeSet: stored, previous: plan === "apply" ? user : null });
 }
 
 function renderNatureOptions() {
@@ -194,7 +219,8 @@ function renderStatus() {
   elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
 }
 
-function seedUser(pokemon, { activeSet = null } = {}) {
+// `previous` (same Pokémon) keeps the ability's "active" toggle when the ability is unchanged.
+function seedUser(pokemon, { activeSet = null, previous = null } = {}) {
   if (!pokemon) return;
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: catalogs.abilityLookup,
@@ -218,6 +244,9 @@ function seedUser(pokemon, { activeSet = null } = {}) {
       speedItem: speedItemIdForSet(initialSet.itemId),
       abilityActive: false,
     };
+    if (previous?.abilityActive && normalizeId(previous.ability?.id) === normalizeId(user.ability?.id)) {
+      user = { ...user, abilityActive: true };
+    }
     manualOpponents = manualOpponents.filter(({ pokemon: opponent }) =>
       normalizeId(opponent.id) !== normalizeId(pokemon.id));
   });
@@ -277,13 +306,7 @@ function handleControl(event) {
 
 function render() {
   if (!user) return;
-  activeSetStore.writeSet(activeSetFromState({
-    pokemon: user.pokemon,
-    nature: user.nature,
-    sp: { spe: user.spe },
-    ability: user.ability,
-    item: user.item,
-  }, activeSetStore.readSet()));
+  activeSetStore.writeSet(speedActiveSet(activeSetStore.readSet()));
   const mode = [...elements.mode].find(({ checked }) => checked)?.value ?? "battle";
   const battle = mode === "battle";
   for (const input of elements.battleOnly) input.disabled = !battle;
