@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f5">
+  <title>Battle Calculator — paired workspace concept</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #1c2a2b; background: #f7f8f5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, input, select { font: inherit; }
+    button, select, input { border: 1px solid #dce2de; border-radius: 8px; background: #fff; color: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid #82b8b9; outline-offset: 2px; }
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: 12px; top: 12px; z-index: 5; padding: 10px; background: white; }
+    .topbar { display: flex; align-items: center; gap: 26px; min-height: 56px; padding: 0 20px; border-bottom: 1px solid #dce2de; background: #f7f8f5; }
+    .brand { flex: none; color: #1c2a2b; font-size: 25px; font-weight: 750; letter-spacing: -.04em; text-decoration: none; }
+    .brand span { color: #326e70; }
+    nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-width: 0; }
+    nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 11px; border-bottom: 3px solid transparent; color: #29393a; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    nav a:hover, nav a:focus-visible, nav a[aria-current] { color: #245d60; border-bottom-color: #326e70; }
+    .language { margin-left: auto; font-size: 13px; white-space: nowrap; }
+    .language select { min-height: 38px; padding: 0 10px; }
+    main { width: calc(100% - 24px); max-width: 1480px; margin: 0 auto 36px; background: #fff; border: 1px solid #dce2de; border-top: 0; border-radius: 0 0 12px 12px; }
+    .page-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 24px 28px 20px; border-bottom: 1px solid #dce2de; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(23px, 2.5vw, 30px); line-height: 1.2; letter-spacing: -.025em; }
+    .lede { margin-top: 4px; color: #526465; font-size: 14px; }
+    .concept-note { align-self: center; color: #647474; font-size: 12px; text-align: right; }
+    .workspace { padding: 20px 28px 30px; }
+    .pairing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+    .set { min-width: 0; padding: 16px; border: 1px solid #dce2de; border-radius: 12px; }
+    .set-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .set-head h2 { font-size: 17px; }
+    .identity { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+    .sprite { display: grid; place-items: center; width: 70px; height: 70px; border-radius: 10px; background: #edf5f2; }
+    .sprite img { display: block; width: 62px; height: 62px; object-fit: contain; image-rendering: pixelated; }
+    .pokemon-name { min-width: 0; font-size: 23px; font-weight: 740; letter-spacing: -.025em; overflow-wrap: anywhere; }
+    .types { display: flex; gap: 5px; margin-top: 4px; }
+    .type { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 8px; border-radius: 20px; color: white; font-size: 11px; font-weight: 700; }
+    .ghost { background: #5b689e; } .fighting { background: #ad4052; } .electric { background: #be951e; }
+    .edit { min-height: 38px; padding: 0 12px; font-size: 13px; font-weight: 650; }
+    .edit:hover, .field summary:hover { background: #edf5f2; border-color: #a8c8c4; }
+    .set-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin: 15px 0 14px; padding: 12px 0; border-top: 1px solid #e3e8e5; border-bottom: 1px solid #e3e8e5; }
+    .fact { min-width: 0; }
+    .fact small { display: block; margin-bottom: 3px; color: #627271; font-size: 11px; }
+    .fact strong { display: block; font-size: 13px; font-weight: 630; overflow-wrap: anywhere; }
+    .moves-label { margin-bottom: 7px; color: #526465; font-size: 11px; font-weight: 700; }
+    .moves { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mobile-summary { display: none; }
+    .move { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 9px; border: 1px solid #dce2de; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .move.ghost-move { border-color: #bfc7df; background: #f1f2f8; }
+    .move.electric-move { border-color: #e5d99b; background: #faf8eb; }
+    .field { margin-top: 14px; border: 1px solid #dce2de; border-radius: 10px; }
+    .field summary { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; min-height: 54px; padding: 9px 16px; cursor: pointer; list-style: none; }
+    .field summary::-webkit-details-marker { display: none; }
+    .field strong { margin-right: 5px; font-size: 13px; }
+    .condition { padding: 4px 8px; border-radius: 5px; background: #f2f5f2; color: #4f6262; font-size: 12px; }
+    .field-arrow { margin-left: auto; color: #326e70; font-size: 12px; font-weight: 700; }
+    .field-editor { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 14px 16px 16px; border-top: 1px solid #dce2de; }
+    .field-editor label { display: grid; gap: 5px; color: #526465; font-size: 12px; }
+    .field-editor select { width: 100%; min-height: 38px; padding: 0 8px; }
+    .results { margin-top: 28px; }
+    .results-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .results h2 { font-size: 19px; }
+    .results-note { color: #647474; font-size: 12px; }
+    .damage-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+    .damage-column { min-width: 0; }
+    .damage-column h3 { margin-bottom: 8px; font-size: 13px; font-weight: 700; }
+    .damage-column h3 span { color: #627271; font-weight: 500; }
+    .damage-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; min-height: 66px; margin-bottom: 6px; padding: 10px 12px; border: 1px solid #dce2de; border-radius: 8px; }
+    .damage-row.primary { border-color: #a9c8c4; background: #edf5f2; }
+    .damage-row strong { min-width: 0; font-size: 13px; overflow-wrap: anywhere; }
+    .damage-row .range { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+    .damage-row .ko { grid-column: 1 / -1; color: #526465; font-size: 12px; }
+    .section-foot { margin-top: 12px; color: #647474; font-size: 11px; line-height: 1.45; }
+    dialog { width: min(580px, calc(100% - 24px)); max-height: min(85vh, 760px); padding: 0; border: 1px solid #b9c9c4; border-radius: 12px; box-shadow: 0 14px 42px #12312e2b; }
+    dialog::backdrop { background: #0c252688; }
+    .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #dce2de; }
+    .dialog-head h2 { font-size: 19px; }
+    .close { min-width: 36px; min-height: 36px; font-size: 18px; }
+    .dialog-body { padding: 18px 20px; }
+    .dialog-body p { color: #526465; font-size: 13px; line-height: 1.5; }
+    .dialog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .dialog-grid label { display: grid; gap: 5px; color: #526465; font-size: 12px; }
+    .dialog-grid input, .dialog-grid select { width: 100%; min-height: 40px; padding: 0 10px; }
+    .dialog-footer { display: flex; justify-content: flex-end; padding: 14px 20px; border-top: 1px solid #dce2de; }
+    .done { min-height: 40px; padding: 0 16px; background: #326e70; border-color: #326e70; color: #fff; font-weight: 700; }
+    @media (max-width: 900px) { .language { display: none; } .topbar { gap: 12px; } nav { overflow-x: auto; flex-wrap: nowrap; } .workspace { padding: 16px; } .page-head { padding: 20px 16px; } }
+    @media (max-width: 720px) { main { width: 100%; border: 0; } .pairing, .damage-columns { grid-template-columns: 1fr; } .set { padding: 14px; } .identity { grid-template-columns: 58px minmax(0, 1fr) auto; gap: 8px; } .sprite { width: 58px; height: 58px; } .sprite img { width: 52px; height: 52px; } .pokemon-name { font-size: 19px; } .edit { padding: 0 8px; } .set-facts, .moves, .moves-label { display: none; } .mobile-summary { display: block; margin-top: 11px; padding-top: 10px; border-top: 1px solid #e3e8e5; color: #526465; font-size: 12px; } .page-head { align-items: start; } .concept-note { max-width: 120px; } .field-editor { grid-template-columns: repeat(2, minmax(0, 1fr)); } .results { margin-top: 22px; } }
+    @media (max-width: 390px) { .concept-note { display: none; } .dialog-grid { grid-template-columns: 1fr; } .field-arrow { width: 100%; margin-left: 0; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to main content</a>
+  <header class="topbar">
+    <a class="brand" href="../../index.html" aria-label="PokéCal home">Poké<span>Cal</span></a>
+    <nav aria-label="PokéCal pages">
+      <a href="../../index.html">Lookup</a><a href="../../moves.html">Moves</a><a href="../../battle.html" aria-current="page">Battle Calculator</a><a href="../../builder.html">Builder</a><a href="../../matchups.html">Matchups</a><a href="../../speed.html">Speed Tiers</a><a href="../../teams.html">Teams</a>
+    </nav>
+    <label class="language">Language <select aria-label="Language"><option>English</option></select></label>
+  </header>
+  <main id="content">
+    <div class="page-head">
+      <div><h1>Battle Calculator</h1><p class="lede">Build both sides together, then compare their damage.</p></div>
+      <p class="concept-note">Static layout concept · sample matchup</p>
+    </div>
+    <div class="workspace">
+      <section class="pairing" aria-label="Battle sets">
+        <article class="set" aria-labelledby="attacker-heading">
+          <div class="set-head"><h2 id="attacker-heading">Attacker</h2></div>
+          <div class="identity"><div class="sprite"><img src="https://play.pokemonshowdown.com/sprites/gen5/annihilape.png" width="62" height="62" alt=""></div><div><div class="pokemon-name">Annihilape</div><div class="types"><span class="type fighting">Fighting</span><span class="type ghost">Ghost</span></div></div><button class="edit" type="button" data-edit="attacker">Edit set</button></div>
+          <div class="set-facts"><div class="fact"><small>Spread</small><strong>Jolly · 2 / 32 / 0 / 0 / 0 / 32 SP</strong></div><div class="fact"><small>Ability</small><strong>Defiant</strong></div><div class="fact"><small>Item</small><strong>Choice Scarf</strong></div><div class="fact"><small>Speed</small><strong>234</strong></div></div>
+          <p class="moves-label">MOVES</p><div class="moves"><span class="move ghost-move">Rage Fist</span><span class="move ghost-move">Shadow Claw</span><span class="move">Ice Punch</span><span class="move">Protect</span></div><p class="mobile-summary">Jolly · Choice Scarf · 234 Speed · 4 moves</p>
+        </article>
+        <article class="set" aria-labelledby="defender-heading">
+          <div class="set-head"><h2 id="defender-heading">Defender</h2></div>
+          <div class="identity"><div class="sprite"><img src="https://play.pokemonshowdown.com/sprites/gen5/pikachu.png" width="62" height="62" alt=""></div><div><div class="pokemon-name">Pikachu</div><div class="types"><span class="type electric">Electric</span></div></div><button class="edit" type="button" data-edit="defender">Edit set</button></div>
+          <div class="set-facts"><div class="fact"><small>Spread</small><strong>Adamant · 0 / 2 / 0 / 32 / 0 / 32 SP</strong></div><div class="fact"><small>Ability</small><strong>Lightning Rod</strong></div><div class="fact"><small>Item</small><strong>Light Ball</strong></div><div class="fact"><small>Speed</small><strong>142</strong></div></div>
+          <p class="moves-label">MOVES</p><div class="moves"><span class="move">Fake Out</span><span class="move electric-move">Volt Tackle</span><span class="move electric-move">Eerie Impulse</span><span class="move electric-move">Thunder Punch</span></div><p class="mobile-summary">Adamant · Light Ball · 142 Speed · 4 moves</p>
+        </article>
+      </section>
+      <details class="field"><summary><strong>Field conditions</strong><span class="condition">Doubles</span><span class="condition">No weather</span><span class="condition">No terrain</span><span class="condition">Trick Room off</span><span class="field-arrow">Edit conditions ↓</span></summary><div class="field-editor"><label>Format<select><option>Doubles</option><option>Singles</option></select></label><label>Weather<select><option>None</option><option>Sun</option><option>Rain</option></select></label><label>Terrain<select><option>None</option><option>Electric</option><option>Grassy</option></select></label><label>Trick Room<select><option>Off</option><option>On</option></select></label></div></details>
+      <section class="results" aria-labelledby="results-heading"><div class="results-head"><h2 id="results-heading">Damage comparison</h2><p class="results-note">Range and likely hits to KO</p></div><div class="damage-columns">
+        <div class="damage-column"><h3>Annihilape <span>→ Pikachu</span></h3><div class="damage-row primary"><strong>Rage Fist <span class="type ghost">Ghost</span></strong><span class="range">480.9–567.2%</span><span class="ko">Guaranteed one-hit KO</span></div><div class="damage-row"><strong>Shadow Claw</strong><span class="range">96.3–114.5%</span><span class="ko">Chance to KO in one hit</span></div><div class="damage-row"><strong>Ice Punch</strong><span class="range">69–81.8%</span><span class="ko">Guaranteed two-hit KO</span></div></div>
+        <div class="damage-column"><h3>Pikachu <span>→ Annihilape</span></h3><div class="damage-row primary"><strong>Volt Tackle <span class="type electric">Electric</span></strong><span class="range">59.3–70.5%</span><span class="ko">Guaranteed two-hit KO</span></div><div class="damage-row"><strong>Thunder Punch</strong><span class="range">37.4–44.9%</span><span class="ko">Guaranteed three-hit KO</span></div><div class="damage-row"><strong>Fake Out</strong><span class="range">0%</span><span class="ko">Does not affect Ghost-type Annihilape</span></div></div>
+      </div><p class="section-foot">Illustrative values copied from the current calculator for this sample only. This page demonstrates layout and editor access; it does not recalculate damage.</p></section>
+    </div>
+  </main>
+  <dialog id="edit-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title">Edit set</h2><button class="close" type="button" aria-label="Close editor">×</button></div><div class="dialog-body"><p>In the proposed calculator, this editor keeps the selected set’s Pokémon, saved set, spread, SP, stages, item, ability, and four moves together. Both set summaries remain visible in the main workspace.</p><div class="dialog-grid"><label>Pokémon<input id="dialog-pokemon" value="Annihilape"></label><label>Saved set<select><option>Champions default</option></select></label><label>Nature<select id="dialog-nature"><option>Jolly</option><option>Adamant</option></select></label><label>Item<select id="dialog-item"><option>Choice Scarf</option><option>Light Ball</option></select></label><label>Ability<select id="dialog-ability"><option>Defiant</option><option>Lightning Rod</option></select></label><label>Spread<select><option>Current spread</option></select></label></div></div><div class="dialog-footer"><button class="done" type="button">View comparison</button></div></dialog>
+  <script>
+    const dialog = document.querySelector('#edit-dialog');
+    document.querySelectorAll('[data-edit]').forEach(button => button.addEventListener('click', () => {
+      const side = button.dataset.edit;
+      document.querySelector('#dialog-title').textContent = `Edit ${side}`;
+      document.querySelector('#dialog-pokemon').value = side === 'attacker' ? 'Annihilape' : 'Pikachu';
+      document.querySelector('#dialog-nature').value = side === 'attacker' ? 'Jolly' : 'Adamant';
+      document.querySelector('#dialog-item').value = side === 'attacker' ? 'Choice Scarf' : 'Light Ball';
+      document.querySelector('#dialog-ability').value = side === 'attacker' ? 'Defiant' : 'Lightning Rod';
+      dialog.showModal();
+    }));
+    document.querySelector('.close').addEventListener('click', () => dialog.close());
+    document.querySelector('.done').addEventListener('click', () => dialog.close());
+  </script>
+</body>
+</html>

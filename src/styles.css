@@ -4141,13 +4141,13 @@ textarea:focus-visible {
   top: 0;
   align-self: start;
   min-width: 0;
-  padding: 20px 0 0;
+  padding: 20px;
   background: var(--surface);
 }
 
 .lookup-page .search-panel > label {
   display: block;
-  margin: 0 20px;
+  margin: 0;
   color: var(--ink);
   font-size: var(--text-md);
   letter-spacing: 0;
@@ -4155,7 +4155,7 @@ textarea:focus-visible {
 }
 
 .lookup-page .search-wrap {
-  margin: 10px 20px 14px;
+  margin: 10px 0 14px;
 }
 
 .lookup-page #pokemon-search {
@@ -4163,7 +4163,7 @@ textarea:focus-visible {
 }
 
 .lookup-browse-context {
-  margin: 0 16px 8px;
+  margin: 0 0 8px;
   color: var(--muted);
   font-size: var(--text-xs);
   line-height: 1.35;
@@ -4178,12 +4178,12 @@ textarea:focus-visible {
 
 .lookup-browse-row {
   display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
+  grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   width: 100%;
   min-height: 74px;
-  padding: 8px 16px;
+  padding: 8px 4px;
   border: 0;
   border-bottom: 1px solid var(--line);
   background: transparent;
