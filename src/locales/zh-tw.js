@@ -156,8 +156,6 @@ export const ZH_TW_MESSAGES = {
   "battle.defaults": "Limitless Champions 預設 · 依使用率排序特性、道具、招式與性格 · 0 SP",
   "battle.speed": ({ value }) => `速度 ${value}`,
   "battle.speedComparison": ({ attacker, attackerSpeed, defender, defenderSpeed }) => `${attacker} 速度 ${attackerSpeed} 對 ${defender} 速度 ${defenderSpeed}`,
-  "battle.attackerMoves": "攻擊方招式",
-  "battle.defenderMoves": "防守方招式",
   "battle.unsupported": "不支援",
   "battle.copy": "複製",
   "battle.choosePokemonFirst": "請先選擇寶可夢",
@@ -480,6 +478,11 @@ export const ZH_TW_MESSAGES = {
   "sheet.sideConditions": ({ count }) => `${count} 項場地效果`,
   "sheet.noFieldEffects": "無場地效果",
   "sheet.editFieldShort": "編輯",
+  "battle.swapSides": "交換雙方",
+  "battle.fieldConditions": "場地狀態",
+  "battle.damageDirection": ({ attacker, defender }) => `${attacker} → ${defender}`,
+  "label.speed": "速度",
+  "battle.mobileSetPreview": ({ speed, count }) => `速度 ${speed} · ${count} 個招式`,
 };
 
 // Exact document-shell copy. Runtime sentences with values are formatted through message keys.

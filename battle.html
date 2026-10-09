@@ -33,14 +33,31 @@
           </label>
         </nav>
       </header>
-      <div class="workspace battle-tool">
-        <div class="workspace-intro">
-          <h1 data-i18n="nav.battle">Battle Calculator</h1>
-          <p class="intro">Compare two Pokémon in battle.</p>
+      <div class="battle-workspace battle-tool">
+        <div class="battle-page-head">
+          <div>
+            <h1 data-i18n="nav.battle">Battle Calculator</h1>
+            <p class="intro">Compare two Pokémon in battle.</p>
+          </div>
+          <button id="swap-sides" type="button" data-i18n="battle.swapSides">Swap sides</button>
         </div>
-        <div class="workspace-sidebar battle-sidebar">
-          <details class="battle-set-panel" name="battle-side" open>
-            <summary>Attacker</summary>
+        <div class="battle-workspace-body">
+          <div class="battle-pairing">
+            <article class="battle-set-card" aria-labelledby="battle-attacker-title">
+              <h2 id="battle-attacker-title" data-i18n="sheet.attacker">Attacker</h2>
+              <div id="attacker-summary-card"></div>
+              <span id="attacker-types-preview" class="battle-set-types"></span>
+              <p id="attacker-mobile-preview" class="battle-set-mobile-preview"></p>
+              <div class="battle-set-facts">
+                <div><span data-i18n="matchups.spread">Spread</span><strong id="attacker-spread-preview">—</strong></div>
+                <div><span data-i18n="label.ability">Ability</span><strong id="attacker-ability-preview">—</strong></div>
+                <div><span data-i18n="label.item">Item</span><strong id="attacker-item-preview">—</strong></div>
+                <div><span data-i18n="label.speed">Speed</span><strong id="attacker-speed-preview">—</strong></div>
+              </div>
+              <div class="battle-set-moves">
+                <h3 data-i18n="label.moves">Moves</h3>
+                <div id="attacker-moves-preview"></div>
+              </div>
             <section id="attacker-editor" class="damage-side" aria-label="Attacker">
               <div class="panel-heading sheet-hidden">
                 <span>Attacker</span>
@@ -159,9 +176,22 @@
                 </div>
               </details>
             </section>
-          </details>
-          <details class="battle-set-panel" name="battle-side">
-            <summary>Defender</summary>
+            </article>
+            <article class="battle-set-card" aria-labelledby="battle-defender-title">
+              <h2 id="battle-defender-title" data-i18n="sheet.defender">Defender</h2>
+              <div id="defender-summary-card"></div>
+              <span id="defender-types-preview" class="battle-set-types"></span>
+              <p id="defender-mobile-preview" class="battle-set-mobile-preview"></p>
+              <div class="battle-set-facts">
+                <div><span data-i18n="matchups.spread">Spread</span><strong id="defender-spread-preview">—</strong></div>
+                <div><span data-i18n="label.ability">Ability</span><strong id="defender-ability-preview">—</strong></div>
+                <div><span data-i18n="label.item">Item</span><strong id="defender-item-preview">—</strong></div>
+                <div><span data-i18n="label.speed">Speed</span><strong id="defender-speed-preview">—</strong></div>
+              </div>
+              <div class="battle-set-moves">
+                <h3 data-i18n="label.moves">Moves</h3>
+                <div id="defender-moves-preview"></div>
+              </div>
             <section id="defender-editor" class="damage-side" aria-label="Defender">
               <div class="panel-heading sheet-hidden">
                 <span>Defender</span>
@@ -280,22 +310,12 @@
                 </div>
               </details>
             </section>
-          </details>
-        </div>
-        <div class="workspace-content">
-          <div class="sheet-summary-host battle-sheet-summaries">
-            <div id="attacker-summary-card"></div>
-            <div id="defender-summary-card"></div>
-            <div id="field-summary-card"></div>
+            </article>
           </div>
-          <p id="damage-source" class="usage-source">Champions defaults loading…</p>
-          <details class="battle-environment"><summary data-i18n="sheet.field">Field</summary>
+          <div class="battle-field-strip">
+            <div id="field-summary-card"></div>
+            <span id="field-conditions-preview" class="battle-field-chips"></span>
             <section id="field-editor" class="field-card" aria-label="Field conditions">
-              <div class="panel-heading">
-                <span>Field</span>
-                <button id="swap-sides" type="button" title="Swap attacker and defender sides">⇄ Swap sides</button>
-              </div>
-
               <div class="field-grid">
                 <div id="battle-ambient-field"></div>
                 <label id="trick-room-toggle" class="inline-toggle"><input id="trick-room" type="checkbox" /> Trick Room</label>
@@ -325,7 +345,8 @@
                 </fieldset>
               </div>
             </section>
-          </details>
+          </div>
+          <p id="damage-source" class="usage-source">Champions defaults loading…</p>
           <section class="catalog-panel" aria-label="Damage ranges">
             <div class="panel-heading">
               <span>Move damage</span>

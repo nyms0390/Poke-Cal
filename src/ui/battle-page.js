@@ -75,6 +75,7 @@ import {
   statEditorRow,
   STAT_LABELS,
   typeBadge,
+  typeClassName,
 } from "./components.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
@@ -162,6 +163,16 @@ const elements = {
   status: document.querySelector("#status"),
 };
 
+const setPreviews = Object.fromEntries(["attacker", "defender"].map((side) => [side, {
+  types: document.querySelector(`#${side}-types-preview`),
+  spread: document.querySelector(`#${side}-spread-preview`),
+  ability: document.querySelector(`#${side}-ability-preview`),
+  item: document.querySelector(`#${side}-item-preview`),
+  speed: document.querySelector(`#${side}-speed-preview`),
+  moves: document.querySelector(`#${side}-moves-preview`),
+  mobile: document.querySelector(`#${side}-mobile-preview`),
+}]));
+
 const SP_STATS = STAT_KEYS;
 const savedSetStore = createSavedSetStore(browserStorage());
 const activeSetStore = createActiveSetStore(browserStorage());
@@ -236,14 +247,15 @@ const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
 });
 ambientFieldControls.sync(fieldState);
 
-// Phones edit each side and the field in its own bottom sheet, so the damage results sit right
-// under three summary cards instead of below both full editors.
+// The paired workspace keeps both set summaries visible. Editors use the existing bottom sheets
+// on phones and centered dialogs on larger screens, without cloning their live controls.
 const sideSheets = Object.fromEntries(["attacker", "defender"].map((side) => [side, mountSetSheet({
   editor: document.querySelector(`#${side}-editor`),
   id: `${side}-sheet`,
   titleKey: side === "attacker" ? "sheet.editAttacker" : "sheet.editDefender",
   doneKey: "sheet.viewResults",
   summaryHost: document.querySelector(`#${side}-summary-card`),
+  media: "(min-width: 0px)",
 })]));
 const fieldSheet = mountSetSheet({
   editor: document.querySelector("#field-editor"),
@@ -252,7 +264,18 @@ const fieldSheet = mountSetSheet({
   doneKey: "sheet.viewResults",
   editKey: "sheet.editFieldShort",
   summaryHost: document.querySelector("#field-summary-card"),
+  media: "(min-width: 0px)",
 });
+for (const sheet of [...Object.values(sideSheets), fieldSheet]) {
+  sheet.element.classList.add("battle-editor-dialog");
+}
+// Type badges sit under each name, and the field chips sit beside the field label, inside the
+// shared summary cards.
+for (const side of ["attacker", "defender"]) {
+  document.querySelector(`#${side}-summary-card .set-summary-text`)?.append(setPreviews[side].types);
+}
+const fieldConditionsPreview = document.querySelector("#field-conditions-preview");
+document.querySelector("#field-summary-card .set-summary-text")?.append(fieldConditionsPreview);
 const sheetBar = mountSheetBar({
   actions: [
     { sheet: sideSheets.attacker, labelKey: "sheet.attacker" },
@@ -1121,8 +1144,14 @@ function renderDamage() {
   const rows = [...attackerRows, ...defenderRows];
   elements.damageCount.textContent = t("count.moves", { count: rows.length });
   elements.damageList.replaceChildren(
-    damageColumn(t("battle.attackerMoves"), attackerRows),
-    damageColumn(t("battle.defenderMoves"), defenderRows),
+    damageColumn(t("battle.damageDirection", {
+      attacker: localizedName(attacker.pokemon),
+      defender: localizedName(defender.pokemon),
+    }), attackerRows),
+    damageColumn(t("battle.damageDirection", {
+      attacker: localizedName(defender.pokemon),
+      defender: localizedName(attacker.pokemon),
+    }), defenderRows),
   );
   translateSubtree(elements.attackerStatEditor, elements.defenderStatEditor, elements.damageList);
 }
@@ -1519,9 +1548,44 @@ function sideSummary(state) {
   return localizedName(state.pokemon);
 }
 
+function renderSetPreview(side) {
+  const state = damageState[side];
+  const preview = setPreviews[side];
+  if (!state?.pokemon) {
+    preview.types.replaceChildren();
+    preview.moves.replaceChildren();
+    for (const key of ["spread", "ability", "item", "speed"]) preview[key].textContent = "—";
+    preview.mobile.textContent = "";
+    return;
+  }
+
+  preview.types.replaceChildren(...state.pokemon.types.map(typeBadge));
+  preview.spread.textContent = `${localizedTerm("nature", state.nature)} · ${SP_STATS.map((stat) => state.sp[stat] ?? 0).join("/")} SP`;
+  preview.ability.textContent = state.ability ? localizedName(state.ability) : t("builder.noAbility");
+  preview.item.textContent = state.item ? localizedName(state.item) : t("builder.noItem");
+  const speedContext = finalSpeedContext();
+  const speed = finalSpeed({
+    ...sideStateForCalc(state),
+    tailwind: Boolean(fieldState[`${side}Side`]?.tailwind),
+  }, speedContext.field, speedContext.options);
+  const selectedMoves = selectedDamageMoves(side);
+  preview.speed.textContent = String(speed);
+  preview.mobile.textContent = t("battle.mobileSetPreview", { speed, count: selectedMoves.length });
+  preview.moves.replaceChildren(...selectedMoves.map(({ move }) => {
+    const chip = document.createElement("span");
+    chip.className = "battle-set-move";
+    const dot = document.createElement("span");
+    dot.className = `battle-set-move-type ${typeClassName(move.type)}`;
+    dot.setAttribute("aria-hidden", "true");
+    chip.append(dot, localizedName(move));
+    return chip;
+  }));
+}
+
 function renderSheetSummaries() {
   const names = ["attacker", "defender"].map((side) => {
     const state = damageState[side];
+    renderSetPreview(side);
     sideSheets[side].update({
       pokemon: state?.pokemon ?? null,
       label: t(side === "attacker" ? "sheet.attacker" : "sheet.defender"),
@@ -1534,14 +1598,24 @@ function renderSheetSummaries() {
   });
   const sideConditions = ["attackerSide", "defenderSide"]
     .reduce((total, side) => total + Object.values(fieldState[side] ?? {}).filter(Boolean).length, 0);
+  const fieldMeta = [
+    fieldState.trickRoom ? t("matchups.speedTrickRoom") : "",
+    sideConditions > 0 ? t("sheet.sideConditions", { count: sideConditions }) : "",
+  ].filter(Boolean);
   fieldSheet.update({
-    label: t("sheet.field"),
+    label: t("battle.fieldConditions"),
     title: ambientFieldLabels(fieldState).join(" · "),
-    meta: [
-      fieldState.trickRoom ? t("matchups.speedTrickRoom") : "",
-      sideConditions > 0 ? t("sheet.sideConditions", { count: sideConditions }) : "",
-    ].filter(Boolean).join(" · ") || t("sheet.noFieldEffects"),
+    meta: fieldMeta.join(" · ") || t("sheet.noFieldEffects"),
   });
+  fieldConditionsPreview.replaceChildren(...[
+    ...ambientFieldLabels(fieldState),
+    ...(fieldMeta.length > 0 ? fieldMeta : [t("sheet.noFieldEffects")]),
+  ].map((text) => {
+    const chip = document.createElement("span");
+    chip.className = "battle-field-chip";
+    chip.textContent = text;
+    return chip;
+  }));
   sheetBar.setNames([...names, ""]);
 }
 

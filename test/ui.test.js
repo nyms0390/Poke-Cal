@@ -1129,9 +1129,9 @@ test("set-editing pages name the editors and summary hosts the phone sheets use"
   }
 });
 
-test("every route uses the shared Matchups workspace", () => {
+test("sidebar routes use the shared Matchups workspace", () => {
   const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
-  for (const page of ["moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+  for (const page of ["moves.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
     const html = read(page);
     assert.match(html, /class="workspace[ "]/, page);
     assert.match(html, /<div class="workspace-intro">\s*<h1/, page);
@@ -1142,9 +1142,28 @@ test("every route uses the shared Matchups workspace", () => {
   const lookup = read("index.html");
   assert.match(lookup, /class="search-panel workspace-sidebar"/);
   assert.match(lookup, /class="tool-page workspace-content"/);
+});
+
+test("battle shows both set summaries and shared field before full-width results", () => {
+  const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
   const battle = read("battle.html");
-  assert.equal((battle.match(/<details class="battle-set-panel" name="battle-side"/g) ?? []).length, 2);
-  assert.match(battle, /<details class="battle-environment">[\s\S]*id="field-editor"/);
+  assert.match(battle, /class="battle-workspace[ "]/);
+  assert.doesNotMatch(battle, /name="battle-side"/);
+  const ordered = ["attacker-summary-card", "defender-summary-card", "field-summary-card", "damage-list"];
+  for (let index = 1; index < ordered.length; index++) {
+    assert.ok(battle.indexOf(`id="${ordered[index - 1]}"`) < battle.indexOf(`id="${ordered[index]}"`));
+  }
+  assert.match(battle, /id="attacker-editor"/);
+  assert.match(battle, /id="defender-editor"/);
+  assert.match(battle, /id="field-editor"/);
+  assert.match(battle, /id="attacker-mobile-preview"/);
+  assert.match(battle, /id="defender-mobile-preview"/);
+  assert.match(battle, /id="field-conditions-preview"/);
+  assert.equal((battle.match(/data-i18n="label.speed"/g) ?? []).length, 2);
+  const controller = read("src/ui/battle-page.js");
+  assert.match(controller, /media: "\(min-width: 0px\)"/);
+  // Results columns name the direction (attacker → defender) instead of a generic side label.
+  assert.match(controller, /t\("battle\.damageDirection"/);
 });
 
 test("the set sheet breakpoint matches the stylesheet", async () => {

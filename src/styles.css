@@ -257,7 +257,6 @@ footer {
 
 /* Panels sit on a 1px --line grid so dividers stay hairline-consistent. */
 .lookup-tool > .tool-page,
-.battle-tool,
 .battle-tool {
   overflow: visible;
 }
@@ -723,6 +722,7 @@ input[type="radio"] {
 .teams-more,
 .matchups-filter button,
 .panel-heading button,
+.battle-page-head #swap-sides,
 .saved-set-controls button,
 .set-paste-actions button,
 .damage-copy-button {
@@ -744,6 +744,8 @@ input[type="radio"] {
 .matchups-filter button:focus-visible,
 .panel-heading button:hover,
 .panel-heading button:focus-visible,
+.battle-page-head #swap-sides:hover,
+.battle-page-head #swap-sides:focus-visible,
 .saved-set-controls button:hover,
 .saved-set-controls button:focus-visible,
 .set-paste-actions button:hover,
@@ -4838,8 +4840,7 @@ textarea:focus-visible {
 
 /* The phone summary cards are hidden on wide screens; hide their hosts too so they add no gap. */
 @media (min-width: 721px) {
-  .workspace-content > div:has(> .set-summary),
-  .workspace-content > .battle-sheet-summaries {
+  .workspace-content > div:has(> .set-summary) {
     display: none;
   }
 }
@@ -4847,8 +4848,7 @@ textarea:focus-visible {
 /* Each tool keeps its own controls within the same input/results frame. */
 .workspace-content > .catalog-panel,
 .builder-results > .catalog-panel,
-.speed-sidebar .speed-control-panel,
-.battle-sidebar .damage-side {
+.speed-sidebar .speed-control-panel {
   padding: 0;
 }
 
@@ -4897,48 +4897,314 @@ textarea:focus-visible {
   padding: 0;
 }
 
-.battle-environment {
+/* ---------- Battle: paired workspace ---------- */
+
+.battle-workspace {
+  overflow: visible;
   border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-}
-
-.battle-environment > summary {
-  padding: 12px 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.battle-environment .field-card {
-  padding-top: 0;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
   background: var(--surface);
 }
 
-.battle-sidebar .saved-set-controls {
-  grid-template-columns: minmax(0, 1fr) auto auto;
+.battle-page-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px var(--panel-pad) 20px;
+  border-bottom: 1px solid var(--line);
 }
 
-.battle-sidebar .saved-set-controls > label {
-  grid-column: 1 / -1;
+.battle-page-head h1 {
+  margin: 0 0 2px;
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
 }
 
-.battle-set-panel > summary {
-  padding: 8px 0;
-  font-size: var(--text-xl);
-  font-weight: 700;
-  cursor: pointer;
+.battle-page-head .intro {
+  margin: 0;
 }
 
-.battle-set-panel[open] > summary {
-  margin-bottom: 12px;
+.battle-page-head #swap-sides {
+  flex: none;
+  min-height: var(--control-height);
+  padding: 8px 14px;
 }
 
-.battle-set-panel .panel-heading > span:first-child {
+.battle-workspace-body {
+  display: grid;
+  gap: 16px;
+  padding: 20px var(--panel-pad) var(--panel-pad);
+}
+
+.battle-pairing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.battle-set-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.battle-set-card h2 {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.battle-set-card .set-summary {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.battle-set-card .set-summary-sprite {
+  width: 70px;
+  height: 70px;
+}
+
+.battle-set-card .set-summary-sprite img {
+  max-width: 70px;
+  max-height: 70px;
+}
+
+.battle-set-card .set-summary-text > small,
+.battle-set-card .set-summary-text > span:not(.battle-set-types) {
   display: none;
 }
 
-.battle-set-panel + .battle-set-panel {
+.battle-set-card .set-summary-text strong {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+.battle-set-card .set-summary-edit {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+}
+
+.battle-set-card .set-summary-edit::after,
+.battle-set-card .set-summary-chevron {
+  display: none;
+}
+
+.battle-set-card .set-summary-edit:hover,
+.battle-set-card .set-summary-edit:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.battle-set-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.battle-set-mobile-preview {
+  display: none;
+}
+
+.battle-set-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+  padding: 12px 0;
   border-top: 1px solid var(--line);
-  padding-top: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.battle-set-facts > div {
+  min-width: 0;
+}
+
+.battle-set-facts span {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.battle-set-facts strong {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.battle-set-facts #attacker-speed-preview,
+.battle-set-facts #defender-speed-preview {
+  font-variant-numeric: tabular-nums;
+}
+
+.battle-set-moves h3 {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.battle-set-moves > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.battle-set-move {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.battle-set-move-type {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.battle-field-strip .set-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 54px;
+  padding: 9px 16px;
+  box-shadow: none;
+}
+
+/* Desktop and phone both show the field as a label plus one chip per active condition. */
+.battle-field-strip .set-summary-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.battle-field-strip .set-summary-text small {
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.battle-field-strip .set-summary-text > strong,
+.battle-field-strip .set-summary-text > span:not(.battle-field-chips) {
+  display: none;
+}
+
+.battle-field-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.battle-field-chip {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--canvas);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.battle-field-strip .set-summary-edit::after {
+  display: none;
+}
+
+.battle-workspace .catalog-panel {
+  padding: 0;
+}
+
+@media (max-width: 950px) {
+  .battle-pairing {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .battle-workspace {
+    border: 0;
+    background: transparent;
+  }
+
+  .battle-page-head {
+    align-items: flex-start;
+    padding: 4px 4px 12px;
+    border-bottom: 0;
+  }
+
+  .battle-page-head #swap-sides {
+    padding-inline: 8px;
+    font-size: var(--text-sm);
+  }
+
+  .battle-workspace-body {
+    gap: 12px;
+    padding: 0;
+  }
+
+  .battle-pairing {
+    gap: 8px;
+  }
+
+  .battle-set-card {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .battle-set-card .set-summary {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+  }
+
+  .battle-set-card .set-summary-sprite {
+    width: 56px;
+    height: 56px;
+  }
+
+  .battle-set-card .set-summary-sprite img {
+    max-width: 56px;
+    max-height: 56px;
+  }
+
+  .battle-set-card .set-summary-text > span:not(.battle-set-types) {
+    display: block;
+  }
+
+  .battle-set-types,
+  .battle-set-facts,
+  .battle-set-moves {
+    display: none;
+  }
+
+  .battle-set-mobile-preview {
+    display: block;
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .battle-workspace .catalog-panel {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+  }
 }
 
 .builder-picks > label:first-child {
@@ -4959,11 +5225,6 @@ textarea:focus-visible {
     margin-bottom: 16px;
     border: 1px solid var(--line);
     border-radius: var(--radius-card);
-  }
-
-  .workspace > .battle-sidebar:not(:has(.damage-side)),
-  .battle-environment:not(:has(#field-editor)) {
-    display: none;
   }
 
   .workspace-content > .catalog-panel,
@@ -6542,6 +6803,36 @@ dialog.set-sheet[open] {
   translate: 0 0;
 }
 
+@media (min-width: 721px) {
+  dialog.set-sheet.battle-editor-dialog {
+    inset: 0;
+    height: fit-content;
+    width: min(720px, calc(100% - 48px));
+    max-width: 720px;
+    max-height: min(90vh, 860px);
+    margin: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    box-shadow: 0 16px 48px rgb(16 24 40 / 20%);
+  }
+
+  dialog.set-sheet.battle-editor-dialog[open] {
+    transition: none;
+  }
+
+  .battle-editor-dialog .set-sheet-handle {
+    display: none;
+  }
+
+  .battle-editor-dialog .set-sheet-header {
+    padding-top: 16px;
+  }
+
+  .battle-editor-dialog .set-sheet-body > * {
+    padding: 20px;
+  }
+}
+
 @starting-style {
   dialog.set-sheet[open] {
     translate: 0 100%;
@@ -6702,7 +6993,8 @@ html:has(dialog.set-sheet[open]) {
   overflow-wrap: anywhere;
 }
 
-.set-summary-text span {
+/* Direct child only, so badges or chips a page adds inside the text keep their own styles. */
+.set-summary-text > span {
   color: var(--muted);
   font-size: var(--text-sm);
   overflow-wrap: anywhere;
@@ -6861,14 +7153,4 @@ html:has(dialog.set-sheet[open]) {
   .damage-controls:not(:has(> section)) {
     display: none;
   }
-}
-
-/* The Field disclosure already names the panel; keep only its Swap sides action. */
-.battle-environment .field-card > .panel-heading {
-  justify-content: flex-end;
-  margin-bottom: 0;
-}
-
-.battle-environment .field-card > .panel-heading > span:first-child {
-  display: none;
 }

@@ -153,8 +153,6 @@ export const EN_MESSAGES = {
   "battle.defaults": "Limitless Champions defaults · ranked ability, item, moves, and nature · neutral 0 SP",
   "battle.speed": ({ value }) => `Speed ${value}`,
   "battle.speedComparison": ({ attacker, attackerSpeed, defender, defenderSpeed }) => `${attacker} Speed ${attackerSpeed} vs ${defender} Speed ${defenderSpeed}`,
-  "battle.attackerMoves": "Attacker moves",
-  "battle.defenderMoves": "Defender moves",
   "battle.unsupported": "Unsupported",
   "battle.copy": "Copy",
   "battle.choosePokemonFirst": "Choose a Pokémon first",
@@ -479,4 +477,9 @@ export const EN_MESSAGES = {
   "sheet.sideConditions": ({ count }) => (count === 1 ? "1 side condition" : `${count} side conditions`),
   "sheet.noFieldEffects": "No side conditions",
   "sheet.editFieldShort": "Edit",
+  "battle.swapSides": "Swap sides",
+  "battle.fieldConditions": "Field conditions",
+  "battle.damageDirection": ({ attacker, defender }) => `${attacker} → ${defender}`,
+  "label.speed": "Speed",
+  "battle.mobileSetPreview": ({ speed, count }) => `Speed ${speed} · ${count} moves`,
 };
