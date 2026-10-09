@@ -1377,3 +1377,16 @@ test("Builder and Matchups edit the set with the same shared editor", () => {
   assert.match(editor, /row\.append\(icon, combobox\.element, crit\)/);
   assert.match(editor, /moveConditionSelect\(descriptor/);
 });
+
+test("Battle set cards and the shared set editor mark moves with the same round type icon", () => {
+  const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+  assert.match(read("src/ui/components.js"), /export function moveTypeIcon\(move/);
+  assert.match(read("src/ui/battle-page.js"), /chip\.append\(moveTypeIcon\(move, \{ className: "battle-set-move-type" \}\), localizedName\(move\)\)/);
+  assert.match(read("src/ui/set-editor.js"), /const icon = moveTypeIcon\(selected\)/);
+  // The Battle edit-set move slots lead with the type mark instead of "Move 1"…"Move 4".
+  const battle = read("src/ui/battle-page.js");
+  assert.match(battle, /const typeIcon = moveTypeIcon\(selectedMove\)/);
+  assert.match(battle, /moveTypeIcon\(picked, \{ icon: typeIcon \}\)/);
+  assert.match(battle, /row\.append\(typeIcon, combobox\.element\)/);
+  assert.doesNotMatch(battle, /damage-move-number/);
+});

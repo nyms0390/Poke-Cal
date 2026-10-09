@@ -131,6 +131,26 @@ export function typeIconPath(type) {
   return TYPE_ICON_PATHS[type] ?? "";
 }
 
+// A round type mark for a move (its base type, icon only; dashed when there is no move).
+// Builder and Matchups put it before each move slot; Battle puts it in the set cards' move
+// chips. Pass an existing mark as `icon` to update it in place. Decorative: the move name
+// always sits next to it.
+export function moveTypeIcon(move, { className = "", icon = document.createElement("span") } = {}) {
+  icon.className = ["move-type-icon", "type-badge", move?.type ? typeClassName(move.type) : "empty", className]
+    .filter(Boolean).join(" ");
+  icon.setAttribute("aria-hidden", "true");
+  const path = move?.type ? typeIconPath(move.type) : "";
+  if (!path) {
+    icon.replaceChildren();
+    return icon;
+  }
+  const image = document.createElement("img");
+  image.src = path;
+  image.alt = "";
+  icon.replaceChildren(image);
+  return icon;
+}
+
 export function typeClassName(type) {
   const normalized = String(type || "unknown")
     .toLowerCase()

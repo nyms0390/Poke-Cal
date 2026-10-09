@@ -75,7 +75,7 @@ import {
   statEditorRow,
   STAT_LABELS,
   typeBadge,
-  typeClassName,
+  moveTypeIcon,
 } from "./components.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
@@ -1044,12 +1044,11 @@ function renderDamageMovePickers(side) {
     ...[0, 1, 2, 3].map((index) => {
       const row = document.createElement("div");
       row.className = "damage-move-row";
-      const moveLabel = document.createElement("span");
-      moveLabel.className = "damage-move-number";
-      moveLabel.textContent = t("battle.moveNumber", { number: index + 1 });
-
       const selectedId = state.selectedMoveIds[index] ?? sideMoves[index]?.id ?? "";
       const selectedMove = sideMoves.find((move) => normalizeDamageId(move.id) === normalizeDamageId(selectedId));
+      // The move's type mark leads the slot, as in the Builder and Matchups set editor; the
+      // search input is still named "Move 1"…"Move 4".
+      const typeIcon = moveTypeIcon(selectedMove);
       const hidden = document.createElement("input");
       hidden.type = "hidden";
       hidden.value = selectedMove?.id ?? selectedId;
@@ -1063,6 +1062,7 @@ function renderDamageMovePickers(side) {
         showSelection: "placeholder",
         onSelect: (picked, search) => {
           hidden.value = picked.id;
+          moveTypeIcon(picked, { icon: typeIcon });
           search.value = localizedName(picked);
           search.placeholder = localizedName(picked);
           handleDamageControl({ target: hidden });
@@ -1070,7 +1070,7 @@ function renderDamageMovePickers(side) {
       });
       combobox.element.prepend(hidden);
       moveComboboxCleanups[side].push(combobox.destroy);
-      row.append(moveLabel, combobox.element);
+      row.append(typeIcon, combobox.element);
 
       row.append(critToggleButton({
         index,
@@ -1574,10 +1574,7 @@ function renderSetPreview(side) {
   preview.moves.replaceChildren(...selectedMoves.map(({ move }) => {
     const chip = document.createElement("span");
     chip.className = "battle-set-move";
-    const dot = document.createElement("span");
-    dot.className = `battle-set-move-type ${typeClassName(move.type)}`;
-    dot.setAttribute("aria-hidden", "true");
-    chip.append(dot, localizedName(move));
+    chip.append(moveTypeIcon(move, { className: "battle-set-move-type" }), localizedName(move));
     return chip;
   }));
 }

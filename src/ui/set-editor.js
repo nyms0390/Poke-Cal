@@ -30,12 +30,11 @@ import {
   ensureRenderedRows,
   moveConditionSelect,
   moveSlotCombobox,
+  moveTypeIcon,
   optionElement,
   pokemonSearchMatchers,
   pokemonSpriteElements,
   searchResultButton,
-  typeClassName,
-  typeIconPath,
 } from "./components.js";
 import { moveConditionDescriptors, moveConditionValue } from "./move-conditions.js";
 
@@ -317,9 +316,7 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
       row.className = "set-editor-move-row";
       const selectedId = setup.selectedMoveIds?.[index] ?? "";
       const selected = moves.find((move) => normalizeId(move.id) === normalizeId(selectedId));
-      const icon = document.createElement("span");
-      icon.setAttribute("aria-hidden", "true");
-      renderMoveTypeIcon(icon, selected);
+      const icon = moveTypeIcon(selected);
       const combobox = moveSlotCombobox({
         index,
         moves,
@@ -361,20 +358,4 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
   }
 
   return { elements, renderOptions, render, renderMoves };
-}
-
-// A round type mark in front of each move slot (the move's base type); dashed when empty.
-function renderMoveTypeIcon(icon, move) {
-  icon.className = `set-editor-move-type type-badge ${move?.type ? typeClassName(move.type) : "empty"}`;
-  const path = move?.type ? typeIconPath(move.type) : "";
-  if (!path) {
-    icon.replaceChildren();
-    return;
-  }
-  const image = document.createElement("img");
-  image.src = path;
-  image.width = 16;
-  image.height = 16;
-  image.alt = "";
-  icon.replaceChildren(image);
 }

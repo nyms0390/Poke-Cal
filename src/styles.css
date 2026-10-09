@@ -2123,18 +2123,19 @@ button:disabled {
   display: inline-flex;
 }
 
+/* Type mark, move search and crit on one line; conditions and toggles go under the search,
+   as in the shared set editor. */
 .damage-move-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 6px 8px;
   align-items: center;
 }
 
-.damage-move-number {
-  color: var(--subtle);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  white-space: nowrap;
+.damage-move-row > .move-inline-control,
+.damage-move-row > .inline-toggle {
+  grid-column: 2 / -1;
+  justify-self: start;
 }
 
 .move-combobox {
@@ -2518,15 +2519,6 @@ button:disabled {
   .battle-stat-editor-row > span {
     padding-right: 4px;
     padding-left: 4px;
-  }
-
-  .damage-move-row {
-    gap: 8px;
-  }
-
-  .damage-move-row .move-inline-control,
-  .damage-move-row > .inline-toggle {
-    margin-left: 24px;
   }
 
   .damage-result-column h3 {
@@ -4993,7 +4985,7 @@ textarea:focus-visible {
 .battle-set-move {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   min-height: 28px;
   padding: 3px 9px;
   border: 1px solid var(--line);
@@ -5002,11 +4994,15 @@ textarea:focus-visible {
   font-weight: 600;
 }
 
-.battle-set-move-type {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.battle-set-move .battle-set-move-type.type-badge {
+  width: 20px;
+  height: 20px;
+  margin-left: -4px;
+}
+
+.battle-set-move .battle-set-move-type img {
+  width: 12px;
+  height: 12px;
 }
 
 .battle-field-strip .set-summary {
@@ -5389,7 +5385,9 @@ textarea:focus-visible {
   font-size: var(--text-xs);
 }
 
-.set-editor-move-type.type-badge {
+/* The round move type mark (components.js moveTypeIcon): 30px in the set editor. */
+.move-type-icon.type-badge {
+  flex: none;
   width: 30px;
   min-width: 0;
   height: 30px;
@@ -5397,12 +5395,12 @@ textarea:focus-visible {
   border-radius: 50%;
 }
 
-.set-editor-move-type.empty {
+.move-type-icon.empty {
   border: 1px dashed var(--line);
   background: var(--surface-soft);
 }
 
-.set-editor-move-type img {
+.move-type-icon img {
   width: 16px;
   height: 16px;
 }
