@@ -29,12 +29,12 @@ import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { createField } from "../engine/field.js";
-import { NATURES, natureOptionLabel } from "../engine/natures.js";
+import { NATURES } from "../engine/natures.js";
 import {
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureOptionLabel,
+  localizedNatureDropdownLabel,
   localizedTerm,
   onLocaleChange,
   translateSubtree,
@@ -1100,7 +1100,7 @@ function threatBuildEditor(threat, cardKey) {
   picks.append(
     threatSelect(t("label.nature"), Object.keys(NATURES).map((nature) => ({
       value: nature,
-      label: getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+      label: localizedNatureDropdownLabel(nature),
     })), threat.nature, (value) => stageThreatControl(
       { kind: "nature", value },
     )),

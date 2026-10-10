@@ -7,7 +7,6 @@ import {
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureOptionLabel,
   localizedTerm,
   onLocaleChange,
   t,
@@ -356,7 +355,7 @@ function pokemonContent(submitted) {
   content.append(factGrid([
     [t("label.ability"), displayCatalogValue(submitted.ability, catalogs.abilityLookup)],
     [t("label.item"), displayCatalogValue(submitted.item, catalogs.itemLookup)],
-    [t("label.nature"), submitted.nature ? localizedNatureOptionLabel(submitted.nature) : ""],
+    [t("label.nature"), submitted.nature ? localizedTerm("nature", submitted.nature) : ""],
     [t("teams.tera"), submitted.tera ? localizedTerm("type", submitted.tera) : t("teams.notSubmitted")],
     [t("teams.spread"), t("teams.spreadUnavailable")],
   ]));

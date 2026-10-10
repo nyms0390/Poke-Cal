@@ -12,12 +12,12 @@ import {
   resolvePokemonAbilities,
 } from "../data/catalog.js";
 import { STAT_KEYS } from "../engine/constants.js";
-import { NATURES, natureOptionLabel } from "../engine/natures.js";
+import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import {
   getLocale,
   localizedName,
-  localizedNatureOptionLabel,
+  localizedNatureDropdownLabel,
   localizedTerm,
   t,
   translateSubtree,
@@ -195,7 +195,7 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
     const catalogs = getCatalogs();
     elements.nature.replaceChildren(...Object.keys(NATURES).map((nature) => optionElement(
       nature,
-      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+      localizedNatureDropdownLabel(nature),
     )));
     elements.status.replaceChildren(...statusOptions().map(({ value, label }) => optionElement(value, label)));
     if (setup?.pokemon && catalogs) {

@@ -11,13 +11,13 @@ import {
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
-import { NATURES, natureOptionLabel } from "../engine/natures.js";
+import { NATURES } from "../engine/natures.js";
 import {
   formatNumber,
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureOptionLabel,
+  localizedNatureDropdownLabel,
   localizedTerm,
   onLocaleChange,
   translateSubtree,
@@ -208,7 +208,7 @@ function renderNatureOptions() {
   elements.nature.replaceChildren(
     ...Object.keys(NATURES).map((nature) => optionElement(
       nature,
-      getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature),
+      localizedNatureDropdownLabel(nature),
     )),
   );
   if (selected) elements.nature.value = selected;

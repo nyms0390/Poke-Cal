@@ -1,3 +1,4 @@
+import { natureEffect, natureOptionLabel } from "./engine/natures.js";
 import { EN_MESSAGES } from "./locales/en.js";
 import { STATIC_ZH_TW, ZH_TW_MESSAGES } from "./locales/zh-tw.js";
 
@@ -103,9 +104,14 @@ export function localizedTerm(kind, value, requestedLocale = locale) {
   return TERMS[kind]?.[value] ?? value;
 }
 
-export function localizedNatureOptionLabel(natureName, requestedLocale = locale) {
+export function localizedNatureDropdownLabel(natureName, requestedLocale = locale) {
+  if (requestedLocale !== "zh-TW") return natureOptionLabel(natureName);
+  const effect = natureEffect(natureName);
   const nature = localizedTerm("nature", natureName, requestedLocale);
-  return requestedLocale === "zh-TW" ? `${nature}（${natureName}）` : natureName;
+  if (!effect) return nature;
+  const up = localizedTerm("stat", effect.up, requestedLocale);
+  const down = localizedTerm("stat", effect.down, requestedLocale);
+  return `${nature}（+${up}，-${down}）`;
 }
 
 export function localizedSpreadName(value, requestedLocale = locale) {

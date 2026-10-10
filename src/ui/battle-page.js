@@ -9,7 +9,7 @@ import {
   formatDamageResult,
   resolveMoveType,
 } from "../engine/damage.js";
-import { NATURES, natureOptionLabel } from "../engine/natures.js";
+import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import { impliedField, impliedStageDefaults } from "../engine/modifiers.js";
 import { moveConditionDescriptors, moveConditionValue, moveOptionsForSlot } from "./move-conditions.js";
@@ -27,7 +27,7 @@ import {
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureOptionLabel,
+  localizedNatureDropdownLabel,
   localizedSpreadName,
   localizedTerm,
   onLocaleChange,
@@ -418,7 +418,7 @@ for (const side of ["attacker", "defender"]) {
 
 function renderDamageShell({ incoming = null, incomingSet = null } = {}) {
   const natureOptions = Object.keys(NATURES).map((nature) =>
-    optionElement(nature, getLocale() === "en" ? natureOptionLabel(nature) : localizedNatureOptionLabel(nature)),
+    optionElement(nature, localizedNatureDropdownLabel(nature)),
   );
   elements.attackerNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
   elements.defenderNature.replaceChildren(...natureOptions.map((option) => option.cloneNode(true)));
