@@ -1,5 +1,5 @@
 import { filterMoves } from "../data/catalog.js";
-import { pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
+import { pokemonHomeArtFile, pokemonSpriteId, searchPokemon } from "../data/pokemon.js";
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { isGuaranteedCritical } from "../engine/critical.js";
@@ -217,10 +217,26 @@ export function pokemonSpriteUrls(pokemon) {
   return [`${baseUrl}/gen5/${spriteId}.png`, `${baseUrl}/ani/${spriteId}.gif`];
 }
 
-// A Pokémon sprite image with the shared fallback chain: Showdown's gen5 sprite, then its
-// animated sprite, then the localized initial in a span (hidden until both images fail).
+const POKEAPI_HOME_ART_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home";
+
+// The 512px Pokémon HOME render from PokeAPI's sprite repository, or "" when the entry has none.
+export function pokemonArtworkUrl(pokemon) {
+  const file = pokemonHomeArtFile(pokemon);
+  return file ? `${POKEAPI_HOME_ART_URL}/${file}.png` : "";
+}
+
+// A Pokémon sprite image with the shared fallback chain: (with `artwork`) the HOME render, then
+// Showdown's gen5 sprite, then its animated sprite, then the localized initial in a span (hidden
+// until every image fails). While the HOME render is showing the image carries
+// `data-artwork="home"`, so CSS can keep pixel-art scaling for the sprite fallbacks only.
 // Returns [image, fallback]; the caller places them.
-export function pokemonSpriteElements(pokemon, { size, lazy = false, className = "", fetchPriority = "" } = {}) {
+export function pokemonSpriteElements(pokemon, {
+  size,
+  lazy = false,
+  className = "",
+  fetchPriority = "",
+  artwork = false,
+} = {}) {
   const image = document.createElement("img");
   if (lazy) image.loading = "lazy";
   image.alt = "";
@@ -228,19 +244,23 @@ export function pokemonSpriteElements(pokemon, { size, lazy = false, className =
   image.height = size;
   if (className) image.className = className;
   if (fetchPriority) image.fetchPriority = fetchPriority;
-  const [source, fallbackSource] = pokemonSpriteUrls(pokemon);
-  image.src = source;
+  const artworkSource = artwork ? pokemonArtworkUrl(pokemon) : "";
+  const sources = [artworkSource, ...pokemonSpriteUrls(pokemon)].filter(Boolean);
+  const showSource = (source) => {
+    if (source === artworkSource) image.dataset.artwork = "home";
+    else delete image.dataset.artwork;
+    image.src = source;
+  };
+  showSource(sources.shift());
 
   const fallback = document.createElement("span");
   fallback.setAttribute("aria-hidden", "true");
   fallback.hidden = true;
   fallback.textContent = localizedName(pokemon).slice(0, 1);
 
-  let nextSource = fallbackSource;
   image.addEventListener("error", () => {
-    if (nextSource) {
-      image.src = nextSource;
-      nextSource = "";
+    if (sources.length > 0) {
+      showSource(sources.shift());
       return;
     }
     image.remove();

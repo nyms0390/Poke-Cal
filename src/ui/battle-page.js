@@ -257,6 +257,7 @@ const sideSheets = Object.fromEntries(["attacker", "defender"].map((side) => [si
   doneKey: "sheet.viewResults",
   summaryHost: document.querySelector(`#${side}-summary-card`),
   media: "(min-width: 0px)",
+  artwork: true,
 })]));
 const fieldSheet = mountSetSheet({
   editor: document.querySelector("#field-editor"),

@@ -19,6 +19,8 @@ export function mountSetSheet({
   editKey = "sheet.editSet",
   media = SHEET_MEDIA_QUERY,
   onClose = null,
+  // Show the summary card's Pokémon as the high-resolution HOME render (Battle's large set cards).
+  artwork = false,
 }) {
   const query = globalThis.matchMedia?.(media);
   const marker = document.createElement("span");
@@ -69,7 +71,7 @@ export function mountSetSheet({
     if (event.target === dialog) dialog.close();
   });
 
-  const summary = summaryHost ? summaryCard({ id, editKey, onEdit: (button) => open(button) }) : null;
+  const summary = summaryHost ? summaryCard({ id, editKey, artwork, onEdit: (button) => open(button) }) : null;
   if (summary) {
     summaryHost.replaceChildren(summary.element);
     translateSubtree(summary.element);
@@ -110,7 +112,7 @@ export function mountSetSheet({
   };
 }
 
-function summaryCard({ id, editKey, onEdit }) {
+function summaryCard({ id, editKey, onEdit, artwork = false }) {
   const element = document.createElement("div");
   element.className = "set-summary";
   const sprite = document.createElement("span");
@@ -145,7 +147,7 @@ function summaryCard({ id, editKey, onEdit }) {
         spriteKey = key;
         sprite.hidden = !pokemon;
         element.classList.toggle("no-sprite", !pokemon);
-        sprite.replaceChildren(...(pokemon ? pokemonSpriteElements(pokemon, { size: 56 }) : []));
+        sprite.replaceChildren(...(pokemon ? pokemonSpriteElements(pokemon, { size: 56, artwork }) : []));
       }
       eyebrow.textContent = eyebrowText;
       eyebrow.hidden = !eyebrowText;

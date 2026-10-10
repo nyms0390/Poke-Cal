@@ -1,4 +1,5 @@
 import { normalizeId } from "./catalog.js";
+import { POKEMON_HOME_ART } from "./pokemon-art.js";
 
 export function normalizeSearch(value) {
   return String(value ?? "")
@@ -15,6 +16,13 @@ export function pokemonSpriteId(pokemon) {
 
   const form = normalizeId(name.slice(baseName.length + 1));
   return form ? `${normalizeId(baseName)}-${form}` : fallback;
+}
+
+// The PokeAPI HOME render file stem for a catalog entry ("25", "10305", "666-fancy"), or "" when
+// src/data/pokemon-art.js has none.
+export function pokemonHomeArtFile(pokemon) {
+  const id = normalizeId(pokemon?.id ?? pokemon?.name);
+  return Object.hasOwn(POKEMON_HOME_ART, id) ? POKEMON_HOME_ART[id] : "";
 }
 
 export function searchPokemon(pokemon, query, options = 12) {

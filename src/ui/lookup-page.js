@@ -313,6 +313,7 @@ function renderSelectedSprite(entry) {
     size: 96,
     className: entry.id === "pikachu" ? "compact-sprite" : "",
     fetchPriority: "high",
+    artwork: true,
   }));
 }
 

@@ -4211,8 +4211,14 @@ textarea:focus-visible {
   image-rendering: pixelated;
 }
 
-.lookup-page .pokemon-card-sprite img.compact-sprite {
+/* The compact scale and pixelated scaling are for the Showdown pixel-sprite fallback only; the
+   HOME render (data-artwork="home") is smooth artwork that already fills its frame. */
+.lookup-page .pokemon-card-sprite img.compact-sprite:not([data-artwork="home"]) {
   scale: 1.75;
+}
+
+.lookup-page .pokemon-card-sprite img[data-artwork="home"] {
+  image-rendering: auto;
 }
 
 .lookup-page .pokemon-card h2 {
@@ -4898,6 +4904,10 @@ textarea:focus-visible {
 .battle-set-card .set-summary-sprite img {
   max-width: 70px;
   max-height: 70px;
+}
+
+.battle-set-card .set-summary-sprite img[data-artwork="home"] {
+  image-rendering: auto;
 }
 
 .battle-set-card .set-summary-text > small,

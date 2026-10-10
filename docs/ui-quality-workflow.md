@@ -45,7 +45,7 @@ Preserve useful information density. Reuse semantic variables and shared compone
 
 Check the states each component actually supports: resting, hover, pressed, keyboard focus, selected, expanded, disabled, loading, empty, error, and success. Prefer native controls. Search pickers must support Arrow keys, Enter, Escape, Tab, and Shift+Tab with accessible names, selection state, visible focus, and pointer behavior. Keep errors near the relevant control, explain recovery, preserve valid work, and use polite live updates without announcing every keystroke.
 
-Keep copy concise and terminology consistent. Preserve precise attribution: Limitless is Champions tournament usage, Smogon ladder stats supply SP spreads, NCP supplies curated Champions sets, Pokémon Showdown seeds mechanics and catalogs including the Champions mod, and PokeAPI supplies Traditional Chinese aliases only. Never invent statistics, claims, testimonials, or placeholder features.
+Keep copy concise and terminology consistent. Preserve precise attribution: Limitless is Champions tournament usage, Smogon ladder stats supply SP spreads, NCP supplies curated Champions sets, Pokémon Showdown seeds mechanics and catalogs including the Champions mod, and PokeAPI supplies Traditional Chinese aliases plus the Pokémon HOME renders in large sprite slots. Never invent statistics, claims, testimonials, or placeholder features.
 
 ## Accessibility and responsive checks
 
