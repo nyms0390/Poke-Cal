@@ -73,16 +73,40 @@
             </div>
 
             <div class="move-table-wrap">
-              <table class="move-table">
+              <table class="move-table sortable-move-table">
                 <thead>
                   <tr>
-                    <th scope="col">Move</th>
-                    <th scope="col">Category</th>
-                    <th scope="col"><span data-i18n="label.moveProperties">Properties</span></th>
-                    <th scope="col">Power</th>
-                    <th scope="col">Acc.</th>
-                    <th scope="col">PP</th>
-                    <th scope="col">Effect</th>
+                    <th scope="col" data-sort-key="name" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="name">
+                        <span data-i18n="label.move">Move</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="category" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="category">
+                        <span data-i18n="label.category">Category</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" class="move-property-heading"><span data-i18n="label.moveProperties">Properties</span></th>
+                    <th scope="col" data-sort-key="power" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="power">
+                        <span data-i18n="label.power">Power</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="accuracy" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="accuracy">
+                        <span data-i18n="label.accuracy">Acc.</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="pp" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="pp">
+                        <span>PP</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
+                    <th scope="col" data-sort-key="effect" aria-sort="none">
+                      <button class="move-sort-button" type="button" data-sort-key="effect">
+                        <span data-i18n="label.effect">Effect</span><span class="sort-icon" aria-hidden="true">↕</span>
+                      </button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody id="move-list"></tbody>

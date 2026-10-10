@@ -322,7 +322,7 @@ test("both move tables include a localized properties column and matching row ce
   ]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const source = readFileSync(new URL(`../src/ui/${controller}`, import.meta.url), "utf8");
-    const table = html.match(/<table class="move-table(?: lookup-move-table)?">([\s\S]*?)<\/table>/)?.[1] ?? "";
+    const table = html.match(/<table class="move-table[^"]*">([\s\S]*?)<\/table>/)?.[1] ?? "";
     assert.match(table, /<th scope="col"[\s\S]*?data-i18n="label\.moveProperties"/);
     assert.match(source, /movePropertyCell\(move\)/);
     assert.match(source, new RegExp(`cell\\.colSpan = ${columns};`));
@@ -981,7 +981,7 @@ test("battle and builder move-search results render type badges before category 
 test("lookup move table omits the Champions usage column", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
-  const table = html.match(/<table class="move-table(?: lookup-move-table)?">([\s\S]*?)<\/table>/)?.[1] ?? "";
+  const table = html.match(/<table class="move-table[^"]*">([\s\S]*?)<\/table>/)?.[1] ?? "";
 
   assert.doesNotMatch(table, />Champions<\/th>/);
   assert.doesNotMatch(source, /formatChampionsUsage\(move/);
@@ -990,7 +990,7 @@ test("lookup move table omits the Champions usage column", () => {
 test("lookup moves use sortable headers, a separate Type column, and no move filters", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
-  const table = html.match(/<table class="move-table(?: lookup-move-table)?">([\s\S]*?)<\/table>/)?.[1] ?? "";
+  const table = html.match(/<table class="move-table[^"]*">([\s\S]*?)<\/table>/)?.[1] ?? "";
 
   for (const id of ["move-search", "move-type", "move-category", "move-property"]) {
     assert.doesNotMatch(html, new RegExp(`id="${id}"`));
@@ -1010,11 +1010,11 @@ test("lookup moves use sortable headers, a separate Type column, and no move fil
 test("lookup keeps a compact seven-button sort toolbar on mobile", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
-  const table = html.match(/<table class="move-table lookup-move-table">([\s\S]*?)<\/table>/)?.[1] ?? "";
+  const table = html.match(/<table class="move-table lookup-move-table sortable-move-table">([\s\S]*?)<\/table>/)?.[1] ?? "";
 
   assert.equal((table.match(/class="move-sort-button"/g) ?? []).length, 7);
-  assert.match(styles, /\.lookup-move-table thead\s*\{[\s\S]*display: block/);
-  assert.match(styles, /\.lookup-move-table thead tr\s*\{[\s\S]*flex-wrap: wrap/);
+  assert.match(styles, /\.sortable-move-table thead\s*\{[\s\S]*display: block/);
+  assert.match(styles, /\.sortable-move-table thead tr\s*\{[\s\S]*flex-wrap: wrap/);
   assert.match(styles, /th\[aria-sort="ascending"\] \.move-sort-button/);
 });
 
@@ -1034,6 +1034,22 @@ test("standalone moves page keeps the four combined filters and full catalog tab
   assert.match(source, /onLocaleChange/);
   assert.match(html, /data-i18n-aria-label="moves\.ariaLabel"/);
   assert.match(html, /data-i18n="moves\.footer"/);
+});
+
+test("standalone moves page sorts the catalog table with the same header buttons as Lookup", () => {
+  const html = readFileSync(new URL("../moves.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/moves-page.js", import.meta.url), "utf8");
+  const table = html.match(/<table class="move-table sortable-move-table">([\s\S]*?)<\/table>/)?.[1] ?? "";
+
+  for (const key of ["name", "category", "power", "accuracy", "pp", "effect"]) {
+    assert.match(table, new RegExp(`<th scope="col" data-sort-key="${key}" aria-sort="none">`));
+    assert.match(table, new RegExp(`<button class="move-sort-button" type="button" data-sort-key="${key}">`));
+  }
+  assert.equal((table.match(/class="move-sort-button"/g) ?? []).length, 6);
+  assert.match(table, /class="move-property-heading"/);
+  assert.doesNotMatch(table, /<button[^>]+aria-sort/);
+  assert.match(source, /sortMoves\(filtered, moveSort\)/);
+  assert.match(source, /aria-sort/);
 });
 
 test("all pages expose the Moves navigation link", () => {

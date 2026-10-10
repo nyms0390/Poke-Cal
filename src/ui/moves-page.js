@@ -3,6 +3,7 @@ import {
   formatMoveAccuracy,
   formatMovePower,
   moveEffect,
+  sortMoves,
 } from "../data/catalog.js";
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import {
@@ -31,16 +32,28 @@ const elements = {
   list: document.querySelector("#move-list"),
   source: document.querySelector("#moves-source"),
   status: document.querySelector("#status"),
+  moveSortButtons: [...document.querySelectorAll(".move-sort-button")],
 };
 
 let catalogs = null;
 let moves = [];
+let moveSort = { key: "", direction: "" };
 
 initI18n();
 initialize();
 
 for (const control of [elements.search, elements.type, elements.category, elements.property]) {
   control.addEventListener("input", renderMoveList);
+}
+
+for (const button of elements.moveSortButtons) {
+  button.addEventListener("click", () => {
+    const key = button.dataset.sortKey;
+    moveSort = moveSort.key === key
+      ? { key, direction: moveSort.direction === "ascending" ? "descending" : "ascending" }
+      : { key, direction: "ascending" };
+    renderMoveList();
+  });
 }
 
 onLocaleChange(() => {
@@ -87,6 +100,7 @@ function renderMoveList() {
     flag: elements.property.value,
   });
   elements.count.textContent = t("moves.count", { filtered: filtered.length, total: moves.length });
+  updateMoveSortButtons();
 
   if (filtered.length === 0) {
     const row = document.createElement("tr");
@@ -99,7 +113,20 @@ function renderMoveList() {
     return;
   }
 
-  elements.list.replaceChildren(...filtered.map(renderMoveRow));
+  const sorted = moveSort.key ? sortMoves(filtered, moveSort) : filtered;
+  elements.list.replaceChildren(...sorted.map(renderMoveRow));
+}
+
+function updateMoveSortButtons() {
+  for (const button of elements.moveSortButtons) {
+    const active = moveSort.key === button.dataset.sortKey;
+    const direction = active ? moveSort.direction : "none";
+    const header = button.closest("th");
+    button.querySelector(".sort-icon").textContent = direction === "ascending"
+      ? "↑"
+      : direction === "descending" ? "↓" : "↕";
+    header?.setAttribute("aria-sort", direction);
+  }
 }
 
 function renderMoveRow(move) {

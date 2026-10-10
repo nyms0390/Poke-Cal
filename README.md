@@ -4,7 +4,7 @@ A compact, dependency-free competitive Pokémon toolkit: species and move lookup
 
 ## Overview
 
-PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, the matchups page (`matchups.html`) races one set against the most-used Pokémon to show what beats it, what it beats, and where Speed decides, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases; the pages load slim, minified Champions-only copies from `public/web/*.json`.
+PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property, with the same sortable column headers as the lookup move pool. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, the matchups page (`matchups.html`) races one set against the most-used Pokémon to show what beats it, what it beats, and where Speed decides, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases; the pages load slim, minified Champions-only copies from `public/web/*.json`.
 
 ## Project Structure
 
@@ -143,7 +143,7 @@ Then open one of the seven tools:
 | Route | Tool |
 | --- | --- |
 | `/` or `/index.html` | Pokémon lookup, usage, spreads, matchups, and move pool |
-| `/moves.html` | Searchable, filterable Champions move catalog |
+| `/moves.html` | Searchable, filterable, sortable Champions move catalog |
 | `/battle.html` | Damage, KO chance, and move-order calculator |
 | `/builder.html` | Defensive bulk and offensive break points |
 | `/matchups.html` | What beats one set, what it beats, and where Speed decides |

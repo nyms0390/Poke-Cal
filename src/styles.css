@@ -2570,12 +2570,12 @@ button:disabled {
     box-shadow: var(--shadow-micro);
   }
 
-  .lookup-move-table thead {
+  .sortable-move-table thead {
     display: block;
     margin-bottom: 12px;
   }
 
-  .lookup-move-table thead tr {
+  .sortable-move-table thead tr {
     display: flex;
     flex-wrap: wrap;
     width: auto;
@@ -2585,7 +2585,7 @@ button:disabled {
     box-shadow: none;
   }
 
-  .lookup-move-table thead th {
+  .sortable-move-table thead th {
     position: static;
     display: block;
     width: auto;
@@ -2594,11 +2594,11 @@ button:disabled {
     background: transparent;
   }
 
-  .lookup-move-table thead .move-property-heading {
+  .sortable-move-table thead .move-property-heading {
     display: none;
   }
 
-  .lookup-move-table thead .move-sort-button {
+  .sortable-move-table thead .move-sort-button {
     margin: 0;
   }
 
