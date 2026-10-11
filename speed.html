@@ -41,31 +41,49 @@
         <aside id="speed-editor" class="workspace-sidebar speed-sidebar" aria-label="Speed settings" data-i18n-aria-label="speed.settings">
           <div class="speed-controls">
             <section class="speed-control-panel" aria-label="Your Speed settings">
-              <div class="panel-heading"><span>Your Pokémon</span><strong id="speed-user-summary">—</strong></div>
-              <label class="pokemon-search-label" for="speed-pokemon-search">Pokémon</label>
-              <div class="pokemon-combobox">
-                <input
-                  id="speed-pokemon-search"
-                  name="speed-pokemon-search"
-                  type="search"
-                  autocomplete="off"
-                  role="combobox"
-                  aria-controls="speed-pokemon-results"
-                  aria-expanded="false"
-                />
-                <div id="speed-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+              <div class="panel-heading"><span data-i18n="matchups.yourSet">Your set</span><strong id="speed-user-summary">—</strong></div>
+              <!-- Same slots as the shared set editor (src/ui/set-editor.js): Pokémon, nature, ability/item, stat row. -->
+              <div class="set-editor-pokemon">
+                <span id="speed-sprite" class="set-editor-sprite" aria-hidden="true"></span>
+                <div class="set-editor-pokemon-field">
+                  <label class="visually-hidden" for="speed-pokemon-search">Pokémon</label>
+                  <div class="pokemon-combobox">
+                    <input
+                      id="speed-pokemon-search"
+                      name="speed-pokemon-search"
+                      type="search"
+                      autocomplete="off"
+                      role="combobox"
+                      aria-controls="speed-pokemon-results"
+                      aria-expanded="false"
+                    />
+                    <div id="speed-pokemon-results" class="search-results pokemon-search-results" hidden></div>
+                  </div>
+                </div>
               </div>
-              <div class="speed-spread-controls">
-                <label>Nature<select id="speed-nature" data-battle-only></select></label>
-                <label>Speed SP<input id="speed-sp" type="number" min="0" max="32" step="1" data-battle-only /></label>
-                <label>Stage<select id="speed-user-stage" data-battle-only></select></label>
+              <label class="set-editor-field">Nature<select id="speed-nature" data-battle-only></select></label>
+              <div class="set-editor-fields">
+                <label class="set-editor-field">Ability<select id="speed-user-ability" data-battle-only></select></label>
+                <label class="set-editor-field"><span data-i18n="speed.speedItem">Speed item</span><select id="speed-user-item" data-battle-only>
+                    <option value="" data-i18n="speed.itemNone">None</option>
+                    <option value="choicescarf">Choice Scarf</option>
+                    <option value="ironball">Iron Ball</option>
+                </select></label>
               </div>
-              <label>Ability<select id="speed-user-ability" data-battle-only></select></label>
-              <label><span data-i18n="speed.speedItem">Speed item</span><select id="speed-user-item" data-battle-only>
-                  <option value="" data-i18n="speed.itemNone">None</option>
-                  <option value="choicescarf">Choice Scarf</option>
-                  <option value="ironball">Iron Ball</option>
-              </select></label>
+              <div class="set-editor-stats">
+                <div class="set-editor-stat-heading" aria-hidden="true">
+                  <span>Stat</span><span>Base</span><span>SP</span><span>Stage</span><span>Final</span>
+                </div>
+                <div class="set-editor-stat-rows" role="group" aria-label="Speed stat">
+                  <div class="set-editor-stat-row">
+                    <span id="speed-user-stat-label" class="set-editor-stat-label">Spe</span>
+                    <span id="speed-user-base" class="set-editor-stat-base">—</span>
+                    <input id="speed-sp" type="number" min="0" max="32" step="1" inputmode="numeric" aria-label="Speed SP" data-battle-only />
+                    <span class="set-editor-stat-stage"><select id="speed-user-stage" aria-label="Speed stage" data-battle-only></select></span>
+                    <strong id="speed-user-final" class="set-editor-stat-final">—</strong>
+                  </div>
+                </div>
+              </div>
               <div class="inline-toggles speed-mods">
                 <label class="inline-toggle"><input id="speed-user-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
                 <label class="inline-toggle"><input id="speed-user-paralysis" type="checkbox" data-battle-only /> Paralysis</label>
@@ -75,17 +93,20 @@
 
             <section class="speed-control-panel" aria-label="Opponent Speed settings">
               <div class="panel-heading"><span>Opponents</span><strong id="speed-popular-summary">Top 10 + Megas + yours</strong></div>
-              <label class="speed-popularity-control">
-                Popular Pokémon
-                <select id="speed-popular-count">
-                  <option value="10">Top 10</option>
-                  <option value="20" selected>Top 20</option>
-                  <option value="30">Top 30</option>
-                  <option value="40">Top 40</option>
-                  <option value="50">Top 50</option>
-                </select>
-              </label>
-              <label class="pokemon-search-label" for="speed-opponent-search">Add Pokémon</label>
+              <div class="speed-opponent-filters">
+                <label class="speed-popularity-control">
+                  Popular Pokémon
+                  <select id="speed-popular-count">
+                    <option value="10">Top 10</option>
+                    <option value="20" selected>Top 20</option>
+                    <option value="30">Top 30</option>
+                    <option value="40">Top 40</option>
+                    <option value="50">Top 50</option>
+                  </select>
+                </label>
+                <label class="speed-opponent-stage">Shared stage<select id="speed-opponent-stage" data-battle-only></select></label>
+              </div>
+              <label class="pokemon-search-label" for="speed-opponent-search">Add custom Pokémon</label>
               <div class="pokemon-combobox">
                 <input
                   id="speed-opponent-search"
@@ -109,9 +130,6 @@
                   <span id="speed-likely-legend" class="speed-preset-likely-key"><span class="speed-preset-dot speed-preset-fast speed-preset-likely" aria-hidden="true"></span>Ring marks likely preset</span>
                 </div>
               </fieldset>
-              <div class="speed-spread-controls opponent">
-                <label>Shared stage<select id="speed-opponent-stage" data-battle-only></select></label>
-              </div>
               <div class="inline-toggles speed-mods">
                 <label class="inline-toggle"><input id="speed-opponent-tailwind" type="checkbox" data-battle-only /> Tailwind</label>
                 <label class="inline-toggle"><input id="speed-opponent-paralysis" type="checkbox" data-battle-only /> Paralysis</label>

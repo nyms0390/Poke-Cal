@@ -2774,17 +2774,6 @@ button:disabled {
   gap: 12px;
 }
 
-.speed-spread-controls {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.speed-spread-controls label {
-  display: grid;
-  gap: 5px;
-}
-
 .builder-assumption,
 .builder-scenarios > p,
 .builder-breakpoints > p,
@@ -2809,14 +2798,17 @@ button:disabled {
   border-top: 1px solid var(--line);
 }
 
-.builder-threat-filters {
+.builder-threat-filters,
+.speed-opponent-filters {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
 .builder-threat-count,
-.builder-threat-status {
+.builder-threat-status,
+.speed-popularity-control,
+.speed-opponent-stage {
   display: grid;
   gap: 5px;
 }
@@ -3570,20 +3562,6 @@ details.builder-analysis-move > .builder-spread-grid {
   padding: var(--panel-pad);
 }
 
-.speed-spread-controls {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.speed-spread-controls.opponent {
-  grid-template-columns: minmax(0, 180px);
-}
-
-.speed-popularity-control {
-  display: grid;
-  max-width: 180px;
-  gap: 5px;
-}
-
 .speed-mods {
   align-items: center;
 }
@@ -3882,7 +3860,7 @@ details.builder-analysis-move > .builder-spread-grid {
 
   .speed-controls,
   .builder-threat-filters,
-  .speed-spread-controls {
+  .speed-opponent-filters {
     grid-template-columns: 1fr;
   }
 
@@ -4814,14 +4792,6 @@ textarea:focus-visible {
   border-top: 1px solid var(--line);
 }
 
-.speed-sidebar .speed-spread-controls {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.speed-sidebar .speed-spread-controls > label:first-child {
-  grid-column: 1 / -1;
-}
-
 .builder-workspace .builder-analysis-toolbar {
   padding: 0;
 }
@@ -5182,7 +5152,8 @@ textarea:focus-visible {
   }
 }
 
-/* ----- Shared set editor (Builder and Matchups, src/ui/set-editor.js) ----- */
+/* ----- Shared set editor (Builder and Matchups, src/ui/set-editor.js; Speed Tiers reuses its
+   Pokémon, nature, ability/item and stat-row slots) ----- */
 
 .set-editor {
   display: grid;

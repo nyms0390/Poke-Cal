@@ -12,6 +12,7 @@ import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { NATURES } from "../engine/natures.js";
+import { calculateStat } from "../engine/stats.js";
 import {
   formatNumber,
   getLocale,
@@ -31,6 +32,7 @@ import {
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
+  pokemonSpriteElements,
   searchResultButton,
 } from "./components.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
@@ -41,6 +43,7 @@ const elements = {
   source: document.querySelector("#speed-source"),
   mode: document.querySelectorAll('input[name="speed-mode"]'),
   trickRoom: document.querySelector("#speed-trick-room"),
+  sprite: document.querySelector("#speed-sprite"),
   pokemonSearch: document.querySelector("#speed-pokemon-search"),
   pokemonResults: document.querySelector("#speed-pokemon-results"),
   opponentSearch: document.querySelector("#speed-opponent-search"),
@@ -53,6 +56,9 @@ const elements = {
   userAbilityActive: document.querySelector("#speed-user-ability-active"),
   userAbilityActiveLabel: document.querySelector("#speed-user-ability-active-label"),
   sp: document.querySelector("#speed-sp"),
+  userStatLabel: document.querySelector("#speed-user-stat-label"),
+  userBase: document.querySelector("#speed-user-base"),
+  userFinal: document.querySelector("#speed-user-final"),
   userStage: document.querySelector("#speed-user-stage"),
   opponentStage: document.querySelector("#speed-opponent-stage"),
   userTailwind: document.querySelector("#speed-user-tailwind"),
@@ -78,6 +84,7 @@ const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let popularOpponents = [];
 let manualOpponents = [];
 let unavailableRequestId = "";
+let spriteId = "";
 const updatePage = createLiveUpdater(render);
 
 const settingsSheet = mountSetSheet({
@@ -318,10 +325,11 @@ function render() {
   elements.ability.value = user.ability?.id ?? "";
   renderSpeedItemOptions();
   elements.sp.value = String(user.spe);
+  renderSpeedStatRow(battle);
   const abilityId = normalizeId(user.ability?.id ?? user.ability?.name);
   const supportsActiveAbility = SUPPORTED_SPEED_ABILITIES.has(abilityId);
   elements.userAbilityActiveLabel.textContent = supportsActiveAbility
-    ? t("speed.abilityActive", { ability: user.ability?.name ?? "" })
+    ? t("speed.abilityActive", { ability: localizedName(user.ability) })
     : t("speed.abilityActiveUnsupported");
   elements.userAbilityActive.disabled = !battle || !supportsActiveAbility;
   if (!supportsActiveAbility || !battle) {
@@ -380,6 +388,26 @@ function modsFromControls(side) {
   };
 }
 
+// The Spe row of the shared set editor's stat table: Final is the stat with its stage, as in
+// Builder and Matchups (Tailwind, items, abilities and paralysis show on the axis instead).
+function renderSpeedStatRow(battle) {
+  if (spriteId !== user.pokemon.id) {
+    spriteId = user.pokemon.id;
+    elements.sprite.replaceChildren(...pokemonSpriteElements(user.pokemon, { size: 56 }));
+  }
+  elements.userStatLabel.textContent = localizedTerm("stat", "Spe");
+  elements.userBase.textContent = String(user.pokemon.baseStats.spe);
+  elements.userFinal.textContent = battle
+    ? String(calculateStat({
+      base: user.pokemon.baseStats.spe,
+      stat: "spe",
+      sp: user.spe,
+      nature: user.nature,
+      stage: Number(elements.userStage.value) || 0,
+    }))
+    : "—";
+}
+
 function renderSpeedItemOptions() {
   const selected = user?.speedItem ?? "";
   const options = [optionElement("", t("speed.itemNone")), ...SPEED_ITEM_IDS.map((id) => {
@@ -396,7 +424,7 @@ function renderAbilityOptions() {
     .map((ability) => catalogs.abilityLookup.get(normalizeId(ability))
       ?? { id: normalizeId(ability), name: ability })
     .filter((ability) => ability.champions?.legal !== false);
-  elements.ability.replaceChildren(...abilities.map((ability) => optionElement(ability.id, ability.name)));
+  elements.ability.replaceChildren(...abilities.map((ability) => optionElement(ability.id, localizedName(ability))));
 }
 
 function renderLikelihoodLegend(rows) {
@@ -424,6 +452,11 @@ function renderManualOpponents() {
     chip.append(name, remove);
     return chip;
   }));
+}
+
+// Speed-line entries carry only `{ id, name }`; look the catalog entry up for its localized name.
+function catalogName(entry, lookup) {
+  return localizedName(lookup.get(normalizeId(entry.id ?? entry.name)) ?? entry);
 }
 
 function renderSpeedRow(row, breakpoint) {
@@ -463,9 +496,9 @@ function renderSpeedRow(row, breakpoint) {
       })}`
       : "";
     details.textContent = entry.source === "NCP"
-      ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")}${activeLabel}`
+      ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item ? catalogName(entry.item, catalogs.itemLookup) : t("speed.noItem")} · ${entry.ability ? catalogName(entry.ability, catalogs.abilityLookup) : t("speed.noAbility")}${activeLabel}`
       : entry.source === "Limitless"
-        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item?.name ?? t("speed.noItem")} · ${entry.ability?.name ?? t("speed.noAbility")} · ${t(entry.spSource === "Smogon" ? "speed.smogonSpEstimate" : "speed.assumedSp")}${usageLabel}${activeLabel}`
+        ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item ? catalogName(entry.item, catalogs.itemLookup) : t("speed.noItem")} · ${entry.ability ? catalogName(entry.ability, catalogs.abilityLookup) : t("speed.noAbility")} · ${t(entry.spSource === "Smogon" ? "speed.smogonSpEstimate" : "speed.assumedSp")}${usageLabel}${activeLabel}`
         : entry.presetLabel;
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";

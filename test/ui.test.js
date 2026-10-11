@@ -1224,6 +1224,33 @@ test("the set sheet breakpoint matches the stylesheet", async () => {
   assert.ok(sheetSection.includes(`@media ${query}`), "the sheet CSS uses the same breakpoint");
 });
 
+test("Speed Tiers reuses the shared set editor's slot layout for the set it owns", () => {
+  const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
+  const panel = html.match(/aria-label="Your Speed settings">([\s\S]*?)<\/section>/)?.[1] ?? "";
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+
+  // Same slot order and classes as mountSetEditor: Pokémon with sprite, nature, ability/item, stat row.
+  const slots = ["set-editor-pokemon", "set-editor-sprite", "set-editor-field", "set-editor-fields", "set-editor-stats"];
+  const positions = slots.map((slot) => panel.indexOf(`class="${slot}"`));
+  assert.ok(positions.every((position) => position >= 0), `missing slot in ${JSON.stringify(positions)}`);
+  assert.deepEqual([...positions].sort((a, b) => a - b), positions);
+  for (const slot of slots) assert.match(editor, new RegExp(`class="${slot}"`));
+  assert.match(panel, /<span>Stat<\/span><span>Base<\/span><span>SP<\/span><span>Stage<\/span><span>Final<\/span>/);
+  assert.match(panel, /class="set-editor-stat-row"[\s\S]*id="speed-sp"[\s\S]*id="speed-user-stage"[\s\S]*id="speed-user-final"/);
+  assert.match(panel, /data-i18n="matchups\.yourSet">Your set</);
+  assert.doesNotMatch(html, /speed-spread-controls/);
+});
+
+test("Speed Tiers shows localized ability and item names", () => {
+  const source = readFileSync(new URL("../src/ui/speed-page.js", import.meta.url), "utf8");
+
+  assert.match(source, /optionElement\(ability\.id, localizedName\(ability\)\)/);
+  assert.match(source, /t\("speed\.abilityActive", \{ ability: localizedName\(user\.ability\) \}\)/);
+  assert.match(source, /catalogName\(entry\.ability, catalogs\.abilityLookup\)/);
+  assert.match(source, /catalogName\(entry\.item, catalogs\.itemLookup\)/);
+  assert.doesNotMatch(source, /(?:ability|item)\?*\.name \?\?/);
+});
+
 test("speed tier table combines each Pokémon with its set and omits the stage column", () => {
   const html = readFileSync(new URL("../speed.html", import.meta.url), "utf8");
   const header = html.match(/<div class="speed-axis-header"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";

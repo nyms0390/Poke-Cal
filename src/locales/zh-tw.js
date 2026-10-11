@@ -662,6 +662,8 @@ export const STATIC_ZH_TW = {
   "Battle": "對戰",
   "Your Speed settings": "你的速度設定",
   "Speed SP": "速度 SP",
+  "Speed stage": "速度階級",
+  "Speed stat": "速度能力",
   "Stage": "能力階級",
   "Paralysis": "麻痺",
   "Choice Scarf": "講究圍巾",
