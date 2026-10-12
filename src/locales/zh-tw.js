@@ -314,13 +314,20 @@ export const ZH_TW_MESSAGES = {
   "matchups.overview": "擊倒競賽一覽",
   "matchups.pokemonCount": ({ count }) => `${count} 隻寶可夢`,
   "matchups.shareNote": ({ count, walled }) =>
-    `此為 ${count} 隻寶可夢依使用率加權的比例，並非勝率。其中佔 ${walled} 使用率的寶可夢，你的招式無法在三擊內擊倒。`,
+    `此為 ${count} 隻寶可夢的數量比例（每隻計一次），並非勝率。其中 ${walled} 的寶可夢，你的招式無法在三擊內擊倒。`,
   "matchups.speedFirstNote": ({ share, mode }) => `由行動順序決勝時，你有 ${share} 的機率先行動（${mode}）。`,
   "matchups.gridCaption": "依對手擊倒你所需回合（列）與你擊倒對手所需回合（欄）分類",
   "matchups.youKoIn": "你擊倒對手需要",
   "matchups.theyKoIn": "對手擊倒你需要",
   "matchups.cellLabel": ({ count, theirs, ours }) =>
     `${count} 隻寶可夢：對手 ${theirs} 回合擊倒你，你 ${ours} 回合擊倒對手`,
+  "matchups.cellBreakdown": ({ loss, speed, win, stalemate }) => [
+    loss && `${loss} 隻贏過你`,
+    speed && `${speed} 隻看行動順序`,
+    win && `${win} 隻你能贏`,
+    stalemate && `${stalemate} 隻無法擊倒`,
+  ].filter(Boolean).join("、"),
+  "matchups.cellLabelBreakdown": ({ label, breakdown }) => `${label}（${breakdown}）`,
   "matchups.filterText": ({ count, theirs, ours }) =>
     `顯示 ${count} 隻寶可夢：對手 ${theirs} 回合擊倒你，你需要 ${ours} 回合擊倒對手。`,
   "matchups.clearFilter": "顯示全部",

@@ -5959,6 +5959,50 @@ textarea:focus-visible {
   color: var(--success-dark);
 }
 
+.matchups-grid-cell.stalemate .matchups-grid-button {
+  color: var(--muted);
+}
+
+/* The 4+/4+ cell when it mixes outcomes: one count per outcome, coloured like the KO race bar. */
+.matchups-grid-cell.mixed .matchups-grid-button {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 6px;
+  padding: 2px 4px;
+}
+
+.matchups-grid-part {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.matchups-grid-part::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.matchups-grid-part.loss {
+  color: var(--danger);
+}
+
+.matchups-grid-part.speed {
+  color: var(--warning-dark);
+}
+
+.matchups-grid-part.win {
+  color: var(--success-dark);
+}
+
+.matchups-grid-part.stalemate {
+  color: var(--muted);
+}
+
 .matchups-grid-cell.empty .matchups-grid-button {
   background: var(--surface);
   color: var(--subtle);

@@ -311,13 +311,20 @@ export const EN_MESSAGES = {
   "matchups.overview": "Your KO race at a glance",
   "matchups.pokemonCount": ({ count }) => `${count} Pokémon`,
   "matchups.shareNote": ({ count, walled }) =>
-    `Usage-weighted shares across ${count} Pokémon, not win probabilities. Your moves cannot 3HKO ${walled} of that usage.`,
+    `Shares of ${count} Pokémon, each counted once, not win probabilities. Your moves cannot 3HKO ${walled} of them.`,
   "matchups.speedFirstNote": ({ share, mode }) => `When move order decides, you move first ${share} of the time (${mode}).`,
   "matchups.gridCaption": "Opponents by turns they need to KO you (rows) and turns you need to KO them (columns)",
   "matchups.youKoIn": "You KO them in",
   "matchups.theyKoIn": "They KO you in",
   "matchups.cellLabel": ({ count, theirs, ours }) =>
     `${count} Pokémon: they KO you in ${theirs}, you KO them in ${ours}`,
+  "matchups.cellBreakdown": ({ loss, speed, win, stalemate }) => [
+    loss && `${loss} beat you`,
+    speed && `${speed} decided by move order`,
+    win && `${win} you beat`,
+    stalemate && `${stalemate} with no KO`,
+  ].filter(Boolean).join(", "),
+  "matchups.cellLabelBreakdown": ({ label, breakdown }) => `${label} (${breakdown})`,
   "matchups.filterText": ({ count, theirs, ours }) =>
     `Showing ${count} Pokémon that KO you in ${theirs} while you KO them in ${ours}.`,
   "matchups.clearFilter": "Show all",

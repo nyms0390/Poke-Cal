@@ -140,38 +140,37 @@ export function analyzeMatchups({
 }
 
 /**
- * Usage-weighted shares of each race outcome, the share of usage your moves cannot 3HKO
- * (`walledShare`), your weighted chance to move first across speed races, and the 4×4 grid
- * of counts (rows: hits they need; columns: hits you need).
+ * Shares of each race outcome by Pokémon count (the top N do not cover all usage, so usage
+ * weights would not add up to anything), the share your moves cannot 3HKO (`walledShare`), your
+ * average chance to move first across speed races, and the 4×4 grid (rows: hits they need;
+ * columns: hits you need). Each cell also counts its rows by race outcome (`outcomes`): every
+ * cell but 4+/4+ holds one outcome, while 4+/4+ mixes them (4 vs 5, 5 vs 5, no KO …), so the
+ * grid's per-outcome counts always add up to `counts`.
  */
 export function summarizeMatchups(rows = []) {
-  const counts = Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, 0]));
-  const weights = Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, 0]));
-  let total = 0;
+  const emptyOutcomes = () => Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, 0]));
+  const counts = emptyOutcomes();
   let walled = 0;
   let speedWins = 0;
   const grid = HIT_BUCKETS.map((theirs) => HIT_BUCKETS.map((ours) => ({
-    theirs, ours, outcome: cellOutcome(theirs, ours), count: 0, usagePercent: 0,
+    theirs, ours, outcome: cellOutcome(theirs, ours), count: 0, outcomes: emptyOutcomes(),
   })));
   for (const row of rows) {
-    const weight = Math.max(0, Number(row.usagePercent) || 0);
     const outcome = row.result.outcome;
-    total += weight;
     counts[outcome] += 1;
-    weights[outcome] += weight;
-    if (row.result.ourOffenseWalled) walled += weight;
-    if (outcome === "speed") speedWins += weight * (row.speed?.ourWinChance ?? 0.5);
+    if (row.result.ourOffenseWalled) walled += 1;
+    if (outcome === "speed") speedWins += row.speed?.ourWinChance ?? 0.5;
     const cell = grid[row.cell.theirs - 1][row.cell.ours - 1];
     cell.count += 1;
-    cell.usagePercent += weight;
+    cell.outcomes[outcome] += 1;
   }
-  const share = (value) => (total > 0 ? value / total : 0);
+  const share = (value) => (rows.length > 0 ? value / rows.length : 0);
   return {
     count: rows.length,
     counts,
-    shares: Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, share(weights[outcome])])),
+    shares: Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, share(counts[outcome])])),
     walledShare: share(walled),
-    speedFirstShare: weights.speed > 0 ? speedWins / weights.speed : null,
+    speedFirstShare: counts.speed > 0 ? speedWins / counts.speed : null,
     grid,
   };
 }

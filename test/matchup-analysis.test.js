@@ -77,15 +77,16 @@ test("hit buckets and grid cells", () => {
   assert.equal(cellOutcome(4, 4), "slow");
 });
 
-test("summarizeMatchups weights outcomes by usage and fills the grid", () => {
+test("summarizeMatchups counts each Pokémon once and fills the grid", () => {
   const summary = summarizeMatchups(fixtureRows);
   assert.equal(summary.count, 7);
   assert.deepEqual(summary.counts, { loss: 2, speed: 2, win: 2, stalemate: 1 });
-  assert.equal(summary.shares.loss, 0.7);
-  assert.equal(summary.shares.speed, 0.2);
-  assert.equal(summary.shares.win, 0.08);
-  assert.equal(summary.shares.stalemate, 0.02);
-  assert.equal(summary.walledShare, 0.32);
+  // Usage does not weight the shares: the top N do not cover all usage.
+  assert.equal(summary.shares.loss, 2 / 7);
+  assert.equal(summary.shares.speed, 2 / 7);
+  assert.equal(summary.shares.win, 2 / 7);
+  assert.equal(summary.shares.stalemate, 1 / 7);
+  assert.equal(summary.walledShare, 2 / 7);
   assert.equal(summary.speedFirstShare, 0.625);
   assert.equal(summary.grid[0][3].count, 1, "they OHKO, you need 4+");
   assert.equal(summary.grid[0][3].outcome, "loss");
@@ -94,6 +95,27 @@ test("summarizeMatchups weights outcomes by usage and fills the grid", () => {
   assert.equal(summary.grid[3][3].outcome, "slow");
   assert.equal(summary.grid.flat().reduce((total, cell) => total + cell.count, 0), 7);
   assert.equal(summarizeMatchups([]).speedFirstShare, null);
+  assert.equal(summarizeMatchups([]).shares.loss, 0);
+});
+
+test("the 4+/4+ grid cell splits by race outcome so the grid adds up to the bar", () => {
+  const rows = [
+    ...fixtureRows,
+    row("Slow loss", { outcome: "loss", theirHits: 4, ourHits: 5, usagePercent: 1, rank: 8 }),
+    row("Slow win", { outcome: "win", theirHits: Infinity, ourHits: 5, usagePercent: 1, rank: 9 }),
+    row("Slow mirror", { outcome: "speed", theirHits: 5, ourHits: 5, usagePercent: 1, rank: 10, ourWinChance: 0 }),
+  ];
+  const summary = summarizeMatchups(rows);
+  assert.deepEqual(summary.grid[3][3].outcomes, { loss: 1, speed: 1, win: 1, stalemate: 1 });
+  assert.equal(summary.counts.stalemate, 1, "only no KO both ways is a stalemate");
+  for (const outcome of ["loss", "speed", "win", "stalemate"]) {
+    const inGrid = summary.grid.flat().reduce((total, cell) => total + cell.outcomes[outcome], 0);
+    assert.equal(inGrid, summary.counts[outcome], outcome);
+  }
+  // Every other cell holds only its own outcome.
+  for (const cell of summary.grid.flat().filter(({ outcome }) => outcome !== "slow")) {
+    assert.equal(cell.outcomes[cell.outcome], cell.count);
+  }
 });
 
 test("matchupSections orders threats, speed races and good matchups", () => {

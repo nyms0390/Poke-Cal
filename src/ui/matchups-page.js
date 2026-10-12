@@ -738,15 +738,33 @@ function renderGrid(summary) {
     const data = summary.grid[theirs - 1][ours - 1];
     const button = cellElement.querySelector("button");
     const selected = state.cell?.theirs === theirs && state.cell?.ours === ours;
-    cellElement.className = `matchups-grid-cell ${data.outcome}${data.count === 0 ? " empty" : ""}`;
-    button.textContent = String(data.count);
+    const present = OUTCOME_LEGEND.filter(({ outcome }) => data.outcomes[outcome] > 0);
+    // Only the 4+/4+ cell can mix outcomes (4 vs 5, 5 vs 5, no KO …); show each one's count in its
+    // own colour so every colour in the grid adds up to the KO race bar.
+    const mixed = present.length > 1;
+    const outcomeClass = mixed ? "mixed" : present[0]?.className ?? data.outcome;
+    cellElement.className = `matchups-grid-cell ${outcomeClass}${data.count === 0 ? " empty" : ""}`;
+    if (mixed) {
+      button.replaceChildren(...present.map(({ outcome, className }) => {
+        const part = document.createElement("span");
+        part.className = `matchups-grid-part ${className}`;
+        part.textContent = String(data.outcomes[outcome]);
+        return part;
+      }));
+    } else {
+      button.textContent = String(data.count);
+    }
     button.disabled = data.count === 0 && !selected;
     button.setAttribute("aria-pressed", String(selected));
-    button.setAttribute("aria-label", t("matchups.cellLabel", {
+    const label = t("matchups.cellLabel", {
       count: data.count,
       theirs: hitsBucketLabel(theirs),
       ours: hitsBucketLabel(ours),
-    }));
+    });
+    const breakdown = data.outcome === "slow" && data.count > 0 ? t("matchups.cellBreakdown", data.outcomes) : "";
+    button.setAttribute("aria-label", breakdown ? t("matchups.cellLabelBreakdown", { label, breakdown }) : label);
+    if (breakdown) button.title = breakdown;
+    else button.removeAttribute("title");
   }
 }
 
