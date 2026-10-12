@@ -511,7 +511,7 @@ export const STATIC_ZH_TW = {
   "PokéCal // Speed tiers": "PokéCal // 速度線",
   "PokéCal // Tournament teams": "PokéCal // 賽事隊伍",
   "Check a Pokémon at a glance.": "一眼掌握寶可夢資訊。",
-  "Compare two Pokémon in battle.": "比較兩隻寶可夢的對戰表現。",
+  "See who moves first and how hard each hit lands.": "看雙方誰先行動、每一擊造成多少傷害。",
   "Turn matchups into useful SP targets.": "將對位結果化為實用的 SP 目標。",
   "See the whole Speed field at once.": "一次看清全場速度線。",
   "Search in English or Traditional Chinese, compare forms, and review Limitless Champions tournament usage for abilities, items, and moves.": "使用英文或繁體中文搜尋，比較不同形態，並查看 Limitless Champions 賽事的特性、道具與招式使用率。",
