@@ -1121,6 +1121,18 @@ test("matchups page exposes the overview, one filtered results list and the turn
   assert.doesNotMatch(html, /data-matchups-view/);
 });
 
+test("Matchups opens the set comparison and the comparison uses one shared editor", () => {
+  const matchups = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
+  const compare = readFileSync(new URL("../compare.html", import.meta.url), "utf8");
+  const controller = readFileSync(new URL("../src/ui/compare-page.js", import.meta.url), "utf8");
+  assert.match(matchups, /class="compare-entry" href="\.\/compare\.html"/);
+  for (const id of ["compare-set-editor", "compare-variant-list", "compare-matrix-body", "compare-changed-only"]) {
+    assert.match(compare, new RegExp(`id="${id}"`));
+  }
+  assert.match(controller, /mountSetEditor\(document\.querySelector\("#compare-set-editor"\)/);
+  assert.match(controller, /watchActiveSet\(refreshFromActiveSet\)/);
+});
+
 test("matchups page keeps the method behind a disclosure and the set editor in one region", () => {
   const html = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
   assert.match(html, /<section id="matchups-editor" class="matchups-editor workspace-sidebar"/);

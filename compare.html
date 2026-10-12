@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta name="description" content="Compare Champions set variants against the same common opponents." />
+    <title>PokéCal — Compare sets</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home" translate="no">Poké<span>Cal</span></a>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a><a href="./moves.html">Moves</a>
+          <a href="./battle.html">Battle Calculator</a><a href="./speed.html">Speed Tiers</a>
+          <a href="./builder.html">Builder</a><a class="active" href="./matchups.html" aria-current="location">Matchups</a>
+          <a href="./teams.html">Teams</a>
+          <label class="language-switch"><span>Language</span><select data-language-switch aria-label="Language"><option value="en">English</option><option value="zh-TW">繁體中文</option></select></label>
+        </nav>
+      </header>
+      <div class="workspace compare-page">
+        <div class="workspace-intro">
+          <a class="compare-back" href="./matchups.html" data-i18n="compare.back">← Matchups</a>
+          <h1 data-i18n="compare.title">Compare sets</h1>
+          <p class="intro" data-i18n="compare.intro">Test set variants against the same opponents.</p>
+        </div>
+        <section id="compare-editor" class="workspace-sidebar compare-editor" aria-label="Selected set editor" data-i18n-aria-label="compare.editorLabel">
+          <p id="compare-editing-label" class="compare-editing-label"></p>
+          <div id="compare-set-editor"></div>
+          <p class="builder-assumption" data-i18n="compare.editHint">Editing the pinned set updates your shared set. Other variants stay here until you pin them.</p>
+        </section>
+        <div class="workspace-content">
+          <div id="compare-summary-card"></div>
+          <div class="compare-controls matchups-card">
+            <div class="compare-controls-row">
+              <label for="compare-opponent-count" data-i18n="matchups.opponents">Opponents</label>
+              <select id="compare-opponent-count"><option value="50">Top 50</option><option value="100">Top 100</option></select>
+              <label for="compare-speed-mode" data-i18n="matchups.speedMode">Move order</label>
+              <select id="compare-speed-mode"><option value="auto" data-i18n="matchups.speedAuto">Auto</option><option value="normal" data-i18n="matchups.speedNormal">Normal</option><option value="trickRoom" data-i18n="matchups.speedTrickRoom">Trick Room</option></select>
+            </div>
+            <details class="matchups-environment"><summary data-i18n="field.environment">Environment</summary><div id="compare-ambient-field"></div></details>
+            <p id="compare-source" class="matchups-source"></p>
+          </div>
+          <section class="compare-variants" aria-labelledby="compare-variants-heading">
+            <div class="compare-section-heading"><h2 id="compare-variants-heading" class="matchups-heading" data-i18n="compare.variants">Set variants</h2><button id="compare-add" type="button" class="compare-add" data-i18n="compare.add">Duplicate selected set</button></div>
+            <div id="compare-variant-list" class="compare-variant-list"></div>
+          </section>
+          <section class="matchups-card compare-matrix-section" aria-labelledby="compare-matrix-heading">
+            <div class="compare-section-heading"><h2 id="compare-matrix-heading" class="matchups-heading" data-i18n="compare.matrix">Opponent comparison</h2><label class="compare-filter"><input id="compare-changed-only" type="checkbox" checked /><span data-i18n="compare.changedOnly">Changed outcomes only</span></label></div>
+            <p id="compare-row-count" class="matchups-source" aria-live="polite"></p>
+            <div class="compare-matrix-scroll" tabindex="0" role="region" aria-label="Opponent by variant comparison" data-i18n-aria-label="compare.matrixLabel">
+              <table class="compare-matrix"><thead id="compare-matrix-head"></thead><tbody id="compare-matrix-body"></tbody></table>
+            </div>
+            <p class="builder-assumption" data-i18n="compare.model">One-on-one KO race; counts are Pokémon, not win rates. Limitless Champions tournament usage ranks opponents, Smogon ladder stats supply spreads, and Pokémon Showdown supplies mechanics. Accuracy, partners and switching are excluded.</p>
+            <details class="matchups-method"><summary data-i18n="matchups.method">How it works</summary><div class="matchups-method-body"><p data-i18n="matchups.methodText"></p></div></details>
+          </section>
+        </div>
+      </div>
+      <footer><span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span><span data-i18n="matchups.footer">Limitless usage · Smogon ladder spreads · Level 50 · 1 SP = 8 EV</span></footer>
+    </main>
+    <script type="module" src="./src/ui/compare-page.js"></script>
+  </body>
+</html>

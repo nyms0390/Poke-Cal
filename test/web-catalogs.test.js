@@ -100,6 +100,7 @@ test("stages only the browser site for GitHub Pages", async () => {
     assert.deepEqual(pages, [
       "battle.html",
       "builder.html",
+      "compare.html",
       "index.html",
       "matchups.html",
       "moves.html",
