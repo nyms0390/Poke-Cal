@@ -1126,7 +1126,11 @@ test("Matchups opens the set comparison and the comparison edits in the shared e
   const compare = readFileSync(new URL("../compare.html", import.meta.url), "utf8");
   const controller = readFileSync(new URL("../src/ui/compare-page.js", import.meta.url), "utf8");
   const battle = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
-  assert.match(matchups, /class="compare-entry" href="\.\/compare\.html"/);
+  // Matchups and Compare sets share one view switch; each marks itself as the current view.
+  for (const [html, current] of [[matchups, "matchups"], [compare, "compare"]]) {
+    assert.match(html, /<nav class="view-switch"/);
+    assert.match(html, new RegExp(`href="\\./${current}\\.html" aria-current="page"`));
+  }
   for (const id of ["compare-set-editor", "compare-variant-list", "compare-selected", "compare-summary-counts", "compare-matrix-body", "compare-filter"]) {
     assert.match(compare, new RegExp(`id="${id}"`));
   }
@@ -1201,7 +1205,8 @@ test("sidebar routes use the shared Matchups workspace", () => {
   for (const page of ["moves.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
     const html = read(page);
     assert.match(html, /class="workspace[ "]/, page);
-    assert.match(html, /<div class="workspace-intro">\s*<h1/, page);
+    // Matchups puts its Overview | Compare sets switch above the title.
+    assert.match(html, /<div class="workspace-intro">\s*(?:<nav class="view-switch"[\s\S]*?<\/nav>\s*)?<h1/, page);
     assert.match(html, /class="[^"]*workspace-sidebar[^"]*"/, page);
     assert.match(html, /<div class="workspace-content">/, page);
     assert.doesNotMatch(html, /class="page-intro"/, page);

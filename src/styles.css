@@ -6722,19 +6722,45 @@ textarea:focus-visible {
    counts and the opponents whose outcome changes. The set editor opens in the editor dialog
    (see "Set sheet"). */
 
-.compare-entry {
+/* Matchups and Compare sets are two views of one tool: the switch above each page title. */
+.view-switch {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 0 12px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface-soft);
+}
+
+.view-switch a {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
-  margin-top: 4px;
-  color: var(--accent-dark);
-  font-weight: 650;
+  justify-content: center;
+  min-height: 34px;
+  padding: 4px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
   text-decoration: none;
 }
 
-.compare-entry:hover,
-.compare-back:hover {
-  text-decoration: underline;
+.view-switch a:hover {
+  background: var(--surface);
+  color: var(--accent-dark);
+}
+
+.view-switch a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.view-switch a[aria-current="page"] {
+  background: var(--surface);
+  box-shadow: var(--shadow-micro), 0 0 0 1px var(--line);
+  color: var(--accent-dark);
+  font-weight: 700;
 }
 
 .compare-workspace {
@@ -6751,7 +6777,7 @@ textarea:focus-visible {
 
 .compare-head h1 {
   max-width: none;
-  margin: 4px 0 2px;
+  margin: 0 0 2px;
   font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   line-height: 1.25;
 }
@@ -6759,15 +6785,6 @@ textarea:focus-visible {
 .compare-head .intro {
   margin: 0;
   line-height: 1.45;
-}
-
-.compare-back {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  color: var(--accent-dark);
-  font-weight: 600;
-  text-decoration: none;
 }
 
 .compare-body {
@@ -7533,6 +7550,15 @@ main > .compare-editor {
 }
 
 @media (max-width: 720px) {
+  .view-switch {
+    display: flex;
+  }
+
+  .view-switch a {
+    flex: 1 1 0;
+    min-height: 40px;
+  }
+
   .compare-head {
     padding: 16px;
   }
