@@ -6722,11 +6722,11 @@ textarea:focus-visible {
    counts and the opponents whose outcome changes. The set editor opens in the editor dialog
    (see "Set sheet"). */
 
-/* Matchups and Compare sets are two views of one tool: the switch above each page title. */
+/* Matchups and Compare sets are two views of one tool: the switch under each page title and intro. */
 .view-switch {
   display: inline-flex;
   gap: 2px;
-  margin: 0 0 12px;
+  margin: 12px 0 4px;
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
