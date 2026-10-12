@@ -515,7 +515,6 @@ export const STATIC_ZH_TW = {
   "Turn matchups into useful SP targets.": "將對位結果化為實用的 SP 目標。",
   "See the whole Speed field at once.": "一次看清全場速度線。",
   "Search in English or Traditional Chinese, compare forms, and review Limitless Champions tournament usage for abilities, items, and moves.": "使用英文或繁體中文搜尋，比較不同形態，並查看 Limitless Champions 賽事的特性、道具與招式使用率。",
-  "Set both sides, choose moves, apply battle conditions, and compare move order with damage ranges.": "設定雙方、選擇招式與對戰條件，比較行動順序與傷害範圍。",
   "Configure one Pokémon, then compare defensive bulk and offensive break points against the most-used Champions threats.": "設定一隻寶可夢，並針對 Champions 常見威脅比較耐久與攻擊臨界點。",
   "Compare one build against popular Champions Pokémon at fixed spreads, then apply battle-wide Speed control without losing manually added opponents.": "以固定能力分配比較你的配置與 Champions 常見寶可夢，再套用全場速度控制，且不會移除手動加入的對手。",
   "Pokémon lookup": "寶可夢查詢",
