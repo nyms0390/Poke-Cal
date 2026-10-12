@@ -243,11 +243,23 @@ function renderVariants() {
     name.maxLength = 60;
     name.value = variant.name;
     name.setAttribute("aria-label", t("compare.nameLabel", { name: variant.name }));
-    name.addEventListener("change", () => {
-      variant.name = name.value.trim() || variant.name;
+    const previousName = variant.name;
+    name.addEventListener("input", () => {
+      variant.name = name.value;
       persist();
-      renderVariants();
-      renderMatrix();
+      if (variant.id === state.selectedId) {
+        elements.editing.textContent = t("compare.editing", { name: variant.name });
+        sheet.update({ pokemon: variant.side.pokemon, label: variant.name,
+          meta: variant.id === state.pinnedId ? t("compare.pinned") : t("compare.variant") });
+      }
+      const column = state.variants.findIndex(({ id }) => id === variant.id) + 1;
+      const heading = elements.head.querySelector(`th:nth-child(${column + 1})`);
+      if (heading) heading.textContent = variant.name;
+    });
+    name.addEventListener("change", () => {
+      variant.name = name.value.trim() || previousName;
+      persist();
+      render();
     });
     top.append(name, element("span", "compare-pin-label", variant.id === state.pinnedId ? t("compare.pinned") : ""));
     const pokemon = element("p", "compare-pokemon", localizedName(variant.side.pokemon));
