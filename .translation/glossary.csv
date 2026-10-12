@@ -1,0 +1,23 @@
+source_term,target_term,locale,context,status,notes
+set,配置,zh-TW,A Pokémon's moves/item/ability/nature/spread bundle,approved,Replaces mixed 配招/配置; page name 配招構築 unchanged
+spread,能力分配,zh-TW,SP/EV distribution; 分配 allowed in compact labels,approved,
+ladder,天梯,zh-TW,Smogon ladder,approved,Replaces 對戰梯
+Mega form,超級形態,zh-TW,Mega Evolution forms,approved,Replaces 超級進化形態
+threat,威脅,zh-TW,Opponent that threatens the user's set,approved,
+matchup,對位,zh-TW,Matchups page,approved,
+KO,擊倒,zh-TW,All KO wording,approved,
+priority,優先度,zh-TW,Move priority,approved,
+move order,行動順序,zh-TW,,approved,
+Speed tier(s),速度線,zh-TW,Page/list; 速度層級 for individual tiers,approved,
+break point,攻擊臨界點,zh-TW,Builder,approved,
+bulk point,耐久臨界點,zh-TW,Builder,approved,
+usage,使用率,zh-TW,Tournament usage,approved,
+team (counter),支,zh-TW,Classifier for teams,approved,Replaces 組 for teams
+Max (Speed preset +Spe 32),極速,zh-TW,Speed presets,approved,
+Fast (Speed preset neutral 32),滿速,zh-TW,Speed presets,approved,Replaces 高速 (owner decision)
+Neutral (Speed preset 0 SP),無投資,zh-TW,Speed presets,approved,
+Slow (Speed preset -Spe 0),0速,zh-TW,Speed presets,approved,Replaces 最慢 (owner decision)
+(ability) active,已發動,zh-TW,Ability/item activation states,approved,Replaces 啟用
+item consumed,道具已消耗,zh-TW,,approved,Replaces 道具已用完
+field conditions,場地狀態,zh-TW,Battle field panel,approved,Replaces 場地條件
+BST,總和,zh-TW,Base stat total label,approved,

@@ -1,0 +1,13 @@
+{
+  "status": "approved",
+  "approved_by": "nyms",
+  "approved_at": "2026-10-12T00:00:00+08:00",
+  "context_sha256": {
+    "project-brief.md": "fe89c1c82768878979c4c01f48950f7264e2d607ce74191e8afd47069458e76d",
+    "locales.yaml": "8a0e916e5962e52242282ebe7797e4e275e0e0b2c78a036bc6c5c6c473fd37af",
+    "glossary.csv": "2fad2d237234549c7799b1e9f5f39b0b7bb6e684dfe91d8c6660adb62e1fe2b0",
+    "style-guide.md": "dca2ab05720b2480b9f19320abf6f4e27cf5ef13632927d785be9dcaaff1b7cd",
+    "protected-terms.txt": "7078fb218c9a15e907c6fd1ab6d4e641021595fbd5b17aff8169df73e2df59cf"
+  },
+  "approved_empty": []
+}

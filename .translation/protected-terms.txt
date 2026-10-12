@@ -1,0 +1,15 @@
+# One exact, untranslated term per line.
+PokéCal
+Champions
+Limitless
+Smogon
+Showdown
+Pokémon Showdown
+NCP
+Nimbasa City Post
+SP
+EV
+IV
+HP
+PP
+VGC

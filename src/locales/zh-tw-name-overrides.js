@@ -6,10 +6,16 @@ import { normalizeId } from "../identifiers.js";
 // committed public/*.json catalogs (and their web/MCP derivatives) without a full re-sync.
 //
 // Keys are catalog ids. A Pokémon key is matched against the base species too, so one entry
-// covers every form (e.g. `kingambit`).
+// covers every form (e.g. `kingambit`). A key naming a specific form (e.g. `rotomwash`) is that
+// form's full official name, so localizedName() shows it without the "（Wash）" form suffix.
 export const ZH_TW_NAME_OVERRIDES = {
   pokemon: {
     kingambit: "仆斬將軍",
+    rotomheat: "加熱洛托姆",
+    rotomwash: "清洗洛托姆",
+    rotomfrost: "結冰洛托姆",
+    rotomfan: "旋轉洛托姆",
+    rotommow: "切割洛托姆",
   },
   abilities: {
     terashell: "太晶甲殼", // PokeAPI lists 貫穿鑽.

@@ -1,6 +1,7 @@
 import { natureEffect, natureOptionLabel } from "./engine/natures.js";
 import { EN_MESSAGES } from "./locales/en.js";
 import { STATIC_ZH_TW, ZH_TW_MESSAGES } from "./locales/zh-tw.js";
+import { ZH_TW_NAME_OVERRIDES } from "./locales/zh-tw-name-overrides.js";
 
 export const SUPPORTED_LOCALES = ["en", "zh-TW"];
 export const LOCALE_STORAGE_KEY = "pokecal.locale.v1";
@@ -31,8 +32,8 @@ const TERMS = {
     Modest: "內斂", Mild: "慢吞吞", Quiet: "冷靜", Bashful: "害羞", Rash: "馬虎",
     Calm: "溫和", Gentle: "溫順", Sassy: "自大", Careful: "慎重", Quirky: "浮躁",
   },
-  form: { Mega: "超級", "Mega-X": "超級X", "Mega-Y": "超級Y", Alola: "阿羅拉", Galar: "伽勒爾", Hisui: "洗翠", Paldea: "帕底亞" },
-  speedPreset: { Max: "極速", Fast: "高速", Neutral: "無投資", Slow: "最慢", "Your spread": "你的分配", Base: "種族值" },
+  form: { Mega: "超級", "Mega-X": "超級X", "Mega-Y": "超級Y", "Mega-Z": "超級Z", Alola: "阿羅拉", Galar: "伽勒爾", Hisui: "洗翠", Paldea: "帕底亞" },
+  speedPreset: { Max: "極速", Fast: "滿速", Neutral: "無投資", Slow: "0速", "Your spread": "你的分配", Base: "種族值" },
   speedClass: { "+Spe": "+速度", Neutral: "無修正", "-Spe": "-速度" },
   condition: { "No item": "無道具", "Target statused": "目標有異常狀態", "User statused": "使用者有異常狀態" },
 };
@@ -91,6 +92,8 @@ export function localizedName(entry, requestedLocale = locale) {
   const name = String(entry.name ?? "");
   const traditionalName = toTraditionalChinese(translated);
   if (!baseSpecies || name === baseSpecies || !name.startsWith(`${baseSpecies}-`)) return traditionalName;
+  // A form with its own official name (清洗洛托姆) already says which form it is.
+  if (translated === ZH_TW_NAME_OVERRIDES.pokemon[entry.id]) return traditionalName;
   const suffix = name.slice(baseSpecies.length + 1);
   return `${traditionalName}（${TERMS.form[suffix] ?? suffix}）`;
 }

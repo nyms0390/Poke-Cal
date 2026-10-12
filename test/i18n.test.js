@@ -183,3 +183,32 @@ test("formats newer engine notes in zh-TW", () => {
   assert.match(formatDamageNote("Snarl hits 2 times (child hit ×0.25)", "zh-TW", { move }), /攻擊 2 次（第二擊 ×0.25）$/);
   assert.match(formatDamageNote("Snarl hit count assumes 90% accuracy for each hit after the first", "zh-TW", { move }), /每擊命中率為 90%$/);
 });
+
+test("zh-TW polish: official terrain names, Mega-Z forms, presets, and classifier agreement", async () => {
+  const { formatResultDescription } = await import("../src/i18n-formatters.js");
+  const pokemon = { id: "pikachu", name: "Pikachu", aliases: ["皮卡丘"] };
+  const move = { id: "thunderbolt", name: "Thunderbolt", category: "Special", aliases: ["十萬伏特"] };
+  const result = { supported: true, minDamage: 10, maxDamage: 12, minPercent: 10, maxPercent: 12, ko: null, notes: [] };
+  for (const [terrain, label] of [["Electric", "電氣場地"], ["Grassy", "青草場地"], ["Misty", "薄霧場地"], ["Psychic", "精神場地"]]) {
+    const text = formatResultDescription({
+      attackerState: { pokemon, sp: {} }, defenderState: { pokemon, sp: {} }, move,
+      field: { terrain: `${terrain} Terrain` }, result,
+    }, "zh-TW");
+    assert.match(text, new RegExp(`（${label}）`));
+  }
+  assert.equal(
+    localizedName({ id: "garchompmegaz", name: "Garchomp-Mega-Z", baseSpecies: "Garchomp", aliases: ["烈咬陸鯊"] }, "zh-TW"),
+    "烈咬陸鯊（超級Z）",
+  );
+  assert.equal(localizedTerm("speedPreset", "Fast", "zh-TW"), "滿速");
+  assert.equal(localizedTerm("speedPreset", "Max", "zh-TW"), "極速");
+  assert.equal(localizedTerm("speedPreset", "Slow", "zh-TW"), "0速");
+  // Rotom forms carry their own official names, so no "（Wash）" suffix is appended.
+  assert.equal(localizedName({ id: "rotomwash", name: "Rotom-Wash", baseSpecies: "Rotom", aliases: ["清洗洛托姆"] }, "zh-TW"), "清洗洛托姆");
+  assert.equal(localizedName({ id: "rotomheat", name: "Rotom-Heat", baseSpecies: "Rotom", aliases: ["加熱洛托姆"] }, "zh-TW"), "加熱洛托姆");
+  // A form still named only after its species keeps the suffix.
+  assert.equal(localizedName({ id: "rotomwash", name: "Rotom-Wash", baseSpecies: "Rotom", aliases: ["洛托姆"] }, "zh-TW"), "洛托姆（Wash）");
+  assert.equal(tFor("zh-TW", "matchups.showing", { count: 3, total: 12, filter: "all" }), "顯示 12 隻寶可夢中的 3 隻");
+  assert.equal(tFor("zh-TW", "matchups.showing", { count: 2, total: 5, filter: "threats" }), "顯示 5 個威脅中的 2 個");
+  assert.equal(STATIC_ZH_TW["PokéCal — Move catalog"], "PokéCal — 招式圖鑑");
+});

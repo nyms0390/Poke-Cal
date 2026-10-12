@@ -1,0 +1,4 @@
+source_locale: en
+target_locales: [zh-TW]
+fallback_locale: en
+neutral_variants_allowed: false

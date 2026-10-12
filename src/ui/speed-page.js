@@ -499,7 +499,7 @@ function renderSpeedRow(row, breakpoint) {
       ? `${sourceLabel} · ${entry.setLabel} · ${nature} · ${entry.sp} SP · ${entry.item ? catalogName(entry.item, catalogs.itemLookup) : t("speed.noItem")} · ${entry.ability ? catalogName(entry.ability, catalogs.abilityLookup) : t("speed.noAbility")}${activeLabel}`
       : entry.source === "Limitless"
         ? `${sourceLabel} · ${nature} · ${entry.sp} SP · ${entry.item ? catalogName(entry.item, catalogs.itemLookup) : t("speed.noItem")} · ${entry.ability ? catalogName(entry.ability, catalogs.abilityLookup) : t("speed.noAbility")} · ${t(entry.spSource === "Smogon" ? "speed.smogonSpEstimate" : "speed.assumedSp")}${usageLabel}${activeLabel}`
-        : entry.presetLabel;
+        : localizedTerm("speedPreset", entry.presetLabel);
     const preset = document.createElement("span");
     preset.className = "speed-axis-preset";
     const dot = document.createElement("span");

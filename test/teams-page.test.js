@@ -220,7 +220,7 @@ test("submitted search finds later tournaments and hides unrelated teams, with l
   assert.equal(view.elements.count.textContent, "1 / 1 tournament");
   assert.match(view.elements["search-status"].textContent, /1 matching team/);
   view.locale("zh-TW");
-  assert.match(view.elements["search-status"].textContent, /1 組符合/);
+  assert.match(view.elements["search-status"].textContent, /1 支符合/);
   assert.equal(view.elements.query.value, "Incineroar + Rillaboom");
 });
 test("regulation switches and reset recompute submitted filters and reset pagination", async () => {

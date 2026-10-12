@@ -713,7 +713,7 @@ function localizedSpeedTierLabel(label) {
   if (getLocale() !== "zh-TW") return label;
   const match = /^(Max|Fast|Uninvested|Min) \(([^,]+), (\d+) SP\)$/.exec(label);
   if (!match) return label;
-  const preset = { Max: "極速", Fast: "高速", Uninvested: "無投資", Min: "最慢" }[match[1]];
+  const preset = { Max: "極速", Fast: "滿速", Uninvested: "無投資", Min: "0速" }[match[1]];
   const nature = match[2].replace("+Spe", "+速度").replace("−Spe", "−速度").replace("neutral", "無性格修正");
   return `${preset}（${nature}, ${match[3]} SP）`;
 }

@@ -163,7 +163,7 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     "Fixed damage": "固定傷害",
     "Doubles spread move": "雙打範圍招式",
     "Pledge combo STAB": "誓約組合的屬性一致加成",
-    "Ice Face intact (first hit negated)": "冰臉完好（抵銷第一次攻擊）",
+    "Ice Face intact (first hit negated)": "結凍頭完好（抵銷第一次攻擊）",
     "Cloud Nine/Air Lock suppresses weather": "無關天氣/氣閘屏蔽天氣",
     "Primordial Sea treated as Rain": "始源之海視為下雨",
     "Mega Sol treats this move as Sunny Day": "超級太陽將此招式視為大晴天",
@@ -239,12 +239,15 @@ function stagePrefix(stage = 0) {
   return stage > 0 ? `+${stage}` : stage < 0 ? String(stage) : "";
 }
 
+// Official zh-TW terrain names; the type names (電, 超能) do not compose into them.
+const TERRAIN_ZH = { Electric: "電氣場地", Grassy: "青草場地", Misty: "薄霧場地", Psychic: "精神場地" };
+
 function localizedFieldClauses({ attackerState, defenderState, field, result }) {
   const clauses = [];
   if (result.critical) clauses.push("要害");
   if (field.terrain) {
     const terrainType = field.terrain.replace(" Terrain", "");
-    clauses.push(`${localizedTerm("type", terrainType, "zh-TW")}場地`);
+    clauses.push(TERRAIN_ZH[terrainType] ?? `${terrainType}場地`);
   }
   const weather = { SunnyDay: "大晴天", RainDance: "下雨", Sandstorm: "沙暴", Snowscape: "下雪" }[field.weather];
   if (weather) clauses.push(weather);
