@@ -34,8 +34,10 @@ const elements = {
 };
 const activeStore = createActiveSetStore(browserStorage());
 const comparisonStore = createComparisonStore(browserStorage());
+const SP_ANALYSIS_DELAY_MS = 150;
 let catalogs = null;
 let trickRoomShares = null;
+let analysisTimer = null;
 let state = {
   variants: [], pinnedId: "", selectedId: "", opponentCount: 50,
   speedMode: "auto", field: createAmbientFieldState(),
@@ -52,7 +54,7 @@ const createSide = (pokemon) => createSideState(pokemon, championsDefaultsForPok
 const setEditor = mountSetEditor(document.querySelector("#compare-set-editor"), {
   prefix: "compare", getCatalogs: () => catalogs, getSetup: () => selected()?.side,
   onPokemonSelect: (pokemon) => changeSide(createSide(pokemon)),
-  onControl: (control) => changeSide(applyControl(selected().side, control)),
+  onControl: (control) => changeSide(applyControl(selected().side, control), { immediate: control.kind !== "sp" }),
 });
 const sheet = mountSetSheet({
   editor: elements.editor, id: "compare-set-sheet", titleKey: "compare.editorLabel",
@@ -138,14 +140,14 @@ function replaceVariant(id, side) {
   state.variants = state.variants.map((variant) => variant.id === id ? { ...variant, side } : variant);
 }
 
-function changeSide(side) {
+function changeSide(side, { immediate = true } = {}) {
   const id = state.selectedId;
   const pokemonChanged = selected().side.pokemon.id !== side.pokemon.id;
   replaceVariant(id, side);
   if (id === state.pinnedId) activeStore.writeSet(activeSetFromState(side));
   persist();
   if (pokemonChanged) setEditor.renderOptions();
-  render();
+  render({ immediate });
 }
 
 function persist() { comparisonStore.write(state); }
@@ -191,7 +193,7 @@ function remove(id) {
   render();
 }
 
-function render() {
+function render({ immediate = true } = {}) {
   if (!selected()) return;
   elements.count.value = String(state.opponentCount);
   elements.speed.value = state.speedMode;
@@ -199,10 +201,18 @@ function render() {
   setEditor.render();
   sheet.update({ pokemon: selected().side.pokemon, label: selected().name,
     meta: selected().id === state.pinnedId ? t("compare.pinned") : t("compare.variant") });
-  renderAnalysis();
+  if (immediate) renderAnalysis();
+  else scheduleAnalysis();
+}
+
+function scheduleAnalysis() {
+  clearTimeout(analysisTimer);
+  analysisTimer = setTimeout(renderAnalysis, SP_ANALYSIS_DELAY_MS);
 }
 
 function renderAnalysis() {
+  clearTimeout(analysisTimer);
+  analysisTimer = null;
   if (!catalogs || !pinned()) return;
   const opponents = rankedOpponents(catalogs.pokemon, state.opponentCount);
   const analyses = state.variants.map((variant) => {
