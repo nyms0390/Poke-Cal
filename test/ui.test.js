@@ -1121,16 +1121,22 @@ test("matchups page exposes the overview, one filtered results list and the turn
   assert.doesNotMatch(html, /data-matchups-view/);
 });
 
-test("Matchups opens the set comparison and the comparison uses one shared editor", () => {
+test("Matchups opens the set comparison and the comparison edits in the shared editor dialog", () => {
   const matchups = readFileSync(new URL("../matchups.html", import.meta.url), "utf8");
   const compare = readFileSync(new URL("../compare.html", import.meta.url), "utf8");
   const controller = readFileSync(new URL("../src/ui/compare-page.js", import.meta.url), "utf8");
+  const battle = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
   assert.match(matchups, /class="compare-entry" href="\.\/compare\.html"/);
-  for (const id of ["compare-set-editor", "compare-variant-list", "compare-matrix-body", "compare-changed-only"]) {
+  for (const id of ["compare-set-editor", "compare-variant-list", "compare-selected", "compare-summary-counts", "compare-matrix-body", "compare-filter"]) {
     assert.match(compare, new RegExp(`id="${id}"`));
   }
   assert.match(controller, /mountSetEditor\(document\.querySelector\("#compare-set-editor"\)/);
+  assert.match(controller, /media: "\(min-width: 0px\)"/);
+  assert.match(controller, /classList\.add\("editor-dialog"\)/);
+  assert.match(battle, /classList\.add\("editor-dialog"\)/);
   assert.match(controller, /watchActiveSet\(refreshFromActiveSet\)/);
+  // The pin is its own button beside the card's select button, never nested inside it.
+  assert.match(controller, /card\.append\(main, pinButton\)/);
 });
 
 test("matchups page keeps the method behind a disclosure and the set editor in one region", () => {

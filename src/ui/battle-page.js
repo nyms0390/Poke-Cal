@@ -269,7 +269,7 @@ const fieldSheet = mountSetSheet({
   media: "(min-width: 0px)",
 });
 for (const sheet of [...Object.values(sideSheets), fieldSheet]) {
-  sheet.element.classList.add("battle-editor-dialog");
+  sheet.element.classList.add("editor-dialog");
 }
 // Type badges sit under each name, and the field chips sit beside the field label, inside the
 // shared summary cards.

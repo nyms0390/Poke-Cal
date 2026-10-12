@@ -4,7 +4,7 @@ A compact, dependency-free competitive Pokémon toolkit: species and move lookup
 
 ## Overview
 
-PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property, with the same sortable column headers as the lookup move pool. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, the matchups page (`matchups.html`) races one set against the most-used Pokémon to show what beats it, what it beats, and where Speed decides, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases; the pages load slim, minified Champions-only copies from `public/web/*.json`.
+PokéCal is a browser-first ES-module web app with no build step and no npm dependencies. The lookup page (`index.html`) searches Pokémon by English or Traditional Chinese name and shows stats, defensive matchups, Champions usage, spreads, and a sortable move pool. The move catalog (`moves.html`) filters every Champions-legal move by name, type, category, or property, with the same sortable column headers as the lookup move pool. The battle calculator (`battle.html`) configures two Pokémon and computes move order, damage ranges, and KO chances, with saved sets and set-text import and export. The builder (`builder.html`) finds defensive bulk and offensive break points against usage-backed threat sets, the matchups page (`matchups.html`) races one set against the most-used Pokémon to show what beats it, what it beats, and where Speed decides, and its compare page (`compare.html`) races up to six variants of that set against the same opponents to show which outcomes each change moves, while the Speed tiers page (`speed.html`) compares final Speed across fixed opponent presets. The tournament-team browser (`teams.html`) shows recent completed Limitless Champions brackets and their submitted builds. Catalog and team data is generated into `public/*.json` from Pokémon Showdown, Limitless, Smogon ladder stats, NCP curated sets, and PokeAPI aliases; the pages load slim, minified Champions-only copies from `public/web/*.json`.
 
 ## Project Structure
 
@@ -15,6 +15,7 @@ PokéCal/
 ├── battle.html                # Battle calculator page (loads src/ui/battle-page.js)
 ├── builder.html               # SP builder (loads src/ui/builder-page.js)
 ├── matchups.html              # Matchup overview (loads src/ui/matchups-page.js)
+├── compare.html               # Set comparison (loads src/ui/compare-page.js)
 ├── speed.html                 # Speed tiers (loads src/ui/speed-page.js)
 ├── teams.html                 # Tournament teams (loads src/ui/teams-page.js)
 ├── src/
@@ -138,7 +139,7 @@ PokéCal also includes a deploy-ready, read-only Cloudflare Worker MCP at [`mcp/
 npm start
 ```
 
-Then open one of the seven tools:
+Then open one of the eight tools:
 
 | Route | Tool |
 | --- | --- |
@@ -147,6 +148,7 @@ Then open one of the seven tools:
 | `/battle.html` | Damage, KO chance, and move-order calculator |
 | `/builder.html` | Defensive bulk and offensive break points |
 | `/matchups.html` | What beats one set, what it beats, and where Speed decides |
+| `/compare.html` | Set variants against the same opponents, and which outcomes each change moves |
 | `/speed.html` | Interactive Speed tiers and breakpoints |
 | `/teams.html` | Recent Limitless Champions tournament teams |
 
@@ -254,4 +256,4 @@ npm run test:pokemon     # pokemon only
 
 The accuracy record for the battle calculator is the `@smogon/calc` reference suite, not a separate checklist: `test/damage-reference.test.js` compares all 16 damage rolls of about 280 scenarios against `test/fixtures/damage-reference.json`, which is generated from `@smogon/calc` (Gen 9 rules, level 50, SP `s` = EV `min(252, 8s)`). The app and tests stay dependency-free; to add scenarios, run `npm install --no-save @smogon/calc@0.12.0 && node scripts/dev/generate-damage-reference.mjs` and commit the regenerated fixture. `test/speed-reference.test.js` does the same for final Speed against `test/fixtures/speed-reference.json` (`@smogon/calc` `getFinalSpeed`; regenerate with `node scripts/dev/generate-speed-reference.mjs`).
 
-No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the seven pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).
+No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the eight pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).

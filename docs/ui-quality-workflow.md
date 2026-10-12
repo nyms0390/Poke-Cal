@@ -23,7 +23,7 @@ A cleanup request authorizes finding and fixing demonstrated issues and repeated
 
 Before editing, read `AGENTS.md`, `DESIGN.md`, this file, the target HTML and controller, `src/ui/components.js`, and `src/styles.css`. Check `git status --short` and preserve unrelated changes. `docs/design-references/kraken/DESIGN.md` is historical inspiration, not an accessibility specification or a source of required fonts and measurements.
 
-Run the application and use the interface before judging it. For a whole-app cleanup, inspect all seven routes:
+Run the application and use the interface before judging it. For a whole-app cleanup, inspect all eight routes:
 
 | Route | Representative task | Stress cases |
 |---|---|---|
@@ -32,6 +32,7 @@ Run the application and use the interface before judging it. For a whole-app cle
 | `battle.html` | Configure both sides and compare results | Keyboard selection, long set names, numeric boundaries, condition and result updates |
 | `builder.html` | Change a spread and inspect matchup targets | Large results, sorting, empty results, long opponent names |
 | `matchups.html` | Pick a set and read what beats it and what it beats | Top 100, grid filter with empty cells, expanded rows, missing team archive |
+| `compare.html` | Compare set variants against the baseline | Six variants, renamed and removed variants, pinning another baseline, Pokémon change on another page, phone column view |
 | `speed.html` | Change Speed conditions and compare ranks | Ties, extremes, long labels, selected-Pokémon changes |
 | `teams.html` | Browse tournament teams | Loading, failure recovery, long metadata, sparse records, narrow layouts |
 
