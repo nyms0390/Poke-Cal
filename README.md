@@ -199,7 +199,7 @@ Limitless Champions ability and item (a Mega form holds its stone), every damagi
 least 5% of its Limitless sets, and its top Smogon ladder SP spread, or a max-offense preset
 when the ladder has none. Each side races with the move that KOs in the fewest hits with at
 least a 50% chance; fewer hits wins, and equal hits go to whoever moves first (priority, then
-Speed, reversed in Trick Room). **Auto** weights normal and Trick Room order by the share of
+Speed, reversed in Trick Room). When neither side KOs within three turns, the race counts as no KO. **Auto** weights normal and Trick Room order by the share of
 the opponent's submitted Limitless teams that run Trick Room. Weather and terrain abilities
 apply on top of the chosen environment, and Intimidate is applied on entry. The race counts
 turns, so no damaging move is left out: charge moves take two turns per use (none in Sun for

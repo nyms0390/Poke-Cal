@@ -74,7 +74,7 @@ test("hit buckets and grid cells", () => {
   assert.equal(cellOutcome(1, 2), "loss");
   assert.equal(cellOutcome(3, 1), "win");
   assert.equal(cellOutcome(2, 2), "speed");
-  assert.equal(cellOutcome(4, 4), "slow");
+  assert.equal(cellOutcome(4, 4), "stalemate");
 });
 
 test("summarizeMatchups counts each Pokémon once and fills the grid", () => {
@@ -92,29 +92,17 @@ test("summarizeMatchups counts each Pokémon once and fills the grid", () => {
   assert.equal(summary.grid[0][3].outcome, "loss");
   assert.equal(summary.grid[2][0].count, 1);
   assert.equal(summary.grid[3][3].count, 1);
-  assert.equal(summary.grid[3][3].outcome, "slow");
+  assert.equal(summary.grid[3][3].outcome, "stalemate");
   assert.equal(summary.grid.flat().reduce((total, cell) => total + cell.count, 0), 7);
   assert.equal(summarizeMatchups([]).speedFirstShare, null);
   assert.equal(summarizeMatchups([]).shares.loss, 0);
 });
 
-test("the 4+/4+ grid cell splits by race outcome so the grid adds up to the bar", () => {
-  const rows = [
-    ...fixtureRows,
-    row("Slow loss", { outcome: "loss", theirHits: 4, ourHits: 5, usagePercent: 1, rank: 8 }),
-    row("Slow win", { outcome: "win", theirHits: Infinity, ourHits: 5, usagePercent: 1, rank: 9 }),
-    row("Slow mirror", { outcome: "speed", theirHits: 5, ourHits: 5, usagePercent: 1, rank: 10, ourWinChance: 0 }),
-  ];
-  const summary = summarizeMatchups(rows);
-  assert.deepEqual(summary.grid[3][3].outcomes, { loss: 1, speed: 1, win: 1, stalemate: 1 });
-  assert.equal(summary.counts.stalemate, 1, "only no KO both ways is a stalemate");
+test("every grid cell holds one outcome, so the grid adds up to the bar", () => {
+  const summary = summarizeMatchups(fixtureRows);
   for (const outcome of ["loss", "speed", "win", "stalemate"]) {
-    const inGrid = summary.grid.flat().reduce((total, cell) => total + cell.outcomes[outcome], 0);
+    const inGrid = summary.grid.flat().filter((cell) => cell.outcome === outcome).reduce((total, cell) => total + cell.count, 0);
     assert.equal(inGrid, summary.counts[outcome], outcome);
-  }
-  // Every other cell holds only its own outcome.
-  for (const cell of summary.grid.flat().filter(({ outcome }) => outcome !== "slow")) {
-    assert.equal(cell.outcomes[cell.outcome], cell.count);
   }
 });
 

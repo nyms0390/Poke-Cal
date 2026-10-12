@@ -438,3 +438,24 @@ test("your crit toggle, stat stages and status reach the race", () => {
   const burned = matchup({ ours: rillaboom({ status: "burn" }), theirs: skarmory() });
   assert.ok(woodHammer(burned).maxPercent < woodHammer(base).maxPercent);
 });
+
+test("when neither side KOs within three turns, the race is a no KO", () => {
+  // Uninvested Body Slams: Snorlax needs 4 turns, Incineroar 5. Fewer turns would have won
+  // before; a 4+ vs 4+ race is now a no KO, like the turn grid's 4+/4+ cell.
+  const wall = (name, abilityName) => ({
+    pokemon: species(name), nature: "Careful",
+    sp: { hp: 32, atk: 0, def: 2, spa: 0, spd: 32, spe: 0 },
+    ability: ability(abilityName), item: null, moves: [move("Body Slam")],
+  });
+  const result = matchup({ ours: wall("Snorlax", "Thick Fat"), theirs: wall("Incineroar", "Blaze") });
+
+  assert.equal(result.ourHits, 4);
+  assert.equal(result.theirHits, 5);
+  assert.equal(result.outcome, "stalemate");
+  assert.equal(result.decisive, false);
+  assert.deepEqual(resolveSpeedOutcome(result, { mode: "normal" }), { first: null, ourWinChance: null });
+
+  const mirror = matchup({ ours: wall("Snorlax", "Thick Fat"), theirs: wall("Snorlax", "Thick Fat") });
+  assert.equal(mirror.ourHits, 4);
+  assert.equal(mirror.outcome, "stalemate", "equal 4+ turns are no KO, not a move-order race");
+});

@@ -321,13 +321,6 @@ export const ZH_TW_MESSAGES = {
   "matchups.theyKoIn": "對手擊倒你需要",
   "matchups.cellLabel": ({ count, theirs, ours }) =>
     `${count} 隻寶可夢：對手 ${theirs} 回合擊倒你，你 ${ours} 回合擊倒對手`,
-  "matchups.cellBreakdown": ({ loss, speed, win, stalemate }) => [
-    loss && `${loss} 隻贏過你`,
-    speed && `${speed} 隻看行動順序`,
-    win && `${win} 隻你能贏`,
-    stalemate && `${stalemate} 隻無法擊倒`,
-  ].filter(Boolean).join("、"),
-  "matchups.cellLabelBreakdown": ({ label, breakdown }) => `${label}（${breakdown}）`,
   "matchups.filterText": ({ count, theirs, ours }) =>
     `顯示 ${count} 隻寶可夢：對手 ${theirs} 回合擊倒你，你需要 ${ours} 回合擊倒對手。`,
   "matchups.clearFilter": "顯示全部",
@@ -341,7 +334,7 @@ export const ZH_TW_MESSAGES = {
   "matchups.empty": ({ count }) => `前 ${count} 名中沒有。`,
   "matchups.emptyFiltered": "所選格子中沒有。",
   "matchups.method": "計算方式",
-  "matchups.methodText": "每個對手使用其 Limitless Champions 最常見的特性與道具、所有在至少 5% 配置中出現的攻擊招式，以及 Smogon 天梯最常見的分配（若無則使用滿攻擊預設）。雙方各自使用能在最少回合內擊倒對方的招式（擊倒機率達 50% 才計入）；回合較少者勝，回合相同時先行動者勝。蓄力、使用後無法行動與延遲命中的招式會加上額外回合，擊掌奇襲與大爆炸類招式只計算首回合擊倒，珍藏、真氣拳等有條件的招式則假設條件成立。這是一對一的衡量，並非雙打勝率：隊友、守住、交換、命中率與追加效果都不計入。",
+  "matchups.methodText": "每個對手使用其 Limitless Champions 最常見的特性與道具、所有在至少 5% 配置中出現的攻擊招式，以及 Smogon 天梯最常見的分配（若無則使用滿攻擊預設）。雙方各自使用能在最少回合內擊倒對方的招式（擊倒機率達 50% 才計入）；回合較少者勝，回合相同時先行動者勝，雙方都無法在 3 回合內擊倒時算作無法擊倒。蓄力、使用後無法行動與延遲命中的招式會加上額外回合，擊掌奇襲與大爆炸類招式只計算首回合擊倒，珍藏、真氣拳等有條件的招式則假設條件成立。這是一對一的衡量，並非雙打勝率：隊友、守住、交換、命中率與追加效果都不計入。",
   "matchups.rankUsage": ({ rank, usage }) => `#${rank} · ${usage} 的隊伍使用`,
   "matchups.theirHit": "對手最強一擊",
   "matchups.yourHit": "你的最強一擊",
@@ -458,7 +451,7 @@ export const ZH_TW_MESSAGES = {
   "matchups.noKoTurns": "5 回合內無法擊倒",
   "matchups.verdict.loss": ({ name }) => `${name}會在你回擊前擊倒你。`,
   "matchups.verdict.win": ({ name }) => `你會在${name}回擊前擊倒它。`,
-  "matchups.verdict.stalemate": "雙方都無法在 5 回合內擊倒對方。",
+  "matchups.verdict.stalemate": "雙方都無法在 3 回合內擊倒對方。",
   "matchups.verdict.speedOurs": "雙方回合數相同，你先行動。",
   "matchups.verdict.speedTheirs": ({ name }) => `雙方回合數相同，${name}先行動。`,
   "matchups.verdict.speedSplit": ({ share }) => `雙方回合數相同；你有 ${share} 的機率先行動。`,

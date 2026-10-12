@@ -89,9 +89,9 @@ export function hitBucket(hits) {
   return Number.isFinite(hits) ? Math.max(1, Math.min(hits, 4)) : 4;
 }
 
-/** Race outcome a grid cell stands for; the 4+/4+ cell mixes slow outcomes, so it is "slow". */
+/** Race outcome a grid cell stands for; 4+/4+ (neither side 3HKOs) is "stalemate", shown as No KO. */
 export function cellOutcome(theirBucket, ourBucket) {
-  if (theirBucket === 4 && ourBucket === 4) return "slow";
+  if (theirBucket === 4 && ourBucket === 4) return "stalemate";
   if (theirBucket < ourBucket) return "loss";
   if (theirBucket > ourBucket) return "win";
   return "speed";
@@ -143,17 +143,15 @@ export function analyzeMatchups({
  * Shares of each race outcome by Pokémon count (the top N do not cover all usage, so usage
  * weights would not add up to anything), the share your moves cannot 3HKO (`walledShare`), your
  * average chance to move first across speed races, and the 4×4 grid (rows: hits they need;
- * columns: hits you need). Each cell also counts its rows by race outcome (`outcomes`): every
- * cell but 4+/4+ holds one outcome, while 4+/4+ mixes them (4 vs 5, 5 vs 5, no KO …), so the
- * grid's per-outcome counts always add up to `counts`.
+ * columns: hits you need). Each cell holds one race outcome (4+/4+ is No KO), so the grid's
+ * cells of one outcome always add up to `counts`.
  */
 export function summarizeMatchups(rows = []) {
-  const emptyOutcomes = () => Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, 0]));
-  const counts = emptyOutcomes();
+  const counts = Object.fromEntries(RACE_OUTCOMES.map((outcome) => [outcome, 0]));
   let walled = 0;
   let speedWins = 0;
   const grid = HIT_BUCKETS.map((theirs) => HIT_BUCKETS.map((ours) => ({
-    theirs, ours, outcome: cellOutcome(theirs, ours), count: 0, outcomes: emptyOutcomes(),
+    theirs, ours, outcome: cellOutcome(theirs, ours), count: 0,
   })));
   for (const row of rows) {
     const outcome = row.result.outcome;
@@ -162,7 +160,6 @@ export function summarizeMatchups(rows = []) {
     if (outcome === "speed") speedWins += row.speed?.ourWinChance ?? 0.5;
     const cell = grid[row.cell.theirs - 1][row.cell.ours - 1];
     cell.count += 1;
-    cell.outcomes[outcome] += 1;
   }
   const share = (value) => (rows.length > 0 ? value / rows.length : 0);
   return {
@@ -184,7 +181,7 @@ export function rowInCell(row, cell) {
  * - threats: they win the race; hard counters first, then the widest margin, then usage.
  * - speed: equal hits; the ones you are least likely to win first, then usage.
  * - favorable ("does well against"): you win; hard checks first, then margin, then usage.
- * - stalemate: neither side KOs within five hits; by usage.
+ * - stalemate: neither side KOs within three turns; by usage.
  */
 export function matchupSections(rows = [], { cell = null } = {}) {
   const visible = rows.filter((row) => rowInCell(row, cell));

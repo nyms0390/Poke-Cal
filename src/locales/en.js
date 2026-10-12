@@ -318,13 +318,6 @@ export const EN_MESSAGES = {
   "matchups.theyKoIn": "They KO you in",
   "matchups.cellLabel": ({ count, theirs, ours }) =>
     `${count} Pokémon: they KO you in ${theirs}, you KO them in ${ours}`,
-  "matchups.cellBreakdown": ({ loss, speed, win, stalemate }) => [
-    loss && `${loss} beat you`,
-    speed && `${speed} decided by move order`,
-    win && `${win} you beat`,
-    stalemate && `${stalemate} with no KO`,
-  ].filter(Boolean).join(", "),
-  "matchups.cellLabelBreakdown": ({ label, breakdown }) => `${label} (${breakdown})`,
   "matchups.filterText": ({ count, theirs, ours }) =>
     `Showing ${count} Pokémon that KO you in ${theirs} while you KO them in ${ours}.`,
   "matchups.clearFilter": "Show all",
@@ -338,7 +331,7 @@ export const EN_MESSAGES = {
   "matchups.empty": ({ count }) => `None in the top ${count}.`,
   "matchups.emptyFiltered": "None in the selected cell.",
   "matchups.method": "How it works",
-  "matchups.methodText": "Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest turns, counting a hit once its KO chance reaches 50%; fewer turns wins, and equal turns go to whoever moves first. Charge, recharge and delayed moves add their extra turns, Fake Out and Explosion-style moves count only as a first-turn KO, and conditional moves such as Last Resort or Focus Punch race as if their condition holds. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.",
+  "matchups.methodText": "Each opponent uses its top Limitless Champions ability and item, every damaging move on at least 5% of its sets, and its top Smogon ladder spread (or a max-offense preset). Each side uses the move that KOs in the fewest turns, counting a hit once its KO chance reaches 50%; fewer turns wins, equal turns go to whoever moves first, and when neither side KOs within 3 turns it counts as no KO. Charge, recharge and delayed moves add their extra turns, Fake Out and Explosion-style moves count only as a first-turn KO, and conditional moves such as Last Resort or Focus Punch race as if their condition holds. This is a one-on-one measure, not a doubles win rate: partners, Protect, switching, accuracy and secondary effects are left out.",
   "matchups.rankUsage": ({ rank, usage }) => `#${rank} · ${usage} of teams`,
   "matchups.theirHit": "Their best hit",
   "matchups.yourHit": "Your best hit",
@@ -457,7 +450,7 @@ export const EN_MESSAGES = {
   "matchups.noKoTurns": "No KO in 5 turns",
   "matchups.verdict.loss": ({ name }) => `${name} KOs you before you can answer.`,
   "matchups.verdict.win": ({ name }) => `You KO ${name} before it can answer.`,
-  "matchups.verdict.stalemate": "Neither side KOs within 5 turns.",
+  "matchups.verdict.stalemate": "Neither side KOs within 3 turns.",
   "matchups.verdict.speedOurs": "Same number of turns, and you move first.",
   "matchups.verdict.speedTheirs": ({ name }) => `Same number of turns, and ${name} moves first.`,
   "matchups.verdict.speedSplit": ({ share }) => `Same number of turns; you move first ${share} of the time.`,

@@ -24,6 +24,8 @@ import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
 export const LIKELY_KO_CHANCE = 0.5;
 /** koChance stops at 5 hits; anything slower is reported as Infinity. */
 export const MAX_RACE_HITS = 5;
+/** When both sides need this many turns or more, neither can 3HKO: the race is a "no KO". */
+export const NO_KO_TURNS = 4;
 /** Usage share (%) at or above which an observed move/item/ability counts as common. */
 export const COMMON_SHARE_PERCENT = 5;
 
@@ -169,7 +171,7 @@ export function entryStageChanges(ownAbility, opposingAbility) {
  *
  * Returns per-move results for both sides, each side's best race move, move order without and
  * with Trick Room, and the race outcome from your side: "win", "loss", "speed" (same hit count,
- * so move order decides) or "stalemate" (neither side KOs within MAX_RACE_HITS).
+ * so move order decides) or "stalemate" (neither side KOs within three turns, NO_KO_TURNS).
  */
 export function matchup({ ours, theirs, field = {}, abilityField = true, entryStages = true } = {}) {
   if (!ours?.pokemon || !theirs?.pokemon) throw new TypeError("matchup needs both sets with a pokemon.");
@@ -504,7 +506,7 @@ function sideOrder(order) {
 }
 
 function raceOutcome(ourHits, theirHits) {
-  if (ourHits === Infinity && theirHits === Infinity) return "stalemate";
+  if (ourHits >= NO_KO_TURNS && theirHits >= NO_KO_TURNS) return "stalemate";
   if (ourHits < theirHits) return "win";
   if (theirHits < ourHits) return "loss";
   return "speed";
