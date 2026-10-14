@@ -1481,3 +1481,38 @@ test("Battle set cards and the shared set editor mark moves with the same round 
   assert.match(battle, /row\.append\(typeIcon, combobox\.element\)/);
   assert.doesNotMatch(battle, /damage-move-number/);
 });
+
+test("headings take their size from a type role, and nested headings step down a role", () => {
+  const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+  const rule = (selector) => {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return css.match(new RegExp(`(?:^|\\n|,\\s*)${escaped}\\s*(?:,[^{]*)?\\{([^}]*)\\}`))?.[1] ?? "";
+  };
+
+  for (const role of ["page-title", "intro", "section-title", "subsection-title", "label", "supporting", "meta", "caption"]) {
+    assert.match(css, new RegExp(`--type-${role}:`), `--type-${role} is defined`);
+  }
+  const roles = {
+    ".workspace-intro h1": "page-title",
+    ".battle-page-head h1": "page-title",
+    ".compare-head h1": "page-title",
+    ".panel-heading > h3": "section-title",
+    ".lookup-section-heading h2": "section-title",
+    ".set-editor-title": "section-title",
+    ".matchups-heading": "section-title",
+    ".compare-card-title": "section-title",
+    ".battle-set-card h2": "section-title",
+    ".lookup-section .panel-heading > h3": "subsection-title",
+    ".set-editor-subtitle": "subsection-title",
+    ".matchups-subheading": "subsection-title",
+    ".damage-result-column h3": "subsection-title",
+    ".lookup-section-heading p": "supporting",
+    ".panel-heading strong": "meta",
+  };
+  for (const [selector, role] of Object.entries(roles)) {
+    assert.match(rule(selector), new RegExp(`font-size: var\\(--type-${role}\\)`), `${selector} uses --type-${role}`);
+  }
+  // Lookup once shrank its section titles below the panel titles inside them.
+  assert.doesNotMatch(css, /\.lookup-page \.lookup-section-heading (?:h2|p)\s*\{[^}]*font-size/);
+  assert.doesNotMatch(rule(".workspace-sidebar .panel-heading strong"), /font-size/);
+});

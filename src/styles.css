@@ -35,6 +35,17 @@
   --text-lg: 1.05rem;
   --text-xl: 1.25rem;
 
+  /* Type roles (DESIGN.md "Type roles"): headings and text pick a role, never a raw step.
+     A heading nested inside a titled section uses the next role down. */
+  --type-page-title: clamp(1.4rem, 2.5vw, 1.8rem);
+  --type-intro: var(--text-md);
+  --type-section-title: var(--text-xl);
+  --type-subsection-title: var(--text-lg);
+  --type-label: var(--text-sm);
+  --type-supporting: var(--text-sm);
+  --type-meta: var(--text-sm);
+  --type-caption: var(--text-xs);
+
   /* Shape & elevation tokens */
   --radius-card: 12px;
   --radius-control: 8px;
@@ -184,7 +195,7 @@ main {
 label,
 legend {
   color: var(--ink);
-  font-size: var(--text-sm);
+  font-size: var(--type-label);
   font-weight: 500;
 }
 
@@ -194,7 +205,7 @@ legend {
 .workspace-sidebar-title {
   margin: 0;
   color: var(--ink);
-  font-size: var(--text-xl);
+  font-size: var(--type-section-title);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -227,7 +238,7 @@ h1 {
   max-width: 680px;
   margin: 0;
   color: var(--muted);
-  font-size: var(--text-md);
+  font-size: var(--type-intro);
   line-height: 1.6;
 }
 
@@ -678,7 +689,7 @@ footer {
 .panel-heading strong {
   min-width: 0;
   color: var(--muted);
-  font-size: var(--text-sm);
+  font-size: var(--type-meta);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
@@ -1048,20 +1059,26 @@ button:disabled {
 
 .lookup-section-heading h2 {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--type-section-title);
   letter-spacing: -0.01em;
 }
 
 .lookup-section-heading p {
   margin: 0;
   color: var(--muted);
-  font-size: var(--text-sm);
+  font-size: var(--type-supporting);
   text-align: right;
+}
+
+/* Panels inside a titled Lookup section are its subsections. */
+.lookup-section .panel-heading > span:first-child,
+.lookup-section .panel-heading > h3 {
+  font-size: var(--type-subsection-title);
 }
 
 .lookup-section-heading > strong {
   color: var(--muted);
-  font-size: var(--text-sm);
+  font-size: var(--type-meta);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -2268,7 +2285,7 @@ button:disabled {
 .damage-result-column h3 {
   margin: 0 0 6px;
   color: var(--ink);
-  font-size: var(--text-lg);
+  font-size: var(--type-subsection-title);
   font-weight: 700;
 }
 
@@ -2522,10 +2539,6 @@ button:disabled {
   .battle-stat-editor-row > span {
     padding-right: 4px;
     padding-left: 4px;
-  }
-
-  .damage-result-column h3 {
-    font-size: var(--text-sm);
   }
 
   .damage-result-card {
@@ -4300,14 +4313,6 @@ textarea:focus-visible {
   margin: 0 0 8px;
 }
 
-.lookup-page .lookup-section-heading h2 {
-  font-size: var(--text-lg);
-}
-
-.lookup-page .lookup-section-heading p {
-  font-size: var(--text-xs);
-}
-
 .lookup-page .lookup-panel-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -4642,7 +4647,7 @@ textarea:focus-visible {
 .workspace-intro h1 {
   max-width: none;
   margin: 0 0 2px;
-  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-size: var(--type-page-title);
   line-height: 1.25;
 }
 
@@ -4768,7 +4773,6 @@ textarea:focus-visible {
 
 .workspace-sidebar .panel-heading strong {
   color: var(--muted);
-  font-size: var(--text-xs);
 }
 
 .workspace-sidebar .move-filters {
@@ -4819,7 +4823,7 @@ textarea:focus-visible {
 
 .battle-page-head h1 {
   margin: 0 0 2px;
-  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-size: var(--type-page-title);
 }
 
 .battle-page-head .intro {
@@ -4857,7 +4861,7 @@ textarea:focus-visible {
 
 .battle-set-card h2 {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--type-section-title);
 }
 
 .battle-set-card .set-summary {
@@ -4938,7 +4942,7 @@ textarea:focus-visible {
 .battle-set-facts span {
   display: block;
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--type-caption);
 }
 
 .battle-set-facts strong {
@@ -4956,7 +4960,7 @@ textarea:focus-visible {
 .battle-set-moves h3 {
   margin: 0 0 6px;
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--type-caption);
 }
 
 .battle-set-moves > div {
@@ -5166,13 +5170,13 @@ textarea:focus-visible {
 
 .set-editor-title {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--type-section-title);
   letter-spacing: -0.01em;
 }
 
 .set-editor-subtitle {
   margin: 0 0 8px;
-  font-size: var(--text-lg);
+  font-size: var(--type-subsection-title);
 }
 
 .set-editor-pokemon {
@@ -5542,7 +5546,7 @@ textarea:focus-visible {
 
 .matchups-heading {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--type-section-title);
   letter-spacing: -0.01em;
 }
 
@@ -6408,7 +6412,7 @@ textarea:focus-visible {
 
 .matchups-subheading {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--type-subsection-title);
 }
 
 .matchups-changes {
@@ -6778,7 +6782,7 @@ textarea:focus-visible {
 .compare-head h1 {
   max-width: none;
   margin: 0 0 2px;
-  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-size: var(--type-page-title);
   line-height: 1.25;
 }
 
@@ -7180,7 +7184,7 @@ main > .compare-editor {
 
 .compare-card-title {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--type-section-title);
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }

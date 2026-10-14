@@ -20,6 +20,23 @@ Ordinary spacing follows 4, 8, 12, 16, 24, 32, and 48px steps. Small optical adj
 
 The system font family carries headings, labels, controls, body copy, and data. Page titles are the strongest type role; section titles, field labels, primary values, supporting text, and metadata descend clearly from them. Keep visible field labels legible. Field labels and table headers use sentence case; the small uppercase voice is reserved for compact metadata. Page names and section headings follow Matchups’ hierarchy, and source attribution is plain muted text.
 
+### Type roles
+
+Every heading and text style takes its size from a role token in `src/styles.css` (`--type-*`), never from a raw `--text-*` step or a literal size. Pick the role by the element's place in the page, not by how big it should look. A heading nested inside a titled section uses the next role down, so a panel inside a section is a subsection even if the same panel elsewhere is a section.
+
+| Role | Token | Size | Weight | Use |
+|---|---|---|---|---|
+| Page title | `--type-page-title` | 1.4–1.8rem (fluid) | 700 | One `h1` per route (`.workspace-intro h1`, Battle and Compare heads) |
+| Intro | `--type-intro` | 0.95rem | 400, muted | The sentence under the page title (`.intro`) |
+| Section title | `--type-section-title` | 1.25rem | 700 | Top-level cards and sections: `.panel-heading` titles, `.lookup-section-heading h2`, sidebar titles, set editor, Battle's Attacker/Defender cards, Matchups and Compare card titles |
+| Subsection title | `--type-subsection-title` | 1.05rem | 700 | Headings inside a titled section: Lookup's panels under Battle profile and Build details, set editor Moves, the Matchups turn grid, Battle's damage columns |
+| Label | `--type-label` | 0.85rem | 500 | Field labels and legends |
+| Supporting | `--type-supporting` | 0.85rem | 400, muted | A sentence describing a section beside or under its title |
+| Meta | `--type-meta` | 0.85rem | 600, muted, tabular | Counts and summaries beside a heading (`.panel-heading strong`), secondary row facts |
+| Caption | `--type-caption` | 0.7rem | 600, muted | Labels inside dense summaries (Battle set-card facts and Moves) and the compact uppercase voice: stat abbreviations, BST, tiny badges |
+
+Display-size figures are the only literal sizes: Lookup's selected Pokémon name (it fills the page-title role at display size) and its base-stat and BST values. Do not add others; if a new element seems to need a size outside the table, it is usually a role that already exists. `test/ui.test.js` pins the shared heading selectors to their roles.
+
 Use tabular numerals for stats, percentages, counts, damage ranges, Speed values, and aligned numeric columns. Use an em dash for unavailable values and keep units such as `%`, `SP`, `EV`, and multipliers explicit. Teal may emphasize a selected or primary number; semantic state colors keep their own meanings and must also have text or another non-color cue.
 
 ## Components and interaction
