@@ -6,6 +6,837 @@
   "format": "M-C",
   "tournaments": [
     {
+      "id": "6acd742e115c12b73a5a29a0",
+      "format": "M-C",
+      "name": "HeroicTitan’s VGC Battle Arena",
+      "date": "2026-10-14T00:00:00.000Z",
+      "players": 49,
+      "organizer": {
+        "id": 2397,
+        "name": "The PokeKitchen Battle Series"
+      },
+      "platform": "SWITCH",
+      "isOnline": true,
+      "phases": [
+        {
+          "phase": 1,
+          "type": "SWISS",
+          "rounds": 6,
+          "mode": "BO3"
+        },
+        {
+          "phase": 2,
+          "type": "SINGLE_BRACKET",
+          "rounds": 1,
+          "mode": "BO3"
+        }
+      ],
+      "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/standings",
+      "topCut": [
+        {
+          "playerId": "chefrich22",
+          "playerName": "ChefRich22",
+          "country": "US",
+          "placing": 1,
+          "record": {
+            "wins": 9,
+            "losses": 0,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/chefrich22/decklist",
+          "pokemon": [
+            {
+              "id": "basculegion",
+              "name": "Basculegion",
+              "item": "Mystic Water",
+              "ability": "Adaptability",
+              "moves": [
+                "Wave Crash",
+                "Last Respects",
+                "Aqua Jet",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "White Herb",
+              "ability": "Unburden",
+              "moves": [
+                "Dire Claw",
+                "Close Combat",
+                "Rock Tomb",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Chople Berry",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Iron Head",
+                "Low Kick"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "whimsicott",
+              "name": "Whimsicott",
+              "item": "Focus Sash",
+              "ability": "Prankster",
+              "moves": [
+                "Tailwind",
+                "Moonblast",
+                "Encore",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Solar Beam",
+                "Weather Ball",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Life Orb",
+              "ability": "Rough Skin",
+              "moves": [
+                "Earthquake",
+                "Rock Slide",
+                "Dragon Claw",
+                "Protect"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "highhonorsjacob",
+          "playerName": "HighHonorsJacob",
+          "country": "US",
+          "placing": 2,
+          "record": {
+            "wins": 6,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/highhonorsjacob/decklist",
+          "pokemon": [
+            {
+              "id": "gengar",
+              "name": "Gengar",
+              "item": "Gengarite",
+              "ability": "Cursed Body",
+              "moves": [
+                "Protect",
+                "Perish Song",
+                "Sludge Bomb",
+                "Shadow Ball"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "politoed",
+              "name": "Politoed",
+              "item": "Sitrus Berry",
+              "ability": "Drizzle",
+              "moves": [
+                "Protect",
+                "Weather Ball",
+                "Perish Song",
+                "Encore"
+              ],
+              "nature": "Calm",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Eject Button",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Grassy Glide",
+                "Fake Out",
+                "Protect",
+                "U-turn"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Passho Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Protect",
+                "Flare Blitz",
+                "Fake Out",
+                "Parting Shot"
+              ],
+              "nature": "Careful",
+              "tera": null
+            },
+            {
+              "id": "archaludon",
+              "name": "Archaludon",
+              "item": "Leftovers",
+              "ability": "Stamina",
+              "moves": [
+                "Protect",
+                "Electro Shot",
+                "Dragon Pulse",
+                "Flash Cannon"
+              ],
+              "nature": "Calm",
+              "tera": null
+            },
+            {
+              "id": "staraptor",
+              "name": "Staraptor",
+              "item": "Staraptite",
+              "ability": "Intimidate",
+              "moves": [
+                "Brave Bird",
+                "Close Combat",
+                "Protect",
+                "Roost"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "rinaldileo",
+          "playerName": "Leonardo Rinaldi",
+          "country": "BR",
+          "placing": 3,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/rinaldileo/decklist",
+          "pokemon": [
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Drum Beating",
+                "Grassy Glide",
+                "Fake Out",
+                "High Horsepower"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "staraptor",
+              "name": "Staraptor",
+              "item": "Staraptite",
+              "ability": "Intimidate",
+              "moves": [
+                "Brave Bird",
+                "Close Combat",
+                "Tailwind",
+                "Protect"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "milotic",
+              "name": "Milotic",
+              "item": "Sitrus Berry",
+              "ability": "Competitive",
+              "moves": [
+                "Muddy Water",
+                "Coil",
+                "Ice Beam",
+                "Hypnosis"
+              ],
+              "nature": "Calm",
+              "tera": null
+            },
+            {
+              "id": "ceruledge",
+              "name": "Ceruledge",
+              "item": "Grassy Seed",
+              "ability": "Flash Fire",
+              "moves": [
+                "Bitter Blade",
+                "Shadow Sneak",
+                "Swords Dance",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "raichu",
+              "name": "Raichu",
+              "item": "Raichunite Y",
+              "ability": "Lightning Rod",
+              "moves": [
+                "Zap Cannon",
+                "Focus Blast",
+                "Encore",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "gholdengo",
+              "name": "Gholdengo",
+              "item": "Life Orb",
+              "ability": "Good as Gold",
+              "moves": [
+                "Make It Rain",
+                "Shadow Ball",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "kaige",
+          "playerName": "Kaige",
+          "country": "US",
+          "placing": 4,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/kaige/decklist",
+          "pokemon": [
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Life Orb",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Swords Dance",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Wood Hammer",
+                "Grassy Glide",
+                "High Horsepower",
+                "Fake Out"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Focus Sash",
+              "ability": "Poison Touch",
+              "moves": [
+                "Poison Jab",
+                "Close Combat",
+                "Fake Out",
+                "Quick Guard"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "delphox",
+              "name": "Delphox",
+              "item": "Delphoxite",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Psychic",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Dazzling Gleam",
+                "Draining Kiss",
+                "Calm Mind",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Passho Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Flare Blitz",
+                "Throat Chop",
+                "Fake Out",
+                "Parting Shot"
+              ],
+              "nature": "Careful",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "maggrosbeat",
+          "playerName": "Maggrosbeat",
+          "country": "FR",
+          "placing": 5,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/maggrosbeat/decklist",
+          "pokemon": [
+            {
+              "id": "gengar",
+              "name": "Gengar",
+              "item": "Gengarite",
+              "ability": "Cursed Body",
+              "moves": [
+                "Perish Song",
+                "Shadow Ball",
+                "Sludge Bomb",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Flare Blitz",
+                "Parting Shot",
+                "Protect"
+              ],
+              "nature": "Relaxed",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Occa Berry",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Fake Out",
+                "Grassy Glide",
+                "U-turn",
+                "Protect"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            },
+            {
+              "id": "kommo-o",
+              "name": "Kommo-o",
+              "item": "Leftovers",
+              "ability": "Bulletproof",
+              "moves": [
+                "Clanging Scales",
+                "Clangorous Soul",
+                "Aura Sphere",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Life Orb",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Swords Dance",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "ninetales-alola",
+              "name": "Alolan Ninetales",
+              "item": "Choice Scarf",
+              "ability": "Snow Warning",
+              "moves": [
+                "Blizzard",
+                "Freeze-Dry",
+                "Encore",
+                "Hypnosis"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "frankina",
+          "playerName": "frankina",
+          "country": "AR",
+          "placing": 6,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/frankina/decklist",
+          "pokemon": [
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Snarl",
+                "Flare Blitz",
+                "Parting Shot"
+              ],
+              "nature": "Impish",
+              "tera": null
+            },
+            {
+              "id": "sinistcha",
+              "name": "Sinistcha",
+              "item": "Rocky Helmet",
+              "ability": "Hospitality",
+              "moves": [
+                "Matcha Gotcha",
+                "Protect",
+                "Rage Powder",
+                "Trick Room"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Black Glasses",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Protect",
+                "Swords Dance"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "delphox",
+              "name": "Delphox",
+              "item": "Delphoxite",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Psychic",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Focus Sash",
+              "ability": "Poison Touch",
+              "moves": [
+                "Poison Jab",
+                "Fake Out",
+                "Close Combat",
+                "Quick Attack"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Dazzling Gleam",
+                "Draining Kiss",
+                "Protect",
+                "Calm Mind"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "drwildy",
+          "playerName": "Drwildy",
+          "country": "US",
+          "placing": 7,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/drwildy/decklist",
+          "pokemon": [
+            {
+              "id": "pyroar",
+              "name": "Pyroar",
+              "item": "Pyroarite",
+              "ability": "Unnerve",
+              "moves": [
+                "Heat Wave",
+                "Overheat",
+                "Scorching Sands",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "indeedee-f",
+              "name": "Indeedee ♀",
+              "item": "Rocky Helmet",
+              "ability": "Psychic Surge",
+              "moves": [
+                "Follow Me",
+                "Helping Hand",
+                "Psyshock",
+                "Protect"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "gardevoir",
+              "name": "Gardevoir",
+              "item": "Gardevoirite",
+              "ability": "Trace",
+              "moves": [
+                "Hyper Voice",
+                "Expanding Force",
+                "Imprison",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "whimsicott",
+              "name": "Whimsicott",
+              "item": "Focus Sash",
+              "ability": "Prankster",
+              "moves": [
+                "Tailwind",
+                "Sunny Day",
+                "Moonblast",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "samurott-hisui",
+              "name": "Hisuian Samurott",
+              "item": "Scope Lens",
+              "ability": "Sharpness",
+              "moves": [
+                "Night Slash",
+                "Aqua Cutter",
+                "Sacred Sword",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "kommo-o",
+              "name": "Kommo-o",
+              "item": "Life Orb",
+              "ability": "Soundproof",
+              "moves": [
+                "Clanging Scales",
+                "Flamethrower",
+                "Aura Sphere",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "profskarmoryyt",
+          "playerName": "ProfSkarmoryYT",
+          "country": "US",
+          "placing": 8,
+          "record": {
+            "wins": 4,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6acd742e115c12b73a5a29a0/player/profskarmoryyt/decklist",
+          "pokemon": [
+            {
+              "id": "archaludon",
+              "name": "Archaludon",
+              "item": "Leftovers",
+              "ability": "Stamina",
+              "moves": [
+                "Electro Shot",
+                "Flash Cannon",
+                "Dragon Pulse",
+                "Protect"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Blaze",
+              "moves": [
+                "Hurricane",
+                "Heat Wave",
+                "Weather Ball",
+                "Protect"
+              ],
+              "nature": "Serious",
+              "tera": null
+            },
+            {
+              "id": "pelipper",
+              "name": "Pelipper",
+              "item": "Sitrus Berry",
+              "ability": "Drizzle",
+              "moves": [
+                "Weather Ball",
+                "Hurricane",
+                "Tailwind",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "venusaur",
+              "name": "Venusaur",
+              "item": "Focus Sash",
+              "ability": "Chlorophyll",
+              "moves": [
+                "Leaf Storm",
+                "Sleep Powder",
+                "Sludge Bomb",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Choice Scarf",
+              "ability": "Rough Skin",
+              "moves": [
+                "Rock Slide",
+                "Dragon Claw",
+                "Stomping Tantrum",
+                "Earthquake"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Moonblast",
+                "Light of Ruin",
+                "Dazzling Gleam",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        }
+      ],
+      "organizerId": 2397
+    },
+    {
       "id": "6ac559b885920e4d25365899",
       "format": "M-C",
       "name": "TARTAN'S ROAD TO NICE #42! - [CHAMPIONS REG M-C!]",
@@ -1135,6 +1966,1635 @@
         }
       ],
       "organizerId": 2398
+    },
+    {
+      "id": "6ac55ac385920e4d2536589f",
+      "format": "M-C",
+      "name": "VGC UmbreNews 13.10.2026 #35 - Champion",
+      "date": "2026-10-13T15:30:00.000Z",
+      "players": 92,
+      "organizer": {
+        "id": 2471,
+        "name": "UmbreNews"
+      },
+      "platform": "SWITCH",
+      "isOnline": true,
+      "phases": [
+        {
+          "phase": 1,
+          "type": "SWISS",
+          "rounds": 6,
+          "mode": "BO3"
+        },
+        {
+          "phase": 2,
+          "type": "SINGLE_BRACKET",
+          "rounds": 1,
+          "mode": "BO3"
+        }
+      ],
+      "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/standings",
+      "topCut": [
+        {
+          "playerId": "kimpkm",
+          "playerName": "KimPkm",
+          "country": "JP",
+          "placing": 1,
+          "record": {
+            "wins": 10,
+            "losses": 0,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/kimpkm/decklist",
+          "pokemon": [
+            {
+              "id": "staraptor",
+              "name": "Staraptor",
+              "item": "Staraptite",
+              "ability": "Intimidate",
+              "moves": [
+                "Brave Bird",
+                "Close Combat",
+                "Tailwind",
+                "Protect"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "farigiraf",
+              "name": "Farigiraf",
+              "item": "Psychic Seed",
+              "ability": "Sap Sipper",
+              "moves": [
+                "Expanding Force",
+                "Hyper Voice",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "indeedee-f",
+              "name": "Indeedee ♀",
+              "item": "Rocky Helmet",
+              "ability": "Psychic Surge",
+              "moves": [
+                "Psychic",
+                "Follow Me",
+                "Trick Room",
+                "Helping Hand"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "basculegion",
+              "name": "Basculegion",
+              "item": "Life Orb",
+              "ability": "Adaptability",
+              "moves": [
+                "Wave Crash",
+                "Last Respects",
+                "Aqua Jet",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Chople Berry",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Iron Head",
+                "Sucker Punch",
+                "Low Kick"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "raichu",
+              "name": "Raichu",
+              "item": "Focus Sash",
+              "ability": "Lightning Rod",
+              "moves": [
+                "Thunderbolt",
+                "Charm",
+                "Encore",
+                "Fake Out"
+              ],
+              "nature": "Timid",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "jhinting",
+          "playerName": "Jhinting",
+          "country": "DE",
+          "placing": 2,
+          "record": {
+            "wins": 7,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/jhinting/decklist",
+          "pokemon": [
+            {
+              "id": "indeedee-f",
+              "name": "Indeedee ♀",
+              "item": "Rocky Helmet",
+              "ability": "Psychic Surge",
+              "moves": [
+                "Helping Hand",
+                "Follow Me",
+                "Psychic",
+                "Trick Room"
+              ],
+              "nature": "Relaxed",
+              "tera": null
+            },
+            {
+              "id": "gardevoir",
+              "name": "Gardevoir",
+              "item": "Gardevoirite",
+              "ability": "Trace",
+              "moves": [
+                "Hyper Voice",
+                "Expanding Force",
+                "Thunderbolt",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Psychic Seed",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Dire Claw",
+                "Rock Slide",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "excadrill",
+              "name": "Excadrill",
+              "item": "Focus Sash",
+              "ability": "Sand Rush",
+              "moves": [
+                "High Horsepower",
+                "Rock Slide",
+                "Iron Head",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "tyranitar",
+              "name": "Tyranitar",
+              "item": "Tyranitarite",
+              "ability": "Sand Stream",
+              "moves": [
+                "Rock Slide",
+                "Knock Off",
+                "Low Kick",
+                "Protect"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "hydreigon",
+              "name": "Hydreigon",
+              "item": "Choice Scarf",
+              "ability": "Levitate",
+              "moves": [
+                "Draco Meteor",
+                "Dark Pulse",
+                "Snarl",
+                "Flamethrower"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "vuultur",
+          "playerName": "Vuultur",
+          "country": "PL",
+          "placing": 3,
+          "record": {
+            "wins": 6,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/vuultur/decklist",
+          "pokemon": [
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Fake Out",
+                "Wood Hammer",
+                "Grassy Glide",
+                "High Horsepower"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Focus Sash",
+              "ability": "Poison Touch",
+              "moves": [
+                "Fake Out",
+                "Close Combat",
+                "Dire Claw",
+                "Coaching"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Flare Blitz",
+                "Helping Hand",
+                "Parting Shot"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Dazzling Gleam",
+                "Draining Kiss",
+                "Calm Mind",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Life Orb",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Swords Dance",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Garchompite",
+              "ability": "Rough Skin",
+              "moves": [
+                "Dragon Claw",
+                "Stomping Tantrum",
+                "Rock Slide",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "ludikrik",
+          "playerName": "Ludikrik",
+          "country": "FR",
+          "placing": 4,
+          "record": {
+            "wins": 6,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/ludikrik/decklist",
+          "pokemon": [
+            {
+              "id": "farigiraf",
+              "name": "Farigiraf",
+              "item": "Sitrus Berry",
+              "ability": "Armor Tail",
+              "moves": [
+                "Helping Hand",
+                "Psychic",
+                "Trick Room",
+                "Protect"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Garchompite Z",
+              "ability": "Rough Skin",
+              "moves": [
+                "Draco Meteor",
+                "Power Gem",
+                "Flamethrower",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Chople Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Flare Blitz",
+                "Darkest Lariat",
+                "Fake Out",
+                "Parting Shot"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "White Herb",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Gunk Shot",
+                "Fake Out",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sylveon",
+              "name": "Sylveon",
+              "item": "Fairy Feather",
+              "ability": "Pixilate",
+              "moves": [
+                "Hyper Voice",
+                "Hyper Beam",
+                "Substitute",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "torkoal",
+              "name": "Torkoal",
+              "item": "Charcoal",
+              "ability": "Drought",
+              "moves": [
+                "Eruption",
+                "Weather Ball",
+                "Earth Power",
+                "Protect"
+              ],
+              "nature": "Quiet",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "beefyboi27",
+          "playerName": "BeefyBoi27",
+          "country": "US",
+          "placing": 5,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/beefyboi27/decklist",
+          "pokemon": [
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Grassy Seed",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Dire Claw",
+                "Rock Slide",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Weather Ball",
+                "Substitute",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Calm Mind",
+                "Dazzling Gleam",
+                "Moonblast",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "sinistcha",
+              "name": "Sinistcha",
+              "item": "Focus Sash",
+              "ability": "Hospitality",
+              "moves": [
+                "Protect",
+                "Matcha Gotcha",
+                "Shadow Ball",
+                "Rage Powder"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Fake Out",
+                "Grassy Glide",
+                "Wood Hammer",
+                "U-turn"
+              ],
+              "nature": "Careful",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Flare Blitz",
+                "Darkest Lariat",
+                "Parting Shot",
+                "Fake Out"
+              ],
+              "nature": "Impish",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "eontheeevee",
+          "playerName": "EonTheEevee",
+          "country": "PL",
+          "placing": 6,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/eontheeevee/decklist",
+          "pokemon": [
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Dazzling Gleam",
+                "Draining Kiss",
+                "Calm Mind",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "gholdengo",
+              "name": "Gholdengo",
+              "item": "Life Orb",
+              "ability": "Good as Gold",
+              "moves": [
+                "Make It Rain",
+                "Shadow Ball",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Wood Hammer",
+                "Grassy Glide",
+                "Fake Out",
+                "High Horsepower"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Grassy Seed",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Dire Claw",
+                "Coaching",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Flare Blitz",
+                "Darkest Lariat",
+                "Parting Shot"
+              ],
+              "nature": "Careful",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Garchompite Z",
+              "ability": "Rough Skin",
+              "moves": [
+                "Earth Power",
+                "Draco Meteor",
+                "Power Gem",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "iagoovc",
+          "playerName": "Iagoovc",
+          "country": "ES",
+          "placing": 7,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/iagoovc/decklist",
+          "pokemon": [
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Flare Blitz",
+                "Snarl",
+                "Parting Shot"
+              ],
+              "nature": "Careful",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Life Orb",
+              "ability": "Defiant",
+              "moves": [
+                "Protect",
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Swords Dance"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sinistcha",
+              "name": "Sinistcha",
+              "item": "Occa Berry",
+              "ability": "Hospitality",
+              "moves": [
+                "Protect",
+                "Matcha Gotcha",
+                "Rage Powder",
+                "Trick Room"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Focus Sash",
+              "ability": "Poison Touch",
+              "moves": [
+                "Fake Out",
+                "Close Combat",
+                "Poison Jab",
+                "Quick Guard"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "floette-eternal",
+              "name": "Eternal Flower Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Protect",
+                "Dazzling Gleam",
+                "Draining Kiss",
+                "Calm Mind"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "delphox",
+              "name": "Delphox",
+              "item": "Delphoxite",
+              "ability": "Blaze",
+              "moves": [
+                "Protect",
+                "Heat Wave",
+                "Psychic",
+                "Nasty Plot"
+              ],
+              "nature": "Timid",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "georgprime",
+          "playerName": "georgprime",
+          "country": null,
+          "placing": 8,
+          "record": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/georgprime/decklist",
+          "pokemon": [
+            {
+              "id": "venusaur",
+              "name": "Venusaur",
+              "item": "Focus Sash",
+              "ability": "Chlorophyll",
+              "moves": [
+                "Sleep Powder",
+                "Protect",
+                "Earth Power",
+                "Sludge Bomb"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "politoed",
+              "name": "Politoed",
+              "item": "Mystic Water",
+              "ability": "Drizzle",
+              "moves": [
+                "Weather Ball",
+                "Protect",
+                "Ice Beam",
+                "Muddy Water"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "grimmsnarl",
+              "name": "Grimmsnarl",
+              "item": "Light Clay",
+              "ability": "Prankster",
+              "moves": [
+                "Spirit Break",
+                "Reflect",
+                "Light Screen",
+                "Parting Shot"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            },
+            {
+              "id": "raichu",
+              "name": "Raichu",
+              "item": "Raichunite X",
+              "ability": "Lightning Rod",
+              "moves": [
+                "Fake Out",
+                "Volt Switch",
+                "Feint",
+                "Volt Tackle"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            },
+            {
+              "id": "archaludon",
+              "name": "Archaludon",
+              "item": "Leftovers",
+              "ability": "Stamina",
+              "moves": [
+                "Dragon Pulse",
+                "Electro Shot",
+                "Protect",
+                "Snarl"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Weather Ball",
+                "Protect",
+                "Hurricane"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "ikarcc",
+          "playerName": "Ikarcc",
+          "country": "PL",
+          "placing": 9,
+          "record": {
+            "wins": 6,
+            "losses": 1,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/ikarcc/decklist",
+          "pokemon": [
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Drought",
+              "moves": [
+                "Heat Wave",
+                "Weather Ball",
+                "Ancient Power",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Chople Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Flare Blitz",
+                "Parting Shot",
+                "Darkest Lariat",
+                "Fake Out"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "sylveon",
+              "name": "Sylveon",
+              "item": "Fairy Feather",
+              "ability": "Pixilate",
+              "moves": [
+                "Hyper Voice",
+                "Moonblast",
+                "Yawn",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "farigiraf",
+              "name": "Farigiraf",
+              "item": "Sitrus Berry",
+              "ability": "Armor Tail",
+              "moves": [
+                "Thunderbolt",
+                "Trick Room",
+                "Psychic",
+                "Helping Hand"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Choice Scarf",
+              "ability": "Rough Skin",
+              "moves": [
+                "Rock Slide",
+                "Stomping Tantrum",
+                "Earthquake",
+                "Dragon Claw"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "venusaur",
+              "name": "Venusaur",
+              "item": "Focus Sash",
+              "ability": "Chlorophyll",
+              "moves": [
+                "Sludge Bomb",
+                "Leaf Storm",
+                "Sleep Powder",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "coban072",
+          "playerName": "coban072",
+          "country": "NL",
+          "placing": 10,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/coban072/decklist",
+          "pokemon": [
+            {
+              "id": "sceptile",
+              "name": "Sceptile",
+              "item": "Sceptilite",
+              "ability": "overgrow",
+              "moves": [
+                "Energy Ball",
+                "Dragon Pulse",
+                "Earth Power",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "rotom-heat",
+              "name": "Heat Rotom",
+              "item": "Choice Scarf",
+              "ability": "Levitate",
+              "moves": [
+                "Discharge",
+                "Overheat",
+                "Trick",
+                "Electroweb"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "Psychic Seed",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Dire Claw",
+                "Rock Slide",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "indeedee",
+              "name": "Indeedee",
+              "item": "Focus Sash",
+              "ability": "Psychic Surge",
+              "moves": [
+                "Expanding Force",
+                "Trick Room",
+                "Imprison",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "gholdengo",
+              "name": "Gholdengo",
+              "item": "Life Orb",
+              "ability": "Good as Gold",
+              "moves": [
+                "Make It Rain",
+                "Shadow Ball",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "staraptor",
+              "name": "Staraptor",
+              "item": "Staraptite",
+              "ability": "Intimidate",
+              "moves": [
+                "Close Combat",
+                "Brave Bird",
+                "Tailwind",
+                "Protect"
+              ],
+              "nature": "Jolly",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "francede",
+          "playerName": "Francede",
+          "country": "IM",
+          "placing": 11,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/francede/decklist",
+          "pokemon": [
+            {
+              "id": "gengar",
+              "name": "Gengar",
+              "item": "Gengarite",
+              "ability": "Cursed Body",
+              "moves": [
+                "Shadow Ball",
+                "Sludge Bomb",
+                "Perish Song",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Lum Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Flare Blitz",
+                "Fake Out",
+                "Parting Shot",
+                "Protect"
+              ],
+              "nature": "Relaxed",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Eject Button",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Grassy Glide",
+                "U-turn",
+                "Fake Out",
+                "Protect"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            },
+            {
+              "id": "delphox",
+              "name": "Delphox",
+              "item": "Delphoxite",
+              "ability": "Blaze",
+              "moves": [
+                "Psyshock",
+                "Heat Wave",
+                "Nasty Plot",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Life Orb",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Swords Dance",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "vivillon",
+              "name": "Vivillon",
+              "item": "Focus Sash",
+              "ability": "Compound Eyes",
+              "moves": [
+                "Hurricane",
+                "Sleep Powder",
+                "Rage Powder",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "magnuschase2115",
+          "playerName": "magnuschase2115",
+          "country": "PL",
+          "placing": 12,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/magnuschase2115/decklist",
+          "pokemon": [
+            {
+              "id": "archaludon",
+              "name": "Archaludon",
+              "item": "Leftovers",
+              "ability": "Stamina",
+              "moves": [
+                "Dragon Pulse",
+                "Electro Shot",
+                "Flash Cannon",
+                "Protect"
+              ],
+              "nature": "Calm",
+              "tera": null
+            },
+            {
+              "id": "charizard",
+              "name": "Charizard",
+              "item": "Charizardite Y",
+              "ability": "Blaze",
+              "moves": [
+                "Heat Wave",
+                "Weather Ball",
+                "Hurricane",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "venusaur",
+              "name": "Venusaur",
+              "item": "Focus Sash",
+              "ability": "Chlorophyll",
+              "moves": [
+                "Leaf Storm",
+                "Sludge Bomb",
+                "Sleep Powder",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "pelipper",
+              "name": "Pelipper",
+              "item": "Sitrus Berry",
+              "ability": "Drizzle",
+              "moves": [
+                "Weather Ball",
+                "Hurricane",
+                "Tailwind",
+                "Wide Guard"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Garchompite Z",
+              "ability": "Rough Skin",
+              "moves": [
+                "Draco Meteor",
+                "Earth Power",
+                "Power Gem",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "grimmsnarl",
+              "name": "Grimmsnarl",
+              "item": "Light Clay",
+              "ability": "Prankster",
+              "moves": [
+                "Spirit Break",
+                "Light Screen",
+                "Reflect",
+                "Parting Shot"
+              ],
+              "nature": "Sassy",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "yeray402",
+          "playerName": "Yeray402",
+          "country": "ES",
+          "placing": 13,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/yeray402/decklist",
+          "pokemon": [
+            {
+              "id": "gholdengo",
+              "name": "Gholdengo",
+              "item": "Life Orb",
+              "ability": "Good as Gold",
+              "moves": [
+                "Protect",
+                "Make It Rain",
+                "Shadow Ball",
+                "Nasty Plot"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Parting Shot",
+                "Flare Blitz",
+                "Darkest Lariat",
+                "Fake Out"
+              ],
+              "nature": "Impish",
+              "tera": null
+            },
+            {
+              "id": "garchomp",
+              "name": "Garchomp",
+              "item": "Garchompite Z",
+              "ability": "Rough Skin",
+              "moves": [
+                "Protect",
+                "Dragon Pulse",
+                "Earth Power",
+                "Power Gem"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Grassy Glide",
+                "Fake Out",
+                "Wood Hammer",
+                "High Horsepower"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "floette",
+              "name": "Floette",
+              "item": "Floettite",
+              "ability": "Flower Veil",
+              "moves": [
+                "Protect",
+                "Dazzling Gleam",
+                "Moonblast",
+                "Calm Mind"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "volcarona",
+              "name": "Volcarona",
+              "item": "Grassy Seed",
+              "ability": "Flame Body",
+              "moves": [
+                "Protect",
+                "Heat Wave",
+                "Giga Drain",
+                "Quiver Dance"
+              ],
+              "nature": "Modest",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "slimeko325",
+          "playerName": "Slimeko325",
+          "country": "UA",
+          "placing": 14,
+          "record": {
+            "wins": 5,
+            "losses": 2,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/slimeko325/decklist",
+          "pokemon": [
+            {
+              "id": "basculegion-f",
+              "name": "Basculegion ♀",
+              "item": "Focus Sash",
+              "ability": "Swift Swim",
+              "moves": [
+                "Shadow Ball",
+                "Muddy Water",
+                "Ice Beam",
+                "Protect"
+              ],
+              "nature": "Modest",
+              "tera": null
+            },
+            {
+              "id": "raichu",
+              "name": "Raichu",
+              "item": "Raichunite Y",
+              "ability": "Lighting Rod",
+              "moves": [
+                "Focus Blast",
+                "Zap Cannon",
+                "Protect",
+                "Fake Out"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "golisopod",
+              "name": "Golisopod",
+              "item": "Golisopite",
+              "ability": "Emergency Exit",
+              "moves": [
+                "Leech Life",
+                "Iron Head",
+                "Sucker Punch",
+                "Protect"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "pelipper",
+              "name": "Pelipper",
+              "item": "Damp Rock",
+              "ability": "Drizzle",
+              "moves": [
+                "Wide Guard",
+                "Helping Hand",
+                "Hurricane",
+                "Weather Ball"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "archaludon",
+              "name": "Archaludon",
+              "item": "Leftovers",
+              "ability": "Stamina",
+              "moves": [
+                "Flash Cannon",
+                "Dragon Pulse",
+                "Electro Shot",
+                "Protect"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "sneasler",
+              "name": "Sneasler",
+              "item": "White Herb",
+              "ability": "Unburden",
+              "moves": [
+                "Close Combat",
+                "Rock Slide",
+                "Protect",
+                "Dire Claw"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "iluxmh",
+          "playerName": "Santi Gonzalez",
+          "country": "ES",
+          "placing": 15,
+          "record": {
+            "wins": 4,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/iluxmh/decklist",
+          "pokemon": [
+            {
+              "id": "raichu",
+              "name": "Raichu",
+              "item": "Raichunite Y",
+              "ability": "Lightning Rod",
+              "moves": [
+                "Protect",
+                "Zap Cannon",
+                "Focus Blast",
+                "Fake Out"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "incineroar",
+              "name": "Incineroar",
+              "item": "Sitrus Berry",
+              "ability": "Intimidate",
+              "moves": [
+                "Fake Out",
+                "Flare Blitz",
+                "Snarl",
+                "Parting Shot"
+              ],
+              "nature": "Relaxed",
+              "tera": null
+            },
+            {
+              "id": "sinistcha",
+              "name": "Sinistcha",
+              "item": "Occa Berry",
+              "ability": "Hospitality",
+              "moves": [
+                "Protect",
+                "Matcha Gotcha",
+                "Trick Room",
+                "Rage Powder"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "kommo-o",
+              "name": "Kommo-o",
+              "item": "Leftovers",
+              "ability": "Overcoat",
+              "moves": [
+                "Protect",
+                "Clangorous Soul",
+                "Aura Sphere",
+                "Clanging Scales"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "kingambit",
+              "name": "Kingambit",
+              "item": "Focus Sash",
+              "ability": "Defiant",
+              "moves": [
+                "Kowtow Cleave",
+                "Sucker Punch",
+                "Iron Head",
+                "Low Kick"
+              ],
+              "nature": "Adamant",
+              "tera": null
+            },
+            {
+              "id": "delphox",
+              "name": "Delphox",
+              "item": "Delphoxite",
+              "ability": "Blaze",
+              "moves": [
+                "Protect",
+                "Heat Wave",
+                "Psychic",
+                "Nasty Plot"
+              ],
+              "nature": "Timid",
+              "tera": null
+            }
+          ]
+        },
+        {
+          "playerId": "cross2",
+          "playerName": "Cross2",
+          "country": "PL",
+          "placing": 16,
+          "record": {
+            "wins": 4,
+            "losses": 3,
+            "ties": 0
+          },
+          "drop": null,
+          "deck": {},
+          "url": "https://play.limitlesstcg.com/tournament/6ac55ac385920e4d2536589f/player/cross2/decklist",
+          "pokemon": [
+            {
+              "id": "rampardos",
+              "name": "Rampardos",
+              "item": "Life Orb",
+              "ability": "Sheer Force",
+              "moves": [
+                "Rock Slide",
+                "Hammer Arm",
+                "Ice Beam",
+                "Protect"
+              ],
+              "nature": "Brave",
+              "tera": null
+            },
+            {
+              "id": "camerupt",
+              "name": "Camerupt",
+              "item": "Cameruptite",
+              "ability": "Magma Armor",
+              "moves": [
+                "Heat Wave",
+                "Earth Power",
+                "Ancient Power",
+                "Substitute"
+              ],
+              "nature": "Quiet",
+              "tera": null
+            },
+            {
+              "id": "vivillon",
+              "name": "Vivillon",
+              "item": "Focus Sash",
+              "ability": "Compound Eyes",
+              "moves": [
+                "Hurricane",
+                "Rage Powder",
+                "Sleep Powder",
+                "Protect"
+              ],
+              "nature": "Timid",
+              "tera": null
+            },
+            {
+              "id": "rillaboom",
+              "name": "Rillaboom",
+              "item": "Miracle Seed",
+              "ability": "Grassy Surge",
+              "moves": [
+                "Wood Hammer",
+                "Grassy Glide",
+                "Fake Out",
+                "High Horsepower"
+              ],
+              "nature": "Brave",
+              "tera": null
+            },
+            {
+              "id": "farigiraf",
+              "name": "Farigiraf",
+              "item": "Sitrus Berry",
+              "ability": "Armor Tail",
+              "moves": [
+                "Expanding Force",
+                "Trick Room",
+                "Imprison",
+                "Protect"
+              ],
+              "nature": "Bold",
+              "tera": null
+            },
+            {
+              "id": "kangaskhan",
+              "name": "Kangaskhan",
+              "item": "Silk Scarf",
+              "ability": "Scrappy",
+              "moves": [
+                "Fake Out",
+                "Last Resort"
+              ],
+              "nature": "Brave",
+              "tera": null
+            }
+          ]
+        }
+      ],
+      "organizerId": 2471
     },
     {
       "id": "6accfc7d115c12b73a5a2049",

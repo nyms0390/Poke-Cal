@@ -96,6 +96,30 @@ test("adds Mega forms alongside top-usage builder threats", () => {
   assert.deepEqual(threats[1].moves, threats[0].moves);
 });
 
+test("gives Mega forms with their own usage their own threat set", () => {
+  const garchomp = {
+    ...pokemonFixture({ id: "garchomp", name: "Garchomp", usagePercent: 30, nature: "Jolly" }),
+    baseSpecies: "Garchomp",
+  };
+  const megaZ = {
+    ...pokemonFixture({ id: "garchompmegaz", name: "Garchomp-Mega-Z", usagePercent: 20, nature: "Timid" }),
+    baseSpecies: "Garchomp",
+  };
+  megaZ.champions.usage.moves = [
+    { id: "protect", name: "Protect", usagePercent: 99 },
+    { id: "surf", name: "Surf", usagePercent: 90 },
+    { id: "icebeam", name: "Ice Beam", usagePercent: 80 },
+  ];
+
+  const threats = threatList([garchomp, megaZ], { count: 1, moveLookup, includeMegas: true });
+
+  assert.deepEqual(threats.map(({ pokemon }) => pokemon.id), ["garchomp", "garchompmegaz"]);
+  assert.equal(threats[1].nature, "Timid");
+  assert.equal(threats[1].usagePercent, 20);
+  assert.deepEqual(threats[1].moves.map(({ id }) => id), ["surf", "icebeam"]);
+  assert.notDeepEqual(threats[1].moves, threats[0].moves);
+});
+
 test("builds a usable custom threat without per-Pokémon usage data", () => {
   const pokemon = {
     id: "custom",

@@ -25,13 +25,19 @@ export function threatList(
 
   if (!includeMegas) return popularThreats;
   return popularThreats.flatMap((threat) =>
-    megaFamily(pokemonCatalog, threat.pokemon).map((pokemon) => ({
-      ...threat,
-      pokemon,
-      ability: pokemon.id === threat.pokemon.id
-        ? threat.ability
-        : formAbility(pokemon, abilityLookup) ?? threat.ability,
-    })));
+    megaFamily(pokemonCatalog, threat.pokemon).map((pokemon) => {
+      if (pokemon.id === threat.pokemon.id) return threat;
+      // A Mega form with its own Limitless usage plays its own set (moves, nature, item);
+      // without usage it borrows the base species' set with the form's ability.
+      if (pokemon.champions?.usage?.moves?.length) {
+        return threatForPokemon(pokemon, { abilityLookup, items, moveLookup });
+      }
+      return {
+        ...threat,
+        pokemon,
+        ability: formAbility(pokemon, abilityLookup) ?? threat.ability,
+      };
+    }));
 }
 
 export function mergeThreatLists(popularThreats = [], customThreats = []) {

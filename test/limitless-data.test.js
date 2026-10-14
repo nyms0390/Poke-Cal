@@ -498,6 +498,18 @@ test("derives form-specific Mega usage from matching legal stones", () => {
   assert.deepEqual(byId.get("charizardmegay").usage.natures.map(({ id }) => id), ["modest"]);
   assert.deepEqual(byId.get("raichumegax").usage.abilities.map(({ id }) => id), ["electricsurge"]);
   assert.deepEqual(byId.get("raichumegay").usage.abilities.map(({ id }) => id), ["noguard"]);
+  // The base form describes only the sets that stay base: Mega Stone holders count the team
+  // but not their moves, item, ability or nature.
+  const raichu = byId.get("raichu");
+  assert.deepEqual(raichu.usage.items.map(({ id, usagePercent }) => [id, usagePercent]), [
+    ["focussash", 100],
+  ]);
+  assert.deepEqual(raichu.usage.moves.map(({ id }) => id), ["fakeout", "helpinghand", "protect", "voltswitch"]);
+  assert.deepEqual(raichu.usage.natures.map(({ id }) => id), ["modest"]);
+  assert.equal(raichu.usage.speedProfiles.length, 1);
+  assert.equal(raichu.usage.teammates.find(({ id }) => id === "charizard").usagePercent, 100);
+  assert.deepEqual(byId.get("charizard").usage.moves, []);
+  assert.equal(usage.items.find(({ id }) => id === "charizarditex").usageCount, 2);
 
   assert.equal(usage.items.find(({ id }) => id === "charizarditex").usageCount, 2);
   assert.equal(usage.abilities.find(({ id }) => id === "blaze").usageCount, 3);

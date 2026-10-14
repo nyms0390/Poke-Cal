@@ -25,9 +25,12 @@ export function buildLimitlessUsage(tournaments, standingsByTournament, catalogs
       const members = [];
       for (const set of standing.decklist) {
         const species = normalizePokemonSetId(set);
+        const megaEntry = countMegaPokemonSet(counters, set, megaStoneMappings);
+        // A set holding a legal Mega Stone plays as the Mega form, so its moves, item, ability
+        // and nature describe that form only; the base species still counts the team.
         for (const entry of [
-          countPokemonSet(counters, set),
-          countMegaPokemonSet(counters, set, megaStoneMappings),
+          countPokemonSet(counters, set, { setDetails: !megaEntry }),
+          megaEntry,
         ]) {
           if (entry) members.push({ entry, species, name: set.name ?? set.id });
         }
@@ -87,30 +90,33 @@ function countTeammates(members) {
   }
 }
 
-function countPokemonSet(counters, set) {
+function countPokemonSet(counters, set, { setDetails = true } = {}) {
   const pokemonId = normalizePokemonSetId(set);
   if (!pokemonId) return undefined;
 
   const pokemon = increment(counters.pokemon, pokemonId, set.name ?? set.id);
+  pokemon.setCount ??= 0;
   pokemon.abilities ??= new Map();
   pokemon.items ??= new Map();
   pokemon.moves ??= new Map();
   pokemon.natures ??= new Map();
   pokemon.speedProfiles ??= new Map();
+  if (setDetails) pokemon.setCount += 1;
 
   if (set.ability) {
     increment(counters.abilities, normalizeId(set.ability), set.ability);
-    increment(pokemon.abilities, normalizeId(set.ability), set.ability);
+    if (setDetails) increment(pokemon.abilities, normalizeId(set.ability), set.ability);
   }
   if (set.item) {
     increment(counters.items, normalizeId(set.item), set.item);
-    increment(pokemon.items, normalizeId(set.item), set.item);
+    if (setDetails) increment(pokemon.items, normalizeId(set.item), set.item);
   }
   for (const attack of set.attacks ?? []) {
     if (!attack) continue;
     increment(counters.moves, normalizeId(attack), attack);
-    increment(pokemon.moves, normalizeId(attack), attack);
+    if (setDetails) increment(pokemon.moves, normalizeId(attack), attack);
   }
+  if (!setDetails) return pokemon;
   if (set.nature) increment(pokemon.natures, normalizeId(set.nature), set.nature);
   if (set.nature && set.ability && set.item) {
     incrementSpeedProfile(pokemon.speedProfiles, set.nature, set.ability, set.item);
@@ -125,6 +131,7 @@ function countMegaPokemonSet(counters, set, megaStoneMappings) {
   if (!mapping) return undefined;
 
   const pokemon = increment(counters.pokemon, mapping.target.id, mapping.target.name);
+  pokemon.setCount = (pokemon.setCount ?? 0) + 1;
   pokemon.abilities ??= new Map();
   pokemon.items ??= new Map();
   pokemon.moves ??= new Map();
@@ -226,15 +233,18 @@ function simpleUsageEntry(entry, denominator) {
   };
 }
 
+// Set details are shares of the sets that stay in this form (setCount); teammates are shares
+// of every team the species appears on.
 function pokemonUsageEntry(entry, denominator) {
+  const sets = entry.setCount ?? entry.count;
   return {
     ...simpleUsageEntry(entry, denominator),
     usage: {
-      abilities: usageEntries(entry.abilities ?? new Map(), entry.count, simpleUsageEntry),
-      items: usageEntries(entry.items ?? new Map(), entry.count, simpleUsageEntry),
-      moves: usageEntries(entry.moves ?? new Map(), entry.count, simpleUsageEntry),
-      natures: usageEntries(entry.natures ?? new Map(), entry.count, simpleUsageEntry),
-      speedProfiles: usageEntries(entry.speedProfiles ?? new Map(), entry.count, speedProfileUsageEntry),
+      abilities: usageEntries(entry.abilities ?? new Map(), sets, simpleUsageEntry),
+      items: usageEntries(entry.items ?? new Map(), sets, simpleUsageEntry),
+      moves: usageEntries(entry.moves ?? new Map(), sets, simpleUsageEntry),
+      natures: usageEntries(entry.natures ?? new Map(), sets, simpleUsageEntry),
+      speedProfiles: usageEntries(entry.speedProfiles ?? new Map(), sets, speedProfileUsageEntry),
       teammates: usageEntries(entry.teammates ?? new Map(), entry.count, simpleUsageEntry)
         .slice(0, TEAMMATE_LIMIT),
     },
