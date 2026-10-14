@@ -68,6 +68,8 @@ export const EN_MESSAGES = {
   "lookup.noMoveMatches": "No moves match the current filters.",
   "lookup.rating": ({ value }) => `Rating ${value}`,
   "lookup.levitate": "Levitate: immune to Ground",
+  "lookup.teammatesMeta": ({ teams }) => `Share of its ${teams} Limitless teams`,
+  "lookup.teammateTeams": ({ count }) => `${count} ${count === 1 ? "team" : "teams"}`,
   "label.ability": "Ability",
   "label.item": "Item",
   "label.nature": "Nature",

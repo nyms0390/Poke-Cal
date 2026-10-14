@@ -90,6 +90,20 @@ export function megaFamily(pokemon, selected) {
   });
 }
 
+// Limitless teammates (base species, most common first) resolved to catalog entries; species
+// missing from the catalog (no longer legal) are skipped.
+export function commonTeammates(selected, pokemon, { limit = Infinity } = {}) {
+  const teammates = selected?.champions?.usage?.teammates;
+  if (!Array.isArray(teammates)) return [];
+  const byId = new Map(pokemon.map((entry) => [normalizeId(entry.id), entry]));
+  return teammates
+    .flatMap(({ id, usageCount, usagePercent }) => {
+      const entry = byId.get(normalizeId(id));
+      return entry ? [{ pokemon: entry, usageCount, usagePercent }] : [];
+    })
+    .slice(0, limit);
+}
+
 export function megaFamilyId(pokemon) {
   const id = normalizeId(pokemon?.id ?? pokemon?.name);
   const baseSpecies = String(pokemon?.baseSpecies ?? "");

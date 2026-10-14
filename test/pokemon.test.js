@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  commonTeammates,
   megaFamily,
   megaFamilyId,
   pokemonSpriteId,
@@ -382,4 +383,35 @@ test("keeps a selected non-Mega alternate form on its own page", () => {
 
 test("returns only the selected Pokémon when it has no Mega form", () => {
   assert.deepEqual(megaFamily(pokemon, pokemon[0]), [pokemon[0]]);
+});
+
+test("resolves a Pokémon's Limitless teammates against the catalog", () => {
+  const catalog = [
+    { id: "raichu", name: "Raichu" },
+    { id: "incineroar", name: "Incineroar" },
+    { id: "sneasler", name: "Sneasler" },
+    { id: "whimsicott", name: "Whimsicott" },
+  ];
+  const selected = {
+    id: "raichu",
+    name: "Raichu",
+    champions: {
+      usage: {
+        teammates: [
+          { id: "incineroar", name: "Incineroar", usageCount: 6, usagePercent: 60 },
+          { id: "retired", name: "Retired", usageCount: 5, usagePercent: 50 },
+          { id: "sneasler", name: "Sneasler", usageCount: 4, usagePercent: 40 },
+          { id: "whimsicott", name: "Whimsicott", usageCount: 2, usagePercent: 20 },
+        ],
+      },
+    },
+  };
+
+  assert.deepEqual(commonTeammates(selected, catalog, { limit: 2 }), [
+    { pokemon: catalog[1], usageCount: 6, usagePercent: 60 },
+    { pokemon: catalog[2], usageCount: 4, usagePercent: 40 },
+  ]);
+  assert.equal(commonTeammates(selected, catalog).length, 3);
+  assert.deepEqual(commonTeammates({ id: "raichu", champions: {} }, catalog), []);
+  assert.deepEqual(commonTeammates(undefined, catalog), []);
 });

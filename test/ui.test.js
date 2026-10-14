@@ -1482,6 +1482,20 @@ test("Battle set cards and the shared set editor mark moves with the same round 
   assert.doesNotMatch(battle, /damage-move-number/);
 });
 
+test("Lookup lists Limitless teammates in the Battle profile and opens them in place", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const controller = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+  const profile = html.match(/aria-labelledby="battle-profile-heading">([\s\S]*?)<\/section>\s*<section class="catalog-panel lookup-move-panel"/)?.[1] ?? "";
+
+  assert.match(profile, /<section id="teammates-card" class="catalog-panel teammates-card" aria-labelledby="teammates-heading" hidden>/);
+  assert.match(profile, /<h3 id="teammates-heading">Common teammates<\/h3>/);
+  assert.match(profile, /<ol id="teammate-list" class="teammate-list"><\/ol>/);
+  assert.match(controller, /commonTeammates\(selectedPokemon, pokemon, \{ limit: TEAMMATE_DISPLAY_LIMIT \}\)/);
+  assert.match(controller, /button\.addEventListener\("click", \(\) => openTeammate\(teammate\.pokemon\)\)/);
+  // The clicked row is replaced, so focus moves to the newly selected Pokémon's name.
+  assert.match(controller, /function openTeammate\(entry\) \{\s*selectPokemon\(entry\);[\s\S]*?elements\.selectedName\.focus\(/);
+});
+
 test("headings take their size from a type role, and nested headings step down a role", () => {
   const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
   const rule = (selector) => {

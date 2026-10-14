@@ -3,6 +3,8 @@ import { NATURES } from "../engine/natures.js";
 
 export const LIMITLESS_TOURNAMENTS_URL = "https://play.limitlesstcg.com/tournaments";
 export const LIMITLESS_API_BASE_URL = "https://play.limitlesstcg.com/api";
+// Teammates kept per Pokémon: enough for a Lookup panel without bloating the catalogs.
+export const TEAMMATE_LIMIT = 12;
 
 export function buildLimitlessUsage(tournaments, standingsByTournament, catalogs = {}) {
   const tournamentEntries = tournaments.filter(Boolean);
@@ -20,10 +22,17 @@ export function buildLimitlessUsage(tournaments, standingsByTournament, catalogs
     for (const standing of standings) {
       if (!Array.isArray(standing.decklist) || standing.decklist.length === 0) continue;
       teamCount += 1;
+      const members = [];
       for (const set of standing.decklist) {
-        countPokemonSet(counters, set);
-        countMegaPokemonSet(counters, set, megaStoneMappings);
+        const species = normalizePokemonSetId(set);
+        for (const entry of [
+          countPokemonSet(counters, set),
+          countMegaPokemonSet(counters, set, megaStoneMappings),
+        ]) {
+          if (entry) members.push({ entry, species, name: set.name ?? set.id });
+        }
       }
+      countTeammates(members);
     }
   }
 
@@ -63,9 +72,24 @@ export function mergeLimitlessUsage(data, usage) {
   };
 }
 
+// Each Pokémon (and each Mega form, under the species that holds the stone) counts the other
+// species on the same team once. Teammates are base species, as Limitless lists them.
+function countTeammates(members) {
+  const species = new Map();
+  for (const { species: id, name } of members) {
+    if (id && !species.has(id)) species.set(id, name);
+  }
+  for (const { entry, species: ownSpecies } of members) {
+    entry.teammates ??= new Map();
+    for (const [id, name] of species) {
+      if (id !== ownSpecies) increment(entry.teammates, id, name);
+    }
+  }
+}
+
 function countPokemonSet(counters, set) {
   const pokemonId = normalizePokemonSetId(set);
-  if (!pokemonId) return;
+  if (!pokemonId) return undefined;
 
   const pokemon = increment(counters.pokemon, pokemonId, set.name ?? set.id);
   pokemon.abilities ??= new Map();
@@ -91,13 +115,14 @@ function countPokemonSet(counters, set) {
   if (set.nature && set.ability && set.item) {
     incrementSpeedProfile(pokemon.speedProfiles, set.nature, set.ability, set.item);
   }
+  return pokemon;
 }
 
 function countMegaPokemonSet(counters, set, megaStoneMappings) {
   const itemMappings = megaStoneMappings.get(normalizeId(set.item)) ?? [];
   const sourceId = normalizePokemonSetId(set);
   const mapping = itemMappings.find(({ source }) => source === sourceId);
-  if (!mapping) return;
+  if (!mapping) return undefined;
 
   const pokemon = increment(counters.pokemon, mapping.target.id, mapping.target.name);
   pokemon.abilities ??= new Map();
@@ -117,6 +142,7 @@ function countMegaPokemonSet(counters, set, megaStoneMappings) {
   if (set.nature && ability && mapping.item) {
     incrementSpeedProfile(pokemon.speedProfiles, set.nature, ability, mapping.item);
   }
+  return pokemon;
 }
 
 function incrementSpeedProfile(map, nature, ability, item) {
@@ -209,6 +235,8 @@ function pokemonUsageEntry(entry, denominator) {
       moves: usageEntries(entry.moves ?? new Map(), entry.count, simpleUsageEntry),
       natures: usageEntries(entry.natures ?? new Map(), entry.count, simpleUsageEntry),
       speedProfiles: usageEntries(entry.speedProfiles ?? new Map(), entry.count, speedProfileUsageEntry),
+      teammates: usageEntries(entry.teammates ?? new Map(), entry.count, simpleUsageEntry)
+        .slice(0, TEAMMATE_LIMIT),
     },
   };
 }
@@ -273,6 +301,7 @@ function normalizePokemonUsage(entries, catalogs) {
         items: normalizeCatalogUsage(entry.usage?.items, catalogs.items),
         moves: normalizeCatalogUsage(entry.usage?.moves, catalogs.moves),
         speedProfiles: normalizeSpeedProfiles(entry.usage?.speedProfiles, catalogs),
+        teammates: normalizeCatalogUsage(entry.usage?.teammates, catalogs.pokemon),
       },
     };
   });

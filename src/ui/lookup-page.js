@@ -9,7 +9,7 @@ import {
   normalizeId,
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
-import { megaFamily } from "../data/pokemon.js";
+import { commonTeammates, megaFamily } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
@@ -73,6 +73,9 @@ const elements = {
   typeMatchupCard: document.querySelector("#type-matchup-card"),
   typeMatchupList: document.querySelector("#type-matchup-list"),
   typeMatchupNote: document.querySelector("#type-matchup-note"),
+  teammatesCard: document.querySelector("#teammates-card"),
+  teammatesMeta: document.querySelector("#teammates-meta"),
+  teammateList: document.querySelector("#teammate-list"),
   speedTierCard: document.querySelector("#speed-tier-card"),
   speedTierList: document.querySelector("#speed-tier-list"),
   spreadCount: document.querySelector("#spread-count"),
@@ -86,6 +89,8 @@ const elements = {
   moveSortButtons: [...document.querySelectorAll(".move-sort-button")],
   status: document.querySelector("#status"),
 };
+
+const TEAMMATE_DISPLAY_LIMIT = 8;
 
 let pokemon = [];
 let abilityLookup = new Map();
@@ -327,6 +332,7 @@ function persistActiveDefaults(entry) {
 function renderCatalog() {
   renderCommonBuild();
   renderDefensiveMatchups();
+  renderTeammates();
   renderSpeedTiers();
 
   const usage = selectedPokemon?.champions?.usage;
@@ -472,6 +478,64 @@ function matchupRow(labelText, types) {
   badges.append(...types.map(typeBadge));
   row.append(label, badges);
   return row;
+}
+
+function renderTeammates() {
+  const champions = selectedPokemon?.champions;
+  const teammates = commonTeammates(selectedPokemon, pokemon, { limit: TEAMMATE_DISPLAY_LIMIT });
+  if (teammates.length === 0 || !Number.isFinite(champions?.usageCount)) {
+    elements.teammatesCard.hidden = true;
+    elements.teammateList.replaceChildren();
+    return;
+  }
+
+  elements.teammatesMeta.textContent = t("lookup.teammatesMeta", {
+    teams: champions.usageCount.toLocaleString(getLocale()),
+  });
+  elements.teammateList.replaceChildren(...teammates.map(teammateRow));
+  elements.teammatesCard.hidden = false;
+}
+
+function teammateRow(teammate) {
+  const row = document.createElement("li");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "teammate-row";
+
+  const sprite = document.createElement("img");
+  sprite.alt = "";
+  sprite.width = 40;
+  sprite.height = 40;
+  sprite.loading = "lazy";
+  const [source, fallback] = pokemonSpriteUrls(teammate.pokemon);
+  sprite.src = source;
+  sprite.addEventListener("error", () => {
+    if (sprite.src !== fallback) sprite.src = fallback;
+    else sprite.hidden = true;
+  });
+
+  const name = document.createElement("span");
+  name.className = "teammate-name";
+  name.textContent = localizedName(teammate.pokemon);
+  const share = document.createElement("strong");
+  share.className = "teammate-share";
+  share.textContent = formatUsagePercent(teammate.usagePercent);
+  const count = document.createElement("small");
+  count.className = "teammate-count";
+  count.textContent = t("lookup.teammateTeams", { count: teammate.usageCount });
+
+  button.append(sprite, name, share, count);
+  button.addEventListener("click", () => openTeammate(teammate.pokemon));
+  row.append(button);
+  return row;
+}
+
+// The clicked row is re-rendered for the new Pokémon, so focus moves to its name.
+function openTeammate(entry) {
+  selectPokemon(entry);
+  elements.selectedName.tabIndex = -1;
+  elements.selectedName.focus({ preventScroll: true });
+  elements.selectedName.scrollIntoView({ block: "nearest" });
 }
 
 function renderSpeedTiers() {

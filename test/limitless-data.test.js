@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildLimitlessUsage, mergeLimitlessUsage } from "../src/data/limitless-data.js";
+import { buildLimitlessUsage, mergeLimitlessUsage, TEAMMATE_LIMIT } from "../src/data/limitless-data.js";
 import { downloadLimitlessChampionsData } from "../scripts/sync-limitless-champions-usage.mjs";
 
 test("falls back to M-B usage when M-C has no tournaments", async () => {
@@ -149,6 +149,88 @@ test("aggregates Limitless standings into usage rates", () => {
     ],
   );
   assert.equal("teras" in usage.pokemon[0].usage, false);
+});
+
+test("counts each Pokémon's teammates as a share of its Limitless teams", () => {
+  const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];
+  const team = (...ids) => ({ decklist: ids.map((id) => ({ id, name: id[0].toUpperCase() + id.slice(1) })) });
+  const standings = new Map([
+    ["event-1", [team("raichu", "sneasler", "incineroar"), team("raichu", "incineroar"), team("sneasler", "raichu"), { decklist: [] }]],
+  ]);
+
+  const usage = buildLimitlessUsage(tournaments, standings);
+  const byId = new Map(usage.pokemon.map((entry) => [entry.id, entry]));
+
+  assert.deepEqual(
+    byId.get("raichu").usage.teammates.map(({ id, name, usageCount, usagePercent }) => [id, name, usageCount, usagePercent]),
+    [
+      ["incineroar", "Incineroar", 2, (2 / 3) * 100],
+      ["sneasler", "Sneasler", 2, (2 / 3) * 100],
+    ],
+  );
+  assert.deepEqual(
+    byId.get("sneasler").usage.teammates.map(({ id, usagePercent }) => [id, usagePercent]),
+    [
+      ["raichu", 100],
+      ["incineroar", 50],
+    ],
+  );
+});
+
+test("keeps only each Pokémon's most common Limitless teammates", () => {
+  const tournaments = [{ id: "event-1", game: "VGC", format: "M-B" }];
+  const others = Array.from({ length: 14 }, (_, index) => `mon${String(index).padStart(2, "0")}`);
+  // mon00 shares two teams with Raichu; every other Pokémon shares one.
+  const decklist = (ids) => ({ decklist: ids.map((id) => ({ id, name: id })) });
+  const standings = new Map([
+    ["event-1", [decklist(["raichu", ...others.slice(0, 5)]), ...others.slice(5).map((id) => decklist(["raichu", id])), decklist(["raichu", "mon00"])]],
+  ]);
+
+  const teammates = buildLimitlessUsage(tournaments, standings).pokemon
+    .find(({ id }) => id === "raichu").usage.teammates;
+
+  assert.equal(teammates.length, TEAMMATE_LIMIT);
+  assert.deepEqual(teammates[0], { id: "mon00", name: "mon00", usageCount: 2, usagePercent: (2 / 11) * 100 });
+});
+
+test("canonicalizes Limitless teammates against the Pokémon catalog", () => {
+  const merged = mergeLimitlessUsage(
+    {
+      pokemon: [
+        { id: "raichu", name: "Raichu", champions: { legal: true } },
+        { id: "incineroar", name: "Incineroar", champions: { legal: true } },
+        { id: "sneasler", name: "Sneasler", champions: { legal: false } },
+      ],
+      abilities: [],
+      items: [],
+      moves: [],
+    },
+    {
+      pokemon: [
+        {
+          id: "raichu",
+          name: "Raichu",
+          usageCount: 3,
+          usagePercent: 100,
+          usage: {
+            teammates: [
+              { id: "Incineroar", name: "incineroar", usageCount: 2, usagePercent: 66.7 },
+              { id: "sneasler", name: "Sneasler", usageCount: 1, usagePercent: 33.3 },
+              { id: "typomon", name: "Typo Mon", usageCount: 1, usagePercent: 33.3 },
+            ],
+          },
+        },
+      ],
+      abilities: [],
+      items: [],
+      moves: [],
+    },
+  );
+
+  assert.deepEqual(
+    merged.pokemon.find(({ id }) => id === "raichu").champions.usage.teammates,
+    [{ id: "incineroar", name: "Incineroar", usageCount: 2, usagePercent: 66.7 }],
+  );
 });
 
 test("keeps correlated nature, ability, and item Limitless Speed profiles", () => {
@@ -398,6 +480,13 @@ test("derives form-specific Mega usage from matching legal stones", () => {
       usageCount: 1,
       usagePercent: 50,
     },
+  ]);
+  // Mega forms list the base species they were teamed with, never their own species.
+  assert.deepEqual(charizardX.usage.teammates.map(({ id, usageCount }) => [id, usageCount]), [
+    ["raichu", 2],
+    ["blastoise", 1],
+    ["pikachu", 1],
+    ["venusaur", 1],
   ]);
   assert.deepEqual(byId.get("charizardmegay").usage.items.map(({ id }) => id), ["charizarditey"]);
   assert.deepEqual(byId.get("charizardmegay").usage.moves.map(({ id }) => id), [

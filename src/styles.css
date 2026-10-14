@@ -1100,6 +1100,73 @@ button:disabled {
   grid-column: 1 / -1;
 }
 
+/* Common teammates: one row per teammate, flowing into columns as width allows. */
+.lookup-profile-grid .teammates-card {
+  grid-column: 1 / -1;
+}
+
+.teammate-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.teammate-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "sprite name share"
+    "sprite count share";
+  align-items: center;
+  column-gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 8px 4px 4px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.teammate-row:hover,
+.teammate-row:focus-visible {
+  background: var(--surface-tint);
+}
+
+.teammate-row img {
+  grid-area: sprite;
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.teammate-name {
+  grid-area: name;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.teammate-count {
+  grid-area: count;
+  color: var(--muted);
+  font-size: var(--type-meta);
+}
+
+.teammate-share {
+  grid-area: share;
+  color: var(--accent-dark);
+  font-variant-numeric: tabular-nums;
+}
+
 .lookup-move-panel {
   background: var(--surface);
 }
