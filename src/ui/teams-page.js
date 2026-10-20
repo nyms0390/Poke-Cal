@@ -2,7 +2,7 @@ import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { attachCombobox, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
+import { attachCombobox, moveChip, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -369,9 +369,8 @@ function pokemonContent(submitted) {
   moveList.className = "teams-move-list";
   if (submitted.moves.length > 0) {
     moveList.append(...submitted.moves.map((move) => {
-      const chip = document.createElement("span");
-      chip.textContent = displayCatalogValue(move, catalogs.moveLookup);
-      return chip;
+      const entry = catalogs.moveLookup.get(normalizeId(move));
+      return moveChip(entry, { label: entry ? localizedName(entry) : move });
     }));
   } else {
     moveList.append(messagePanel(t("teams.notPublished")));

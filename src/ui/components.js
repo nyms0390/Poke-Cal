@@ -133,7 +133,7 @@ export function typeIconPath(type) {
 
 // A round type mark for a move (its base type, icon only; dashed when there is no move).
 // Builder and Matchups put it before each move slot; Battle puts it in the set cards' move
-// chips. Pass an existing mark as `icon` to update it in place. Decorative: the move name
+// chips (`moveChip`). Pass an existing mark as `icon` to update it in place. Decorative: the move name
 // always sits next to it.
 export function moveTypeIcon(move, { className = "", icon = document.createElement("span") } = {}) {
   icon.className = ["move-type-icon", "type-badge", move?.type ? typeClassName(move.type) : "empty", className]
@@ -149,6 +149,16 @@ export function moveTypeIcon(move, { className = "", icon = document.createEleme
   image.alt = "";
   icon.replaceChildren(image);
   return icon;
+}
+
+// A move chip: its round type mark and name. Battle's set cards and the Teams page list
+// moves with it. `label` overrides the name (Teams falls back to the submitted text when a
+// move is not in the catalog; the mark is then dashed).
+export function moveChip(move, { label = localizedName(move) } = {}) {
+  const chip = document.createElement("span");
+  chip.className = "move-chip";
+  chip.append(moveTypeIcon(move, { className: "move-chip-type" }), label);
+  return chip;
 }
 
 export function typeClassName(type) {

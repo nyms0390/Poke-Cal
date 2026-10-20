@@ -75,6 +75,7 @@ import {
   statEditorRow,
   STAT_LABELS,
   typeBadge,
+  moveChip,
   moveTypeIcon,
 } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
@@ -1588,12 +1589,7 @@ function renderSetPreview(side) {
   const selectedMoves = selectedDamageMoves(side);
   preview.speed.textContent = String(speed);
   preview.mobile.textContent = t("battle.mobileSetPreview", { speed, count: selectedMoves.length });
-  preview.moves.replaceChildren(...selectedMoves.map(({ move }) => {
-    const chip = document.createElement("span");
-    chip.className = "battle-set-move";
-    chip.append(moveTypeIcon(move, { className: "battle-set-move-type" }), localizedName(move));
-    return chip;
-  }));
+  preview.moves.replaceChildren(...selectedMoves.map(({ move }) => moveChip(move)));
 }
 
 function renderSheetSummaries() {

@@ -662,15 +662,6 @@ footer {
   gap: 6px;
 }
 
-.teams-move-list > span {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-badge);
-  padding: 5px 8px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: var(--text-sm);
-}
-
 .teams-message {
   margin: 0;
   color: var(--muted);
@@ -1813,6 +1804,31 @@ button:disabled {
 .type-rock { background: #b6a25b; color: #161306; text-shadow: none; }
 .type-steel { background: #5a8ea3; }
 .type-water { background: #5090d6; }
+
+/* Move chip: type mark + name (Battle set cards, Teams; moveChip in components.js) */
+
+.move-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.move-chip .move-chip-type.type-badge {
+  width: 20px;
+  height: 20px;
+  margin-left: -4px;
+}
+
+.move-chip .move-chip-type img {
+  width: 12px;
+  height: 12px;
+}
 
 /* ---------- Battle: layout ---------- */
 
@@ -5034,29 +5050,6 @@ textarea:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-}
-
-.battle-set-move {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 28px;
-  padding: 3px 9px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  font-size: var(--text-xs);
-  font-weight: 600;
-}
-
-.battle-set-move .battle-set-move-type.type-badge {
-  width: 20px;
-  height: 20px;
-  margin-left: -4px;
-}
-
-.battle-set-move .battle-set-move-type img {
-  width: 12px;
-  height: 12px;
 }
 
 .battle-field-strip .set-summary {
