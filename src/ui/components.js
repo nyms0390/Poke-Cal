@@ -3,6 +3,7 @@ import { pokemonHomeArtFile, pokemonSpriteId, searchPokemon } from "../data/poke
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { isGuaranteedCritical } from "../engine/critical.js";
+import { natureEffect } from "../engine/natures.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 import { urlWithoutConsumedParams } from "./battle-state.js";
 
@@ -159,6 +160,89 @@ export function moveChip(move, { label = localizedName(move) } = {}) {
   chip.className = "move-chip";
   chip.append(moveTypeIcon(move, { className: "move-chip-type" }), label);
   return chip;
+}
+
+// A move name led by its round type icon, for move names in text (result headings, table
+// cells) rather than a chip.
+export function moveNameLabel(move, { label = localizedName(move) } = {}) {
+  const wrap = document.createElement("span");
+  wrap.className = "move-name-label";
+  wrap.append(moveTypeIcon(move, { className: "move-name-type" }), label);
+  return wrap;
+}
+
+// A whole set on one row, after the in-game team banner: optional sprite, name and types, the
+// facts as label/value pairs, then the four moves (move chips) in a 2 × 2 grid. Below 640px
+// of its own width the facts and moves drop under the name.
+export function setRow({ media = null, title, types = [], facts = [], moves = [], className = "" }) {
+  const row = document.createElement("article");
+  row.className = ["set-row", className].filter(Boolean).join(" ");
+  const body = document.createElement("div");
+  body.className = "set-row-body";
+
+  if (media) {
+    media.classList.add("set-row-media");
+    body.append(media);
+  } else {
+    body.classList.add("no-media");
+  }
+
+  const identity = document.createElement("div");
+  identity.className = "set-row-identity";
+  const name = document.createElement("strong");
+  name.className = "set-row-name";
+  name.append(title);
+  identity.append(name);
+  if (types.length > 0) {
+    const badges = document.createElement("span");
+    badges.className = "set-row-types";
+    badges.append(...types.map(typeBadge));
+    identity.append(badges);
+  }
+
+  const list = document.createElement("dl");
+  list.className = "set-row-facts";
+  for (const [label, value] of facts) {
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const detail = document.createElement("dd");
+    detail.append(value);
+    list.append(term, detail);
+  }
+
+  const moveList = document.createElement("div");
+  moveList.className = "set-move-list set-row-moves";
+  moveList.append(...moves);
+
+  body.append(identity, list, moveList);
+  row.append(body);
+  return row;
+}
+
+// A nature with the stat it raises (▲) and lowers (▼), as on the in-game set summary. The arrows
+// are hidden from assistive tech, which hears "Raises"/"Lowers" instead.
+export function natureLabel(natureName) {
+  const label = document.createElement("span");
+  label.className = "nature-label";
+  const name = document.createElement("span");
+  name.className = "nature-label-name";
+  name.textContent = localizedTerm("nature", natureName);
+  label.append(name);
+  const effect = natureEffect(natureName);
+  if (!effect) return label;
+  for (const [direction, stat] of [["up", effect.up], ["down", effect.down]]) {
+    const pill = document.createElement("span");
+    pill.className = `nature-stat nature-stat-${direction}`;
+    const arrow = document.createElement("span");
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.textContent = direction === "up" ? "▲" : "▼";
+    const spoken = document.createElement("span");
+    spoken.className = "visually-hidden";
+    spoken.textContent = t(direction === "up" ? "nature.raises" : "nature.lowers");
+    pill.append(arrow, spoken, localizedTerm("stat", stat));
+    label.append(pill);
+  }
+  return label;
 }
 
 export function typeClassName(type) {

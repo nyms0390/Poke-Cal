@@ -38,12 +38,15 @@ import {
   FULL_STAT_LABELS,
   itemLabel,
   moveCategoryMark,
+  moveChip,
   moveNameCell,
   movePropertyCell,
+  natureLabel,
   optionElement,
   pokemonSpriteElements,
   pokemonSpriteUrls,
   searchResultFocusIndex,
+  setRow,
   textCell,
   typeBadge,
 } from "./components.js";
@@ -404,9 +407,8 @@ function commonBuildFact(labelText, entry) {
   const rawName = entry?.name;
   if (!entry) value.textContent = "—";
   else if (labelText === t("label.item")) value.append(itemLabel(entry));
-  else value.textContent = labelText === t("label.nature")
-    ? localizedTerm("nature", rawName)
-    : localizedName(entry);
+  else if (labelText === t("label.nature")) value.append(rawName ? natureLabel(rawName) : "—");
+  else value.textContent = localizedName(entry);
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");
     usage.textContent = formatUsagePercent(entry.usagePercent);
@@ -422,11 +424,10 @@ function commonBuildMoves(moves) {
   const label = document.createElement("span");
   label.textContent = t("label.moves");
   const list = document.createElement("div");
-  list.className = "common-build-move-list";
+  list.className = "common-build-move-list set-move-list";
   list.append(
     ...moves.map((move) => {
-      const item = document.createElement("span");
-      item.textContent = localizedName(move);
+      const item = moveChip(move);
       if (Number.isFinite(move.usagePercent)) {
         const usage = document.createElement("small");
         usage.textContent = formatUsagePercent(move.usagePercent);
@@ -605,29 +606,24 @@ function renderUsageSpreadRow(spread) {
   return row;
 }
 
+// An NCP set as a set row: ability, nature, item and spread, then its moves.
 function renderNcpSetCard(set) {
-  const card = document.createElement("article");
-  card.className = "spread-card";
-
-  const heading = document.createElement("div");
-  heading.className = "spread-card-heading";
-  const name = document.createElement("strong");
-  name.textContent = set.name;
-  const spread = document.createElement("span");
-  spread.textContent = localizedSpreadName(set.spreadName);
-  heading.append(name, spread);
-
-  const build = document.createElement("p");
-  build.textContent = [
-    localizedCatalogValue(set.ability, abilityLookup),
-    localizedCatalogValue(set.item, itemLookup),
-  ].filter(Boolean).join(" · ") || "—";
-
-  const moves = document.createElement("p");
-  moves.textContent = set.moves.map((move) => localizedCatalogValue(move, moveLookup)).join(" / ");
-
-  card.append(heading, build, moves);
-  return card;
+  const itemEntry = set.item ? itemLookup.get(normalizeId(set.item)) : null;
+  return setRow({
+    className: "ncp-set-row",
+    title: set.name,
+    facts: [
+      [t("label.ability"), localizedCatalogValue(set.ability, abilityLookup) || "—"],
+      [t("label.nature"), set.nature ? natureLabel(set.nature) : "—"],
+      [t("label.item"), itemEntry ? itemLabel(itemEntry) : localizedCatalogValue(set.item, itemLookup) || "—"],
+      // The spread name repeats the nature ("Quiet:32/0/2/32/0/0"); the Nature row already has it.
+      [t("matchups.spread"), String(set.spreadName ?? "").split(":").pop() || "—"],
+    ],
+    moves: set.moves.map((move) => {
+      const entry = moveLookup.get(normalizeId(move));
+      return moveChip(entry, { label: localizedCatalogValue(move, moveLookup) });
+    }),
+  });
 }
 
 function renderSpreadSource(hasUsageSpreads, hasNcpSets) {

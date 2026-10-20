@@ -2,7 +2,7 @@ import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { attachCombobox, itemLabel, moveChip, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
+import { attachCombobox, itemLabel, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -319,11 +319,16 @@ function renderTeam(team, key) {
     buildContent: () => {
       const content = document.createElement("div");
       content.className = "teams-team-content";
-      content.append(externalLink(team.url, t("teams.openTeamList")));
+      const source = document.createElement("div");
+      source.className = "teams-source-row";
+      const spread = document.createElement("span");
+      spread.textContent = `${t("teams.spread")}: ${t("teams.spreadUnavailable")}`;
+      source.append(spread, externalLink(team.url, t("teams.openTeamList")));
+      content.append(source);
       const pokemonGrid = document.createElement("div");
       pokemonGrid.className = "teams-pokemon-grid";
       if (team.pokemon.length > 0) {
-        pokemonGrid.append(...team.pokemon.map((submitted, index) => renderPokemon(submitted, `${key}-${index}`)));
+        pokemonGrid.append(...team.pokemon.map((submitted) => renderPokemon(submitted)));
       } else {
         pokemonGrid.append(messagePanel(t("teams.teamUnavailable")));
       }
@@ -333,51 +338,34 @@ function renderTeam(team, key) {
   });
 }
 
-function renderPokemon(submitted, key) {
-  const summary = document.createElement("summary");
-  summary.className = "teams-pokemon-summary";
-  summary.append(teamPreviewSprite(submitted, { showName: true }));
-  const item = document.createElement("small");
-  item.append(itemValue(submitted.item));
-  summary.append(item);
-
-  return lazyDetails({
-    className: "teams-pokemon-card",
-    key,
-    summary,
-    buildContent: () => pokemonContent(submitted),
-  });
-}
-
-function pokemonContent(submitted) {
-  const content = document.createElement("div");
-  content.className = "teams-pokemon-content";
-  content.append(factGrid([
+// Each submitted Pokémon as a set row: sprite, name and types, ability, nature, item (and Tera
+// when submitted), then its moves.
+function renderPokemon(submitted) {
+  const resolved = resolvePokemon(submitted);
+  const media = teamPreviewSprite(submitted);
+  media.removeAttribute("role");
+  media.removeAttribute("aria-label");
+  media.setAttribute("aria-hidden", "true");
+  const facts = [
     [t("label.ability"), displayCatalogValue(submitted.ability, catalogs.abilityLookup)],
+    [t("label.nature"), submitted.nature ? natureLabel(submitted.nature) : ""],
     [t("label.item"), itemValue(submitted.item)],
-    [t("label.nature"), submitted.nature ? localizedTerm("nature", submitted.nature) : ""],
-    [t("teams.tera"), submitted.tera ? localizedTerm("type", submitted.tera) : t("teams.notSubmitted")],
-    [t("teams.spread"), t("teams.spreadUnavailable")],
-  ]));
-
-  const moves = document.createElement("div");
-  moves.className = "teams-moves";
-  const movesLabel = document.createElement("span");
-  movesLabel.className = "teams-fact-label";
-  movesLabel.textContent = t("label.moves");
-  const moveList = document.createElement("div");
-  moveList.className = "teams-move-list";
-  if (submitted.moves.length > 0) {
-    moveList.append(...submitted.moves.map((move) => {
+    ...(submitted.tera ? [[t("teams.tera"), localizedTerm("type", submitted.tera)]] : []),
+  ].map(([label, value]) => [label, value || t("teams.notPublished")]);
+  const moves = submitted.moves.length > 0
+    ? submitted.moves.map((move) => {
       const entry = catalogs.moveLookup.get(normalizeId(move));
       return moveChip(entry, { label: entry ? localizedName(entry) : move });
-    }));
-  } else {
-    moveList.append(messagePanel(t("teams.notPublished")));
-  }
-  moves.append(movesLabel, moveList);
-  content.append(moves);
-  return content;
+    })
+    : [messagePanel(t("teams.notPublished"))];
+  return setRow({
+    className: "teams-set-row",
+    media,
+    title: resolved ? localizedName(resolved) : submitted?.name ?? t("teams.notPublished"),
+    types: resolved?.types ?? [],
+    facts,
+    moves,
+  });
 }
 
 function tournamentMeta(tournament) {
@@ -401,46 +389,18 @@ function finalPhaseLabel(phases = []) {
   return [phase.mode, phase.type].filter(Boolean).join(" ");
 }
 
-function factGrid(facts) {
-  const grid = document.createElement("div");
-  grid.className = "teams-facts";
-  for (const [label, value] of facts) {
-    const fact = document.createElement("div");
-    fact.className = "teams-fact";
-    const labelElement = document.createElement("span");
-    labelElement.className = "teams-fact-label";
-    labelElement.textContent = label;
-    const valueElement = document.createElement("strong");
-    valueElement.append(value || t("teams.notPublished"));
-    fact.append(labelElement, valueElement);
-    grid.append(fact);
-  }
-  return grid;
-}
-
-function teamPreviewSprite(submitted, { showName = false } = {}) {
+function teamPreviewSprite(submitted) {
   const wrap = document.createElement("span");
   wrap.className = "teams-sprite";
   const resolved = resolvePokemon(submitted);
   if (resolved) {
     wrap.append(...pokemonSpriteElements(resolved, { size: 42, lazy: true }));
-    if (!showName) {
-      wrap.setAttribute("role", "img");
-      wrap.setAttribute("aria-label", localizedName(resolved));
-    }
+    wrap.setAttribute("role", "img");
+    wrap.setAttribute("aria-label", localizedName(resolved));
   } else {
     wrap.classList.add("empty");
     wrap.textContent = "?";
     wrap.setAttribute("aria-label", t("teams.notPublished"));
-  }
-  if (showName) {
-    const label = document.createElement("span");
-    label.className = "teams-pokemon-label";
-    const name = document.createElement("span");
-    name.className = "teams-pokemon-name";
-    name.textContent = resolved ? localizedName(resolved) : submitted?.name ?? t("teams.notPublished");
-    label.append(wrap, name);
-    return label;
   }
   return wrap;
 }

@@ -75,8 +75,10 @@ import {
   statEditorRow,
   STAT_LABELS,
   typeBadge,
+  itemLabel,
   moveChip,
   moveTypeIcon,
+  natureLabel,
 } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
@@ -167,6 +169,7 @@ const elements = {
 
 const setPreviews = Object.fromEntries(["attacker", "defender"].map((side) => [side, {
   types: document.querySelector(`#${side}-types-preview`),
+  nature: document.querySelector(`#${side}-nature-preview`),
   spread: document.querySelector(`#${side}-spread-preview`),
   ability: document.querySelector(`#${side}-ability-preview`),
   item: document.querySelector(`#${side}-item-preview`),
@@ -1572,15 +1575,17 @@ function renderSetPreview(side) {
   if (!state?.pokemon) {
     preview.types.replaceChildren();
     preview.moves.replaceChildren();
-    for (const key of ["spread", "ability", "item", "speed"]) preview[key].textContent = "—";
+    for (const key of ["nature", "spread", "ability", "item", "speed"]) preview[key].textContent = "—";
     preview.mobile.textContent = "";
     return;
   }
 
   preview.types.replaceChildren(...state.pokemon.types.map(typeBadge));
-  preview.spread.textContent = `${localizedTerm("nature", state.nature)} · ${SP_STATS.map((stat) => state.sp[stat] ?? 0).join("/")} SP`;
+  preview.nature.replaceChildren(natureLabel(state.nature));
+  preview.spread.textContent = `${SP_STATS.map((stat) => state.sp[stat] ?? 0).join("/")} SP`;
   preview.ability.textContent = state.ability ? localizedName(state.ability) : t("builder.noAbility");
-  preview.item.textContent = state.item ? localizedName(state.item) : t("builder.noItem");
+  if (state.item) preview.item.replaceChildren(itemLabel(state.item));
+  else preview.item.textContent = t("builder.noItem");
   const speedContext = finalSpeedContext();
   const speed = finalSpeed({
     ...sideStateForCalc(state),

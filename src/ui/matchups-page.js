@@ -29,7 +29,7 @@ import {
 import { formatDamageReason, formatKoText } from "../i18n-formatters.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
-import { browserStorage, consumeQueryParam, optionElement, pokemonMiniSprite } from "./components.js";
+import { browserStorage, consumeQueryParam, itemLabel, moveChip, moveNameLabel, natureLabel, optionElement, pokemonMiniSprite, setRow } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
@@ -811,7 +811,8 @@ function hitCell(label, best, turns) {
   heading.textContent = label;
   const move = document.createElement("span");
   move.className = "matchups-hit-move";
-  move.textContent = best ? localizedName(best.move) : t("matchups.noMove");
+  if (best) move.append(moveNameLabel(best.move));
+  else move.textContent = t("matchups.noMove");
   const value = document.createElement("span");
   value.className = "matchups-hit-value";
   if (best) {
@@ -894,11 +895,17 @@ function matchupDetail(row, ours, extraFacts = []) {
   const columns = document.createElement("div");
   columns.className = "matchups-detail-columns";
   columns.append(
-    detailColumn(t("matchups.theirSet"), [
-      localizedTerm("nature", set.nature),
-      set.ability ? localizedName(set.ability) : t("builder.noAbility"),
-      set.item ? localizedName(set.item) : t("builder.noItem"),
-    ].join(" · ")),
+    detailColumn(t("matchups.theirSet"), setRow({
+      className: "matchups-set-row",
+      title: localizedName(set.pokemon),
+      types: set.pokemon?.types ?? [],
+      facts: [
+        [t("label.ability"), set.ability ? localizedName(set.ability) : t("builder.noAbility")],
+        [t("label.nature"), natureLabel(set.nature)],
+        [t("label.item"), set.item ? itemLabel(set.item) : t("builder.noItem")],
+      ],
+      moves: set.moves.map((move) => moveChip(move)),
+    })),
     detailColumn(t("matchups.theRace"), [
       raceLine(row.result.theirs.best, row.result.theirHits),
       raceLine(row.result.ours.best, row.result.ourHits),
@@ -923,12 +930,15 @@ function matchupDetail(row, ours, extraFacts = []) {
   return detail;
 }
 
-function detailColumn(heading, text) {
+function detailColumn(heading, content) {
   const column = document.createElement("div");
   const title = document.createElement("h4");
   title.textContent = heading;
-  const body = document.createElement("p");
-  body.textContent = text;
+  let body = content;
+  if (typeof content === "string") {
+    body = document.createElement("p");
+    body.textContent = content;
+  }
   column.append(title, body);
   return column;
 }
@@ -1028,7 +1038,7 @@ function moveTable(caption, entries) {
   for (const entry of sorted) {
     const row = document.createElement("tr");
     const move = document.createElement("td");
-    move.textContent = localizedName(entry.move);
+    move.append(moveNameLabel(entry.move));
     const damage = document.createElement("td");
     damage.className = "matchups-numeric";
     damage.textContent = entry.included ? rangeLabel(entry) : "—";

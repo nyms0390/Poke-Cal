@@ -1480,6 +1480,14 @@ test("Battle set cards, Teams and the shared set editor mark moves with the same
   assert.match(read("src/ui/teams-page.js"), /return entry \? itemLabel\(entry\) : value;/);
   assert.match(read("src/ui/teams-page.js"), /\[t\("label\.item"\), itemValue\(submitted\.item\)\]/);
   assert.match(read("src/ui/set-editor.js"), /const icon = moveTypeIcon\(selected\)/);
+  // Game-style set previews: Battle's set card lists the four moves as rows beside the facts,
+  // and Teams, Lookup's NCP sets and Matchups' opponent set share the one-row setRow.
+  assert.match(read("battle.html"), /id="attacker-moves-preview" class="set-move-list"/);
+  assert.match(read("src/ui/battle-page.js"), /preview\.nature\.replaceChildren\(natureLabel\(state\.nature\)\)/);
+  for (const page of ["teams-page", "lookup-page", "matchups-page"]) {
+    assert.match(read(`src/ui/${page}.js`), /setRow\(\{/);
+  }
+  assert.match(read("src/ui/components.js"), /spoken\.textContent = t\(direction === "up" \? "nature\.raises" : "nature\.lowers"\)/);
   // The Battle edit-set move slots lead with the type mark instead of "Move 1"…"Move 4".
   const battle = read("src/ui/battle-page.js");
   assert.match(battle, /const typeIcon = moveTypeIcon\(selectedMove\)/);

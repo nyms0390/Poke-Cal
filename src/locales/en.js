@@ -73,6 +73,8 @@ export const EN_MESSAGES = {
   "label.ability": "Ability",
   "label.item": "Item",
   "label.nature": "Nature",
+  "nature.raises": "Raises ",
+  "nature.lowers": "Lowers ",
   "label.moves": "Moves",
   "label.move": "Move",
   "label.type": "Type",

@@ -76,6 +76,8 @@ export const ZH_TW_MESSAGES = {
   "label.ability": "特性",
   "label.item": "道具",
   "label.nature": "性格",
+  "nature.raises": "提升",
+  "nature.lowers": "降低",
   "label.moves": "招式",
   "label.move": "招式",
   "label.type": "屬性",

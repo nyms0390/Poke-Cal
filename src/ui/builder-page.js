@@ -69,6 +69,7 @@ import {
   browserStorage,
   consumeQueryParam,
   damagePercentColor,
+  moveNameLabel,
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
@@ -1215,7 +1216,7 @@ function analysisMovePanel({
   const heading = document.createElement("div");
   heading.className = "builder-analysis-move-heading";
   const name = document.createElement("strong");
-  name.textContent = localizedName(move);
+  name.append(moveNameLabel(move));
   heading.append(name, koBadge(formatKoText(damage.koText, getLocale())));
   const range = document.createElement("div");
   range.className = "builder-damage-range";

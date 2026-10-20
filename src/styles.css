@@ -413,8 +413,7 @@ footer {
 }
 
 .teams-tournament-card,
-.teams-team-card,
-.teams-pokemon-card {
+.teams-team-card {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
@@ -423,15 +422,13 @@ footer {
 }
 
 .teams-tournament-card[open],
-.teams-team-card[open],
-.teams-pokemon-card[open] {
+.teams-team-card[open] {
   border-color: var(--accent-ring);
   background: var(--surface);
 }
 
 .teams-tournament-card > summary,
-.teams-team-card > summary,
-.teams-pokemon-card > summary {
+.teams-team-card > summary {
   display: flex;
   align-items: center;
   min-width: 0;
@@ -443,14 +440,12 @@ footer {
 }
 
 .teams-tournament-card > summary::-webkit-details-marker,
-.teams-team-card > summary::-webkit-details-marker,
-.teams-pokemon-card > summary::-webkit-details-marker {
+.teams-team-card > summary::-webkit-details-marker {
   display: none;
 }
 
 .teams-tournament-card > summary::before,
-.teams-team-card > summary::before,
-.teams-pokemon-card > summary::before {
+.teams-team-card > summary::before {
   flex: 0 0 auto;
   color: var(--subtle);
   content: "＋";
@@ -459,14 +454,12 @@ footer {
 }
 
 .teams-tournament-card[open] > summary::before,
-.teams-team-card[open] > summary::before,
-.teams-pokemon-card[open] > summary::before {
+.teams-team-card[open] > summary::before {
   content: "−";
 }
 
 .teams-tournament-card > summary:focus-visible,
-.teams-team-card > summary:focus-visible,
-.teams-pokemon-card > summary:focus-visible {
+.teams-team-card > summary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
@@ -479,8 +472,7 @@ footer {
 }
 
 .teams-tournament-title,
-.teams-player-name,
-.teams-pokemon-name {
+.teams-player-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -500,8 +492,7 @@ footer {
 }
 
 .teams-tournament-meta,
-.teams-team-summary small,
-.teams-pokemon-summary small {
+.teams-team-summary small {
   color: var(--muted);
   font-size: var(--text-xs);
 }
@@ -515,8 +506,7 @@ footer {
 }
 
 .teams-tournament-content,
-.teams-team-content,
-.teams-pokemon-content {
+.teams-team-content {
   display: grid;
   gap: 14px;
   border-top: 1px solid var(--line);
@@ -565,6 +555,17 @@ footer {
   max-height: 42px;
 }
 
+.teams-set-row .teams-sprite {
+  width: 48px;
+  height: 48px;
+  flex-basis: 48px;
+}
+
+.teams-set-row .teams-sprite img {
+  max-width: 48px;
+  max-height: 48px;
+}
+
 .teams-sprite.empty {
   border-style: dashed;
   background: var(--surface-soft);
@@ -597,76 +598,16 @@ footer {
   text-decoration: underline;
 }
 
-.teams-pokemon-card {
-  background: var(--surface-soft);
-}
 
-.teams-pokemon-summary {
-  flex-wrap: wrap;
-}
 
-.teams-pokemon-label {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  flex: 1 1 auto;
-  gap: 9px;
-  font-weight: 700;
-}
 
-.teams-pokemon-label .teams-sprite {
-  width: 38px;
-  height: 38px;
-  flex-basis: 38px;
-}
 
-.teams-facts {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
 
-.teams-fact {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-control);
-  padding: 9px 10px;
-  background: var(--surface);
-}
 
-.teams-fact-label {
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
 
-.teams-fact strong {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
 
-.teams-fact .item-label,
-.teams-pokemon-summary .item-label {
-  font-size: inherit;
-  font-weight: inherit;
-}
 
-.teams-moves {
-  display: grid;
-  gap: 7px;
-}
 
-.teams-move-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
 
 .teams-message {
   margin: 0;
@@ -1332,8 +1273,7 @@ button:disabled {
   font-size: var(--text-sm);
 }
 
-.common-build-fact strong,
-.common-build-move-list > span {
+.common-build-fact strong {
   font-size: var(--text-md);
   font-weight: 600;
 }
@@ -1348,22 +1288,20 @@ button:disabled {
 
 .common-build-moves {
   grid-column: 1 / -1;
-  align-items: start;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
   border-bottom: 0;
 }
 
-.common-build-move-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 7px;
+/* Move names match the fact values above them. */
+.common-build-move-list .move-chip {
+  font-size: var(--text-md);
 }
 
-.common-build-move-list > span {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 4px 9px;
-  background: var(--surface);
+.common-build-move-list .move-chip small {
+  margin-left: auto;
+  padding-left: 8px;
 }
 
 .common-build-calculator {
@@ -1486,32 +1424,8 @@ button:disabled {
   white-space: nowrap;
 }
 
-.spread-card {
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-control);
-  background: var(--surface);
-  box-shadow: var(--shadow-micro);
-  font-size: var(--text-md);
-}
-
-.spread-card-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.spread-card-heading span {
-  color: var(--accent);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.spread-card p {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: var(--text-sm);
-  line-height: 1.55;
+.spread-list .ncp-set-row {
+  grid-column: 1 / -1;
 }
 
 .spread-source {
@@ -1834,6 +1748,199 @@ button:disabled {
 .move-chip .move-chip-type img {
   width: 12px;
   height: 12px;
+}
+
+/* Nature with raised and lowered stat (natureLabel in components.js); red up and blue down
+   match the stat table's increase/decrease, and the arrows carry the meaning without color. */
+
+.nature-label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.nature-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: var(--type-caption);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nature-stat-up {
+  background: rgb(194 59 59 / 8%);
+  color: var(--danger);
+}
+
+.nature-stat-down {
+  background: rgb(37 99 235 / 8%);
+  color: var(--raise);
+}
+
+/* Set move list: the four moves as full-width typed rows (set cards and set rows). */
+
+.set-move-list {
+  display: grid;
+  gap: 6px;
+}
+
+.set-move-list .move-chip {
+  display: flex;
+  min-width: 0;
+  min-height: 38px;
+  padding: 4px 10px 4px 6px;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  overflow-wrap: break-word;
+}
+
+.set-move-list .move-chip .move-chip-type.type-badge {
+  width: 26px;
+  height: 26px;
+  margin-left: 0;
+}
+
+.set-move-list .move-chip .move-chip-type img {
+  width: 15px;
+  height: 15px;
+}
+
+/* Move name with its type icon in running text (moveNameLabel in components.js). */
+
+.move-name-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.move-name-label .move-name-type.type-badge {
+  width: 20px;
+  height: 20px;
+}
+
+.move-name-label .move-name-type img {
+  width: 12px;
+  height: 12px;
+}
+
+/* Set row: one set as a single row (setRow in components.js: Teams, Lookup NCP sets, Matchups). */
+
+.set-row {
+  container: set-row / inline-size;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.set-row-body {
+  display: grid;
+  grid-template-areas: "media identity facts moves";
+  grid-template-columns: auto minmax(120px, 0.8fr) minmax(0, 1fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 12px 16px;
+  padding: 12px 14px;
+}
+
+.set-row-body.no-media {
+  grid-template-areas: "identity facts moves";
+  grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1fr) minmax(0, 1.3fr);
+}
+
+.set-row-media {
+  grid-area: media;
+}
+
+.set-row-identity {
+  display: grid;
+  grid-area: identity;
+  gap: 6px;
+  min-width: 0;
+}
+
+.set-row-name {
+  min-width: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.set-row-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.set-row-facts {
+  display: grid;
+  grid-area: facts;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0;
+  min-width: 0;
+}
+
+.set-row-facts dt {
+  color: var(--muted);
+  font-size: var(--type-caption);
+  font-weight: 600;
+}
+
+.set-row-facts dd {
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.common-build-fact .item-label,
+.set-row-facts .item-label {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.set-row-moves {
+  grid-area: moves;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.set-row-moves .move-chip {
+  min-height: 36px;
+}
+
+@container set-row (max-width: 640px) {
+  .set-row-body,
+  .set-row-body.no-media {
+    grid-template-areas:
+      "media identity"
+      "facts facts"
+      "moves moves";
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .set-row-body.no-media {
+    grid-template-areas:
+      "identity"
+      "facts"
+      "moves";
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Too narrow for two move columns without splitting words: chips size to their names. */
+@container set-row (max-width: 420px) {
+  .set-row-moves {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 /* ---------- Battle: layout ---------- */
@@ -4026,8 +4133,7 @@ details.builder-analysis-move > .builder-spread-grid {
   }
 
   .teams-tournament-card > summary,
-  .teams-team-card > summary,
-  .teams-pokemon-card > summary {
+  .teams-team-card > summary {
     align-items: flex-start;
     padding: 12px;
   }
@@ -4037,9 +4143,6 @@ details.builder-analysis-move > .builder-spread-grid {
     margin-left: 42px;
   }
 
-  .teams-facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
   .teams-source-row {
     align-items: flex-start;
@@ -4447,10 +4550,6 @@ textarea:focus-visible {
 
 .lookup-page .common-build-moves {
   grid-column: auto;
-}
-
-.lookup-page .common-build-move-list {
-  justify-content: flex-end;
 }
 
 .lookup-page .type-matchup-row {
@@ -4942,6 +5041,7 @@ textarea:focus-visible {
   align-content: start;
   gap: 12px;
   min-width: 0;
+  container: battle-set / inline-size;
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
@@ -5015,20 +5115,26 @@ textarea:focus-visible {
   display: none;
 }
 
+/* Set body: facts on the left, the four moves as rows on the right (the in-game set summary). */
+.battle-set-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: start;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
 .battle-set-facts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 20px;
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  gap: 10px;
 }
 
 .battle-set-facts > div {
   min-width: 0;
 }
 
-.battle-set-facts span {
+.battle-set-facts > div > span {
   display: block;
   color: var(--muted);
   font-size: var(--type-caption);
@@ -5041,6 +5147,13 @@ textarea:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.battle-set-facts .item-label {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.battle-set-facts #attacker-spread-preview,
+.battle-set-facts #defender-spread-preview,
 .battle-set-facts #attacker-speed-preview,
 .battle-set-facts #defender-speed-preview {
   font-variant-numeric: tabular-nums;
@@ -5052,10 +5165,14 @@ textarea:focus-visible {
   font-size: var(--type-caption);
 }
 
-.battle-set-moves > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+@container battle-set (max-width: 400px) {
+  .battle-set-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .battle-set-moves .set-move-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .battle-field-strip .set-summary {
@@ -5166,8 +5283,7 @@ textarea:focus-visible {
   }
 
   .battle-set-types,
-  .battle-set-facts,
-  .battle-set-moves {
+  .battle-set-body {
     display: none;
   }
 
@@ -6298,6 +6414,10 @@ textarea:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.matchups-detail-columns h4 + .set-row {
+  margin-top: 6px;
+}
+
 .matchups-inspect {
   display: flex;
   flex-wrap: wrap;
@@ -7322,11 +7442,18 @@ main > .compare-editor {
 }
 
 .compare-chip {
+  display: inline-flex;
+  align-items: center;
   padding: 3px 9px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface-soft);
   font-size: var(--text-sm);
+}
+
+.compare-chip .item-label {
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .compare-moves {

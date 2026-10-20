@@ -21,7 +21,7 @@ import { initI18n, localizedName, localizedTerm, onLocaleChange, t } from "../i1
 import { watchActiveSet } from "./active-set-sync.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs } from "./bootstrap.js";
-import { browserStorage, pokemonSpriteElements, typeBadge } from "./components.js";
+import { browserStorage, itemLabel, natureLabel, pokemonSpriteElements, typeBadge } from "./components.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
@@ -502,10 +502,14 @@ function renderSelected() {
   const text = element("div", "compare-selected-text");
   const chips = element("div", "compare-chips");
   for (const value of [
-    localizedTerm("nature", variant.side.nature),
+    variant.side.nature ? natureLabel(variant.side.nature) : "",
     variant.side.ability ? localizedName(variant.side.ability) : "",
-    variant.side.item ? localizedName(variant.side.item) : "",
-  ].filter(Boolean)) chips.append(element("span", "compare-chip", value));
+    variant.side.item ? itemLabel(variant.side.item) : "",
+  ].filter(Boolean)) {
+    const chip = element("span", "compare-chip");
+    chip.append(value);
+    chips.append(chip);
+  }
   text.append(element("strong", "", localizedName(variant.side.pokemon)), chips);
   identity.append(sprite(variant.side.pokemon, 64, "compare-selected-sprite"), text);
 
