@@ -10,8 +10,6 @@ import {
 } from "../data/catalog.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { commonTeammates, megaFamily } from "../data/pokemon.js";
-import { createThreatPreferencesStore } from "../data/threat-preferences.js";
-import { speedTierSummary, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
 import { totalBaseStats } from "../engine/stats.js";
 import { defensiveMatchups } from "../engine/type-chart.js";
@@ -79,10 +77,10 @@ const elements = {
   teammatesCard: document.querySelector("#teammates-card"),
   teammatesMeta: document.querySelector("#teammates-meta"),
   teammateList: document.querySelector("#teammate-list"),
-  speedTierCard: document.querySelector("#speed-tier-card"),
-  speedTierList: document.querySelector("#speed-tier-list"),
   spreadCount: document.querySelector("#spread-count"),
   spreadList: document.querySelector("#spread-list"),
+  ncpSetCount: document.querySelector("#ncp-set-count"),
+  ncpSetList: document.querySelector("#ncp-set-list"),
   abilityCount: document.querySelector("#ability-count"),
   abilityList: document.querySelector("#ability-list"),
   itemCount: document.querySelector("#item-count"),
@@ -100,14 +98,12 @@ let abilityLookup = new Map();
 let moveLookup = new Map();
 let itemLookup = new Map();
 let items = [];
-let threats = [];
 let selectedPokemon = null;
 let selectedFamily = [];
 let selectedMoves = [];
 let moveSort = { key: "", direction: "" };
 let catalogs = null;
 const activeSetStore = createActiveSetStore(browserStorage());
-const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 
 initI18n();
 elements.search.setAttribute("aria-autocomplete", "list");
@@ -138,10 +134,6 @@ async function initialize() {
   moveLookup = data.moveLookup;
   itemLookup = data.itemLookup;
   items = data.items;
-  threats = threatList(pokemon, {
-    count: threatPreferencesStore.readThreatCount(),
-    moveLookup,
-  });
   const activeSet = activeSetStore.readSet();
   const activePokemon = pokemon.find(({ id }) => id === activeSet?.pokemonId);
   selectPokemon(activePokemon ?? pokemon.find(({ id }) => id === "pikachu") ?? pokemon[0], {
@@ -336,7 +328,6 @@ function renderCatalog() {
   renderCommonBuild();
   renderDefensiveMatchups();
   renderTeammates();
-  renderSpeedTiers();
 
   const usage = selectedPokemon?.champions?.usage;
   const abilities = rankByUsage(resolvePokemonAbilities(selectedPokemon, abilityLookup), usage?.abilities);
@@ -350,8 +341,8 @@ function renderCatalog() {
   translateSubtree(
     elements.commonBuildCard,
     elements.typeMatchupCard,
-    elements.speedTierList,
     elements.spreadList,
+    elements.ncpSetList,
     elements.abilityList,
     elements.itemList,
     elements.moveList,
@@ -539,57 +530,33 @@ function openTeammate(entry) {
   elements.selectedName.scrollIntoView({ block: "nearest" });
 }
 
-function renderSpeedTiers() {
-  const summary = speedTierSummary(selectedPokemon, threats);
-  if (summary.length === 0) {
-    elements.speedTierCard.hidden = true;
-    elements.speedTierList.replaceChildren();
-    return;
-  }
-
-  elements.speedTierList.replaceChildren(...summary.map(speedTierRow));
-  elements.speedTierCard.hidden = false;
-}
-
-function speedTierRow(entry) {
-  const details = document.createElement("details");
-  details.className = "speed-tier-row";
-  const summary = document.createElement("summary");
-  const label = document.createElement("span");
-  label.textContent = localizedSpeedTierLabel(entry.label);
-  const speed = document.createElement("strong");
-  speed.textContent = String(entry.value);
-  const count = document.createElement("span");
-  count.textContent = t("lookup.outspeeds", { count: entry.outspeedCount, total: entry.threatCount });
-  count.title = localizedPokemonNames(entry.outspeedNames).join(", ") || t("lookup.noThreats");
-  summary.append(label, speed, count);
-
-  const names = document.createElement("p");
-  names.textContent = entry.outspeedNames.length > 0
-    ? localizedPokemonNames(entry.outspeedNames).join(" · ")
-    : t("lookup.noThreatsAtSpeed");
-  details.append(summary, names);
-  return details;
-}
-
+// Smogon ladder SP spreads and NCP curated sets are separate panels, each with its own source.
 function renderSpreads() {
   const usageSpreads = selectedPokemon?.champions?.usage?.spreads ?? [];
   const ncpSets = selectedPokemon?.champions?.ncp?.sets ?? [];
-  elements.spreadCount.textContent = String(usageSpreads.length + ncpSets.length);
+  const meta = selectedPokemon?.champions?.spreadsMeta;
+  elements.spreadCount.textContent = String(usageSpreads.length);
+  elements.spreadList.replaceChildren(...(usageSpreads.length > 0
+    ? [...usageSpreads.map(renderUsageSpreadRow), sourceLine(t("lookup.smogonSpreadSource", { month: meta?.month, cutoff: meta?.cutoff }))]
+    : [emptyCatalog(t("lookup.noSmogonSpreads"))]));
+  elements.ncpSetCount.textContent = String(ncpSets.length);
+  elements.ncpSetList.replaceChildren(...(ncpSets.length > 0
+    ? [...ncpSets.map(renderNcpSetCard), sourceLine(t("lookup.ncpSpreadSource"))]
+    : [emptyCatalog(t("lookup.noNcpSets"))]));
+}
 
-  if (usageSpreads.length === 0 && ncpSets.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "empty-catalog";
-    empty.textContent = t("lookup.noSpreads");
-    elements.spreadList.replaceChildren(empty);
-    return;
-  }
+function emptyCatalog(text) {
+  const empty = document.createElement("p");
+  empty.className = "empty-catalog";
+  empty.textContent = text;
+  return empty;
+}
 
-  elements.spreadList.replaceChildren(
-    ...usageSpreads.map(renderUsageSpreadRow),
-    ...ncpSets.map(renderNcpSetCard),
-    renderSpreadSource(usageSpreads.length > 0, ncpSets.length > 0),
-  );
+function sourceLine(text) {
+  const source = document.createElement("p");
+  source.className = "usage-source spread-source";
+  source.textContent = text;
+  return source;
 }
 
 function renderUsageSpreadRow(spread) {
@@ -606,37 +573,25 @@ function renderUsageSpreadRow(spread) {
   return row;
 }
 
-// An NCP set as a set row: ability, nature, item and spread, then its moves.
+// An NCP set as a set row: ability, nature, item and spread, then its moves. Facts the
+// setdex leaves blank (often the ability) are left out rather than shown as a dash.
 function renderNcpSetCard(set) {
   const itemEntry = set.item ? itemLookup.get(normalizeId(set.item)) : null;
   return setRow({
     className: "ncp-set-row",
     title: set.name,
     facts: [
-      [t("label.ability"), localizedCatalogValue(set.ability, abilityLookup) || "—"],
-      [t("label.nature"), set.nature ? natureLabel(set.nature) : "—"],
-      [t("label.item"), itemEntry ? itemLabel(itemEntry) : localizedCatalogValue(set.item, itemLookup) || "—"],
+      [t("label.ability"), localizedCatalogValue(set.ability, abilityLookup)],
+      [t("label.nature"), set.nature ? natureLabel(set.nature) : ""],
+      [t("label.item"), itemEntry ? itemLabel(itemEntry) : localizedCatalogValue(set.item, itemLookup)],
       // The spread name repeats the nature ("Quiet:32/0/2/32/0/0"); the Nature row already has it.
-      [t("matchups.spread"), String(set.spreadName ?? "").split(":").pop() || "—"],
-    ],
+      [t("matchups.spread"), String(set.spreadName ?? "").split(":").pop()],
+    ].filter(([, value]) => value),
     moves: set.moves.map((move) => {
       const entry = moveLookup.get(normalizeId(move));
       return moveChip(entry, { label: localizedCatalogValue(move, moveLookup) });
     }),
   });
-}
-
-function renderSpreadSource(hasUsageSpreads, hasNcpSets) {
-  const meta = selectedPokemon?.champions?.spreadsMeta;
-  const source = document.createElement("p");
-  source.className = "usage-source spread-source";
-  source.textContent = [
-    hasUsageSpreads && t("lookup.smogonSpreadSource", { month: meta?.month, cutoff: meta?.cutoff }),
-    hasNcpSets && t("lookup.ncpSpreadSource"),
-  ]
-    .filter(Boolean)
-    .join(" · ");
-  return source;
 }
 
 function renderAbilities(abilities) {
@@ -758,22 +713,9 @@ function renderMoveRow(move) {
   return row;
 }
 
-function localizedPokemonNames(names) {
-  const byName = new Map(pokemon.map((entry) => [entry.name, entry]));
-  return names.map((name) => localizedName(byName.get(name) ?? { name }));
-}
-
 function localizedCatalogValue(value, lookup) {
   if (!value) return "";
   const entry = lookup.get(String(value).toLowerCase().replace(/[^a-z0-9]/g, ""));
   return localizedName(entry ?? { name: value });
 }
 
-function localizedSpeedTierLabel(label) {
-  if (getLocale() !== "zh-TW") return label;
-  const match = /^(Max|Fast|Uninvested|Min) \(([^,]+), (\d+) SP\)$/.exec(label);
-  if (!match) return label;
-  const preset = { Max: "極速", Fast: "滿速", Uninvested: "無投資", Min: "0速" }[match[1]];
-  const nature = match[2].replace("+Spe", "+速度").replace("−Spe", "−速度").replace("neutral", "無性格修正");
-  return `${preset}（${nature}, ${match[3]} SP）`;
-}

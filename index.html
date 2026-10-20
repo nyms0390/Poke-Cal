@@ -178,26 +178,10 @@
           <section class="lookup-section" aria-labelledby="build-details-heading">
             <div class="lookup-section-heading">
               <h2 id="build-details-heading">Build details</h2>
-              <p>Available abilities, Limitless item usage, and Smogon/NCP SP spreads.</p>
+              <p>Available abilities, Limitless item usage, Smogon ladder SP spreads, and NCP curated sets.</p>
             </div>
 
             <div class="lookup-panel-grid lookup-build-grid">
-              <section id="speed-tier-card" class="catalog-panel" aria-label="Speed tiers" hidden>
-                <div class="panel-heading">
-                  <span>Speed tiers</span>
-                  <strong>Top 10 usage</strong>
-                </div>
-                <div id="speed-tier-list" class="speed-tier-list"></div>
-              </section>
-
-              <section class="catalog-panel lookup-spread-panel" aria-label="Spread source">
-                <div class="panel-heading">
-                  <span>Champions spreads</span>
-                  <strong id="spread-count">—</strong>
-                </div>
-                <div id="spread-list" class="spread-list"></div>
-              </section>
-
               <section class="catalog-panel" aria-label="Abilities">
                 <div class="panel-heading">
                   <span>Abilities</span>
@@ -206,12 +190,28 @@
                 <div id="ability-list" class="ability-list"></div>
               </section>
 
+              <section class="catalog-panel lookup-spread-panel" aria-label="Smogon spreads">
+                <div class="panel-heading">
+                  <span>Smogon spreads</span>
+                  <strong id="spread-count">—</strong>
+                </div>
+                <div id="spread-list" class="spread-list"></div>
+              </section>
+
               <section class="catalog-panel" aria-label="Items">
                 <div class="panel-heading">
                   <span>Items</span>
                   <strong id="item-count">—</strong>
                 </div>
                 <div id="item-list" class="item-list"></div>
+              </section>
+
+              <section class="catalog-panel lookup-ncp-panel" aria-label="NCP sets">
+                <div class="panel-heading">
+                  <span>NCP sets</span>
+                  <strong id="ncp-set-count">—</strong>
+                </div>
+                <div id="ncp-set-list" class="ncp-set-list"></div>
               </section>
             </div>
           </section>
