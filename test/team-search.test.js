@@ -38,6 +38,15 @@ test("matching forms and gender preserves distinct identities", () => {
   assert.deepEqual(resolveTeamQuery("Nidoran♀ + Nidoran♂", pokemon).ids, ["nidoranf", "nidoranm"]);
   assert.equal(searchTeamArchive(archive, { format: "M-C", query: "Charizard", pokemon }).teamCount, 0);
 });
+test("a Mega form matches teams that list its base species holding the stone", () => {
+  const items = [{ id: "charizarditex", name: "Charizardite X", megaStone: { Charizard: "Charizard-Mega-X" } }];
+  const listed = (item) => ({ playerName: item ?? "none", pokemon: [{ id: "charizard", name: "Charizard", item }, { id: "incineroar" }] });
+  const teams = { format: "M-C", tournaments: [{ id: "t", format: "M-C", topCut: [listed("Charizardite X"), listed("Charcoal"), listed()] }] };
+  const mega = searchTeamArchive(teams, { format: "M-C", query: "Charizard Mega X + Incineroar", pokemon, items });
+  assert.deepEqual(mega.tournaments[0].topCut.map(({ playerName }) => playerName), ["Charizardite X"]);
+  assert.equal(searchTeamArchive(teams, { format: "M-C", query: "Charizard", pokemon, items }).teamCount, 3);
+  assert.equal(searchTeamArchive(teams, { format: "M-C", query: "Charizard Mega X", pokemon }).teamCount, 0, "needs the item catalog");
+});
 test("unknown, punctuation-only and oversized queries fail instead of broadening", () => {
   assert.deepEqual(resolveTeamQuery("Incineroar + Missing", pokemon).error, { code: "unknown", terms: ["Missing"] });
   assert.equal(resolveTeamQuery("+++", pokemon).error.code, "empty");

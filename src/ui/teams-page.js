@@ -198,7 +198,7 @@ function renderPage() {
   for (const control of [elements.regulation, elements.query, elements.submit, elements.reset]) {
     control.disabled = formats.length === 0;
   }
-  const result = searchTeamArchive(archive, { format: selectedFormat, query: submittedQuery, pokemon: catalogs?.pokemon });
+  const result = searchTeamArchive(archive, { format: selectedFormat, query: submittedQuery, pokemon: catalogs?.pokemon, items: catalogs?.items });
   filteredTournaments = result.tournaments;
   const archivedCount = (archive?.tournaments ?? []).filter((tournament) =>
     (tournament.format ?? archive.format) === selectedFormat).length;

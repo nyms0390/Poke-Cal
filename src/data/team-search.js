@@ -67,18 +67,38 @@ export function resolveTeamQuery(query, pokemon = []) {
   return { ids, error, searching: Boolean(text) };
 }
 
-export function searchTeamArchive(archive, { format, query = "", pokemon = [] } = {}) {
+// Limitless lists a Mega as its base species holding the stone, so map stone + species to the form.
+function megaFormsByStone(items = []) {
+  const forms = new Map();
+  for (const item of items) {
+    for (const [species, form] of Object.entries(item?.megaStone ?? {})) {
+      for (const key of [item.id, item.name].map(normalizeId).filter(Boolean)) {
+        forms.set(`${key}|${normalizeId(species)}`, normalizeId(form));
+      }
+    }
+  }
+  return forms;
+}
+
+function submittedIds(entry, megaForms) {
+  const id = normalizeId(entry.id ?? entry.name);
+  const mega = megaForms.get(`${normalizeId(entry.item)}|${id}`);
+  return mega ? [id, mega] : [id];
+}
+
+export function searchTeamArchive(archive, { format, query = "", pokemon = [], items = [] } = {}) {
   // Historical submitted forms remain searchable even if absent from today's browser catalog.
   const historical = (archive?.tournaments ?? []).flatMap((tournament) =>
     tournament.topCut.flatMap((team) => team.pokemon ?? []));
   const resolved = resolveTeamQuery(query, [...pokemon, ...historical]);
   if (resolved.error) return { ...resolved, tournaments: [], teamCount: 0 };
+  const megaForms = megaFormsByStone(items);
   const tournaments = (archive?.tournaments ?? [])
     .filter((tournament) => (tournament.format ?? archive.format) === format && /^M-[A-Z]+$/.test(format ?? ""))
     .map((tournament) => {
       if (!resolved.searching) return tournament;
       const topCut = tournament.topCut.filter((team) => {
-        const submitted = new Set((team.pokemon ?? []).map((entry) => normalizeId(entry.id ?? entry.name)));
+        const submitted = new Set((team.pokemon ?? []).flatMap((entry) => submittedIds(entry, megaForms)));
         return resolved.ids.every((id) => submitted.has(id));
       });
       return { ...tournament, topCut };
