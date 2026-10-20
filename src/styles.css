@@ -651,6 +651,12 @@ footer {
   font-weight: 600;
 }
 
+.teams-fact .item-label,
+.teams-pokemon-summary .item-label {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .teams-moves {
   display: grid;
   gap: 7px;

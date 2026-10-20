@@ -2,7 +2,7 @@ import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { attachCombobox, moveChip, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
+import { attachCombobox, itemLabel, moveChip, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -338,7 +338,7 @@ function renderPokemon(submitted, key) {
   summary.className = "teams-pokemon-summary";
   summary.append(teamPreviewSprite(submitted, { showName: true }));
   const item = document.createElement("small");
-  item.textContent = submitted.item ? `@ ${displayCatalogValue(submitted.item, catalogs.itemLookup)}` : "";
+  item.append(itemValue(submitted.item));
   summary.append(item);
 
   return lazyDetails({
@@ -354,7 +354,7 @@ function pokemonContent(submitted) {
   content.className = "teams-pokemon-content";
   content.append(factGrid([
     [t("label.ability"), displayCatalogValue(submitted.ability, catalogs.abilityLookup)],
-    [t("label.item"), displayCatalogValue(submitted.item, catalogs.itemLookup)],
+    [t("label.item"), itemValue(submitted.item)],
     [t("label.nature"), submitted.nature ? localizedTerm("nature", submitted.nature) : ""],
     [t("teams.tera"), submitted.tera ? localizedTerm("type", submitted.tera) : t("teams.notSubmitted")],
     [t("teams.spread"), t("teams.spreadUnavailable")],
@@ -411,7 +411,7 @@ function factGrid(facts) {
     labelElement.className = "teams-fact-label";
     labelElement.textContent = label;
     const valueElement = document.createElement("strong");
-    valueElement.textContent = value || t("teams.notPublished");
+    valueElement.append(value || t("teams.notPublished"));
     fact.append(labelElement, valueElement);
     grid.append(fact);
   }
@@ -451,6 +451,13 @@ function resolvePokemon(submitted) {
     normalizeId(entry.id) === normalizeId(submitted.id)
       || normalizeId(entry.name) === normalizeId(submitted.name),
   ) ?? null;
+}
+
+// The submitted item with its sprite, as on Lookup; unknown items keep their submitted text.
+function itemValue(value) {
+  if (!value) return "";
+  const entry = catalogs.itemLookup.get(normalizeId(value));
+  return entry ? itemLabel(entry) : value;
 }
 
 function displayCatalogValue(value, lookup) {
