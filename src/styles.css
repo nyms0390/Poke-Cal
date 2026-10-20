@@ -3429,10 +3429,17 @@ details.builder-analysis-move > .builder-spread-grid {
   gap: 8px;
 }
 
+/* A long KO badge drops under the move name instead of squeezing it mid-word. */
+.builder-analysis-move-heading {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+
 .builder-analysis-move-heading strong {
+  flex: 1 1 auto;
   min-width: 0;
   font-size: var(--text-sm);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .builder-damage-range {
@@ -3467,8 +3474,9 @@ details.builder-analysis-move > .builder-spread-grid {
   align-items: center;
   width: fit-content;
   max-width: 100%;
-  border-radius: 999px;
-  padding: 3px 7px;
+  /* Pill when it fits on one line, a rounded box (not a blob) when its text wraps. */
+  border-radius: 12px;
+  padding: 3px 8px;
   background: var(--surface-tint);
   color: var(--accent-dark);
   font-size: var(--text-xs);
@@ -3530,12 +3538,17 @@ details.builder-analysis-move > .builder-spread-grid {
   background: var(--surface);
 }
 
+/* Label and damage share a line; the KO badge follows when it fits, else wraps below whole. */
 .builder-bulk-comparison-row {
-  display: grid;
-  grid-template-columns: minmax(120px, 1fr) auto auto;
-  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 6px 8px;
   padding: 8px 9px;
+}
+
+.builder-bulk-comparison-label {
+  flex: 1 1 120px;
 }
 
 .builder-bulk-comparison-row + .builder-bulk-comparison-row {
@@ -4103,10 +4116,6 @@ details.builder-analysis-move > .builder-spread-grid {
   .builder-coverage-section:not(.builder-more-detail) > .builder-coverage-heading {
     align-items: flex-start;
     flex-direction: column;
-  }
-
-  .builder-bulk-comparison-row {
-    grid-template-columns: 1fr;
   }
 
   .builder-analysis-toolbar {
@@ -6308,7 +6317,7 @@ textarea:focus-visible {
 
 .matchups-hit-move {
   font-weight: 500;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .matchups-hit-range {
