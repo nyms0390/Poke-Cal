@@ -13,6 +13,7 @@
     "test:data": "node --test test/champions-data.test.js test/data.test.js test/limitless-data.test.js test/limitless-teams.test.js test/showdown-data.test.js test/ncp-data.test.js test/smogon-data.test.js test/sync-pokemon-data.test.js test/showdown-pin.test.js test/sync-utils.test.js test/catalog-validation.test.js test/sync-fail-closed.test.js test/web-catalogs.test.js test/mcp-catalogs.test.js test/name-overrides.test.js test/usage-defaults.test.js",
     "test:damage": "node --test test/damage.test.js",
     "test:pokemon": "node --test test/pokemon.test.js",
+    "lint:design": "node scripts/lint-design.mjs",
     "sync-data": "node scripts/sync-pokemon-data.mjs",
     "sync-champions-data": "node scripts/sync-limitless-champions-usage.mjs",
     "sync-champions-spreads": "node scripts/sync-champions-spreads.mjs",

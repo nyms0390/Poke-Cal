@@ -60,6 +60,6 @@ Exercise keyboard and touch interactions where available. Viewport emulation pro
 
 Use one baseline inspection, one grouped correction pass, and one confirmation pass. If confirmation shows a concrete defect, fix it and recheck the affected scope. Do not continue adding subjective refinements once the agreed checks pass.
 
-Run the narrow relevant tests first and the full suite when shared logic or cross-page UI changes require it. Run `git diff --check`. Inspect the complete diff including untracked files. Unit tests do not replace rendered inspection.
+Run the narrow relevant tests first and the full suite when shared logic or cross-page UI changes require it. Run `npm run lint:design` (type roles, weights, font stack, color tokens, mid-word wrapping and truncation; `npm test` runs it too) and `git diff --check`. Inspect the complete diff including untracked files. Unit tests do not replace rendered inspection.
 
 Capture comparable before and after evidence when practical. The handoff states what changed, routes, locales and states verified, test results, evidence location, browser and input limitations, and remaining observed concerns. Detector output is supporting evidence, not proof of usability, accessibility, or craft.

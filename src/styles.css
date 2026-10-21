@@ -23,6 +23,7 @@
   --success: #149e61;
   --success-dark: #026b3f;
   --danger: #c23b3b;
+  --danger-dark: #a52f2f;
   --warning: #9a6700;
   /* Amber text on amber tints; --warning there measures 4.2:1. */
   --warning-dark: #7a5200;
@@ -4718,7 +4719,7 @@ textarea:focus-visible {
   border: 1px solid var(--accent);
   border-radius: var(--radius-control);
   background: var(--accent);
-  color: #ffffff;
+  color: white;
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
@@ -7621,7 +7622,7 @@ main > .compare-editor {
 
 .compare-outcome.loss {
   background: rgb(194 59 59 / 11%);
-  color: #a52f2f;
+  color: var(--danger-dark);
 }
 
 .compare-outcome.speed {
@@ -7636,7 +7637,7 @@ main > .compare-editor {
 }
 
 .compare-shift {
-  font-size: 0.7rem;
+  font-size: var(--type-caption);
 }
 
 .compare-shift.better {

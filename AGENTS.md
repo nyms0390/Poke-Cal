@@ -22,6 +22,7 @@ npm run test:catalog           # battle-state, catalog, identifiers, pokemon, st
 npm run test:data              # sync/parser/merge/data-loading tests, incl. NCP, sync utilities, validation, fail-closed syncs, web catalogs
 npm run test:damage            # test/damage.test.js only
 npm run test:pokemon           # test/pokemon.test.js only
+npm run lint:design            # static DESIGN.md checks on styles.css/HTML/JS against scripts/design-lint-baseline.json (also run by npm test; -- --all lists known violations, -- --update-baseline after fixing some)
 npm run sync-data              # regenerate public/*.json (Showdown incl. Champions mod at the pinned commit + PokeAPI, needs internet)
 npm run sync-champions-data    # overlay Limitless Champions usage (run sync-data first)
 npm run sync-champions-spreads # overlay Smogon ladder SP spreads (run sync-champions-data first)
