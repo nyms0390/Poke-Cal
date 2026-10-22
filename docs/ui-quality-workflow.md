@@ -1,6 +1,6 @@
 # PokéCal UI quality workflow
 
-Use this workflow for UI audits, cleanup, and refinement. It is the authoritative project policy for UI quality; `DESIGN.md` records the incumbent product and design decisions that the workflow preserves.
+Use this workflow for UI audits, cleanup, and refinement. It is the authoritative project policy for UI quality; `DESIGN.md` records the incumbent design system and `docs/DECISIONS.md` the product and design decisions that the workflow preserves.
 
 ## Guidance and precedence
 
@@ -21,7 +21,7 @@ A cleanup request authorizes finding and fixing demonstrated issues and repeated
 
 ## Inspect and inventory
 
-Before editing, read `AGENTS.md`, `DESIGN.md`, this file, the target HTML and controller, `src/ui/components.js`, and `src/styles.css`. Check `git status --short` and preserve unrelated changes. `docs/design-references/kraken/DESIGN.md` is historical inspiration, not an accessibility specification or a source of required fonts and measurements.
+Before editing, read `AGENTS.md`, `DESIGN.md`, this file, the target HTML and controller, `src/ui/components.js`, and `src/styles.css`. Check `git status --short` and preserve unrelated changes.
 
 Run the application and use the interface before judging it. For a whole-app cleanup, inspect all eight routes:
 

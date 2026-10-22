@@ -102,7 +102,7 @@ PokéCal/
 ├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
 ├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
 ├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions
-└── ROADMAP.md                  # Completed implementation roadmap
+└── docs/                       # DECISIONS.md (owner decisions), ui-quality-workflow.md, ROADMAP.md (completed roadmap), move-conditions.md
 ```
 
 ## Requirements
@@ -256,4 +256,4 @@ npm run test:pokemon     # pokemon only
 
 The accuracy record for the battle calculator is the `@smogon/calc` reference suite, not a separate checklist: `test/damage-reference.test.js` compares all 16 damage rolls of about 280 scenarios against `test/fixtures/damage-reference.json`, which is generated from `@smogon/calc` (Gen 9 rules, level 50, SP `s` = EV `min(252, 8s)`). The app and tests stay dependency-free; to add scenarios, run `npm install --no-save @smogon/calc@0.12.0 && node scripts/dev/generate-damage-reference.mjs` and commit the regenerated fixture. `test/speed-reference.test.js` does the same for final Speed against `test/fixtures/speed-reference.json` (`@smogon/calc` `getFinalSpeed`; regenerate with `node scripts/dev/generate-speed-reference.mjs`).
 
-No linter is configured. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the eight pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).
+`npm run lint:design` (also run by `npm test`) checks styles against `DESIGN.md`. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the eight pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).

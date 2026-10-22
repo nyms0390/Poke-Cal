@@ -4590,7 +4590,7 @@ test("formats unsupported damage results with their specific reason", () => {
 });
 
 // -- P1-01 field UI golden checks --------------------------------------------------------------
-// Hand-computed against the pipeline documented in ROADMAP.md ("Damage pipeline order"), not the
+// Hand-computed against the pipeline documented in docs/ROADMAP.md ("Damage pipeline order"), not the
 // NCP calculator, since these fixtures use round base stats chosen to keep the arithmetic exact.
 
 test("golden: Charizard Weather Ball gets the Fire type, the power double, and the sun damage boost", () => {
@@ -4860,7 +4860,7 @@ test("golden: Grassy Terrain halves Earthquake and Bulldoze into grounded target
 });
 
 // -- P1-02 side conditions ---------------------------------------------------------------------
-// Hand-computed against the pipeline documented in ROADMAP.md steps 1 (power modifiers) and 12
+// Hand-computed against the pipeline documented in docs/ROADMAP.md steps 1 (power modifiers) and 12
 // (final modifiers). Shared fixtures: a 100/100/100/100/100/50 Normal-type attacker/defender pair
 // (both physical and special variants) so STAB always applies and the base damage is a round 46
 // with no field conditions, matching the terrain golden tests above.

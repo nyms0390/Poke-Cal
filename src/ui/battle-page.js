@@ -234,7 +234,7 @@ function neutralFieldSidePanel() {
   };
 }
 
-// Module-level field selections (ROADMAP.md P1-01 step 2) — kept separate from damageState so
+// Module-level field selections (docs/ROADMAP.md P1-01 step 2) — kept separate from damageState so
 // switching either side's Pokémon never resets weather/terrain/format/gravity/Trick Room.
 // attackerSide/defenderSide (P1-02) are keyed by physical field side ("Attacker's side"/
 // "Defender's side" panels), not by calculation direction — buildCalcInput derives both

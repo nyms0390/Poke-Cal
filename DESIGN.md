@@ -6,7 +6,7 @@ PokéCal is a frequently used competitive Pokémon analysis tool. The interface 
 
 The visual direction is calm, precise, compact, readable, and consistent. All eight routes share the lookup page's slim brand and navigation header, white working surfaces, quiet dividers, and sparse elevation. Deep teal marks interaction; Pokémon sprites, type colors, move-category marks, and aligned battle data provide the domain character. Avoid generic dashboard styling, decorative gradients, glow, and ornamental icon tiles.
 
-PokéCal uses the system font stack already declared in `src/styles.css`. Do not introduce proprietary or downloaded fonts. The historic Kraken reference in `docs/design-references/kraken/` is visual inspiration only; PokéCal owns the decisions in this file.
+PokéCal uses the system font stack already declared in `src/styles.css`. Do not introduce proprietary or downloaded fonts.
 
 ## Tokens and roles
 

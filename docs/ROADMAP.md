@@ -44,6 +44,8 @@ finished product.
 
 ## Hard constraints (never violate)
 
+These constraints are now kept current in [DECISIONS.md](DECISIONS.md) "Architecture and constraints"; this list is the roadmap-era record.
+
 - **No build step, no npm dependencies.** Plain ES modules served statically. Tests run with
   `node --test`. Deployment is GitHub Pages serving a staged copy of the browser files
   (`npm run stage-site`: pages, `src/`, `public/icons/`, and the generated `public/web/` catalogs).

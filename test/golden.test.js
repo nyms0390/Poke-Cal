@@ -176,7 +176,7 @@ const p2State = {
 };
 const oneHpState = { ...p2State, currentHpFraction: 1 / 175 };
 
-// Phase 2 hand-calculated cases use the documented level-50 pipeline in ROADMAP.md:
+// Phase 2 hand-calculated cases use the documented level-50 pipeline in docs/ROADMAP.md:
 // floor at base damage, random roll, STAB/type, then final modifiers. Each comment names the
 // task and the mechanic that changes the otherwise-neutral 120-vs-120 stat matchup.
 const P2_GOLDEN_CASES = [

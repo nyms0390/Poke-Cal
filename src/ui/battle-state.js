@@ -1,5 +1,5 @@
 // Pure battle-page state helpers — no DOM. battle-page.js does DOM reads, calls these, then
-// writes the result back to the DOM. See ROADMAP.md "Side state (per Pokémon)" for the shape.
+// writes the result back to the DOM. See docs/ROADMAP.md "Side state (per Pokémon)" for the shape.
 import { createField } from "../engine/field.js";
 import { normalizeId } from "../identifiers.js";
 import { parseUsageSpread } from "../data/usage-defaults.js";
