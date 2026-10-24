@@ -24,6 +24,8 @@
 //                                                     read move.damage, not a moveId)
 //   recalculatesFixedDamage -> boolean                (fixed damage changes with remaining HP)
 //   offensiveStat(ctx) -> "atk" | "spa"              (Photon Geyser)
+//   chargeBoosts      -> { [stat]: number }          (stat stages the user gains before the hit,
+//                                                     e.g. Electro Shot's charge-turn +1 SpA)
 
 import { normalizeId } from "../identifiers.js";
 import { isGrounded } from "./field.js";
@@ -266,6 +268,11 @@ export const MOVE_EFFECTS = {
   // -- sun/rain-halved charge moves ---------------------------------------
   solarbeam: { basePower: solarPowerHandler },
   solarblade: { basePower: solarPowerHandler },
+
+  // -- charge moves that boost the user before hitting (Showdown onTryMove), also when the
+  //    charge is skipped (Electro Shot in rain, Power Herb) --
+  electroshot: { chargeBoosts: { spa: 1 } },
+  meteorbeam: { chargeBoosts: { spa: 1 } },
 
   // -- pledge combo: forced 150 power (STAB is handled separately in damage.js) --
   firepledge: { basePower: pledgePowerHandler },

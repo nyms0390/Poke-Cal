@@ -238,3 +238,36 @@ test("Sturdy survival reports a guaranteed 2HKO in ko.chances", () => {
   assert.equal(result.ko.hits, null);
   assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
 });
+
+test("Electro Shot and Meteor Beam raise the user's SpA by 1 before hitting", () => {
+  const archaludon = { id: "archaludon", name: "Archaludon", types: ["Steel", "Dragon"], baseStats: { hp: 90, atk: 105, def: 130, spa: 125, spd: 65, spe: 85 } };
+  const electroShot = { id: "electroshot", name: "Electro Shot", type: "Electric", category: "Special", basePower: 130, target: "normal", flags: { charge: 1 } };
+  const thunderbolt = { ...electroShot, id: "thunderbolt", name: "Thunderbolt", flags: {} };
+  const meteorBeam = { id: "meteorbeam", name: "Meteor Beam", type: "Rock", category: "Special", basePower: 120, target: "normal", flags: { charge: 1 } };
+  const modest = (extra = {}) => ({ nature: "Modest", sp: { spa: 32 }, stages: {}, ability: null, item: null, ...extra });
+  const calc = (move, attackerState, extra = {}) => calculateDamage({ attacker: archaludon, defender: corviknight, move, attackerState, defenderState: bulky(), field: singles, ...extra });
+
+  const shot = calc(electroShot, modest());
+  const boostedBolt = calc(thunderbolt, modest({ stages: { spa: 1 } }));
+  assert.deepEqual(shot.rolls, boostedBolt.rolls);
+  assert.equal(shot.notes.includes("+1 SpA from the charge turn"), true);
+  // The boost also applies in rain, where the charge turn is skipped.
+  const rain = createField({ format: "singles", weather: "RainDance" });
+  assert.deepEqual(calc(electroShot, modest(), { field: rain }).rolls, calc(thunderbolt, modest({ stages: { spa: 1 } }), { field: rain }).rolls);
+  // Stacks with existing boosts and caps at +6.
+  assert.deepEqual(calc(electroShot, modest({ stages: { spa: 2 } })).rolls, calc(thunderbolt, modest({ stages: { spa: 3 } })).rolls);
+  const capped = calc(electroShot, modest({ stages: { spa: 6 } }));
+  assert.deepEqual(capped.rolls, calc(thunderbolt, modest({ stages: { spa: 6 } })).rolls);
+  assert.equal(capped.notes.some((note) => note.includes("charge turn")), false);
+  // Simple doubles and Contrary inverts the boost.
+  assert.deepEqual(calc(electroShot, modest({ ability: { id: "simple", name: "Simple" } })).rolls, calc(thunderbolt, modest({ stages: { spa: 2 } })).rolls);
+  assert.deepEqual(calc(electroShot, modest({ ability: { id: "contrary", name: "Contrary" } })).rolls, calc(thunderbolt, modest({ stages: { spa: -1 } })).rolls);
+  // The target's Unaware ignores it.
+  assert.deepEqual(
+    calc(electroShot, modest(), { defenderState: bulky({ ability: { id: "unaware", name: "Unaware" } }) }).rolls,
+    calc(thunderbolt, modest(), { defenderState: bulky({ ability: { id: "unaware", name: "Unaware" } }) }).rolls,
+  );
+
+  const beam = calc({ ...meteorBeam }, modest());
+  assert.deepEqual(beam.rolls, calc({ ...meteorBeam, id: "powergem", name: "Power Gem", flags: {} }, modest({ stages: { spa: 1 } })).rolls);
+});

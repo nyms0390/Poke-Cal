@@ -219,6 +219,12 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     const variableHits = /^ hits (\d+)-(\d+) times$/.exec(suffix);
     if (variableHits) return `${moveName}攻擊 ${variableHits[1]}-${variableHits[2]} 次`;
   }
+  const chargeBoost = /^(.+) from the charge turn$/.exec(note);
+  if (chargeBoost) {
+    const statLabels = { Atk: "攻擊", Def: "防禦", SpA: "特攻", SpD: "特防", Spe: "速度" };
+    const changes = chargeBoost[1].split(" / ").map((change) => change.replace(/ (\w+)$/, (_, stat) => ` ${statLabels[stat] ?? stat}`).replace(/^([+-]\d+) (.+)$/, "$2 $1"));
+    return `蓄力回合${changes.join("／")}`;
+  }
   const spTotal = /^(Attacker|Defender) SP total (\d+) exceeds (\d+)$/.exec(note);
   if (spTotal) return `${spTotal[1] === "Attacker" ? "攻擊方" : "防守方"} SP 總和 ${spTotal[2]} 超過 ${spTotal[3]}`;
   const teraFloor = /^Tera (.+) raises (.+) to 60 power$/.exec(note);
