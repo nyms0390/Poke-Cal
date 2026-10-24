@@ -21,6 +21,7 @@ import {
   isActiveSetUnconsumed,
 } from "../data/active-set.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
+import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import {
@@ -88,6 +89,7 @@ import {
   createAmbientFieldState,
 } from "./field-state.js";
 import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "./battle-results.js";
+import { MEMBER_QUERY_PARAM, TEAM_QUERY_PARAM, teamMemberSprite } from "./my-teams-ui.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -165,6 +167,11 @@ const elements = {
   damageCount: document.querySelector("#damage-count"),
   damageList: document.querySelector("#damage-list"),
   status: document.querySelector("#status"),
+  teamSelect: document.querySelector("#battle-team-select"),
+  teamMembers: document.querySelector("#battle-team-members"),
+  teamSave: document.querySelector("#battle-team-save"),
+  teamStatus: document.querySelector("#battle-team-status"),
+  teamTargets: [...document.querySelectorAll('input[name="battle-team-target"]')],
 };
 
 const setPreviews = Object.fromEntries(["attacker", "defender"].map((side) => [side, {
@@ -181,6 +188,9 @@ const setPreviews = Object.fromEntries(["attacker", "defender"].map((side) => [s
 const SP_STATS = STAT_KEYS;
 const savedSetStore = createSavedSetStore(browserStorage());
 const activeSetStore = createActiveSetStore(browserStorage());
+// The user's own saved teams (My teams), shown in the team strip above the set cards. Battle's
+// six working slots per side (`teamStore` below) stay its own calc state.
+const myTeamStore = createMyTeamStore(browserStorage());
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
 const teamStore = createStorageStore(browserStorage(), {
   key: TEAM_STORAGE_KEY,
@@ -297,6 +307,7 @@ onLocaleChange(() => {
   if (pokemon.length === 0) return;
   elements.status.textContent = catalogLoadedStatus({ pokemon, abilities, moves });
   renderDamageShell();
+  renderTeamStrip();
 });
 
 async function initialize() {
@@ -315,6 +326,8 @@ async function initialize() {
   moves = data.moves;
   const storedTeams = loadStoredTeams();
   teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
+  const requestedTeamId = new URLSearchParams(globalThis.location?.search ?? "").get(TEAM_QUERY_PARAM);
+  const requestedMember = Number(new URLSearchParams(globalThis.location?.search ?? "").get(MEMBER_QUERY_PARAM));
   const requestedLeftId = new URLSearchParams(globalThis.location?.search ?? "").get("left");
   const requestedLeft = findPokemon(requestedLeftId);
   const activeEntry = activeSetStore.readEntry();
@@ -328,6 +341,19 @@ async function initialize() {
   markActiveSetConsumed(activeEntry.revision);
   removeConsumedUrlParams();
   renderDamageShell({ incoming, incomingSet });
+  // My teams' "Calc in Battle" links here with the member to load as the attacker.
+  const requestedTeam = requestedTeamId ? myTeamStore.getTeam(requestedTeamId) : null;
+  if (requestedTeam) myTeamStore.selectTeam(requestedTeam.id);
+  renderTeamStrip();
+  if (requestedTeam) loadTeamMember(requestedTeam, requestedMember, "attacker");
+  else if (requestedTeamId) elements.teamStatus.textContent = t("myTeams.memberMissing");
+  // Back from My teams, or an edit in another tab, refreshes the strip.
+  globalThis.addEventListener?.("pageshow", (event) => {
+    if (event.persisted) renderTeamStrip();
+  });
+  globalThis.addEventListener?.("storage", (event) => {
+    if (event.key === MY_TEAMS_STORAGE_KEY) renderTeamStrip();
+  });
   // Battle keeps its own team copies, so it takes a hand-off only when shown again by Back /
   // Forward (as a fresh load would), never from a background tab: placing a Pokémon already on
   // the team writes Battle's copy to the shared set, which would undo edits made elsewhere.
@@ -399,6 +425,13 @@ for (const control of elements.assumptionInputs) {
 }
 
 elements.swapSides.addEventListener("click", swapSides);
+elements.teamSelect.addEventListener("input", () => {
+  myTeamStore.selectTeam(elements.teamSelect.value);
+  elements.teamStatus.textContent = "";
+  renderTeamStrip();
+});
+for (const target of elements.teamTargets) target.addEventListener("input", renderTeamStrip);
+elements.teamSave.addEventListener("click", saveSideToTeam);
 document.addEventListener("keydown", handleKeyboardControl);
 
 elements.importAttackerSet.addEventListener("click", () => importSetPaste("attacker"));
@@ -1632,6 +1665,115 @@ function renderSheetSummaries() {
     return chip;
   }));
   sheetBar.setNames([...names, ""]);
+  syncTeamStripSides();
+}
+
+// ---------- My teams strip ----------
+
+function teamTargetSide() {
+  return elements.teamTargets.find((input) => input.checked)?.value === "defender" ? "defender" : "attacker";
+}
+
+function teamSideLabel(side) {
+  return t(side === "defender" ? "myTeams.sideDefender" : "myTeams.sideAttacker");
+}
+
+function renderTeamStrip() {
+  if (pokemon.length === 0) return;
+  const savedTeams = myTeamStore.listTeams();
+  const team = myTeamStore.selectedTeam();
+  const side = teamTargetSide();
+  elements.teamSelect.replaceChildren(...(savedTeams.length > 0
+    ? savedTeams.map((entry) => optionElement(entry.id, entry.name))
+    : [optionElement("", t("myTeams.emptyList"))]));
+  elements.teamSelect.value = team?.id ?? "";
+  elements.teamSelect.disabled = savedTeams.length === 0;
+  elements.teamSave.textContent = t(team ? "myTeams.saveSide" : "myTeams.saveSideNew", { side: teamSideLabel(side) });
+
+  if (!team || team.members.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "battle-team-empty";
+    empty.textContent = t(team ? "myTeams.emptyTeam" : "myTeams.stripEmpty");
+    elements.teamMembers.replaceChildren(empty);
+    return;
+  }
+  elements.teamMembers.replaceChildren(...parseTeamMembers(team, setPasteCatalogs()).map(({ parsed }, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "battle-team-member";
+    button.dataset.pokemonId = normalizeDamageId(parsed.pokemon?.id);
+    button.disabled = !parsed.pokemon;
+    const name = parsed.pokemon ? localizedName(parsed.pokemon) : t("myTeams.unknownPokemon");
+    button.setAttribute("aria-label", t("myTeams.loadMember", { name, side: teamSideLabel(side) }));
+    const sprite = teamMemberSprite(parsed.pokemon, { size: 40 });
+    sprite.setAttribute("aria-hidden", "true");
+    const label = document.createElement("span");
+    label.className = "battle-team-member-name";
+    label.textContent = name;
+    const badge = document.createElement("span");
+    badge.className = "battle-team-member-side";
+    badge.setAttribute("aria-hidden", "true");
+    button.append(sprite, label, badge);
+    button.addEventListener("click", () => loadTeamMember(myTeamStore.getTeam(team.id), index, teamTargetSide()));
+    return button;
+  }));
+  syncTeamStripSides();
+}
+
+// Marks the members currently loaded on each side (by species).
+function syncTeamStripSides() {
+  const loaded = {
+    attacker: normalizeDamageId(damageState.attacker?.pokemon?.id),
+    defender: normalizeDamageId(damageState.defender?.pokemon?.id),
+  };
+  for (const button of elements.teamMembers.querySelectorAll(".battle-team-member")) {
+    const sides = ["attacker", "defender"].filter((side) => loaded[side] && loaded[side] === button.dataset.pokemonId);
+    button.classList.toggle("on-attacker", sides.includes("attacker"));
+    button.classList.toggle("on-defender", sides.includes("defender"));
+    button.querySelector(".battle-team-member-side").textContent = sides
+      .map((side) => t(side === "attacker" ? "sheet.attacker" : "sheet.defender"))
+      .join(" · ");
+  }
+}
+
+// Loads a saved member into a side, replacing what that side holds (by owner decision, without
+// asking), the same way Battle's set import does.
+function loadTeamMember(team, index, side) {
+  const member = team ? parseTeamMembers(team, setPasteCatalogs())[index] : null;
+  if (!member?.parsed.pokemon) {
+    elements.teamStatus.textContent = t("myTeams.memberMissing");
+    return;
+  }
+  applyParsedSet(side, member.parsed);
+  setSetPasteStatus(member.parsed.warnings);
+  elements.teamStatus.textContent = t("myTeams.loaded", { name: localizedName(member.parsed.pokemon), team: team.name });
+  syncTeamStripSides();
+}
+
+// Saves the chosen side's set into the selected team: over the member of the same species, else
+// into a free place; with no saved team yet, it starts one.
+function saveSideToTeam() {
+  const side = teamTargetSide();
+  const state = damageState[side];
+  if (!state?.pokemon) return;
+  const text = formatSetPaste(state, { moves: damageMovesForSide(side) });
+  const name = localizedName(state.pokemon);
+  const team = myTeamStore.selectedTeam();
+  if (!team) {
+    const created = myTeamStore.createTeam({ name: t("myTeams.defaultName", { number: 1 }), members: [text] });
+    elements.teamStatus.textContent = t("myTeams.added", { name, team: created.name });
+    renderTeamStrip();
+    return;
+  }
+  const memberIds = parseTeamMembers(team, setPasteCatalogs()).map(({ parsed }) => parsed.pokemon?.id ?? "");
+  const { outcome, index } = memberSlotFor(memberIds, state.pokemon.id);
+  if (outcome === "full") {
+    elements.teamStatus.textContent = t("myTeams.teamFull", { team: team.name });
+    return;
+  }
+  myTeamStore.setMember(team.id, index, text);
+  elements.teamStatus.textContent = t(outcome === "replaced" ? "myTeams.replaced" : "myTeams.added", { name, team: team.name });
+  renderTeamStrip();
 }
 
 function normalizeDamageId(value) {

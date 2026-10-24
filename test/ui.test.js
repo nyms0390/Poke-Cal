@@ -1053,14 +1053,14 @@ test("standalone moves page sorts the catalog table with the same header buttons
 });
 
 test("all pages expose the Moves navigation link", () => {
-  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "my-teams.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     assert.match(html, /<a href="\.\/moves\.html">Moves<\/a>/, page);
   }
 });
 
 test("all pages place Moves in the second navigation slot", () => {
-  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "moves.html"]) {
+  for (const page of ["index.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "my-teams.html", "moves.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
     assert.deepEqual(
@@ -1072,7 +1072,7 @@ test("all pages place Moves in the second navigation slot", () => {
 });
 
 test("every page links Matchups right after Builder, and Matchups marks itself current", () => {
-  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "my-teams.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
     const links = [...nav.matchAll(/<a(?: class="active")? href="([^"]+)"(?: aria-current="page")?>([^<]+)<\/a>/g)]
@@ -1087,7 +1087,7 @@ test("every page links Matchups right after Builder, and Matchups marks itself c
 });
 
 test("every page orders the nav as the tuning flow: Speed Tiers, Builder, Matchups", () => {
-  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html"]) {
+  for (const page of ["index.html", "moves.html", "battle.html", "builder.html", "matchups.html", "speed.html", "teams.html", "my-teams.html"]) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), "utf8");
     const nav = html.match(/<nav class="page-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
     const links = [...nav.matchAll(/<a(?: class="active")? href="([^"]+)"(?: aria-current="page")?>([^<]+)<\/a>/g)]
@@ -1101,6 +1101,29 @@ test("every page orders the nav as the tuning flow: Speed Tiers, Builder, Matchu
       "./matchups.html",
       "./teams.html",
     ], page);
+  }
+});
+
+test("Teams and My teams share one view switch, and Battle shows the saved-team strip", () => {
+  const teams = readFileSync(new URL("../teams.html", import.meta.url), "utf8");
+  const mine = readFileSync(new URL("../my-teams.html", import.meta.url), "utf8");
+  for (const [html, current] of [[teams, "teams"], [mine, "my-teams"]]) {
+    assert.match(html, /<h1[^>]*>[^<]*<\/h1>\s*<p class="intro"[^>]*>[^<]*<\/p>\s*<nav class="view-switch"/);
+    assert.match(html, new RegExp(`<a href="\\./${current}\\.html" aria-current="page"`));
+    assert.match(html, /<a class="active" href="\.\/teams\.html" aria-current="page">Teams<\/a>/);
+  }
+  assert.match(mine, /<script type="module" src="\.\/src\/ui\/my-teams-page\.js"><\/script>/);
+  // Members are added and edited in the shared set editor, opened in a dialog.
+  const controller = readFileSync(new URL("../src/ui/my-teams-page.js", import.meta.url), "utf8");
+  assert.match(controller, /mountSetEditor\(document\.querySelector\("#my-teams-set-editor"\)/);
+  assert.match(controller, /classList\.add\("editor-dialog"\)/);
+  for (const id of ["my-teams-list", "my-teams-members", "my-teams-dialog", "my-teams-paste", "my-teams-add", "my-teams-set-editor"]) {
+    assert.match(mine, new RegExp(`id="${id}"`), id);
+  }
+  const battle = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
+  assert.ok(battle.indexOf('class="battle-team-strip"') < battle.indexOf('class="battle-pairing"'));
+  for (const id of ["battle-team-select", "battle-team-members", "battle-team-save"]) {
+    assert.match(battle, new RegExp(`id="${id}"`), id);
   }
 });
 

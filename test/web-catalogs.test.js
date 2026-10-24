@@ -104,6 +104,7 @@ test("stages only the browser site for GitHub Pages", async () => {
       "index.html",
       "matchups.html",
       "moves.html",
+      "my-teams.html",
       "speed.html",
       "teams.html",
     ]);
