@@ -17,6 +17,7 @@ import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 import { isGuaranteedCritical } from "./critical.js";
 
 const SP_TOTAL_LIMIT = 66;
+const STAT_LABELS = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
 const DAMAGE_ROLLS = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const SPREAD_MOVE_TARGETS = new Set(["allAdjacent", "allAdjacentFoes"]);
 const SPREAD_MODIFIER = 3072;
@@ -178,6 +179,8 @@ function calculateDamageUnchecked({
   const suppressDefenderAbility = neutralizingGasActive || abilityBroken;
   attackerState = normalizeStatusForAbility(attackerState, suppressAttackerAbility);
   defenderState = normalizeStatusForAbility(defenderState, suppressDefenderAbility);
+  const chargeBoost = applyChargeBoosts(move, attackerState, suppressAttackerAbility);
+  attackerState = chargeBoost.state;
   const weatherSuppressed = !neutralizingGasActive && (
     hasAnyAbility(attackerState, ["cloudnine", "airlock"]) ||
     hasAnyAbility(defenderState, ["cloudnine", "airlock"])
@@ -368,6 +371,7 @@ function calculateDamageUnchecked({
     ...teraNotes(attackerState, defenderState),
     attackerTypeChange.note,
   ];
+  if (chargeBoost.note) notes.push(chargeBoost.note);
   if (iceFaceActive) notes.push("Ice Face intact (first hit negated)");
   if (megaSolActive) notes.push("Mega Sol treats this move as Sunny Day");
   if (teraShell !== null) notes.push("Tera Shell");
@@ -960,6 +964,25 @@ function hasAbility(state, abilityId) {
 function hasAnyAbility(state, abilityIds) {
   const ability = normalizeId(state.ability?.id ?? state.ability?.name);
   return abilityIds.includes(ability);
+}
+
+// Electro Shot / Meteor Beam raise the user's stats before the hit, through Simple and Contrary.
+function applyChargeBoosts(move, state, suppressed) {
+  const boosts = moveEffect(normalizeId(move.id ?? move.name)).chargeBoosts;
+  if (!boosts) return { state, note: null };
+  const multiplier = suppressed ? 1 : hasAbility(state, "contrary") ? -1 : hasAbility(state, "simple") ? 2 : 1;
+  const stages = { ...(state.stages ?? {}) };
+  const changes = [];
+  for (const [stat, amount] of Object.entries(boosts)) {
+    const before = normalizeStage(stages[stat]);
+    const after = Math.max(-6, Math.min(6, before + amount * multiplier));
+    stages[stat] = after;
+    if (after !== before) changes.push(`${after > before ? "+" : ""}${after - before} ${STAT_LABELS[stat]}`);
+  }
+  return {
+    state: { ...state, stages },
+    note: changes.length ? `${changes.join(" / ")} from the charge turn` : null,
+  };
 }
 
 function normalizeStatusForAbility(state, suppressed) {
