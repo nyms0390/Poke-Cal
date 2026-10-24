@@ -1,16 +1,21 @@
 import {
   TEAM_MEMBER_LIMIT,
+  applyParsedMember,
   createMyTeamStore,
   formatTeamPaste,
   parseTeamMembers,
   splitTeamPaste,
 } from "../data/my-teams.js";
-import { parseSetPaste } from "../data/set-paste.js";
+import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
+import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { formatSetWarning } from "../i18n-formatters.js";
 import { getLocale, initI18n, localizedName, onLocaleChange, t, translateSubtree } from "../i18n.js";
+import { applyControl, createSideState } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
 import { browserStorage } from "./components.js";
 import { memberSetRow, teamMemberSprites, teamMemberBattleHref } from "./my-teams-ui.js";
+import { mountSetEditor } from "./set-editor.js";
+import { mountSetSheet } from "./set-sheet.js";
 
 const elements = {
   status: document.querySelector("#status"),
@@ -21,6 +26,7 @@ const elements = {
   meta: document.querySelector("#my-teams-meta"),
   actions: document.querySelector("#my-teams-actions"),
   open: document.querySelector("#my-teams-open"),
+  add: document.querySelector("#my-teams-add"),
   edit: document.querySelector("#my-teams-edit"),
   copy: document.querySelector("#my-teams-copy"),
   remove: document.querySelector("#my-teams-delete"),
@@ -40,6 +46,40 @@ const store = createMyTeamStore(browserStorage());
 let catalogs = null;
 // The team the dialog edits, or null while it creates a new team.
 let editingId = null;
+// The member open in the set editor: its team, its place (the member count when adding) and
+// the side state being edited. Only "Save to team" writes it back; closing discards it.
+let member = null;
+let saveMemberOnClose = false;
+
+const setEditor = mountSetEditor(document.querySelector("#my-teams-set-editor"), {
+  prefix: "my-teams",
+  getCatalogs: () => catalogs,
+  getSetup: () => member?.side,
+  onPokemonSelect: (pokemon) => {
+    member = { ...member, side: seededSide(pokemon) };
+    setEditor.renderOptions();
+  },
+  onControl: (control) => {
+    member = { ...member, side: applyControl(member.side, control) };
+  },
+});
+const memberSheet = mountSetSheet({
+  editor: document.querySelector("#my-teams-editor"),
+  id: "my-teams-member-sheet",
+  titleKey: "myTeams.editorTitle",
+  doneKey: "myTeams.saveMember",
+  media: "(min-width: 0px)",
+  onClose: () => {
+    if (saveMemberOnClose) saveMember();
+    saveMemberOnClose = false;
+    member = null;
+  },
+});
+memberSheet.element.classList.add("editor-dialog");
+// The sheet closes itself on Done first; this listener runs before its close event.
+memberSheet.element.querySelector(".set-sheet-done").addEventListener("click", () => {
+  saveMemberOnClose = true;
+});
 
 initI18n();
 initialize();
@@ -49,10 +89,15 @@ onLocaleChange(() => {
   elements.status.textContent = catalogLoadedStatus(catalogs);
   render();
   if (elements.dialog.open) renderParse();
+  if (member) setEditor.renderOptions();
 });
 
 elements.newTeam.addEventListener("click", () => openDialog(null));
 elements.edit.addEventListener("click", () => openDialog(store.selectedTeam()));
+elements.add.addEventListener("click", () => {
+  const team = store.selectedTeam();
+  if (team) openMemberEditor(team, team.members.length);
+});
 elements.copy.addEventListener("click", copySelectedTeam);
 elements.remove.addEventListener("click", deleteSelectedTeam);
 elements.open.addEventListener("click", () => {
@@ -110,6 +155,7 @@ function teamListButton(team, selected) {
 
 function renderDetail(team) {
   for (const control of [elements.edit, elements.copy, elements.remove]) control.disabled = !team;
+  elements.add.disabled = !team || team.members.length >= TEAM_MEMBER_LIMIT;
   elements.open.hidden = !team || team.members.length === 0;
   if (!team) {
     elements.name.textContent = t("myTeams.noTeams");
@@ -137,6 +183,13 @@ function memberRow(team, member, index) {
   actions.className = "my-teams-member-actions";
   const pokemonName = member.parsed.pokemon ? localizedName(member.parsed.pokemon) : t("myTeams.unknownPokemon");
   if (member.parsed.pokemon) {
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "team-action";
+    edit.textContent = t("myTeams.editMember");
+    edit.setAttribute("aria-label", t("myTeams.editMemberLabel", { name: pokemonName }));
+    edit.addEventListener("click", () => openMemberEditor(team, index));
+    actions.append(edit);
     const calc = document.createElement("a");
     calc.className = "team-action";
     calc.href = teamMemberBattleHref(team.id, index);
@@ -157,6 +210,50 @@ function memberRow(team, member, index) {
   actions.append(remove);
   row.append(actions);
   return row;
+}
+
+// A Pokémon's usage-based defaults, as Battle and Matchups seed a newly picked Pokémon.
+function seededSide(pokemon) {
+  return createSideState(pokemon, championsDefaultsForPokemon(pokemon, {
+    abilityLookup: catalogs.abilityLookup,
+    moveLookup: catalogs.moveLookup,
+    items: catalogs.items,
+  }));
+}
+
+// Opens the shared set editor on member `index` of `team`, or on a new member when `index` is
+// the member count (seeded with the most used Pokémon not on the team yet).
+function openMemberEditor(team, index) {
+  if (!catalogs || !team) return;
+  const parsed = parseTeamMembers(team, catalogs)[index]?.parsed;
+  let side;
+  if (parsed?.pokemon) {
+    side = applyParsedMember(seededSide(parsed.pokemon), parsed);
+  } else {
+    if (index < team.members.length || index >= TEAM_MEMBER_LIMIT) return;
+    const onTeam = new Set(parseTeamMembers(team, catalogs).map((entry) => entry.parsed.pokemon?.id));
+    const pick = [...catalogs.pokemon]
+      .sort((a, b) => (b.champions?.usagePercent ?? 0) - (a.champions?.usagePercent ?? 0))
+      .find((entry) => !onTeam.has(entry.id));
+    if (!pick) return;
+    side = seededSide(pick);
+  }
+  member = { teamId: team.id, index, side };
+  saveMemberOnClose = false;
+  setEditor.renderOptions();
+  memberSheet.open();
+  if (index === team.members.length) {
+    setEditor.elements.pokemonSearch.focus();
+    setEditor.elements.pokemonSearch.select();
+  }
+}
+
+function saveMember() {
+  if (!member?.side?.pokemon) return;
+  const text = formatSetPaste(member.side, { moves: catalogs.moves });
+  const saved = store.setMember(member.teamId, member.index, text);
+  if (saved) elements.teamStatus.textContent = t("myTeams.memberSaved", { name: localizedName(member.side.pokemon) });
+  render();
 }
 
 function openDialog(team) {

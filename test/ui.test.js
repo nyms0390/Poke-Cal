@@ -1113,7 +1113,11 @@ test("Teams and My teams share one view switch, and Battle shows the saved-team 
     assert.match(html, /<a class="active" href="\.\/teams\.html" aria-current="page">Teams<\/a>/);
   }
   assert.match(mine, /<script type="module" src="\.\/src\/ui\/my-teams-page\.js"><\/script>/);
-  for (const id of ["my-teams-list", "my-teams-members", "my-teams-dialog", "my-teams-paste"]) {
+  // Members are added and edited in the shared set editor, opened in a dialog.
+  const controller = readFileSync(new URL("../src/ui/my-teams-page.js", import.meta.url), "utf8");
+  assert.match(controller, /mountSetEditor\(document\.querySelector\("#my-teams-set-editor"\)/);
+  assert.match(controller, /classList\.add\("editor-dialog"\)/);
+  for (const id of ["my-teams-list", "my-teams-members", "my-teams-dialog", "my-teams-paste", "my-teams-add", "my-teams-set-editor"]) {
     assert.match(mine, new RegExp(`id="${id}"`), id);
   }
   const battle = readFileSync(new URL("../battle.html", import.meta.url), "utf8");

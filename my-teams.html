@@ -57,7 +57,8 @@
               </div>
               <div id="my-teams-actions" class="my-teams-actions">
                 <a id="my-teams-open" class="team-action primary" href="./battle.html" data-i18n="myTeams.openBattle">Open in Battle</a>
-                <button id="my-teams-edit" class="team-action" type="button" data-i18n="myTeams.edit">Edit</button>
+                <button id="my-teams-add" class="team-action" type="button" data-i18n="myTeams.addMember">Add Pokémon</button>
+                <button id="my-teams-edit" class="team-action" type="button" data-i18n="myTeams.editPaste">Edit paste</button>
                 <button id="my-teams-copy" class="team-action" type="button" data-i18n="myTeams.copyPaste">Copy paste</button>
                 <button id="my-teams-delete" class="team-action danger" type="button" data-i18n="myTeams.delete">Delete</button>
               </div>
@@ -67,6 +68,11 @@
           </section>
         </div>
       </div>
+
+      <!-- Moved into the team-member dialog by src/ui/set-sheet.js. -->
+      <section id="my-teams-editor" class="my-teams-editor" aria-label="Team member" data-i18n-aria-label="myTeams.editorTitle">
+        <div id="my-teams-set-editor"></div>
+      </section>
 
       <dialog id="my-teams-dialog" class="my-teams-dialog" aria-labelledby="my-teams-dialog-title">
         <form id="my-teams-form" method="dialog" class="my-teams-form">

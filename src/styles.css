@@ -8496,6 +8496,22 @@ dialog.my-teams-dialog::backdrop {
   margin-top: 8px;
 }
 
+/* My teams' member editor lives in its dialog; hide it until set-sheet.js has moved it there.
+   A saved paste has no status, so the editor's status field is left out. */
+main > .my-teams-editor {
+  display: none;
+}
+
+.my-teams-editor {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.my-teams-editor .set-editor-field:has(> [data-kind="status"]) {
+  display: none;
+}
+
 /* Teams: "Save to my teams" beside a submitted team's list link. */
 .teams-source-actions,
 .teams-save-mine {
