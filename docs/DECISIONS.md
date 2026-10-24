@@ -14,6 +14,7 @@ Each entry is the decision, the date it was made (as far as the history shows), 
 - **Accounts, cloud sync and a battle-sim matchup grid are non-goals.** (2026-07-09) They conflict with the dependency-free, static architecture.
 - **Matchups is its own page, linked from Builder; Compare sets is a view of Matchups.** (2026-10-12) Compare sets sits behind an Overview | Compare sets switch under the title and intro, not in the nav. Promote it only if comparison grows beyond the KO race.
 - **Nav order follows the tuning flow:** Lookup, Moves, Battle, Speed Tiers, Builder, Matchups, Teams. (2026-10-09) Enforced: `test/ui.test.js`.
+- **My teams: your own teams are saved in this browser only,** up to six Pokémon each, stored as Showdown paste text (`pokecal.my-teams.v1`); copying and importing the paste moves a team between devices. (2026-10-24) Keeps the no-accounts, no-sync constraint. Enforced: `test/my-teams.test.js`.
 - **Lookup Build details:** Abilities beside Smogon ladder spreads, then Items beside NCP curated sets, each with its own count, source line and empty state; no Speed tiers panel (Speed Tiers covers it). (2026-10-20)
 
 ## Architecture and constraints
@@ -55,6 +56,7 @@ Each entry is the decision, the date it was made (as far as the history shows), 
 - **Shared workspace and set sheets:** Lookup, Moves, Builder, Matchups, Speed and Teams use the Matchups sidebar layout; set editors move into bottom sheets at 720px and below, Battle and Compare open editors in dialogs. (2026-10-08)
 - **Set previews:** Battle set cards use the in-game summary layout (facts on the left, four typed move rows on the right); Teams, Lookup's NCP sets and the Matchups opponent set use the shared one-row `setRow`. (2026-10-20)
 - **Moves on Teams use Battle's set-card move chip** (`moveChip`), not the damage-table rows, with no category icon. (2026-10-20)
+- **My teams is the second view of Teams** (Tournament teams | My teams switch; Teams stays current in the nav). Battle shows a team strip above the set cards: a tap loads that member into the chosen side, replacing that side's Pokémon without asking, and saving a side puts its set over the team member of the same species or into a free place. Tournament teams can be saved to My teams without a spread, Mega Stone holders as the Mega form. Matchups' set editor has "From my team". (2026-10-24) Enforced: `test/ui.test.js`.
 - **Large sprite slots use PokeAPI HOME renders** with the Showdown sprites as fallback. (2026-10-10) Enforced: `test/pokemon-art.test.js`.
 
 ## Language

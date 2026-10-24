@@ -23,7 +23,7 @@ A cleanup request authorizes finding and fixing demonstrated issues and repeated
 
 Before editing, read `AGENTS.md`, `DESIGN.md`, this file, the target HTML and controller, `src/ui/components.js`, and `src/styles.css`. Check `git status --short` and preserve unrelated changes.
 
-Run the application and use the interface before judging it. For a whole-app cleanup, inspect all eight routes:
+Run the application and use the interface before judging it. For a whole-app cleanup, inspect all nine routes:
 
 | Route | Representative task | Stress cases |
 |---|---|---|
@@ -35,6 +35,7 @@ Run the application and use the interface before judging it. For a whole-app cle
 | `compare.html` | Compare set variants against the baseline | Six variants, renamed and removed variants, pinning another baseline, Pokémon change on another page, phone column view |
 | `speed.html` | Change Speed conditions and compare ranks | Ties, extremes, long labels, selected-Pokémon changes |
 | `teams.html` | Browse tournament teams | Loading, failure recovery, long metadata, sparse records, narrow layouts |
+| `my-teams.html` | Paste a team, then load members in Battle | No teams, empty team, more than six pasted, unknown names, long team names, Back to Battle |
 
 Record route or component, viewport, locale, interaction state, symptom, impact, source, correction, and verification for each finding. Separate task-blocking, usability/accessibility, consistency/readability, and optional aesthetic findings. Mark uncertain items as hypotheses and reproduce them before editing. Fix repeated causes at shared tokens or components first.
 
