@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 import * as teamSearch from "../src/data/team-search.js";
+import * as myTeams from "../src/data/my-teams.js";
 import { localizedName, tFor, toTraditionalChinese } from "../src/i18n.js";
 
 // A small DOM fixture runs the real page controller without an extra test dependency.
@@ -42,7 +43,7 @@ async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
   let locale = "en";
   let changeLocale;
   const context = {
-    document, console: { error() {} }, Intl, queueMicrotask, ...teamSearch, toTraditionalChinese,
+    document, console: { error() {} }, Intl, queueMicrotask, ...teamSearch, ...myTeams, toTraditionalChinese,
     translateSubtree() {},
     optionElement(value, text) { const option = node("option"); option.value = value; option.textContent = text; return option; },
     normalizeId: (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g, ""),

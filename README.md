@@ -139,7 +139,7 @@ PokéCal also includes a deploy-ready, read-only Cloudflare Worker MCP at [`mcp/
 npm start
 ```
 
-Then open one of the eight tools:
+Then open one of the nine tools:
 
 | Route | Tool |
 | --- | --- |
@@ -151,8 +151,9 @@ Then open one of the eight tools:
 | `/compare.html` | Set variants against the same opponents, and which outcomes each change moves |
 | `/speed.html` | Interactive Speed tiers and breakpoints |
 | `/teams.html` | Recent Limitless Champions tournament teams |
+| `/my-teams.html` | Your own saved teams, loaded into Battle or Matchups with one tap |
 
-Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173) and `SERVE_ROOT` to serve another directory (for example `_site` after `npm run stage-site`). The server only serves files inside its root (no dotfiles) and sends ETag/Last-Modified for revalidation. The battle calculator stores named sets in browser local storage, imports PokéCal SP or Pokémon Showdown EV set text, and exports PokéCal SP set text.
+Set `PORT` to use a different port (`serve.mjs` reads `process.env.PORT`, default 4173) and `SERVE_ROOT` to serve another directory (for example `_site` after `npm run stage-site`). The server only serves files inside its root (no dotfiles) and sends ETag/Last-Modified for revalidation. The battle calculator stores named sets in browser local storage, imports PokéCal SP or Pokémon Showdown EV set text, and exports PokéCal SP set text. Whole teams you save on My teams (Teams › My teams) live in the same browser storage as Showdown pastes; Battle's team strip loads any member into either side.
 
 ### Builder workflow and assumptions
 
@@ -256,4 +257,4 @@ npm run test:pokemon     # pokemon only
 
 The accuracy record for the battle calculator is the `@smogon/calc` reference suite, not a separate checklist: `test/damage-reference.test.js` compares all 16 damage rolls of about 280 scenarios against `test/fixtures/damage-reference.json`, which is generated from `@smogon/calc` (Gen 9 rules, level 50, SP `s` = EV `min(252, 8s)`). The app and tests stay dependency-free; to add scenarios, run `npm install --no-save @smogon/calc@0.12.0 && node scripts/dev/generate-damage-reference.mjs` and commit the regenerated fixture. `test/speed-reference.test.js` does the same for final Speed against `test/fixtures/speed-reference.json` (`@smogon/calc` `getFinalSpeed`; regenerate with `node scripts/dev/generate-speed-reference.mjs`).
 
-`npm run lint:design` (also run by `npm test`) checks styles against `DESIGN.md`. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the eight pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).
+`npm run lint:design` (also run by `npm test`) checks styles against `DESIGN.md`. Deployment is automatic: `.github/workflows/pages.yml` runs the app and MCP tests and `validate-data`, stages only the browser site with `npm run stage-site` (the nine pages, `src/`, `public/icons/`, and `public/web/` in `_site/`; tests, docs, MCP, scripts, agent skills, and the full catalogs are not published), and deploys it on every push to `main` and whenever the weekly data update commits new catalogs. The same workflow's `deploy-mcp` job deploys the Cloudflare MCP Worker after the tests pass when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets are set (see [`mcp/README.md`](mcp/README.md)).

@@ -182,7 +182,6 @@
   "font-size-raw-step | .stat-cell-label | font-size: var(--text-sm)",
   "font-size-raw-step | .team-slot button | font-size: var(--text-sm)",
   "font-size-raw-step | .teams-message | font-size: var(--text-sm)",
-  "font-size-raw-step | .teams-more, .matchups-filter button, .panel-heading button, .battle-page-head #swap-sides, .saved-set-controls button, .set-paste-actions button, .damage-copy-button, .compare-action | font-size: var(--text-sm)",
   "font-size-raw-step | .teams-note | font-size: var(--text-sm)",
   "font-size-raw-step | .teams-placement | font-size: var(--text-lg)",
   "font-size-raw-step | .teams-search-fields label | font-size: var(--text-sm)",

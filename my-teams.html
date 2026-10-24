@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta
+      name="description"
+      content="Save your own Pokémon Champions teams as Showdown pastes and load them into the battle calculator."
+    />
+    <title>PokéCal — My Teams</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main id="main-content">
+      <header class="lookup-header">
+        <a class="lookup-brand" href="./index.html" aria-label="PokéCal home" translate="no">Poké<span>Cal</span></a>
+        <nav class="page-nav" aria-label="PokéCal pages">
+          <a href="./index.html">Lookup</a>
+          <a href="./moves.html">Moves</a>
+          <a href="./battle.html">Battle Calculator</a>
+          <a href="./speed.html">Speed Tiers</a>
+          <a href="./builder.html">Builder</a>
+          <a href="./matchups.html">Matchups</a>
+          <a class="active" href="./teams.html" aria-current="page">Teams</a>
+          <label class="language-switch">
+            <span>Language</span>
+            <select data-language-switch aria-label="Language">
+              <option value="en">English</option>
+              <option value="zh-TW">繁體中文</option>
+            </select>
+          </label>
+        </nav>
+      </header>
+      <div class="workspace teams-tool my-teams-tool">
+        <div class="workspace-intro">
+          <h1 data-i18n="nav.teams">Teams</h1>
+          <p class="intro" data-i18n="myTeams.intro">Keep your own teams here and load any member into the battle calculator with one tap.</p>
+          <nav class="view-switch" aria-label="Teams views" data-i18n-aria-label="myTeams.viewsLabel">
+            <a href="./teams.html" data-i18n="myTeams.viewTournament">Tournament teams</a>
+            <a href="./my-teams.html" aria-current="page" data-i18n="myTeams.viewMine">My teams</a>
+          </nav>
+        </div>
+        <aside class="workspace-sidebar my-teams-sidebar" aria-labelledby="my-teams-list-title">
+          <h2 id="my-teams-list-title" class="workspace-sidebar-title" data-i18n="myTeams.listTitle">My teams</h2>
+          <button id="my-teams-new" class="team-action primary" type="button" data-i18n="myTeams.newTeam">New team</button>
+          <div id="my-teams-list" class="my-teams-list" data-i18n-skip></div>
+          <p class="teams-search-help" data-i18n="myTeams.storageNote">Teams are saved in this browser only. Copy a team's paste to move it to another device.</p>
+        </aside>
+        <div class="workspace-content">
+          <section id="my-teams-detail" class="catalog-panel my-teams-detail" aria-labelledby="my-teams-name">
+            <div class="my-teams-head">
+              <div class="my-teams-heading" data-i18n-skip>
+                <h2 id="my-teams-name">—</h2>
+                <p id="my-teams-meta" class="my-teams-meta"></p>
+              </div>
+              <div id="my-teams-actions" class="my-teams-actions">
+                <a id="my-teams-open" class="team-action primary" href="./battle.html" data-i18n="myTeams.openBattle">Open in Battle</a>
+                <button id="my-teams-edit" class="team-action" type="button" data-i18n="myTeams.edit">Edit</button>
+                <button id="my-teams-copy" class="team-action" type="button" data-i18n="myTeams.copyPaste">Copy paste</button>
+                <button id="my-teams-delete" class="team-action danger" type="button" data-i18n="myTeams.delete">Delete</button>
+              </div>
+            </div>
+            <p id="my-teams-status" class="my-teams-status" role="status" aria-live="polite" aria-atomic="true"></p>
+            <div id="my-teams-members" class="my-teams-members" data-i18n-skip></div>
+          </section>
+        </div>
+      </div>
+
+      <dialog id="my-teams-dialog" class="my-teams-dialog" aria-labelledby="my-teams-dialog-title">
+        <form id="my-teams-form" method="dialog" class="my-teams-form">
+          <div class="my-teams-dialog-head">
+            <h2 id="my-teams-dialog-title">New team</h2>
+            <button id="my-teams-dialog-close" class="team-action" type="button" data-i18n="myTeams.close">Close</button>
+          </div>
+          <label for="my-teams-name-input" data-i18n="myTeams.nameLabel">Team name</label>
+          <input id="my-teams-name-input" name="name" type="text" autocomplete="off" maxlength="60" />
+          <label for="my-teams-paste" data-i18n="myTeams.pasteLabel">Showdown paste</label>
+          <textarea id="my-teams-paste" name="paste" rows="12" spellcheck="false" aria-describedby="my-teams-paste-help my-teams-parse"></textarea>
+          <p id="my-teams-paste-help" class="teams-search-help" data-i18n="myTeams.pasteHelp">Paste up to 6 Pokémon from Showdown or PokePaste, separated by blank lines. You can also leave it empty and add Pokémon from the battle calculator.</p>
+          <div id="my-teams-parse" class="my-teams-parse" role="status" aria-live="polite" aria-atomic="true" data-i18n-skip></div>
+          <div class="my-teams-dialog-actions">
+            <button id="my-teams-cancel" class="team-action" type="button" data-i18n="myTeams.cancel">Cancel</button>
+            <button id="my-teams-save" class="team-action primary" type="submit" data-i18n="myTeams.save">Save team</button>
+          </div>
+        </form>
+      </dialog>
+
+      <footer>
+        <span id="status" role="status" aria-live="polite" aria-atomic="true">Loading Pokémon data…</span>
+        <span data-i18n="myTeams.footer">Your teams · saved in this browser · Showdown paste format</span>
+      </footer>
+    </main>
+    <script type="module" src="./src/ui/my-teams-page.js"></script>
+  </body>
+</html>

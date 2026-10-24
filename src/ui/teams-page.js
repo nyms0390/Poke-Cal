@@ -1,8 +1,9 @@
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
+import { createMyTeamStore, formatMemberPaste } from "../data/my-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
-import { attachCombobox, itemLabel, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
+import { attachCombobox, browserStorage, itemLabel, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
 import {
   getLocale,
   initI18n,
@@ -28,6 +29,7 @@ const elements = {
   reset: document.querySelector("#teams-reset"),
 };
 
+const myTeamStore = createMyTeamStore(browserStorage());
 let catalogs = null;
 let archive = null;
 let selectedFormat = null;
@@ -282,14 +284,14 @@ function renderTournament(tournament, index) {
       content.append(tournamentMeta(tournament));
       const topCut = document.createElement("div");
       topCut.className = "teams-top-cut";
-      topCut.append(...tournament.topCut.map((team, teamIndex) => renderTeam(team, `${key}-${teamIndex}`)));
+      topCut.append(...tournament.topCut.map((team, teamIndex) => renderTeam(team, `${key}-${teamIndex}`, tournament)));
       content.append(topCut);
       return content;
     },
   });
 }
 
-function renderTeam(team, key) {
+function renderTeam(team, key, tournament) {
   const summary = document.createElement("summary");
   summary.className = "teams-team-summary";
   const placement = document.createElement("strong");
@@ -323,7 +325,11 @@ function renderTeam(team, key) {
       source.className = "teams-source-row";
       const spread = document.createElement("span");
       spread.textContent = `${t("teams.spread")}: ${t("teams.spreadUnavailable")}`;
-      source.append(spread, externalLink(team.url, t("teams.openTeamList")));
+      const links = document.createElement("span");
+      links.className = "teams-source-actions";
+      links.append(externalLink(team.url, t("teams.openTeamList")));
+      if (team.pokemon.length > 0) links.prepend(saveToMyTeamsButton(team, tournament));
+      source.append(spread, links);
       content.append(source);
       const pokemonGrid = document.createElement("div");
       pokemonGrid.className = "teams-pokemon-grid";
@@ -365,6 +371,51 @@ function renderPokemon(submitted) {
     types: resolved?.types ?? [],
     facts,
     moves,
+  });
+}
+
+// Copies a submitted team into My teams. Limitless publishes no spreads, so the pastes carry
+// none and each member keeps its usage-based default spread when loaded.
+function saveToMyTeamsButton(team, tournament) {
+  const wrap = document.createElement("span");
+  wrap.className = "teams-save-mine";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "team-action";
+  button.textContent = t("myTeams.saveTournamentTeam");
+  const status = document.createElement("span");
+  status.className = "teams-save-status";
+  status.setAttribute("role", "status");
+  button.addEventListener("click", () => {
+    const saved = myTeamStore.createTeam({
+      name: [team.playerName, tournament?.name].map((part) => String(part ?? "").trim()).filter(Boolean).join(" · "),
+      members: team.pokemon.map(submittedMemberPaste).filter(Boolean),
+    });
+    status.replaceChildren();
+    const link = document.createElement("a");
+    link.href = "./my-teams.html";
+    link.textContent = t("myTeams.savedTournamentTeam", { name: saved.name });
+    status.append(link);
+  });
+  wrap.append(button, status);
+  return wrap;
+}
+
+function submittedMemberPaste(submitted) {
+  const resolved = resolvePokemon(submitted);
+  const catalogName = (value, lookup) => (value ? lookup.get(normalizeId(value))?.name ?? value : "");
+  // Limitless lists a Mega as its base species holding the stone; save the Mega form so the
+  // calculator races the form that battles.
+  const species = resolved?.name ?? submitted?.name ?? "";
+  const stone = submitted.item ? catalogs.itemLookup.get(normalizeId(submitted.item)) : null;
+  const megaForm = Object.entries(stone?.megaStone ?? {})
+    .find(([base]) => normalizeId(base) === normalizeId(species))?.[1];
+  return formatMemberPaste({
+    pokemon: megaForm ?? species,
+    item: catalogName(submitted.item, catalogs.itemLookup),
+    ability: catalogName(submitted.ability, catalogs.abilityLookup),
+    nature: submitted.nature ?? "",
+    moves: (submitted.moves ?? []).map((move) => catalogName(move, catalogs.moveLookup)),
   });
 }
 

@@ -42,6 +42,23 @@
           <button id="swap-sides" type="button" data-i18n="battle.swapSides">Swap sides</button>
         </div>
         <div class="battle-workspace-body">
+          <section class="battle-team-strip" aria-labelledby="battle-team-title">
+            <div class="battle-team-controls">
+              <label class="battle-team-pick" for="battle-team-select">
+                <span id="battle-team-title" data-i18n="myTeams.stripTitle">My team</span>
+                <select id="battle-team-select" data-i18n-skip></select>
+              </label>
+              <fieldset class="battle-team-target">
+                <legend data-i18n="myTeams.loadInto">Tap loads into</legend>
+                <label><input type="radio" name="battle-team-target" value="attacker" checked /><span data-i18n="side.attacker">Attacker</span></label>
+                <label><input type="radio" name="battle-team-target" value="defender" /><span data-i18n="side.defender">Defender</span></label>
+              </fieldset>
+              <button id="battle-team-save" class="team-action" type="button">Save attacker to team</button>
+              <a class="battle-team-manage" href="./my-teams.html" data-i18n="myTeams.manage">Manage teams</a>
+            </div>
+            <div id="battle-team-members" class="battle-team-members" data-i18n-skip></div>
+            <p id="battle-team-status" class="battle-team-status" role="status" aria-live="polite" aria-atomic="true"></p>
+          </section>
           <div class="battle-pairing">
             <article class="battle-set-card" aria-labelledby="battle-attacker-title">
               <h2 id="battle-attacker-title" data-i18n="sheet.attacker">Attacker</h2>
