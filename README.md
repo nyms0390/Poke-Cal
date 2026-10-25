@@ -210,7 +210,7 @@ Solar Beam), recharge moves add a turn between uses, Future Sight lands two turn
 Out, First Impression, Explosion and Steel Roller count only as a first-turn KO, and conditional
 moves (Last Resort, Focus Punch, Belch, …) race as if their condition holds, with a caveat. Moves
 that lower the user's attacking stat (Overheat, Draco Meteor) count for at most two uses, the
-second at the lowered stat. It is a one-on-one measure, not a doubles win rate.
+second at the lowered stat; Electro Shot and Meteor Beam hit one SpA stage harder on each use. It is a one-on-one measure, not a doubles win rate.
 
 **Beyond the usual sets** checks every Champions Pokémon, not only the top 50 or 100, split at
 20 Limitless teams. Theory sets use full-investment spreads (an attacker, or a wall against the

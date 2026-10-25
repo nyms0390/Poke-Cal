@@ -2,8 +2,9 @@ import { compareMoveOrder, effectivePriority } from "../engine/battle-order.js";
 import { isGuaranteedCritical } from "../engine/critical.js";
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
-import { koChance } from "../engine/ko-chance.js";
+import { convolveDistributions, koChance } from "../engine/ko-chance.js";
 import { impliedField } from "../engine/modifiers.js";
+import { moveEffect } from "../engine/move-effects.js";
 import { NATURES } from "../engine/natures.js";
 import { normalizeId } from "../identifiers.js";
 import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
@@ -424,9 +425,13 @@ function raceMoves(attacker, defender, moves = [], field, settings = []) {
       return { move, plan, included: false, reasonCode: "unsupported", reason: result.reason ?? "Unsupported move.", hits: Infinity };
     }
     const statDrop = selfAttackDrop(move);
-    const uses = result.maxDamage > 0
-      ? statDrop ? hitsWithStatDrop(result, { attacker, defender, move, field, statDrop, critical, moveOptions }) : likelyHitsToKo(result.ko)
-      : Infinity;
+    const raceInput = { attacker, defender, move, field, critical, moveOptions };
+    let uses = Infinity;
+    if (result.maxDamage > 0) {
+      if (statDrop) uses = hitsWithStatDrop(result, { ...raceInput, statDrop });
+      else if (moveEffect(normalizeId(move.id ?? move.name)).chargeBoosts) uses = hitsWithChargeBoosts(result, raceInput);
+      else uses = likelyHitsToKo(result.ko);
+    }
     return {
       move,
       plan,
@@ -478,6 +483,35 @@ function hitsWithStatDrop(first, { attacker, defender, move, field, statDrop, cr
     maxHits: 2,
   });
   return (chances[1]?.chance ?? 0) >= LIKELY_KO_CHANCE ? 2 : Infinity;
+}
+
+// Electro Shot and Meteor Beam raise SpA before each hit, so every later use hits one stage
+// harder (+1, +2, +3 from the starting stage; capped at +6). End-of-turn recovery is not counted.
+function hitsWithChargeBoosts(first, { attacker, defender, move, field, critical = false, moveOptions = {} }) {
+  const targetHp = first.defenderCurrentHp;
+  const likelyKo = (distribution) => distribution
+    .reduce((chance, entry) => chance + (entry.damage >= targetHp ? entry.chance : 0), 0) >= LIKELY_KO_CHANCE;
+  let totals = first.distribution;
+  if (likelyKo(totals)) return 1;
+  let result = first;
+  let stages = first.attackerStages ?? attacker.stages;
+  for (let uses = 2; uses <= MAX_RACE_HITS; uses += 1) {
+    result = calculateDamage({
+      attacker: attacker.pokemon,
+      defender: defender.pokemon,
+      move,
+      attackerState: { ...attacker, stages },
+      defenderState: defender,
+      field,
+      critical,
+      moveOptions,
+    });
+    if (!result.supported) return Infinity;
+    stages = result.attackerStages ?? stages;
+    totals = convolveDistributions([totals, result.repeatDistribution ?? result.distribution]);
+    if (likelyKo(totals)) return uses;
+  }
+  return Infinity;
 }
 
 /**

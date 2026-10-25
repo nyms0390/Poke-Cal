@@ -32,7 +32,7 @@ export function resultDescription({ attackerState, defenderState, move, field = 
 
   return [
     [
-      statPrefix(attackerState, attackStat),
+      statPrefix({ ...attackerState, stages: result.attackerStages ?? attackerState.stages }, attackStat),
       relevantAttackerItem(attackerState, result),
       attackerState.pokemon?.name ?? "Attacker",
       move.name,

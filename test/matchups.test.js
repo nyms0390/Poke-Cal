@@ -264,6 +264,25 @@ test("moves that lower the user's attacking stat race as at most a 2HKO at the l
   assert.equal(withDrop.ours.best.minPercent, withoutDrop.ours.best.minPercent);
 });
 
+test("Electro Shot's SpA boost stacks on each use in the race", () => {
+  const archaludon = { pokemon: species("Archaludon"), nature: "Modest", sp: { hp: 2, spa: 32, spe: 32 }, ability: null, item: null, moves: [move("Electro Shot")] };
+  const target = (name) => ({ pokemon: species(name), nature: "Calm", sp: { hp: 32, spd: 32 }, ability: null, item: null, moves: [move("Body Slam")] });
+  const rain = { abilityField: false, field: { format: "singles", weather: "RainDance" } };
+
+  // At a constant +1, Snorlax is only a 31.7% 3HKO; at +1, +2, +3 it is a likely 3HKO.
+  const snorlax = matchup({ ours: archaludon, theirs: target("Snorlax"), ...rain }).ours.best;
+  assert.equal(snorlax.koText, "31.7% chance to 3HKO");
+  assert.equal(snorlax.uses, 3);
+  // Goodra survives five uses at +1 but not four stacked uses.
+  const goodra = matchup({ ours: archaludon, theirs: target("Goodra"), ...rain }).ours.best;
+  assert.equal(goodra.koText, "not a KO within 5 hits");
+  assert.equal(goodra.uses, 4);
+  // Without rain each use still needs a charge turn: two stacked uses take four turns.
+  const dry = matchup({ ours: archaludon, theirs: target("Milotic"), abilityField: false, field: { format: "singles" } }).ours.best;
+  assert.equal(dry.uses, 2);
+  assert.equal(dry.hits, 4);
+});
+
 test("immunity abilities remove moves from the race", () => {
   const farigiraf = {
     pokemon: species("Farigiraf"), nature: "Bold", sp: { hp: 32, def: 32, spa: 2 },
