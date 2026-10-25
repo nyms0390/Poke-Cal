@@ -8246,12 +8246,6 @@ html:has(dialog.set-sheet[open]) {
   box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
-.team-action.quiet {
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-}
-
 .team-action.danger {
   color: var(--danger-dark);
 }

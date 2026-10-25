@@ -13,7 +13,7 @@ import { getLocale, initI18n, localizedName, onLocaleChange, t, translateSubtree
 import { applyControl, createSideState } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
 import { browserStorage } from "./components.js";
-import { memberSetRow, teamMemberSprites, teamMemberBattleHref } from "./my-teams-ui.js";
+import { memberSetRow, teamMemberSprites } from "./my-teams-ui.js";
 import { mountSetEditor } from "./set-editor.js";
 import { mountSetSheet } from "./set-sheet.js";
 
@@ -190,16 +190,10 @@ function memberRow(team, member, index) {
     edit.setAttribute("aria-label", t("myTeams.editMemberLabel", { name: pokemonName }));
     edit.addEventListener("click", () => openMemberEditor(team, index));
     actions.append(edit);
-    const calc = document.createElement("a");
-    calc.className = "team-action";
-    calc.href = teamMemberBattleHref(team.id, index);
-    calc.textContent = t("myTeams.calc");
-    calc.setAttribute("aria-label", t("myTeams.calcLabel", { name: pokemonName }));
-    actions.append(calc);
   }
   const remove = document.createElement("button");
   remove.type = "button";
-  remove.className = "team-action quiet";
+  remove.className = "team-action danger";
   remove.textContent = t("myTeams.removeMember");
   remove.setAttribute("aria-label", t("myTeams.removeMemberLabel", { name: pokemonName }));
   remove.addEventListener("click", () => {

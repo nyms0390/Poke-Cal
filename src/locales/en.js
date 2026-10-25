@@ -592,8 +592,6 @@ export const EN_MESSAGES = {
   "myTeams.unknownPokemon": "Unknown Pokémon",
   "myTeams.notSet": "Not set",
   "myTeams.spread": "SP",
-  "myTeams.calc": "Calc in Battle",
-  "myTeams.calcLabel": ({ name }) => `Load ${name} into the battle calculator`,
   "myTeams.removeMember": "Remove",
   "myTeams.removeMemberLabel": ({ name }) => `Remove ${name} from this team`,
   "myTeams.removed": ({ name }) => `Removed ${name}.`,

@@ -89,7 +89,7 @@ import {
   createAmbientFieldState,
 } from "./field-state.js";
 import { expandedMoveIndexAfterClick, mostEffectiveMoveIndex } from "./battle-results.js";
-import { MEMBER_QUERY_PARAM, TEAM_QUERY_PARAM, teamMemberSprite } from "./my-teams-ui.js";
+import { teamMemberSprite } from "./my-teams-ui.js";
 
 const elements = {
   damageSource: document.querySelector("#damage-source"),
@@ -326,8 +326,6 @@ async function initialize() {
   moves = data.moves;
   const storedTeams = loadStoredTeams();
   teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
-  const requestedTeamId = new URLSearchParams(globalThis.location?.search ?? "").get(TEAM_QUERY_PARAM);
-  const requestedMember = Number(new URLSearchParams(globalThis.location?.search ?? "").get(MEMBER_QUERY_PARAM));
   const requestedLeftId = new URLSearchParams(globalThis.location?.search ?? "").get("left");
   const requestedLeft = findPokemon(requestedLeftId);
   const activeEntry = activeSetStore.readEntry();
@@ -341,12 +339,7 @@ async function initialize() {
   markActiveSetConsumed(activeEntry.revision);
   removeConsumedUrlParams();
   renderDamageShell({ incoming, incomingSet });
-  // My teams' "Calc in Battle" links here with the member to load as the attacker.
-  const requestedTeam = requestedTeamId ? myTeamStore.getTeam(requestedTeamId) : null;
-  if (requestedTeam) myTeamStore.selectTeam(requestedTeam.id);
   renderTeamStrip();
-  if (requestedTeam) loadTeamMember(requestedTeam, requestedMember, "attacker");
-  else if (requestedTeamId) elements.teamStatus.textContent = t("myTeams.memberMissing");
   // Back from My teams, or an edit in another tab, refreshes the strip.
   globalThis.addEventListener?.("pageshow", (event) => {
     if (event.persisted) renderTeamStrip();

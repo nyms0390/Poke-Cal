@@ -86,7 +86,7 @@ export function spreadSelectionForState(state, spreadNames = []) {
 
 // Query parameters the battle page consumes on load. They are removed afterwards (via
 // history.replaceState) so a reload restores the saved team instead of re-seeding from the URL.
-export const CONSUMED_QUERY_PARAMS = ["left", "team", "member"];
+export const CONSUMED_QUERY_PARAMS = ["left"];
 
 // Returns the URL (path + remaining query + hash) with the consumed parameters removed, or
 // null when none of them are present (no history update needed).
