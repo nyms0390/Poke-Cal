@@ -574,6 +574,12 @@ function calculateDamageUnchecked({
     critical: effectiveCritical,
     ko,
     notes,
+    // For moves that raise the user's stats first (Electro Shot): the stages this hit used,
+    // and the damage of a later use, without first-hit effects such as Multiscale or Sturdy.
+    ...(chargeBoost.applies ? {
+      attackerStages: attackerState.stages,
+      repeatDistribution: sortedDistribution(baseRollDistribution),
+    } : {}),
   };
 }
 
@@ -969,7 +975,7 @@ function hasAnyAbility(state, abilityIds) {
 // Electro Shot / Meteor Beam raise the user's stats before the hit, through Simple and Contrary.
 function applyChargeBoosts(move, state, suppressed) {
   const boosts = moveEffect(normalizeId(move.id ?? move.name)).chargeBoosts;
-  if (!boosts) return { state, note: null };
+  if (!boosts) return { state, applies: false, note: null };
   const multiplier = suppressed ? 1 : hasAbility(state, "contrary") ? -1 : hasAbility(state, "simple") ? 2 : 1;
   const stages = { ...(state.stages ?? {}) };
   const changes = [];
@@ -981,6 +987,7 @@ function applyChargeBoosts(move, state, suppressed) {
   }
   return {
     state: { ...state, stages },
+    applies: true,
     note: changes.length ? `${changes.join(" / ")} from the charge turn` : null,
   };
 }

@@ -142,7 +142,7 @@ export function formatResultDescription(args, locale = "en") {
   const attackStat = result.attackStat ?? (move.category === "Special" ? "spa" : "atk");
   const defenseStat = result.defenseStat ?? (move.category === "Special" ? "spd" : "def");
   const statLabels = { hp: "HP", atk: "攻擊", def: "防禦", spa: "特攻", spd: "特防", spe: "速度" };
-  const attackerPrefix = [stagePrefix(attackerState.stages?.[attackStat]), `${attackerState.sp?.[attackStat] ?? 0} ${statLabels[attackStat]}`]
+  const attackerPrefix = [stagePrefix((result.attackerStages ?? attackerState.stages)?.[attackStat]), `${attackerState.sp?.[attackStat] ?? 0} ${statLabels[attackStat]}`]
     .filter(Boolean).join(" ");
   const defenderPrefix = [
     stagePrefix(defenderState.stages?.[defenseStat]),

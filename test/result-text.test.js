@@ -129,3 +129,16 @@ test("omits attacker items that did not modify this damage", () => {
     "32 SpA Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice: 70-84 (33.8 - 40.5%) -- guaranteed 3HKO",
   );
 });
+
+test("the description shows the stage Electro Shot hits at after its charge boost", async () => {
+  const { formatResultDescription } = await import("../src/i18n-formatters.js");
+  const electroShot = { id: "electroshot", name: "Electro Shot", type: "Electric", category: "Special", basePower: 130, flags: { charge: 1 } };
+  const attackerState = { pokemon: attacker, nature: "Modest", sp: { spa: 32 }, stages: { ...neutralStages, spa: 2 } };
+  const defenderState = { pokemon: defender, nature: "Calm", sp: { hp: 32, spd: 32 }, stages: neutralStages };
+  const field = createField({ format: "singles" });
+  const result = calculateDamage({ attacker, defender, move: electroShot, attackerState, defenderState, field });
+
+  assert.deepEqual(result.attackerStages, { ...neutralStages, spa: 3 });
+  assert.match(resultDescription({ attackerState, defenderState, move: electroShot, field, result }), /^\+3 32 SpA Miraidon Electro Shot/);
+  assert.match(formatResultDescription({ attackerState, defenderState, move: electroShot, field, result }, "zh-TW"), /^\+3 32 特攻/);
+});
