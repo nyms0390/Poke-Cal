@@ -8706,6 +8706,11 @@ main > .my-teams-editor {
   display: none;
 }
 
+/* The empty note sits in the member grid; let it span the whole row. */
+.battle-team-empty {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 950px) {
   .battle-team-members {
     grid-template-columns: repeat(3, minmax(0, 1fr));
