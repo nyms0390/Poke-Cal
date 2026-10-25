@@ -593,8 +593,6 @@ export const ZH_TW_MESSAGES = {
   "myTeams.unknownPokemon": "無法辨識的寶可夢",
   "myTeams.notSet": "未設定",
   "myTeams.spread": "SP",
-  "myTeams.calc": "在計算機計算",
-  "myTeams.calcLabel": ({ name }) => `將${name}載入對戰計算機`,
   "myTeams.removeMember": "移除",
   "myTeams.removeMemberLabel": ({ name }) => `從這支隊伍移除${name}`,
   "myTeams.removed": ({ name }) => `已移除${name}。`,

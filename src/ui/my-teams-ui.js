@@ -1,17 +1,8 @@
-// Shared pieces for the user's own teams (src/data/my-teams.js): the My teams page rows, the
-// sprite previews, and the Battle hand-off link.
+// Shared pieces for the user's own teams (src/data/my-teams.js): the My teams page rows and
+// the sprite previews.
 import { STAT_KEYS } from "../engine/constants.js";
 import { localizedName, localizedTerm, t } from "../i18n.js";
 import { itemLabel, moveChip, natureLabel, pokemonSpriteElements, setRow, STAT_LABELS } from "./components.js";
-
-// Battle reads these on load, loads that member as the attacker, and removes them from the URL.
-export const TEAM_QUERY_PARAM = "team";
-export const MEMBER_QUERY_PARAM = "member";
-
-export function teamMemberBattleHref(teamId, index) {
-  const params = new URLSearchParams({ [TEAM_QUERY_PARAM]: teamId, [MEMBER_QUERY_PARAM]: String(index) });
-  return `./battle.html?${params}`;
-}
 
 // A member's sprite (or "?" for a paste whose Pokémon is unknown), named for assistive tech.
 export function teamMemberSprite(pokemon, { size = 40 } = {}) {
