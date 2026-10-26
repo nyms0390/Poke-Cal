@@ -40,8 +40,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -62,11 +62,7 @@
       "阿勃梭魯進化石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "legal": true
     }
   },
   {
@@ -91,7 +87,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 19,
-      "usagePercent": 0.15417072379097696
+      "usagePercent": 0.1741840850751742
     }
   },
   {
@@ -199,8 +195,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.1866277182732879
+      "usageCount": 34,
+      "usagePercent": 0.3116978364503117
     }
   },
   {
@@ -224,8 +220,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -273,8 +269,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -298,8 +294,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -341,8 +337,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.10548523206751054
+      "usageCount": 10,
+      "usagePercent": 0.09167583425009168
     }
   },
   {
@@ -366,8 +362,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03245699448231094
+      "usageCount": 6,
+      "usagePercent": 0.055005500550055
     }
   },
   {
@@ -467,8 +463,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -508,8 +504,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 14,
+      "usagePercent": 0.12834616795012835
     }
   },
   {
@@ -530,7 +526,11 @@
       "詛咒娃娃進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -554,8 +554,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -579,8 +579,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.11359948068808828
+      "usageCount": 17,
+      "usagePercent": 0.15584891822515584
     }
   },
   {
@@ -620,8 +620,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -756,7 +756,11 @@
       "大根莖"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -777,7 +781,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -835,8 +839,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 8,
+      "usagePercent": 0.07334066740007333
     }
   },
   {
@@ -860,8 +864,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 90,
-      "usagePercent": 0.7302823758519961
+      "usageCount": 81,
+      "usagePercent": 0.7425742574257426
     }
   },
   {
@@ -920,8 +924,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.24342745861733206
+      "usageCount": 26,
+      "usagePercent": 0.23835716905023838
     }
   },
   {
@@ -945,8 +949,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.20285621551444336
+      "usageCount": 27,
+      "usagePercent": 0.24752475247524752
     }
   },
   {
@@ -1067,7 +1071,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 17,
-      "usagePercent": 0.1379422265498215
+      "usagePercent": 0.15584891822515584
     }
   },
   {
@@ -1187,8 +1191,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 56,
-      "usagePercent": 0.45439792275235313
+      "usageCount": 74,
+      "usagePercent": 0.6784011734506784
     }
   },
   {
@@ -1233,8 +1237,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03245699448231094
+      "usageCount": 12,
+      "usagePercent": 0.11001100110011
     }
   },
   {
@@ -1258,8 +1262,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 86,
-      "usagePercent": 0.6978253813696852
+      "usageCount": 74,
+      "usagePercent": 0.6784011734506784
     }
   },
   {
@@ -1283,8 +1287,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 8,
+      "usagePercent": 0.07334066740007333
     }
   },
   {
@@ -1308,8 +1312,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 410,
-      "usagePercent": 3.3268419344368714
+      "usageCount": 328,
+      "usagePercent": 3.0069673634030067
     }
   },
   {
@@ -1331,8 +1335,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.12171372930866603
+      "usageCount": 16,
+      "usagePercent": 0.14668133480014667
     }
   },
   {
@@ -1391,8 +1395,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -1474,8 +1478,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -1534,8 +1538,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 669,
-      "usagePercent": 5.4284323271665045
+      "usageCount": 475,
+      "usagePercent": 4.354602126879355
     }
   },
   {
@@ -1577,8 +1581,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 292,
-      "usagePercent": 2.3693605972086984
+      "usageCount": 218,
+      "usagePercent": 1.9985331866519986
     }
   },
   {
@@ -1640,8 +1644,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -1681,8 +1685,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 8,
+      "usagePercent": 0.07334066740007333
     }
   },
   {
@@ -1704,8 +1708,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 175,
-      "usagePercent": 1.4199935086011035
+      "usageCount": 130,
+      "usagePercent": 1.1917858452511918
     }
   },
   {
@@ -1810,8 +1814,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -1889,8 +1893,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 89,
-      "usagePercent": 0.7221681272314184
+      "usageCount": 144,
+      "usagePercent": 1.3201320132013201
     }
   },
   {
@@ -2074,8 +2078,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 144,
-      "usagePercent": 1.1684518013631937
+      "usageCount": 128,
+      "usagePercent": 1.1734506784011733
     }
   },
   {
@@ -2211,8 +2215,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -2239,8 +2243,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 11,
+      "usagePercent": 0.10084341767510084
     }
   },
   {
@@ -2324,8 +2328,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 124,
-      "usagePercent": 1.006166828951639
+      "usageCount": 95,
+      "usagePercent": 0.8709204253758709
     }
   },
   {
@@ -2366,8 +2370,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -2520,8 +2524,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -2562,7 +2566,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 56,
-      "usagePercent": 0.45439792275235313
+      "usagePercent": 0.5133846718005134
     }
   },
   {
@@ -2664,8 +2668,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 102,
-      "usagePercent": 0.8276533592989289
+      "usageCount": 182,
+      "usagePercent": 1.6685001833516684
     }
   },
   {
@@ -2707,7 +2711,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -2774,8 +2778,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 9,
+      "usagePercent": 0.08250825082508251
     }
   },
   {
@@ -2795,8 +2799,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 38,
-      "usagePercent": 0.3083414475819539
+      "usageCount": 34,
+      "usagePercent": 0.3116978364503117
     }
   },
   {
@@ -2834,8 +2838,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 238,
-      "usagePercent": 1.9311911716975008
+      "usageCount": 173,
+      "usagePercent": 1.5859919325265859
     }
   },
   {
@@ -2892,7 +2896,11 @@
       "列陣兵進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -2932,8 +2940,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -3189,8 +3197,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 237,
-      "usagePercent": 1.9230769230769231
+      "usageCount": 251,
+      "usagePercent": 2.3010634396773013
     }
   },
   {
@@ -3286,11 +3294,7 @@
       "氣勢頭帶"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "legal": true
     }
   },
   {
@@ -3315,8 +3319,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1288,
-      "usagePercent": 10.451152223304122
+      "usageCount": 1211,
+      "usagePercent": 11.101943527686101
     }
   },
   {
@@ -3428,8 +3432,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 116,
-      "usagePercent": 0.9412528399870171
+      "usageCount": 56,
+      "usagePercent": 0.5133846718005134
     }
   },
   {
@@ -3508,8 +3512,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -3553,8 +3557,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 15,
-      "usagePercent": 0.12171372930866603
+      "usageCount": 18,
+      "usagePercent": 0.16501650165016502
     }
   },
   {
@@ -3578,8 +3582,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 353,
-      "usagePercent": 2.86432976306394
+      "usageCount": 231,
+      "usagePercent": 2.1177117711771176
     }
   },
   {
@@ -3603,8 +3607,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 102,
-      "usagePercent": 0.8276533592989289
+      "usageCount": 98,
+      "usagePercent": 0.8984231756508985
     }
   },
   {
@@ -3628,8 +3632,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 117,
-      "usagePercent": 0.949367088607595
+      "usageCount": 145,
+      "usagePercent": 1.3292995966263295
     }
   },
   {
@@ -3706,7 +3710,11 @@
       "冰鬼護進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -3730,8 +3738,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 43,
-      "usagePercent": 0.3489126906848426
+      "usageCount": 33,
+      "usagePercent": 0.3025302530253025
     }
   },
   {
@@ -3794,8 +3802,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 243,
-      "usagePercent": 1.9717624148003894
+      "usageCount": 263,
+      "usagePercent": 2.411074440777411
     }
   },
   {
@@ -3820,7 +3828,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -3900,8 +3908,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 226,
-      "usagePercent": 1.8338201882505683
+      "usageCount": 192,
+      "usagePercent": 1.76017601760176
     }
   },
   {
@@ -3941,8 +3949,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 11,
+      "usagePercent": 0.10084341767510084
     }
   },
   {
@@ -4106,8 +4114,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 9,
+      "usagePercent": 0.08250825082508251
     }
   },
   {
@@ -4129,8 +4137,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 14,
-      "usagePercent": 0.11359948068808828
+      "usageCount": 10,
+      "usagePercent": 0.09167583425009168
     }
   },
   {
@@ -4175,8 +4183,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 11,
+      "usagePercent": 0.10084341767510084
     }
   },
   {
@@ -4232,11 +4240,7 @@
       "熾熱岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "legal": true
     }
   },
   {
@@ -4333,8 +4337,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03245699448231094
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -4379,8 +4383,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -4542,11 +4546,7 @@
       "冰冷岩石"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "legal": true
     }
   },
   {
@@ -4605,8 +4605,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usageCount": 10,
+      "usagePercent": 0.09167583425009168
     }
   },
   {
@@ -4686,8 +4686,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 11,
+      "usagePercent": 0.10084341767510084
     }
   },
   {
@@ -4709,8 +4709,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 35,
-      "usagePercent": 0.2839987017202207
+      "usageCount": 29,
+      "usagePercent": 0.26585991932526587
     }
   },
   {
@@ -4732,8 +4732,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -4798,7 +4798,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -4965,8 +4965,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08925673482635509
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -4989,8 +4989,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 843,
-      "usagePercent": 6.8403115871470295
+      "usageCount": 757,
+      "usagePercent": 6.93986065273194
     }
   },
   {
@@ -5025,7 +5025,11 @@
       "蘋野果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -5082,8 +5086,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1087,
-      "usagePercent": 8.820188250567998
+      "usageCount": 995,
+      "usagePercent": 9.121745507884121
     }
   },
   {
@@ -5127,11 +5131,7 @@
       "電氣球"
     ],
     "champions": {
-      "legal": true,
-      "source": "Limitless",
-      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "legal": true
     }
   },
   {
@@ -5154,8 +5154,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 227,
-      "usagePercent": 1.8419344368711459
+      "usageCount": 139,
+      "usagePercent": 1.2742940960762743
     }
   },
   {
@@ -5198,8 +5198,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usageCount": 10,
+      "usagePercent": 0.09167583425009168
     }
   },
   {
@@ -5258,7 +5258,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -5282,8 +5282,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 30,
-      "usagePercent": 0.24342745861733206
+      "usageCount": 19,
+      "usagePercent": 0.1741840850751742
     }
   },
   {
@@ -5331,7 +5331,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usagePercent": 0.08250825082508251
     }
   },
   {
@@ -5549,8 +5549,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -5633,8 +5633,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -5676,8 +5676,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -5773,8 +5773,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 28,
-      "usagePercent": 0.22719896137617657
+      "usageCount": 37,
+      "usagePercent": 0.3392005867253392
     }
   },
   {
@@ -5813,7 +5813,11 @@
       "恰雷姆進化石"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -5837,8 +5841,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.09737098344693282
+      "usageCount": 18,
+      "usagePercent": 0.16501650165016502
     }
   },
   {
@@ -5861,8 +5865,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 12,
-      "usagePercent": 0.09737098344693282
+      "usageCount": 10,
+      "usagePercent": 0.09167583425009168
     }
   },
   {
@@ -5888,8 +5892,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.10548523206751054
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -5913,8 +5917,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 54,
-      "usagePercent": 0.4381694255111977
+      "usageCount": 38,
+      "usagePercent": 0.3483681701503484
     }
   },
   {
@@ -5955,8 +5959,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -6008,7 +6012,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -6194,8 +6198,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 624,
-      "usagePercent": 5.063291139240507
+      "usageCount": 501,
+      "usagePercent": 4.592959295929593
     }
   },
   {
@@ -6294,7 +6298,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 4,
-      "usagePercent": 0.03245699448231094
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -6339,8 +6343,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 113,
-      "usagePercent": 0.9169100941252841
+      "usageCount": 111,
+      "usagePercent": 1.0176017601760174
     }
   },
   {
@@ -6417,8 +6421,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 8,
-      "usagePercent": 0.06491398896462187
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -6460,8 +6464,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -6498,8 +6502,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 88,
-      "usagePercent": 0.7140538786108407
+      "usageCount": 89,
+      "usagePercent": 0.815914924825816
     }
   },
   {
@@ -6632,8 +6636,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 40,
-      "usagePercent": 0.32456994482310936
+      "usageCount": 43,
+      "usagePercent": 0.3942060872753942
     }
   },
   {
@@ -6652,7 +6656,11 @@
       "福祿果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -6748,8 +6756,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -6906,7 +6914,11 @@
       "毒針"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -7354,8 +7366,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 211,
-      "usagePercent": 1.712106458941902
+      "usageCount": 187,
+      "usagePercent": 1.7143381004767144
     }
   },
   {
@@ -7416,8 +7428,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 23,
-      "usagePercent": 0.1866277182732879
+      "usageCount": 18,
+      "usagePercent": 0.16501650165016502
     }
   },
   {
@@ -7479,8 +7491,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08925673482635509
+      "usageCount": 17,
+      "usagePercent": 0.15584891822515584
     }
   },
   {
@@ -7546,8 +7558,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 164,
-      "usagePercent": 1.3307367737747484
+      "usageCount": 224,
+      "usagePercent": 2.0535386872020536
     }
   },
   {
@@ -7571,8 +7583,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 416,
-      "usagePercent": 3.375527426160337
+      "usageCount": 300,
+      "usagePercent": 2.7502750275027505
     }
   },
   {
@@ -7710,7 +7722,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -7786,8 +7798,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 4,
-      "usagePercent": 0.03245699448231094
+      "usageCount": 7,
+      "usagePercent": 0.06417308397506417
     }
   },
   {
@@ -7903,8 +7915,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 274,
-      "usagePercent": 2.223304122038299
+      "usageCount": 229,
+      "usagePercent": 2.0993766043270994
     }
   },
   {
@@ -7982,8 +7994,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08925673482635509
+      "usageCount": 18,
+      "usagePercent": 0.16501650165016502
     }
   },
   {
@@ -8064,7 +8076,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -8179,8 +8191,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 213,
-      "usagePercent": 1.7283349561830574
+      "usageCount": 157,
+      "usagePercent": 1.4393105977264393
     }
   },
   {
@@ -8204,8 +8216,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 25,
-      "usagePercent": 0.20285621551444336
+      "usageCount": 13,
+      "usagePercent": 0.11917858452511919
     }
   },
   {
@@ -8229,8 +8241,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -8254,8 +8266,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -8275,8 +8287,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08925673482635509
+      "usageCount": 6,
+      "usagePercent": 0.055005500550055
     }
   },
   {
@@ -8300,8 +8312,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 19,
-      "usagePercent": 0.15417072379097696
+      "usageCount": 23,
+      "usagePercent": 0.21085441877521086
     }
   },
   {
@@ -8325,8 +8337,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 9,
+      "usagePercent": 0.08250825082508251
     }
   },
   {
@@ -8372,8 +8384,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 7,
-      "usagePercent": 0.05679974034404414
+      "usageCount": 11,
+      "usagePercent": 0.10084341767510084
     }
   },
   {
@@ -8397,8 +8409,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -8436,7 +8448,11 @@
       "貝殼之鈴"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -8497,8 +8513,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 6,
+      "usagePercent": 0.055005500550055
     }
   },
   {
@@ -8522,8 +8538,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 13,
+      "usagePercent": 0.11917858452511919
     }
   },
   {
@@ -8569,8 +8585,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 1166,
-      "usagePercent": 9.461213891593639
+      "usageCount": 1040,
+      "usagePercent": 9.534286762009534
     }
   },
   {
@@ -8594,8 +8610,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 6,
-      "usagePercent": 0.04868549172346641
+      "usageCount": 3,
+      "usagePercent": 0.0275027502750275
     }
   },
   {
@@ -8653,8 +8669,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 11,
-      "usagePercent": 0.08925673482635509
+      "usageCount": 15,
+      "usagePercent": 0.13751375137513752
     },
     "aliases": [
       "呆殼獸進化石"
@@ -8737,8 +8753,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -8808,8 +8824,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 9,
-      "usagePercent": 0.0730282375851996
+      "usageCount": 5,
+      "usagePercent": 0.04583791712504584
     }
   },
   {
@@ -8924,8 +8940,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 183,
-      "usagePercent": 1.4849074975657255
+      "usageCount": 152,
+      "usagePercent": 1.3934726806013935
     }
   },
   {
@@ -8969,8 +8985,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -9050,8 +9066,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -9190,8 +9206,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 77,
-      "usagePercent": 0.6247971437844856
+      "usageCount": 69,
+      "usagePercent": 0.6325632563256326
     }
   },
   {
@@ -9267,7 +9283,11 @@
       "扁櫻果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -9351,8 +9371,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 6,
+      "usagePercent": 0.055005500550055
     }
   },
   {
@@ -11299,8 +11319,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 5,
-      "usagePercent": 0.04057124310288867
+      "usageCount": 2,
+      "usagePercent": 0.018335166850018333
     }
   },
   {
@@ -11324,8 +11344,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 142,
-      "usagePercent": 1.1522233041220382
+      "usageCount": 126,
+      "usagePercent": 1.155115511551155
     }
   },
   {
@@ -11443,8 +11463,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 13,
-      "usagePercent": 0.10548523206751054
+      "usageCount": 12,
+      "usagePercent": 0.11001100110011
     }
   },
   {
@@ -11468,8 +11488,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -11508,7 +11528,11 @@
       "燭木果"
     ],
     "champions": {
-      "legal": true
+      "legal": true,
+      "source": "Limitless",
+      "sourceUrl": "https://play.limitlesstcg.com/tournaments",
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -11730,8 +11754,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 315,
-      "usagePercent": 2.5559883154819865
+      "usageCount": 242,
+      "usagePercent": 2.2185551888522186
     }
   },
   {
@@ -11752,8 +11776,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 33,
-      "usagePercent": 0.26777020447906524
+      "usageCount": 40,
+      "usagePercent": 0.3667033370003667
     }
   },
   {
@@ -11800,8 +11824,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 2,
-      "usagePercent": 0.01622849724115547
+      "usageCount": 4,
+      "usagePercent": 0.03667033370003667
     }
   },
   {
@@ -11823,8 +11847,8 @@
       "legal": true,
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
-      "usageCount": 3,
-      "usagePercent": 0.024342745861733205
+      "usageCount": 1,
+      "usagePercent": 0.009167583425009167
     }
   },
   {
@@ -11885,7 +11909,7 @@
       "source": "Limitless",
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 1,
-      "usagePercent": 0.008114248620577734
+      "usagePercent": 0.009167583425009167
     }
   },
   {
