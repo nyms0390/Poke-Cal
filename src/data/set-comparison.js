@@ -33,6 +33,7 @@ export function compactSide(side) {
     soaked: Boolean(side?.soaked),
     selectedMoveIds: SLOTS.map((index) => normalizeId(side?.selectedMoveIds?.[index])),
     critMoves: SLOTS.map((index) => Boolean(side?.critMoves?.[index])),
+    singleTargetMoves: SLOTS.map((index) => Boolean(side?.singleTargetMoves?.[index])),
     moveOptionsBySlot: SLOTS.map((index) => ({ ...(side?.moveOptionsBySlot?.[index] ?? {}) })),
   };
 }
@@ -65,6 +66,7 @@ export function hydrateSide(compact, catalogs, createSide) {
     soaked: source.soaked,
     selectedMoveIds: source.selectedMoveIds,
     critMoves: source.critMoves,
+    singleTargetMoves: source.singleTargetMoves,
     moveOptionsBySlot: source.moveOptionsBySlot,
   };
   if (source.nature) side.nature = source.nature;
@@ -238,7 +240,8 @@ export function setChanges(base, other) {
   }
   for (const slot of SLOTS) {
     if (a.critMoves[slot] !== b.critMoves[slot]) changes.push({ kind: "crit", slot, to: b.critMoves[slot] });
-    if (stableJson(a.moveOptionsBySlot[slot]) !== stableJson(b.moveOptionsBySlot[slot])) {
+    if (a.singleTargetMoves[slot] !== b.singleTargetMoves[slot] ||
+      stableJson(a.moveOptionsBySlot[slot]) !== stableJson(b.moveOptionsBySlot[slot])) {
       changes.push({ kind: "conditions", slot });
     }
   }

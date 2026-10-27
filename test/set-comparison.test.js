@@ -32,7 +32,8 @@ const memoryStorage = () => {
 };
 
 test("compact sides keep identifiers and editable values, then hydrate catalog entries", () => {
-  const compact = compactSide({ ...base, stages: { ...base.stages, spe: 2 }, critMoves: [true, false, false, false] });
+  const compact = compactSide({ ...base, stages: { ...base.stages, spe: 2 }, critMoves: [true, false, false, false],
+    singleTargetMoves: [false, true, false, false] });
   assert.equal(compact.pokemonId, "pikachu");
   assert.equal(compact.itemId, "lightball");
   assert.equal(JSON.stringify(compact).includes('"name"'), false);
@@ -42,6 +43,7 @@ test("compact sides keep identifiers and editable values, then hydrate catalog e
   assert.equal(side.item, item);
   assert.equal(side.stages.spe, 2);
   assert.equal(side.critMoves[0], true);
+  assert.deepEqual(side.singleTargetMoves, [false, true, false, false]);
   assert.equal(side.extra, "kept");
   assert.deepEqual(missing, []);
   assert.equal(hydrateSide({ ...compact, pokemonId: "missingno" }, catalogs, () => usageDefault), null);
@@ -109,6 +111,8 @@ test("changes list moves by slot and every other edit as data", () => {
   ]);
   assert.deepEqual(changeTally(changes), { moves: 1, parts: ["item", "nature", "sp", "moveSettings"] });
   assert.deepEqual(setChanges(base, { ...base }), []);
+  assert.deepEqual(setChanges(base, { ...base, singleTargetMoves: [false, true, false, false] }),
+    [{ kind: "conditions", slot: 1 }]);
   assert.deepEqual(setChanges(base, { ...base, moveOptionsBySlot: [{ a: "1", b: "2" }, {}, {}, {}] }),
     setChanges(base, { ...base, moveOptionsBySlot: [{ b: "2", a: "1" }, {}, {}, {}] }));
 });

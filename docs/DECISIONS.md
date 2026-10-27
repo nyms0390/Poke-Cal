@@ -34,6 +34,7 @@ Each entry is the decision, the date it was made (as far as the history shows), 
 - **The turn grid's 4+/4+ corner is a single No KO cell;** do not split it (a trial was rejected). Stalemate means neither side can 3HKO. (2026-10-12)
 - **Four outcomes everywhere:** You beat / Move order / Beat you / No KO, including Compare sets. (2026-10-12)
 - **Opponents never assume a crit.** (2026-10-08)
+- **Spread moves have a per-move "1 target" toggle** in Battle and the shared set editor (Builder, Matchups, Compare sets): on, the move skips the doubles 0.75x spread modifier for that slot only. It shows only for moves that can spread (incl. Expanding Force), resets when the move changes, and is not saved to the shared active set, like Crit. The field's Singles format still removes the modifier for every move. (2026-10-27) Enforced: `test/move-conditions.test.js`, `test/matchup-analysis.test.js`.
 - **"Beyond the usual sets" splits at 20 Limitless teams;** tabs are named "Top N" / "Beyond top N". (2026-10-08)
 - **Each Mega form with its own Limitless usage gets its own Builder opponent set,** and Mega Stone holders' set details count only under the Mega form; the base species still counts the team and its teammates. (2026-10-14) Enforced: `test/limitless-data.test.js`, `test/threats.test.js`.
 

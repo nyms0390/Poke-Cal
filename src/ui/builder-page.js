@@ -314,10 +314,10 @@ function refreshFromActiveSet() {
   }, { refreshPicks: true });
 }
 
-// Setup edits are staged until "Apply spread"; a crit toggle applies at once, as before.
+// Setup edits are staged until "Apply spread"; crit and "1 target" toggles apply at once.
 function handleSetupControl(control) {
   if (!state.user) return;
-  if (control.kind === "crit") {
+  if (control.kind === "crit" || control.kind === "singleTarget") {
     updatePage(() => {
       if (userSetupDraft) userSetupDraft.stage((current) => applyControl(current, control));
       state = { ...state, user: applyControl(state.user, control) };

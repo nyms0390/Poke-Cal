@@ -1,5 +1,5 @@
 import { normalizeId } from "../identifiers.js";
-import { hitCountRange } from "../engine/damage.js";
+import { hitCountRange, isSpreadMove } from "../engine/damage.js";
 import { moveEffect } from "../engine/move-effects.js";
 
 const BOOLEAN_LABELS = {
@@ -87,5 +87,6 @@ export function moveOptionsForSlot(state, index, move) {
     if (value === "auto") continue;
     options[descriptor.key] = value === "yes" ? true : value === "no" ? false : Number(value);
   }
+  if (state?.singleTargetMoves?.[index] && isSpreadMove(move)) options.singleTarget = true;
   return options;
 }

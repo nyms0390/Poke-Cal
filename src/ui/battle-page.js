@@ -73,6 +73,7 @@ import {
   pokemonSearchMatchers,
   pokemonSpriteElements,
   searchResultButton,
+  singleTargetToggleButton,
   statEditorRow,
   STAT_LABELS,
   typeBadge,
@@ -1024,7 +1025,7 @@ function controlFromTarget(target) {
   }
   if (target.dataset.kind === "single-target") {
     const { side, index } = target.dataset;
-    return { kind: "singleTarget", side, index: Number(index), value: target.checked };
+    return { kind: "singleTarget", side, index: Number(index), value: target.getAttribute("aria-pressed") === "true" };
   }
   if (target.dataset.kind === "move-option") {
     const { side, index, key } = target.dataset;
@@ -1128,6 +1129,14 @@ function renderDamageMovePickers(side) {
         manual: state.critMoves?.[index],
         onToggle: (_pressed, crit) => handleDamageControl({ target: crit }),
       }));
+      const singleTarget = singleTargetToggleButton({
+        index,
+        side,
+        selectedMove,
+        pressed: state.singleTargetMoves?.[index],
+        onToggle: (_pressed, button) => handleDamageControl({ target: button }),
+      });
+      if (singleTarget) row.append(singleTarget);
 
       for (const descriptor of moveConditionDescriptors(selectedMove, state)) {
         row.append(moveConditionSelect(descriptor, {
@@ -1234,7 +1243,6 @@ function moveOptionsForDamage(side, index, move) {
   const slotOptions = moveOptionsForSlot(damageState[side], index, move);
   return {
     ...slotOptions,
-    singleTarget: damageState[side].singleTargetMoves?.[index],
     critical: Boolean(damageState[side].critMoves?.[index]),
     opponentMove: selectedDamageMoves(otherSide)[0]?.move,
     targetMoved: slotOptions.targetMoved ?? targetMovedForMove(side, index, move),

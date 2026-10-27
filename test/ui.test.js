@@ -79,7 +79,8 @@ test("builder exposes per-move critical-hit controls for offensive breakpoint an
 
   assert.doesNotMatch(html, /builder-critical-toggle/);
   assert.match(editor, /critToggleButton\(\{[\s\S]*?onToggle: \(pressed\) => edit\(\{ kind: "crit"/);
-  assert.match(source, /if \(control\.kind === "crit"\)/);
+  assert.match(source, /if \(control\.kind === "crit" \|\| control\.kind === "singleTarget"\)/);
+  assert.match(editor, /singleTargetToggleButton\(\{[\s\S]*?onToggle: \(pressed\) => edit\(\{ kind: "singleTarget"/);
   assert.match(components, /crit\.dataset\.kind = "crit"/);
   assert.match(components, /const pressed = crit\.getAttribute\("aria-pressed"\) !== "true";[\s\S]*?crit\.setAttribute\("aria-pressed", String\(pressed\)\)/);
   assert.match(source, /critical: Boolean\(setup\.critMoves\?\./);
