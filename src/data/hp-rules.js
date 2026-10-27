@@ -126,6 +126,30 @@ export function hpNumberPlan(user, { moves = [], effects = [], unassignedSp = 0 
   };
 }
 
+// HP gained each time a chip or heal rule's effect applies when HP moves from `fromHp` to
+// `toHp`: less chip taken or more healed (the modulus is the effect's 1/k). Negative when the
+// move makes it worse; null for the Sitrus Berry and Substitute combos, which are not per tick.
+export function hpRuleGain(rule, fromHp, toHp) {
+  if (rule.goal === "chip") return Math.floor(fromHp / rule.modulus) - Math.floor(toHp / rule.modulus);
+  if (rule.goal === "heal") return Math.floor(toHp / rule.modulus) - Math.floor(fromHp / rule.modulus);
+  return null;
+}
+
+// The trade-off of moving from the most-bulk spread's HP to a fitting one: the first chip or heal
+// rule's gain per tick and how many ticks repay `bulkCostHp`. `turns` is null without such a rule
+// or when the gain is not positive.
+export function hpTradeoff(rules, { fromHp, toHp, bulkCostHp }) {
+  const rule = rules.find(({ goal }) => goal === "chip" || goal === "heal") ?? null;
+  const gain = rule ? hpRuleGain(rule, fromHp, toHp) : null;
+  return {
+    rule,
+    gain,
+    bulkCostHp,
+    // Counted from the cost as shown (0.1 HP), so "about 1.0 HP" never reads as 2 ticks.
+    turns: gain > 0 ? Math.max(1, Math.ceil(Math.round(bulkCostHp * 10) / 10 / gain)) : null,
+  };
+}
+
 // "16n − 1", "4n + 1", "3n": the target written the way players write it.
 export function hpRuleTarget({ modulus, remainder }) {
   if (remainder === 0) return `${modulus}n`;

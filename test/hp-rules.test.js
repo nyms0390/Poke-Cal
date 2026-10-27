@@ -5,7 +5,9 @@ import {
   hpNumberPlan,
   hpNumberRules,
   hpRuleMatches,
+  hpRuleGain,
   hpRuleTarget,
+  hpTradeoff,
 } from "../src/data/hp-rules.js";
 
 const rillaboom = {
@@ -122,4 +124,30 @@ test("has no plan targets without rules", () => {
   assert.equal(plan.matches, null);
   assert.equal(plan.below, null);
   assert.equal(plan.above, null);
+});
+
+test("counts the HP each tick saves and the ticks that repay the bulk given up", () => {
+  const sand = { goal: "chip", modulus: 16, remainder: 15 };
+  const leftovers = { goal: "heal", modulus: 16, remainder: 0 };
+  assert.equal(hpRuleGain(sand, 176, 175), 1);
+  assert.equal(hpRuleGain(sand, 176, 207), -1);
+  assert.equal(hpRuleGain(leftovers, 191, 192), 1);
+  assert.equal(hpRuleGain({ goal: "halfCost", modulus: 2, remainder: 0 }, 175, 176), null);
+
+  assert.deepEqual(hpTradeoff([sand], { fromHp: 176, toHp: 175, bulkCostHp: 2.4 }), {
+    rule: sand,
+    gain: 1,
+    bulkCostHp: 2.4,
+    turns: 3,
+  });
+  assert.equal(hpTradeoff([sand], { fromHp: 176, toHp: 175, bulkCostHp: 0.2 }).turns, 1);
+  assert.equal(hpTradeoff([sand], { fromHp: 176, toHp: 175, bulkCostHp: 1.03 }).turns, 1);
+  assert.equal(hpTradeoff([sand], { fromHp: 176, toHp: 207, bulkCostHp: 1 }).turns, null);
+  const combo = { goal: "halfCost", modulus: 2, remainder: 0 };
+  assert.deepEqual(hpTradeoff([combo], { fromHp: 175, toHp: 176, bulkCostHp: 1 }), {
+    rule: null,
+    gain: null,
+    bulkCostHp: 1,
+    turns: null,
+  });
 });

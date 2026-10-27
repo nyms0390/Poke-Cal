@@ -26,8 +26,10 @@ export function zeroBulkState(userState) {
   };
 }
 
-// `hpMatches(hp)` (an HP number plan's `matches`) limits HP to fitting values whenever one of
-// them is reachable; otherwise the target is ignored. With `hpMatches`, `hpTargetKept` says which.
+// With `hpMatches(hp)` (an HP number plan's `matches`) the result also says whether the most-bulk
+// spread fits (`hpFits`) and, when it does not, offers the bulkiest fitting spread as `hpOption`
+// with its cost: `bulkCostHp` is how much HP the most-bulk spread could lose and still take no
+// more damage from equal physical and special hits than the fitting one.
 export function generalBulkRecommendation(userState, { budget = 66, hpMatches = null } = {}) {
   if (!userState?.pokemon) return null;
 
@@ -60,10 +62,18 @@ export function generalBulkRecommendation(userState, { budget = 66, hpMatches = 
     }
   }
 
-  const chosen = bestFitting ?? best;
-  if (!chosen) return null;
-  const { score: _score, ...recommendation } = chosen;
-  return hpMatches ? { ...recommendation, hpTargetKept: Boolean(bestFitting) } : recommendation;
+  if (!best) return null;
+  const { score: _score, ...recommendation } = best;
+  if (!hpMatches) return recommendation;
+  const hpFits = Boolean(hpMatches(best.stats.hp));
+  const hpOption = !hpFits && bestFitting
+    ? {
+      sp: bestFitting.sp,
+      stats: bestFitting.stats,
+      bulkCostHp: best.stats.hp * (1 - bestFitting.score / best.score),
+    }
+    : null;
+  return { ...recommendation, hpFits, hpOption };
 }
 
 export function threatDamage(userState, scenario) {

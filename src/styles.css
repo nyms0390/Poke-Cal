@@ -3076,6 +3076,13 @@ button:disabled {
   justify-self: start;
 }
 
+.builder-general-bulk-option {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--accent-ring);
+  padding-top: 10px;
+}
+
 /* HP number card: HP values that lose less to fixed-fraction chip or heal more (hp-rules.js). */
 .builder-hp-number {
   display: grid;

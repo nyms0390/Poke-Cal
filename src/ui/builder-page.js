@@ -28,6 +28,7 @@ import {
   hpNumberPlan,
   hpRuleMatches,
   hpRuleTarget,
+  hpTradeoff,
 } from "../data/hp-rules.js";
 import { megaFamilyId } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
@@ -672,17 +673,57 @@ function renderGeneralBulkRecommendation(recommendation, hpPlan) {
     ),
   );
 
+  const children = [
+    heading,
+    textSpan(t("builder.generalBulkDescription"), "builder-general-bulk-description"),
+  ];
+  if (recommendation.hpFits && hpPlan?.rules.length) {
+    children.push(textSpan(
+      t("builder.hpBulkFits", { targets: hpTargetList(hpPlan.rules) }),
+      "builder-general-bulk-description",
+    ));
+  }
+  children.push(...generalBulkSpread(recommendation, t("builder.applyRecommendation")));
+
+  // A fitting spread beside the most-bulk one, with what it costs and what it saves per tick.
+  const option = recommendation.hpOption;
+  const tradeoff = option && hpPlan
+    ? hpTradeoff(hpPlan.rules, {
+      fromHp: recommendation.stats.hp,
+      toHp: option.stats.hp,
+      bulkCostHp: option.bulkCostHp,
+    })
+    : null;
+  if (tradeoff && (tradeoff.turns !== null || !tradeoff.rule)) {
+    const section = document.createElement("div");
+    section.className = "builder-general-bulk-option";
+    const optionTitle = document.createElement("strong");
+    optionTitle.textContent = t("builder.hpOptionTitle", { targets: hpTargetList(hpPlan.rules) });
+    section.append(
+      optionTitle,
+      textSpan(hpTradeoffText(tradeoff, hpPlan.rules), "builder-general-bulk-description"),
+      ...generalBulkSpread(option, t("builder.applyHpOption")),
+    );
+    children.push(section);
+  }
+
+  elements.generalBulk.replaceChildren(...children);
+  elements.generalBulk.hidden = false;
+}
+
+// SP and final stats of one general bulk spread, then its Apply button.
+function generalBulkSpread(spread, applyLabel) {
   const spreads = document.createElement("div");
   spreads.className = "builder-general-bulk-spreads";
   spreads.append(
-    generalBulkStatGroup(t("builder.recommendedSp"), recommendation.sp),
-    generalBulkStatGroup(t("builder.finalBulkStats"), recommendation.stats),
+    generalBulkStatGroup(t("builder.recommendedSp"), spread.sp),
+    generalBulkStatGroup(t("builder.finalBulkStats"), spread.stats),
   );
 
   const apply = document.createElement("button");
   apply.type = "button";
   apply.className = "builder-apply-button";
-  apply.textContent = t("builder.applyRecommendation");
+  apply.textContent = applyLabel;
   apply.addEventListener("click", () => {
     resetUserSetupDraft();
     updatePage(() => {
@@ -690,25 +731,21 @@ function renderGeneralBulkRecommendation(recommendation, hpPlan) {
         ...state,
         user: {
           ...state.user,
-          sp: { ...state.user.sp, ...recommendation.sp },
+          sp: { ...state.user.sp, ...spread.sp },
         },
       };
     });
   });
+  return [spreads, apply];
+}
 
-  elements.generalBulk.replaceChildren(
-    heading,
-    textSpan(t("builder.generalBulkDescription"), "builder-general-bulk-description"),
-    ...(recommendation.hpTargetKept
-      ? [textSpan(
-        t("builder.hpTargetKept", { targets: hpTargetList(hpPlan.rules) }),
-        "builder-general-bulk-description",
-      )]
-      : []),
-    spreads,
-    apply,
-  );
-  elements.generalBulk.hidden = false;
+function hpTradeoffText({ rule, gain, bulkCostHp, turns }, rules) {
+  const target = hpTargetList(rules);
+  const cost = t("builder.hpBulkCost", { cost: bulkCostHp });
+  if (!rule) return t("builder.hpTradeoffCost", { target, cost });
+  const sources = rule.sources.map(hpSourceName).join(t("builder.hpListJoin"));
+  const key = rule.goal === "chip" ? "builder.hpTradeoffChip" : "builder.hpTradeoffHeal";
+  return t(key, { target, cost, gain, sources, turns });
 }
 
 // The HP number card: rules from the set plus opted-in effects, whether the current HP fits,
