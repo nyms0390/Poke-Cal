@@ -26,7 +26,9 @@ export function zeroBulkState(userState) {
   };
 }
 
-export function generalBulkRecommendation(userState, { budget = 66 } = {}) {
+// `hpMatches(hp)` (an HP number plan's `matches`) limits HP to fitting values whenever one of
+// them is reachable; otherwise the target is ignored. With `hpMatches`, `hpTargetKept` says which.
+export function generalBulkRecommendation(userState, { budget = 66, hpMatches = null } = {}) {
   if (!userState?.pokemon) return null;
 
   const currentSp = {
@@ -40,6 +42,7 @@ export function generalBulkRecommendation(userState, { budget = 66 } = {}) {
     Math.min(96, Math.max(0, Math.trunc(Number(budget) || 0))),
   );
   let best = null;
+  let bestFitting = null;
 
   for (let hpSp = currentSp.hp; hpSp <= 32; hpSp += 1) {
     for (let defSp = currentSp.def; defSp <= 32; defSp += 1) {
@@ -53,12 +56,14 @@ export function generalBulkRecommendation(userState, { budget = 66 } = {}) {
         score: mixedBulkScore(stats),
       };
       if (betterGeneralBulk(candidate, best)) best = candidate;
+      if (hpMatches?.(stats.hp) && betterGeneralBulk(candidate, bestFitting)) bestFitting = candidate;
     }
   }
 
-  if (!best) return null;
-  const { score: _score, ...recommendation } = best;
-  return recommendation;
+  const chosen = bestFitting ?? best;
+  if (!chosen) return null;
+  const { score: _score, ...recommendation } = chosen;
+  return hpMatches ? { ...recommendation, hpTargetKept: Boolean(bestFitting) } : recommendation;
 }
 
 export function threatDamage(userState, scenario) {

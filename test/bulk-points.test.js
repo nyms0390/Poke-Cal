@@ -184,6 +184,42 @@ test("general bulk recommendation spends only unassigned SP", () => {
   assert.deepEqual(state.sp, { hp: 5, atk: 20, def: 0, spa: 0, spd: 0, spe: 21 });
 });
 
+test("general bulk recommendation keeps HP on a reachable HP number", () => {
+  const state = {
+    ...userState(),
+    pokemon: {
+      ...defender,
+      baseStats: { ...defender.baseStats, hp: 65, def: 80, spd: 80 },
+    },
+  };
+  const free = generalBulkRecommendation(state, { budget: 20 });
+  const fitting = generalBulkRecommendation(state, {
+    budget: 20,
+    hpMatches: (hp) => hp % 16 === 15,
+  });
+
+  assert.equal(free.stats.hp, 160);
+  assert.equal(fitting.stats.hp % 16, 15);
+  assert.equal(fitting.addedSp, 20);
+  assert.equal(fitting.sp.hp + fitting.sp.def + fitting.sp.spd, 20);
+  assert.equal(fitting.hpTargetKept, true);
+});
+
+test("general bulk recommendation ignores an HP number it cannot reach", () => {
+  const state = {
+    ...userState(),
+    pokemon: {
+      ...defender,
+      baseStats: { ...defender.baseStats, hp: 65, def: 80, spd: 80 },
+    },
+  };
+
+  assert.deepEqual(generalBulkRecommendation(state, { budget: 20, hpMatches: () => false }), {
+    ...generalBulkRecommendation(state, { budget: 20 }),
+    hpTargetKept: false,
+  });
+});
+
 test("targets the next modeled KO tier from every non-terminal origin", () => {
   const tiers = [
     ["guaranteed OHKO", 1, 2],
