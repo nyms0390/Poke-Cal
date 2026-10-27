@@ -23,6 +23,12 @@ import {
   koHitCount,
   rankBulkCoverageGroups,
 } from "../data/bulk-points.js";
+import {
+  availableHpEffects,
+  hpNumberPlan,
+  hpRuleMatches,
+  hpRuleTarget,
+} from "../data/hp-rules.js";
 import { megaFamilyId } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
@@ -102,6 +108,7 @@ const elements = {
   bulkPanel: document.querySelector("#builder-bulk-panel"),
   breakPanel: document.querySelector("#builder-break-panel"),
   bulkCount: document.querySelector("#bulk-count"),
+  hpNumber: document.querySelector("#builder-hp-number"),
   generalBulk: document.querySelector("#builder-general-bulk"),
   bulkPoints: document.querySelector("#bulk-points"),
   breakCount: document.querySelector("#break-count"),
@@ -114,6 +121,8 @@ let state = createBuilderState();
 const activeSetStore = createActiveSetStore(browserStorage());
 const threatPreferencesStore = createThreatPreferencesStore(browserStorage());
 let customThreats = [];
+// Opponent and field effects the HP number card plans for (hp-rules.js HP_EFFECTS); opt-in.
+let hpEffects = [];
 let userSetupDraft = null;
 let unavailableRequestId = "";
 const threatOverrides = new Map();
@@ -574,8 +583,9 @@ function renderCustomThreats() {
 
 function renderBulkPoints(inputs) {
   const { user, threats, budget } = inputs;
+  // The HP number card also reads the selected moves and the opted-in effects.
   const renderKey = analysisRenderKey({
-    context: inputs.bulkContext,
+    context: `${inputs.bulkContext}:${user.selectedMoveIds.join(",")}:${hpEffects.join(",")}`,
     threatKeys: inputs.bulkThreatKeys,
     locale: getLocale(),
   });
@@ -585,7 +595,11 @@ function renderBulkPoints(inputs) {
   if (renderedAnalysisKeys.bulk === renderKey) return;
   renderedAnalysisKeys.bulk = renderKey;
 
-  renderGeneralBulkRecommendation(generalBulkRecommendation(user, { budget }));
+  const hpPlan = renderHpNumber(user);
+  renderGeneralBulkRecommendation(
+    generalBulkRecommendation(user, { budget, hpMatches: hpPlan?.matches }),
+    hpPlan,
+  );
   const resultsByThreat = new Map(threats.map((threat, index) => [threat, results[index]]));
   const families = threatFamilies(threats).map((family) => ({
     ...family,
@@ -638,7 +652,7 @@ function bulkThreatResult(inputs, threat, threatKey) {
   });
 }
 
-function renderGeneralBulkRecommendation(recommendation) {
+function renderGeneralBulkRecommendation(recommendation, hpPlan) {
   if (!recommendation || recommendation.addedSp <= 0) {
     elements.generalBulk.hidden = true;
     elements.generalBulk.replaceChildren();
@@ -685,10 +699,184 @@ function renderGeneralBulkRecommendation(recommendation) {
   elements.generalBulk.replaceChildren(
     heading,
     textSpan(t("builder.generalBulkDescription"), "builder-general-bulk-description"),
+    ...(recommendation.hpTargetKept
+      ? [textSpan(
+        t("builder.hpTargetKept", { targets: hpTargetList(hpPlan.rules) }),
+        "builder-general-bulk-description",
+      )]
+      : []),
     spreads,
     apply,
   );
   elements.generalBulk.hidden = false;
+}
+
+// The HP number card: rules from the set plus opted-in effects, whether the current HP fits,
+// and the closest fitting HP below and above. Returns the plan for the general bulk fallback.
+function renderHpNumber(user) {
+  const moves = selectedMoves(user);
+  const effects = availableHpEffects(user, moves);
+  const plan = hpNumberPlan(user, {
+    moves,
+    effects: hpEffects,
+    unassignedSp: SET_SP_LIMIT - spSpent(user.sp),
+  });
+  if (!plan) {
+    elements.hpNumber.hidden = true;
+    elements.hpNumber.replaceChildren();
+    return null;
+  }
+
+  const heading = document.createElement("div");
+  heading.className = "builder-general-bulk-heading";
+  const title = document.createElement("strong");
+  title.id = "builder-hp-number-title";
+  title.textContent = t("builder.hpNumberTitle");
+  heading.append(
+    title,
+    textSpan(t("builder.hpCurrent", { hp: plan.hp, sp: plan.sp }), "builder-hp-current"),
+  );
+
+  const children = [
+    heading,
+    textSpan(t("builder.hpNumberDescription"), "builder-hp-description"),
+  ];
+  if (effects.length > 0) children.push(hpEffectToggles(effects));
+  if (plan.rules.length === 0) {
+    children.push(textSpan(t("builder.hpNoRules"), "builder-hp-description"));
+  } else {
+    const list = document.createElement("ul");
+    list.className = "builder-hp-rules";
+    list.append(...plan.rules.map((rule) => hpRuleRow(rule, plan.hp)));
+    children.push(list);
+    if (plan.dropped.length > 0) {
+      children.push(textSpan(
+        t("builder.hpDropped", { targets: hpTargetList(plan.dropped) }),
+        "builder-hp-description",
+      ));
+    }
+    const options = [
+      plan.below && plan.below.sp !== plan.sp ? plan.below : null,
+      plan.above,
+    ].filter(Boolean);
+    if (options.length > 0) {
+      const actions = document.createElement("div");
+      actions.className = "builder-hp-options";
+      actions.append(...options.map((option) => hpOptionButton(option, plan.sp)));
+      children.push(actions);
+    }
+  }
+  // The card is rebuilt on every change, so keep keyboard focus on the toggle just used.
+  const focusedEffect = elements.hpNumber.contains(document.activeElement)
+    ? document.activeElement.dataset.hpEffect
+    : "";
+  elements.hpNumber.replaceChildren(...children);
+  elements.hpNumber.hidden = false;
+  if (focusedEffect) elements.hpNumber.querySelector(`[data-hp-effect="${focusedEffect}"]`)?.focus();
+  return plan;
+}
+
+function hpEffectToggles(effects) {
+  const group = document.createElement("fieldset");
+  group.className = "builder-hp-effects";
+  const legend = document.createElement("legend");
+  legend.textContent = t("builder.hpEffectsLegend");
+  group.append(legend, ...effects.map((effect) => {
+    const label = document.createElement("label");
+    label.className = "inline-toggle";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.dataset.hpEffect = effect;
+    input.checked = hpEffects.includes(effect);
+    input.addEventListener("change", () => {
+      updatePage(() => {
+        hpEffects = input.checked
+          ? [...hpEffects, effect]
+          : hpEffects.filter((id) => id !== effect);
+      });
+    });
+    label.append(input, document.createTextNode(` ${hpEffectLabel(effect)}`));
+    return label;
+  }));
+  return group;
+}
+
+function hpEffectLabel(effect) {
+  if (effect === "sand") return hpSourceName({ kind: "move", id: "sandstorm" });
+  if (effect === "burn") return t("builder.hpEffectBurn");
+  if (effect === "grassy") return hpSourceName({ kind: "move", id: "grassyterrain" });
+  return t("builder.hpEffectContact", {
+    roughSkin: hpSourceName({ kind: "ability", id: "roughskin" }),
+    rockyHelmet: hpSourceName({ kind: "item", id: "rockyhelmet" }),
+  });
+}
+
+function hpRuleRow(rule, hp) {
+  const row = document.createElement("li");
+  const fits = hpRuleMatches(rule, hp);
+  row.className = "builder-hp-rule";
+  row.dataset.fits = String(fits);
+  row.append(
+    textSpan(hpRuleTarget(rule), "builder-hp-target"),
+    textSpan(hpRuleText(rule), "builder-hp-reason"),
+    textSpan(fits ? `✓ ${t("builder.hpFits")}` : `× ${t("builder.hpMisses")}`, "builder-hp-status"),
+  );
+  return row;
+}
+
+function hpRuleText({ goal, sources }) {
+  const names = sources.map(hpSourceName);
+  const berry = hpSourceName({ kind: "item", id: "sitrusberry" });
+  if (goal === "chip") return t("builder.hpRuleChip", { sources: names.join(t("builder.hpListJoin")) });
+  if (goal === "heal") return t("builder.hpRuleHeal", { sources: names.join(t("builder.hpListJoin")) });
+  if (goal === "halfCost") return t("builder.hpRuleHalfCost", { move: names[0], berry });
+  if (goal === "substituteSitrus") return t("builder.hpRuleSubstituteSitrus", { move: names[0], berry });
+  return t("builder.hpRuleSubstitute", { move: names[0] });
+}
+
+function hpSourceName({ kind, id }) {
+  if (kind === "status") return t("builder.hpBurn");
+  const lookup = kind === "item"
+    ? catalogs.itemLookup
+    : kind === "ability" ? catalogs.abilityLookup : catalogs.moveLookup;
+  const entry = lookup.get(id);
+  return entry ? localizedName(entry) : id;
+}
+
+function hpTargetList(rules) {
+  return rules.map(hpRuleTarget).join(t("builder.hpListJoin"));
+}
+
+function hpOptionButton(option, currentSp) {
+  const delta = option.sp - currentSp;
+  const wrapper = document.createElement("div");
+  wrapper.className = "builder-hp-option";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "builder-hp-option-button";
+  button.textContent = t("builder.hpUse", {
+    hp: option.hp,
+    delta: delta > 0 ? `+${delta}` : `−${Math.abs(delta)}`,
+  });
+  const affordable = delta <= 0 || option.affordable;
+  button.disabled = !affordable;
+  button.addEventListener("click", () => {
+    resetUserSetupDraft();
+    updatePage(() => {
+      state = {
+        ...state,
+        user: { ...state.user, sp: { ...state.user.sp, hp: option.sp } },
+      };
+    });
+  });
+  wrapper.append(button);
+  if (!affordable) {
+    const note = textSpan(t("builder.hpNeedsSp", { count: delta }), "builder-hp-description");
+    note.id = `builder-hp-needs-${option.sp}`;
+    button.setAttribute("aria-describedby", note.id);
+    wrapper.append(note);
+  }
+  return wrapper;
 }
 
 function generalBulkStatGroup(label, values) {

@@ -666,7 +666,8 @@ input[type="radio"] {
 .set-paste-actions button,
 .damage-copy-button,
 .compare-action,
-.team-action {
+.team-action,
+.builder-hp-option-button {
   min-height: var(--control-height);
   padding: 8px 14px;
   border: 1px solid var(--line);
@@ -696,7 +697,9 @@ input[type="radio"] {
 .compare-action:hover,
 .compare-action:focus-visible,
 .team-action:hover:not(:disabled),
-.team-action:focus-visible {
+.team-action:focus-visible,
+.builder-hp-option-button:hover:not(:disabled),
+.builder-hp-option-button:focus-visible {
   border-color: var(--accent);
   outline: none;
   color: var(--accent);
@@ -3070,6 +3073,108 @@ button:disabled {
 
 .builder-general-bulk .builder-apply-button {
   justify-self: start;
+}
+
+/* HP number card: HP values that lose less to fixed-fraction chip or heal more (hp-rules.js). */
+.builder-hp-number {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 12px;
+  background: var(--surface);
+}
+
+.builder-hp-number[hidden] {
+  display: none;
+}
+
+.builder-hp-current {
+  color: var(--muted);
+  font-size: var(--type-meta);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.builder-hp-description {
+  color: var(--muted);
+  font-size: var(--type-supporting);
+}
+
+.builder-hp-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.builder-hp-effects legend {
+  margin-bottom: 4px;
+  padding: 0;
+  color: var(--ink);
+  font-size: var(--type-label);
+  font-weight: 500;
+}
+
+.builder-hp-rules {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.builder-hp-rule {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding: 8px 0;
+}
+
+.builder-hp-target {
+  color: var(--ink);
+  font-size: var(--type-label);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.builder-hp-reason {
+  min-width: 0;
+  overflow-wrap: break-word;
+  color: var(--ink);
+  font-size: var(--type-supporting);
+}
+
+.builder-hp-status {
+  font-size: var(--type-meta);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.builder-hp-rule[data-fits="true"] .builder-hp-status {
+  color: var(--success-dark);
+}
+
+.builder-hp-rule[data-fits="false"] .builder-hp-status {
+  color: var(--muted);
+}
+
+.builder-hp-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 12px;
+}
+
+.builder-hp-option {
+  display: grid;
+  gap: 4px;
 }
 
 .builder-analysis-card {
