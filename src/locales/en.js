@@ -228,7 +228,15 @@ export const EN_MESSAGES = {
   "builder.hpDropped": ({ targets }) => `${targets} cannot also fit in this Pokémon's HP range.`,
   "builder.hpUse": ({ hp, delta }) => `Use HP ${hp} (${delta} SP)`,
   "builder.hpNeedsSp": ({ count }) => `Needs ${count} unassigned SP`,
-  "builder.hpTargetKept": ({ targets }) => `Keeps HP on ${targets}.`,
+  "builder.hpBulkFits": ({ targets }) => `This spread already keeps HP on ${targets}.`,
+  "builder.hpOptionTitle": ({ targets }) => `Keep HP on ${targets}`,
+  "builder.hpBulkCost": ({ cost }) => cost < 1 ? "under 1" : `about ${cost < 10 ? cost.toFixed(1) : Math.round(cost)}`,
+  "builder.hpTradeoffChip": ({ target, cost, gain, sources, turns }) =>
+    `${target} gives up bulk worth ${cost} HP and takes ${gain} HP less each time ${sources} hits, so it pays off after ${turns} ${turns === 1 ? "hit" : "hits"}.`,
+  "builder.hpTradeoffHeal": ({ target, cost, gain, sources, turns }) =>
+    `${target} gives up bulk worth ${cost} HP and heals ${gain} HP more each time ${sources} heals, so it pays off after ${turns} ${turns === 1 ? "heal" : "heals"}.`,
+  "builder.hpTradeoffCost": ({ target, cost }) => `${target} gives up bulk worth ${cost} HP.`,
+  "builder.applyHpOption": "Apply this spread",
   "builder.generalBulkTitle": "General bulk fallback",
   "builder.generalBulkDescription": "Spends the remaining SP with equal weight on physical and special bulk without lowering the current defensive spread.",
   "builder.unassignedSp": ({ count }) => `${count} unassigned SP`,

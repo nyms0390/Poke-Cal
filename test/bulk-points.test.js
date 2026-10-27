@@ -184,7 +184,7 @@ test("general bulk recommendation spends only unassigned SP", () => {
   assert.deepEqual(state.sp, { hp: 5, atk: 20, def: 0, spa: 0, spd: 0, spe: 21 });
 });
 
-test("general bulk recommendation keeps HP on a reachable HP number", () => {
+test("general bulk recommendation offers the bulkiest spread on a reachable HP number", () => {
   const state = {
     ...userState(),
     pokemon: {
@@ -193,19 +193,24 @@ test("general bulk recommendation keeps HP on a reachable HP number", () => {
     },
   };
   const free = generalBulkRecommendation(state, { budget: 20 });
-  const fitting = generalBulkRecommendation(state, {
+  const withRule = generalBulkRecommendation(state, {
     budget: 20,
     hpMatches: (hp) => hp % 16 === 15,
   });
 
-  assert.equal(free.stats.hp, 160);
-  assert.equal(fitting.stats.hp % 16, 15);
-  assert.equal(fitting.addedSp, 20);
-  assert.equal(fitting.sp.hp + fitting.sp.def + fitting.sp.spd, 20);
-  assert.equal(fitting.hpTargetKept, true);
+  assert.deepEqual({ sp: withRule.sp, stats: withRule.stats }, { sp: free.sp, stats: free.stats });
+  assert.equal(withRule.hpFits, false);
+  assert.equal(withRule.hpOption.stats.hp % 16, 15);
+  assert.equal(withRule.hpOption.sp.hp + withRule.hpOption.sp.def + withRule.hpOption.sp.spd, 20);
+  const score = ({ hp, def, spd }) => (hp * def * spd) / (def + spd);
+  assert.ok(Math.abs(
+    withRule.hpOption.bulkCostHp -
+      free.stats.hp * (1 - score(withRule.hpOption.stats) / score(free.stats)),
+  ) < 1e-9);
+  assert.ok(withRule.hpOption.bulkCostHp > 0);
 });
 
-test("general bulk recommendation ignores an HP number it cannot reach", () => {
+test("general bulk recommendation has no HP option when the bulkiest spread fits or none can", () => {
   const state = {
     ...userState(),
     pokemon: {
@@ -213,11 +218,13 @@ test("general bulk recommendation ignores an HP number it cannot reach", () => {
       baseStats: { ...defender.baseStats, hp: 65, def: 80, spd: 80 },
     },
   };
+  const fits = generalBulkRecommendation(state, { budget: 20, hpMatches: (hp) => hp === 160 });
+  assert.equal(fits.hpFits, true);
+  assert.equal(fits.hpOption, null);
 
-  assert.deepEqual(generalBulkRecommendation(state, { budget: 20, hpMatches: () => false }), {
-    ...generalBulkRecommendation(state, { budget: 20 }),
-    hpTargetKept: false,
-  });
+  const none = generalBulkRecommendation(state, { budget: 20, hpMatches: () => false });
+  assert.equal(none.hpFits, false);
+  assert.equal(none.hpOption, null);
 });
 
 test("targets the next modeled KO tier from every non-terminal origin", () => {

@@ -231,7 +231,15 @@ export const ZH_TW_MESSAGES = {
   "builder.hpDropped": ({ targets }) => `這隻寶可夢的 HP 範圍無法同時符合 ${targets}。`,
   "builder.hpUse": ({ hp, delta }) => `改為 HP ${hp}（${delta} SP）`,
   "builder.hpNeedsSp": ({ count }) => `需要 ${count} 點未分配 SP`,
-  "builder.hpTargetKept": ({ targets }) => `HP 維持在 ${targets}。`,
+  "builder.hpBulkFits": ({ targets }) => `這個分配的 HP 已符合 ${targets}。`,
+  "builder.hpOptionTitle": ({ targets }) => `HP 維持在 ${targets}`,
+  "builder.hpBulkCost": ({ cost }) => cost < 1 ? "不到 1" : `約 ${cost < 10 ? cost.toFixed(1) : Math.round(cost)}`,
+  "builder.hpTradeoffChip": ({ target, cost, gain, sources, turns }) =>
+    `${target} 會少掉相當於${cost} HP 的耐久，每次${sources}少受 ${gain} HP 傷害，${turns} 次後划算。`,
+  "builder.hpTradeoffHeal": ({ target, cost, gain, sources, turns }) =>
+    `${target} 會少掉相當於${cost} HP 的耐久，每次${sources}多回復 ${gain} HP，${turns} 次後划算。`,
+  "builder.hpTradeoffCost": ({ target, cost }) => `${target} 會少掉相當於${cost} HP 的耐久。`,
+  "builder.applyHpOption": "套用這個分配",
   "builder.generalBulkTitle": "通用耐久建議",
   "builder.generalBulkDescription": "將剩餘 SP 以相同權重分配給物理與特殊耐久，不會降低目前的耐久分配。",
   "builder.unassignedSp": ({ count }) => `${count} 點未分配 SP`,
