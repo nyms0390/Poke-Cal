@@ -184,3 +184,28 @@ test("matchupSetFromSide keeps stages, status and per-slot move settings aligned
   assert.deepEqual(ours.stages, side.stages);
   assert.equal(ours.soaked, true);
 });
+
+test("a spread move marked 1 target races at full damage", () => {
+  const side = {
+    pokemon: species("Garchomp"),
+    nature: "Jolly",
+    sp: { hp: 2, atk: 32, def: 0, spa: 0, spd: 0, spe: 32 },
+    ability: lookups.abilityLookup.get("roughskin"),
+    item: null,
+    selectedMoveIds: ["earthquake", "", "", ""],
+  };
+  const opponents = rankedOpponents(pokemonCatalog, 20);
+  const race = (moveOptions) => analyzeMatchups({
+    ours: matchupSetFromSide(side, lookups.moveLookup, { moveOptions: () => moveOptions }),
+    opponents, lookups, speedMode: "normal",
+  });
+  const hitsById = (result) => new Map(result.rows.map((entry) => [entry.id, entry.result.ourHits]));
+  const spread = hitsById(race({}));
+  const single = hitsById(race({ singleTarget: true }));
+  let fewer = 0;
+  for (const [id, hits] of single) {
+    assert.ok(hits <= spread.get(id), id);
+    if (hits < spread.get(id)) fewer += 1;
+  }
+  assert.ok(fewer > 0);
+});

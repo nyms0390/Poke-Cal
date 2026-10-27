@@ -115,6 +115,16 @@ export function unsupportedMoveReason(move) {
 }
 
 /**
+ * Whether a move can hit more than one target in doubles (and so takes the spread modifier
+ * unless `moveOptions.singleTarget` says only one target was hit). Moves whose targeting
+ * depends on the field, such as Expanding Force, count.
+ */
+export function isSpreadMove(move) {
+  if (!move) return false;
+  return SPREAD_MOVE_TARGETS.has(move.target) || Boolean(moveEffect(normalizeId(move.id ?? move.name)).target);
+}
+
+/**
  * @param {object} input
  * @param {{singleTarget?: boolean}} [input.moveOptions] Override spread targeting for this move.
  * Supported results carry `warnings` (machine-readable, e.g. an SP total above 66) whose

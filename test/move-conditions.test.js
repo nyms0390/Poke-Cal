@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { moveConditionDescriptors, moveConditionValue, moveOptionsForSlot } from "../src/ui/move-conditions.js";
 import { applyControl, createSideState } from "../src/ui/battle-state.js";
 import { activeSetFromState, applyActiveSet } from "../src/data/active-set.js";
+import { isSpreadMove } from "../src/engine/damage.js";
 
 const pokemon = { id: "testmon", name: "Testmon", types: ["Ghost"], baseStats: { hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 80 } };
 const move = (id, basePower = 50) => ({ id, name: id, type: "Ghost", category: "Physical", basePower });
@@ -77,4 +78,23 @@ test("Auto clears legacy slot overrides for hits, order, and condition through r
     const restored = applyActiveSet(legacy, persisted);
     assert.deepEqual(moveOptionsForSlot(restored, 0, move(id)), {}, `${id} reload`);
   }
+});
+
+test("the 1 target toggle reaches the engine only for spread moves", () => {
+  const earthquake = { ...move("earthquake", 100), type: "Ground", target: "allAdjacent" };
+  const rockSlide = { ...move("rockslide", 75), type: "Rock", target: "allAdjacentFoes" };
+  const expandingForce = { ...move("expandingforce", 80), type: "Psychic", category: "Special", target: "normal" };
+  const tackle = { ...move("tackle", 40), type: "Normal", target: "normal" };
+  assert.equal(isSpreadMove(earthquake), true);
+  assert.equal(isSpreadMove(rockSlide), true);
+  assert.equal(isSpreadMove(expandingForce), true);
+  assert.equal(isSpreadMove(tackle), false);
+  assert.equal(isSpreadMove(null), false);
+
+  const state = applyControl(createSideState(pokemon, defaults), { kind: "singleTarget", index: 0, value: true });
+  assert.deepEqual(moveOptionsForSlot(state, 0, rockSlide), { singleTarget: true });
+  assert.deepEqual(moveOptionsForSlot(state, 0, tackle), {});
+  assert.deepEqual(moveOptionsForSlot(state, 1, rockSlide), {});
+  const replaced = applyControl(state, { kind: "move", index: 0, value: "earthquake" });
+  assert.deepEqual(moveOptionsForSlot(replaced, 0, earthquake), {});
 });

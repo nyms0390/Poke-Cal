@@ -21,3 +21,10 @@
 - Context: Owner request; PokeAPI only lists 洛托姆 for every form.
 - Locale: zh-TW
 - Status: approved
+
+## 2026-10-27
+
+- Decision: The per-move "1 target" toggle for spread moves = 單體 (as opposed to 範圍).
+- Context: New Battle / set editor control that skips the doubles spread modifier.
+- Locale: zh-TW
+- Status: approved

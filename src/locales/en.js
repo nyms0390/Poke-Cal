@@ -123,6 +123,8 @@ export const EN_MESSAGES = {
   "battle.ready": "Ready",
   "battle.moveNumber": ({ number }) => `Move ${number}`,
   "battle.crit": "Crit",
+  "battle.singleTarget": "1 target",
+  "battle.singleTargetHint": "Only one target hit: skip the doubles spread reduction (0.75x)",
   "battle.hits": "× hits",
   "battle.targetMoved": "Target moved",
   "battle.auto": "Auto",

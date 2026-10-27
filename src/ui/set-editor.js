@@ -35,6 +35,7 @@ import {
   pokemonSearchMatchers,
   pokemonSpriteElements,
   searchResultButton,
+  singleTargetToggleButton,
 } from "./components.js";
 import { moveConditionDescriptors, moveConditionValue } from "./move-conditions.js";
 
@@ -343,9 +344,16 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
       }
       row.append(icon, combobox.element, crit);
       const descriptors = selected ? moveConditionDescriptors(selected, setup) : [];
-      if (descriptors.length > 0) {
+      const singleTarget = singleTargetToggleButton({
+        index,
+        selectedMove: selected,
+        pressed: setup.singleTargetMoves?.[index],
+        onToggle: (pressed) => edit({ kind: "singleTarget", index, value: pressed }),
+      });
+      if (descriptors.length > 0 || singleTarget) {
         const conditions = document.createElement("div");
         conditions.className = "set-editor-move-conditions";
+        if (singleTarget) conditions.append(singleTarget);
         conditions.append(...descriptors.map((descriptor) => moveConditionSelect(descriptor, {
           index,
           value: moveConditionValue(setup, index, descriptor),

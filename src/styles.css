@@ -2295,7 +2295,8 @@ button:disabled {
 }
 
 .damage-move-row > .move-inline-control,
-.damage-move-row > .inline-toggle {
+.damage-move-row > .inline-toggle,
+.damage-move-row > .single-target-toggle {
   grid-column: 2 / -1;
   justify-self: start;
 }
@@ -5489,6 +5490,11 @@ textarea:focus-visible {
   gap: 6px 10px;
   color: var(--muted);
   font-size: var(--text-xs);
+}
+
+/* "1 target" sits on the select line when a condition label is above it. */
+.set-editor-move-conditions .single-target-toggle {
+  align-self: end;
 }
 
 /* The round move type mark (components.js moveTypeIcon): 30px in the set editor. */

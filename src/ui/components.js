@@ -3,6 +3,7 @@ import { pokemonHomeArtFile, pokemonSpriteId, searchPokemon } from "../data/poke
 import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { isGuaranteedCritical } from "../engine/critical.js";
+import { isSpreadMove } from "../engine/damage.js";
 import { natureEffect } from "../engine/natures.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 import { urlWithoutConsumedParams } from "./battle-state.js";
@@ -558,6 +559,28 @@ export function critToggleButton({ index, side = "", selectedMove, pokemon = nul
     onToggle(pressed, crit);
   });
   return crit;
+}
+
+// The per-slot "1 target" toggle for spread moves: pressed means the move hit only one target,
+// so the doubles spread modifier (0.75x) is skipped. Returns null for moves that never spread.
+// `onToggle(pressed, button)` runs after aria-pressed flips.
+export function singleTargetToggleButton({ index, side = "", selectedMove, pressed = false, onToggle }) {
+  if (!isSpreadMove(selectedMove)) return null;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "move-toggle single-target-toggle";
+  button.textContent = t("battle.singleTarget");
+  button.title = t("battle.singleTargetHint");
+  button.dataset.kind = "single-target";
+  if (side) button.dataset.side = side;
+  button.dataset.index = String(index);
+  button.setAttribute("aria-pressed", String(Boolean(pressed)));
+  button.addEventListener("click", () => {
+    const next = button.getAttribute("aria-pressed") !== "true";
+    button.setAttribute("aria-pressed", String(next));
+    onToggle(next, button);
+  });
+  return button;
 }
 
 // A labelled select for one move-condition descriptor (see move-conditions.js).
