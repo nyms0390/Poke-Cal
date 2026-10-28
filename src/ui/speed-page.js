@@ -38,6 +38,7 @@ import {
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { createLiveUpdater } from "./live-update.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { mountTeamPanel } from "./team-panel.js";
 
 const elements = {
   source: document.querySelector("#speed-source"),
@@ -95,7 +96,27 @@ const settingsSheet = mountSetSheet({
   doneKey: "sheet.viewResults",
   summaryHost: document.querySelector("#speed-summary-card"),
 });
-mountSheetBar({ actions: [{ sheet: settingsSheet, labelKey: "speed.editSettings" }] });
+// The shared team panel: the set's team status under "Your set" and the working team below it.
+const teamStatusHost = document.createElement("div");
+const teamBlockHost = document.createElement("div");
+document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon").after(teamStatusHost);
+document.querySelector("#speed-editor .speed-mods").after(teamBlockHost);
+const teamPanel = mountTeamPanel({
+  prefix: "speed",
+  statusHost: teamStatusHost,
+  blockHost: teamBlockHost,
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    unavailableRequestId = "";
+    renderStatus();
+    refreshFromActiveSet();
+  },
+});
+const sheetBar = mountSheetBar({
+  actions: [teamPanel.sheetAction, { sheet: settingsSheet, labelKey: "speed.editSettings" }],
+});
 
 initI18n();
 initialize();
@@ -140,7 +161,7 @@ async function initialize() {
     onSelect: (pokemon) => {
       unavailableRequestId = "";
       renderStatus();
-      seedUser(pokemon);
+      seedUser(pokemon, { activeSet: teamPanel.memberSet(pokemon.id) });
     },
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -343,6 +364,8 @@ function render() {
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
   settingsSheet.update({ pokemon: user.pokemon, meta: elements.userSummary.textContent });
+  teamPanel.render();
+  sheetBar.setNames([teamPanel.barName()]);
   const popularCount = Number(elements.popularCount.value);
   elements.popularSummary.textContent = t("speed.popularSummary", { count: popularCount });
   elements.source.textContent = battle

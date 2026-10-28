@@ -88,6 +88,7 @@ import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { mountTeamPanel } from "./team-panel.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
 import { SET_SP_LIMIT, mountSetEditor, setEditorMoves, spSpent, statusOptions } from "./set-editor.js";
 
@@ -148,7 +149,23 @@ const setSheet = mountSetSheet({
   summaryHost: document.querySelector("#builder-summary-card"),
   onClose: () => applyUserSetup(),
 });
-const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
+const teamStatusHost = document.createElement("div");
+const teamBlockHost = document.createElement("div");
+const teamPanel = mountTeamPanel({
+  prefix: "builder",
+  statusHost: teamStatusHost,
+  blockHost: teamBlockHost,
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    refreshFromActiveSet();
+  },
+});
+const sheetBar = mountSheetBar({
+  actions: [teamPanel.sheetAction, { sheet: setSheet, labelKey: "sheet.editSet" }],
+  withStatus: true,
+});
 const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), {
   prefix: "builder",
   getCatalogs: () => catalogs,
@@ -156,10 +173,12 @@ const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), 
   onPokemonSelect: (pokemon) => {
     unavailableRequestId = "";
     renderStatus();
-    seedPokemon(pokemon);
+    seedPokemon(pokemon, { activeSet: teamPanel.memberSet(pokemon.id) });
   },
   onControl: handleSetupControl,
 });
+document.querySelector("#builder-set-editor .set-editor-pokemon").after(teamStatusHost);
+elements.applySpread.after(teamBlockHost);
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
   onChange: handleAmbientFieldControl,
@@ -437,6 +456,8 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
     ].join(" · "),
   });
   elements.applySpread.disabled = !userSetupDraft;
+  teamPanel.render();
+  sheetBar.setNames([teamPanel.barName()]);
   renderCustomThreats();
   const inputs = analysisInputs();
   elements.breakCount.textContent = t("builder.breakCount", {

@@ -1,7 +1,6 @@
 import { normalizeId } from "../data/catalog.js";
 import { activeSetFromState, applyActiveSet, createActiveSetStore, planActiveSetRefresh } from "../data/active-set.js";
 import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
-import { MY_TEAMS_STORAGE_KEY, applyParsedMember, createMyTeamStore, parseTeamMembers } from "../data/my-teams.js";
 import {
   HIT_BUCKETS,
   analyzeMatchups,
@@ -32,6 +31,7 @@ import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
 import { browserStorage, consumeQueryParam, itemLabel, moveChip, moveNameLabel, natureLabel, optionElement, pokemonMiniSprite, setRow } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { mountTeamPanel } from "./team-panel.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
@@ -128,7 +128,25 @@ const setSheet = mountSetSheet({
   doneKey: "sheet.viewMatchups",
   summaryHost: elements.summaryCard,
 });
-const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
+const teamStatusHost = document.createElement("div");
+const teamBlockHost = document.createElement("div");
+const teamPanel = mountTeamPanel({
+  prefix: "matchups",
+  statusHost: teamStatusHost,
+  blockHost: teamBlockHost,
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    unavailableRequestId = "";
+    renderStatus();
+    refreshFromActiveSet();
+  },
+});
+const sheetBar = mountSheetBar({
+  actions: [teamPanel.sheetAction, { sheet: setSheet, labelKey: "sheet.editSet" }],
+  withStatus: true,
+});
 
 const setEditor = mountSetEditor(document.querySelector("#matchups-set-editor"), {
   prefix: "matchups",
@@ -137,59 +155,14 @@ const setEditor = mountSetEditor(document.querySelector("#matchups-set-editor"),
   onPokemonSelect: (pokemon) => {
     unavailableRequestId = "";
     renderStatus();
-    seedPokemon(pokemon);
+    seedPokemon(pokemon, { activeSet: teamPanel.memberSet(pokemon.id) });
   },
   // SP typing waits a moment before re-racing; every other edit re-races at once.
   onControl: (control) => updateUser(control, { immediate: control.kind !== "sp" }),
 });
-// "From my team": loads a member of a saved team (My teams) as the set to race.
-const myTeamStore = createMyTeamStore(browserStorage());
-const teamPick = document.createElement("label");
-teamPick.className = "set-editor-field matchups-team-pick";
-teamPick.hidden = true;
-const teamPickLabel = document.createElement("span");
-teamPickLabel.dataset.i18n = "myTeams.fromTeam";
-teamPickLabel.textContent = "From my team";
-const teamPickSelect = document.createElement("select");
-teamPickSelect.id = "matchups-team-member";
-teamPickSelect.dataset.i18nSkip = "";
-teamPick.append(teamPickLabel, teamPickSelect);
-document.querySelector("#matchups-set-editor .set-editor-pokemon").after(teamPick);
-teamPickSelect.addEventListener("input", () => {
-  const [teamId, index] = teamPickSelect.value.split(":");
-  teamPickSelect.value = "";
-  const member = parseTeamMembers(myTeamStore.getTeam(teamId), catalogs)[Number(index)];
-  const pokemon = member?.parsed.pokemon;
-  if (!pokemon) return;
-  const defaults = championsDefaultsForPokemon(pokemon, {
-    abilityLookup: catalogs.abilityLookup,
-    moveLookup: catalogs.moveLookup,
-    items: catalogs.items,
-  });
-  unavailableRequestId = "";
-  renderStatus();
-  seedPokemon(pokemon, { activeSet: activeSetFromState(applyParsedMember(createSideState(pokemon, defaults), member.parsed)) });
-});
-globalThis.addEventListener?.("storage", (event) => {
-  if (event.key === MY_TEAMS_STORAGE_KEY) renderTeamPick();
-});
-globalThis.addEventListener?.("pageshow", (event) => {
-  if (event.persisted) renderTeamPick();
-});
-
-function renderTeamPick() {
-  if (!catalogs) return;
-  const teams = myTeamStore.listTeams().filter((team) => team.members.length > 0);
-  teamPick.hidden = teams.length === 0;
-  teamPickSelect.replaceChildren(optionElement("", t("myTeams.chooseMember")), ...teams.map((team) => {
-    const group = document.createElement("optgroup");
-    group.label = team.name;
-    group.append(...parseTeamMembers(team, catalogs)
-      .map(({ parsed }, index) => (parsed.pokemon ? optionElement(`${team.id}:${index}`, localizedName(parsed.pokemon)) : null))
-      .filter(Boolean));
-    return group;
-  }));
-}
+// The shared team panel: the set's team status under "Your set" and the working team below it.
+document.querySelector("#matchups-set-editor .set-editor-pokemon").after(teamStatusHost);
+document.querySelector("#matchups-set-editor").after(teamBlockHost);
 
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "matchups",
@@ -209,7 +182,6 @@ initialize();
 onLocaleChange(() => {
   if (!catalogs || !state.user) return;
   renderStatus();
-  renderTeamPick();
   setEditor.renderOptions();
   buildGrid();
   buildOutcomeFilter();
@@ -223,7 +195,6 @@ async function initialize() {
     },
   });
   if (!catalogs) return;
-  renderTeamPick();
 
   elements.opponentCount.addEventListener("input", (event) => {
     state = { ...state, ...preferencesStore.write({ opponentCount: normalizeOpponentCount(event.target.value) }), cell: null };
@@ -344,6 +315,8 @@ function renderEditor() {
     ].join(" · "),
   });
   sheetBar.setStatus(t("matchups.spShort", { count: spent, limit: SET_SP_LIMIT }), spent > SET_SP_LIMIT ? "over" : spent === SET_SP_LIMIT ? "ok" : "");
+  teamPanel.render();
+  sheetBar.setNames([teamPanel.barName()]);
 }
 
 // ---------- analysis ----------
