@@ -3,6 +3,7 @@
 import { createField } from "../engine/field.js";
 import { normalizeId } from "../identifiers.js";
 import { parseUsageSpread } from "../data/usage-defaults.js";
+import { activeSetsEqual } from "../data/active-set.js";
 
 export const TEAM_SIZE = 6;
 const TYPE_CHANGE_ABILITIES = new Set(["libero", "protean"]);
@@ -53,8 +54,9 @@ export function clearTeamSlot(teams, side, index) {
 
 // Decides where a Pokémon handed over from another page (the shared active set or a `?left=`
 // link) goes in a team without ever destroying an existing member:
-// - "kept":      the active slot already holds it — keep that slot and its edits untouched;
-// - "activated": another slot holds it — switch to that slot (its edits are kept);
+// - "kept":      the active slot already holds it — keep that slot (see incomingSetUpdatesMember
+//                for when the handed-over set replaces its edits);
+// - "activated": another slot holds it — switch to that slot (same rule for its edits);
 // - "placed":    seed it into the first empty slot (`index`) and make that slot active;
 // - "full":      every slot holds a different Pokémon — change nothing (the page tells the
 //                user; picking it in the Pokémon search replaces the active slot explicitly).
@@ -68,6 +70,14 @@ export function planIncomingTeamSlot(team, pokemonId) {
   const empty = team.slots.findIndex((slot) => !slot);
   if (empty >= 0) return { outcome: "placed", index: empty };
   return { outcome: "full", index: -1 };
+}
+
+// A hand-off for a Pokémon already on the team carries the set last edited on another page, so
+// it updates that member; otherwise Battle would show its stale copy and write it back over the
+// shared set. A hand-off that is only the Pokémon's default set (a fresh pick on Lookup or
+// Speed Tiers) holds no edits, so the member keeps its own.
+export function incomingSetUpdatesMember(activeSet, defaultSet) {
+  return Boolean(activeSet?.pokemonId) && !activeSetsEqual(activeSet, defaultSet);
 }
 
 // True when `spreadName` ("Nature:hp/atk/def/spa/spd/spe") is exactly the side's nature + SP.

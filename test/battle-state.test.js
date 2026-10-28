@@ -8,6 +8,7 @@ import {
   clearTeamSlot,
   createSideState,
   createTeamsState,
+  incomingSetUpdatesMember,
   planIncomingTeamSlot,
   setTeamSlot,
   spreadMatchesState,
@@ -439,6 +440,16 @@ test("plans incoming Pokémon without overwriting existing team members", () => 
   assert.deepEqual(planIncomingTeamSlot(full, "garchomp"), { outcome: "full", index: -1 });
   assert.deepEqual(planIncomingTeamSlot(full, "e"), { outcome: "activated", index: 4 });
   assert.deepEqual(planIncomingTeamSlot(createTeamsState().attacker, "garchomp"), { outcome: "placed", index: 0 });
+});
+
+test("a hand-off updates a team member unless it is only the default set", () => {
+  const defaults = {
+    pokemonId: "pikachu", nature: "Timid", sp: { hp: 0, atk: 0, def: 4, spa: 32, spd: 0, spe: 32 },
+    abilityId: "static", itemId: "", teraType: "", moveIds: ["thunderbolt", "", "", ""],
+  };
+  assert.equal(incomingSetUpdatesMember({ ...defaults, sp: { ...defaults.sp, spe: 20 } }, defaults), true);
+  assert.equal(incomingSetUpdatesMember({ ...defaults }, defaults), false, "fresh pick keeps the member's edits");
+  assert.equal(incomingSetUpdatesMember(null, defaults), false);
 });
 
 test("derives the spread dropdown selection from the side's nature and SP", () => {

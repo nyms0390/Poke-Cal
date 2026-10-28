@@ -50,6 +50,7 @@ import {
   clearTeamSlot as clearTeamSlotState,
   createSideState,
   createTeamsState,
+  incomingSetUpdatesMember,
   isTypeChangeAbility,
   isUnburdenAbility,
   normalizeTypeChangeState,
@@ -350,7 +351,7 @@ async function initialize() {
   });
   // Battle keeps its own team copies, so it takes a hand-off only when shown again by Back /
   // Forward (as a fresh load would), never from a background tab: placing a Pokémon already on
-  // the team writes Battle's copy to the shared set, which would undo edits made elsewhere.
+  // the team can write Battle's copy to the shared set (see incomingSetUpdatesMember).
   watchActiveSet(takePendingHandOff, { crossTab: false });
 }
 
@@ -475,8 +476,13 @@ function placeIncomingAttacker(entry, activeSet) {
     seedDamageSide(side, entry, { activeSet });
     return;
   }
-  if (outcome === "activated") {
+  if (outcome === "kept" || outcome === "activated") {
     teams = activateTeamSlotState(teams, side, index);
+    const defaultSet = activeSetFromState(championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items }));
+    if (incomingSetUpdatesMember(activeSet, defaultSet)) {
+      const member = teams[side].slots[index];
+      teams = updateActiveTeamSlot(teams, side, applyActiveSet(member, activeSet, { abilityLookup, itemLookup }));
+    }
     persistTeams();
   }
   if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
