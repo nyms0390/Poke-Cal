@@ -11,14 +11,13 @@ import {
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
-import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import {
   formatNumber,
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureDropdownLabel,
+  localizedNatureEffect,
   localizedTerm,
   onLocaleChange,
   translateSubtree,
@@ -29,6 +28,7 @@ import {
   attachCombobox,
   browserStorage,
   consumeQueryParam,
+  natureOptionGroups,
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
@@ -53,6 +53,7 @@ const elements = {
   popularSummary: document.querySelector("#speed-popular-summary"),
   manualOpponents: document.querySelector("#speed-manual-opponents"),
   nature: document.querySelector("#speed-nature"),
+  natureEffect: document.querySelector("#speed-nature-effect"),
   ability: document.querySelector("#speed-user-ability"),
   userAbilityActive: document.querySelector("#speed-user-ability-active"),
   userAbilityActiveLabel: document.querySelector("#speed-user-ability-active-label"),
@@ -96,15 +97,14 @@ const settingsSheet = mountSetSheet({
   doneKey: "sheet.viewResults",
   summaryHost: document.querySelector("#speed-summary-card"),
 });
-// The shared team panel: the set's team status under "Your set" and the working team below it.
-const teamStatusHost = document.createElement("div");
-const teamBlockHost = document.createElement("div");
-document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon").after(teamStatusHost);
-document.querySelector("#speed-editor .speed-mods").after(teamBlockHost);
+mountSheetBar({ actions: [{ sheet: settingsSheet, labelKey: "speed.editSettings" }] });
+// The shared team panel: the team row under the Pokémon field, its toggle in the heading.
 const teamPanel = mountTeamPanel({
   prefix: "speed",
-  statusHost: teamStatusHost,
-  blockHost: teamBlockHost,
+  toggleHost: document.querySelector("#speed-editor .speed-control-panel .panel-heading"),
+  menuHost: document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon"),
+  rowHost: document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon"),
+  phoneHost: document.querySelector("#speed-summary-card"),
   getCatalogs: () => catalogs,
   readSet: () => activeSetStore.readSet(),
   loadSet: (set) => {
@@ -113,9 +113,6 @@ const teamPanel = mountTeamPanel({
     renderStatus();
     refreshFromActiveSet();
   },
-});
-const sheetBar = mountSheetBar({
-  actions: [teamPanel.sheetAction, { sheet: settingsSheet, labelKey: "speed.editSettings" }],
 });
 
 initI18n();
@@ -233,12 +230,7 @@ function refreshFromActiveSet() {
 
 function renderNatureOptions() {
   const selected = elements.nature.value;
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(
-      nature,
-      localizedNatureDropdownLabel(nature),
-    )),
-  );
+  elements.nature.replaceChildren(...natureOptionGroups());
   if (selected) elements.nature.value = selected;
 }
 
@@ -342,6 +334,7 @@ function render() {
 
   elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.nature.value = user.nature;
+  elements.natureEffect.textContent = localizedNatureEffect(user.nature);
   renderAbilityOptions();
   elements.ability.value = user.ability?.id ?? "";
   renderSpeedItemOptions();
@@ -365,7 +358,6 @@ function render() {
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
   settingsSheet.update({ pokemon: user.pokemon, meta: elements.userSummary.textContent });
   teamPanel.render();
-  sheetBar.setNames([teamPanel.barName()]);
   const popularCount = Number(elements.popularCount.value);
   elements.popularSummary.textContent = t("speed.popularSummary", { count: popularCount });
   elements.source.textContent = battle

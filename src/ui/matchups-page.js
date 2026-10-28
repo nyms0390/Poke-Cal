@@ -128,25 +128,7 @@ const setSheet = mountSetSheet({
   doneKey: "sheet.viewMatchups",
   summaryHost: elements.summaryCard,
 });
-const teamStatusHost = document.createElement("div");
-const teamBlockHost = document.createElement("div");
-const teamPanel = mountTeamPanel({
-  prefix: "matchups",
-  statusHost: teamStatusHost,
-  blockHost: teamBlockHost,
-  getCatalogs: () => catalogs,
-  readSet: () => activeSetStore.readSet(),
-  loadSet: (set) => {
-    activeSetStore.writeSet(set);
-    unavailableRequestId = "";
-    renderStatus();
-    refreshFromActiveSet();
-  },
-});
-const sheetBar = mountSheetBar({
-  actions: [teamPanel.sheetAction, { sheet: setSheet, labelKey: "sheet.editSet" }],
-  withStatus: true,
-});
+const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
 
 const setEditor = mountSetEditor(document.querySelector("#matchups-set-editor"), {
   prefix: "matchups",
@@ -160,9 +142,22 @@ const setEditor = mountSetEditor(document.querySelector("#matchups-set-editor"),
   // SP typing waits a moment before re-racing; every other edit re-races at once.
   onControl: (control) => updateUser(control, { immediate: control.kind !== "sp" }),
 });
-// The shared team panel: the set's team status under "Your set" and the working team below it.
-document.querySelector("#matchups-set-editor .set-editor-pokemon").after(teamStatusHost);
-document.querySelector("#matchups-set-editor").after(teamBlockHost);
+// The shared team panel: the team row under the Pokémon field, its toggle in the heading.
+const teamPanel = mountTeamPanel({
+  prefix: "matchups",
+  toggleHost: document.querySelector("#matchups-set-editor .set-editor-heading"),
+  menuHost: document.querySelector("#matchups-set-editor .set-editor-pokemon"),
+  rowHost: document.querySelector("#matchups-set-editor .set-editor-pokemon"),
+  phoneHost: elements.summaryCard,
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    unavailableRequestId = "";
+    renderStatus();
+    refreshFromActiveSet();
+  },
+});
 
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "matchups",
@@ -316,7 +311,6 @@ function renderEditor() {
   });
   sheetBar.setStatus(t("matchups.spShort", { count: spent, limit: SET_SP_LIMIT }), spent > SET_SP_LIMIT ? "over" : spent === SET_SP_LIMIT ? "ok" : "");
   teamPanel.render();
-  sheetBar.setNames([teamPanel.barName()]);
 }
 
 // ---------- analysis ----------

@@ -149,23 +149,7 @@ const setSheet = mountSetSheet({
   summaryHost: document.querySelector("#builder-summary-card"),
   onClose: () => applyUserSetup(),
 });
-const teamStatusHost = document.createElement("div");
-const teamBlockHost = document.createElement("div");
-const teamPanel = mountTeamPanel({
-  prefix: "builder",
-  statusHost: teamStatusHost,
-  blockHost: teamBlockHost,
-  getCatalogs: () => catalogs,
-  readSet: () => activeSetStore.readSet(),
-  loadSet: (set) => {
-    activeSetStore.writeSet(set);
-    refreshFromActiveSet();
-  },
-});
-const sheetBar = mountSheetBar({
-  actions: [teamPanel.sheetAction, { sheet: setSheet, labelKey: "sheet.editSet" }],
-  withStatus: true,
-});
+const sheetBar = mountSheetBar({ actions: [{ sheet: setSheet, labelKey: "sheet.editSet" }], withStatus: true });
 const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), {
   prefix: "builder",
   getCatalogs: () => catalogs,
@@ -177,8 +161,20 @@ const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), 
   },
   onControl: handleSetupControl,
 });
-document.querySelector("#builder-set-editor .set-editor-pokemon").after(teamStatusHost);
-elements.applySpread.after(teamBlockHost);
+// The shared team panel: the team row under the Pokémon field, its toggle in the heading.
+const teamPanel = mountTeamPanel({
+  prefix: "builder",
+  toggleHost: document.querySelector("#builder-set-editor .set-editor-heading"),
+  menuHost: document.querySelector("#builder-set-editor .set-editor-pokemon"),
+  rowHost: document.querySelector("#builder-set-editor .set-editor-pokemon"),
+  phoneHost: document.querySelector("#builder-summary-card"),
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    refreshFromActiveSet();
+  },
+});
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
   onChange: handleAmbientFieldControl,
@@ -457,7 +453,6 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
   });
   elements.applySpread.disabled = !userSetupDraft;
   teamPanel.render();
-  sheetBar.setNames([teamPanel.barName()]);
   renderCustomThreats();
   const inputs = analysisInputs();
   elements.breakCount.textContent = t("builder.breakCount", {

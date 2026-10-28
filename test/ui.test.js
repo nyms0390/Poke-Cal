@@ -1276,8 +1276,8 @@ test("Speed Tiers reuses the shared set editor's slot layout for the set it owns
   const panel = html.match(/aria-label="Your Speed settings">([\s\S]*?)<\/section>/)?.[1] ?? "";
   const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
 
-  // Same slot order and classes as mountSetEditor: Pokémon with sprite, nature, ability/item, stat row.
-  const slots = ["set-editor-pokemon", "set-editor-sprite", "set-editor-field", "set-editor-fields", "set-editor-stats"];
+  // Same slot order and classes as mountSetEditor: Pokémon with sprite, the ability/item/nature grid, stat row.
+  const slots = ["set-editor-pokemon", "set-editor-sprite", "set-editor-fields", "set-editor-field", "set-editor-stats"];
   const positions = slots.map((slot) => panel.indexOf(`class="${slot}"`));
   assert.ok(positions.every((position) => position >= 0), `missing slot in ${JSON.stringify(positions)}`);
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);

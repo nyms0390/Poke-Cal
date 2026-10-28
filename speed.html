@@ -42,7 +42,7 @@
           <div class="speed-controls">
             <section class="speed-control-panel" aria-label="Your Speed settings">
               <div class="panel-heading"><span data-i18n="matchups.yourSet">Your set</span><strong id="speed-user-summary">—</strong></div>
-              <!-- Same slots as the shared set editor (src/ui/set-editor.js): Pokémon, nature, ability/item, stat row. -->
+              <!-- Same slots as the shared set editor (src/ui/set-editor.js): Pokémon, ability/item/nature, stat row. -->
               <div class="set-editor-pokemon">
                 <span id="speed-sprite" class="set-editor-sprite" aria-hidden="true"></span>
                 <div class="set-editor-pokemon-field">
@@ -61,7 +61,6 @@
                   </div>
                 </div>
               </div>
-              <label class="set-editor-field">Nature<select id="speed-nature" data-battle-only></select></label>
               <div class="set-editor-fields">
                 <label class="set-editor-field">Ability<select id="speed-user-ability" data-battle-only></select></label>
                 <label class="set-editor-field"><span data-i18n="speed.speedItem">Speed item</span><select id="speed-user-item" data-battle-only>
@@ -69,6 +68,7 @@
                     <option value="choicescarf">Choice Scarf</option>
                     <option value="ironball">Iron Ball</option>
                 </select></label>
+                <label class="set-editor-field"><span class="set-editor-field-head">Nature<small id="speed-nature-effect" class="set-editor-field-hint" data-i18n-skip></small></span><select id="speed-nature" data-battle-only></select></label>
               </div>
               <div class="set-editor-stats">
                 <div class="set-editor-stat-heading" aria-hidden="true">

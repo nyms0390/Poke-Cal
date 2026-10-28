@@ -10,6 +10,7 @@ import {
   localizedName,
   localizedSpreadName,
   localizedNatureDropdownLabel,
+  localizedNatureEffect,
   localizedTerm,
   resolveLocale,
   setLocale,
@@ -71,6 +72,9 @@ test("localizes domain terms and locale-sensitive numbers", () => {
   assert.equal(localizedNatureDropdownLabel("Adamant", "zh-TW"), "固執（+攻擊，-特攻）");
   assert.equal(localizedNatureDropdownLabel("Timid", "zh-TW"), "膽小（+速度，-攻擊）");
   assert.equal(localizedNatureDropdownLabel("Hardy", "zh-TW"), "勤奮");
+  assert.equal(localizedNatureEffect("Adamant", "en"), "+Atk −SpA");
+  assert.equal(localizedNatureEffect("Timid", "zh-TW"), "+速度 −攻擊");
+  assert.equal(localizedNatureEffect("Hardy", "en"), "");
   assert.equal(formatNumber(12345, "en"), "12,345");
   assert.equal(formatNumber(12345, "zh-TW"), "12,345");
   assert.equal(toTraditionalChinese("波动冲 · 特性护具"), "波動衝 · 特性護具");

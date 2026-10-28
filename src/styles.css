@@ -5454,6 +5454,22 @@ textarea:focus-visible {
   gap: 10px;
 }
 
+/* A field label with a quiet hint after it, such as the chosen nature's "+Atk −SpA". */
+.set-editor-field-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  min-width: 0;
+}
+
+.set-editor-field-hint {
+  color: var(--muted);
+  font-size: var(--type-caption);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Stat / Base / SP / Stage / Final. Columns stay narrow enough for a 280px sidebar. */
 .set-editor-stats {
   overflow: hidden;
@@ -8879,138 +8895,89 @@ main > .my-teams-editor {
   }
 }
 
-/* ---------- Shared team panel (src/ui/team-panel.js: Builder, Speed Tiers, Matchups, Compare sets) ---------- */
+/* ---------- Shared team panel (src/ui/team-panel.js: Builder, Speed Tiers, Matchups) ---------- */
 
-.team-set-status {
-  display: grid;
-  gap: 10px;
-}
-
-.team-set-status[data-kind="none"] {
-  display: none;
-}
-
-.team-set-state {
+/* "Your set" with the working team's name beside it; the name hides or shows the team row. */
+.set-editor-heading {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 6px 10px;
-  margin: 0;
-}
-
-.team-set-chip {
-  min-width: 0;
-  padding: 3px 10px;
-  border: 1px dashed var(--subtle);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: var(--type-caption);
-  font-weight: 600;
-  overflow-wrap: break-word;
-}
-
-.team-set-status[data-kind="saved"] .team-set-chip {
-  border: 1px solid transparent;
-  background: var(--surface-tint);
-  color: var(--accent-dark);
-}
-
-.team-set-status[data-kind="edited"] .team-set-chip {
-  border: 1px solid transparent;
-  background: rgb(154 103 0 / 12%);
-  color: var(--warning-dark);
-}
-
-.team-set-status[data-kind="edited"] .team-set-chip::before {
-  content: "● ";
-}
-
-.team-set-detail {
-  min-width: 0;
-  color: var(--muted);
-  font-size: var(--type-supporting);
-  overflow-wrap: break-word;
-}
-
-.team-set-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.team-set-actions .team-action {
-  flex: 1 1 auto;
-}
-
-.team-saved-sets {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 6px 8px;
-}
-
-.team-saved-sets .set-editor-field {
-  grid-column: 1 / -1;
-}
-
-.team-saved-sets .team-action.danger {
-  grid-column: 1 / -1;
-  justify-self: start;
-}
-
-.team-panel-message {
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--type-supporting);
-  overflow-wrap: break-word;
-}
-
-.team-panel {
-  display: grid;
-  gap: 10px;
-  margin-top: 4px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-
-.team-panel-heading {
-  display: flex;
-  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
 }
 
-.team-panel-heading h3 {
-  margin: 0;
-  font-size: var(--type-subsection-title);
-}
-
-.team-panel-heading a {
+.set-editor-heading .team-toggle,
+.panel-heading .team-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 32px;
+  margin: -6px -6px -6px auto;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  box-shadow: none;
   color: var(--accent-dark);
   font-size: var(--type-label);
   font-weight: 600;
+  cursor: pointer;
 }
 
-.team-panel-empty {
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--type-supporting);
+.set-editor-heading .team-toggle:hover,
+.panel-heading .team-toggle:hover {
+  background: var(--surface-tint);
 }
 
-.team-panel-members {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+.set-editor-heading .team-toggle:focus-visible,
+.panel-heading .team-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-.team-panel-member {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: 2px;
+.team-toggle[hidden] {
+  display: none;
+}
+
+/* Speed Tiers: the team name takes the heading's right side; the fields below already say what
+   the summary would. */
+.speed-control-panel .panel-heading:has(.team-toggle:not([hidden])) #speed-user-summary {
+  display: none;
+}
+
+.team-toggle-name {
   min-width: 0;
-  min-height: 72px;
-  padding: 6px 4px;
+  overflow-wrap: break-word;
+  text-align: right;
+}
+
+.team-toggle-chevron {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: -4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.team-toggle[aria-expanded="false"] .team-toggle-chevron {
+  margin-top: 0;
+  transform: rotate(-45deg);
+}
+
+/* The Pokémon field gains the "⋯" set menu button on its right. */
+.set-editor-pokemon.has-set-menu {
+  grid-template-columns: 56px minmax(0, 1fr) var(--control-height);
+}
+
+.set-menu-button {
+  display: grid;
+  place-items: center;
+  width: var(--control-height);
+  height: var(--control-height);
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
   background: var(--surface);
@@ -9018,33 +8985,169 @@ main > .my-teams-editor {
   cursor: pointer;
 }
 
-.team-panel-member:hover:not(:disabled) {
+.set-menu-button svg {
+  fill: currentColor;
+}
+
+.set-menu-button:hover,
+.set-menu-button[aria-expanded="true"] {
   border-color: var(--accent);
-}
-
-.team-panel-member:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.team-panel-member[aria-pressed="true"] {
-  border: 2px solid var(--accent);
   background: var(--surface-tint);
   color: var(--accent-dark);
 }
 
-.team-panel-member .my-teams-sprite {
-  width: 40px;
-  height: 40px;
+.set-menu-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-.team-panel-member-name {
-  max-width: 100%;
-  min-width: 0;
+.set-menu {
+  position: fixed;
+  inset: auto;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(24 39 43 / 14%);
+  color: var(--ink);
+}
+
+.set-menu:popover-open {
+  display: grid;
+  align-content: start;
+}
+
+.set-menu-label {
+  margin: 0;
+  padding: 8px 10px 4px;
+  color: var(--muted);
   font-size: var(--type-caption);
   font-weight: 600;
-  text-align: center;
+}
+
+.set-menu-note {
+  margin: 0;
+  padding: 6px 10px 8px;
+  color: var(--muted);
+  font-size: var(--type-supporting);
+}
+
+.set-menu-separator {
+  width: auto;
+  margin: 4px 6px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.set-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--type-supporting);
+  text-align: left;
+  text-decoration: none;
   overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+.set-menu-item[aria-pressed]::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 5px;
+  margin: -3px 2px 0;
+  border-bottom: 2px solid transparent;
+  border-left: 2px solid transparent;
+  transform: rotate(-45deg);
+}
+
+.set-menu-item[aria-pressed="true"] {
+  background: var(--surface-tint);
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.set-menu-item[aria-pressed="true"]::before {
+  border-color: currentColor;
+}
+
+.set-menu-item.action {
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.set-menu-item.danger {
+  color: var(--danger-dark);
+}
+
+.set-menu-item:hover,
+.set-menu-item:focus-visible {
+  background: var(--surface-tint);
+  outline: none;
+}
+
+.set-menu-item.danger:hover,
+.set-menu-item.danger:focus-visible {
+  background: rgb(194 59 59 / 8%);
+}
+
+/* The team row: one sprite per member, then the edited line and any message. */
+.team-row {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.team-row:empty,
+.team-row-phone {
+  display: none;
+}
+
+.team-row-members {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.team-row-member {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.team-row-member:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.team-row-member:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.team-row-member[aria-pressed="true"] {
+  border: 2px solid var(--accent);
+  background: var(--surface-tint);
+}
+
+.team-row-member .my-teams-sprite {
+  width: 40px;
+  height: 40px;
 }
 
 .team-panel-edited-mark {
@@ -9057,17 +9160,57 @@ main > .my-teams-editor {
   background: var(--warning);
 }
 
-.team-picker-sheet .set-sheet-body {
-  display: grid;
-  align-content: start;
-  gap: 16px;
-  padding: 16px;
+.team-row-member .team-panel-edited-mark {
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
 }
 
-.team-picker-sheet .set-sheet-body > .team-panel {
-  margin-top: 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+.team-row-empty,
+.team-row-message {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--type-supporting);
+  overflow-wrap: break-word;
+}
+
+.team-edited {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.team-edited-chip {
+  min-width: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(154 103 0 / 12%);
+  color: var(--warning-dark);
+  font-size: var(--type-caption);
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.team-edited-chip::before {
+  content: "● ";
+}
+
+.team-edited .team-action {
+  min-height: 32px;
+  padding: 4px 12px;
+}
+
+/* Phones: the editor lives in a sheet, so the row moves under the page's summary card. */
+@media (max-width: 720px) {
+  .team-row-phone:not(:empty) {
+    display: grid;
+  }
+
+  .set-sheet .team-row-members {
+    display: none;
+  }
 }
 
 .team-switch-dialog {

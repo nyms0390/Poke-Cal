@@ -1,31 +1,61 @@
 // The shared team panel (docs/DECISIONS.md "Shared team panel") on the pages built around a
-// "Your set" sidebar: Builder, Speed Tiers, Matchups and Compare sets.
-// - The status row sits under "Your set": whether the set is a free set, a saved team member or
-//   an edited one (Save to team / Revert / Add to team), and the Pokémon's saved sets.
-// - The team block sits below the set editor: the working team (My teams' selected team) and a
-//   tile per member; a tap loads that member as the shared set.
-// - On phones the sidebar lives in the editor sheet, so `sheetAction` adds a Team button to the
-//   pinned bar that opens a short sheet with just the status row and the team.
+// "Your set" sidebar: Builder, Speed Tiers and Matchups.
+// - The team row sits under the Pokémon field: one sprite per member of the working team (My
+//   teams' selected team); a tap loads that member as the shared set. An edited member carries a
+//   dot, and an "Edited · Save to team · Revert" line shows under the row.
+// - The working team's name sits in the "Your set" heading and hides or shows the row (kept per
+//   device). The edited line stays visible while the row is hidden.
+// - A "⋯" button beside the Pokémon field opens the set menu: switch team, the Pokémon's saved
+//   sets, Save set as…, Add to team and Manage teams.
+// - On phones the editor lives in a sheet, so a second copy of the row sits under the page's
+//   summary card, always shown.
 // The page owns the set: `loadSet(set)` writes it to the shared active set and shows it.
 import { normalizeId } from "../data/catalog.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor } from "../data/my-teams.js";
 import { SAVED_SETS_STORAGE_KEY, createSavedSetStore } from "../data/saved-sets.js";
 import { pasteFromSet, sameBuild, setFromPaste, teamMemberSets, teamSetStatus } from "../data/team-sets.js";
 import { getLocale, localizedName, t, translateSubtree } from "../i18n.js";
-import { browserStorage, optionElement } from "./components.js";
+import { browserStorage } from "./components.js";
 import { teamMemberSprite } from "./my-teams-ui.js";
 
-export function mountTeamPanel({ prefix, statusHost, blockHost, getCatalogs, readSet, loadSet }) {
-  const teamStore = createMyTeamStore(browserStorage());
-  const savedSetStore = createSavedSetStore(browserStorage());
+export const TEAM_ROW_STORAGE_KEY = "pokecal.team-row.v1";
+
+export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHost = null, getCatalogs, readSet, loadSet }) {
+  const storage = browserStorage();
+  const teamStore = createMyTeamStore(storage);
+  const savedSetStore = createSavedSetStore(storage);
   let message = "";
   let signature = "";
+  let collapsed = readCollapsed(storage);
 
-  const picker = pickerSheet(`${prefix}-team-sheet`);
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "team-toggle";
+  toggle.id = `${prefix}-team-toggle`;
+  toggle.setAttribute("aria-controls", `${prefix}-team-members`);
+  toggle.addEventListener("click", () => {
+    collapsed = !collapsed;
+    writeCollapsed(storage, collapsed);
+    render({ force: true });
+  });
+  toggleHost.append(toggle);
+
+  const menu = setMenu(`${prefix}-set-menu`);
+  menuHost.append(menu.button);
+  menuHost.classList.add("has-set-menu");
+
+  const row = document.createElement("div");
+  row.className = "team-row";
+  rowHost.after(row);
+  const phoneRow = document.createElement("div");
+  phoneRow.className = "team-row team-row-phone";
+  phoneHost?.append(phoneRow);
+
   const confirm = switchDialog(`${prefix}-team-switch`);
 
   globalThis.addEventListener?.("storage", (event) => {
-    if ([MY_TEAMS_STORAGE_KEY, SAVED_SETS_STORAGE_KEY, null].includes(event.key)) render({ force: true });
+    if (event.key === TEAM_ROW_STORAGE_KEY) collapsed = readCollapsed(storage);
+    if ([MY_TEAMS_STORAGE_KEY, SAVED_SETS_STORAGE_KEY, TEAM_ROW_STORAGE_KEY, null].includes(event.key)) render({ force: true });
   });
   globalThis.addEventListener?.("pageshow", (event) => {
     if (event.persisted) render({ force: true });
@@ -47,16 +77,17 @@ export function mountTeamPanel({ prefix, statusHost, blockHost, getCatalogs, rea
     const ctx = context();
     if (!ctx) return;
     const next = JSON.stringify([
-      getLocale(), message, ctx.teams.map(({ id, name }) => [id, name]), ctx.team?.id, ctx.team?.members,
+      getLocale(), message, collapsed, ctx.teams.map(({ id, name }) => [id, name]), ctx.team?.id, ctx.team?.members,
       ctx.set, ctx.status, ctx.savedSets,
     ]);
     if (!force && next === signature) return;
     signature = next;
     const focusedId = document.activeElement?.id;
-    statusHost.replaceChildren(statusRow(ctx, prefix));
-    blockHost.replaceChildren(teamBlock(ctx, prefix));
-    picker.body.replaceChildren(statusRow(ctx, `${prefix}-sheet`), teamBlock(ctx, `${prefix}-sheet`, { heading: false }));
-    for (const host of [statusHost, blockHost, picker.body]) translateSubtree(host);
+    renderToggle(ctx);
+    row.replaceChildren(...teamRow(ctx, prefix, { collapsible: true }));
+    phoneRow.replaceChildren(...teamRow(ctx, `${prefix}-phone`, { collapsible: false }));
+    menu.fill(menuItems(ctx));
+    for (const host of [row, phoneRow, menu.list]) translateSubtree(host);
     if (focusedId) document.getElementById(focusedId)?.focus();
   }
 
@@ -163,161 +194,136 @@ export function mountTeamPanel({ prefix, statusHost, blockHost, getCatalogs, rea
 
   // ---- Markup ----
 
-  function statusRow(ctx, idPrefix) {
-    const row = document.createElement("div");
-    row.className = "team-set-status";
-    row.dataset.kind = ctx.status.kind;
-    if (ctx.status.kind === "none") return row;
+  function renderToggle(ctx) {
+    toggle.hidden = !ctx.team;
+    if (!ctx.team) return;
+    toggle.setAttribute("aria-expanded", String(!collapsed));
+    const name = document.createElement("span");
+    name.className = "team-toggle-name";
+    name.textContent = ctx.team.name;
+    const chevron = document.createElement("span");
+    chevron.className = "team-toggle-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    toggle.replaceChildren(name, chevron);
+    toggle.setAttribute("aria-label", t(collapsed ? "teamPanel.showMembers" : "teamPanel.hideMembers", { team: ctx.team.name }));
+  }
 
-    const state = document.createElement("p");
-    state.className = "team-set-state";
-    const chip = document.createElement("span");
-    chip.className = "team-set-chip";
-    chip.dataset.i18nSkip = "";
-    chip.textContent = ctx.status.kind === "free"
-      ? t("teamPanel.freeSet")
-      : ctx.status.kind === "saved"
-        ? t("teamPanel.onTeam", { team: ctx.team.name })
-        : t("teamPanel.edited");
-    state.append(chip);
-    if (ctx.status.kind === "edited") {
-      const detail = document.createElement("span");
-      detail.className = "team-set-detail";
-      detail.dataset.i18nSkip = "";
-      detail.textContent = t("teamPanel.editedDetail", { team: ctx.team.name });
-      state.append(detail);
+  function teamRow(ctx, idPrefix, { collapsible }) {
+    const parts = [];
+    const hidden = collapsible && collapsed;
+    if (ctx.team && !hidden) {
+      if (ctx.members.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "team-row-empty";
+        empty.dataset.i18n = "teamPanel.emptyTeam";
+        empty.textContent = "This team has no Pokémon yet.";
+        parts.push(empty);
+      } else {
+        parts.push(memberGrid(ctx, idPrefix));
+      }
     }
-    row.append(state);
-
-    const actions = document.createElement("div");
-    actions.className = "team-set-actions";
-    if (ctx.status.kind === "edited") {
-      actions.append(
-        actionButton("myTeams.saveMember", () => saveToTeam(), { primary: true }),
-        actionButton("teamPanel.revert", revert),
-      );
-    } else if (ctx.status.kind === "free") {
-      actions.append(actionButton(ctx.team ? "teamPanel.addToTeam" : "teamPanel.startTeam", addToTeam));
-    }
-    if (actions.childElementCount > 0) row.append(actions);
-
-    const saved = document.createElement("div");
-    saved.className = "team-saved-sets";
-    const label = document.createElement("label");
-    label.className = "set-editor-field";
-    label.htmlFor = `${idPrefix}-saved-set`;
-    label.dataset.i18n = "teamPanel.savedSet";
-    label.textContent = "Saved set";
-    const select = document.createElement("select");
-    select.id = `${idPrefix}-saved-set`;
-    select.dataset.i18nSkip = "";
-    const current = ctx.savedSets.find((entry) => sameBuild(setFromPaste(entry.text, ctx.catalogs), ctx.set, ctx.catalogs));
-    select.append(
-      optionElement("", t(ctx.savedSets.length > 0 ? "teamPanel.chooseSavedSet" : "teamPanel.noSavedSets")),
-      ...ctx.savedSets.map((entry) => optionElement(entry.name, entry.name)),
-    );
-    select.value = current?.name ?? "";
-    select.disabled = ctx.savedSets.length === 0;
-    select.addEventListener("input", () => loadSavedSet(select.value));
-    saved.append(label, select, actionButton("teamPanel.saveSet", saveSet));
-    if (current) saved.append(actionButton("teamPanel.deleteSet", () => deleteSavedSet(current.name), { danger: true }));
-    row.append(saved);
-
+    // With the row hidden, the edited line names the member it means.
+    if (ctx.status.kind === "edited") parts.push(editedLine(ctx, { named: hidden }));
     if (message) {
       const note = document.createElement("p");
-      note.className = "team-panel-message";
+      note.className = "team-row-message";
       note.dataset.i18nSkip = "";
       note.setAttribute("role", "status");
       note.textContent = message;
-      row.append(note);
+      parts.push(note);
     }
-    return row;
+    return parts;
   }
 
-  function teamBlock(ctx, idPrefix, { heading = true } = {}) {
-    const section = document.createElement("section");
-    section.className = "team-panel";
-    section.setAttribute("aria-labelledby", `${idPrefix}-team-title`);
-    const head = document.createElement("div");
-    head.className = "team-panel-heading";
-    const title = document.createElement("h3");
-    title.id = `${idPrefix}-team-title`;
-    title.dataset.i18n = "teamPanel.team";
-    title.textContent = "Team";
-    if (!heading) title.classList.add("visually-hidden");
-    const manage = document.createElement("a");
-    manage.href = "./my-teams.html";
-    manage.dataset.i18n = "myTeams.manage";
-    manage.textContent = "Manage teams";
-    head.append(title, manage);
-    section.append(head);
-
-    if (ctx.teams.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "team-panel-empty";
-      empty.dataset.i18n = "teamPanel.noTeam";
-      empty.textContent = "No team yet. Add this set to start one.";
-      section.append(empty);
-      return section;
-    }
-
-    const select = document.createElement("select");
-    select.id = `${idPrefix}-team-select`;
-    select.dataset.i18nSkip = "";
-    select.setAttribute("aria-labelledby", `${idPrefix}-team-title`);
-    select.append(...ctx.teams.map((team) => optionElement(team.id, team.name)));
-    select.value = ctx.team?.id ?? "";
-    select.addEventListener("input", () => selectTeam(select.value));
-    section.append(select);
-
-    if (!ctx.team || ctx.members.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "team-panel-empty";
-      empty.dataset.i18n = "teamPanel.emptyTeam";
-      empty.textContent = "This team has no Pokémon yet.";
-      section.append(empty);
-      return section;
-    }
-
+  function memberGrid(ctx, idPrefix) {
     const grid = document.createElement("div");
-    grid.className = "team-panel-members";
+    grid.className = "team-row-members";
+    grid.id = `${idPrefix}-team-members`;
+    grid.setAttribute("role", "group");
+    grid.dataset.i18nSkip = "";
+    grid.setAttribute("aria-label", t("teamPanel.members", { team: ctx.team.name }));
     grid.append(...ctx.members.map((member) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "team-panel-member";
+      button.className = "team-row-member";
+      button.id = `${idPrefix}-team-member-${member.index}`;
       button.disabled = !member.set;
       const current = ctx.status.index === member.index;
-      button.setAttribute("aria-pressed", String(current));
       const edited = current && ctx.status.kind === "edited";
-      button.classList.toggle("edited", edited);
+      button.setAttribute("aria-pressed", String(current));
       const name = member.pokemon ? localizedName(member.pokemon) : t("myTeams.unknownPokemon");
+      button.setAttribute("aria-label", edited ? `${name}, ${t("teamPanel.edited")}` : name);
+      button.title = name;
       const sprite = teamMemberSprite(member.pokemon, { size: 40 });
       sprite.setAttribute("aria-hidden", "true");
-      const label = document.createElement("span");
-      label.className = "team-panel-member-name";
-      label.dataset.i18nSkip = "";
-      label.textContent = name;
-      button.append(sprite, label);
+      button.append(sprite);
       if (edited) {
         const mark = document.createElement("span");
         mark.className = "team-panel-edited-mark";
-        const text = document.createElement("span");
-        text.className = "visually-hidden";
-        text.textContent = t("teamPanel.edited");
-        mark.append(text);
+        mark.setAttribute("aria-hidden", "true");
         button.append(mark);
       }
       button.addEventListener("click", () => loadMember(member.index));
       return button;
     }));
-    section.append(grid);
-    return section;
+    return grid;
+  }
+
+  function editedLine(ctx, { named }) {
+    const line = document.createElement("div");
+    line.className = "team-edited";
+    const chip = document.createElement("span");
+    chip.className = "team-edited-chip";
+    chip.dataset.i18nSkip = "";
+    chip.textContent = named ? `${t("teamPanel.edited")} · ${setName(ctx)}` : t("teamPanel.edited");
+    chip.title = t("teamPanel.editedDetail", { team: ctx.team.name });
+    line.append(
+      chip,
+      actionButton("myTeams.saveMember", () => saveToTeam(), { primary: true }),
+      actionButton("teamPanel.revert", revert),
+    );
+    return line;
+  }
+
+  function menuItems(ctx) {
+    const items = [];
+    if (ctx.teams.length > 0) {
+      items.push(menuLabel("teamPanel.team"));
+      for (const team of ctx.teams) {
+        items.push(menuButton(team.name, () => selectTeam(team.id), { checked: team.id === ctx.team?.id }));
+      }
+      items.push(menuSeparator());
+    }
+    if (ctx.set) {
+      items.push(menuLabel("teamPanel.savedSets"));
+      const current = ctx.savedSets.find((entry) => sameBuild(setFromPaste(entry.text, ctx.catalogs), ctx.set, ctx.catalogs));
+      if (ctx.savedSets.length === 0) {
+        const none = document.createElement("p");
+        none.className = "set-menu-note";
+        none.dataset.i18n = "teamPanel.noSavedSets";
+        none.textContent = "No saved sets yet";
+        items.push(none);
+      }
+      for (const entry of ctx.savedSets) {
+        items.push(menuButton(entry.name, () => loadSavedSet(entry.name), { checked: entry === current }));
+      }
+      items.push(menuSeparator(), menuButton(t("teamPanel.saveSetAs"), saveSet, { action: true }));
+      if (current) items.push(menuButton(t("teamPanel.deleteSet", { name: current.name }), () => deleteSavedSet(current.name), { danger: true }));
+      if (ctx.status.kind === "free") {
+        items.push(menuButton(t(ctx.team ? "teamPanel.addToTeam" : "teamPanel.startTeam", { team: ctx.team?.name }), addToTeam, { action: true }));
+      }
+    }
+    const manage = document.createElement("a");
+    manage.className = "set-menu-item action";
+    manage.href = "./my-teams.html";
+    manage.dataset.i18n = "myTeams.manage";
+    manage.textContent = "Manage teams";
+    items.push(manage);
+    return items;
   }
 
   return {
     render,
-    // For mountSheetBar: the phone bar's Team button opens the picker sheet.
-    sheetAction: { sheet: picker, labelKey: "teamPanel.team" },
     // The working team's build of a Pokémon picked by search, so a team member opens as saved.
     memberSet(pokemonId) {
       const catalogs = getCatalogs();
@@ -325,14 +331,24 @@ export function mountTeamPanel({ prefix, statusHost, blockHost, getCatalogs, rea
       if (!catalogs || !id) return null;
       return teamMemberSets(teamStore.selectedTeam(), catalogs).find(({ set }) => set?.pokemonId === id)?.set ?? null;
     },
-    // The bar button's second line: the member in use, or the free set.
-    barName() {
-      const ctx = context();
-      if (!ctx?.set) return "";
-      const name = setName(ctx);
-      return ctx.status.kind === "edited" ? `${name} · ${t("teamPanel.edited")}` : name;
-    },
   };
+}
+
+function readCollapsed(storage) {
+  try {
+    return storage?.getItem(TEAM_ROW_STORAGE_KEY) === "collapsed";
+  } catch {
+    return false;
+  }
+}
+
+function writeCollapsed(storage, collapsed) {
+  try {
+    if (collapsed) storage?.setItem(TEAM_ROW_STORAGE_KEY, "collapsed");
+    else storage?.removeItem(TEAM_ROW_STORAGE_KEY);
+  } catch {
+    // Private mode or blocked storage: the row still toggles for this page view.
+  }
 }
 
 function setName(ctx) {
@@ -349,45 +365,108 @@ function setParts(set, catalogs) {
   };
 }
 
-function actionButton(key, onClick, { primary = false, danger = false } = {}) {
+function actionButton(key, onClick, { primary = false } = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "team-action";
   button.classList.toggle("primary", primary);
-  button.classList.toggle("danger", danger);
   button.dataset.i18n = key;
   button.textContent = t(key);
   button.addEventListener("click", onClick);
   return button;
 }
 
-// A short bottom sheet with the same frame as the set sheets (src/ui/set-sheet.js).
-function pickerSheet(id) {
-  const dialog = document.createElement("dialog");
-  dialog.className = "set-sheet team-picker-sheet";
-  dialog.id = id;
-  dialog.setAttribute("aria-labelledby", `${id}-title`);
-  dialog.innerHTML = `
-    <div class="set-sheet-header">
-      <span class="set-sheet-handle" aria-hidden="true"></span>
-      <h2 id="${id}-title" data-i18n="teamPanel.team">Team</h2>
-      <button type="button" class="set-sheet-close" data-i18n-aria-label="sheet.close"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-    </div>
-    <div class="set-sheet-body"></div>
-    <div class="set-sheet-footer"><button type="button" class="set-sheet-done" data-i18n="sheet.done">Done</button></div>`;
-  document.body.append(dialog);
-  translateSubtree(dialog);
-  for (const button of dialog.querySelectorAll(".set-sheet-close, .set-sheet-done")) {
-    button.addEventListener("click", () => dialog.close());
+function menuLabel(key) {
+  const label = document.createElement("p");
+  label.className = "set-menu-label";
+  label.dataset.i18n = key;
+  label.textContent = t(key);
+  return label;
+}
+
+function menuSeparator() {
+  const line = document.createElement("hr");
+  line.className = "set-menu-separator";
+  return line;
+}
+
+function menuButton(text, onClick, { checked = null, action = false, danger = false } = {}) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "set-menu-item";
+  button.classList.toggle("action", action);
+  button.classList.toggle("danger", danger);
+  button.dataset.i18nSkip = "";
+  if (checked !== null) button.setAttribute("aria-pressed", String(checked));
+  button.textContent = text;
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+// The "⋯" set menu: a popover (light dismiss and Escape come with it) placed under its button.
+function setMenu(id) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "set-menu-button";
+  button.dataset.i18nAriaLabel = "teamPanel.setOptions";
+  button.setAttribute("aria-label", t("teamPanel.setOptions"));
+  button.setAttribute("aria-controls", id);
+  button.setAttribute("aria-expanded", "false");
+  button.innerHTML = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="3" cy="8" r="1.6"/><circle cx="8" cy="8" r="1.6"/><circle cx="13" cy="8" r="1.6"/></svg>';
+
+  const list = document.createElement("div");
+  list.className = "set-menu";
+  list.id = id;
+  list.setAttribute("popover", "auto");
+  list.setAttribute("aria-label", t("teamPanel.setOptions"));
+  list.dataset.i18nAriaLabel = "teamPanel.setOptions";
+  // Inside a phone sheet the popover must join the sheet's top layer, so it lives in the dialog.
+  const host = () => button.closest("dialog") ?? document.body;
+  host().append(list);
+
+  function place() {
+    const rect = button.getBoundingClientRect();
+    const width = Math.min(260, globalThis.innerWidth - 32);
+    list.style.width = `${width}px`;
+    list.style.left = `${Math.max(16, Math.min(rect.right - width, globalThis.innerWidth - width - 16))}px`;
+    const below = rect.bottom + 6;
+    const room = globalThis.innerHeight - below - 16;
+    if (room >= 200 || room >= rect.top) {
+      list.style.top = `${below}px`;
+      list.style.bottom = "auto";
+      list.style.maxHeight = `${Math.max(160, room)}px`;
+    } else {
+      list.style.top = "auto";
+      list.style.bottom = `${globalThis.innerHeight - rect.top + 6}px`;
+      list.style.maxHeight = `${rect.top - 22}px`;
+    }
   }
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
+
+  button.addEventListener("click", () => {
+    if (list.parentElement !== host()) host().append(list);
+    if (list.matches(":popover-open")) {
+      list.hidePopover();
+      return;
+    }
+    place();
+    list.showPopover();
+    list.querySelector("button, a")?.focus();
   });
+  list.addEventListener("toggle", (event) => {
+    const open = event.newState === "open";
+    button.setAttribute("aria-expanded", String(open));
+    if (!open && list.contains(document.activeElement)) button.focus();
+  });
+  // Any choice closes the menu; its own handler has already run.
+  list.addEventListener("click", (event) => {
+    if (event.target.closest("button, a")) list.hidePopover();
+  });
+
   return {
-    element: dialog,
-    body: dialog.querySelector(".set-sheet-body"),
-    open: () => {
-      if (!dialog.open) dialog.showModal();
+    button,
+    list,
+    fill(items) {
+      list.replaceChildren(...items);
     },
   };
 }
