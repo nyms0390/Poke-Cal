@@ -49,7 +49,7 @@ import {
 } from "../i18n.js";
 import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
-import { loadCatalogs, rankByUsage, requestedPokemonStatus } from "./bootstrap.js";
+import { loadCatalogs, rankByUsage, requestedPokemonStatus, showStatus } from "./bootstrap.js";
 import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
   analysisRenderKey,
@@ -193,8 +193,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;
@@ -230,7 +230,7 @@ async function initialize() {
 }
 
 function renderStatus() {
-  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+  showStatus(elements.status, requestedPokemonStatus(catalogs, unavailableRequestId), { quiet: !unavailableRequestId });
 }
 
 function initializeAnalysisTabs() {

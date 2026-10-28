@@ -20,7 +20,7 @@ import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { initI18n, localizedName, localizedTerm, onLocaleChange, t } from "../i18n.js";
 import { watchActiveSet } from "./active-set-sync.js";
 import { applyControl, createSideState } from "./battle-state.js";
-import { loadCatalogs } from "./bootstrap.js";
+import { loadCatalogs, showStatus } from "./bootstrap.js";
 import { browserStorage, itemLabel, natureLabel, pokemonSpriteElements, typeBadge } from "./components.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
@@ -133,7 +133,7 @@ initialize();
 // ---------- Loading and state changes ----------
 
 async function initialize() {
-  catalogs = await loadCatalogs({ onStatus: (message) => { elements.status.textContent = message; } });
+  catalogs = await loadCatalogs({ onStatus: (message, phase) => { showStatus(elements.status, message, { quiet: phase === "loaded" }); } });
   if (!catalogs) return;
   const stored = activeStore.readSet();
   const storedPokemon = stored && findPokemon(stored.pokemonId);

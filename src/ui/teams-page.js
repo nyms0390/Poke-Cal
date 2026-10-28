@@ -2,7 +2,7 @@ import { loadLimitlessTeamArchive } from "../data/limitless-teams.js";
 import { createMyTeamStore, formatMemberPaste } from "../data/my-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
-import { catalogLoadedStatus, loadCatalogs, loadWithRecovery } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, loadWithRecovery, showStatus } from "./bootstrap.js";
 import { attachCombobox, browserStorage, itemLabel, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
 import {
   getLocale,
@@ -177,10 +177,14 @@ function initializeQueryPicker() {
 function renderStatus() {
   const { catalogs: catalogPhase, archive: archivePhase, failed } = loadState;
   let text = t("catalog.loading");
+  let quiet = false;
   if (failed || archivePhase === "failed") text = t("teams.loadError");
   else if (catalogPhase === "failed") text = t("catalog.missing");
-  else if (catalogPhase === "loaded" && catalogs) text = catalogLoadedStatus(catalogs);
-  elements.status.textContent = text;
+  else if (catalogPhase === "loaded" && catalogs) {
+    text = catalogLoadedStatus(catalogs);
+    quiet = true;
+  }
+  showStatus(elements.status, text, { quiet });
 }
 
 function renderFailure() {

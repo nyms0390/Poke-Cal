@@ -28,7 +28,7 @@ import {
 } from "../i18n.js";
 import { formatDamageReason, formatKoText } from "../i18n-formatters.js";
 import { applyControl, createSideState } from "./battle-state.js";
-import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
+import { loadCatalogs, requestedPokemonStatus, showStatus } from "./bootstrap.js";
 import { browserStorage, consumeQueryParam, itemLabel, moveChip, moveNameLabel, natureLabel, optionElement, pokemonMiniSprite, setRow } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
 import { mountTeamPanel } from "./team-panel.js";
@@ -185,8 +185,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;
@@ -252,7 +252,7 @@ async function loadTrickRoomShares() {
 }
 
 function renderStatus() {
-  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+  showStatus(elements.status, requestedPokemonStatus(catalogs, unavailableRequestId), { quiet: !unavailableRequestId });
 }
 
 function seedPokemon(pokemon, { activeSet = null } = {}) {

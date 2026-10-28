@@ -63,7 +63,7 @@ import {
   updateActiveTeamSlot,
   urlWithoutConsumedParams,
 } from "./battle-state.js";
-import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage, showStatus } from "./bootstrap.js";
 import {
   attachCombobox,
   browserStorage,
@@ -308,15 +308,15 @@ initialize();
 
 onLocaleChange(() => {
   if (pokemon.length === 0) return;
-  elements.status.textContent = catalogLoadedStatus({ pokemon, abilities, moves });
+  showStatus(elements.status, catalogLoadedStatus({ pokemon, abilities, moves }), { quiet: true });
   renderDamageShell();
   renderTeamStrip();
 });
 
 async function initialize() {
   const data = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!data) return;
@@ -489,7 +489,7 @@ function placeIncomingAttacker(entry, activeSet) {
   if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
   else seedDamageSide(side, defaultPokemonForSide(side));
   if (outcome === "full") {
-    elements.status.textContent = t("battle.teamFull", { name: localizedName(entry) });
+    showStatus(elements.status, t("battle.teamFull", { name: localizedName(entry) }));
   }
 }
 
@@ -1698,10 +1698,15 @@ function renderTeamStrip() {
   elements.teamSelect.disabled = savedTeams.length === 0;
   elements.teamSave.textContent = t(team ? "myTeams.saveSide" : "myTeams.saveSideNew", { side: teamSideLabel(side) });
 
-  if (!team || team.members.length === 0) {
+  // With no team the select, the save button and Manage teams say what to do.
+  if (!team) {
+    elements.teamMembers.replaceChildren();
+    return;
+  }
+  if (team.members.length === 0) {
     const empty = document.createElement("p");
     empty.className = "battle-team-empty";
-    empty.textContent = t(team ? "myTeams.emptyTeam" : "myTeams.stripEmpty");
+    empty.textContent = t("myTeams.emptyTeam");
     elements.teamMembers.replaceChildren(empty);
     return;
   }
@@ -1770,7 +1775,8 @@ function loadTeamMember(team, index, side) {
   }
   applyParsedSet(side, member.parsed);
   setSetPasteStatus(member.parsed.warnings);
-  elements.teamStatus.textContent = t("myTeams.loaded", { name: localizedName(member.parsed.pokemon), team: team.name });
+  // The member's side badge shows the load; no message repeats it.
+  elements.teamStatus.textContent = "";
   syncTeamStripSides();
 }
 
