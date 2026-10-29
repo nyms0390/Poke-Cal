@@ -11,7 +11,7 @@ import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { formatSetWarning } from "../i18n-formatters.js";
 import { getLocale, initI18n, localizedName, onLocaleChange, t, translateSubtree } from "../i18n.js";
 import { applyControl, createSideState } from "./battle-state.js";
-import { catalogLoadedStatus, loadCatalogs } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, showStatus } from "./bootstrap.js";
 import { browserStorage } from "./components.js";
 import { memberSetRow, teamMemberSprites } from "./my-teams-ui.js";
 import { mountSetEditor } from "./set-editor.js";
@@ -86,7 +86,7 @@ initialize();
 
 onLocaleChange(() => {
   if (!catalogs) return;
-  elements.status.textContent = catalogLoadedStatus(catalogs);
+  showStatus(elements.status, catalogLoadedStatus(catalogs), { quiet: true });
   render();
   if (elements.dialog.open) renderParse();
   if (member) setEditor.renderOptions();
@@ -114,8 +114,8 @@ elements.form.addEventListener("submit", (event) => {
 
 async function initialize() {
   const data = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!data) return;

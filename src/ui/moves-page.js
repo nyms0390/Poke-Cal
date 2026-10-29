@@ -14,7 +14,7 @@ import {
   translateSubtree,
   t,
 } from "../i18n.js";
-import { loadCatalogs, catalogLoadedStatus } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, showStatus } from "./bootstrap.js";
 import {
   moveCategoryMark,
   moveNameCell,
@@ -58,14 +58,14 @@ for (const button of elements.moveSortButtons) {
 
 onLocaleChange(() => {
   if (!catalogs) return;
-  elements.status.textContent = catalogLoadedStatus(catalogs);
+  showStatus(elements.status, catalogLoadedStatus(catalogs), { quiet: true });
   renderPage();
 });
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;

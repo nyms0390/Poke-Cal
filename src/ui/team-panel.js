@@ -2,7 +2,7 @@
 // "Your set" sidebar: Builder, Speed Tiers and Matchups.
 // - The team row sits under the Pokémon field: one sprite per member of the working team (My
 //   teams' selected team); a tap loads that member as the shared set. An edited member carries a
-//   dot, and an "Edited · Save to team · Revert" line shows under the row.
+//   dot, and a "Save to team · Revert" line shows under the row.
 // - The working team's name sits in the "Your set" heading and hides or shows the row (kept per
 //   device). The edited line stays visible while the row is hidden.
 // - A "⋯" button beside the Pokémon field opens the set menu: switch team, the Pokémon's saved
@@ -107,7 +107,8 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
     }
     if (ctx.status.kind === "saved" && ctx.status.index === index) return;
     const load = () => {
-      message = t("myTeams.loaded", { name: localizedName(member.pokemon), team: ctx.team.name });
+      // The selected sprite shows the load; no message repeats it.
+      message = "";
       loadSet(member.set);
       render({ force: true });
     };
@@ -117,16 +118,18 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
     }
     const editedName = localizedName(ctx.members[ctx.status.index].pokemon);
     confirm.ask(t("teamPanel.switchPrompt", { name: editedName }), (choice) => {
-      if (choice === "save") saveToTeam({ quiet: true });
+      if (choice === "save") saveToTeam();
       if (choice === "save" || choice === "discard") load();
     });
   }
 
-  function saveToTeam({ quiet = false } = {}) {
+  // The edited mark and line go away once saved, which is the confirmation.
+  function saveToTeam() {
     const ctx = context();
     if (!ctx?.set || !ctx.team || ctx.status.index < 0) return;
+    message = "";
     teamStore.setMember(ctx.team.id, ctx.status.index, pasteFromSet(ctx.set, ctx.catalogs));
-    if (!quiet) say(t("myTeams.replaced", { name: setName(ctx), team: ctx.team.name }));
+    render({ force: true });
   }
 
   function revert() {
@@ -269,16 +272,16 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
     return grid;
   }
 
+  // Save to team and Revert say the set has changes; the dot on the sprite says whose. The
+  // group's name carries "Edited" and the member for assistive tech.
   function editedLine(ctx, { named }) {
     const line = document.createElement("div");
     line.className = "team-edited";
-    const chip = document.createElement("span");
-    chip.className = "team-edited-chip";
-    chip.dataset.i18nSkip = "";
-    chip.textContent = named ? `${t("teamPanel.edited")} · ${setName(ctx)}` : t("teamPanel.edited");
-    chip.title = t("teamPanel.editedDetail", { team: ctx.team.name });
+    line.setAttribute("role", "group");
+    line.dataset.i18nSkip = "";
+    line.setAttribute("aria-label", named ? `${t("teamPanel.edited")} · ${setName(ctx)}` : t("teamPanel.edited"));
+    line.title = t("teamPanel.editedDetail", { team: ctx.team.name });
     line.append(
-      chip,
       actionButton("myTeams.saveMember", () => saveToTeam(), { primary: true }),
       actionButton("teamPanel.revert", revert),
     );
@@ -295,19 +298,16 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
       items.push(menuSeparator());
     }
     if (ctx.set) {
-      items.push(menuLabel("teamPanel.savedSets"));
+      // With no saved sets the group is left out; Save set as… starts it.
       const current = ctx.savedSets.find((entry) => sameBuild(setFromPaste(entry.text, ctx.catalogs), ctx.set, ctx.catalogs));
-      if (ctx.savedSets.length === 0) {
-        const none = document.createElement("p");
-        none.className = "set-menu-note";
-        none.dataset.i18n = "teamPanel.noSavedSets";
-        none.textContent = "No saved sets yet";
-        items.push(none);
+      if (ctx.savedSets.length > 0) {
+        items.push(menuLabel("teamPanel.savedSets"));
+        for (const entry of ctx.savedSets) {
+          items.push(menuButton(entry.name, () => loadSavedSet(entry.name), { checked: entry === current }));
+        }
+        items.push(menuSeparator());
       }
-      for (const entry of ctx.savedSets) {
-        items.push(menuButton(entry.name, () => loadSavedSet(entry.name), { checked: entry === current }));
-      }
-      items.push(menuSeparator(), menuButton(t("teamPanel.saveSetAs"), saveSet, { action: true }));
+      items.push(menuButton(t("teamPanel.saveSetAs"), saveSet, { action: true }));
       if (current) items.push(menuButton(t("teamPanel.deleteSet", { name: current.name }), () => deleteSavedSet(current.name), { danger: true }));
       if (ctx.status.kind === "free") {
         items.push(menuButton(t(ctx.team ? "teamPanel.addToTeam" : "teamPanel.startTeam", { team: ctx.team?.name }), addToTeam, { action: true }));

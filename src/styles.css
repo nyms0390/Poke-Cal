@@ -252,6 +252,20 @@ footer {
   font-size: var(--text-xs);
 }
 
+/* The "loaded" summary is for assistive tech only; failures and notices stay visible. */
+footer > [data-quiet] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+footer:has(> [data-quiet]) {
+  justify-content: flex-end;
+}
+
 /* ---------- App frame ---------- */
 
 .calculator {
@@ -9028,13 +9042,6 @@ main > .my-teams-editor {
   font-weight: 600;
 }
 
-.set-menu-note {
-  margin: 0;
-  padding: 6px 10px 8px;
-  color: var(--muted);
-  font-size: var(--type-supporting);
-}
-
 .set-menu-separator {
   width: auto;
   margin: 4px 6px;
@@ -9180,21 +9187,6 @@ main > .my-teams-editor {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-}
-
-.team-edited-chip {
-  min-width: 0;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: rgb(154 103 0 / 12%);
-  color: var(--warning-dark);
-  font-size: var(--type-caption);
-  font-weight: 600;
-  overflow-wrap: break-word;
-}
-
-.team-edited-chip::before {
-  content: "● ";
 }
 
 .team-edited .team-action {
