@@ -103,3 +103,19 @@ test("damage and survival results are identical with the minified catalogs", asy
   calls.push(["check_survival", { attacker: "incineroar", defender: "milotic", move: "fakeout", attackerAbility: "intimidate", defenderItem: "none" }]);
   assert.equal(await assertSameOutputs(calls) > pokemonIds.length, true);
 });
+
+test("set, Speed tier, bulk point and break point results are identical with the minified catalogs", async () => {
+  const legal = full.pokemon.filter(({ champions }) => champions?.legal === true);
+  const calls = [
+    ...pokemonIds.map((pokemon) => ["get_sets", { pokemon }]),
+    ...every(legal, 11).map(({ id }) => ["get_sets", { pokemon: id }]),
+    ["speed_tiers", { pokemon: "garchomp", count: 50, includeAllSets: true }],
+    ["speed_tiers", { pokemon: "kingambit", count: 50, trickRoom: true, includeAllSets: true, includeActiveOpponentAbilities: true }],
+    ["speed_tiers", { pokemon: "whimsicott", count: 20, tailwind: true, opponentTailwind: true, includeAllSets: true }],
+    ["bulk_points", { pokemon: "incineroar", spread: "Adamant:0/32/0/0/0/0", attacker: "sylveon", move: "moonblast" }],
+    ["bulk_points", { pokemon: "kingambit", attacker: "sneasler", move: "closecombat", reflect: true }],
+    ["break_points", { pokemon: "garchomp", spread: "Jolly:2/0/0/0/0/32", target: "incineroar", move: "earthquake" }],
+    ["break_points", { pokemon: "sylveon", target: "kingambit", move: "moonblast", weather: "sun" }],
+  ];
+  assert.equal(await assertSameOutputs(calls) > pokemonIds.length, true);
+});

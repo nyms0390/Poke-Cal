@@ -117,6 +117,14 @@ export function localizedNatureDropdownLabel(natureName, requestedLocale = local
   return `${nature}（+${up}，-${down}）`;
 }
 
+// A nature's stat change for the hint beside a names-only nature field: "+Atk −SpA", "+攻擊 −特攻";
+// "" for a neutral nature.
+export function localizedNatureEffect(natureName, requestedLocale = locale) {
+  const effect = natureEffect(natureName);
+  if (!effect) return "";
+  return `+${localizedTerm("stat", effect.up, requestedLocale)} −${localizedTerm("stat", effect.down, requestedLocale)}`;
+}
+
 export function localizedSpreadName(value, requestedLocale = locale) {
   const text = String(value ?? "");
   if (requestedLocale !== "zh-TW") return text;

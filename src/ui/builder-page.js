@@ -49,7 +49,7 @@ import {
 } from "../i18n.js";
 import { formatKoText } from "../i18n-formatters.js";
 import { applyControl } from "./battle-state.js";
-import { loadCatalogs, rankByUsage, requestedPokemonStatus } from "./bootstrap.js";
+import { loadCatalogs, rankByUsage, requestedPokemonStatus, showStatus } from "./bootstrap.js";
 import { restoreBuilderCardFocus } from "./builder-focus.js";
 import {
   analysisRenderKey,
@@ -88,6 +88,7 @@ import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
 import { createDeferredUpdater, createLiveUpdater } from "./live-update.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { mountTeamPanel } from "./team-panel.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
 import { SET_SP_LIMIT, mountSetEditor, setEditorMoves, spSpent, statusOptions } from "./set-editor.js";
 
@@ -156,9 +157,23 @@ const setEditor = mountSetEditor(document.querySelector("#builder-set-editor"), 
   onPokemonSelect: (pokemon) => {
     unavailableRequestId = "";
     renderStatus();
-    seedPokemon(pokemon);
+    seedPokemon(pokemon, { activeSet: teamPanel.memberSet(pokemon.id) });
   },
   onControl: handleSetupControl,
+});
+// The shared team panel: the team row under the Pokémon field, its toggle in the heading.
+const teamPanel = mountTeamPanel({
+  prefix: "builder",
+  toggleHost: document.querySelector("#builder-set-editor .set-editor-heading"),
+  menuHost: document.querySelector("#builder-set-editor .set-editor-pokemon"),
+  rowHost: document.querySelector("#builder-set-editor .set-editor-pokemon"),
+  phoneHost: document.querySelector("#builder-summary-card"),
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    refreshFromActiveSet();
+  },
 });
 const ambientFieldControls = mountAmbientFieldControls(elements.ambientField, {
   namePrefix: "builder",
@@ -178,8 +193,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;
@@ -215,7 +230,7 @@ async function initialize() {
 }
 
 function renderStatus() {
-  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+  showStatus(elements.status, requestedPokemonStatus(catalogs, unavailableRequestId), { quiet: !unavailableRequestId });
 }
 
 function initializeAnalysisTabs() {
@@ -437,6 +452,7 @@ function render({ refreshPicks = false, refreshMoves = false, focusKey = "", foc
     ].join(" · "),
   });
   elements.applySpread.disabled = !userSetupDraft;
+  teamPanel.render();
   renderCustomThreats();
   const inputs = analysisInputs();
   elements.breakCount.textContent = t("builder.breakCount", {

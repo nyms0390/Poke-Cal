@@ -33,7 +33,10 @@ test("Worker serves stateless MCP initialize, tools/list, and tools/call", async
   assert.equal(initJson.result.serverInfo.name, "PokéCal Champions Strategy");
   const listed = await app.fetch(request({ method: "tools/list", params: {} }, 2), env);
   const listJson = await readMcpResponse(listed);
-  assert.equal(listJson.result.tools.length, 5);
+  assert.deepEqual(listJson.result.tools.map(({ name }) => name).sort(), [
+    "break_points", "bulk_points", "calculate_damage", "check_survival", "compare_speed",
+    "get_sets", "lookup_move", "lookup_pokemon", "speed_tiers",
+  ]);
   const called = await app.fetch(request({ method: "tools/call", params: { name: "lookup_pokemon", arguments: { query: "Alpha" } } }, 3), env);
   const callJson = await readMcpResponse(called);
   assert.match(callJson.result.content[0].text, /Alpha/);

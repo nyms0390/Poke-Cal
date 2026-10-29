@@ -1,5 +1,5 @@
-// The "Your set" editor shared by Builder and Matchups: Pokémon (with its sprite), nature,
-// ability, item and status, the Stat / Base / SP / Stage / Final table with the SP budget, and
+// The "Your set" editor shared by Builder and Matchups: Pokémon (with its sprite), ability,
+// item, nature and status as a 2×2 grid, the Stat / Base / SP / Stage / Final table with the SP budget, and
 // four move slots (type mark, move search, crit toggle and any move conditions).
 //
 // The editor owns its markup and rendering; the page owns the state. Every edit is reported as
@@ -12,12 +12,11 @@ import {
   resolvePokemonAbilities,
 } from "../data/catalog.js";
 import { STAT_KEYS } from "../engine/constants.js";
-import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import {
   getLocale,
   localizedName,
-  localizedNatureDropdownLabel,
+  localizedNatureEffect,
   localizedTerm,
   t,
   translateSubtree,
@@ -31,6 +30,7 @@ import {
   moveConditionSelect,
   moveSlotCombobox,
   moveTypeIcon,
+  natureOptionGroups,
   optionElement,
   pokemonSearchMatchers,
   pokemonSpriteElements,
@@ -93,7 +93,9 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
   const id = (name) => `${prefix}-${name}`;
   host.classList.add("set-editor");
   host.innerHTML = `
-    <h2 id="${id("set-heading")}" class="set-editor-title sheet-hidden" data-i18n="matchups.yourSet">Your set</h2>
+    <div class="set-editor-heading sheet-hidden">
+      <h2 id="${id("set-heading")}" class="set-editor-title" data-i18n="matchups.yourSet">Your set</h2>
+    </div>
     <div class="set-editor-pokemon">
       <span id="${id("sprite")}" class="set-editor-sprite" aria-hidden="true"></span>
       <div class="set-editor-pokemon-field">
@@ -105,10 +107,6 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
         </div>
       </div>
     </div>
-    <label class="set-editor-field">
-      Nature
-      <select id="${id("nature")}" data-kind="nature"></select>
-    </label>
     <div class="set-editor-fields">
       <label class="set-editor-field">
         Ability
@@ -117,6 +115,10 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
       <label class="set-editor-field">
         Item
         <select id="${id("item")}" data-kind="item"></select>
+      </label>
+      <label class="set-editor-field">
+        <span class="set-editor-field-head">Nature<small id="${id("nature-effect")}" class="set-editor-field-hint" data-i18n-skip></small></span>
+        <select id="${id("nature")}" data-kind="nature"></select>
       </label>
       <label class="set-editor-field">
         Status
@@ -145,6 +147,7 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
     pokemonSearch: find("pokemon-search"),
     pokemonResults: find("pokemon-results"),
     nature: find("nature"),
+    natureEffect: find("nature-effect"),
     ability: find("ability"),
     item: find("item"),
     status: find("status"),
@@ -194,10 +197,7 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
   function renderOptions() {
     const setup = getSetup();
     const catalogs = getCatalogs();
-    elements.nature.replaceChildren(...Object.keys(NATURES).map((nature) => optionElement(
-      nature,
-      localizedNatureDropdownLabel(nature),
-    )));
+    elements.nature.replaceChildren(...natureOptionGroups());
     elements.status.replaceChildren(...statusOptions().map(({ value, label }) => optionElement(value, label)));
     if (setup?.pokemon && catalogs) {
       const usage = setup.pokemon.champions?.usage;
@@ -222,6 +222,7 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
     if (!setup?.pokemon) return;
     if (document.activeElement !== elements.pokemonSearch) elements.pokemonSearch.value = localizedName(setup.pokemon);
     elements.nature.value = setup.nature;
+    elements.natureEffect.textContent = localizedNatureEffect(setup.nature);
     elements.ability.value = setup.ability?.id ?? "";
     elements.item.value = setup.item?.id ?? "";
     elements.status.value = setup.soaked ? "soak" : setup.status ?? "";

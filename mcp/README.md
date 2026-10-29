@@ -23,13 +23,23 @@ This repository does not include an account ID, zone ID, custom domain, or a dep
 
 ## Tools
 
-Exactly five read-only tools are registered:
+Nine read-only tools are registered:
 
 - `lookup_pokemon({query, limit})` — matching species with IDs, names, types, base stats, abilities, and concise Champions availability/usage.
 - `lookup_move({query, limit})` — matching moves with type, category, power, accuracy, priority, target, description, and Champions legality.
+- `get_sets({pokemon})` — what a Pokémon runs: its 12 most used abilities, items, moves, natures, and teammates on Limitless, its Smogon ladder SP spreads, and NCP curated sets, each with a Showdown paste the other tools accept.
 - `compare_speed(...)` — resolved final Speed and acting order with spreads, modifiers, weather/terrain, and Trick Room.
+- `speed_tiers(...)` — Speed Tiers for one set: its final Speed against the 10–50 most used Pokémon (default 20, Mega forms included), each opponent's likely and fastest Speed set (presets, NCP sets, Limitless profiles; every set with `includeAllSets`), who moves first, Trick Room, Tailwind, paralysis, stages, and active Speed abilities, plus the SP and nature needed to outspeed each faster tier outside Trick Room.
 - `calculate_damage(...)` — deterministic damage range/distribution, percentages, HP, type effectiveness, KO summary, notes, and assumptions.
 - `check_survival(...)` — the damage result plus survival verdict and remaining-HP range.
+- `bulk_points(...)` — Builder's bulk points against one attacker's move: the fewest HP + Def/SpD SP for each better KO tier (e.g. guaranteed 2HKO → guaranteed 3HKO), from your current spread and from zero bulk SP. The budget defaults to 66 minus your Atk, SpA, and Spe SP.
+- `break_points(...)` — Builder's break points against one target: the Atk or SpA SP at which your move reaches a better KO tier, including points that need a +Atk/+SpA nature.
+
+### Sets and set pastes
+
+Every Pokémon a tool takes can be given by name or ID (`attacker`, `left`, `pokemon`, `target`, …) or as a Showdown set paste in the matching `*Set` field (`attackerSet`, `defenderSet`, `leftSet`, `rightSet`, `set`, `targetSet`; up to 1,000 characters). The paste fills the item, ability, Tera type, nature, and SP; `EVs:` lines are mapped to SP and moves are ignored. Explicit name, spread, ability, item, and Tera type fields override the paste. Anything neither gives falls back to the Pokémon's Champions usage defaults (top ability, item, nature, and Smogon spread), except that a paste without `@ Item` holds no item and a paste with SP but no nature line is neutral, as in Showdown. Unknown items, abilities, natures, and Tera types in a paste are skipped and listed in `pasteWarnings`.
+
+`bulk_points` and `break_points` assume both sides at full HP with no stat stages; the other side's Atk/SpA (or HP/Def/SpD) SP, nature, ability, item, and Tera type come from its set. They and `speed_tiers` reuse the Builder and Speed Tiers modules (`src/data/bulk-points.js`, `break-points.js`, `speed-line.js`) through `src/data/strategy-analysis.js`.
 
 ### Input validation
 
@@ -42,11 +52,11 @@ All free-text inputs (names, spreads, abilities, items, and search queries) are 
 | `*Status` | `paralysis`, `burn`, `poison`, `toxic`, `sleep`, `freeze` | `par`/`paralyzed`, `brn`/`burned`, `psn`/`poisoned`, `tox`/`badly poisoned`, `slp`/`asleep`, `frz`/`frozen`; `none` or empty for healthy |
 | `targetType`, `*TeraType` | The 18 types (`Normal` … `Fairy`) | Any capitalisation, e.g. `fire`, `FIRE` |
 
-Stat stages are integers from −6 to 6, HP fractions are in (0, 1], `limit` is 1–10, and `moveOptions.hitCount` is 1–10.
+Stat stages are integers from −6 to 6, HP fractions are in (0, 1], `limit` is 1–10, `moveOptions.hitCount` is 1–10, `speed_tiers` `count` is 10, 20, 30, 40, or 50, `bulk_points` `budget` is 0–66, and set pastes are at most 1,000 characters.
 
 ### Champions legality
 
-`compare_speed`, `calculate_damage`, and `check_survival` always return `legal` and `warnings`. When a Pokémon or move is not legal in Pokémon Champions (per the Pokémon Showdown Champions mod, e.g. Mewtwo or Psystrike), the calculation still runs as a hypothetical, but `legal` is `false` and `warnings` names each non-legal entry. The lookup tools report legality in `champions.legal`.
+Every calculation tool (`compare_speed`, `speed_tiers`, `calculate_damage`, `check_survival`, `bulk_points`, `break_points`) returns `legal` and `warnings`, and `get_sets` returns `legal`. When a Pokémon or move is not legal in Pokémon Champions (per the Pokémon Showdown Champions mod, e.g. Mewtwo or Psystrike), the calculation still runs as a hypothetical, but `legal` is `false` and `warnings` names each non-legal entry. The lookup tools report legality in `champions.legal`.
 
 Pokémon Champions doubles is the default format. Results are deterministic and the public MVP is unauthenticated and read-only by owner decision; the per-IP `MCP_RATE_LIMITER` (see Deployment) is its abuse protection instead of auth. Over the limit, `/mcp` returns 429 with `Retry-After: 60` without loading catalogs. See [docs/DECISIONS.md](../docs/DECISIONS.md).
 
@@ -58,4 +68,4 @@ Pokémon Champions doubles is the default format. Results are deterministic and 
 - NCP (Nimbasa City Post) — curated Champions sets.
 - PokeAPI — Traditional Chinese aliases only.
 
-The Worker reads the generated `../public/mcp-catalogs/pokemon.json`, `moves.json`, `abilities.json`, and `items.json` through the Cloudflare `ASSETS` binding and caches parsed catalogs per Worker isolate. These are minified copies of the full `public/*.json` catalogs that keep every entry (so non-Champions-legal lookups still work) but drop fields the Worker never reads, cutting about 6.0 MB to 1.0 MB and the cold JSON parse by roughly 4x. Regenerate them with `npm run build-web-catalogs` from the repository root after any data sync. No user model token is required by PokéCal, and agent callers' AI-provider tokens are never sent to this service.
+The Worker reads the generated `../public/mcp-catalogs/pokemon.json`, `moves.json`, `abilities.json`, and `items.json` through the Cloudflare `ASSETS` binding and caches parsed catalogs per Worker isolate. These are minified copies of the full `public/*.json` catalogs that keep every entry (so non-Champions-legal lookups still work) but drop fields the Worker never reads, cutting about 6.0 MB to 1.6 MB. Per-Pokémon usage keeps only what `get_sets` and `speed_tiers` return (the 12 most used entries of each list, the Speed profiles Speed Tiers can show, Smogon spreads, and NCP sets), which costs about 3 ms more cold JSON parse than the lookup-only catalogs did. Regenerate them with `npm run build-web-catalogs` from the repository root after any data sync. No user model token is required by PokéCal, and agent callers' AI-provider tokens are never sent to this service.

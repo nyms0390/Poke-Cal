@@ -11,24 +11,24 @@ import {
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
 import { threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
-import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 import {
   formatNumber,
   getLocale,
   initI18n,
   localizedName,
-  localizedNatureDropdownLabel,
+  localizedNatureEffect,
   localizedTerm,
   onLocaleChange,
   translateSubtree,
   t,
 } from "../i18n.js";
-import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
+import { loadCatalogs, requestedPokemonStatus, showStatus } from "./bootstrap.js";
 import {
   attachCombobox,
   browserStorage,
   consumeQueryParam,
+  natureOptionGroups,
   optionElement,
   pokemonMiniSprite,
   pokemonSearchMatchers,
@@ -38,6 +38,7 @@ import {
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { createLiveUpdater } from "./live-update.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { mountTeamPanel } from "./team-panel.js";
 
 const elements = {
   source: document.querySelector("#speed-source"),
@@ -52,6 +53,7 @@ const elements = {
   popularSummary: document.querySelector("#speed-popular-summary"),
   manualOpponents: document.querySelector("#speed-manual-opponents"),
   nature: document.querySelector("#speed-nature"),
+  natureEffect: document.querySelector("#speed-nature-effect"),
   ability: document.querySelector("#speed-user-ability"),
   userAbilityActive: document.querySelector("#speed-user-ability-active"),
   userAbilityActiveLabel: document.querySelector("#speed-user-ability-active-label"),
@@ -96,6 +98,22 @@ const settingsSheet = mountSetSheet({
   summaryHost: document.querySelector("#speed-summary-card"),
 });
 mountSheetBar({ actions: [{ sheet: settingsSheet, labelKey: "speed.editSettings" }] });
+// The shared team panel: the team row under the Pokémon field, its toggle in the heading.
+const teamPanel = mountTeamPanel({
+  prefix: "speed",
+  toggleHost: document.querySelector("#speed-editor .speed-control-panel .panel-heading"),
+  menuHost: document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon"),
+  rowHost: document.querySelector("#speed-editor .speed-control-panel .set-editor-pokemon"),
+  phoneHost: document.querySelector("#speed-summary-card"),
+  getCatalogs: () => catalogs,
+  readSet: () => activeSetStore.readSet(),
+  loadSet: (set) => {
+    activeSetStore.writeSet(set);
+    unavailableRequestId = "";
+    renderStatus();
+    refreshFromActiveSet();
+  },
+});
 
 initI18n();
 initialize();
@@ -109,8 +127,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;
@@ -140,7 +158,7 @@ async function initialize() {
     onSelect: (pokemon) => {
       unavailableRequestId = "";
       renderStatus();
-      seedUser(pokemon);
+      seedUser(pokemon, { activeSet: teamPanel.memberSet(pokemon.id) });
     },
     renderRow: (entry, onSelect) => searchResultButton(entry, onSelect, { preventBlur: true }),
   });
@@ -212,18 +230,13 @@ function refreshFromActiveSet() {
 
 function renderNatureOptions() {
   const selected = elements.nature.value;
-  elements.nature.replaceChildren(
-    ...Object.keys(NATURES).map((nature) => optionElement(
-      nature,
-      localizedNatureDropdownLabel(nature),
-    )),
-  );
+  elements.nature.replaceChildren(...natureOptionGroups());
   if (selected) elements.nature.value = selected;
 }
 
 
 function renderStatus() {
-  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+  showStatus(elements.status, requestedPokemonStatus(catalogs, unavailableRequestId), { quiet: !unavailableRequestId });
 }
 
 // `previous` (same Pokémon) keeps the ability's "active" toggle when the ability is unchanged.
@@ -321,6 +334,7 @@ function render() {
 
   elements.pokemonSearch.value = localizedName(user.pokemon);
   elements.nature.value = user.nature;
+  elements.natureEffect.textContent = localizedNatureEffect(user.nature);
   renderAbilityOptions();
   elements.ability.value = user.ability?.id ?? "";
   renderSpeedItemOptions();
@@ -343,6 +357,7 @@ function render() {
     ? t("speed.userSummary", { nature: localizedTerm("nature", user.nature), sp: user.spe })
     : t("speed.baseSummary", { value: user.pokemon.baseStats.spe });
   settingsSheet.update({ pokemon: user.pokemon, meta: elements.userSummary.textContent });
+  teamPanel.render();
   const popularCount = Number(elements.popularCount.value);
   elements.popularSummary.textContent = t("speed.popularSummary", { count: popularCount });
   elements.source.textContent = battle

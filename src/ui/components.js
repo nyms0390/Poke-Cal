@@ -4,7 +4,7 @@ import { MOVE_PROPERTY_FLAGS } from "../data/move-properties.js";
 import { formatMovePriority } from "../engine/battle-order.js";
 import { isGuaranteedCritical } from "../engine/critical.js";
 import { isSpreadMove } from "../engine/damage.js";
-import { natureEffect } from "../engine/natures.js";
+import { NATURES, natureEffect } from "../engine/natures.js";
 import { getLocale, localizedName, localizedTerm, t, toTraditionalChinese } from "../i18n.js";
 import { urlWithoutConsumedParams } from "./battle-state.js";
 
@@ -914,4 +914,23 @@ export function updateLoadErrorPanel(panel, { messageKeys, retrying = false } = 
   // aria-disabled (not disabled) keeps keyboard focus on the button during a retry.
   retry.setAttribute("aria-disabled", String(retrying));
   panel.setAttribute("aria-busy", String(retrying));
+}
+
+// Nature options for a half-width field (the shared "Your set" editor and Speed Tiers): names
+// only so the closed field fits, grouped by the raised stat so the list still says what each
+// nature does. The field's label shows the chosen nature's full effect (localizedNatureEffect).
+const NATURE_STAT_ORDER = ["Atk", "Def", "SpA", "SpD", "Spe"];
+
+export function natureOptionGroups() {
+  const rank = (stat) => NATURE_STAT_ORDER.indexOf(stat);
+  const groups = [...NATURE_STAT_ORDER, ""].map((up) => {
+    const group = document.createElement("optgroup");
+    group.label = up ? `+${localizedTerm("stat", up)}` : t("nature.neutral");
+    const natures = Object.keys(NATURES)
+      .filter((nature) => (natureEffect(nature)?.up ?? "") === up)
+      .sort((a, b) => rank(natureEffect(a)?.down ?? "") - rank(natureEffect(b)?.down ?? ""));
+    group.append(...natures.map((nature) => optionElement(nature, localizedTerm("nature", nature))));
+    return group;
+  });
+  return groups;
 }

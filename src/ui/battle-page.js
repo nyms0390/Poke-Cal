@@ -20,8 +20,10 @@ import {
   createActiveSetStore,
   isActiveSetUnconsumed,
 } from "../data/active-set.js";
+import { ncpSetPaste } from "../data/ncp-data.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
+import { sameBuild, teamMemberSets } from "../data/team-sets.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import {
@@ -50,6 +52,7 @@ import {
   clearTeamSlot as clearTeamSlotState,
   createSideState,
   createTeamsState,
+  incomingSetUpdatesMember,
   isTypeChangeAbility,
   isUnburdenAbility,
   normalizeTypeChangeState,
@@ -61,7 +64,7 @@ import {
   updateActiveTeamSlot,
   urlWithoutConsumedParams,
 } from "./battle-state.js";
-import { catalogLoadedStatus, loadCatalogs, rankByUsage } from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage, showStatus } from "./bootstrap.js";
 import {
   attachCombobox,
   browserStorage,
@@ -306,15 +309,15 @@ initialize();
 
 onLocaleChange(() => {
   if (pokemon.length === 0) return;
-  elements.status.textContent = catalogLoadedStatus({ pokemon, abilities, moves });
+  showStatus(elements.status, catalogLoadedStatus({ pokemon, abilities, moves }), { quiet: true });
   renderDamageShell();
   renderTeamStrip();
 });
 
 async function initialize() {
   const data = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!data) return;
@@ -350,7 +353,7 @@ async function initialize() {
   });
   // Battle keeps its own team copies, so it takes a hand-off only when shown again by Back /
   // Forward (as a fresh load would), never from a background tab: placing a Pokémon already on
-  // the team writes Battle's copy to the shared set, which would undo edits made elsewhere.
+  // the team can write Battle's copy to the shared set (see incomingSetUpdatesMember).
   watchActiveSet(takePendingHandOff, { crossTab: false });
 }
 
@@ -475,14 +478,19 @@ function placeIncomingAttacker(entry, activeSet) {
     seedDamageSide(side, entry, { activeSet });
     return;
   }
-  if (outcome === "activated") {
+  if (outcome === "kept" || outcome === "activated") {
     teams = activateTeamSlotState(teams, side, index);
+    const defaultSet = activeSetFromState(championsDefaultsForPokemon(entry, { abilityLookup, moveLookup, items }));
+    if (incomingSetUpdatesMember(activeSet, defaultSet)) {
+      const member = teams[side].slots[index];
+      teams = updateActiveTeamSlot(teams, side, applyActiveSet(member, activeSet, { abilityLookup, itemLookup }));
+    }
     persistTeams();
   }
   if (teams[side].slots.some(Boolean)) renderActiveTeamSlot(side);
   else seedDamageSide(side, defaultPokemonForSide(side));
   if (outcome === "full") {
-    elements.status.textContent = t("battle.teamFull", { name: localizedName(entry) });
+    showStatus(elements.status, t("battle.teamFull", { name: localizedName(entry) }));
   }
 }
 
@@ -690,15 +698,12 @@ function renderSideSelects(side) {
   const rankedItems = rankByUsage(items, usage?.items);
 
   const usageSpreads = usage?.spreads ?? [];
-  const ncpSets = damageState[side].pokemon?.champions?.ncp?.sets ?? [];
   spreadSelect.replaceChildren(
     optionElement(
       "",
-      usageSpreads.length > 0 || ncpSets.length > 0
-        ? t("battle.customSpread")
-        : t("battle.noSpreadSource"),
+      usageSpreads.length > 0 ? t("battle.customSpread") : t("battle.noSpreadSource"),
     ),
-    ...spreadOptionGroups(usageSpreads, ncpSets),
+    ...spreadOptionGroups(usageSpreads),
   );
   syncSpreadSelect(side);
   natureSelect.value = damageState[side].nature;
@@ -720,7 +725,9 @@ function renderSideSelects(side) {
   renderSavedSetSelect(side);
 }
 
-function spreadOptionGroups(usageSpreads, ncpSets) {
+// NCP sets carry item, ability, nature, SP and moves, so they live in the Set picker
+// (applied whole); the Spread picker only lists Smogon ladder nature + SP spreads.
+function spreadOptionGroups(usageSpreads) {
   const groups = [];
   if (usageSpreads.length > 0) {
     groups.push(
@@ -737,14 +744,6 @@ function spreadOptionGroups(usageSpreads, ncpSets) {
       ),
     );
   }
-  if (ncpSets.length > 0) {
-    groups.push(
-      optionGroup(
-        t("battle.ncpSpreadGroup"),
-        ncpSets.map((set) => optionElement(set.spreadName, `${set.name} — ${localizedSpreadName(set.spreadName)}`)),
-      ),
-    );
-  }
   return groups;
 }
 
@@ -755,15 +754,37 @@ function optionGroup(label, options) {
   return group;
 }
 
-function renderSavedSetSelect(side, selectedName = "") {
+// Option values for NCP sets are prefixed so they never collide with a saved set's name;
+// the option's data-source says which kind was picked.
+const NCP_SET_PREFIX = "ncp:";
+
+function renderSavedSetSelect(side, selectedValue = "") {
   const state = damageState[side];
   const sets = savedSetStore.listSets(state?.pokemon?.id);
-  elements[`${side}SavedSet`].replaceChildren(
+  const ncpSets = state?.pokemon?.champions?.ncp?.sets ?? [];
+  const select = elements[`${side}SavedSet`];
+  select.replaceChildren(
     optionElement("", t("battle.championsDefault")),
     ...sets.map((set) => optionElement(set.name, set.name)),
+    ...(ncpSets.length > 0
+      ? [optionGroup(
+        t("battle.ncpSpreadGroup"),
+        ncpSets.map((set, index) => {
+          const option = optionElement(`${NCP_SET_PREFIX}${index}`, set.name);
+          option.dataset.source = "ncp";
+          return option;
+        }),
+      )]
+      : []),
   );
-  elements[`${side}SavedSet`].value = sets.some((set) => set.name === selectedName) ? selectedName : "";
-  elements[`${side}DeleteSet`].disabled = !elements[`${side}SavedSet`].value;
+  select.value = [...select.options].some((option) => option.value === selectedValue && option.value)
+    ? selectedValue
+    : "";
+  elements[`${side}DeleteSet`].disabled = !select.value || selectedSetSource(side) === "ncp";
+}
+
+function selectedSetSource(side) {
+  return elements[`${side}SavedSet`].selectedOptions[0]?.dataset.source === "ncp" ? "ncp" : "saved";
 }
 
 // The spread dropdown always reflects the side's actual nature + SP: the matching preset, or
@@ -909,19 +930,27 @@ function applySavedSet(side) {
     return;
   }
 
-  const saved = savedSetStore
-    .listSets(damageState[side]?.pokemon?.id)
-    .find((set) => set.name === selectedName);
-  if (!saved) {
+  const text = selectedSetSource(side) === "ncp"
+    ? ncpSetText(side, selectedName)
+    : savedSetStore
+      .listSets(damageState[side]?.pokemon?.id)
+      .find((set) => set.name === selectedName)?.text;
+  if (!text) {
     renderSavedSetSelect(side);
     return;
   }
 
-  elements.setPaste.value = saved.text;
-  const parsed = parseSetPaste(saved.text, setPasteCatalogs());
+  elements.setPaste.value = text;
+  const parsed = parseSetPaste(text, setPasteCatalogs());
   applyParsedSet(side, parsed);
   renderSavedSetSelect(side, selectedName);
   setSetPasteStatus(parsed.warnings);
+}
+
+function ncpSetText(side, value) {
+  const pokemonEntry = damageState[side]?.pokemon;
+  const set = pokemonEntry?.champions?.ncp?.sets?.[Number(value.slice(NCP_SET_PREFIX.length))];
+  return set ? ncpSetPaste(pokemonEntry, set) : "";
 }
 
 function saveCurrentSet(side) {
@@ -944,7 +973,7 @@ function saveCurrentSet(side) {
 function deleteCurrentSet(side) {
   const selectedName = elements[`${side}SavedSet`].value;
   const pokemonId = damageState[side]?.pokemon?.id;
-  if (!pokemonId || !selectedName) return;
+  if (!pokemonId || !selectedName || selectedSetSource(side) === "ncp") return;
   if (!window.confirm(t("battle.deleteConfirm", { name: selectedName }))) return;
 
   savedSetStore.deleteSet(pokemonId, selectedName);
@@ -1691,10 +1720,15 @@ function renderTeamStrip() {
   elements.teamSelect.disabled = savedTeams.length === 0;
   elements.teamSave.textContent = t(team ? "myTeams.saveSide" : "myTeams.saveSideNew", { side: teamSideLabel(side) });
 
-  if (!team || team.members.length === 0) {
+  // With no team the select, the save button and Manage teams say what to do.
+  if (!team) {
+    elements.teamMembers.replaceChildren();
+    return;
+  }
+  if (team.members.length === 0) {
     const empty = document.createElement("p");
     empty.className = "battle-team-empty";
-    empty.textContent = t(team ? "myTeams.emptyTeam" : "myTeams.stripEmpty");
+    empty.textContent = t("myTeams.emptyTeam");
     elements.teamMembers.replaceChildren(empty);
     return;
   }
@@ -1703,6 +1737,7 @@ function renderTeamStrip() {
     button.type = "button";
     button.className = "battle-team-member";
     button.dataset.pokemonId = normalizeDamageId(parsed.pokemon?.id);
+    button.dataset.memberIndex = String(index);
     button.disabled = !parsed.pokemon;
     const name = parsed.pokemon ? localizedName(parsed.pokemon) : t("myTeams.unknownPokemon");
     button.setAttribute("aria-label", t("myTeams.loadMember", { name, side: teamSideLabel(side) }));
@@ -1714,21 +1749,36 @@ function renderTeamStrip() {
     const badge = document.createElement("span");
     badge.className = "battle-team-member-side";
     badge.setAttribute("aria-hidden", "true");
-    button.append(sprite, label, badge);
+    const edited = document.createElement("span");
+    edited.className = "team-panel-edited-mark";
+    edited.hidden = true;
+    const editedText = document.createElement("span");
+    editedText.className = "visually-hidden";
+    edited.append(editedText);
+    button.append(sprite, label, badge, edited);
     button.addEventListener("click", () => loadTeamMember(myTeamStore.getTeam(team.id), index, teamTargetSide()));
     return button;
   }));
   syncTeamStripSides();
 }
 
-// Marks the members currently loaded on each side (by species).
+// Marks the members currently loaded on each side (by species), and those a side has edited
+// since loading (the same "Edited" state as the shared team panel on the other pages).
 function syncTeamStripSides() {
   const loaded = {
     attacker: normalizeDamageId(damageState.attacker?.pokemon?.id),
     defender: normalizeDamageId(damageState.defender?.pokemon?.id),
   };
+  const setCatalogs = { ...setPasteCatalogs(), abilityLookup, itemLookup, moveLookup };
+  const members = teamMemberSets(myTeamStore.selectedTeam(), setCatalogs);
   for (const button of elements.teamMembers.querySelectorAll(".battle-team-member")) {
     const sides = ["attacker", "defender"].filter((side) => loaded[side] && loaded[side] === button.dataset.pokemonId);
+    const member = members[Number(button.dataset.memberIndex)];
+    const edited = Boolean(member?.set) && sides.some((side) =>
+      !sameBuild(activeSetFromState(damageState[side]), member.set, setCatalogs));
+    const mark = button.querySelector(".team-panel-edited-mark");
+    mark.hidden = !edited;
+    mark.firstChild.textContent = t("teamPanel.edited");
     button.classList.toggle("on-attacker", sides.includes("attacker"));
     button.classList.toggle("on-defender", sides.includes("defender"));
     button.querySelector(".battle-team-member-side").textContent = sides
@@ -1747,7 +1797,8 @@ function loadTeamMember(team, index, side) {
   }
   applyParsedSet(side, member.parsed);
   setSetPasteStatus(member.parsed.warnings);
-  elements.teamStatus.textContent = t("myTeams.loaded", { name: localizedName(member.parsed.pokemon), team: team.name });
+  // The member's side badge shows the load; no message repeats it.
+  elements.teamStatus.textContent = "";
   syncTeamStripSides();
 }
 

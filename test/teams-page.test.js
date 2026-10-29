@@ -52,6 +52,7 @@ async function page(total, { failure = false, topCut = 0, tournaments } = {}) {
     localizedName: (entry) => localizedName(entry, locale),
     t: (key, params) => tFor(locale, key, params),
     onLocaleChange: (callback) => { changeLocale = callback; },
+    showStatus: (element, text) => { element.textContent = text; },
     catalogLoadedStatus: ({ pokemon, abilities, moves }) =>
       tFor(locale, "catalog.loaded", { pokemon: pokemon.length, abilities: abilities.length, moves: moves.length }),
     loadCatalogs: async ({ onStatus, onLoaded }) => {

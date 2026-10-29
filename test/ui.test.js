@@ -1136,7 +1136,7 @@ test("matchups page exposes the overview, one filtered results list and the turn
   for (const key of ["matchups.overview", "matchups.koRace", "matchups.methodText"]) {
     assert.match(html, new RegExp(`data-i18n="${key.replace(".", "\\.")}"`), key);
   }
-  assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
+  assert.match(html, /<caption class="visually-hidden" data-i18n="matchups\.gridCaption">/);
   assert.match(html, /<select id="matchups-speed-mode">/);
   const overview = html.match(/<section id="matchups-overview"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(overview, /id="matchups-grid-view"[^>]*>/);
@@ -1276,8 +1276,8 @@ test("Speed Tiers reuses the shared set editor's slot layout for the set it owns
   const panel = html.match(/aria-label="Your Speed settings">([\s\S]*?)<\/section>/)?.[1] ?? "";
   const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
 
-  // Same slot order and classes as mountSetEditor: Pokémon with sprite, nature, ability/item, stat row.
-  const slots = ["set-editor-pokemon", "set-editor-sprite", "set-editor-field", "set-editor-fields", "set-editor-stats"];
+  // Same slot order and classes as mountSetEditor: Pokémon with sprite, the ability/item/nature grid, stat row.
+  const slots = ["set-editor-pokemon", "set-editor-sprite", "set-editor-fields", "set-editor-field", "set-editor-stats"];
   const positions = slots.map((slot) => panel.indexOf(`class="${slot}"`));
   assert.ok(positions.every((position) => position >= 0), `missing slot in ${JSON.stringify(positions)}`);
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
@@ -1567,4 +1567,12 @@ test("headings take their size from a type role, and nested headings step down a
   // Lookup once shrank its section titles below the panel titles inside them.
   assert.doesNotMatch(css, /\.lookup-page \.lookup-section-heading (?:h2|p)\s*\{[^}]*font-size/);
   assert.doesNotMatch(rule(".workspace-sidebar .panel-heading strong"), /font-size/);
+});
+
+test("battle lists NCP curated entries as whole sets in the Set picker, not as spreads", () => {
+  const source = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
+  assert.match(source, /function spreadOptionGroups\(usageSpreads\) \{/);
+  assert.doesNotMatch(source, /optionElement\(set\.spreadName/);
+  assert.match(source, /t\("battle\.ncpSpreadGroup"\),\s*ncpSets\.map\(\(set, index\)/);
+  assert.match(source, /ncpSetPaste\(pokemonEntry, set\)/);
 });
