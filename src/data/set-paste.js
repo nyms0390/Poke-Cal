@@ -205,7 +205,7 @@ function parseSpreadLine(value, { evs, warnings }) {
   return sp;
 }
 
-function formatSpLine(sp = {}) {
+export function formatSpLine(sp = {}) {
   return STAT_ORDER
     .filter((stat) => Number(sp[stat] ?? 0) !== 0)
     .map((stat) => `${sp[stat]} ${STAT_LABELS[stat]}`)

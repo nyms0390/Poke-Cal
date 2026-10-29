@@ -1568,3 +1568,11 @@ test("headings take their size from a type role, and nested headings step down a
   assert.doesNotMatch(css, /\.lookup-page \.lookup-section-heading (?:h2|p)\s*\{[^}]*font-size/);
   assert.doesNotMatch(rule(".workspace-sidebar .panel-heading strong"), /font-size/);
 });
+
+test("battle lists NCP curated entries as whole sets in the Set picker, not as spreads", () => {
+  const source = readFileSync(new URL("../src/ui/battle-page.js", import.meta.url), "utf8");
+  assert.match(source, /function spreadOptionGroups\(usageSpreads\) \{/);
+  assert.doesNotMatch(source, /optionElement\(set\.spreadName/);
+  assert.match(source, /t\("battle\.ncpSpreadGroup"\),\s*ncpSets\.map\(\(set, index\)/);
+  assert.match(source, /ncpSetPaste\(pokemonEntry, set\)/);
+});

@@ -123,3 +123,48 @@ test("merges NCP sets into the Pokémon catalog and clears stale entries", () =>
   assert.equal(pikachu.champions.ncp, undefined, "stale NCP data is cleared");
   assert.equal(urshifu.champions.ncp.sets[0].name, "Band");
 });
+
+test("formats an NCP set as set text that parses back to the full set", async () => {
+  const { ncpSetPaste } = await import("../src/data/ncp-data.js");
+  const { parseSetPaste } = await import("../src/data/set-paste.js");
+  const [set] = buildNcpSets(parseNcpSetdex(setdexJs)).pokemon
+    .find((entry) => entry.id === "urshifurapidstrike").sets;
+  const pokemon = { id: "urshifurapidstrike", name: "Urshifu-Rapid-Strike" };
+  const text = ncpSetPaste(pokemon, set);
+  assert.equal(
+    text,
+    [
+      "Urshifu-Rapid-Strike @ Choice Band",
+      "Ability: Unseen Fist",
+      "SPs: 2 HP / 32 Atk / 32 Spe",
+      "Jolly Nature",
+      "- Surging Strikes",
+      "- Close Combat",
+      "- Aqua Jet",
+      "- U-turn",
+    ].join("\n"),
+  );
+
+  const catalog = (name) => ({ id: name.toLowerCase().replace(/[^a-z0-9]/g, ""), name });
+  const parsed = parseSetPaste(text, {
+    pokemon: [pokemon],
+    items: [catalog("Choice Band")],
+    abilities: [catalog("Unseen Fist")],
+    moves: ["Surging Strikes", "Close Combat", "Aqua Jet", "U-turn"].map(catalog),
+  });
+  assert.deepEqual(parsed.warnings, []);
+  assert.equal(parsed.item.name, "Choice Band");
+  assert.equal(parsed.ability.name, "Unseen Fist");
+  assert.equal(parsed.nature, "Jolly");
+  assert.deepEqual(parsed.sp, { hp: 2, atk: 32, def: 0, spa: 0, spd: 0, spe: 32 });
+  assert.deepEqual(parsed.selectedMoveIds, ["surgingstrikes", "closecombat", "aquajet", "uturn"]);
+});
+
+test("leaves blank NCP fields out of the set text", async () => {
+  const { ncpSetPaste } = await import("../src/data/ncp-data.js");
+  const text = ncpSetPaste(
+    { name: "Venusaur" },
+    { nature: "Modest", sps: { hp: 2, spa: 32, spe: 32 }, ability: "", item: "", moves: [] },
+  );
+  assert.equal(text, "Venusaur\nSPs: 2 HP / 32 SpA / 32 Spe\nModest Nature");
+});
