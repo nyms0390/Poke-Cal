@@ -8354,11 +8354,10 @@ html:has(dialog.set-sheet[open]) {
 }
 
 @media (max-width: 720px) {
+  /* The summary card and the team row under it, the same on Builder, Speed Tiers and Matchups. */
   .sheet-summary-host {
     display: grid;
     gap: 8px;
-    padding: 12px;
-    background: var(--surface-soft);
   }
 
   .sheet-summary-host:empty {
