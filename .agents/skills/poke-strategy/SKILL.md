@@ -35,7 +35,7 @@ Use evidence in this order:
 3. `src/data/` for defaults, threats, Mega handling, and breakpoint analyses.
 4. Primary external sources only when the repository cannot answer the question. Identify the repository boundary and cite those sources.
 
-Use `lookup_pokemon` and `lookup_move` for focused catalog questions, and use `compare_speed`, `calculate_damage`, or `check_survival` for individual calculations. For large matchup sweeps or exhaustive catalog analysis that the MCP tools do not expose, write a temporary analysis script that imports the repository's modules rather than copying formulas.
+Use `lookup_pokemon` and `lookup_move` for focused catalog questions, `get_sets` for what a Pokémon runs (Limitless usage, Smogon spreads, NCP sets with pastes), and `compare_speed`, `calculate_damage`, or `check_survival` for individual calculations; the calculation tools also take a Showdown set paste per side (`attackerSet`, `leftSet`, …). Use `speed_tiers` for a set against the most used Pokémon, and `bulk_points` / `break_points` for the SP that reach a better KO tier. For large matchup sweeps or exhaustive catalog analysis that the MCP tools do not expose, write a temporary analysis script that imports the repository's modules rather than copying formulas.
 
 ## Answer contract
 

@@ -4,8 +4,17 @@ import { z } from "zod";
 import {
   calculateDamageMatchup,
   compareSpeed,
+  resolveMove,
   resolvePokemon,
 } from "../../src/data/strategy-tools.js";
+import {
+  DEFAULT_SPEED_OPPONENT_COUNT,
+  SP_BUDGET,
+  breakPointAnalysis,
+  bulkPointAnalysis,
+  pokemonSets,
+  speedTierTable,
+} from "../../src/data/strategy-analysis.js";
 
 import { TYPE_EFFECTIVENESS } from "../../src/engine/type-chart.js";
 import { survivalChance } from "../../src/engine/damage.js";
@@ -13,6 +22,8 @@ import { survivalChance } from "../../src/engine/damage.js";
 // Free-text inputs are bounded so a caller cannot make the Worker parse, search, or echo
 // arbitrarily large strings. Error messages quote at most ECHO_LIMIT characters of input.
 export const TEXT_MAX = 100;
+// A Showdown set paste: six lines plus four moves comfortably fit.
+export const PASTE_MAX = 1000;
 const ECHO_LIMIT = 40;
 
 // Canonical values are exactly what the engine compares against (see src/ui/field-controls.js
@@ -87,6 +98,10 @@ function aliasedEnum(label, aliases, { allowNone = false } = {}) {
 const text = () => z.string().trim().max(TEXT_MAX);
 const name = (label) => text().min(1).describe(`${label} name or ID (max ${TEXT_MAX} characters).`);
 const optionalText = (label) => text().optional().describe(`${label} (max ${TEXT_MAX} characters).`);
+const optionalName = (label) => text().min(1).optional().describe(`${label} name or ID (max ${TEXT_MAX} characters); required unless the matching set paste is given.`);
+const setPaste = (label) => z.string().trim().max(PASTE_MAX).optional().describe(
+  `${label} as a Showdown set paste (max ${PASTE_MAX} characters): "Name @ Item", "Ability:", "Tera Type:", "SPs:" (or EVs, mapped to SP), and "<Nature> Nature" lines; moves are ignored. Explicit name, spread, ability, item and Tera type fields override it; anything it leaves out falls back to Champions usage defaults, except that a paste without an item holds none.`,
+);
 const weather = aliasedEnum("weather", WEATHER_ALIASES, { allowNone: true });
 const terrain = aliasedEnum("terrain", TERRAIN_ALIASES, { allowNone: true });
 const status = aliasedEnum("status", STATUS_ALIASES, { allowNone: true });
@@ -96,7 +111,8 @@ const stage = () => z.number().int().min(-6).max(6).optional();
 const limit = z.number().int().min(1).max(10).default(5);
 const query = z.string().trim().min(1).max(TEXT_MAX);
 const speedSchema = z.object({
-  left: name("Left Pokémon"), right: name("Right Pokémon"),
+  left: optionalName("Left Pokémon"), right: optionalName("Right Pokémon"),
+  leftSet: setPaste("Left set"), rightSet: setPaste("Right set"),
   leftSpread: optionalText("Left spread"), rightSpread: optionalText("Right spread"),
   leftAbility: optionalText("Left ability"), rightAbility: optionalText("Right ability"),
   leftItem: optionalText("Left item"), rightItem: optionalText("Right item"),
@@ -106,7 +122,8 @@ const speedSchema = z.object({
   weather, terrain, trickRoom: z.boolean().optional(),
 });
 const damageSchema = z.object({
-  attacker: name("Attacking Pokémon"), defender: name("Defending Pokémon"), move: name("Move"),
+  attacker: optionalName("Attacking Pokémon"), defender: optionalName("Defending Pokémon"), move: name("Move"),
+  attackerSet: setPaste("Attacker set"), defenderSet: setPaste("Defender set"),
   attackerSpread: optionalText("Attacker spread"), defenderSpread: optionalText("Defender spread"),
   attackerAbility: optionalText("Attacker ability"), defenderAbility: optionalText("Defender ability"),
   attackerItem: optionalText("Attacker item"), defenderItem: optionalText("Defender item"),
@@ -123,10 +140,48 @@ const damageSchema = z.object({
   moveOptions: z.object({ singleTarget: z.boolean().optional(), hitCount: z.number().int().min(1).max(10).optional() }).optional(),
 });
 
+const fieldFlags = {
+  weather, terrain,
+  gravity: z.boolean().optional(), helpingHand: z.boolean().optional(), powerSpot: z.boolean().optional(), battery: z.boolean().optional(),
+  steelySpirit: z.boolean().optional(), reflect: z.boolean().optional(), lightScreen: z.boolean().optional(),
+  auroraVeil: z.boolean().optional(), friendGuard: z.boolean().optional(),
+};
+const setsSchema = z.object({ pokemon: name("Pokémon") });
+const speedTiersSchema = z.object({
+  pokemon: optionalName("Your Pokémon"), set: setPaste("Your set"), spread: optionalText("Your spread, e.g. Jolly:2/32/0/0/0/32"),
+  ability: optionalText("Your ability"), item: optionalText("Your item (Choice Scarf and Iron Ball change Speed)"),
+  speedStage: stage(), tailwind: z.boolean().optional(), paralysis: z.boolean().optional(),
+  abilityActive: z.boolean().optional().describe("Your Speed ability (Swift Swim, Chlorophyll, Sand Rush, Slush Rush, Surge Surfer, Unburden) is active."),
+  opponentSpeedStage: stage(), opponentTailwind: z.boolean().optional(), opponentParalysis: z.boolean().optional(),
+  includeActiveOpponentAbilities: z.boolean().optional().describe("Also list opponents' active Speed ability variants."),
+  includeAllSets: z.boolean().optional().describe("List every Speed set of each opponent (presets, NCP sets, Limitless profiles), not just the likely and fastest one."),
+  trickRoom: z.boolean().optional(),
+  count: z.number().int().min(10).max(50).multipleOf(10).default(DEFAULT_SPEED_OPPONENT_COUNT).describe("How many of the most used Pokémon to compare against: 10, 20, 30, 40 or 50."),
+});
+const bulkPointsSchema = z.object({
+  pokemon: optionalName("Your (defending) Pokémon"), set: setPaste("Your set"), spread: optionalText("Your spread"),
+  ability: optionalText("Your ability"), item: optionalText("Your item"), teraType: pokemonType("teraType"),
+  attacker: optionalName("Attacking Pokémon"), attackerSet: setPaste("Attacker set"), attackerSpread: optionalText("Attacker spread"),
+  attackerAbility: optionalText("Attacker ability"), attackerItem: optionalText("Attacker item"),
+  attackerTeraType: pokemonType("attackerTeraType"), attackerStatus: status,
+  move: name("Attacker's move"),
+  budget: z.number().int().min(0).max(SP_BUDGET).optional().describe(`SP available for HP + Def + SpD together; defaults to ${SP_BUDGET} minus your Atk, SpA and Spe SP.`),
+  ...fieldFlags,
+});
+const breakPointsSchema = z.object({
+  pokemon: optionalName("Your (attacking) Pokémon"), set: setPaste("Your set"), spread: optionalText("Your spread"),
+  ability: optionalText("Your ability"), item: optionalText("Your item"), teraType: pokemonType("teraType"), status,
+  target: optionalName("Target Pokémon"), targetSet: setPaste("Target set"), targetSpread: optionalText("Target spread"),
+  targetAbility: optionalText("Target ability"), targetItem: optionalText("Target item"), targetTeraType: pokemonType("targetTeraType"),
+  move: name("Your move"), critical: z.boolean().optional(),
+  moveOptions: z.object({ singleTarget: z.boolean().optional(), hitCount: z.number().int().min(1).max(10).optional() }).optional(),
+  ...fieldFlags,
+});
+
 export function createToolServer(context) {
   const server = new McpServer({
     name: "PokéCal Champions Strategy",
-    version: "0.1.0",
+    version: "0.2.0",
     instructions: "Calculations target Pokémon Champions. Doubles is the default. Results are deterministic; PokéCal does not require or accept a user model token.",
   });
   const tools = registerTools(server, context);
@@ -149,6 +204,26 @@ export function registerTools(server, context) {
     compare_speed: { schema: speedSchema, handler: (input) => speedResult(context, input), description: "Compare final Pokémon Champions Speed and acting order. Results include legal:false and warnings when a Pokémon is not Champions-legal." },
     calculate_damage: { schema: damageSchema, handler: (input) => serializeDamage(assertDamage(calculateDamageMatchup(context, input))), description: "Calculate deterministic Pokémon Champions damage. Results include legal:false and warnings when a Pokémon or move is not Champions-legal." },
     check_survival: { schema: damageSchema, handler: (input) => survivalResult(assertDamage(calculateDamageMatchup(context, input))), description: "Check whether a Pokémon survives deterministic damage. Results include legal:false and warnings when a Pokémon or move is not Champions-legal." },
+    get_sets: {
+      schema: setsSchema,
+      handler: (input) => pokemonSets(context, input.pokemon),
+      description: "What a Pokémon runs in Pokémon Champions doubles: its most used abilities, items, moves, natures and teammates on Limitless, its Smogon ladder SP spreads, and NCP curated sets (each with a paste for the set inputs of the other tools).",
+    },
+    speed_tiers: {
+      schema: speedTiersSchema,
+      handler: (input) => withLegality(context, speedTierTable(context, input)),
+      description: "Final Speed of your set against the 10–50 most used Champions Pokémon and their common Speed sets, with who moves first (Trick Room aware) and the SP you need to outspeed each faster tier.",
+    },
+    bulk_points: {
+      schema: bulkPointsSchema,
+      handler: (input) => withLegality(context, bulkPointAnalysis(context, input), input.move),
+      description: "Builder's bulk points: the fewest HP + Def/SpD SP that let your Pokémon take one more hit of an attacker's move, from your current spread and from zero bulk SP, within the 66 SP budget.",
+    },
+    break_points: {
+      schema: breakPointsSchema,
+      handler: (input) => withLegality(context, breakPointAnalysis(context, input), input.move),
+      description: "Builder's break points: the Atk or SpA SP at which your move reaches a better KO tier (e.g. a guaranteed 2HKO) against one target, including points that need a +Atk/+SpA nature.",
+    },
   };
   for (const [name, tool] of Object.entries(tools)) {
     server.registerTool(name, { description: tool.description, inputSchema: tool.schema.shape }, async (input) => {
@@ -184,7 +259,16 @@ function formatIssue(issue) {
 
 function speedResult(context, input) {
   const result = compareSpeed(context, input);
-  return { ...result, ...legality([resolvePokemon(context, input.left), resolvePokemon(context, input.right)], []) };
+  return { ...result, ...legality([resolvePokemon(context, result.left.id), resolvePokemon(context, result.right.id)], []) };
+}
+
+// Legality for the analysis tools: every Pokémon the result names (pokemon, attacker, target)
+// plus the move.
+function withLegality(context, result, move = null) {
+  const pokemon = ["pokemon", "user", "attacker", "target"]
+    .filter((key) => result[key]?.id)
+    .map((key) => resolvePokemon(context, result[key].id));
+  return { ...legality(pokemon, move ? [resolveMove(context, move)] : []), ...result };
 }
 
 // Champions legality comes from the Showdown Champions mod overlay (champions.legal). An
@@ -241,7 +325,13 @@ function serializeDamage(result) {
     currentHp: { current: result.defenderCurrentHp, max: result.defenderHp }, typeEffectiveness: result.typeMultiplier,
     koChance: result.ko ?? null, notes: result.notes ?? [], assumptions: assumptions(result),
     defenderCurrentHp: result.defenderCurrentHp, minDamage: result.minDamage, maxDamage: result.maxDamage,
+    ...pasteWarnings(result),
   };
+}
+
+function pasteWarnings(result) {
+  const warnings = [...(result.attackerState.pasteWarnings ?? []), ...(result.defenderState.pasteWarnings ?? [])];
+  return warnings.length ? { pasteWarnings: warnings } : {};
 }
 
 function survivalResult(result) {
@@ -250,7 +340,7 @@ function survivalResult(result) {
   const protectedAtOneHp = survival.reason === "Focus Sash" || survival.reason === "Sturdy";
   const minRemaining = protectedAtOneHp ? 1 : Math.max(0, result.defenderCurrentHp - result.maxDamage);
   const maxRemaining = protectedAtOneHp ? 1 : Math.max(0, result.defenderCurrentHp - result.minDamage);
-  return { legal: damage.legal, warnings: damage.warnings, damage, survives: survival.verdict !== "NO", remainingHp: { min: minRemaining, max: maxRemaining }, summary: survival.summary };
+  return { legal: damage.legal, warnings: damage.warnings, ...pasteWarnings(result), damage, survives: survival.verdict !== "NO", remainingHp: { min: minRemaining, max: maxRemaining }, summary: survival.summary };
 }
 
 function checkSurvivalFromResult(result) {
