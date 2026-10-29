@@ -58,7 +58,7 @@ Stat stages are integers from −6 to 6, HP fractions are in (0, 1], `limit` is 
 
 Every calculation tool (`compare_speed`, `speed_tiers`, `calculate_damage`, `check_survival`, `bulk_points`, `break_points`) returns `legal` and `warnings`, and `get_sets` returns `legal`. When a Pokémon or move is not legal in Pokémon Champions (per the Pokémon Showdown Champions mod, e.g. Mewtwo or Psystrike), the calculation still runs as a hypothetical, but `legal` is `false` and `warnings` names each non-legal entry. The lookup tools report legality in `champions.legal`.
 
-Pokémon Champions doubles is the default format. Results are deterministic and the public MVP is unauthenticated and read-only. Operators should apply Cloudflare rate limiting (and add authentication before exposing it to untrusted high-volume traffic) because catalog and calculation requests are publicly reachable.
+Pokémon Champions doubles is the default format. Results are deterministic and the public MVP is unauthenticated and read-only by owner decision; the per-IP `MCP_RATE_LIMITER` (see Deployment) is its abuse protection instead of auth. Over the limit, `/mcp` returns 429 with `Retry-After: 60` without loading catalogs. See [docs/DECISIONS.md](../docs/DECISIONS.md).
 
 ## Data labels
 
