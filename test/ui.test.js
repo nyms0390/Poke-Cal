@@ -1136,7 +1136,7 @@ test("matchups page exposes the overview, one filtered results list and the turn
   for (const key of ["matchups.overview", "matchups.koRace", "matchups.methodText"]) {
     assert.match(html, new RegExp(`data-i18n="${key.replace(".", "\\.")}"`), key);
   }
-  assert.match(html, /<caption data-i18n="matchups\.gridCaption">/);
+  assert.match(html, /<caption class="visually-hidden" data-i18n="matchups\.gridCaption">/);
   assert.match(html, /<select id="matchups-speed-mode">/);
   const overview = html.match(/<section id="matchups-overview"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(overview, /id="matchups-grid-view"[^>]*>/);

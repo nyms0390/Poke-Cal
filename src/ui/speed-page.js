@@ -23,7 +23,7 @@ import {
   translateSubtree,
   t,
 } from "../i18n.js";
-import { loadCatalogs, requestedPokemonStatus } from "./bootstrap.js";
+import { loadCatalogs, requestedPokemonStatus, showStatus } from "./bootstrap.js";
 import {
   attachCombobox,
   browserStorage,
@@ -127,8 +127,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   catalogs = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!catalogs) return;
@@ -236,7 +236,7 @@ function renderNatureOptions() {
 
 
 function renderStatus() {
-  elements.status.textContent = requestedPokemonStatus(catalogs, unavailableRequestId);
+  showStatus(elements.status, requestedPokemonStatus(catalogs, unavailableRequestId), { quiet: !unavailableRequestId });
 }
 
 // `previous` (same Pokémon) keeps the ability's "active" toggle when the ability is unchanged.

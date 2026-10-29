@@ -144,6 +144,13 @@ function focusMain() {
   main.focus({ preventScroll: true });
 }
 
+// Writes the footer status line. A quiet message (the "loaded" summary) stays in the live region
+// for assistive tech but is hidden on screen: the working page already shows the data arrived.
+export function showStatus(element, text, { quiet = false } = {}) {
+  element.textContent = text;
+  element.toggleAttribute?.("data-quiet", quiet);
+}
+
 export function catalogLoadedStatus(data) {
   return t("catalog.loaded", {
     pokemon: data.pokemon.length,

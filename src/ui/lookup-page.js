@@ -25,12 +25,7 @@ import {
   toTraditionalChinese,
 } from "../i18n.js";
 import { formatChampionsUsage } from "../i18n-formatters.js";
-import {
-  catalogLoadedStatus,
-  loadCatalogs,
-  rankByUsage,
-  rankObservedUsage,
-} from "./bootstrap.js";
+import { catalogLoadedStatus, loadCatalogs, rankByUsage, rankObservedUsage, showStatus } from "./bootstrap.js";
 import {
   browserStorage,
   FULL_STAT_LABELS,
@@ -115,7 +110,7 @@ elements.results.addEventListener("keydown", handleBrowseKeydown);
 initialize();
 
 onLocaleChange(() => {
-  if (catalogs) elements.status.textContent = catalogLoadedStatus(catalogs);
+  if (catalogs) showStatus(elements.status, catalogLoadedStatus(catalogs), { quiet: true });
   if (!selectedPokemon) return;
   renderFormOptions();
   selectForm(selectedPokemon, { syncActive: false, resetMoveSort: false });
@@ -123,8 +118,8 @@ onLocaleChange(() => {
 
 async function initialize() {
   const data = await loadCatalogs({
-    onStatus: (text) => {
-      elements.status.textContent = text;
+    onStatus: (text, phase) => {
+      showStatus(elements.status, text, { quiet: phase === "loaded" });
     },
   });
   if (!data) return;
