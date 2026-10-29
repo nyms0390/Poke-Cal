@@ -1,4 +1,5 @@
 import { normalizeId } from "./catalog.js";
+import { formatSpLine } from "./set-paste.js";
 import { parseUsageSpread } from "./usage-defaults.js";
 
 export const NCP_CALC_URL = "https://nerd-of-now.github.io/NCP-VGC-Damage-Calculator/";
@@ -71,6 +72,19 @@ export function mergeNcpSets(pokemon, ncp) {
       champions: { ...entry.champions, ncp: { meta, sets: ncpEntry.sets } },
     };
   });
+}
+
+// An NCP set as Showdown set text, so Battle loads it through the same parser as saved
+// and pasted sets (item, ability, nature, SP and moves; blank setdex fields are left out).
+export function ncpSetPaste(pokemon, set) {
+  const header = [pokemon?.name ?? "", set?.item ? ` @ ${set.item}` : ""].join("");
+  return [
+    header,
+    set?.ability ? `Ability: ${set.ability}` : "",
+    `SPs: ${formatSpLine(set?.sps)}`,
+    set?.nature ? `${set.nature} Nature` : "",
+    ...(set?.moves ?? []).map((move) => `- ${move}`),
+  ].filter(Boolean).join("\n");
 }
 
 function toNcpSet(setName, set) {

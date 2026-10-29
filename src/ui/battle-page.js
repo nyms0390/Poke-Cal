@@ -20,6 +20,7 @@ import {
   createActiveSetStore,
   isActiveSetUnconsumed,
 } from "../data/active-set.js";
+import { ncpSetPaste } from "../data/ncp-data.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
 import { sameBuild, teamMemberSets } from "../data/team-sets.js";
@@ -697,15 +698,12 @@ function renderSideSelects(side) {
   const rankedItems = rankByUsage(items, usage?.items);
 
   const usageSpreads = usage?.spreads ?? [];
-  const ncpSets = damageState[side].pokemon?.champions?.ncp?.sets ?? [];
   spreadSelect.replaceChildren(
     optionElement(
       "",
-      usageSpreads.length > 0 || ncpSets.length > 0
-        ? t("battle.customSpread")
-        : t("battle.noSpreadSource"),
+      usageSpreads.length > 0 ? t("battle.customSpread") : t("battle.noSpreadSource"),
     ),
-    ...spreadOptionGroups(usageSpreads, ncpSets),
+    ...spreadOptionGroups(usageSpreads),
   );
   syncSpreadSelect(side);
   natureSelect.value = damageState[side].nature;
@@ -727,7 +725,9 @@ function renderSideSelects(side) {
   renderSavedSetSelect(side);
 }
 
-function spreadOptionGroups(usageSpreads, ncpSets) {
+// NCP sets carry item, ability, nature, SP and moves, so they live in the Set picker
+// (applied whole); the Spread picker only lists Smogon ladder nature + SP spreads.
+function spreadOptionGroups(usageSpreads) {
   const groups = [];
   if (usageSpreads.length > 0) {
     groups.push(
@@ -744,14 +744,6 @@ function spreadOptionGroups(usageSpreads, ncpSets) {
       ),
     );
   }
-  if (ncpSets.length > 0) {
-    groups.push(
-      optionGroup(
-        t("battle.ncpSpreadGroup"),
-        ncpSets.map((set) => optionElement(set.spreadName, `${set.name} — ${localizedSpreadName(set.spreadName)}`)),
-      ),
-    );
-  }
   return groups;
 }
 
@@ -762,15 +754,37 @@ function optionGroup(label, options) {
   return group;
 }
 
-function renderSavedSetSelect(side, selectedName = "") {
+// Option values for NCP sets are prefixed so they never collide with a saved set's name;
+// the option's data-source says which kind was picked.
+const NCP_SET_PREFIX = "ncp:";
+
+function renderSavedSetSelect(side, selectedValue = "") {
   const state = damageState[side];
   const sets = savedSetStore.listSets(state?.pokemon?.id);
-  elements[`${side}SavedSet`].replaceChildren(
+  const ncpSets = state?.pokemon?.champions?.ncp?.sets ?? [];
+  const select = elements[`${side}SavedSet`];
+  select.replaceChildren(
     optionElement("", t("battle.championsDefault")),
     ...sets.map((set) => optionElement(set.name, set.name)),
+    ...(ncpSets.length > 0
+      ? [optionGroup(
+        t("battle.ncpSpreadGroup"),
+        ncpSets.map((set, index) => {
+          const option = optionElement(`${NCP_SET_PREFIX}${index}`, set.name);
+          option.dataset.source = "ncp";
+          return option;
+        }),
+      )]
+      : []),
   );
-  elements[`${side}SavedSet`].value = sets.some((set) => set.name === selectedName) ? selectedName : "";
-  elements[`${side}DeleteSet`].disabled = !elements[`${side}SavedSet`].value;
+  select.value = [...select.options].some((option) => option.value === selectedValue && option.value)
+    ? selectedValue
+    : "";
+  elements[`${side}DeleteSet`].disabled = !select.value || selectedSetSource(side) === "ncp";
+}
+
+function selectedSetSource(side) {
+  return elements[`${side}SavedSet`].selectedOptions[0]?.dataset.source === "ncp" ? "ncp" : "saved";
 }
 
 // The spread dropdown always reflects the side's actual nature + SP: the matching preset, or
@@ -916,19 +930,27 @@ function applySavedSet(side) {
     return;
   }
 
-  const saved = savedSetStore
-    .listSets(damageState[side]?.pokemon?.id)
-    .find((set) => set.name === selectedName);
-  if (!saved) {
+  const text = selectedSetSource(side) === "ncp"
+    ? ncpSetText(side, selectedName)
+    : savedSetStore
+      .listSets(damageState[side]?.pokemon?.id)
+      .find((set) => set.name === selectedName)?.text;
+  if (!text) {
     renderSavedSetSelect(side);
     return;
   }
 
-  elements.setPaste.value = saved.text;
-  const parsed = parseSetPaste(saved.text, setPasteCatalogs());
+  elements.setPaste.value = text;
+  const parsed = parseSetPaste(text, setPasteCatalogs());
   applyParsedSet(side, parsed);
   renderSavedSetSelect(side, selectedName);
   setSetPasteStatus(parsed.warnings);
+}
+
+function ncpSetText(side, value) {
+  const pokemonEntry = damageState[side]?.pokemon;
+  const set = pokemonEntry?.champions?.ncp?.sets?.[Number(value.slice(NCP_SET_PREFIX.length))];
+  return set ? ncpSetPaste(pokemonEntry, set) : "";
 }
 
 function saveCurrentSet(side) {
@@ -951,7 +973,7 @@ function saveCurrentSet(side) {
 function deleteCurrentSet(side) {
   const selectedName = elements[`${side}SavedSet`].value;
   const pokemonId = damageState[side]?.pokemon?.id;
-  if (!pokemonId || !selectedName) return;
+  if (!pokemonId || !selectedName || selectedSetSource(side) === "ncp") return;
   if (!window.confirm(t("battle.deleteConfirm", { name: selectedName }))) return;
 
   savedSetStore.deleteSet(pokemonId, selectedName);
