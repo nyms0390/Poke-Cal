@@ -5,8 +5,9 @@
 // mcp/src/*.js, src/data/strategy-tools.js, and everything it imports (catalog.js,
 // usage-defaults.js, src/engine/*). mcp/test/mcp-catalogs.test.js checks that tool outputs
 // match the full catalogs and that the committed files equal this derivation.
+import { speedProfilesInUse } from "../../src/data/speed-line.js";
+import { USAGE_LIST_KEYS, topUsageList } from "../../src/data/strategy-analysis.js";
 import { stripGenerationHistory } from "../../src/data/web-catalogs.js";
-import { topUsageEntry } from "../../src/data/usage-defaults.js";
 
 export const MCP_CATALOG_NAMES = Object.freeze(["pokemon", "moves", "abilities", "items"]);
 export const MCP_CATALOG_DIRECTORY = "mcp-catalogs";
@@ -14,13 +15,14 @@ export const MCP_CATALOG_DIRECTORY = "mcp-catalogs";
 // Catalog metadata no Worker code reads (Showdown numbering, contest/Z/Max data, sprites).
 const UNUSED_METADATA_KEYS = ["num", "contestType", "isNonstandard", "zMove", "maxMove", "spritenum", "rating"];
 // The Worker reads Champions legality, tier, and aggregate usage (for search ranking and the
-// lookup summaries); source labels/URLs, NCP sets, spread metadata, and overlay descriptions
-// are browser-only.
+// lookup summaries), and get_sets/speed_tiers read per-Pokémon usage and NCP sets; source
+// labels/URLs, spread and NCP metadata, and overlay descriptions are browser-only.
 const CHAMPIONS_KEYS = ["legal", "tier", "usageCount", "usagePercent"];
-// Per-Pokémon usage feeds championsDefaultsForPokemon, which only uses the top ability, item,
-// nature, and spread (topUsageEntry). Default moves and Speed profiles are not used by the
-// strategy tools.
-const POKEMON_USAGE_KEYS = ["abilities", "items", "natures", "spreads"];
+// Per-Pokémon usage lists keep the entries get_sets returns (topUsageList); defaults only read
+// the top one. Smogon spreads stay whole because speed_tiers matches them by nature, and Speed
+// profiles keep only those speed_tiers can show (speedProfilesInUse).
+const CAPPED_USAGE_KEYS = USAGE_LIST_KEYS.filter((key) => key !== "spreads");
+const USAGE_ENTRY_KEYS = ["id", "name", "usagePercent"];
 
 export function deriveMcpCatalogs({ pokemon, moves, abilities, items }) {
   return {
@@ -69,12 +71,23 @@ function slimChampions(champions, { usage = false } = {}) {
   const result = Object.fromEntries(
     CHAMPIONS_KEYS.filter((key) => key in champions).map((key) => [key, champions[key]]),
   );
-  if (usage && champions.usage) {
-    result.usage = Object.fromEntries(POKEMON_USAGE_KEYS
-      .map((key) => [key, topUsageEntry(champions.usage[key] ?? [])])
-      .filter(([, top]) => top)
-      .map(([key, top]) => [key, [top]]));
+  if (usage && champions.usage) result.usage = slimUsage(champions);
+  if (usage && champions.ncp?.sets?.length) result.ncp = { sets: champions.ncp.sets };
+  return result;
+}
+
+function slimUsage(champions) {
+  const usage = champions.usage;
+  const result = {};
+  for (const key of CAPPED_USAGE_KEYS) {
+    if (!usage[key]?.length) continue;
+    result[key] = topUsageList(usage[key]).map((entry) => Object.fromEntries(
+      USAGE_ENTRY_KEYS.filter((field) => field in entry).map((field) => [field, entry[field]]),
+    ));
   }
+  if (usage.spreads?.length) result.spreads = usage.spreads.map(({ name, usagePercent }) => ({ name, usagePercent }));
+  const profiles = speedProfilesInUse({ champions });
+  if (profiles.length) result.speedProfiles = profiles;
   return result;
 }
 

@@ -15,6 +15,7 @@ Each entry is the decision, the date it was made (as far as the history shows), 
 - **Matchups is its own page, linked from Builder; Compare sets is a view of Matchups.** (2026-10-12) Compare sets sits behind an Overview | Compare sets switch under the title and intro, not in the nav. Promote it only if comparison grows beyond the KO race.
 - **Nav order follows the tuning flow:** Lookup, Moves, Battle, Speed Tiers, Builder, Matchups, Teams. (2026-10-09) Enforced: `test/ui.test.js`.
 - **My teams: your own teams are saved in this browser only,** up to six Pokémon each, stored as Showdown paste text (`pokecal.my-teams.v1`); copying and importing the paste moves a team between devices. (2026-10-24) Keeps the no-accounts, no-sync constraint. Enforced: `test/my-teams.test.js`.
+- **The MCP exposes sets, Speed tiers, bulk points and break points alongside lookups and calcs;** calculation tools take Showdown set pastes. (2026-10-29) The Matchups KO race sweep and tournament team search stay out for now (per-call CPU and a 1.2 MB archive on the Worker), and My teams and Compare sets stay browser-only. Enforced: `mcp/test/worker.test.js` (tool list), `mcp/test/catalog-equivalence.test.js`.
 - **Lookup Build details:** Abilities beside Smogon ladder spreads, then Items beside NCP curated sets, each with its own count, source line and empty state; no Speed tiers panel (Speed Tiers covers it). (2026-10-20)
 
 ## Architecture and constraints

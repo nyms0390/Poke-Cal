@@ -6,8 +6,11 @@ import {
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
 import { calculateDamage, survivalChance as damageSurvivalChance } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
+import { NATURES } from "../engine/natures.js";
 import { finalSpeed } from "../engine/speed.js";
+import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import { normalizeId } from "../identifiers.js";
+import { parseSetPaste } from "./set-paste.js";
 
 const NEUTRAL_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 const TRUE_WORDS = new Set(["true", "1", "yes", "on"]);
@@ -59,6 +62,7 @@ export function resolveEntry(lookup, value, label) {
 
 export function compareSpeed(context, options = {}) {
   const left = sideState(context, options.left, {
+    set: options.leftSet,
     spread: options.leftSpread,
     ability: options.leftAbility,
     item: options.leftItem,
@@ -67,6 +71,7 @@ export function compareSpeed(context, options = {}) {
     stages: { spe: options.leftSpeedStage },
   });
   const right = sideState(context, options.right, {
+    set: options.rightSet,
     spread: options.rightSpread,
     ability: options.rightAbility,
     item: options.rightItem,
@@ -81,6 +86,8 @@ export function compareSpeed(context, options = {}) {
   });
   const leftSpeed = finalSpeed(left, field);
   const rightSpeed = finalSpeed(right, field);
+  const pasteWarnings = [...left.pasteWarnings, ...right.pasteWarnings];
+  const extra = pasteWarnings.length ? { pasteWarnings } : {};
 
   if (leftSpeed === rightSpeed) {
     return {
@@ -88,6 +95,7 @@ export function compareSpeed(context, options = {}) {
       left: speedResult(left, leftSpeed),
       right: speedResult(right, rightSpeed),
       summary: `Speed tie — ${leftSpeed} each.`,
+      ...extra,
     };
   }
 
@@ -105,11 +113,13 @@ export function compareSpeed(context, options = {}) {
     left: speedResult(left, leftSpeed),
     right: speedResult(right, rightSpeed),
     summary,
+    ...extra,
   };
 }
 
 export function calculateDamageMatchup(context, options = {}) {
   const attackerState = sideState(context, options.attacker, {
+    set: options.attackerSet,
     spread: options.attackerSpread,
     ability: options.attackerAbility,
     item: options.attackerItem,
@@ -122,6 +132,7 @@ export function calculateDamageMatchup(context, options = {}) {
     },
   });
   const defenderState = sideState(context, options.defender, {
+    set: options.defenderSet,
     spread: options.defenderSpread,
     ability: options.defenderAbility,
     item: options.defenderItem,
@@ -137,7 +148,32 @@ export function calculateDamageMatchup(context, options = {}) {
   const defender = options.targetType
     ? { ...defenderState.pokemon, types: [options.targetType] }
     : defenderState.pokemon;
-  const field = createField({
+  const field = damageField(options);
+  const result = calculateDamage({
+    attacker: attackerState.pokemon,
+    defender,
+    move,
+    attackerState,
+    defenderState,
+    field,
+    critical: parseBooleanOption(options.critical, "critical"),
+    moveOptions: normalizedMoveOptions(options.moveOptions),
+  });
+  return {
+    ...result,
+    attacker: attackerState.pokemon,
+    defender,
+    move,
+    attackerState,
+    defenderState,
+    field,
+  };
+}
+
+// The damage field from flat tool options; every flag is optional and defaults to off, and the
+// format defaults to doubles.
+export function damageField(options = {}) {
+  return createField({
     format: options.format ?? "doubles",
     weather: options.weather ?? "",
     terrain: options.terrain ?? "",
@@ -159,25 +195,6 @@ export function calculateDamageMatchup(context, options = {}) {
       tailwind: parseBooleanOption(options.defenderTailwind, "defenderTailwind"),
     },
   });
-  const result = calculateDamage({
-    attacker: attackerState.pokemon,
-    defender,
-    move,
-    attackerState,
-    defenderState,
-    field,
-    critical: parseBooleanOption(options.critical, "critical"),
-    moveOptions: normalizedMoveOptions(options.moveOptions),
-  });
-  return {
-    ...result,
-    attacker: attackerState.pokemon,
-    defender,
-    move,
-    attackerState,
-    defenderState,
-    field,
-  };
 }
 
 export function checkSurvival(context, options = {}) {
@@ -224,8 +241,16 @@ export function checkSurvival(context, options = {}) {
   };
 }
 
+// A side's state from a Pokémon name and/or a Showdown set paste. The paste fills the item,
+// ability, Tera type, nature and SP; explicit overrides (spread, ability, item, Tera type) win
+// over it, and the name wins over the paste's Pokémon. Without a paste, Champions usage
+// defaults fill whatever is not given.
 export function sideState(context, pokemonName, overrides = {}) {
-  const pokemon = resolvePokemon(context, pokemonName);
+  const pasted = overrides.set ? parsePastedSet(context, overrides.set) : null;
+  const pokemon = pokemonName ? resolvePokemon(context, pokemonName) : pasted?.pokemon;
+  if (!pokemon) {
+    throw new Error(pasted ? "The set paste does not name a known Pokémon." : "A Pokémon name or set paste is required.");
+  }
   const defaults = championsDefaultsForPokemon(pokemon, {
     abilityLookup: context.abilityLookup,
     items: context.items,
@@ -235,26 +260,56 @@ export function sideState(context, pokemonName, overrides = {}) {
   if (overrides.spread && !spread) throw new Error(`Invalid spread: ${overrides.spread}`);
   const ability = overrides.ability
     ? resolveEntry(context.abilityLookup, overrides.ability, "ability")
-    : defaults.ability ?? resolveFirstAbility(context, pokemon);
+    : pasted?.ability ?? defaults.ability ?? resolveFirstAbility(context, pokemon);
   const item = overrides.item
     ? normalizeId(overrides.item) === "none"
       ? null
       : resolveEntry(context.itemLookup, overrides.item, "item")
-    : defaults.item;
+    : pasted ? pasted.item : defaults.item;
 
   return {
     pokemon,
-    nature: spread?.nature ?? defaults.nature,
-    sp: { ...(spread?.sp ?? defaults.sp) },
+    nature: spread?.nature ?? pasted?.nature ?? defaults.nature,
+    sp: { ...(spread?.sp ?? pasted?.sp ?? defaults.sp) },
     stages: normalizedStages(overrides.stages),
     ability,
     item,
     status: overrides.status ?? "",
     currentHpFraction: clampFraction(overrides.currentHpFraction),
-    teraType: overrides.teraType ?? "",
+    teraType: overrides.teraType ?? pasted?.teraType ?? "",
     tailwind: parseBooleanOption(overrides.tailwind, "tailwind"),
     speedMultiplier: 1,
+    pasteWarnings: pasted?.warnings ?? [],
   };
+}
+
+// A paste without an SPs/EVs line keeps the usage-default SP, and one without a nature line is
+// neutral (Showdown's default) when it has SP and the usage default otherwise. A paste without
+// "@ Item" holds no item, as in Showdown. Moves are not used and not reported.
+function parsePastedSet(context, text) {
+  const parsed = parseSetPaste(text, context);
+  const warnings = parsed.warnings.filter((warning) => !warning.startsWith("Unknown move"));
+  let nature = parsed.nature ? canonicalNature(parsed.nature) : null;
+  if (parsed.nature && !nature) warnings.push(`Unknown nature: ${parsed.nature}`);
+  if (!nature && parsed.hasSpread) nature = "Hardy";
+  const teraType = parsed.teraType
+    ? Object.keys(TYPE_EFFECTIVENESS).find((type) => type.toLowerCase() === parsed.teraType.toLowerCase()) ?? null
+    : "";
+  if (teraType === null) warnings.push(`Unknown Tera type: ${parsed.teraType}`);
+  return {
+    pokemon: parsed.pokemon,
+    item: parsed.item,
+    ability: parsed.ability,
+    teraType: teraType || undefined,
+    nature: nature ?? undefined,
+    sp: parsed.hasSpread ? parsed.sp : undefined,
+    warnings,
+  };
+}
+
+function canonicalNature(value) {
+  const normalized = String(value).trim().toLowerCase();
+  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
 }
 
 function resolveFirstAbility(context, pokemon) {

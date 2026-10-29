@@ -309,6 +309,16 @@ function canActivateAbility(row) {
   return !(normalizeEntityId(row.item) === "utilityumbrella" && WEATHER_SPEED_ABILITIES.has(abilityId));
 }
 
+// The raw Limitless Speed profiles speedTiers() can show for a Pokémon, in catalog order. A
+// catalog that keeps only these (the MCP catalogs) gives the same Speed tiers as the full one.
+export function speedProfilesInUse(pokemon) {
+  const selected = new Set(selectedProfiles(limitlessProfiles(pokemon)).map(profileKey));
+  return (pokemon?.champions?.usage?.speedProfiles ?? []).filter((profile) => {
+    const nature = canonicalNature(profile?.nature);
+    return nature && profile?.ability && profile?.item && selected.has(profileKey({ ...profile, nature }));
+  });
+}
+
 function limitlessProfiles(pokemon) {
   return (pokemon?.champions?.usage?.speedProfiles ?? [])
     .flatMap((profile) => {

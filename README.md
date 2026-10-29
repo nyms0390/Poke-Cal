@@ -133,7 +133,7 @@ Syncs fail closed: each script validates its own freshly built output (`src/data
 
 ### Cloudflare MCP
 
-PokéCal also includes a deploy-ready, read-only Cloudflare Worker MCP at [`mcp/README.md`](mcp/README.md). It exposes deterministic Champions lookup, Speed, damage, and survival tools at `/mcp` without requiring callers to send model-provider credentials.
+PokéCal also includes a deploy-ready, read-only Cloudflare Worker MCP at [`mcp/README.md`](mcp/README.md). It exposes deterministic Champions lookup, set (usage and NCP curated sets), Speed, Speed tier, damage, survival, bulk point, and break point tools at `/mcp` without requiring callers to send model-provider credentials.
 
 ```sh
 npm start
