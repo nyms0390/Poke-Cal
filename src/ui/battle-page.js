@@ -22,6 +22,7 @@ import {
 } from "../data/active-set.js";
 import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
+import { sameBuild, teamMemberSets } from "../data/team-sets.js";
 import { finalSpeed } from "../engine/speed.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import {
@@ -1709,6 +1710,7 @@ function renderTeamStrip() {
     button.type = "button";
     button.className = "battle-team-member";
     button.dataset.pokemonId = normalizeDamageId(parsed.pokemon?.id);
+    button.dataset.memberIndex = String(index);
     button.disabled = !parsed.pokemon;
     const name = parsed.pokemon ? localizedName(parsed.pokemon) : t("myTeams.unknownPokemon");
     button.setAttribute("aria-label", t("myTeams.loadMember", { name, side: teamSideLabel(side) }));
@@ -1720,21 +1722,36 @@ function renderTeamStrip() {
     const badge = document.createElement("span");
     badge.className = "battle-team-member-side";
     badge.setAttribute("aria-hidden", "true");
-    button.append(sprite, label, badge);
+    const edited = document.createElement("span");
+    edited.className = "team-panel-edited-mark";
+    edited.hidden = true;
+    const editedText = document.createElement("span");
+    editedText.className = "visually-hidden";
+    edited.append(editedText);
+    button.append(sprite, label, badge, edited);
     button.addEventListener("click", () => loadTeamMember(myTeamStore.getTeam(team.id), index, teamTargetSide()));
     return button;
   }));
   syncTeamStripSides();
 }
 
-// Marks the members currently loaded on each side (by species).
+// Marks the members currently loaded on each side (by species), and those a side has edited
+// since loading (the same "Edited" state as the shared team panel on the other pages).
 function syncTeamStripSides() {
   const loaded = {
     attacker: normalizeDamageId(damageState.attacker?.pokemon?.id),
     defender: normalizeDamageId(damageState.defender?.pokemon?.id),
   };
+  const setCatalogs = { ...setPasteCatalogs(), abilityLookup, itemLookup, moveLookup };
+  const members = teamMemberSets(myTeamStore.selectedTeam(), setCatalogs);
   for (const button of elements.teamMembers.querySelectorAll(".battle-team-member")) {
     const sides = ["attacker", "defender"].filter((side) => loaded[side] && loaded[side] === button.dataset.pokemonId);
+    const member = members[Number(button.dataset.memberIndex)];
+    const edited = Boolean(member?.set) && sides.some((side) =>
+      !sameBuild(activeSetFromState(damageState[side]), member.set, setCatalogs));
+    const mark = button.querySelector(".team-panel-edited-mark");
+    mark.hidden = !edited;
+    mark.firstChild.textContent = t("teamPanel.edited");
     button.classList.toggle("on-attacker", sides.includes("attacker"));
     button.classList.toggle("on-defender", sides.includes("defender"));
     button.querySelector(".battle-team-member-side").textContent = sides
