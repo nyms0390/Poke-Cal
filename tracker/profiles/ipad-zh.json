@@ -1,0 +1,26 @@
+{
+  "name": "ipad-zh",
+  "about": "Pokémon Champions on iPad, zh-TW UI, screen recording (2360×1640). The values fasttrack.swift had built in.",
+  "aspect": 1.439,
+  "ref": [2360, 1640],
+  "feed": [0, 0, 1, 1],
+  "language": "zh-TW",
+  "ocrLanguages": ["zh-Hant", "en-US"],
+  "msg": [150, 1130, 1250, 320],
+  "msgTight": [340, 1190, 1080, 240],
+  "msgText": [370, 1225, 1030, 175],
+  "msgEmpty": 100,
+  "field": [390, 65, 640, 60],
+  "choose": { "kind": "gradient", "box": [1687, 891, 632, 600], "signature": "../choose-signature.json" },
+  "banners": [{ "name": "ability", "box": [59, 614, 420, 120] }],
+  "bannerEmpty": 300,
+  "preview": { "name": [215, 245, 395, 60], "own": [106, 319, 637, 914] },
+  "plates": {
+    "opp_left": [1333, 47, 490, 153], "opp_right": [1823, 47, 490, 153],
+    "you_left": [53, 1440, 490, 153], "you_right": [537, 1440, 490, 153],
+    "opp_left_hp": [1530, 125, 290, 80], "opp_right_hp": [2020, 125, 290, 80],
+    "you_left_hp": [263, 1515, 290, 80], "you_right_hp": [747, 1515, 290, 80]
+  },
+  "ownHp": "hp",
+  "splitGames": false
+}

@@ -1,0 +1,61 @@
+{"type":"match","schema":1,"source":"ocr-prototype","language":"zh-TW","video":"live:display","players":{"you":"nyms","opp":null},"yourTeam":"Rotom @ Sitrus Berry\n\nSceptile @ Lum Berry\n\nSquawkabilly @ Choice Scarf\n\nIndeedee\n\nArmarouge @ Life Orb\n\nAnnihilape @ Leftovers","oppPreview":[],"t":31.26,"src":"ocr","conf":"likely","raw":"Rotom: Sitrus Berry×2 | Sceptile: Lum Berry×2 | Squawkabilly: Choice Scarf×2 | Indeedee: ?×2 | Armarouge: Life Orb×2 | Annihilape: Leftovers×2"}
+{"t":120.01,"src":"ocr","raw":"對手的大狃拉和對手的烈咬陸鯊的攻擊降低了！","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Sneasler","stages":{"atk":-1}}
+{"t":120.01,"src":"ocr","raw":"對手的大狃拉和對手的烈咬陸鯊的攻擊降低了！","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Garchomp","stages":{"atk":-1}}
+{"type":"reveal","t":122.26,"src":"ocr","conf":"sure","raw":"愛管侍的 / 精神製造者","side":"you","species":"Indeedee","ability":"Psychic Surge"}
+{"t":127.01,"src":"ocr","raw":"對手的大狃拉用白色香草復原了能力！","type":"reveal","conf":"sure","side":"opp","species":"Sneasler","item":"White Herb"}
+{"t":127.01,"src":"ocr","raw":"對手的大狃拉用白色香草復原了能力！","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Sneasler","stages":{"atk":1}}
+{"type":"turn","n":1,"t":133.01,"src":"ocr","conf":"likely","raw":" | you.left: 怒舞哥 189 7189 | you.left: 怒鸚哥 189 7189 | you.left: 怒赠哥 189 7189 | you.left: 怒贈哥 189 7189 | you.right: 愛管待 177m77 | you.right: 愛管待 1777177 | you.right: 愛管待 177777 | opp.left: 烈胶陸鯊 100%.","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Squawkabilly","hp":{"cur":189,"max":189}},"right":{"species":"Indeedee","hp":{"cur":177,"max":177}}},"opp":{"left":{"species":"Garchomp","hp":{"pct":100}},"right":{"species":"Sneasler","hp":{"pct":100}}}}}
+{"t":161.01,"src":"ocr","raw":"訓練家派出了仆斬將軍！","type":"switch","conf":"sure","side":"opp","slot":"right","out":"Sneasler","in":"Kingambit"}
+{"t":168.26,"src":"ocr","raw":"訓練家派出了妖火紅狐！","type":"switch","conf":"sure","side":"opp","slot":"left","out":"Garchomp","in":"Delphox"}
+{"t":172.51,"src":"ocr","raw":"怒鸚哥使出了搏命！","type":"move","conf":"sure","side":"you","slot":"left","species":"Squawkabilly","move":"Final Gambit","targets":["opp.left"]}
+{"t":179.26,"src":"ocr","raw":"怒鸚哥倒下了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Squawkabilly","from":189,"to":0,"unit":"hp","cause":"move"}
+{"t":179.26,"src":"ocr","raw":"怒鸚哥倒下了！","type":"faint","conf":"sure","side":"you","slot":"left","species":"Squawkabilly"}
+{"t":183.51,"src":"ocr","raw":"對手的妖火紅狐倒下了！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Delphox","from":100,"to":0,"unit":"pct","cause":"move"}
+{"t":183.51,"src":"ocr","raw":"對手的妖火紅狐倒下了！","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Delphox"}
+{"t":187.01,"src":"ocr","raw":"愛管侍使出了精神強念！","type":"move","conf":"sure","side":"you","slot":"right","species":"Indeedee","move":"Psychic","targets":["opp.right"]}
+{"t":189.01,"src":"ocr","raw":"對於對手的仆斬將軍，好像沒有效果…","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Kingambit","from":100,"to":100,"unit":"pct","cause":"move","effect":"immune"}
+{"t":228.76,"src":"ocr","raw":"訓練家派出了大狃拉！","type":"switch","conf":"likely","side":"opp","slot":"left","out":null,"in":"Sneasler"}
+{"t":232.51,"src":"ocr","raw":"上吧！不怕人的紅蓮鎧騎！","type":"switch","conf":"unsure","side":"you","slot":"left","out":null,"in":"Armarouge"}
+{"type":"turn","n":2,"t":238.26,"src":"ocr","conf":"likely","raw":" | you.left: 紅蓮鎧騎 189 7189 | you.right: 愛管待 177777 | you.right: 愛管待 177m77 | you.right: 愛管待 1777177 | you.right: 愛管待 177-7177 | opp.left: 大扭拉 100% | opp.right: 仆新將軍 100%* | opp.right: 仆新將軍 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Armarouge","hp":{"cur":189,"max":189}},"right":{"species":"Indeedee","hp":{"cur":177,"max":177}}},"opp":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Kingambit","hp":{"pct":100}}}}}
+{"t":271.26,"src":"ocr","raw":"對手的大狃拉使出了守住！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Sneasler","move":"Protect","targets":[]}
+{"t":276.76,"src":"ocr","raw":"愛管侍使出了看我嘛！","type":"move","conf":"sure","side":"you","slot":"right","species":"Indeedee","move":"Follow Me","targets":[]}
+{"t":282.76,"src":"ocr","raw":"對手的仆斬將軍使出了仆斬！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Kingambit","move":"Kowtow Cleave","targets":["you.right"]}
+{"t":287.01,"src":"ocr","raw":"對愛管侍效果絕佳！","type":"hp","conf":"likely","side":"you","slot":"right","species":"Indeedee","from":177,"to":1,"unit":"hp","cause":"move","effect":"super"}
+{"type":"reveal","t":289.01,"src":"ocr","conf":"sure","raw":"愛管侍使用了 / 凸凸頭盔！","side":"you","species":"Indeedee","item":"Rocky Helmet"}
+{"type":"hp","t":289.01,"src":"ocr","conf":"sure","raw":"愛管侍使用了 / 凸凸頭盔！","side":"opp","slot":"right","species":"Kingambit","from":100,"to":null,"unit":"pct","cause":"item","item":"Rocky Helmet"}
+{"t":292.01,"src":"ocr","raw":"紅蓮鎧騎使出了鎧農炮！","type":"move","conf":"sure","side":"you","slot":"left","species":"Armarouge","move":"Armor Cannon","targets":["opp.right"]}
+{"t":298.01,"src":"ocr","raw":"對對手的仆斬將軍效果絕佳！","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Kingambit","from":null,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":300.26,"src":"ocr","raw":"紅蓮鎧騎的防禦、特防降低了","type":"stat","conf":"likely","side":"you","slot":"left","species":"Armarouge","stages":{"def":-1,"spd":-1}}
+{"t":301.51,"src":"ocr","raw":"對手的仆斬將軍倒","type":"faint","conf":"likely","side":"opp","slot":"right","species":"Kingambit"}
+{"type":"reveal","t":306.26,"src":"ocr","conf":"sure","raw":"紅蓮鎧騎使用了 / 生命寶珠！","side":"you","species":"Armarouge","item":"Life Orb"}
+{"t":307.76,"src":"ocr","raw":"紅蓮鎧騎的生命被削減了一些！","type":"hp","conf":"sure","side":"you","slot":"left","species":"Armarouge","from":189,"to":171,"unit":"hp","cause":"item","item":"Life Orb"}
+{"t":312.51,"src":"ocr","raw":"訓練家派出了烈咬陸鯊！","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Garchomp"}
+{"type":"turn","n":3,"t":318.26,"src":"ocr","conf":"likely","raw":" | you.left: 紅蓮鎧騎 171/189 | you.left: 紅蓮鎧騎 1717189 | you.left: 紅蓮鎧騎 171,189 | you.right: 愛管待 1/177 | opp.left: 大扭拉 100% | opp.left: 大扭拉 100%* | opp.right: 烈咬陸鯊 100% | opp.right: 烈胶陸鯊 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Armarouge","hp":{"cur":171,"max":189}},"right":{"species":"Indeedee","hp":{"cur":1,"max":177}}},"opp":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Garchomp","hp":{"pct":100}}}}}
+{"t":351.01,"src":"ocr","raw":"對手的大狃拉使出了守住！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Sneasler","move":"Protect","targets":[]}
+{"t":356.26,"src":"ocr","raw":"愛管侍使出了看我嘛！","type":"move","conf":"sure","side":"you","slot":"right","species":"Indeedee","move":"Follow Me","targets":[]}
+{"t":362.01,"src":"ocr","raw":"對手的烈咬陸鯊使出了地震！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Garchomp","move":"Earthquake","targets":["opp.left","you.left","you.right"]}
+{"t":371.01,"src":"ocr","raw":"對紅蓮鎧騎效果絕佳！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Armarouge","from":171,"to":0,"unit":"hp","cause":"move","effect":"super"}
+{"t":372.76,"src":"ocr","raw":"紅蓮鎧騎倒下了！","type":"faint","conf":"sure","side":"you","slot":"left","species":"Armarouge"}
+{"t":377.02,"src":"ocr","raw":"愛管侍倒下了！","type":"hp","conf":"likely","side":"you","slot":"right","species":"Indeedee","from":1,"to":0,"unit":"hp","cause":"move"}
+{"t":377.02,"src":"ocr","raw":"愛管侍倒下了！","type":"faint","conf":"sure","side":"you","slot":"right","species":"Indeedee"}
+{"t":384.26,"src":"ocr","raw":"上吧！棄世猴！","type":"switch","conf":"likely","side":"you","slot":"left","out":null,"in":"Annihilape"}
+{"type":"turn","n":4,"t":389.76,"src":"ocr","conf":"likely","raw":" | you.left: 棄世猴 209 1209 | you.left: 棄世猴 209 1209( | opp.left: 大扭拉 100% | opp.right: 烈咬陸鯊 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Annihilape","hp":{"cur":209,"max":209}}},"opp":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Garchomp","hp":{"pct":100}}}}}
+{"t":398.76,"src":"ocr","raw":"對手的烈咬陸鯊使出了地震！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Garchomp","move":"Earthquake","targets":["opp.left","you.left"]}
+{"type":"hp","t":398.77,"src":"inferred","conf":"unsure","raw":"no result line after Earthquake","side":"you","slot":"left","species":"Annihilape","from":209,"to":124,"unit":"hp","cause":"move"}
+{"t":403.76,"src":"ocr","raw":"對對手的大狃拉效果絕佳！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Sneasler","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":405.76,"src":"ocr","raw":"對手的大狃拉倒下了！","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Sneasler"}
+{"t":409.76,"src":"ocr","raw":"棄世猴使出了健美！","type":"move","conf":"sure","side":"you","slot":"left","species":"Annihilape","move":"Bulk Up","targets":[]}
+{"t":412.76,"src":"ocr","raw":"棄世猴的攻擊、防禦提高了！","type":"stat","conf":"sure","side":"you","slot":"left","species":"Annihilape","stages":{"atk":1,"def":1}}
+{"type":"reveal","t":414.76,"src":"ocr","conf":"sure","raw":"棄世猴使用了 / 吃剩的東西！","side":"you","species":"Annihilape","item":"Leftovers"}
+{"type":"hp","t":414.76,"src":"ocr","conf":"likely","raw":"棄世猴使用了 / 吃剩的東西！","side":"you","slot":"left","species":"Annihilape","from":124,"to":137,"unit":"hp","cause":"item","item":"Leftovers"}
+{"type":"turn","n":5,"t":419.76,"src":"ocr","conf":"likely","raw":" | you.left: 棄世猴 137 1209 | opp.right: 烈胶塺鯊 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Annihilape","hp":{"cur":137,"max":209}}},"opp":{"right":{"species":"Garchomp","hp":{"pct":100}}}}}
+{"t":423.26,"src":"ocr","raw":"棄世猴使出了守住！","type":"move","conf":"sure","side":"you","slot":"left","species":"Annihilape","move":"Protect","targets":[]}
+{"t":428.51,"src":"ocr","raw":"對手的烈咬陸鯊使出了地震！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Garchomp","move":"Earthquake","targets":["you.left"]}
+{"type":"hp","t":433.01,"src":"ocr","conf":"sure","raw":"棄世猴使用了 / 吃剩的東西！","side":"you","slot":"left","species":"Annihilape","from":137,"to":150,"unit":"hp","cause":"item","item":"Leftovers"}
+{"type":"turn","n":6,"t":440.01,"src":"ocr","conf":"likely","raw":" | you.left: 棄世猴 150 /209 | opp.right: 烈咬陸鯊 100%","field":{},"active":{"you":{"left":{"species":"Annihilape","hp":{"cur":150,"max":209}}},"opp":{"right":{"species":"Garchomp","hp":{"pct":100}}}}}
+{"t":445.51,"src":"ocr","raw":"對手的烈咬陸鯊使出了地震！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Garchomp","move":"Earthquake","targets":["you.left"]}
+{"type":"hp","t":445.52,"src":"inferred","conf":"unsure","raw":"no result line after Earthquake","side":"you","slot":"left","species":"Annihilape","from":150,"to":null,"unit":"hp","cause":"move"}
+{"t":451.26,"src":"ocr","raw":"棄世猴使出了憤怒之拳！","type":"move","conf":"sure","side":"you","slot":"left","species":"Annihilape","move":"Rage Fist","targets":["opp.right"]}
+{"t":459.01,"src":"ocr","raw":"對手的烈咬陸鯊倒下了！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Garchomp","from":100,"to":0,"unit":"pct","cause":"move"}
+{"t":459.01,"src":"ocr","raw":"對手的烈咬陸鯊倒下了！","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Garchomp"}
+{"t":464.26,"src":"ocr","raw":"成功戰勝了訓練家！","type":"end","conf":"likely","winner":"you"}

@@ -1,0 +1,721 @@
+{
+ "about": "Ground truth for floette/window2.ts game 2 (2027 Gdańsk Regional Masters Top 8 A, Jude Lee vs Liam Chatterjee), from floette/findings.md 'Game 2'. The broadcast shows Jude's side: you = Jude, opp = Liam. Slots are left out (findings.md has none); turn actives are compared as sets. hp values are the % shown; null = not in findings.md (only the event is checked). Events marked added/fixed are not in findings.md's table but are on screen: banners (Intimidate, Flower Veil, Fairy Aura, Toxic Debris, Life Orb; findings.md names them in the team sheets and notes), Grassy Terrain heals ('X had its HP restored.'), and Whimsicott's turn-6 heal 14 → 20 (findings.md has it at 14 on turn 7; the turn-7 plate and the heal message say 20).",
+ "game": 2,
+ "events": [
+  {
+   "type": "reveal",
+   "turn": 0,
+   "side": "you",
+   "species": "Incineroar",
+   "ability": "Intimidate",
+   "added": true
+  },
+  {
+   "type": "stat",
+   "turn": 0,
+   "side": "opp",
+   "species": "Floette",
+   "stages": {
+    "atk": -1
+   },
+   "added": true
+  },
+  {
+   "type": "reveal",
+   "turn": 0,
+   "side": "opp",
+   "species": "Floette",
+   "ability": "Flower Veil",
+   "added": true
+  },
+  {
+   "type": "turn",
+   "turn": 1,
+   "activeSet": {
+    "you": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Incineroar",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Whimsicott",
+      100
+     ]
+    ]
+   }
+  },
+  {
+   "type": "switch",
+   "turn": 1,
+   "side": "opp",
+   "out": "Floette",
+   "in": "Glimmora"
+  },
+  {
+   "type": "reveal",
+   "turn": 1,
+   "side": "you",
+   "species": "Floette",
+   "item": "Floettite"
+  },
+  {
+   "type": "mega",
+   "turn": 1,
+   "side": "you",
+   "species": "Floette"
+  },
+  {
+   "type": "reveal",
+   "turn": 1,
+   "side": "you",
+   "species": "Floette",
+   "ability": "Fairy Aura",
+   "added": true
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "you",
+   "species": "Incineroar",
+   "move": "Fake Out"
+  },
+  {
+   "type": "hp",
+   "turn": 1,
+   "side": "opp",
+   "species": "Glimmora",
+   "from": 100,
+   "to": 94,
+   "effect": "resisted"
+  },
+  {
+   "type": "reveal",
+   "turn": 1,
+   "side": "opp",
+   "species": "Glimmora",
+   "ability": "Toxic Debris",
+   "added": true
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "opp",
+   "species": "Whimsicott",
+   "move": "Tailwind"
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "you",
+   "species": "Floette",
+   "move": "Calm Mind"
+  },
+  {
+   "type": "stat",
+   "turn": 1,
+   "side": "you",
+   "species": "Floette",
+   "stages": {
+    "spa": 1,
+    "spd": 1
+   }
+  },
+  {
+   "type": "turn",
+   "turn": 2,
+   "activeSet": {
+    "you": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Incineroar",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Glimmora",
+      94
+     ],
+     [
+      "Whimsicott",
+      100
+     ]
+    ]
+   }
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "opp",
+   "species": "Whimsicott",
+   "move": "Moonblast"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar",
+   "from": 100,
+   "to": 71
+  },
+  {
+   "type": "stat",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar",
+   "stages": {
+    "spa": -1
+   }
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "opp",
+   "species": "Glimmora",
+   "move": "Power Gem"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar",
+   "from": 71,
+   "to": 0,
+   "effect": "super"
+  },
+  {
+   "type": "faint",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar"
+  },
+  {
+   "type": "reveal",
+   "turn": 2,
+   "side": "opp",
+   "species": "Glimmora",
+   "item": "Life Orb",
+   "added": true
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "opp",
+   "species": "Glimmora",
+   "from": 94,
+   "to": null,
+   "cause": "recoil"
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "you",
+   "species": "Floette",
+   "move": "Dazzling Gleam"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "opp",
+   "species": "Whimsicott",
+   "from": 100,
+   "to": 14
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "opp",
+   "species": "Glimmora",
+   "from": null,
+   "to": 45,
+   "effect": "resisted"
+  },
+  {
+   "type": "switch",
+   "turn": 2,
+   "side": "you",
+   "out": null,
+   "in": "Sneasler"
+  },
+  {
+   "type": "turn",
+   "turn": 3,
+   "activeSet": {
+    "you": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Sneasler",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Glimmora",
+      45
+     ],
+     [
+      "Whimsicott",
+      14
+     ]
+    ]
+   }
+  },
+  {
+   "type": "switch",
+   "turn": 3,
+   "side": "opp",
+   "out": "Whimsicott",
+   "in": "Indeedee"
+  },
+  {
+   "type": "reveal",
+   "turn": 3,
+   "side": "opp",
+   "species": "Indeedee",
+   "ability": "Psychic Surge"
+  },
+  {
+   "type": "move",
+   "turn": 3,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Fake Out"
+  },
+  {
+   "type": "move",
+   "turn": 3,
+   "side": "opp",
+   "species": "Glimmora",
+   "move": "Sludge Bomb"
+  },
+  {
+   "type": "hp",
+   "turn": 3,
+   "side": "you",
+   "species": "Floette",
+   "from": 100,
+   "to": 42,
+   "effect": "super"
+  },
+  {
+   "type": "hp",
+   "turn": 3,
+   "side": "opp",
+   "species": "Glimmora",
+   "from": 45,
+   "to": 36,
+   "cause": "recoil"
+  },
+  {
+   "type": "move",
+   "turn": 3,
+   "side": "you",
+   "species": "Floette",
+   "move": "Dazzling Gleam"
+  },
+  {
+   "type": "hp",
+   "turn": 3,
+   "side": "opp",
+   "species": "Glimmora",
+   "from": 36,
+   "to": 0,
+   "effect": "resisted"
+  },
+  {
+   "type": "faint",
+   "turn": 3,
+   "side": "opp",
+   "species": "Glimmora"
+  },
+  {
+   "type": "hp",
+   "turn": 3,
+   "side": "opp",
+   "species": "Indeedee",
+   "from": 100,
+   "to": 2
+  },
+  {
+   "type": "hp",
+   "turn": 3,
+   "side": "you",
+   "species": "Floette",
+   "from": 42,
+   "to": 30,
+   "cause": "recoil"
+  },
+  {
+   "type": "switch",
+   "turn": 3,
+   "side": "opp",
+   "out": null,
+   "in": "Floette"
+  },
+  {
+   "type": "turn",
+   "turn": 4,
+   "activeSet": {
+    "you": [
+     [
+      "Floette",
+      30
+     ],
+     [
+      "Sneasler",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Indeedee",
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "type": "switch",
+   "turn": 4,
+   "side": "you",
+   "out": "Sneasler",
+   "in": "Rillaboom"
+  },
+  {
+   "type": "reveal",
+   "turn": 4,
+   "side": "you",
+   "species": "Rillaboom",
+   "ability": "Grassy Surge"
+  },
+  {
+   "type": "reveal",
+   "turn": 4,
+   "side": "opp",
+   "species": "Floette",
+   "item": "Floettite"
+  },
+  {
+   "type": "mega",
+   "turn": 4,
+   "side": "opp",
+   "species": "Floette"
+  },
+  {
+   "type": "reveal",
+   "turn": 4,
+   "side": "opp",
+   "species": "Floette",
+   "ability": "Fairy Aura",
+   "added": true
+  },
+  {
+   "type": "move",
+   "turn": 4,
+   "side": "opp",
+   "species": "Indeedee",
+   "move": "Hyper Voice"
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "you",
+   "species": "Floette",
+   "from": 30,
+   "to": 16
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "you",
+   "species": "Rillaboom",
+   "from": 100,
+   "to": 67
+  },
+  {
+   "type": "move",
+   "turn": 4,
+   "side": "opp",
+   "species": "Floette",
+   "move": "Dazzling Gleam"
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "you",
+   "species": "Floette",
+   "from": 16,
+   "to": 0
+  },
+  {
+   "type": "faint",
+   "turn": 4,
+   "side": "you",
+   "species": "Floette"
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "you",
+   "species": "Rillaboom",
+   "from": 67,
+   "to": 15
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "opp",
+   "species": "Indeedee",
+   "from": 2,
+   "to": 8,
+   "cause": "terrain"
+  },
+  {
+   "type": "hp",
+   "turn": 4,
+   "side": "you",
+   "species": "Rillaboom",
+   "from": 15,
+   "to": 21,
+   "cause": "terrain"
+  },
+  {
+   "type": "switch",
+   "turn": 4,
+   "side": "you",
+   "out": null,
+   "in": "Sneasler"
+  },
+  {
+   "type": "turn",
+   "turn": 5,
+   "activeSet": {
+    "you": [
+     [
+      "Rillaboom",
+      21
+     ],
+     [
+      "Sneasler",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Indeedee",
+      8
+     ]
+    ]
+   }
+  },
+  {
+   "type": "move",
+   "turn": 5,
+   "side": "opp",
+   "species": "Floette",
+   "move": "Protect"
+  },
+  {
+   "type": "move",
+   "turn": 5,
+   "side": "you",
+   "species": "Rillaboom",
+   "move": "Fake Out"
+  },
+  {
+   "type": "move",
+   "turn": 5,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Dire Claw"
+  },
+  {
+   "type": "hp",
+   "turn": 5,
+   "side": "opp",
+   "species": "Indeedee",
+   "from": 8,
+   "to": 0
+  },
+  {
+   "type": "faint",
+   "turn": 5,
+   "side": "opp",
+   "species": "Indeedee"
+  },
+  {
+   "type": "hp",
+   "turn": 5,
+   "side": "you",
+   "species": "Rillaboom",
+   "from": 21,
+   "to": null,
+   "cause": "terrain",
+   "added": true
+  },
+  {
+   "type": "switch",
+   "turn": 5,
+   "side": "opp",
+   "out": null,
+   "in": "Whimsicott"
+  },
+  {
+   "type": "turn",
+   "turn": 6,
+   "activeSet": {
+    "you": [
+     [
+      "Rillaboom",
+      null
+     ],
+     [
+      "Sneasler",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Whimsicott",
+      14
+     ]
+    ]
+   }
+  },
+  {
+   "type": "move",
+   "turn": 6,
+   "side": "opp",
+   "species": "Whimsicott",
+   "move": "Encore"
+  },
+  {
+   "type": "move",
+   "turn": 6,
+   "side": "you",
+   "species": "Rillaboom",
+   "move": "Fake Out"
+  },
+  {
+   "type": "move",
+   "turn": 6,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Dire Claw"
+  },
+  {
+   "type": "hp",
+   "turn": 6,
+   "side": "opp",
+   "species": "Floette",
+   "from": 100,
+   "to": 0,
+   "effect": "super"
+  },
+  {
+   "type": "faint",
+   "turn": 6,
+   "side": "opp",
+   "species": "Floette"
+  },
+  {
+   "type": "hp",
+   "turn": 6,
+   "side": "opp",
+   "species": "Whimsicott",
+   "from": 14,
+   "to": 20,
+   "cause": "terrain",
+   "added": true
+  },
+  {
+   "type": "hp",
+   "turn": 6,
+   "side": "you",
+   "species": "Rillaboom",
+   "from": null,
+   "to": null,
+   "cause": "terrain",
+   "added": true
+  },
+  {
+   "type": "turn",
+   "turn": 7,
+   "activeSet": {
+    "you": [
+     [
+      "Rillaboom",
+      null
+     ],
+     [
+      "Sneasler",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Whimsicott",
+      20
+     ]
+    ]
+   },
+   "fixed": true
+  },
+  {
+   "type": "move",
+   "turn": 7,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Dire Claw"
+  },
+  {
+   "type": "hp",
+   "turn": 7,
+   "side": "opp",
+   "species": "Whimsicott",
+   "from": 20,
+   "to": 0,
+   "effect": "super",
+   "fixed": true
+  },
+  {
+   "type": "faint",
+   "turn": 7,
+   "side": "opp",
+   "species": "Whimsicott"
+  },
+  {
+   "type": "end",
+   "turn": 7,
+   "winner": "you"
+  }
+ ]
+}

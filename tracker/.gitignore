@@ -1,0 +1,11 @@
+# Run outputs, recordings, frame dumps and compiled binaries stay out of the repo.
+out*/
+frames/
+*.mov
+*.mp4
+*.ts
+*.webm
+fasttrack
+ocr
+*.o
+labels.txt

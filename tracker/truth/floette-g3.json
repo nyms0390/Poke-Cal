@@ -1,0 +1,239 @@
+{
+ "about": "Ground truth for floette/window2.ts game 3 turns 0–2 (the latest game with Floette), from floette/findings.md 'Game 3' (it stops after turn 2: 'The rest of game 3 has no Floette'). you = Jude, opp = Liam. Turn 0 = before the first choose screen (lead Intimidate). Events marked added are on screen but not in findings.md's table: Floette's Flower Veil and Fairy Aura banners, and Indeedee replacing the fainted Floette at the end of turn 2 (findings.md: 'Indeedee and Glimmora come in').",
+ "game": 3,
+ "events": [
+  {
+   "type": "reveal",
+   "turn": 0,
+   "side": "you",
+   "species": "Incineroar",
+   "ability": "Intimidate"
+  },
+  {
+   "type": "stat",
+   "turn": 0,
+   "side": "opp",
+   "species": "Floette",
+   "stages": {
+    "atk": -1
+   }
+  },
+  {
+   "type": "reveal",
+   "turn": 0,
+   "side": "opp",
+   "species": "Floette",
+   "ability": "Flower Veil",
+   "added": true
+  },
+  {
+   "type": "turn",
+   "turn": 1,
+   "activeSet": {
+    "you": [
+     [
+      "Sneasler",
+      100
+     ],
+     [
+      "Incineroar",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Whimsicott",
+      100
+     ]
+    ]
+   }
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "opp",
+   "species": "Whimsicott",
+   "move": "Protect"
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "opp",
+   "species": "Floette",
+   "move": "Protect"
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Dire Claw"
+  },
+  {
+   "type": "move",
+   "turn": 1,
+   "side": "you",
+   "species": "Incineroar",
+   "move": "Parting Shot"
+  },
+  {
+   "type": "turn",
+   "turn": 2,
+   "activeSet": {
+    "you": [
+     [
+      "Sneasler",
+      100
+     ],
+     [
+      "Incineroar",
+      100
+     ]
+    ],
+    "opp": [
+     [
+      "Floette",
+      100
+     ],
+     [
+      "Whimsicott",
+      100
+     ]
+    ]
+   }
+  },
+  {
+   "type": "reveal",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette",
+   "item": "Floettite"
+  },
+  {
+   "type": "mega",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette"
+  },
+  {
+   "type": "reveal",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette",
+   "ability": "Fairy Aura",
+   "added": true
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "opp",
+   "species": "Whimsicott",
+   "move": "Tailwind"
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette",
+   "move": "Dazzling Gleam"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "you",
+   "species": "Sneasler",
+   "from": 100,
+   "to": 29
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar",
+   "from": 100,
+   "to": 64
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "you",
+   "species": "Sneasler",
+   "move": "Dire Claw"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette",
+   "from": 100,
+   "to": 0,
+   "effect": "super"
+  },
+  {
+   "type": "faint",
+   "turn": 2,
+   "side": "opp",
+   "species": "Floette"
+  },
+  {
+   "type": "move",
+   "turn": 2,
+   "side": "you",
+   "species": "Incineroar",
+   "move": "Parting Shot"
+  },
+  {
+   "type": "stat",
+   "turn": 2,
+   "side": "opp",
+   "species": "Whimsicott",
+   "stages": {
+    "atk": -1,
+    "spa": -1
+   }
+  },
+  {
+   "type": "switch",
+   "turn": 2,
+   "side": "you",
+   "out": "Incineroar",
+   "in": "Rillaboom"
+  },
+  {
+   "type": "reveal",
+   "turn": 2,
+   "side": "you",
+   "species": "Rillaboom",
+   "ability": "Grassy Surge"
+  },
+  {
+   "type": "hp",
+   "turn": 2,
+   "side": "you",
+   "species": "Sneasler",
+   "from": 29,
+   "to": 35,
+   "cause": "terrain"
+  },
+  {
+   "type": "switch",
+   "turn": 2,
+   "side": "opp",
+   "out": null,
+   "in": "Indeedee",
+   "added": true
+  },
+  {
+   "type": "reveal",
+   "turn": 2,
+   "side": "opp",
+   "species": "Indeedee",
+   "ability": "Psychic Surge",
+   "added": true
+  }
+ ]
+}

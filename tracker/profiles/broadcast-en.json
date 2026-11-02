@@ -1,0 +1,26 @@
+{
+  "name": "broadcast-en",
+  "about": "Play! Pokémon tournament broadcast (YouTube 720p, English, spectator view from one player's side). The game feed fills the 1280×720 frame under the overlays (player cams, team sidebars, TOTAL TIME). No move list and no field banner: turns come from the 'Trainers are choosing actions' line.",
+  "aspect": 1.778,
+  "ref": [1280, 720],
+  "feed": [0, 0, 1, 1],
+  "language": "en",
+  "ocrLanguages": ["en-US"],
+  "msg": [180, 505, 920, 72],
+  "msgTight": [180, 505, 920, 72],
+  "msgText": [200, 520, 880, 50],
+  "msgEmpty": 60,
+  "field": null,
+  "choose": { "kind": "strokes", "box": [490, 572, 300, 44], "signature": "broadcast-en.choose.json", "labelRegex": "choosing" },
+  "banners": [{ "name": "ability", "box": [95, 276, 260, 70] }, { "name": "ability_opp", "box": [925, 276, 265, 70] }],
+  "bannerEmpty": 120,
+  "preview": null,
+  "plates": {
+    "you_left": [22, 634, 150, 32], "you_right": [230, 634, 150, 32],
+    "opp_left": [855, 634, 150, 32], "opp_right": [1062, 634, 150, 32],
+    "you_left_hp": [60, 666, 130, 40], "you_right_hp": [268, 666, 130, 40],
+    "opp_left_hp": [893, 666, 130, 40], "opp_right_hp": [1100, 666, 130, 40]
+  },
+  "ownHp": "pct",
+  "splitGames": true
+}
