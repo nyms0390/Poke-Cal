@@ -410,16 +410,53 @@ export function matchText(mask, candidates, renderText) {
     .map((c) => {
       const drawn = renderText(c.zh);
       const shape = drawn ? shapeScore(mask, drawn) : 0;
-      return { name: c.name, shape, score: shape + USAGE_PRIOR * Math.sqrt(Math.min(100, c.usage ?? 0) / 100) };
+      return { name: c.name, zh: c.zh, shape, score: shape + USAGE_PRIOR * Math.sqrt(Math.min(100, c.usage ?? 0) / 100) };
     })
     .sort((a, b) => b.score - a.score);
-  const [first, second] = ranked;
+  const tail = rankByTail(mask, ranked, renderText);
+  const [first, second] = tail?.ranked ?? ranked;
   return {
     name: first.shape > 0.2 ? first.name : null,
-    confidence: first.score - (second?.score ?? 0),
+    confidence: tail?.confidence ?? first.score - (second?.score ?? 0),
     score: first.score,
     alternatives: ranked.slice(1, 4).map((r) => r.name),
   };
+}
+
+// Names that differ only in their last character or two (Charizardite X and Y) draw almost the
+// same shape, so the usage prior would decide. The close ones of equal length are re-ranked on
+// the part of the text where they differ, without the prior.
+const TAIL_GROUP = 0.08;
+function rankByTail(mask, ranked, renderText) {
+  const length = [...ranked[0].zh].length;
+  const close = ranked.filter((r) => r.score >= ranked[0].score - TAIL_GROUP && [...r.zh].length === length);
+  if (close.length < 2) return null;
+  const chars = close.map((r) => [...r.zh]);
+  let prefix = 0;
+  while (prefix < length && chars.every((c) => c[prefix] === chars[0][prefix])) prefix++;
+  if (prefix === 0 || length - prefix > 2) return null;
+  const tailMask = sliceColumns(mask, prefix / length);
+  if (!tailMask) return null;
+  const scored = close
+    .map((r, i) => {
+      const drawn = renderText(chars[i].slice(prefix).join(""));
+      return { ...r, tail: drawn ? shapeScore(tailMask, drawn) : 0 };
+    })
+    .sort((a, b) => b.tail - a.tail);
+  const names = new Set(scored.map((r) => r.name));
+  return {
+    ranked: [...scored, ...ranked.filter((r) => !names.has(r.name))],
+    confidence: scored[0].tail - scored[1].tail,
+  };
+}
+
+function sliceColumns(mask, fromFraction) {
+  const start = Math.floor(mask.width * fromFraction);
+  const width = mask.width - start;
+  if (width < 2) return null;
+  const data = new Uint8Array(width * mask.height);
+  for (let j = 0; j < mask.height; j++) for (let i = 0; i < width; i++) data[j * width + i] = mask.data[j * mask.width + start + i];
+  return trimMask({ width, height: mask.height, data });
 }
 
 export function readAbilitiesScreen(image, members, catalogs, renderText) {
