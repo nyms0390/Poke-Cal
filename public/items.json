@@ -4967,7 +4967,10 @@
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 3,
       "usagePercent": 0.0275027502750275
-    }
+    },
+    "aliases": [
+      "大蔥"
+    ]
   },
   {
     "id": "leftovers",
@@ -7996,7 +7999,10 @@
       "sourceUrl": "https://play.limitlesstcg.com/tournaments",
       "usageCount": 18,
       "usagePercent": 0.16501650165016502
-    }
+    },
+    "aliases": [
+      "洛玫果"
+    ]
   },
   {
     "id": "rowapberry",

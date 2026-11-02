@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Orthworm", "nature": "Relaxed", "stats": [176, 105, 198, 80, 95, 76], "sp": [31, 0, 15, 0, 20, 0], "ability": "Earth Eater", "item": "Sitrus Berry", "moves": ["Helping Hand", "Body Press", "Shed Tail", "Protect"] },
+    { "species": "Sneasler", "nature": "Adamant", "stats": [167, 198, 89, 54, 100, 155], "sp": [12, 30, 9, 0, 0, 15], "ability": "Unburden", "item": "Focus Sash", "moves": ["Close Combat", "Dire Claw", "Protect", "Rock Slide"] },
+    { "species": "Charizard", "nature": "Adamant", "stats": [170, 132, 98, 116, 114, 144], "sp": [17, 16, 0, 0, 9, 24], "ability": "Blaze", "item": "Charizardite X", "moves": ["Flame Charge", "Breaking Swipe", "Belly Drum", "Protect"] },
+    { "species": "Sableye", "nature": "Sassy", "stats": [157, 95, 114, 85, 110, 63], "sp": [32, 0, 19, 0, 15, 0], "ability": "Prankster", "item": "Roseli Berry", "moves": ["Foul Play", "Thunder Wave", "Will-O-Wisp", "Rain Dance"] },
+    { "species": "Torterra", "nature": "Adamant", "stats": [179, 177, 125, 85, 105, 101], "sp": [9, 32, 0, 0, 0, 25], "ability": "Overgrow", "item": "White Herb", "moves": ["Wood Hammer", "Earthquake", "Shell Smash", "Protect"] },
+    { "species": "Clefable", "nature": "Bold", "stats": [202, 81, 132, 115, 117, 80], "sp": [32, 0, 27, 0, 7, 0], "ability": "Unaware", "item": "Leftovers", "moves": ["Moonblast", "Follow Me", "Life Dew", "Protect"] }
+  ]
+}

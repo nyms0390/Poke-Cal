@@ -21,7 +21,10 @@ export const ZH_TW_NAME_OVERRIDES = {
     terashell: "太晶甲殼", // PokeAPI lists 貫穿鑽.
   },
   moves: {},
-  items: {},
+  items: {
+    roseliberry: "洛玫果", // PokeAPI has no zh-Hant name.
+    leek: "大蔥", // PokeAPI has no zh-Hant name.
+  },
 };
 
 // Returns `catalogs` with overridden names placed first in `aliases`, dropping the PokeAPI
