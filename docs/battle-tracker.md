@@ -1,6 +1,6 @@
 # Battle tracker
 
-Status: planned, nothing built. The decision is in [DECISIONS.md](DECISIONS.md) "Scope and product".
+Status: code-only prototype in [`tracker/`](../tracker/README.md) (macOS; file, live window and live display capture). The review step (running the engine on the turn log) is not built yet. The decision is in [DECISIONS.md](DECISIONS.md) "Scope and product".
 
 Pokémon Champions has no replays, so a match can't be reviewed after it ends. The tracker reads a recording of the game screen on the Mac, writes a turn log, shows Speed order and KO checks during play, and keeps the log for a review after the match. It plays the role Hearthstone Deck Tracker plays for Hearthstone, but it reads the video, because the game exposes no logs.
 
@@ -85,6 +85,5 @@ Golisopod's HP, the weather turns and the timestamps are illustrative; the switc
 
 ## Open questions
 
-- Where the code lives: a `tracker/` folder beside `mcp/` is the default, because it needs the engine and the zh-TW catalogs.
 - How the tracker shows its results during play: a PokéCal page reading the capture through `getUserMedia`, or a native Mac window. A browser page needs OCR without adding a dependency to the app.
 - Sprite matching for the opponent's team preview: which sprite set and size match the game's art.
