@@ -90,7 +90,10 @@ test("speed_tiers gives the SP to outspeed each faster likely set", async () => 
 });
 
 test("bulk_points steps match calculate_damage at the suggested spreads", async () => {
-  const input = { pokemon: "Incineroar", spread: "Adamant:0/32/0/0/0/0", attacker: "Dragapult", move: "Draco Meteor" };
+  // Pin the attacker set: Dragapult's most common spread and item change with the monthly stats,
+  // and a Timid one already 2HKOs this Incineroar, leaving no bulk point to suggest.
+  const attacker = { attacker: "Dragapult", attackerSpread: "Modest:2/0/0/32/0/32", attackerItem: "Life Orb" };
+  const input = { pokemon: "Incineroar", spread: "Adamant:0/32/0/0/0/0", ...attacker, move: "Draco Meteor" };
   const bulk = await call("bulk_points", input);
   assert.equal(bulk.legal, true);
   assert.equal(bulk.defenseStat, "spd");
@@ -99,7 +102,7 @@ test("bulk_points steps match calculate_damage at the suggested spreads", async 
   for (const point of bulk.fromCurrent) {
     assert.ok(point.totalSp <= bulk.budget);
     const damage = await call("calculate_damage", {
-      attacker: "Dragapult", move: "Draco Meteor", defender: "Incineroar",
+      ...attacker, move: "Draco Meteor", defender: "Incineroar",
       defenderSpread: `Adamant:${point.hp}/32/0/0/${point.spd}/0`,
     });
     assert.equal(damage.koChance.text, point.koText);
