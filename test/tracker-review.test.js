@@ -70,7 +70,7 @@ test('move order checks Speed only between moves of the same known priority', ()
   assert.equal(review.verdicts.some((v) => v.species === 'Maushold'), false);
 });
 
-test('the live match with the real team narrows Kingambit to fast sets and Garchomp to Scarf-like ones', async () => {
+test('the live match with the real team narrows Kingambit to fast sets and rules out max-Attack Life Orb Garchomp', async () => {
   const { readFileSync } = await import('node:fs');
   const dir = new URL('../tracker/fixtures/live-1/', import.meta.url);
   const events = readFileSync(new URL('turn-log.jsonl', dir), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
@@ -80,5 +80,6 @@ test('the live match with the real team narrows Kingambit to fast sets and Garch
   assert.ok(kingambit.fitting.length > 0);
   assert.ok(kingambit.fitting.every((c) => c.state.sp.spe === 32));
   const garchomp = review.verdicts.find((v) => v.species === 'Garchomp');
-  assert.ok(garchomp.fitting.every((c) => c.item !== 'Life Orb'));
+  assert.equal(garchomp.fitting[0].item, 'Choice Scarf');
+  assert.ok(garchomp.ruledOut.some((c) => c.item === 'Life Orb'));
 });
