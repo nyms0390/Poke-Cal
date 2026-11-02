@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Sableye", "nature": "Sassy", "stats": [157, 95, 114, 85, 110, 63], "sp": [32, 0, 19, 0, 15, 0], "ability": "Prankster", "item": "Wide Lens", "moves": ["Will-O-Wisp", "Rain Dance", "Encore", "Disable"] },
+    { "species": "Golisopod", "nature": "Adamant", "stats": [182, 194, 160, 72, 112, 60], "sp": [32, 32, 0, 0, 2, 0], "ability": "Emergency Exit", "item": "Golisopite", "moves": ["First Impression", "U-turn", "Iron Head", "Protect"] },
+    { "species": "Basculegion", "nature": "Adamant", "stats": [195, 180, 87, 90, 95, 130], "sp": [0, 32, 2, 0, 0, 32], "ability": "Swift Swim", "item": "Life Orb", "moves": ["Wave Crash", "Flip Turn", "Last Respects", "Protect"] },
+    { "species": "Politoed", "nature": "Modest", "stats": [197, 85, 107, 145, 120, 90], "sp": [32, 0, 12, 22, 0, 0], "ability": "Drizzle", "item": "Sitrus Berry", "moves": ["Weather Ball", "Perish Song", "Ice Beam", "Protect"] },
+    { "species": "Raichu", "nature": "Timid", "stats": [165, 99, 87, 110, 100, 169], "sp": [30, 0, 12, 0, 0, 24], "ability": "Lightning Rod", "item": "Raichunite Y", "moves": ["Zap Cannon", "Focus Blast", "Fake Out", "Protect"] },
+    { "species": "Rillaboom", "nature": "Adamant", "stats": [193, 194, 112, 72, 104, 105], "sp": [18, 32, 2, 0, 14, 0], "ability": "Grassy Surge", "item": "Miracle Seed", "moves": ["Grassy Glide", "Wood Hammer", "High Horsepower", "Fake Out"] }
+  ]
+}
