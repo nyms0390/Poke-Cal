@@ -118,14 +118,42 @@ function fakeRenderer() {
   };
 }
 
-test("names that differ only at the end are told apart by that end, not by usage", () => {
+// The fake glyph for the prefix, followed by an X or a Y drawn as the game draws them.
+function withLetter(render, prefix, letter) {
+  const head = render(prefix);
+  const size = head.height;
+  const width = head.width + 2 + size;
+  const data = new Uint8Array(width * size);
+  for (let j = 0; j < size; j++) for (let i = 0; i < head.width; i++) data[j * width + i] = head.data[j * head.width + i];
+  const dot = (i, j) => { data[j * width + head.width + 2 + i] = 255; };
+  for (let j = 0; j < size; j++) {
+    const lower = j >= size / 2;
+    if (letter === "Y" && lower) { dot(size / 2 - 1, j); dot(size / 2, j); continue; }
+    dot(Math.round((j * (size - 1)) / (size - 1)), j);
+    dot(size - 1 - Math.round((j * (size - 1)) / (size - 1)), j);
+  }
+  return { width, height: size, data };
+}
+
+test("Mega Stone X and Y are told apart by the letter's shape, not by usage or the font", () => {
   const render = fakeRenderer();
   const candidates = [
     { name: "Charizardite X", zh: "噴火龍進化石Ｘ", usage: 5 },
     { name: "Charizardite Y", zh: "噴火龍進化石Ｙ", usage: 60 },
   ];
-  assert.equal(matchText(render("噴火龍進化石Ｘ"), candidates, render).name, "Charizardite X");
-  assert.equal(matchText(render("噴火龍進化石Ｙ"), candidates, render).name, "Charizardite Y");
+  // The renderer draws the letters as noise, so only the measured shape can decide.
+  assert.equal(matchText(withLetter(render, "噴火龍進化石", "X"), candidates, render).name, "Charizardite X");
+  assert.equal(matchText(withLetter(render, "噴火龍進化石", "Y"), candidates, render).name, "Charizardite Y");
+});
+
+test("names that differ only at the end are told apart by that end, not by usage", () => {
+  const render = fakeRenderer();
+  const candidates = [
+    { name: "Stone One", zh: "進化石甲", usage: 5 },
+    { name: "Stone Two", zh: "進化石乙", usage: 60 },
+  ];
+  assert.equal(matchText(render("進化石甲"), candidates, render).name, "Stone One");
+  assert.equal(matchText(render("進化石乙"), candidates, render).name, "Stone Two");
 });
 
 test("a character too faint to read does not cut a name short, but distant specks are dropped", () => {
