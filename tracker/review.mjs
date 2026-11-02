@@ -106,7 +106,11 @@ export function parseTeamPaste(ctx, text) {
     const name = header.replace(/@.*$/, '').replace(/\((?:M|F)\)\s*$/, '').trim();
     const nick = /\(([^()]+)\)\s*$/.exec(name);
     const entry = entryOf(ctx, nick ? nick[1] : name);
-    if (entry) sets.set(entry.id, block.trim());
+    if (!entry) continue;
+    sets.set(entry.id, block.trim());
+    // Logs name forms like Rotom-Wash or Indeedee-F by their base species.
+    const base = entryOf(ctx, entry.baseSpecies);
+    if (base && !sets.has(base.id)) sets.set(base.id, block.trim());
   }
   return sets;
 }
@@ -120,7 +124,7 @@ function maxHp(state) {
 function ownState(ctx, species, { paste, observedMaxHp, item }) {
   const entry = entryOf(ctx, species);
   if (paste) {
-    const state = sideState(ctx, entry.name, { set: paste });
+    const state = sideState(ctx, null, { set: paste });
     const hp = maxHp(state);
     const note = observedMaxHp && hp !== observedMaxHp ? `paste gives ${hp} HP but the game showed ${observedMaxHp}` : '';
     return { state, source: 'paste', note };
