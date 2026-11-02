@@ -1,0 +1,65 @@
+{"type":"match","schema":1,"source":"ocr-prototype","language":"zh-TW","video":"1030_2005.mov","players":{"you":"nyms","opp":"DeeObaweea"},"yourTeam":"Raichu @ Raichunite Y\n\nBasculegion @ Life Orb\n\nGolisopod @ Golisopite\n\nRillaboom @ Miracle Seed\n\nPolitoed @ Sitrus Berry\n\nSableye @ Wide Lens","oppPreview":[],"t":12.25,"src":"ocr","conf":"likely","raw":"Raichu: Raichunite Y×4 | Basculegion: Life Orb×4 | Golisopod: Golisopite×4 | Rillaboom: Miracle Seed×4 | Politoed: Sitrus Berry×4 | Sableye: Wide Lens×4"}
+{"type":"reveal","t":104.75,"src":"ocr","conf":"sure","raw":"蚊香蛙皇的 / 降雨","side":"you","species":"Politoed","ability":"Drizzle"}
+{"type":"turn","n":1,"t":108.25,"src":"ocr","conf":"likely","raw":"5/5下雨狀態 | you.left: 蚊香蛙皇 1977197 | you.right: 具甲武者 182 7182 | you.right: 具甲武者 1827182 | opp.left: 水箭羅 100% | opp.left: 水箭羅 100%* | opp.right: 一家鼠 100%","field":{"weather":"rain","weatherTurns":5},"active":{"you":{"left":{"species":"Politoed","hp":{"cur":197,"max":197}},"right":{"species":"Golisopod","hp":{"cur":182,"max":182}}},"opp":{"left":{"species":"Blastoise","hp":{"pct":100}},"right":{"species":"Maushold","hp":{"pct":100}}}}}
+{"t":145.25,"src":"ocr","raw":"上吧！轟擂金剛猩！","type":"switch","conf":"sure","side":"you","slot":"left","out":"Politoed","in":"Rillaboom"}
+{"type":"reveal","t":149.25,"src":"ocr","conf":"sure","raw":"轟擂金剛猩的 / 青草製造者","side":"you","species":"Rillaboom","ability":"Grassy Surge"}
+{"t":151.75,"src":"ocr","raw":"具甲武者的具甲武者進化石和nyms的全一環產生了反應！","type":"reveal","conf":"sure","side":"you","species":"Golisopod","item":"Golisopite"}
+{"t":161.25,"src":"ocr","raw":"具甲武者超級進化成了超級具甲武者！","type":"mega","conf":"sure","side":"you","slot":"right","species":"Golisopod","form":"Golisopod-Mega"}
+{"t":163.5,"src":"ocr","raw":"對手的一家鼠使出了看我嘛！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Maushold","move":"Follow Me","targets":[]}
+{"t":169.25,"src":"ocr","raw":"具甲武者使出了迎頭一擊！","type":"move","conf":"sure","side":"you","slot":"right","species":"Golisopod-Mega","move":"First Impression","targets":["opp.right"]}
+{"t":173,"src":"ocr","raw":"對手的一家鼠倒下了！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Maushold","from":100,"to":0,"unit":"pct","cause":"move"}
+{"t":173,"src":"ocr","raw":"對手的一家鼠倒下了！","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Maushold"}
+{"t":177,"src":"ocr","raw":"對手的水箭龜使出了破殼！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Blastoise","move":"Shell Smash","targets":[]}
+{"t":182,"src":"ocr","raw":"對手的水箭龜的防禦、特防降低了！ 對手的水箭龜的攻擊、特攻、速度大幅提高了！","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Blastoise","stages":{"def":-1,"spd":-1,"atk":2,"spa":2,"spe":2}}
+{"t":190,"src":"ocr","raw":"DeeObaweea派出了愛管侍！","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Indeedee"}
+{"t":194.25,"src":"ocr","raw":"腳下傳來了奇妙的感覺！","type":"reveal","conf":"likely","side":"opp","species":"Indeedee","ability":"Psychic Surge"}
+{"type":"turn","n":2,"t":203.25,"src":"ocr","conf":"likely","raw":"4/5下雨狀態 | you.left: 轟擂金剛猩 2071207 | you.left: 壽擂金剛猩 2071207 | you.right: 具甲武者 182 7182 | opp.left: 水箭盔 100%* | opp.left: 水箭盔 100% | opp.right: 愛管待 100%","field":{"weather":"rain","weatherTurns":4,"terrain":"psychic"},"active":{"you":{"left":{"species":"Rillaboom","hp":{"cur":207,"max":207}},"right":{"species":"Golisopod","hp":{"cur":182,"max":182},"mega":true}},"opp":{"left":{"species":"Blastoise","hp":{"pct":100}},"right":{"species":"Indeedee","hp":{"pct":100}}}}}
+{"t":211,"src":"ocr","raw":"上吧！蚊香蛙皇！","type":"switch","conf":"sure","side":"you","slot":"left","out":"Rillaboom","in":"Politoed"}
+{"t":214.25,"src":"ocr","raw":"對手的水箭龜的水箭龜進化石和DeeObaweea的全一環產生了反應！","type":"reveal","conf":"sure","side":"opp","species":"Blastoise","item":"Blastoisinite"}
+{"t":223.5,"src":"ocr","raw":"對手的水箭龜超級進化成了超級水箭龜！","type":"mega","conf":"sure","side":"opp","slot":"left","species":"Blastoise","form":"Blastoise-Mega"}
+{"t":225.75,"src":"ocr","raw":"具甲武者使出了守住！","type":"move","conf":"sure","side":"you","slot":"right","species":"Golisopod-Mega","move":"Protect","targets":[]}
+{"t":231.75,"src":"ocr","raw":"對手的水箭龜使出了噴水！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Blastoise-Mega","move":"Water Spout","targets":["you.right","you.left"]}
+{"t":242.75,"src":"ocr","raw":"對蚊香蛙皇效果不好。","type":"hp","conf":"sure","side":"you","slot":"left","species":"Politoed","from":197,"to":null,"unit":"hp","cause":"move","effect":"resisted"}
+{"type":"reveal","t":244.75,"src":"ocr","conf":"sure","raw":"蚊香蛙皇使用了 / 文柚果！","side":"you","species":"Politoed","item":"Sitrus Berry"}
+{"type":"hp","t":244.75,"src":"ocr","conf":"sure","raw":"蚊香蛙皇使用了 / 文柚果！","side":"you","slot":"left","species":"Politoed","from":null,"to":null,"unit":"hp","cause":"item","item":"Sitrus Berry"}
+{"t":248.75,"src":"ocr","raw":"對手的愛管侍使出了廣域戰力！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Indeedee","move":"Expanding Force","targets":["you.right","you.left"]}
+{"t":258.25,"src":"ocr","raw":"蚊香蛙皇倒下了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Politoed","from":null,"to":0,"unit":"hp","cause":"move"}
+{"t":258.25,"src":"ocr","raw":"蚊香蛙皇倒下了！","type":"faint","conf":"sure","side":"you","slot":"left","species":"Politoed"}
+{"t":267,"src":"ocr","raw":"上吧！轟擂金剛猩！","type":"switch","conf":"likely","side":"you","slot":"left","out":null,"in":"Rillaboom"}
+{"type":"turn","n":3,"t":281.75,"src":"ocr","conf":"likely","raw":"下雨狀態3/5 | you.left: 轟 金剧猩 2071207 | you.left: 轟擂金剛猩 2071207 | you.right: 具甲武者 1827182 | you.right: 具甲武者 182 7182 | opp.left: 水箭盔 100% | opp.left: 水箭盛 100%) | opp.left: 水箭盛 100% | opp.right: 愛管待 100%","field":{"weather":"rain","weatherTurns":3,"terrain":"grassy"},"active":{"you":{"left":{"species":"Rillaboom","hp":{"cur":207,"max":207}},"right":{"species":"Golisopod","hp":{"cur":182,"max":182},"mega":true}},"opp":{"left":{"species":"Blastoise","hp":{"pct":100},"mega":true},"right":{"species":"Indeedee","hp":{"pct":100}}}}}
+{"t":304.25,"src":"ocr","raw":"DeeObaweea派出了大狃拉！","type":"switch","conf":"sure","side":"opp","slot":"left","out":"Blastoise-Mega","in":"Sneasler"}
+{"t":308.25,"src":"ocr","raw":"轟擂金剛猩使出了青草滑梯！","type":"move","conf":"sure","side":"you","slot":"left","species":"Rillaboom","move":"Grassy Glide","targets":["opp.left"]}
+{"t":311.25,"src":"ocr","raw":"對對手的大狃拉效果不好。","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Sneasler","from":100,"to":61,"unit":"pct","cause":"move","effect":"resisted"}
+{"t":314,"src":"ocr","raw":"對手的愛管侍使出了廣域戰力！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Indeedee","move":"Expanding Force","targets":["you.left"]}
+{"t":319.75,"src":"ocr","raw":"擊中了要害！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Rillaboom","from":207,"to":89,"unit":"hp","cause":"move","crit":true}
+{"t":323,"src":"ocr","raw":"具甲武者使出了急速折返！","type":"move","conf":"sure","side":"you","slot":"right","species":"Golisopod-Mega","move":"U-turn","targets":["opp.right"]}
+{"t":326.5,"src":"ocr","raw":"對對手的愛管侍效果絕佳！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Indeedee","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":328.5,"src":"ocr","raw":"對手的愛管侍倒下了！","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Indeedee"}
+{"t":339,"src":"ocr","raw":"上吧！幽尾玄魚！","type":"switch","conf":"sure","side":"you","slot":"right","out":"Golisopod-Mega","in":"Basculegion"}
+{"t":345,"src":"ocr","raw":"對手的大狃拉的體力回復了！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Sneasler","from":61,"to":67,"unit":"pct","cause":"terrain"}
+{"t":348.75,"src":"ocr","raw":"轟擂金剛猩的體力回復了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Rillaboom","from":89,"to":101,"unit":"hp","cause":"terrain"}
+{"t":354.25,"src":"ocr","raw":"DeeObaweea派出了水箭龜！","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Blastoise-Mega"}
+{"type":"turn","n":4,"t":359.25,"src":"ocr","conf":"likely","raw":"2/5下雨狀態 | you.left: 壽擂金剛猩 101 /207 | you.left: 轟福金剛猩 101 /207 | you.left: 轟擂金剛猩 101 /207 | you.right: 幽尾玄魚 1957195 | opp.left: 大扭拉 67% | opp.left: 大扭拉 67 % | opp.right: 水箭 100% | opp.right: 水箭龜 100%","field":{"weather":"rain","weatherTurns":2,"terrain":"grassy"},"active":{"you":{"left":{"species":"Rillaboom","hp":{"cur":101,"max":207}},"right":{"species":"Basculegion","hp":{"cur":195,"max":195}}},"opp":{"left":{"species":"Sneasler","hp":{"pct":67}},"right":{"species":"Blastoise","hp":{"pct":100},"mega":true}}}}
+{"t":399.5,"src":"ocr","raw":"對手的大狃拉使出了守住！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Sneasler","move":"Protect","targets":[]}
+{"t":404.75,"src":"ocr","raw":"轟擂金剛猩使出了青草滑梯！","type":"move","conf":"sure","side":"you","slot":"left","species":"Rillaboom","move":"Grassy Glide","targets":["opp.right"]}
+{"t":408.5,"src":"ocr","raw":"對對手的水箭龜效果絕佳！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Blastoise-Mega","from":100,"to":10,"unit":"pct","cause":"move","effect":"super"}
+{"t":411.25,"src":"ocr","raw":"幽尾玄魚使出了掃墓！","type":"move","conf":"sure","side":"you","slot":"right","species":"Basculegion","move":"Last Respects","targets":["opp.left"]}
+{"t":415.75,"src":"ocr","raw":"對手的水箭龜使出了濁流！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Blastoise-Mega","move":"Muddy Water","targets":["you.left","you.right"]}
+{"t":421.75,"src":"ocr","raw":"對轟擂金剛猩和幽尾玄魚效果不好。","type":"hp","conf":"likely","side":"you","slot":"left","species":"Rillaboom","from":101,"to":0,"unit":"hp","cause":"move","effect":"resisted","crit":true}
+{"t":421.75,"src":"ocr","raw":"對轟擂金剛猩和幽尾玄魚效果不好。","type":"hp","conf":"likely","side":"you","slot":"right","species":"Basculegion","from":195,"to":102,"unit":"hp","cause":"move","effect":"resisted","crit":true}
+{"t":427.25,"src":"ocr","raw":"轟擂金剛猩倒下了！","type":"faint","conf":"sure","side":"you","slot":"left","species":"Rillaboom"}
+{"t":431.25,"src":"ocr","raw":"幽尾玄魚的命中率降低了！","type":"stat","conf":"sure","side":"you","slot":"right","species":"Basculegion","stages":{"accuracy":-1}}
+{"t":434.75,"src":"ocr","raw":"幽尾玄魚的體力回復了！","type":"hp","conf":"likely","side":"you","slot":"right","species":"Basculegion","from":102,"to":114,"unit":"hp","cause":"terrain"}
+{"t":438.25,"src":"ocr","raw":"對手的大狃拉的體力回復了！","type":"hp","conf":"sure","side":"opp","slot":"left","species":"Sneasler","from":67,"to":73,"unit":"pct","cause":"terrain"}
+{"t":442,"src":"ocr","raw":"對手的水箭龜的體力回復了！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Blastoise-Mega","from":10,"to":16,"unit":"pct","cause":"terrain"}
+{"t":447.5,"src":"ocr","raw":"上吧！具甲武者！","type":"switch","conf":"likely","side":"you","slot":"left","out":null,"in":"Golisopod-Mega"}
+{"type":"turn","n":5,"t":452.5,"src":"ocr","conf":"likely","raw":"1/5下雨狀態 | you.left: 具甲武者 1827182 | you.right: 幽尾玄魚 114/195 | opp.left: 大扭拉 73 %, | opp.left: 大扭拉 73%, | opp.right: 水箭 16%* | opp.right: 水箭店 16%- | opp.right: 水箭然 16%","field":{"weather":"rain","weatherTurns":1,"terrain":"grassy"},"active":{"you":{"left":{"species":"Golisopod","hp":{"cur":182,"max":182},"mega":true},"right":{"species":"Basculegion","hp":{"cur":114,"max":195}}},"opp":{"left":{"species":"Sneasler","hp":{"pct":73}},"right":{"species":"Blastoise","hp":{"pct":16},"mega":true}}}}
+{"t":470.5,"src":"ocr","raw":"具甲武者使出了迎頭一擊！","type":"move","conf":"sure","side":"you","slot":"left","species":"Golisopod-Mega","move":"First Impression","targets":["opp.right"]}
+{"t":474.5,"src":"ocr","raw":"對手的水箭龜倒下了！","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Blastoise-Mega","from":16,"to":0,"unit":"pct","cause":"move"}
+{"t":474.5,"src":"ocr","raw":"對手的水箭龜倒下了！","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Blastoise-Mega"}
+{"t":478.5,"src":"ocr","raw":"幽尾玄魚使出了掃墓！","type":"move","conf":"sure","side":"you","slot":"right","species":"Basculegion","move":"Last Respects","targets":["opp.left"]}
+{"t":482.75,"src":"ocr","raw":"對手的大狃拉倒下了！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Sneasler","from":73,"to":0,"unit":"pct","cause":"move"}
+{"t":482.75,"src":"ocr","raw":"對手的大狃拉倒下了！","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Sneasler"}
+{"type":"reveal","t":486.5,"src":"ocr","conf":"sure","raw":"幽尾玄魚使用了 / 生命寶珠！","side":"you","species":"Basculegion","item":"Life Orb"}
+{"t":488.5,"src":"ocr","raw":"幽尾玄魚的生命被削減了一些！","type":"hp","conf":"sure","side":"you","slot":"right","species":"Basculegion","from":114,"to":null,"unit":"hp","cause":"item","item":"Life Orb"}
+{"t":491.25,"src":"ocr","raw":"成功戰勝了DeeObaweea！","type":"end","conf":"likely","winner":"you"}

@@ -1,0 +1,53 @@
+Rotom-Wash @ Sitrus Berry
+Ability: Levitate
+SPs: 32 HP / 32 SpA / 2 Spe
+Modest Nature
+- Thunderbolt
+- Hydro Pump
+- Volt Switch
+- Will-O-Wisp
+
+Sceptile @ Lum Berry
+Ability: Unburden
+SPs: 2 HP / 32 Atk / 31 SpD / 1 Spe
+Adamant Nature
+- Leaf Blade
+- Acrobatics
+- Earthquake
+- Detect
+
+Squawkabilly @ Choice Scarf
+Ability: Intimidate
+SPs: 32 HP / 2 Def / 3 SpD / 29 Spe
+Jolly Nature
+- Brave Bird
+- Final Gambit
+- Parting Shot
+- Swagger
+
+Indeedee-F @ Rocky Helmet
+Ability: Psychic Surge
+SPs: 32 HP / 32 Def / 2 SpD
+Relaxed Nature
+- Psychic
+- Follow Me
+- Helping Hand
+- Trick Room
+
+Armarouge @ Life Orb
+Ability: Flash Fire
+SPs: 29 HP / 4 Def / 32 SpA / 1 SpD
+Modest Nature
+- Expanding Force
+- Armor Cannon
+- Trick Room
+- Protect
+
+Annihilape @ Leftovers
+Ability: Defiant
+SPs: 24 HP / 25 Atk / 8 Def / 7 SpD / 2 Spe
+Adamant Nature
+- Rage Fist
+- Drain Punch
+- Bulk Up
+- Protect

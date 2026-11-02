@@ -84,6 +84,12 @@
           <label for="my-teams-paste" data-i18n="myTeams.pasteLabel">Showdown paste</label>
           <textarea id="my-teams-paste" name="paste" rows="12" spellcheck="false" aria-describedby="my-teams-paste-help my-teams-parse"></textarea>
           <p id="my-teams-paste-help" class="teams-search-help" data-i18n="myTeams.pasteHelp">Paste up to 6 Pokémon from Showdown or PokePaste.</p>
+          <div class="my-teams-screens">
+            <button id="my-teams-screens-button" class="team-action" type="button" aria-describedby="my-teams-screens-help" data-i18n="myTeams.screensButton">Read from screenshots</button>
+            <input id="my-teams-screens-input" class="visually-hidden" type="file" accept="image/png,image/jpeg" multiple tabindex="-1" aria-hidden="true" />
+            <p id="my-teams-screens-help" class="teams-search-help" data-i18n="myTeams.screensHelp">Choose the Abilities (能力) and Stats (狀態) screenshots of a team from Pokémon Champions on iPad. The paste above is replaced; check it before saving.</p>
+            <p id="my-teams-screens-status" class="my-teams-screens-status" role="status" aria-live="polite" aria-atomic="true" data-i18n-skip></p>
+          </div>
           <div id="my-teams-parse" class="my-teams-parse" role="status" aria-live="polite" aria-atomic="true" data-i18n-skip></div>
           <div class="my-teams-dialog-actions">
             <button id="my-teams-cancel" class="team-action" type="button" data-i18n="myTeams.cancel">Cancel</button>

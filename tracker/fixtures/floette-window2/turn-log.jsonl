@@ -1,0 +1,209 @@
+{"type":"match","schema":1,"source":"ocr-prototype","language":"en","video":"window2.ts","profile":"broadcast-en","game":1,"partial":true,"players":{"you":null,"opp":null},"yourTeam":"","oppPreview":[],"t":0,"src":"ocr","conf":"unsure","raw":""}
+{"type":"turn","n":1,"t":0,"src":"ocr","conf":"likely","raw":" | you.left: Floette 100% | you.right: Sneasler 100% | opp.left: Whimsicott 100% | opp.right: Glimmora 91%","field":{},"active":{"you":{"left":{"species":"Floette","hp":{"pct":100}},"right":{"species":"Sneasler","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Glimmora","hp":{"pct":91}}}}}
+{"t":21.5,"src":"ocr","raw":"Go! Incineroar the Great Friend!","type":"switch","conf":"sure","side":"you","slot":"right","out":"Sneasler","in":"Incineroar"}
+{"type":"reveal","t":30,"src":"ocr","conf":"sure","raw":"Incineroar's / Intimidate","side":"you","species":"Incineroar","ability":"Intimidate"}
+{"t":30.25,"src":"ocr","raw":"The opposing Glimmora and the opposing Whimsicott's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Glimmora","stages":{"atk":-1}}
+{"t":30.25,"src":"ocr","raw":"The opposing Glimmora and the opposing Whimsicott's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","stages":{"atk":-1}}
+{"t":32.25,"src":"ocr","raw":"The opposing Whimsicott used Encore!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Encore","targets":["you.right"]}
+{"t":34,"src":"ocr","raw":"It doesn't affect Incineroar.","type":"hp","conf":"likely","side":"you","slot":"right","species":"Incineroar","from":100,"to":100,"unit":"pct","cause":"move","effect":"immune"}
+{"t":36.25,"src":"ocr","raw":"The opposing Glimmora used Sludge Bomb!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Glimmora","move":"Sludge Bomb","targets":["you.left"]}
+{"t":39.5,"src":"ocr","raw":"It's super effective on Floette!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette","from":100,"to":null,"unit":"pct","cause":"move","effect":"super"}
+{"type":"reveal","t":46.5,"src":"ocr","conf":"likely","raw":"Glimmora's / Life Orb","side":"opp","species":"Glimmora","item":"Life Orb"}
+{"t":48,"src":"ocr","raw":"The opposing Glimmora lost some of its HP!","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Glimmora","from":91,"to":82,"unit":"pct","cause":"recoil"}
+{"t":50,"src":"ocr","raw":"Floette used Calm Mind!","type":"move","conf":"likely","side":"you","slot":"left","species":"Floette","move":"Calm Mind","targets":[]}
+{"t":57,"src":"ocr","raw":"Floette's Sp.Atk and Sp.Def rose!","type":"stat","conf":"sure","side":"you","slot":"left","species":"Floette","stages":{"spa":1,"spd":1}}
+{"t":58.75,"src":"ocr","raw":"Floette was hurt by its poisoning!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette","from":null,"to":48,"unit":"pct","cause":"recoil"}
+{"t":61,"src":"ocr","raw":"Incineroar was hurt by its poisoning!","type":"hp","conf":"likely","side":"you","slot":"right","species":"Incineroar","from":100,"to":35,"unit":"pct","cause":"recoil"}
+{"type":"turn","n":2,"t":65,"src":"ocr","conf":"likely","raw":" | you.left: Floette 48% | you.right: Incineroar 35% | opp.left: Whimsicott 100% | opp.right: Glimmora 82%","field":{},"active":{"you":{"left":{"species":"Floette","hp":{"pct":48}},"right":{"species":"Incineroar","hp":{"pct":35}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Glimmora","hp":{"pct":82}}}}}
+{"t":104,"src":"ocr","raw":"Go! Rillaboom!","type":"switch","conf":"sure","side":"you","slot":"right","out":"Incineroar","in":"Rillaboom"}
+{"type":"reveal","t":112.75,"src":"ocr","conf":"likely","raw":"Rillaboom's / Grassy Surge","side":"you","species":"Rillaboom","ability":"Grassy Surge"}
+{"t":115,"src":"ocr","raw":"The opposing Whimsicott used Protect!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Protect","targets":[]}
+{"t":120.5,"src":"ocr","raw":"The opposing Glimmora used Sludge Bomb!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Glimmora","move":"Sludge Bomb","targets":["you.left"]}
+{"t":124,"src":"ocr","raw":"It's super effective on Floette!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette","from":48,"to":null,"unit":"pct","cause":"move","effect":"super"}
+{"t":128,"src":"ocr","raw":"The opposing Glimmora lost some of its HP!","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Glimmora","from":82,"to":72,"unit":"pct","cause":"recoil"}
+{"t":130.5,"src":"ocr","raw":"Floette used Draining Kiss!","type":"move","conf":"likely","side":"you","slot":"left","species":"Floette","move":"Draining Kiss","targets":["opp.left"]}
+{"t":136.5,"src":"ocr","raw":"The opposing Glimmora had its HP restored.","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Glimmora","from":72,"to":78,"unit":"pct","cause":"terrain"}
+{"t":140.25,"src":"ocr","raw":"Floette had its HP restored.","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette","from":null,"to":null,"unit":"pct","cause":"terrain"}
+{"t":142,"src":"ocr","raw":"Floette was hurt by its poisoning!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette","from":null,"to":9,"unit":"pct","cause":"recoil"}
+{"t":144.25,"src":"ocr","raw":"Rillaboom was hurt by its poisoning!","type":"hp","conf":"likely","side":"you","slot":"right","species":"Rillaboom","from":100,"to":87,"unit":"pct","cause":"recoil"}
+{"type":"turn","n":3,"t":146.5,"src":"ocr","conf":"likely","raw":" | you.left: Floette 9% | you.right: Rillaboom 87% | opp.left: Whimsicott 100% | opp.right: Glimmora 78%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Floette","hp":{"pct":9}},"right":{"species":"Rillaboom","hp":{"pct":87}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Glimmora","hp":{"pct":78}}}}}
+{"t":188.25,"src":"ocr","raw":"Rillaboom used Fake Out!","type":"move","conf":"likely","side":"you","slot":"right","species":"Rillaboom","move":"Fake Out","targets":["opp.right"]}
+{"t":191.25,"src":"ocr","raw":"It's not very effective on the opposing Glimmora.","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Glimmora","from":78,"to":null,"unit":"pct","cause":"move","effect":"resisted"}
+{"type":"reveal","t":193.5,"src":"ocr","conf":"likely","raw":"Glimmora's / Toxic Debris","side":"opp","species":"Glimmora","ability":"Toxic Debris"}
+{"t":196.25,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Moonblast","targets":["you.left"]}
+{"t":202.75,"src":"ocr","raw":"Floette fainted!","type":"hp","conf":"likely","side":"you","slot":"left","species":"Floette","from":9,"to":0,"unit":"pct","cause":"move"}
+{"t":202.75,"src":"ocr","raw":"Floette fainted!","type":"faint","conf":"sure","side":"you","slot":"left","species":"Floette"}
+{"t":210.25,"src":"ocr","raw":"The opposing Glimmora had its HP restored:","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Glimmora","from":null,"to":null,"unit":"pct","cause":"terrain"}
+{"t":213.75,"src":"ocr","raw":"Rillaboom had its HP restored.","type":"hp","conf":"sure","side":"you","slot":"right","species":"Rillaboom","from":87,"to":93,"unit":"pct","cause":"terrain"}
+{"t":215.5,"src":"ocr","raw":"Rillaboom was hurt by its poisoning!","type":"hp","conf":"sure","side":"you","slot":"right","species":"Rillaboom","from":93,"to":null,"unit":"pct","cause":"recoil"}
+{"t":220,"src":"ocr","raw":"The battle has ended due to a forfeit.","type":"end","conf":"unsure","winner":null,"forfeit":true}
+{"type":"match","schema":1,"source":"ocr-prototype","language":"en","video":"window2.ts","profile":"broadcast-en","game":2,"players":{"you":null,"opp":"Liam"},"yourTeam":"","oppPreview":[],"t":456.5,"src":"ocr","conf":"unsure","raw":""}
+{"type":"reveal","t":469,"src":"ocr","conf":"sure","raw":"Incineroar's / Intimidate","side":"you","species":"Incineroar","ability":"Intimidate"}
+{"t":469.25,"src":"ocr","raw":"The opposing Floette's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Floette","stages":{"atk":-1}}
+{"type":"reveal","t":473.5,"src":"ocr","conf":"likely","raw":"Floette's / Flower Veil","side":"opp","species":"Floette","ability":"Flower Veil"}
+{"type":"turn","n":1,"t":475.25,"src":"ocr","conf":"likely","raw":" | you.left: Floette 100% | you.left: Floette 100 % | you.right: Incineroar 100% | you.right: Incineroar 100 % | opp.left: Whimsicott 100% | opp.right: Floette 100%","field":{},"active":{"you":{"left":{"species":"Floette","hp":{"pct":100}},"right":{"species":"Incineroar","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Floette","hp":{"pct":100}}}}}
+{"t":490.75,"src":"ocr","raw":"Liam sent out Glimmora the Great Friend!","type":"switch","conf":"sure","side":"opp","slot":"right","out":"Floette","in":"Glimmora"}
+{"t":494.5,"src":"ocr","raw":"Flotte's Floettite is reacting to 7**'s m Ring!","type":"reveal","conf":"likely","side":"you","species":"Floette","item":"Floettite"}
+{"t":504,"src":"ocr","raw":"Floette has Mega Evolved into Mega Floette!","type":"mega","conf":"sure","side":"you","slot":"left","species":"Floette","form":"Floette-Mega"}
+{"type":"reveal","t":506.25,"src":"ocr","conf":"likely","raw":"Floette's / Fairy Aura","side":"you","species":"Floette","ability":"Fairy Aura"}
+{"t":508.5,"src":"ocr","raw":"Incineroar used Fake Out!","type":"move","conf":"likely","side":"you","slot":"right","species":"Incineroar","move":"Fake Out","targets":["opp.right"]}
+{"t":511.5,"src":"ocr","raw":"It's not very effective on the opposing Glimmora.","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Glimmora","from":100,"to":94,"unit":"pct","cause":"move","effect":"resisted"}
+{"type":"reveal","t":513.5,"src":"ocr","conf":"likely","raw":"Glimmora's / Toxic Debris","side":"opp","species":"Glimmora","ability":"Toxic Debris"}
+{"t":517,"src":"ocr","raw":"The opposing Whimsicott used Tailwind!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Tailwind","targets":[]}
+{"t":523,"src":"ocr","raw":"Floette used Calm Mind!","type":"move","conf":"likely","side":"you","slot":"left","species":"Floette-Mega","move":"Calm Mind","targets":[]}
+{"t":529.75,"src":"ocr","raw":"Floette's Sp.Atk and Sp.Def rose!","type":"stat","conf":"sure","side":"you","slot":"left","species":"Floette-Mega","stages":{"spa":1,"spd":1}}
+{"type":"turn","n":2,"t":531.5,"src":"ocr","conf":"likely","raw":" | you.left: Floette 100% | you.right: Incineroar 100 % | opp.left: Whimsicott 100% | opp.right: Glimmora 94%","field":{},"active":{"you":{"left":{"species":"Floette","hp":{"pct":100},"mega":true},"right":{"species":"Incineroar","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Glimmora","hp":{"pct":94}}}}}
+{"t":562.25,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Moonblast","targets":[]}
+{"t":568.75,"src":"ocr","raw":"Incineroar's Sp.Atk fell!","type":"stat","conf":"sure","side":"you","slot":"right","species":"Incineroar","stages":{"spa":-1}}
+{"t":571.75,"src":"ocr","raw":"The opposing Glimmora used Power Gem!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Glimmora","move":"Power Gem","targets":["you.right"]}
+{"t":575.25,"src":"ocr","raw":"It's super effective on Incineroar!","type":"hp","conf":"likely","side":"you","slot":"right","species":"Incineroar","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":577.25,"src":"ocr","raw":"Incineroar fainted!","type":"faint","conf":"sure","side":"you","slot":"right","species":"Incineroar"}
+{"type":"reveal","t":581.25,"src":"ocr","conf":"likely","raw":"Glimmora's / Life Orb","side":"opp","species":"Glimmora","item":"Life Orb"}
+{"t":583,"src":"ocr","raw":"The opposing Glimmora lost some of its HP!","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Glimmora","from":94,"to":null,"unit":"pct","cause":"recoil"}
+{"t":585.25,"src":"ocr","raw":"Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"you","slot":"left","species":"Floette-Mega","move":"Dazzling Gleam","targets":["opp.right","opp.left"]}
+{"type":"hp","t":585.26,"src":"inferred","conf":"unsure","raw":"no result line after Dazzling Gleam","side":"opp","slot":"left","species":"Whimsicott","from":100,"to":14,"unit":"pct","cause":"move"}
+{"t":589.75,"src":"ocr","raw":"It's not very effective on the opposing Glimmora.","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Glimmora","from":null,"to":45,"unit":"pct","cause":"move","effect":"resisted"}
+{"t":598.5,"src":"ocr","raw":"Go! Sneasler!","type":"switch","conf":"likely","side":"you","slot":"right","out":null,"in":"Sneasler"}
+{"type":"turn","n":3,"t":604,"src":"ocr","conf":"likely","raw":" | you.left: Floette 100% | you.right: Sneasler 100% | opp.left: Whimsicott 14% | opp.right: Glimmora 45%","field":{},"active":{"you":{"left":{"species":"Floette","hp":{"pct":100},"mega":true},"right":{"species":"Sneasler","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":14}},"right":{"species":"Glimmora","hp":{"pct":45}}}}}
+{"t":640,"src":"ocr","raw":"Liam sent out Indeedee!","type":"switch","conf":"sure","side":"opp","slot":"left","out":"Whimsicott","in":"Indeedee"}
+{"type":"reveal","t":643.75,"src":"ocr","conf":"likely","raw":"Indeedee's / Psychic Surge","side":"opp","species":"Indeedee","ability":"Psychic Surge"}
+{"t":646,"src":"ocr","raw":"Sneasler used Fake Out!","type":"move","conf":"likely","side":"you","slot":"right","species":"Sneasler","move":"Fake Out","targets":[]}
+{"t":650,"src":"ocr","raw":"The opposing Glimmora used Sludge Bomb!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Glimmora","move":"Sludge Bomb","targets":["you.left"]}
+{"t":653.5,"src":"ocr","raw":"It's super effective on Floette!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette-Mega","from":100,"to":null,"unit":"pct","cause":"move","effect":"super"}
+{"t":662.25,"src":"ocr","raw":"The opposing Glimmora lost some of its HP!","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Glimmora","from":45,"to":null,"unit":"pct","cause":"recoil"}
+{"t":664,"src":"ocr","raw":"Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"you","slot":"left","species":"Floette-Mega","move":"Dazzling Gleam","targets":["opp.right","opp.left"]}
+{"type":"hp","t":664.01,"src":"inferred","conf":"likely","raw":"no result line after Dazzling Gleam","side":"opp","slot":"left","species":"Indeedee","from":100,"to":2,"unit":"pct","cause":"move"}
+{"t":668.5,"src":"ocr","raw":"It's not very effective on the opposing Glimmora.","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Glimmora","from":null,"to":0,"unit":"pct","cause":"move","effect":"resisted"}
+{"t":670.5,"src":"ocr","raw":"The opposing Glimmora fainted!","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Glimmora"}
+{"t":674.25,"src":"ocr","raw":"Floette was hurt by its poisoning!","type":"hp","conf":"sure","side":"you","slot":"left","species":"Floette-Mega","from":null,"to":30,"unit":"pct","cause":"recoil"}
+{"t":683,"src":"ocr","raw":"Liam sent out Floette the Champion-Tiered!","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Floette"}
+{"type":"turn","n":4,"t":686.75,"src":"ocr","conf":"likely","raw":" | you.left: Floette 30% | you.right: Sneasler 100% | opp.left: Indeedee 2% | opp.right: Floette 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Floette","hp":{"pct":30},"mega":true},"right":{"species":"Sneasler","hp":{"pct":100}}},"opp":{"left":{"species":"Indeedee","hp":{"pct":2}},"right":{"species":"Floette","hp":{"pct":100}}}}}
+{"t":727.25,"src":"ocr","raw":"Go! Rillaboom!","type":"switch","conf":"sure","side":"you","slot":"right","out":"Sneasler","in":"Rillaboom"}
+{"type":"reveal","t":731.5,"src":"ocr","conf":"likely","raw":"Rillaboom's / Grassy Surge","side":"you","species":"Rillaboom","ability":"Grassy Surge"}
+{"t":733.5,"src":"ocr","raw":"The opposing Floette's Floettite is reacting to Liam's Omni Ring!","type":"reveal","conf":"sure","side":"opp","species":"Floette","item":"Floettite"}
+{"t":742.75,"src":"ocr","raw":"The opposing Floette has Mega Evolved into Mega Floette!","type":"mega","conf":"sure","side":"opp","slot":"right","species":"Floette","form":"Floette-Mega"}
+{"type":"reveal","t":745,"src":"ocr","conf":"likely","raw":"Floette's / Fairy Aura","side":"opp","species":"Floette","ability":"Fairy Aura"}
+{"t":747.25,"src":"ocr","raw":"The opposing Indeedee used Hyper Voice!","type":"move","conf":"likely","side":"opp","slot":"left","species":"Indeedee","move":"Hyper Voice","targets":["you.left","you.right"]}
+{"type":"hp","t":747.26,"src":"inferred","conf":"unsure","raw":"no result line after Hyper Voice","side":"you","slot":"left","species":"Floette-Mega","from":30,"to":null,"unit":"pct","cause":"move"}
+{"type":"hp","t":747.26,"src":"inferred","conf":"likely","raw":"no result line after Hyper Voice","side":"you","slot":"right","species":"Rillaboom","from":100,"to":null,"unit":"pct","cause":"move"}
+{"t":751.5,"src":"ocr","raw":"The opposing Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Floette-Mega","move":"Dazzling Gleam","targets":["you.left","you.right"]}
+{"type":"hp","t":751.51,"src":"inferred","conf":"unsure","raw":"no result line after Dazzling Gleam","side":"you","slot":"right","species":"Rillaboom","from":null,"to":15,"unit":"pct","cause":"move"}
+{"t":756,"src":"ocr","raw":"Floette fainted!","type":"hp","conf":"likely","side":"you","slot":"left","species":"Floette-Mega","from":null,"to":0,"unit":"pct","cause":"move"}
+{"t":756,"src":"ocr","raw":"Floette fainted!","type":"faint","conf":"sure","side":"you","slot":"left","species":"Floette-Mega"}
+{"t":761.5,"src":"ocr","raw":"The opposing Indeedee had its HP restored.","type":"hp","conf":"sure","side":"opp","slot":"left","species":"Indeedee","from":2,"to":8,"unit":"pct","cause":"terrain"}
+{"t":765,"src":"ocr","raw":"Rillaboom had its HP restored.","type":"hp","conf":"sure","side":"you","slot":"right","species":"Rillaboom","from":15,"to":21,"unit":"pct","cause":"terrain"}
+{"t":774.25,"src":"ocr","raw":"Go! Sneasler!","type":"switch","conf":"likely","side":"you","slot":"left","out":null,"in":"Sneasler"}
+{"type":"turn","n":5,"t":778,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 100% | you.right: Rillaboom 21% | opp.left: Indeedee 8% | opp.right: Floette 100%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Rillaboom","hp":{"pct":21}}},"opp":{"left":{"species":"Indeedee","hp":{"pct":8}},"right":{"species":"Floette","hp":{"pct":100},"mega":true}}}}
+{"t":798,"src":"ocr","raw":"The opposing Floette used Protect!","type":"move","conf":"sure","side":"opp","slot":"right","species":"Floette-Mega","move":"Protect","targets":[]}
+{"t":803,"src":"ocr","raw":"Rillaboom used Fake Out!","type":"move","conf":"likely","side":"you","slot":"right","species":"Rillaboom","move":"Fake Out","targets":["opp.right"]}
+{"t":807.75,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":"left","species":"Sneasler","move":"Dire Claw","targets":["opp.left"]}
+{"t":810.75,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Indeedee","from":8,"to":0,"unit":"pct","cause":"move"}
+{"t":810.75,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Indeedee"}
+{"t":816.25,"src":"ocr","raw":"Rillaboom had its HP restored.","type":"hp","conf":"sure","side":"you","slot":"right","species":"Rillaboom","from":21,"to":27,"unit":"pct","cause":"terrain"}
+{"t":822,"src":"ocr","raw":"Liam sent out Whimsicott the Champion-Tiered!","type":"switch","conf":"likely","side":"opp","slot":"left","out":null,"in":"Whimsicott"}
+{"type":"turn","n":6,"t":826,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 100% | you.right: Rillaboom 27 % | opp.left: Whimsicott 14% | opp.right: Floette 100%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Rillaboom","hp":{"pct":27}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":14}},"right":{"species":"Floette","hp":{"pct":100},"mega":true}}}}
+{"t":853,"src":"ocr","raw":"The opposing Whimsicott used Encore!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Encore","targets":[]}
+{"t":860.25,"src":"ocr","raw":"Rillaboom used Fake Out!","type":"move","conf":"likely","side":"you","slot":"right","species":"Rillaboom","move":"Fake Out","targets":[]}
+{"t":864,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":"left","species":"Sneasler","move":"Dire Claw","targets":["opp.right"]}
+{"t":867.25,"src":"ocr","raw":"It's super effective on the opposing Floette!","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Floette-Mega","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":869.25,"src":"ocr","raw":"The opposing Floette fainted!","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Floette-Mega"}
+{"t":874.75,"src":"ocr","raw":"The opposing Whimsicott had its HP restored.","type":"hp","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","from":14,"to":20,"unit":"pct","cause":"terrain"}
+{"t":878.25,"src":"ocr","raw":"Rillaboom had its HP restored.","type":"hp","conf":"sure","side":"you","slot":"right","species":"Rillaboom","from":27,"to":33,"unit":"pct","cause":"terrain"}
+{"type":"turn","n":7,"t":880.25,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 100% | you.right: Rillaboom 33 %р | opp.left: Whimsicott 20%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Rillaboom","hp":{"pct":33}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":20}}}}}
+{"t":890.5,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":"left","species":"Sneasler","move":"Dire Claw","targets":["opp.left"]}
+{"t":893.75,"src":"ocr","raw":"It's extremely effective on the opposing Whimsicott!","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Whimsicott","from":20,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":895.75,"src":"ocr","raw":"The opposing Whimsicott fainted!","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Whimsicott"}
+{"t":899.75,"src":"ocr","raw":"Liam lost!","type":"end","conf":"likely","winner":"you"}
+{"type":"match","schema":1,"source":"ocr-prototype","language":"en","video":"window2.ts","profile":"broadcast-en","game":3,"players":{"you":null,"opp":"Liam"},"yourTeam":"","oppPreview":[],"t":966.75,"src":"ocr","conf":"unsure","raw":""}
+{"type":"reveal","t":979.25,"src":"ocr","conf":"sure","raw":"Incineroar's / Intimidate","side":"you","species":"Incineroar","ability":"Intimidate"}
+{"t":979.5,"src":"ocr","raw":"The opposing Floette's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Floette","stages":{"atk":-1}}
+{"type":"reveal","t":983.75,"src":"ocr","conf":"likely","raw":"Floette's / Flower Veil","side":"opp","species":"Floette","ability":"Flower Veil"}
+{"type":"turn","n":1,"t":985.5,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 100% | you.right: Incineroar 100% | opp.left: Whimsicott 100% | opp.right: Floette 100%","field":{},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Incineroar","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Floette","hp":{"pct":100}}}}}
+{"t":1012.25,"src":"ocr","raw":"The opposing Whimsicott used Protect!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Protect","targets":[]}
+{"t":1017.5,"src":"ocr","raw":"The opposing Floette used Protect!","type":"move","conf":"sure","side":"opp","slot":"right","species":"Floette","move":"Protect","targets":[]}
+{"t":1023,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":"left","species":"Sneasler","move":"Dire Claw","targets":["opp.left"]}
+{"t":1027.25,"src":"ocr","raw":"Incineroar used Parting Shot!","type":"move","conf":"likely","side":"you","slot":"right","species":"Incineroar","move":"Parting Shot","targets":["opp.right"]}
+{"type":"turn","n":2,"t":1031.5,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 100% | you.right: Incineroar 100% | opp.left: Whimsicott 100% | opp.right: Floette 100%","field":{},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":100}},"right":{"species":"Incineroar","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Floette","hp":{"pct":100}}}}}
+{"t":1061.5,"src":"ocr","raw":"The opposing Floette's Floettite is reacting to Liam's Omni Ring!","type":"reveal","conf":"sure","side":"opp","species":"Floette","item":"Floettite"}
+{"t":1070.75,"src":"ocr","raw":"The opposing Floette has Mega Evolved into Mega Floette!","type":"mega","conf":"sure","side":"opp","slot":"right","species":"Floette","form":"Floette-Mega"}
+{"type":"reveal","t":1072.75,"src":"ocr","conf":"likely","raw":"Floette's / Fairy Aura","side":"opp","species":"Floette","ability":"Fairy Aura"}
+{"t":1075.25,"src":"ocr","raw":"The opposing Whimsicott used Tailwind!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Tailwind","targets":[]}
+{"t":1081.25,"src":"ocr","raw":"The opposing Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Floette-Mega","move":"Dazzling Gleam","targets":["you.left","you.right"]}
+{"type":"hp","t":1081.26,"src":"inferred","conf":"unsure","raw":"no result line after Dazzling Gleam","side":"you","slot":"left","species":"Sneasler","from":100,"to":29,"unit":"pct","cause":"move"}
+{"type":"hp","t":1081.26,"src":"inferred","conf":"unsure","raw":"no result line after Dazzling Gleam","side":"you","slot":"right","species":"Incineroar","from":100,"to":null,"unit":"pct","cause":"move"}
+{"t":1086.75,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":"left","species":"Sneasler","move":"Dire Claw","targets":["opp.right"]}
+{"t":1090,"src":"ocr","raw":"It's super effective on the opposing Floette!","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Floette-Mega","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":1092.25,"src":"ocr","raw":"The opposing Floette fainted!","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Floette-Mega"}
+{"t":1096.25,"src":"ocr","raw":"Incineroar used Parting Shot!","type":"move","conf":"likely","side":"you","slot":"right","species":"Incineroar","move":"Parting Shot","targets":[]}
+{"t":1099.75,"src":"ocr","raw":"The opposing Whimsicott's Attack and Sp.Atk fell!","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","stages":{"atk":-1,"spa":-1}}
+{"t":1113.75,"src":"ocr","raw":"Go! Rillaboom!","type":"switch","conf":"sure","side":"you","slot":"right","out":"Incineroar","in":"Rillaboom"}
+{"type":"reveal","t":1118.5,"src":"ocr","conf":"likely","raw":"Rillaboom's / Grassy Surge","side":"you","species":"Rillaboom","ability":"Grassy Surge"}
+{"t":1122.25,"src":"ocr","raw":"Sneasler had its HP restored.","type":"hp","conf":"likely","side":"you","slot":"left","species":"Sneasler","from":29,"to":35,"unit":"pct","cause":"terrain"}
+{"t":1139,"src":"ocr","raw":"Liam sent out Indeedee!","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Indeedee"}
+{"type":"reveal","t":1142.75,"src":"ocr","conf":"likely","raw":"Indeedee's / Psychic Surge","side":"opp","species":"Indeedee","ability":"Psychic Surge"}
+{"type":"turn","n":3,"t":1145,"src":"ocr","conf":"likely","raw":" | you.left: Sneasler 35% | you.right: Rillaboom 100% | opp.left: Whimsicott 100% | opp.right: Indeedee 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Sneasler","hp":{"pct":35}},"right":{"species":"Rillaboom","hp":{"pct":100}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Indeedee","hp":{"pct":100}}}}}
+{"t":1171.25,"src":"ocr","raw":"Liam sent out Glimmora the Great Friend!","type":"switch","conf":"sure","side":"opp","slot":"left","out":"Whimsicott","in":"Glimmora"}
+{"t":1178.25,"src":"ocr","raw":"Go! Incineroar the Great Friend!","type":"switch","conf":"sure","side":"you","slot":"left","out":"Sneasler","in":"Incineroar"}
+{"t":1182.25,"src":"ocr","raw":"The opposing Indeedee and the opposing Glimmora's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Indeedee","stages":{"atk":-1}}
+{"t":1182.25,"src":"ocr","raw":"The opposing Indeedee and the opposing Glimmora's Attack fell!","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Glimmora","stages":{"atk":-1}}
+{"t":1184.5,"src":"ocr","raw":"The opposing Indeedee used Expanding Force!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Indeedee","move":"Expanding Force","targets":["you.left","you.right"]}
+{"type":"hp","t":1184.51,"src":"inferred","conf":"unsure","raw":"no result line after Expanding Force","side":"you","slot":"right","species":"Rillaboom","from":100,"to":42,"unit":"pct","cause":"move"}
+{"t":1186.25,"src":"ocr","raw":"It doesn't affect Incineroar.","type":"hp","conf":"sure","side":"you","slot":"left","species":"Incineroar","from":100,"to":64,"unit":"pct","cause":"move","effect":"immune"}
+{"t":1194.5,"src":"ocr","raw":"Rillaboom used High Horsepower!","type":"move","conf":"likely","side":"you","slot":"right","species":"Rillaboom","move":"High Horsepower","targets":["opp.left"]}
+{"t":1198.5,"src":"ocr","raw":"It's extremely effective on the opposing Glimmora!","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Glimmora","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"type":"reveal","t":1200.75,"src":"ocr","conf":"likely","raw":"Glimmora's / Toxic Debris","side":"opp","species":"Glimmora","ability":"Toxic Debris"}
+{"t":1203,"src":"ocr","raw":"The opposing Glimmora fainted!","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Glimmora"}
+{"t":1212,"src":"ocr","raw":"Liam sent out Whimsicott the Champion-Tiered!","type":"switch","conf":"likely","side":"opp","slot":"left","out":null,"in":"Whimsicott"}
+{"type":"turn","n":4,"t":1215.75,"src":"ocr","conf":"likely","raw":" | you.left: Incineroar 64% | you.right: Rillaboom 42% | opp.left: Whimsicott 100% | opp.right: Indeedee 100%","field":{"terrain":"psychic"},"active":{"you":{"left":{"species":"Incineroar","hp":{"pct":64}},"right":{"species":"Rillaboom","hp":{"pct":42}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Indeedee","hp":{"pct":100}}}}}
+{"t":1232,"src":"ocr","raw":"Go! Sneasler!","type":"switch","conf":"sure","side":"you","slot":"right","out":"Rillaboom","in":"Sneasler"}
+{"t":1237.75,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Moonblast","targets":[]}
+{"type":"reveal","t":1244,"src":"ocr","conf":"likely","raw":"Incineroar's / Sitrus Berry","side":"you","species":"Incineroar","item":"Sitrus Berry"}
+{"type":"hp","t":1244,"src":"ocr","conf":"likely","raw":"Incineroar's / Sitrus Berry","side":"you","slot":"left","species":"Incineroar","from":64,"to":89,"unit":"pct","cause":"item","item":"Sitrus Berry"}
+{"t":1247.5,"src":"ocr","raw":"The opposing Indeedee used Expanding Force!","type":"move","conf":"likely","side":"opp","slot":"right","species":"Indeedee","move":"Expanding Force","targets":["you.left","you.right"]}
+{"t":1249.25,"src":"ocr","raw":"It doesn't affect Incineroar.","type":"hp","conf":"likely","side":"you","slot":"left","species":"Incineroar","from":89,"to":89,"unit":"pct","cause":"move","effect":"immune"}
+{"t":1256.5,"src":"ocr","raw":"It's extremely effective on Sneasler!","type":"hp","conf":"likely","side":"you","slot":"right","species":"Sneasler","from":35,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":1258.5,"src":"ocr","raw":"Sneasler fainted!","type":"faint","conf":"sure","side":"you","slot":"right","species":"Sneasler"}
+{"t":1262.5,"src":"ocr","raw":"Incineroar used Flare Blitz!","type":"move","conf":"likely","side":"you","slot":"left","species":"Incineroar","move":"Flare Blitz","targets":["opp.right"]}
+{"type":"hp","t":1262.51,"src":"inferred","conf":"likely","raw":"choose-screen diff after Flare Blitz","side":"opp","slot":"right","species":"Indeedee","from":100,"to":5,"unit":"pct","cause":"move"}
+{"t":1268,"src":"ocr","raw":"Incineroar was damaged by the recoil!","type":"hp","conf":"likely","side":"you","slot":"left","species":"Incineroar","from":89,"to":48,"unit":"pct","cause":"recoil"}
+{"t":1274.5,"src":"ocr","raw":"Go! Rillaboom!","type":"switch","conf":"likely","side":"you","slot":"right","out":null,"in":"Rillaboom"}
+{"type":"turn","n":5,"t":1280.75,"src":"ocr","conf":"likely","raw":" | you.left: Incineroar 48% | you.right: Rillaboom 42% | opp.left: Whimsicott 100% | opp.right: Indeedee 5%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Incineroar","hp":{"pct":48}},"right":{"species":"Rillaboom","hp":{"pct":42}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":100}},"right":{"species":"Indeedee","hp":{"pct":5}}}}}
+{"t":1292,"src":"ocr","raw":"Rillaboom used Grassy Glide!","type":"move","conf":"likely","side":"you","slot":"right","species":"Rillaboom","move":"Grassy Glide","targets":["opp.right"]}
+{"t":1295.5,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Indeedee","from":5,"to":0,"unit":"pct","cause":"move"}
+{"t":1295.5,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"faint","conf":"sure","side":"opp","slot":"right","species":"Indeedee"}
+{"t":1299.25,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Moonblast","targets":["you.right"]}
+{"type":"hp","t":1299.26,"src":"inferred","conf":"unsure","raw":"choose-screen diff after Moonblast","side":"you","slot":"right","species":"Rillaboom","from":42,"to":12,"unit":"pct","cause":"move"}
+{"t":1306.75,"src":"ocr","raw":"Incineroar used Flare Blitz!","type":"move","conf":"likely","side":"you","slot":"left","species":"Incineroar","move":"Flare Blitz","targets":["opp.left"]}
+{"type":"reveal","t":1308.75,"src":"ocr","conf":"likely","raw":"Whimsicott's / Occa Berry","side":"opp","species":"Whimsicott","item":"Occa Berry"}
+{"t":1315.25,"src":"ocr","raw":"It's super effective on the opposing Whimsicott!","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Whimsicott","from":100,"to":41,"unit":"pct","cause":"move","effect":"super"}
+{"t":1319,"src":"ocr","raw":"Incineroar was damaged by the recoil!","type":"hp","conf":"likely","side":"you","slot":"left","species":"Incineroar","from":48,"to":33,"unit":"pct","cause":"recoil"}
+{"t":1323.25,"src":"ocr","raw":"The opposing Whimsicott had its HP restored.","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Whimsicott","from":41,"to":47,"unit":"pct","cause":"terrain"}
+{"t":1326.75,"src":"ocr","raw":"Rillaboom had its HP restored.","type":"hp","conf":"likely","side":"you","slot":"right","species":"Rillaboom","from":12,"to":18,"unit":"pct","cause":"terrain"}
+{"t":1330.5,"src":"ocr","raw":"Incineroar had its HP restored.","type":"hp","conf":"likely","side":"you","slot":"left","species":"Incineroar","from":33,"to":39,"unit":"pct","cause":"terrain"}
+{"type":"turn","n":6,"t":1334,"src":"ocr","conf":"likely","raw":" | you.left: Incineroar 39% | you.right: Rillaboom 18% | opp.left: Whimsicott 47%","field":{"terrain":"grassy"},"active":{"you":{"left":{"species":"Incineroar","hp":{"pct":39}},"right":{"species":"Rillaboom","hp":{"pct":18}}},"opp":{"left":{"species":"Whimsicott","hp":{"pct":47}}}}}
+{"t":1342,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":"left","species":"Whimsicott","move":"Moonblast","targets":["you.right"]}
+{"t":1348.5,"src":"ocr","raw":"Rillaboom fainted!","type":"hp","conf":"likely","side":"you","slot":"right","species":"Rillaboom","from":18,"to":0,"unit":"pct","cause":"move"}
+{"t":1348.5,"src":"ocr","raw":"Rillaboom fainted!","type":"faint","conf":"sure","side":"you","slot":"right","species":"Rillaboom"}
+{"t":1352.5,"src":"ocr","raw":"Incineroar used Flare Blitz!","type":"move","conf":"likely","side":"you","slot":"left","species":"Incineroar","move":"Flare Blitz","targets":["opp.left"]}
+{"t":1357.75,"src":"ocr","raw":"It's super effective on the opposing Whimsicott!","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Whimsicott","from":47,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":1359.75,"src":"ocr","raw":"The opposing Whimsicott fainted!","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Whimsicott"}
+{"t":1474.75,"src":"ocr","raw":"Sneasler used Fake Out!","type":"move","conf":"likely","side":"you","slot":null,"species":"Sneasler","move":"Fake Out","targets":[]}
+{"t":1478,"src":"ocr","raw":"The opposing Whimsicott used Moonblast!","type":"move","conf":"sure","side":"opp","slot":null,"species":"Whimsicott","move":"Moonblast","targets":[]}
+{"t":1482.25,"src":"ocr","raw":"The opposing Glimmora used Power Gem!","type":"move","conf":"likely","side":"opp","slot":null,"species":"Glimmora","move":"Power Gem","targets":["you.left"]}
+{"t":1484.25,"src":"ocr","raw":"Incineroar fainted!","type":"hp","conf":"likely","side":"you","slot":"left","species":"Incineroar","from":39,"to":0,"unit":"pct","cause":"move"}
+{"t":1484.25,"src":"ocr","raw":"Incineroar fainted!","type":"faint","conf":"sure","side":"you","slot":"left","species":"Incineroar"}
+{"t":1485.75,"src":"ocr","raw":"Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"you","slot":null,"species":"Floette","move":"Dazzling Gleam","targets":[]}
+{"t":1488,"src":"ocr","raw":"The opposing Glimmora fainted!","type":"hp","conf":"likely","side":"opp","slot":null,"species":"Glimmora","from":null,"to":0,"unit":"pct","cause":"move"}
+{"t":1488,"src":"ocr","raw":"The opposing Glimmora fainted!","type":"faint","conf":"sure","side":"opp","slot":null,"species":"Glimmora"}
+{"t":1489.75,"src":"ocr","raw":"The opposing Floette used Dazzling Gleam!","type":"move","conf":"likely","side":"opp","slot":null,"species":"Floette-Mega","move":"Dazzling Gleam","targets":[]}
+{"t":1492,"src":"ocr","raw":"Floette fainted!","type":"hp","conf":"likely","side":"you","slot":null,"species":"Floette","from":null,"to":0,"unit":"pct","cause":"move"}
+{"t":1492,"src":"ocr","raw":"Floette fainted!","type":"faint","conf":"sure","side":"you","slot":null,"species":"Floette"}
+{"t":1493.75,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":null,"species":"Sneasler","move":"Dire Claw","targets":[]}
+{"t":1495.5,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"hp","conf":"likely","side":"opp","slot":null,"species":"Indeedee","from":null,"to":0,"unit":"pct","cause":"move"}
+{"t":1495.5,"src":"ocr","raw":"The opposing Indeedee fainted!","type":"faint","conf":"sure","side":"opp","slot":null,"species":"Indeedee"}
+{"t":1496.75,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":null,"species":"Sneasler","move":"Dire Claw","targets":[]}
+{"t":1502.5,"src":"ocr","raw":"Sneasler used Dire Claw!","type":"move","conf":"likely","side":"you","slot":null,"species":"Sneasler","move":"Dire Claw","targets":[]}
+{"t":1507.75,"src":"ocr","raw":"• Liam sent out Glimmora the Great Friend!","type":"switch","conf":"sure","side":"opp","slot":"right","out":"Whimsicott","in":"Glimmora"}
+{"t":1509.5,"src":"ocr","raw":"Rillaboom used High Horsepower!","type":"move","conf":"likely","side":"you","slot":null,"species":"Rillaboom","move":"High Horsepower","targets":[]}
+{"t":1515.75,"src":"ocr","raw":"Rillaboom used Grassy Glide!","type":"move","conf":"likely","side":"you","slot":null,"species":"Rillaboom","move":"Grassy Glide","targets":[]}
+{"t":1520.25,"src":"ocr","raw":"Incineroar used Flare Blitz!","type":"move","conf":"likely","side":"you","slot":null,"species":"Incineroar","move":"Flare Blitz","targets":[]}
