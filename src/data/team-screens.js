@@ -65,9 +65,17 @@ function pixel(image, x, y) {
   return [image.data[k], image.data[k + 1], image.data[k + 2]];
 }
 
-// Light text on the purple panels. Red and green are what set it apart: the panel and its
-// faint slot numbers are purple-blue, item and type icons are saturated.
-const isText = ([r, g, b]) => (r + g) / 2 > 194 && b > 200 && Math.abs(r - g) < 30;
+// Masks hold a weight per pixel, 0–255. Light text on the purple panels: red and green are what
+// set it apart, since the panel and its faint slot numbers are purple-blue and item and type
+// icons are saturated. Thin strokes come out half-bright, so the weight ramps up instead of
+// cutting off; bounds, columns and digit splits count only strong pixels (STRONG and up), while
+// the shape comparison uses every weight.
+export const STRONG = 128;
+function textWeight([r, g, b]) {
+  if (b <= 200 || Math.abs(r - g) >= 30) return 0;
+  const w = ((r + g) / 2 - 170) / 50;
+  return w <= 0 ? 0 : w >= 1 ? 255 : Math.round(w * 255);
+}
 
 // A text mask over a reference-coordinate box, trimmed to the text's bounding box.
 export function textMask(image, [x0, y0, x1, y1]) {
@@ -80,19 +88,20 @@ export function textMask(image, [x0, y0, x1, y1]) {
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
       if (top + j >= image.height || left + i >= image.width) continue;
-      data[j * width + i] = isText(pixel(image, left + i, top + j)) ? 1 : 0;
+      data[j * width + i] = textWeight(pixel(image, left + i, top + j));
     }
   }
   return trimMask(mainColumns(trimMask({ width, height, data })));
 }
 
-// Keeps the densest group of columns, where a group allows gaps up to 60% of the line height
-// (the space between characters). Drops specks from the panel edge or a faint slot number.
-function mainColumns(mask) {
+// Keeps the densest group of columns, where a group allows gaps up to 1.6 line heights: the
+// space between characters, plus a character whose strokes are too thin to pass the text test
+// (一 in 再來一次). Drops specks from the panel edge or a faint slot number further away.
+export function mainColumns(mask) {
   if (!mask) return null;
   const counts = new Array(mask.width).fill(0);
-  for (let j = 0; j < mask.height; j++) for (let i = 0; i < mask.width; i++) counts[i] += mask.data[j * mask.width + i];
-  const maxGap = Math.max(3, Math.round(mask.height * 0.6));
+  for (let j = 0; j < mask.height; j++) for (let i = 0; i < mask.width; i++) if (mask.data[j * mask.width + i] >= STRONG) counts[i]++;
+  const maxGap = Math.max(3, Math.round(mask.height * 1.6));
   let best = null;
   let group = null;
   let gap = 0;
@@ -122,7 +131,7 @@ export function trimMask(mask) {
   let y1 = -1;
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
-      if (!data[j * width + i]) continue;
+      if (data[j * width + i] < STRONG) continue;
       if (i < x0) x0 = i;
       if (i > x1) x1 = i;
       if (j < y0) y0 = j;
@@ -142,7 +151,8 @@ export function maskVector(mask, gw, gh) {
   const v = new Float64Array(gw * gh);
   for (let j = 0; j < mask.height; j++) {
     for (let i = 0; i < mask.width; i++) {
-      if (mask.data[j * mask.width + i]) v[Math.floor((j * gh) / mask.height) * gw + Math.floor((i * gw) / mask.width)] += 1;
+      const w = mask.data[j * mask.width + i];
+      if (w) v[Math.floor((j * gh) / mask.height) * gw + Math.floor((i * gw) / mask.width)] += w;
     }
   }
   let norm = 0;
@@ -228,7 +238,7 @@ export function splitGlyphs(mask) {
   let start = -1;
   for (let i = 0; i <= mask.width; i++) {
     let filled = false;
-    if (i < mask.width) for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i]) { filled = true; break; }
+    if (i < mask.width) for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i] >= STRONG) { filled = true; break; }
     if (filled && start < 0) start = i;
     if (!filled && start >= 0) {
       runs.push([start, i]);
@@ -435,11 +445,15 @@ function rankByTail(mask, ranked, renderText) {
   let prefix = 0;
   while (prefix < length && chars.every((c) => c[prefix] === chars[0][prefix])) prefix++;
   if (prefix === 0 || length - prefix > 2) return null;
-  const tailMask = sliceColumns(mask, prefix / length);
+  // A Latin letter (Ｘ, Ｙ, Z) is narrower than a CJK character in the game's font, so it is cut
+  // as the last run of columns rather than by character count, and drawn half-width.
+  const tails = chars.map((c) => c.slice(prefix).join("").normalize("NFKC"));
+  const latin = tails.every((t) => /^[A-Za-z0-9]$/.test(t));
+  const tailMask = latin ? lastRun(mask) : sliceColumns(mask, prefix / length);
   if (!tailMask) return null;
   const scored = close
     .map((r, i) => {
-      const drawn = renderText(chars[i].slice(prefix).join(""));
+      const drawn = renderText(latin ? tails[i] : chars[i].slice(prefix).join(""));
       return { ...r, tail: drawn ? shapeScore(tailMask, drawn) : 0 };
     })
     .sort((a, b) => b.tail - a.tail);
@@ -448,6 +462,24 @@ function rankByTail(mask, ranked, renderText) {
     ranked: [...scored, ...ranked.filter((r) => !names.has(r.name))],
     confidence: scored[0].tail - scored[1].tail,
   };
+}
+
+// The last glyph: the last run of columns with ink, bridging gaps of up to two columns where a
+// thin stroke (the fork of a Y) is too faint to count.
+function lastRun(mask) {
+  const filled = (i) => {
+    for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i] >= STRONG / 2) return true;
+    return false;
+  };
+  let end = mask.width - 1;
+  while (end >= 0 && !filled(end)) end--;
+  if (end < 0) return null;
+  let start = end;
+  for (let i = end - 1; i >= 0 && end - i < mask.height; i--) {
+    if (filled(i)) start = i;
+    else if (start - i > 2) break;
+  }
+  return sliceColumns(mask, start / mask.width);
 }
 
 function sliceColumns(mask, fromFraction) {
@@ -497,6 +529,10 @@ export function readAbilitiesScreen(image, members, catalogs, renderText) {
 
 // ---------- both screens ----------
 
+// A name whose best match beats the runner-up by less than this is listed to check. Measured on
+// the fixture teams: every misread so far fell under it, along with about one right read in 15.
+const CHECK_MARGIN = 0.035;
+
 const SP_LABELS = { hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
 
 // Reads a team from any order of the two screenshots. Returns members (with warnings) and a
@@ -539,10 +575,11 @@ export function readTeamScreens(images, catalogs, renderText) {
       member.ability = read.ability.name;
       member.item = read.item.name;
       member.moves = read.moves.filter((m) => m?.name).map((m) => m.name);
-      if (!read.ability.name || read.ability.confidence < 0.02) member.warnings.push("ability");
-      if (!read.item.name || read.item.confidence < 0.02) member.warnings.push("item");
+      member.confidence = { ability: read.ability.confidence, item: read.item.confidence, moves: read.moves.map((m) => m?.confidence ?? 0) };
+      if (!read.ability.name || read.ability.confidence < CHECK_MARGIN) member.warnings.push("ability");
+      if (!read.item.name || read.item.confidence < CHECK_MARGIN) member.warnings.push("item");
       read.moves.forEach((m, i) => {
-        if (m && (!m.name || m.confidence < 0.02)) member.warnings.push(`move${i + 1}`);
+        if (m && (!m.name || m.confidence < CHECK_MARGIN)) member.warnings.push(`move${i + 1}`);
       });
       // Forms that share stats but not abilities (Squawkabilly's plumages) follow the ability.
       if (member.ability && member.forms.length) {

@@ -10,6 +10,8 @@ import {
   detectScreen,
   formatMember,
   iconType,
+  mainColumns,
+  trimMask,
   matchText,
   readStatsScreen,
   readTeamScreens,
@@ -17,7 +19,7 @@ import {
 } from "../src/data/team-screens.js";
 import { parseSetPaste } from "../src/data/set-paste.js";
 
-const TEAMS = ["rotom", "charizard"].map((name) => {
+const TEAMS = ["rotom", "charizard", "raichu"].map((name) => {
   const dir = new URL(`./fixtures/team-screens/${name}/`, import.meta.url);
   return {
     name,
@@ -110,7 +112,7 @@ function fakeRenderer() {
     const data = new Uint8Array(width * 12);
     chars.forEach((ch, k) => {
       const bits = glyph(ch);
-      for (let j = 0; j < 12; j++) for (let i = 0; i < 10; i++) data[j * width + k * 12 + i] = bits[j * 10 + i];
+      for (let j = 0; j < 12; j++) for (let i = 0; i < 10; i++) data[j * width + k * 12 + i] = bits[j * 10 + i] * 255;
     });
     return { width, height: 12, data };
   };
@@ -124,4 +126,18 @@ test("names that differ only at the end are told apart by that end, not by usage
   ];
   assert.equal(matchText(render("噴火龍進化石Ｘ"), candidates, render).name, "Charizardite X");
   assert.equal(matchText(render("噴火龍進化石Ｙ"), candidates, render).name, "Charizardite Y");
+});
+
+test("a character too faint to read does not cut a name short, but distant specks are dropped", () => {
+  // 再來 · (faint 一, one character wide) · 次 · … far-off speck. Height 20, characters 20 wide.
+  const width = 300;
+  const height = 20;
+  const data = new Uint8Array(width * height);
+  const block = (x0, x1) => { for (let j = 0; j < height; j++) for (let i = x0; i < x1; i++) data[j * width + i] = 255; };
+  block(0, 20);
+  block(24, 44);
+  block(72, 92);
+  block(290, 292);
+  const kept = trimMask(mainColumns({ width, height, data }));
+  assert.equal(kept.width, 92);
 });

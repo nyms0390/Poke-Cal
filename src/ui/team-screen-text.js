@@ -22,7 +22,7 @@ export function createTextRenderer() {
     context.fillText(text, 4, 12);
     const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
     const data = new Uint8Array(canvas.width * canvas.height);
-    for (let i = 0; i < data.length; i++) data[i] = pixels[i * 4] > 128 ? 1 : 0;
+    for (let i = 0; i < data.length; i++) data[i] = pixels[i * 4] > 128 ? 255 : 0;
     const mask = trimMask({ width: canvas.width, height: canvas.height, data });
     cache.set(text, mask);
     return mask;
