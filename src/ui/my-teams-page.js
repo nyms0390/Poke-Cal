@@ -7,6 +7,7 @@ import {
   splitTeamPaste,
 } from "../data/my-teams.js";
 import { formatSetPaste, parseSetPaste } from "../data/set-paste.js";
+import { readTeamScreens } from "../data/team-screens.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { formatSetWarning } from "../i18n-formatters.js";
 import { getLocale, initI18n, localizedName, onLocaleChange, t, translateSubtree } from "../i18n.js";
@@ -16,6 +17,7 @@ import { browserStorage } from "./components.js";
 import { memberSetRow, teamMemberSprites } from "./my-teams-ui.js";
 import { mountSetEditor } from "./set-editor.js";
 import { mountSetSheet } from "./set-sheet.js";
+import { createTextRenderer, imageFilePixels } from "./team-screen-text.js";
 
 const elements = {
   status: document.querySelector("#status"),
@@ -40,6 +42,9 @@ const elements = {
   paste: document.querySelector("#my-teams-paste"),
   parse: document.querySelector("#my-teams-parse"),
   cancel: document.querySelector("#my-teams-cancel"),
+  screensButton: document.querySelector("#my-teams-screens-button"),
+  screensInput: document.querySelector("#my-teams-screens-input"),
+  screensStatus: document.querySelector("#my-teams-screens-status"),
 };
 
 const store = createMyTeamStore(browserStorage());
@@ -107,6 +112,12 @@ elements.open.addEventListener("click", () => {
 elements.dialogClose.addEventListener("click", () => elements.dialog.close());
 elements.cancel.addEventListener("click", () => elements.dialog.close());
 elements.paste.addEventListener("input", renderParse);
+elements.screensButton.addEventListener("click", () => elements.screensInput.click());
+elements.screensInput.addEventListener("change", () => {
+  const files = [...elements.screensInput.files];
+  elements.screensInput.value = "";
+  if (files.length) readScreens(files);
+});
 elements.form.addEventListener("submit", (event) => {
   event.preventDefault();
   saveDialog();
@@ -256,6 +267,7 @@ function openDialog(team) {
   elements.nameInput.value = team?.name ?? "";
   elements.nameInput.placeholder = t("myTeams.defaultName", { number: store.listTeams().length + 1 });
   elements.paste.value = team ? formatTeamPaste(team) : "";
+  elements.screensStatus.textContent = "";
   renderParse();
   elements.dialog.showModal();
   elements.nameInput.focus();
@@ -286,6 +298,48 @@ function renderParse() {
     line.textContent = text;
     return line;
   }));
+}
+
+// Reads the game's two team screens into the paste (src/data/team-screens.js). Uncertain
+// fields are listed so they get checked before saving.
+let textRenderer = null;
+async function readScreens(files) {
+  if (!catalogs) return;
+  elements.screensButton.disabled = true;
+  elements.screensStatus.textContent = t("myTeams.screensReading");
+  try {
+    const images = await Promise.all(files.map(imageFilePixels));
+    // Let the status paint before the synchronous matching runs.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    textRenderer ??= createTextRenderer();
+    const result = readTeamScreens(images, catalogs, textRenderer);
+    if (!result.screens.length) {
+      elements.screensStatus.textContent = t("myTeams.screensNone");
+      return;
+    }
+    if (!result.members.length) {
+      elements.screensStatus.textContent = t(result.warnings.includes("noStats") ? "myTeams.screensNoStats" : "myTeams.screensNone");
+      return;
+    }
+    elements.paste.value = result.paste;
+    renderParse();
+    const messages = [t("myTeams.screensRead", { count: result.members.length })];
+    if (result.warnings.includes("noAbilities")) messages.push(t("myTeams.screensNoAbilities"));
+    const checks = result.members
+      .filter((entry) => entry.warnings.length)
+      .map((entry) => t("myTeams.screensCheckEntry", { name: localizedName(entry.species), fields: entry.warnings.map(screenFieldLabel) }));
+    if (checks.length) messages.push(t("myTeams.screensCheck", { list: checks.join(t("myTeams.screensCheckJoin")) }));
+    elements.screensStatus.textContent = messages.join(t("myTeams.screensSentenceJoin"));
+  } catch {
+    elements.screensStatus.textContent = t("myTeams.screensFailed");
+  } finally {
+    elements.screensButton.disabled = false;
+  }
+}
+
+function screenFieldLabel(field) {
+  const move = /^move(\d)$/.exec(field);
+  return move ? t("myTeams.screensField.move", { number: Number(move[1]) }) : t(`myTeams.screensField.${field}`);
 }
 
 function saveDialog() {

@@ -8637,6 +8637,28 @@ dialog.my-teams-dialog::backdrop {
   margin-top: 8px;
 }
 
+.my-teams-screens {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.my-teams-screens .teams-search-help,
+.my-teams-screens-status {
+  margin: 0;
+}
+
+.my-teams-screens-status {
+  color: var(--muted);
+  font-size: var(--type-supporting);
+  overflow-wrap: break-word;
+}
+
+.my-teams-screens-status:empty {
+  display: none;
+}
+
 /* My teams' member editor lives in its dialog; hide it until set-sheet.js has moved it there.
    A saved paste has no status, so the editor's status field is left out. */
 main > .my-teams-editor {

@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Rotom-Wash", "nature": "Modest", "stats": [157, 76, 127, 172, 127, 108], "sp": [32, 0, 0, 32, 0, 2], "ability": "Levitate", "item": "Sitrus Berry", "moves": ["Thunderbolt", "Hydro Pump", "Volt Switch", "Will-O-Wisp"] },
+    { "species": "Sceptile", "nature": "Adamant", "stats": [147, 150, 85, 112, 136, 141], "sp": [2, 32, 0, 0, 31, 1], "ability": "Unburden", "item": "Lum Berry", "moves": ["Leaf Blade", "Acrobatics", "Earthquake", "Detect"] },
+    { "species": "Squawkabilly", "nature": "Jolly", "stats": [189, 116, 73, 58, 74, 155], "sp": [32, 0, 2, 0, 3, 29], "ability": "Intimidate", "item": "Choice Scarf", "moves": ["Brave Bird", "Final Gambit", "Parting Shot", "Swagger"] },
+    { "species": "Indeedee-F", "nature": "Relaxed", "stats": [177, 75, 128, 115, 127, 94], "sp": [32, 0, 32, 0, 2, 0], "ability": "Psychic Surge", "item": "Rocky Helmet", "moves": ["Psychic", "Follow Me", "Helping Hand", "Trick Room"] },
+    { "species": "Armarouge", "nature": "Modest", "stats": [189, 72, 124, 194, 101, 95], "sp": [29, 0, 4, 32, 1, 0], "ability": "Flash Fire", "item": "Life Orb", "moves": ["Expanding Force", "Armor Cannon", "Trick Room", "Protect"] },
+    { "species": "Annihilape", "nature": "Adamant", "stats": [209, 176, 108, 63, 117, 112], "sp": [24, 25, 8, 0, 7, 2], "ability": "Defiant", "item": "Leftovers", "moves": ["Rage Fist", "Drain Punch", "Bulk Up", "Protect"] }
+  ]
+}

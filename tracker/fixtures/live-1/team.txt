@@ -14,7 +14,7 @@ Adamant Nature
 - Leaf Blade
 - Acrobatics
 - Earthquake
-- Foresight
+- Detect
 
 Squawkabilly @ Choice Scarf
 Ability: Intimidate
