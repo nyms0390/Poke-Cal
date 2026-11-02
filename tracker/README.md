@@ -17,6 +17,20 @@ diff <(jq -c 'del(.video)' /tmp/replay/turn-log.jsonl) <(jq -c 'del(.video)' fix
 node parse.mjs fixtures/ipad-ladder-1/ocr.jsonl /tmp/ipad.jsonl && node compare.mjs /tmp/ipad.jsonl
 ```
 
+## Review a match
+
+```sh
+node review.mjs out-live-1/turn-log.jsonl review.md --team my-team.txt   # --json review.json for the raw checks
+```
+
+`review.mjs` replays the turn log with PokéCal's engine and, for each opposing Pokémon, tests every listed Smogon spread and NCP set × every item with at least 2% use (or the revealed item) against:
+
+- **Move order**: two moves of the same priority, one per side, mean the first mover is faster (slower under Trick Room). Moves whose priority depends on the field or an ability (Grassy Glide, Prankster, Triage, Gale Wings) are skipped.
+- **Damage it dealt**: your HP before and after, with your exact set, stat stages from the log (kept through Mega Evolution), weather, terrain and spread targets; a logged crit uses crit damage, otherwise a crit is allowed and noted.
+- **Damage it took**: the % drop, ±1.5% for rounding.
+
+The review lists the sets that fit everything, the most used sets that were ruled out, and a turn-by-turn list of the readings. `--team` is your team as a Showdown paste; without it each of your Pokémon gets a listed spread that matches the HP the game showed, and readings that depend on it are shown but not counted. HP that changes in the middle of a turn without a message (`to: null` in the log) can't be checked yet.
+
 Takes a recorded Pokémon Champions match (zh-TW UI) and writes a JSON Lines turn log in the format from `docs/battle-tracker.md` "Turn log format" (branch `claude/project-thread-nv0w6s`). No new dependencies: it uses system `swift` (Apple Vision), Homebrew `ffmpeg`, and `node`. It only reads from the PokéCal repo (`public/web/{pokemon,moves,items,abilities}.json`).
 
 ## Run

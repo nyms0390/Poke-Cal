@@ -1,6 +1,6 @@
 # Battle tracker
 
-Status: code-only prototype in [`tracker/`](../tracker/README.md) (macOS; file, live window and live display capture). The review step (running the engine on the turn log) is not built yet. The decision is in [DECISIONS.md](DECISIONS.md) "Scope and product".
+Status: code-only prototype in [`tracker/`](../tracker/README.md) (macOS; file, live window and live display capture). `tracker/review.mjs` runs the engine on the turn log (step 6) and writes a Markdown review. The decision is in [DECISIONS.md](DECISIONS.md) "Scope and product".
 
 Pokémon Champions has no replays, so a match can't be reviewed after it ends. The tracker reads a recording of the game screen on the Mac, writes a turn log, shows Speed order and KO checks during play, and keeps the log for a review after the match. It plays the role Hearthstone Deck Tracker plays for Hearthstone, but it reads the video, because the game exposes no logs.
 
