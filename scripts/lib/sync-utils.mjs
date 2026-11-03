@@ -5,6 +5,11 @@ export const DEFAULT_FETCH_TIMEOUT_MS = 60_000;
 export const DEFAULT_FETCH_RETRIES = 3;
 export const DEFAULT_RETRY_BASE_DELAY_MS = 1000;
 const MAX_RETRY_DELAY_MS = 60_000;
+// HTTP 429 gets its own, longer budget: Limitless throttles GitHub's shared runner IPs for
+// minutes at a time, so a few seconds of backoff just spends the retries while still limited.
+export const DEFAULT_RATE_LIMIT_RETRIES = 6;
+const RATE_LIMIT_BASE_DELAY_MS = 15_000;
+const MAX_RATE_LIMIT_DELAY_MS = 300_000;
 
 export function argumentValue(argv, flag) {
   const index = argv.indexOf(flag);
@@ -85,12 +90,14 @@ export async function fetchWithRetry(
     headers,
     timeoutMs = DEFAULT_FETCH_TIMEOUT_MS,
     retries = DEFAULT_FETCH_RETRIES,
+    rateLimitRetries = DEFAULT_RATE_LIMIT_RETRIES,
     baseDelayMs = DEFAULT_RETRY_BASE_DELAY_MS,
     fetchImpl = globalThis.fetch,
     sleep = delay,
   } = {},
 ) {
   let lastError;
+  let rateLimited = 0;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     let response;
     try {
@@ -112,6 +119,12 @@ export async function fetchWithRetry(
       });
       await discardBody(response);
       if (!retryable) throw lastError;
+      if (response.status === 429 && rateLimited < rateLimitRetries) {
+        await sleep(rateLimitDelay(response, rateLimited));
+        rateLimited += 1;
+        attempt -= 1; // 429s use their own budget, not the general retries.
+        continue;
+      }
       if (attempt < retries) await sleep(retryDelay(response, attempt, baseDelayMs));
       continue;
     }
@@ -170,21 +183,32 @@ export function looksLikeHtml(text) {
 // Honors Retry-After (seconds) and the IETF `RateLimit: ...;t=<seconds>` header used by
 // Limitless, otherwise exponential backoff.
 export function retryDelay(response, attempt, baseDelayMs = DEFAULT_RETRY_BASE_DELAY_MS) {
+  const hinted = serverRetryHint(response);
+  if (hinted !== null) return Math.min(hinted, MAX_RETRY_DELAY_MS);
+  return backoffDelay(attempt, baseDelayMs);
+}
+
+// Milliseconds the server asks us to wait, or null when it gives no hint.
+function serverRetryHint(response) {
   const retryAfterHeader = response.headers?.get?.("retry-after");
   const retryAfter =
     retryAfterHeader === null || retryAfterHeader === undefined || retryAfterHeader === ""
       ? Number.NaN
       : Number(retryAfterHeader);
-  if (Number.isFinite(retryAfter) && retryAfter >= 0) {
-    return Math.min(retryAfter * 1000, MAX_RETRY_DELAY_MS);
-  }
+  if (Number.isFinite(retryAfter) && retryAfter >= 0) return retryAfter * 1000;
   const resetSeconds = Number(
     /(?:^|;\s*)t=(\d+)/.exec(response.headers?.get?.("ratelimit") ?? "")?.[1],
   );
-  if (Number.isFinite(resetSeconds) && resetSeconds >= 0) {
-    return Math.min((resetSeconds + 1) * 1000, MAX_RETRY_DELAY_MS);
-  }
-  return backoffDelay(attempt, baseDelayMs);
+  if (Number.isFinite(resetSeconds) && resetSeconds >= 0) return (resetSeconds + 1) * 1000;
+  return null;
+}
+
+// Waits for HTTP 429: the server's own hint (Retry-After or RateLimit t=) up to 5 minutes,
+// otherwise 15 s doubling up to 5 minutes.
+export function rateLimitDelay(response, attempt) {
+  const hinted = serverRetryHint(response);
+  if (hinted !== null) return Math.min(hinted, MAX_RATE_LIMIT_DELAY_MS);
+  return Math.min(RATE_LIMIT_BASE_DELAY_MS * 2 ** attempt, MAX_RATE_LIMIT_DELAY_MS);
 }
 
 export function delay(milliseconds) {
