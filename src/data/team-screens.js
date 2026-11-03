@@ -451,6 +451,19 @@ function rankByTail(mask, ranked, renderText) {
   const latin = tails.every((t) => /^[A-Za-z0-9]$/.test(t));
   const tailMask = latin ? lastRun(mask) : sliceColumns(mask, prefix / length);
   if (!tailMask) return null;
+  if (latin && tails.length === 2 && [...tails].sort().join("") === "XY") {
+    // X and Y are told apart by their shape alone: X spreads to both lower corners, Y stands on
+    // one stem. Comparing against a system font's X and Y depends on that font (on iPad PingFang
+    // swapped them), so the glyph is measured instead.
+    const spread = lowerSpread(tailMask);
+    const want = spread > XY_SPREAD ? "X" : "Y";
+    const scored = close.map((r, i) => ({ ...r, tail: tails[i] === want ? 1 : 0 })).sort((a, b) => b.tail - a.tail);
+    const names = new Set(scored.map((r) => r.name));
+    return {
+      ranked: [...scored, ...ranked.filter((r) => !names.has(r.name))],
+      confidence: Math.abs(spread - XY_SPREAD),
+    };
+  }
   const scored = close
     .map((r, i) => {
       const drawn = renderText(latin ? tails[i] : chars[i].slice(prefix).join(""));
@@ -466,7 +479,29 @@ function rankByTail(mask, ranked, renderText) {
 
 // The last glyph: the last run of columns with ink, bridging gaps of up to two columns where a
 // thin stroke (the fork of a Y) is too faint to count.
-function lastRun(mask) {
+// Mean width of ink across the bottom quarter of a glyph, relative to the glyph's width: near 1
+// for X, near a stem's width for Y.
+const XY_SPREAD = 0.6;
+export function lowerSpread(mask) {
+  const from = Math.floor(mask.height * 0.75);
+  let sum = 0;
+  let rows = 0;
+  for (let j = from; j < mask.height; j++) {
+    let left = -1;
+    let right = -1;
+    for (let i = 0; i < mask.width; i++) {
+      if (mask.data[j * mask.width + i] < STRONG / 2) continue;
+      if (left < 0) left = i;
+      right = i;
+    }
+    if (left < 0) continue;
+    sum += (right - left + 1) / mask.width;
+    rows++;
+  }
+  return rows ? sum / rows : 0;
+}
+
+export function lastRun(mask) {
   const filled = (i) => {
     for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i] >= STRONG / 2) return true;
     return false;
