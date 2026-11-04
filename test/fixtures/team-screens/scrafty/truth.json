@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Scrafty", "nature": "Adamant", "stats": [164, 156, 135, 58, 135, 88], "sp": [24, 32, 0, 0, 0, 10], "ability": "Moxie", "item": "Scraftinite", "moves": ["Fake Out", "Knock Off", "Close Combat", "Protect"] },
+    { "species": "Dragonite", "nature": "Modest", "stats": [168, 138, 115, 167, 120, 132], "sp": [2, 0, 0, 32, 0, 32], "ability": "Multiscale", "item": "Dragoninite", "moves": ["Draco Meteor", "Thunderbolt", "Haze", "Tailwind"] },
+    { "species": "Zoroark-Hisui", "nature": "Timid", "stats": [132, 108, 80, 177, 80, 178], "sp": [2, 0, 0, 32, 0, 32], "ability": "Illusion", "item": "Choice Scarf", "moves": ["Memento", "Flamethrower", "Grass Knot", "Taunt"] },
+    { "species": "Annihilape", "nature": "Adamant", "stats": [209, 176, 108, 63, 117, 112], "sp": [24, 25, 8, 0, 7, 2], "ability": "Defiant", "item": "Leftovers", "moves": ["Rage Fist", "Drain Punch", "Bulk Up", "Protect"] },
+    { "species": "Gholdengo", "nature": "Modest", "stats": [162, 72, 117, 203, 111, 136], "sp": [0, 0, 2, 32, 0, 32], "ability": "Good as Gold", "item": "Life Orb", "moves": ["Make It Rain", "Power Gem", "Shadow Ball", "Protect"] },
+    { "species": "Whimsicott", "nature": "Timid", "stats": [137, 78, 105, 129, 95, 184], "sp": [2, 0, 0, 32, 0, 32], "ability": "Prankster", "item": "Focus Sash", "moves": ["Moonblast", "Tailwind", "Beat Up", "Protect"] }
+  ]
+}
