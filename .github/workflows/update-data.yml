@@ -19,7 +19,7 @@ jobs:
   # persisted git credentials, and no tokens in its environment.
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     permissions:
       contents: read
     steps:

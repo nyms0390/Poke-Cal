@@ -15,6 +15,7 @@ import {
   looksLikeHtml,
   readCatalogs,
   readJson,
+  rateLimitDelay,
   retryDelay,
   writeJson,
   writeJsonEntries,
@@ -191,4 +192,24 @@ test("detects HTML documents and computes rate-limit delays", () => {
   assert.equal(retryDelay(headers({ "retry-after": "3" }), 0), 3000);
   assert.equal(retryDelay(headers({ ratelimit: "limit=10, remaining=0;t=4" }), 0), 5000);
   assert.equal(retryDelay(headers({}), 2, 100), 400);
+  assert.equal(retryDelay(headers({ "retry-after": "600" }), 0), 60_000);
+
+  assert.equal(rateLimitDelay(headers({ "retry-after": "120" }), 0), 120_000);
+  assert.equal(rateLimitDelay(headers({ "retry-after": "900" }), 0), 300_000);
+  assert.deepEqual([0, 1, 2, 3, 4, 5].map((n) => rateLimitDelay(headers({}), n)), [15_000, 30_000, 60_000, 120_000, 240_000, 300_000]);
+});
+
+test("fetch helper gives 429s their own longer retry budget", async () => {
+  const sleeps = [];
+  const sleep = async (ms) => sleeps.push(ms);
+  const throttled = fakeFetch([...Array(4).fill({ status: 429 }), { body: "[]" }]);
+  assert.deepEqual(await fetchJson("https://example.test/busy", { fetchImpl: throttled.fetchImpl, retries: 1, sleep }), []);
+  assert.deepEqual(sleeps, [15_000, 30_000, 60_000, 120_000]);
+
+  const stuck = fakeFetch(Array(20).fill({ status: 429 }));
+  await assert.rejects(
+    fetchJson("https://example.test/busy", { fetchImpl: stuck.fetchImpl, retries: 1, rateLimitRetries: 2, sleep: noSleep }),
+    (error) => error.status === 429 && error.retryable,
+  );
+  assert.equal(stuck.calls.length, 4);
 });
