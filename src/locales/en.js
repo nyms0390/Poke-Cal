@@ -611,6 +611,9 @@ export const EN_MESSAGES = {
   "myTeams.screensCheck": ({ list }) => `Check before saving: ${list}.`,
   "myTeams.screensNoStats": "Add the Stats (狀態) screenshot too. It holds the SP and nature, which identify each Pokémon.",
   "myTeams.screensNoAbilities": "Only the Stats screen was found, so the ability, item and moves are missing. Add the Abilities (能力) screenshot to fill them.",
+  "myTeams.screensUnidentified": ({ count }) => (count === 1
+    ? "One Pokémon couldn't be identified from its stats and was left out; add it by hand."
+    : `${count} Pokémon couldn't be identified from their stats and were left out; add them by hand.`),
   "myTeams.screensNone": "These don't look like the team screens, or the screenshot size isn't supported yet. Use full iPad screenshots (2360 × 1640).",
   "myTeams.screensFailed": "Couldn't read these images.",
   "myTeams.screensCheckEntry": ({ name, fields }) => `${name} (${fields.join(", ")})`,

@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Whimsicott", "nature": "Timid", "stats": [137, 78, 105, 129, 95, 184], "sp": [2, 0, 0, 32, 0, 32], "ability": "Prankster", "item": "Focus Sash", "moves": ["Moonblast", "Tailwind", "Beat Up", "Protect"] },
+    { "species": "Absol", "nature": "Jolly", "stats": [161, 161, 81, 85, 81, 139], "sp": [21, 11, 1, 0, 1, 32], "ability": "Justified", "item": "Absolite Z", "moves": ["Shadow Claw", "Night Slash", "Icy Wind", "Detect"] },
+    { "species": "Indeedee-F", "nature": "Relaxed", "stats": [177, 75, 128, 115, 127, 94], "sp": [32, 0, 32, 0, 2, 0], "ability": "Psychic Surge", "item": "Rocky Helmet", "moves": ["Psychic", "Follow Me", "Helping Hand", "Trick Room"] },
+    { "species": "Armarouge", "nature": "Modest", "stats": [189, 72, 125, 194, 100, 95], "sp": [29, 0, 5, 32, 0, 0], "ability": "Flash Fire", "item": "Colbur Berry", "moves": ["Heat Wave", "Expanding Force", "Wide Guard", "Protect"] },
+    { "species": "Kommo-o", "nature": "Impish", "stats": [177, 130, 194, 108, 125, 112], "sp": [27, 0, 32, 0, 0, 7], "ability": "Soundproof", "item": "Leftovers", "moves": ["Body Press", "Iron Defense", "Throat Chop", "Protect"] },
+    { "species": "Gholdengo", "nature": "Modest", "stats": [193, 72, 121, 190, 111, 113], "sp": [31, 0, 6, 20, 0, 9], "ability": "Good as Gold", "item": "Life Orb", "moves": ["Make It Rain", "Shadow Ball", "Nasty Plot", "Protect"] }
+  ]
+}

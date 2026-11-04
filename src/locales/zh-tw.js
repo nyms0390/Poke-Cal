@@ -612,6 +612,7 @@ export const ZH_TW_MESSAGES = {
   "myTeams.screensCheck": ({ list }) => `儲存前請檢查：${list}。`,
   "myTeams.screensNoStats": "請一併加入「狀態」截圖。上面的 SP 和性格是辨認每隻寶可夢的依據。",
   "myTeams.screensNoAbilities": "只找到「狀態」畫面，所以缺少特性、道具和招式。加入「能力」截圖即可補上。",
+  "myTeams.screensUnidentified": ({ count }) => `有 ${count} 隻寶可夢無法從能力值辨識，已略過，請手動加入。`,
   "myTeams.screensNone": "這些圖片看起來不是隊伍畫面，或尚未支援這個截圖尺寸。請使用 iPad 完整截圖（2360 × 1640）。",
   "myTeams.screensFailed": "無法讀取這些圖片。",
   "myTeams.screensCheckEntry": ({ name, fields }) => `${name}（${fields.join("、")}）`,

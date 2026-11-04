@@ -325,6 +325,8 @@ async function readScreens(files) {
     renderParse();
     const messages = [t("myTeams.screensRead", { count: result.members.length })];
     if (result.warnings.includes("noAbilities")) messages.push(t("myTeams.screensNoAbilities"));
+    const unidentified = result.warnings.find((w) => w?.unidentified)?.unidentified;
+    if (unidentified) messages.push(t("myTeams.screensUnidentified", { count: unidentified }));
     const checks = result.members
       .filter((entry) => entry.warnings.length)
       .map((entry) => t("myTeams.screensCheckEntry", { name: localizedName(entry.species), fields: entry.warnings.map(screenFieldLabel) }));

@@ -123,7 +123,7 @@ export function mainColumns(mask) {
   return { width: mask.width, height: mask.height, data };
 }
 
-export function trimMask(mask) {
+export function trimMask(mask, threshold = STRONG) {
   const { width, height, data } = mask;
   let x0 = width;
   let x1 = -1;
@@ -131,7 +131,7 @@ export function trimMask(mask) {
   let y1 = -1;
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
-      if (data[j * width + i] < STRONG) continue;
+      if (data[j * width + i] < threshold) continue;
       if (i < x0) x0 = i;
       if (i > x1) x1 = i;
       if (j < y0) y0 = j;
@@ -238,7 +238,8 @@ export function splitGlyphs(mask) {
   let start = -1;
   for (let i = 0; i <= mask.width; i++) {
     let filled = false;
-    if (i < mask.width) for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i] >= STRONG) { filled = true; break; }
+    // Faint ink counts, so a 7 whose top bar is faint stays one glyph.
+    if (i < mask.width) for (let j = 0; j < mask.height; j++) if (mask.data[j * mask.width + i] >= STRONG / 2) { filled = true; break; }
     if (filled && start < 0) start = i;
     if (!filled && start >= 0) {
       runs.push([start, i]);
@@ -257,7 +258,9 @@ export function splitGlyphs(mask) {
       const w = b - a;
       const data = new Uint8Array(w * mask.height);
       for (let j = 0; j < mask.height; j++) for (let k = 0; k < w; k++) data[j * w + k] = mask.data[j * mask.width + a + k];
-      return trimMask({ width: w, height: mask.height, data });
+      // Trimmed on faint ink too: the stem of a thin 1 can be faint all the way down, and a glyph
+      // trimmed to its strong top would be dropped as too short.
+      return trimMask({ width: w, height: mask.height, data }, STRONG / 2);
     })
     .filter(Boolean);
 }
@@ -414,6 +417,7 @@ function zhName(entry) {
 // percentage. The bundled name font only resembles the game's, so close shapes are settled by a small
 // usage prior: a name people actually run wins a near tie over one nobody does.
 export const USAGE_PRIOR = 0.08;
+const USAGE_SAMPLE_HALF = 10;
 export function matchText(mask, candidates, renderText) {
   if (!mask || !candidates.length) return { name: null, confidence: 0, alternatives: [] };
   const ranked = candidates
@@ -535,7 +539,11 @@ export function readAbilitiesScreen(image, members, catalogs, renderText) {
     const species = member.species;
     const base = species.baseSpecies ?? species.name;
     const usage = usageOf(species, catalogs.pokemon);
-    const pct = (list, name) => list?.find((e) => normalizeId(e.name) === normalizeId(name))?.usagePercent ?? 0;
+    // A species seen on only a few teams has noisy percentages (one team makes a move 100%), so its
+    // usage counts for less, shrinking toward nothing as the sample does.
+    const sample = Math.max(0, ...(usage.moves ?? []).map((m) => m.usageCount ?? 0));
+    const weight = sample / (sample + USAGE_SAMPLE_HALF);
+    const pct = (list, name) => weight * (list?.find((e) => normalizeId(e.name) === normalizeId(name))?.usagePercent ?? 0);
     const abilities = (member.abilityOptions ?? species.abilities ?? [])
       .map((name) => ({ name, zh: zhName(abilityByName.get(normalizeId(name))), usage: pct(usage.abilities, name) }))
       .filter((c) => c.zh);
@@ -626,6 +634,9 @@ export function readTeamScreens(images, catalogs, renderText) {
   });
   if (!byScreen.abilities) warnings.push("noAbilities");
   const found = members.filter((m) => m?.species);
+  // A panel whose stats match no Pokémon is left out of the paste, so say so rather than drop it.
+  const missing = members.filter((m) => m && !m.species).length;
+  if (missing) warnings.push({ unidentified: missing });
   return { members: found, paste: found.map(formatMember).join("\n\n"), warnings, screens: Object.keys(byScreen) };
 }
 
