@@ -1,6 +1,7 @@
 // Stages the browser site for GitHub Pages into _site/ (or --out <dir>): the HTML pages,
-// src/, the slim catalogs in public/web/, and public/icons/. Tests, docs, MCP, scripts, agent
-// skills, and the full public/*.json catalogs are deliberately not published.
+// src/, the slim catalogs in public/web/, public/icons/, and the screenshot reader's name font in
+// public/fonts/. Tests, docs, MCP, scripts, agent skills, and the full public/*.json catalogs are
+// deliberately not published.
 import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,6 +26,11 @@ export async function stageSite({ root = repositoryRoot, out = join(root, "_site
     recursive: true,
     filter: (source) => skipHidden(source) && !source.endsWith(".md"),
   });
+  // The screenshot reader's name font and its licence.
+  await mkdir(join(outDirectory, "public", "fonts"), { recursive: true });
+  for (const name of ["pokecal-names.woff2", "OFL.txt"]) {
+    await cp(join(root, "public", "fonts", name), join(outDirectory, "public", "fonts", name));
+  }
   await mkdir(join(outDirectory, "public", "web"), { recursive: true });
   for (const name of WEB_CATALOG_NAMES) {
     await cp(

@@ -27,7 +27,8 @@ const base = process.env.POKECAL_URL ?? "http://127.0.0.1:4173";
   const truth = JSON.parse(fs.readFileSync(path.join(fixtures, "truth.json"), "utf8")).team;
   const members = await page.evaluate(async ({ sources, swapXY }) => {
     const { readTeamScreens } = await import("/src/data/team-screens.js");
-    const { createTextRenderer } = await import("/src/ui/team-screen-text.js");
+    const { createTextRenderer, loadNameFont } = await import("/src/ui/team-screen-text.js");
+    if (!(await loadNameFont())) throw new Error("The bundled name font did not load.");
     const load = async (name) => (await fetch(`/public/web/${name}.json`)).json();
     const catalogs = { pokemon: await load("pokemon"), moves: await load("moves"), items: await load("items"), abilities: await load("abilities") };
     const images = [];
