@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Raichu", "nature": "Timid", "stats": [165, 99, 87, 110, 100, 169], "sp": [30, 0, 12, 0, 0, 24], "ability": "Lightning Rod", "item": "Raichunite Y", "moves": ["Zap Cannon", "Focus Blast", "Fake Out", "Protect"] },
+    { "species": "Scovillain", "nature": "Impish", "stats": [172, 128, 110, 115, 102, 97], "sp": [32, 0, 15, 0, 17, 2], "ability": "Moody", "item": "Scovillainite", "moves": ["Flare Blitz", "Leaf Storm", "Protect", "Rage Powder"] },
+    { "species": "Gholdengo", "nature": "Modest", "stats": [179, 72, 115, 187, 111, 136], "sp": [17, 0, 0, 17, 0, 32], "ability": "Good as Gold", "item": "Life Orb", "moves": ["Make It Rain", "Hex", "Nasty Plot", "Protect"] },
+    { "species": "Hydreigon", "nature": "Modest", "stats": [169, 112, 110, 194, 110, 150], "sp": [2, 0, 0, 32, 0, 32], "ability": "Levitate", "item": "Choice Scarf", "moves": ["Draco Meteor", "Dark Pulse", "Snarl", "Earth Power"] },
+    { "species": "Sneasler", "nature": "Jolly", "stats": [160, 177, 87, 54, 104, 179], "sp": [5, 27, 7, 0, 4, 23], "ability": "Unburden", "item": "Grassy Seed", "moves": ["Dire Claw", "Close Combat", "Fake Out", "Protect"] },
+    { "species": "Rillaboom", "nature": "Adamant", "stats": [207, 176, 110, 72, 108, 106], "sp": [32, 15, 0, 0, 18, 1], "ability": "Grassy Surge", "item": "Miracle Seed", "moves": ["Wood Hammer", "Grassy Glide", "High Horsepower", "Fake Out"] }
+  ]
+}

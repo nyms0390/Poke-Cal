@@ -20,7 +20,7 @@ import {
 } from "../src/data/team-screens.js";
 import { parseSetPaste } from "../src/data/set-paste.js";
 
-const TEAMS = ["rotom", "charizard", "raichu"].map((name) => {
+const TEAMS = ["rotom", "charizard", "raichu", "scovillain", "absol"].map((name) => {
   const dir = new URL(`./fixtures/team-screens/${name}/`, import.meta.url);
   return {
     name,
