@@ -5,6 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { decodePng } from "../scripts/png.mjs";
+import { nameFontCharacters } from "../scripts/build-name-font.mjs";
 import {
   PANELS,
   detectScreen,
@@ -168,4 +169,12 @@ test("a character too faint to read does not cut a name short, but distant speck
   block(290, 292);
   const kept = trimMask(mainColumns({ width, height, data }));
   assert.equal(kept.width, 92);
+});
+
+// A name with a character the font lacks still reads (the browser draws that character with a
+// system font), so a data update that adds one is reported as a todo rather than blocking deploys.
+test("the bundled name font covers every character in move, item and ability names", async (t) => {
+  const bundled = new Set(readFileSync(new URL("../public/fonts/pokecal-names.chars.txt", import.meta.url), "utf8").trim());
+  const missing = [...(await nameFontCharacters())].filter((c) => !bundled.has(c));
+  if (missing.length) t.todo(`Run node scripts/build-name-font.mjs: the name font lacks ${missing.join("")}`);
 });

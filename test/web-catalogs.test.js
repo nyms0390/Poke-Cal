@@ -110,13 +110,14 @@ test("stages only the browser site for GitHub Pages", async () => {
     ]);
     const top = (await readdir(out)).sort();
     assert.deepEqual(top, [".nojekyll", ...pages, "public", "src"].sort());
-    assert.deepEqual((await readdir(join(out, "public"))).sort(), ["icons", "web"]);
+    assert.deepEqual((await readdir(join(out, "public"))).sort(), ["fonts", "icons", "web"]);
     assert.deepEqual(
       (await readdir(join(out, "public", "web"))).sort(),
       WEB_CATALOG_NAMES.map((name) => `${name}.json`).sort(),
     );
     assert.ok(existsSync(join(out, "src", "ui", "lookup-page.js")));
     assert.ok(existsSync(join(out, "public", "icons", "types", "fire.png")));
+    assert.deepEqual((await readdir(join(out, "public", "fonts"))).sort(), ["OFL.txt", "pokecal-names.woff2"]);
     assert.equal(existsSync(join(out, "public", "icons", "README.md")), false);
     assert.equal(existsSync(join(out, "public", "pokemon.json")), false);
   } finally {

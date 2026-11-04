@@ -17,7 +17,7 @@ import { browserStorage } from "./components.js";
 import { memberSetRow, teamMemberSprites } from "./my-teams-ui.js";
 import { mountSetEditor } from "./set-editor.js";
 import { mountSetSheet } from "./set-sheet.js";
-import { createTextRenderer, imageFilePixels } from "./team-screen-text.js";
+import { createTextRenderer, imageFilePixels, loadNameFont } from "./team-screen-text.js";
 
 const elements = {
   status: document.querySelector("#status"),
@@ -308,7 +308,7 @@ async function readScreens(files) {
   elements.screensButton.disabled = true;
   elements.screensStatus.textContent = t("myTeams.screensReading");
   try {
-    const images = await Promise.all(files.map(imageFilePixels));
+    const [images] = await Promise.all([Promise.all(files.map(imageFilePixels)), loadNameFont()]);
     // Let the status paint before the synchronous matching runs.
     await new Promise((resolve) => setTimeout(resolve, 0));
     textRenderer ??= createTextRenderer();

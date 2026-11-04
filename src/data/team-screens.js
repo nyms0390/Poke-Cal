@@ -411,7 +411,7 @@ function zhName(entry) {
 }
 
 // Best match among named candidates; each candidate is { name, zh, usage } with usage as a
-// percentage. The system font only resembles the game's, so close shapes are settled by a small
+// percentage. The bundled name font only resembles the game's, so close shapes are settled by a small
 // usage prior: a name people actually run wins a near tie over one nobody does.
 export const USAGE_PRIOR = 0.08;
 export function matchText(mask, candidates, renderText) {
