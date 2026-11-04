@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Espathra", "nature": "Timid", "stats": [190, 72, 94, 121, 94, 157], "sp": [20, 0, 14, 0, 14, 18], "ability": "Speed Boost", "item": "Focus Sash", "moves": ["Lumina Crash", "Calm Mind", "Baton Pass", "Protect"] },
+    { "species": "Excadrill", "nature": "Adamant", "stats": [187, 205, 80, 63, 85, 140], "sp": [2, 32, 0, 0, 0, 32], "ability": "Mold Breaker", "item": "Excadrite", "moves": ["High Horsepower", "Iron Head", "Rock Slide", "Protect"] },
+    { "species": "Kommo-o", "nature": "Modest", "stats": [160, 117, 145, 158, 125, 137], "sp": [10, 0, 0, 24, 0, 32], "ability": "Soundproof", "item": "Life Orb", "moves": ["Clanging Scales", "Clangorous Soul", "Aura Sphere", "Protect"] },
+    { "species": "Milotic", "nature": "Modest", "stats": [198, 72, 112, 159, 145, 101], "sp": [28, 0, 13, 25, 0, 0], "ability": "Competitive", "item": "Sitrus Berry", "moves": ["Scald", "Ice Beam", "Icy Wind", "Protect"] },
+    { "species": "Tsareena", "nature": "Adamant", "stats": [159, 177, 118, 63, 150, 93], "sp": [12, 21, 0, 0, 32, 1], "ability": "Queenly Majesty", "item": "Expert Belt", "moves": ["Power Whip", "Triple Axel", "Low Kick", "Taunt"] },
+    { "species": "Sableye", "nature": "Sassy", "stats": [157, 95, 114, 85, 110, 63], "sp": [32, 0, 19, 0, 15, 0], "ability": "Prankster", "item": "Roseli Berry", "moves": ["Foul Play", "Thunder Wave", "Will-O-Wisp", "Rain Dance"] }
+  ]
+}

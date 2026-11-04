@@ -8,7 +8,7 @@ import { decodePng } from "./png.mjs";
 import { PANELS, splitGlyphs, statCellBoxes, textMask, maskVector } from "../src/data/team-screens.js";
 import { DIGIT_GRID } from "../src/data/team-screens-digits.js";
 
-const folders = process.argv.slice(2).length ? process.argv.slice(2) : ["rotom", "charizard", "raichu", "scovillain", "absol", "scrafty"].map((n) => `test/fixtures/team-screens/${n}`);
+const folders = process.argv.slice(2).length ? process.argv.slice(2) : ["rotom", "charizard", "raichu", "scovillain", "absol", "scrafty", "espathra"].map((n) => `test/fixtures/team-screens/${n}`);
 const sums = {};
 for (const folder of folders) learn(decodePng(`${folder}/stats.png`), JSON.parse(readFileSync(`${folder}/truth.json`, "utf8")).team);
 
