@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Indeedee-F", "nature": "Relaxed", "stats": [177, 75, 128, 115, 127, 94], "sp": [32, 0, 32, 0, 2, 0], "ability": "Psychic Surge", "item": "Sitrus Berry", "moves": ["Psychic", "Follow Me", "Helping Hand", "Trick Room"] },
+    { "species": "Hatterene", "nature": "Modest", "stats": [159, 99, 120, 206, 124, 50], "sp": [27, 0, 5, 32, 1, 1], "ability": "Magic Bounce", "item": "Life Orb", "moves": ["Expanding Force", "Dazzling Gleam", "Trick Room", "Protect"] },
+    { "species": "Camerupt", "nature": "Quiet", "stats": [177, 120, 92, 172, 95, 54], "sp": [32, 0, 2, 32, 0, 0], "ability": "Solid Rock", "item": "Cameruptite", "moves": ["Eruption", "Heat Wave", "Earth Power", "Protect"] },
+    { "species": "Appletun", "nature": "Quiet", "stats": [200, 105, 109, 145, 130, 45], "sp": [15, 0, 9, 12, 30, 0], "ability": "Thick Fat", "item": "Iron Ball", "moves": ["Apple Acid", "Draco Meteor", "Sunny Day", "Sucker Punch"] },
+    { "species": "Avalugg-Hisui", "nature": "Brave", "stats": [202, 196, 206, 54, 56, 52], "sp": [32, 32, 2, 0, 0, 0], "ability": "Sturdy", "item": "Wide Lens", "moves": ["Mountain Gale", "Rock Slide", "Body Press", "Wide Guard"] },
+    { "species": "Kingambit", "nature": "Brave", "stats": [207, 205, 140, 80, 107, 63], "sp": [32, 32, 0, 0, 2, 0], "ability": "Defiant", "item": "Focus Sash", "moves": ["Kowtow Cleave", "Sucker Punch", "Iron Head", "Low Kick"] }
+  ]
+}
