@@ -83,6 +83,16 @@ test("without a text renderer the stats screen alone gives species, nature and S
   assert.deepEqual(KEYS.map((k) => parsed.sp[k]), truth[3].sp);
 });
 
+test("says how many Pokémon could not be identified instead of dropping them silently", () => {
+  const { stats, truth } = TEAMS[0];
+  // Drop the species and every form of it, since forms can share stats (Rotom).
+  const base = catalogs.pokemon.find((p) => p.name === truth[0].species).baseSpecies ?? truth[0].species;
+  const without = { ...catalogs, pokemon: catalogs.pokemon.filter((p) => (p.baseSpecies ?? p.name) !== base) };
+  const result = readTeamScreens([stats], without, null);
+  assert.equal(result.members.length, 5);
+  assert.deepEqual(result.warnings.find((w) => w?.unidentified), { unidentified: 1 });
+});
+
 test("asks for the stats screen when only the abilities screen is given", () => {
   const result = readTeamScreens([abilities], catalogs, null);
   assert.deepEqual(result.warnings, ["noStats"]);

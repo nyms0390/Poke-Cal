@@ -417,6 +417,7 @@ function zhName(entry) {
 // percentage. The bundled name font only resembles the game's, so close shapes are settled by a small
 // usage prior: a name people actually run wins a near tie over one nobody does.
 export const USAGE_PRIOR = 0.08;
+const USAGE_SAMPLE_HALF = 10;
 export function matchText(mask, candidates, renderText) {
   if (!mask || !candidates.length) return { name: null, confidence: 0, alternatives: [] };
   const ranked = candidates
@@ -538,7 +539,11 @@ export function readAbilitiesScreen(image, members, catalogs, renderText) {
     const species = member.species;
     const base = species.baseSpecies ?? species.name;
     const usage = usageOf(species, catalogs.pokemon);
-    const pct = (list, name) => list?.find((e) => normalizeId(e.name) === normalizeId(name))?.usagePercent ?? 0;
+    // A species seen on only a few teams has noisy percentages (one team makes a move 100%), so its
+    // usage counts for less, shrinking toward nothing as the sample does.
+    const sample = Math.max(0, ...(usage.moves ?? []).map((m) => m.usageCount ?? 0));
+    const weight = sample / (sample + USAGE_SAMPLE_HALF);
+    const pct = (list, name) => weight * (list?.find((e) => normalizeId(e.name) === normalizeId(name))?.usagePercent ?? 0);
     const abilities = (member.abilityOptions ?? species.abilities ?? [])
       .map((name) => ({ name, zh: zhName(abilityByName.get(normalizeId(name))), usage: pct(usage.abilities, name) }))
       .filter((c) => c.zh);
@@ -629,6 +634,9 @@ export function readTeamScreens(images, catalogs, renderText) {
   });
   if (!byScreen.abilities) warnings.push("noAbilities");
   const found = members.filter((m) => m?.species);
+  // A panel whose stats match no Pokémon is left out of the paste, so say so rather than drop it.
+  const missing = members.filter((m) => m && !m.species).length;
+  if (missing) warnings.push({ unidentified: missing });
   return { members: found, paste: found.map(formatMember).join("\n\n"), warnings, screens: Object.keys(byScreen) };
 }
 
