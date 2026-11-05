@@ -342,12 +342,13 @@ test("distinguishes independent thresholds from one legal joint allocation", () 
   });
 });
 
-test("offers a re-spread when only moving defensive SP reaches the next tier", () => {
+test("treats a tier only a re-spread reaches as unreachable and offers that re-spread", () => {
   const specialImpact = { ...ohkoMove, id: "special-impact", name: "Special Impact", category: "Special" };
   const state = withDefensiveSp(userState(), { hp: 0, def: 32, spd: 0 });
   const matchups = bulkPointMatchups(state, [{ ...threat, moves: [specialImpact] }], { budget: 46 });
   const coverage = bulkCoverage(state, matchups, { budget: 46 });
-  assert.equal(coverage.status, "possible");
+  assert.equal(coverage.status, "unreachable");
+  assert.ok(Number.isFinite(coverage.requiredSp));
   assert.deepEqual(matchups[0].points, []);
 
   const respread = coverageRespread(state, matchups, coverage, { budget: 46 });

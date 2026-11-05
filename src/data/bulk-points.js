@@ -137,23 +137,27 @@ export function bulkCoverage(userState, matchups, { budget, tables } = {}) {
   const coverageTables = tables ?? matchups.map((matchup) =>
     bulkCoverageTable(userState, matchup));
   const requiredSp = minimumJointAllocation(coverageTables, targetHits, budget)?.totalSp ?? Infinity;
+  // Possible means the SP still unassigned reaches the next tier on top of the current spread;
+  // a tier that only moving defensive SP reaches is unreachable (see coverageRespread).
   const status = currentHits >= targetHits
     ? "covered"
-    : Number.isFinite(requiredSp) ? "possible" : "unreachable";
+    : Number.isFinite(requiredSp) &&
+        reachableByAdding(coverageTables, targetHits, budget, currentDefensiveSp(userState))
+      ? "possible"
+      : "unreachable";
   return { status, originHits, targetHits, currentHits, requiredSp };
 }
 
-// For a "possible" card whose joint allocation takes SP away from a defensive stat the current
-// spread has invested, adding SP on top of the current spread cannot reach the next tier, so the
-// per-move thresholds come up empty. This returns that re-spread instead: the minimum joint
-// HP/Def/SpD allocation, with any SP left in the bulk budget given back to the stats it was taken
-// from, and the worst KO text it leaves across the card's moves. Null when no SP has to move.
+// An "unreachable" card can still have a re-spread: a joint HP/Def/SpD allocation within the bulk
+// budget that reaches the next tier by taking SP away from a defensive stat the current spread has
+// invested. This returns the one that keeps the most current SP, with any SP left in the budget
+// given back to the stats it was taken from, and the worst KO text it leaves across the card's
+// moves. Null when no allocation reaches the tier or no SP has to move.
 export function coverageRespread(userState, matchups, coverage, { budget, tables } = {}) {
-  if (coverage?.status !== "possible") return null;
+  if (coverage?.status !== "unreachable" || coverage.currentHits >= coverage.targetHits) return null;
   const coverageTables = tables ?? matchups.map((matchup) =>
     bulkCoverageTable(userState, matchup));
-  const current = Object.fromEntries(DEFENSIVE_STATS.map((stat) =>
-    [stat, clampSp(userState.sp?.[stat])]));
+  const current = currentDefensiveSp(userState);
   const allocation = closestJointAllocation(
     coverageTables,
     coverage.targetHits,
@@ -463,6 +467,23 @@ function closestJointAllocation(tables, targetHits, budget, current) {
     }
   }
   return best && { totalSp: best.totalSp, sp: best.sp };
+}
+
+function reachableByAdding(tables, targetHits, budget, current) {
+  const maximumBudget = Math.max(0, Math.min(96, Math.trunc(Number(budget) || 0)));
+  for (let hpSp = current.hp; hpSp <= 32; hpSp += 1) {
+    for (let defSp = current.def; defSp <= 32; defSp += 1) {
+      for (let spdSp = current.spd; spdSp <= 32; spdSp += 1) {
+        if (hpSp + defSp + spdSp > maximumBudget) break;
+        if (coversAll(tables, targetHits, hpSp, defSp, spdSp)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function currentDefensiveSp(userState) {
+  return Object.fromEntries(DEFENSIVE_STATS.map((stat) => [stat, clampSp(userState.sp?.[stat])]));
 }
 
 function coversAll(tables, targetHits, hpSp, defSp, spdSp) {
