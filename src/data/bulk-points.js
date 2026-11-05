@@ -136,11 +136,61 @@ export function bulkCoverage(userState, matchups, { budget, tables } = {}) {
 
   const coverageTables = tables ?? matchups.map((matchup) =>
     bulkCoverageTable(userState, matchup));
-  const requiredSp = minimumJointSp(coverageTables, targetHits, budget);
+  const requiredSp = minimumJointAllocation(coverageTables, targetHits, budget)?.totalSp ?? Infinity;
+  // Possible means the SP still unassigned reaches the next tier on top of the current spread;
+  // a tier that only moving defensive SP reaches is unreachable (see coverageRespread).
   const status = currentHits >= targetHits
     ? "covered"
-    : Number.isFinite(requiredSp) ? "possible" : "unreachable";
+    : Number.isFinite(requiredSp) &&
+        reachableByAdding(coverageTables, targetHits, budget, currentDefensiveSp(userState))
+      ? "possible"
+      : "unreachable";
   return { status, originHits, targetHits, currentHits, requiredSp };
+}
+
+// An "unreachable" card can still have a re-spread: a joint HP/Def/SpD allocation within the bulk
+// budget that reaches the next tier by taking SP away from a defensive stat the current spread has
+// invested. This returns the one that keeps the most current SP, with any SP left in the budget
+// given back to the stats it was taken from, and the worst KO text it leaves across the card's
+// moves. Null when no allocation reaches the tier or no SP has to move.
+export function coverageRespread(userState, matchups, coverage, { budget, tables } = {}) {
+  if (coverage?.status !== "unreachable" || coverage.currentHits >= coverage.targetHits) return null;
+  const coverageTables = tables ?? matchups.map((matchup) =>
+    bulkCoverageTable(userState, matchup));
+  const current = currentDefensiveSp(userState);
+  const allocation = closestJointAllocation(
+    coverageTables,
+    coverage.targetHits,
+    budget,
+    current,
+  );
+  if (!allocation) return null;
+  if (DEFENSIVE_STATS.every((stat) => allocation.sp[stat] >= current[stat])) return null;
+
+  const sp = { ...allocation.sp };
+  let leftover = Math.max(0, Math.trunc(Number(budget) || 0) - allocation.totalSp);
+  const restoreOrder = [...DEFENSIVE_STATS].sort((left, right) =>
+    (current[right] - sp[right]) - (current[left] - sp[left]));
+  for (const stat of restoreOrder) {
+    const restored = Math.min(leftover, Math.max(0, current[stat] - sp[stat]));
+    sp[stat] += restored;
+    leftover -= restored;
+  }
+
+  const state = { ...userState, sp: { ...userState.sp, ...sp } };
+  const damages = matchups.map(({ scenario }) => threatDamage(state, scenario));
+  return {
+    sp,
+    totalSp: DEFENSIVE_STATS.reduce((total, stat) => total + sp[stat], 0),
+    movedFrom: DEFENSIVE_STATS.filter((stat) => sp[stat] < current[stat]),
+    fromKoText: worstKoText(matchups.map(({ damage }) => damage.koText)),
+    koText: worstKoText(damages.map(({ koText }) => koText)),
+    maxPct: Math.max(...damages.map(({ maxPct }) => maxPct)),
+  };
+}
+
+function worstKoText(texts) {
+  return texts.reduce((left, right) => compareKoTiers(left, right) >= 0 ? left : right);
 }
 
 export function bulkCoverageTable(userState, { scenario }) {
@@ -377,7 +427,9 @@ export function koHitCount(text) {
   return label[1].toUpperCase() === "OHKO" ? 1 : Number(label[2]);
 }
 
-function minimumJointSp(tables, targetHits, budget) {
+const DEFENSIVE_STATS = ["hp", "def", "spd"];
+
+function minimumJointAllocation(tables, targetHits, budget) {
   const maximumBudget = Math.max(0, Math.min(96, Math.trunc(Number(budget) || 0)));
 
   for (let totalSp = 0; totalSp <= maximumBudget; totalSp += 1) {
@@ -385,13 +437,58 @@ function minimumJointSp(tables, targetHits, budget) {
       for (let defSp = 0; defSp <= 32; defSp += 1) {
         const spdSp = totalSp - hpSp - defSp;
         if (spdSp < 0 || spdSp > 32) continue;
-        const covered = tables.every(({ defenseStat, tiers }) =>
-          tiers[hpSp][defenseStat === "def" ? defSp : spdSp] >= targetHits);
-        if (covered) return totalSp;
+        if (coversAll(tables, targetHits, hpSp, defSp, spdSp)) {
+          return { totalSp, sp: { hp: hpSp, def: defSp, spd: spdSp } };
+        }
       }
     }
   }
-  return Infinity;
+  return null;
+}
+
+// The covering allocation within `budget` that keeps the most SP where `current` has it, then
+// the cheapest of those, so a re-spread moves as little SP as it can.
+function closestJointAllocation(tables, targetHits, budget, current) {
+  const maximumBudget = Math.max(0, Math.min(96, Math.trunc(Number(budget) || 0)));
+  let best = null;
+  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+    for (let defSp = 0; defSp <= 32; defSp += 1) {
+      for (let spdSp = 0; spdSp <= 32; spdSp += 1) {
+        const totalSp = hpSp + defSp + spdSp;
+        if (totalSp > maximumBudget) break;
+        if (!coversAll(tables, targetHits, hpSp, defSp, spdSp)) continue;
+        const sp = { hp: hpSp, def: defSp, spd: spdSp };
+        const kept = DEFENSIVE_STATS.reduce((total, stat) =>
+          total + Math.min(sp[stat], current[stat]), 0);
+        if (!best || kept > best.kept || (kept === best.kept && totalSp < best.totalSp)) {
+          best = { totalSp, sp, kept };
+        }
+      }
+    }
+  }
+  return best && { totalSp: best.totalSp, sp: best.sp };
+}
+
+function reachableByAdding(tables, targetHits, budget, current) {
+  const maximumBudget = Math.max(0, Math.min(96, Math.trunc(Number(budget) || 0)));
+  for (let hpSp = current.hp; hpSp <= 32; hpSp += 1) {
+    for (let defSp = current.def; defSp <= 32; defSp += 1) {
+      for (let spdSp = current.spd; spdSp <= 32; spdSp += 1) {
+        if (hpSp + defSp + spdSp > maximumBudget) break;
+        if (coversAll(tables, targetHits, hpSp, defSp, spdSp)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function currentDefensiveSp(userState) {
+  return Object.fromEntries(DEFENSIVE_STATS.map((stat) => [stat, clampSp(userState.sp?.[stat])]));
+}
+
+function coversAll(tables, targetHits, hpSp, defSp, spdSp) {
+  return tables.every(({ defenseStat, tiers }) =>
+    tiers[hpSp][defenseStat === "def" ? defSp : spdSp] >= targetHits);
 }
 
 function fillFullCoverageGrid(tiers, userState, scenario, defenseStat) {

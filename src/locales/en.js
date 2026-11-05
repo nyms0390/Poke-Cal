@@ -194,7 +194,9 @@ export const EN_MESSAGES = {
   "builder.coverage.unreachable": "Unreachable",
   "builder.coverageCount": ({ cards, matchups }) =>
     `${cards} ${cards === 1 ? "card" : "cards"} · ${matchups} analyzed ${matchups === 1 ? "move" : "moves"}`,
-  "builder.noSurvival": "No better survival tier is reachable from the current spread.",
+  "builder.noSurvival": "No better survival tier is reachable by adding SP to the current spread.",
+  "builder.respreadNote": ({ stats }) =>
+    `Adding SP reaches no better tier here, but moving SP out of ${stats} survives one more hit from every move:`,
   "builder.totalSp": ({ count }) => `${count} total SP`,
   "builder.maxDamage": ({ value }) => `Max damage ${value}%`,
   "builder.zeroBulk": "Zero-bulk baseline",

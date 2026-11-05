@@ -3595,6 +3595,19 @@ details.builder-analysis-move > .builder-spread-grid {
   padding: 12px 12px 0;
 }
 
+.builder-respread {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.builder-respread-note {
+  color: var(--muted);
+  font-size: var(--type-supporting);
+  line-height: 1.5;
+}
+
 .builder-spread-assumption {
   color: var(--muted);
   font-size: var(--type-supporting);

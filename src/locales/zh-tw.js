@@ -197,7 +197,9 @@ export const ZH_TW_MESSAGES = {
   "builder.coverage.unreachable": "無法達成",
   "builder.coverageCount": ({ cards, matchups }) =>
     `${cards} 張卡片 · ${matchups} 個已分析招式`,
-  "builder.noSurvival": "以目前的能力分配無法達到更高的存活等級。",
+  "builder.noSurvival": "在目前的能力分配上再加 SP，也無法達到更高的存活等級。",
+  "builder.respreadNote": ({ stats }) =>
+    `再加 SP 無法提升存活等級，但把${stats}的 SP 移出來，就能讓每個招式都多撐一擊：`,
   "builder.totalSp": ({ count }) => `總計 ${count} SP`,
   "builder.maxDamage": ({ value }) => `最大傷害 ${value}%`,
   "builder.zeroBulk": "零耐久基準",
