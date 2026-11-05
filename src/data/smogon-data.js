@@ -1,4 +1,5 @@
 import { normalizeId } from "./catalog.js";
+import { buildSpreadGroups } from "./spread-groups.js";
 import { parseUsageSpread } from "./usage-defaults.js";
 
 export const SMOGON_STATS_URL = "https://www.smogon.com/stats/";
@@ -97,12 +98,18 @@ export function mergeSmogonSpreads(pokemon, usage) {
       lookup.get(normalizeId(entry.id)) ?? lookup.get(normalizeId(entry.name));
     if (!spreadUsage) return clearSpreads(entry);
 
+    // Groups come from every ladder spread, not only the stored top ones, so a build split
+    // across many small spreads still counts in full (docs/DECISIONS.md, threat spreads).
+    const spreadGroups = buildSpreadGroups(entry, spreadUsage.allSpreads ?? spreadUsage.spreads);
+    const usage = { ...entry.champions?.usage, spreads: spreadUsage.spreads };
+    if (spreadGroups) usage.spreadGroups = spreadGroups;
+    else delete usage.spreadGroups;
     return {
       ...entry,
       champions: {
         ...entry.champions,
         spreadsMeta,
-        usage: { ...entry.champions?.usage, spreads: spreadUsage.spreads },
+        usage,
       },
     };
   });
@@ -110,26 +117,33 @@ export function mergeSmogonSpreads(pokemon, usage) {
 
 function toSpreadUsageEntry(entry, top) {
   const totalWeight = [...entry.weights.values()].reduce((sum, weight) => sum + weight, 0);
-  const spreads = [...entry.weights.entries()]
-    .sort(([aName, aWeight], [bName, bWeight]) => bWeight - aWeight || aName.localeCompare(bName))
+  const sorted = [...entry.weights.entries()]
+    .sort(([aName, aWeight], [bName, bWeight]) => bWeight - aWeight || aName.localeCompare(bName));
+  const spreads = sorted
     .slice(0, top)
     .map(([name, weight]) => ({
       name,
       usageCount: round(weight, 1),
       usagePercent: round(totalWeight > 0 ? (weight / totalWeight) * 100 : 0, 2),
     }));
+  // Every spread's unrounded share, for spread groups at merge time (not written to catalogs).
+  const allSpreads = sorted.map(([name, weight]) => ({
+    name,
+    usagePercent: totalWeight > 0 ? (weight / totalWeight) * 100 : 0,
+  }));
 
-  return { id: entry.id, name: entry.name, spreadWeight: round(totalWeight, 1), spreads };
+  return { id: entry.id, name: entry.name, spreadWeight: round(totalWeight, 1), spreads, allSpreads };
 }
 
 function clearSpreads(entry) {
-  if (!entry.champions?.spreadsMeta && !entry.champions?.usage?.spreads) return entry;
+  if (!entry.champions?.spreadsMeta && !entry.champions?.usage?.spreads && !entry.champions?.usage?.spreadGroups) return entry;
 
   const champions = { ...entry.champions };
   delete champions.spreadsMeta;
-  if (champions.usage?.spreads) {
+  if (champions.usage?.spreads || champions.usage?.spreadGroups) {
     champions.usage = { ...champions.usage };
     delete champions.usage.spreads;
+    delete champions.usage.spreadGroups;
     if (Object.keys(champions.usage).length === 0) delete champions.usage;
   }
   return { ...entry, champions };

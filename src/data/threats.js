@@ -1,13 +1,18 @@
 import { normalizeId } from "./catalog.js";
 import { megaFamily } from "./pokemon.js";
+import { topSpreadGroups } from "./spread-groups.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "./usage-defaults.js";
 import { NATURES } from "../engine/natures.js";
 import { calculateStat } from "../engine/stats.js";
 
 /*
- * Limitless publishes observed natures, but not Champions SP spreads. Threat sets therefore
- * assume 32 SP in both offensive stats, 2 HP SP, no defensive SP, and one of four explicit
- * Speed presets. These are comparison presets, not claims about the submitted teams' exact spreads.
+ * Limitless publishes observed natures, but not Champions SP spreads. Where Smogon ladder spreads
+ * exist, each analysis reads the most used group of spreads for the stats a move uses
+ * (`usageSpreads`, from spread-groups.js): break points the target's HP and the defense the move
+ * hits, bulk points the attacker's offensive stat, each with that group's own nature. Without
+ * ladder spreads a threat assumes 32 SP in both offensive stats, 2 HP SP and no defensive SP.
+ * Speed always uses one of four explicit presets. Editing a threat's nature or SP in Builder
+ * drops `usageSpreads`, so the edited build is used for every move.
  */
 
 export function threatList(
@@ -112,11 +117,14 @@ export function threatForPokemon(
   const defaults = championsDefaultsForPokemon(pokemon, { abilityLookup, items, moveLookup });
   const nature = natureEntry?.name ?? defaults.nature;
 
+  const usageSpreads = topSpreadGroups(pokemon);
+
   return {
     pokemon,
     usagePercent: pokemon?.champions?.usagePercent ?? 0,
     nature,
     natureShare: natureEntry?.usagePercent ?? 0,
+    usageSpreads,
     item: usage ? defaults.item : null,
     ability: defaults.ability,
     teraType: "",
@@ -124,9 +132,17 @@ export function threatForPokemon(
     soaked: false,
     moves: threatMoves(usage?.moves?.length ? usage.moves : defaults.moves, moveLookup),
     spPresets: {
-      offense: { atk: 32, spa: 32 },
-      bulk: defaults.spreadName
-        ? { hp: defaults.sp.hp, def: defaults.sp.def, spd: defaults.sp.spd }
+      // The build editor's starting values: each stat from the group the analyses use for it.
+      offense: {
+        atk: usageSpreads?.atk?.sp.atk ?? 32,
+        spa: usageSpreads?.spa?.sp.spa ?? 32,
+      },
+      bulk: usageSpreads?.def || usageSpreads?.spd
+        ? {
+          hp: (usageSpreads.def ?? usageSpreads.spd).sp.hp,
+          def: usageSpreads.def?.sp.def ?? 0,
+          spd: usageSpreads.spd?.sp.spd ?? 0,
+        }
         : { hp: 2, def: 0, spd: 0 },
       speed: speedPresets({
         baseSpe: pokemon.baseStats?.spe ?? pokemon.baseSpeed,

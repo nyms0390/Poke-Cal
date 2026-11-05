@@ -361,8 +361,8 @@ function usageLookup(entries) {
 function clearUsage(entry) {
   if (!entry.champions) return entry;
   const champions = clearUsageMetadata(entry.champions);
-  const spreads = entry.champions.usage?.spreads;
-  if (spreads) champions.usage = { spreads };
+  const smogon = smogonUsage(entry.champions.usage);
+  if (smogon) champions.usage = smogon;
   return {
     ...entry,
     champions,
@@ -377,14 +377,22 @@ function mergeCatalogUsage(entry, usage) {
 }
 
 function mergePokemonUsage(entry, usage) {
-  const spreads = entry.champions?.usage?.spreads;
+  const smogon = smogonUsage(entry.champions?.usage);
   return {
     ...entry,
     champions: {
       ...limitlessMetadata(entry.champions, usage),
-      usage: spreads ? { ...usage.usage, spreads } : usage.usage,
+      usage: smogon ? { ...usage.usage, ...smogon } : usage.usage,
     },
   };
+}
+
+// The Smogon spread overlay's usage keys, kept when Limitless usage is re-merged.
+function smogonUsage(usage) {
+  const result = {};
+  if (usage?.spreads) result.spreads = usage.spreads;
+  if (usage?.spreadGroups) result.spreadGroups = usage.spreadGroups;
+  return Object.keys(result).length > 0 ? result : null;
 }
 
 function limitlessMetadata(champions, usage) {

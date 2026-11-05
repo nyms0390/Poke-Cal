@@ -3595,6 +3595,12 @@ details.builder-analysis-move > .builder-spread-grid {
   padding: 12px 12px 0;
 }
 
+.builder-spread-assumption {
+  color: var(--muted);
+  font-size: var(--type-supporting);
+  line-height: 1.5;
+}
+
 .builder-bulk-comparison {
   overflow: hidden;
   border: 1px solid var(--line);

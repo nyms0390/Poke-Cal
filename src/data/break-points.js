@@ -100,18 +100,29 @@ function damageResult(userState, move, { threat, field = createField(), critical
     defender: threat.pokemon,
     move,
     attackerState: { ...userState, currentHpFraction: 1 },
-    defenderState: threatState(threat),
+    defenderState: threatState(threat, move),
     field,
     critical,
     moveOptions,
   });
 }
 
-function threatState(threat) {
+/**
+ * The ladder spread group a break point assumes for the target: the most used group for its HP
+ * and the defense `move` hits, or null when the threat has none (no ladder spreads, or the
+ * user edited its build).
+ */
+export function breakTargetSpread(threat, move) {
+  const defenseStat = move?.overrideDefensiveStat ?? (move?.category === "Physical" ? "def" : "spd");
+  return threat?.usageSpreads?.[defenseStat] ?? null;
+}
+
+function threatState(threat, move) {
+  const group = breakTargetSpread(threat, move);
   return {
     pokemon: threat.pokemon,
-    nature: threat.nature ?? "Hardy",
-    sp: {
+    nature: group?.nature ?? threat.nature ?? "Hardy",
+    sp: group ? { ...group.sp } : {
       hp: threat.spPresets?.bulk?.hp ?? 0,
       atk: 0,
       def: threat.spPresets?.bulk?.def ?? 0,

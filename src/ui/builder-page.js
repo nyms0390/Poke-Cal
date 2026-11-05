@@ -11,10 +11,12 @@ import {
 } from "../data/active-set.js";
 import {
   breakPoints,
+  breakTargetSpread,
   rankBreakPointPokemonGroups,
   yourDamageAnalysis,
 } from "../data/break-points.js";
 import {
+  bulkAttackerSpread,
   bulkBaseline,
   bulkCoverage,
   bulkCoverageTable,
@@ -32,6 +34,7 @@ import {
 } from "../data/hp-rules.js";
 import { megaFamilyId } from "../data/pokemon.js";
 import { createThreatPreferencesStore } from "../data/threat-preferences.js";
+import { SPREAD_GROUP_STATS } from "../data/spread-groups.js";
 import { mergeThreatLists, threatForPokemon, threatList } from "../data/threats.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { STAT_KEYS } from "../engine/constants.js";
@@ -1020,6 +1023,7 @@ function bulkMovePanel(
       baselinePoints,
       damage,
       defenseStat,
+      assumption: spreadAssumption(bulkAttackerSpread(scenario.threat, scenario.move), "attacker"),
     }),
     loadChoices: () => points.map((point) => spreadChoice({
       label: t("builder.totalSp", { count: point.totalSp }),
@@ -1054,9 +1058,10 @@ function bulkMovePanel(
   });
 }
 
-function bulkMoveContext({ baselineDamage, baselinePoints, damage, defenseStat }) {
+function bulkMoveContext({ baselineDamage, baselinePoints, damage, defenseStat, assumption }) {
   const context = document.createElement("div");
   context.className = "builder-bulk-context";
+  if (assumption) context.append(assumption);
   const comparison = document.createElement("div");
   comparison.className = "builder-bulk-comparison";
   comparison.append(
@@ -1105,6 +1110,25 @@ function bulkDamageComparison(label, damage) {
     koBadge(formatKoText(damage.koText, getLocale())),
   );
   return row;
+}
+
+// The ladder spread group an analysis assumed for the threat: nature, the SP of the stats the
+// group is keyed by, and its share of the Pokémon's Smogon ladder spreads.
+function spreadAssumption(group, role) {
+  if (!group) return null;
+  const sp = SPREAD_GROUP_STATS[group.key]
+    .map((stat) => `${group.sp[stat]} ${localizedTerm("stat", STAT_LABELS[stat])}`)
+    .join(" / ");
+  return textSpan(t(`builder.${role}Spread`, {
+    nature: localizedTerm("nature", group.nature),
+    sp,
+    share: formatShare(group.share),
+    count: group.spreadCount,
+  }), "builder-spread-assumption");
+}
+
+function formatShare(share) {
+  return Number(share).toLocaleString(getLocale(), { maximumFractionDigits: share >= 10 ? 0 : 1 });
 }
 
 function statChip(stat, value) {
@@ -1191,6 +1215,14 @@ function breakMovePanel({ move, damage, points, attackStat }, threat, panelKey) 
     move,
     damage,
     emptyMessage: t("builder.noHigherKo"),
+    loadContext: () => {
+      const assumption = spreadAssumption(breakTargetSpread(threat, move), "target");
+      if (!assumption) return null;
+      const context = document.createElement("div");
+      context.className = "builder-bulk-context";
+      context.append(assumption);
+      return context;
+    },
     loadChoices: () => significantBreakPoints(
       damage.koText,
       points,
@@ -1414,7 +1446,10 @@ function threatBuildEditor(threat, cardKey) {
   }));
 
   apply.addEventListener("click", () => draft.apply());
-  editor.append(picks, spread, moves, apply);
+  const hint = threat.usageSpreads
+    ? textSpan(t("builder.spreadGroupHint"), "builder-spread-assumption")
+    : null;
+  editor.append(picks, spread, ...(hint ? [hint] : []), moves, apply);
   return editor;
 }
 

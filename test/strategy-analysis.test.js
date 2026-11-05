@@ -26,7 +26,7 @@ test("topUsageList sorts by usage, breaks ties by name, caps, and is idempotent"
 
 test("capped usage lists keep the usage defaults", () => {
   for (const pokemon of popular) {
-    const usage = Object.fromEntries(Object.entries(pokemon.champions.usage).map(([key, list]) => [key, topUsageList(list)]));
+    const usage = Object.fromEntries(Object.entries(pokemon.champions.usage).map(([key, list]) => [key, Array.isArray(list) ? topUsageList(list) : list]));
     const capped = { ...pokemon, champions: { ...pokemon.champions, usage } };
     const lookups = { abilityLookup: context.abilityLookup, items: context.items, moveLookup: context.moveLookup };
     const summary = (defaults) => ({
