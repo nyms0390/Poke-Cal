@@ -304,17 +304,28 @@ function damageResult(userState, { threat, move, field = createField() }) {
     attacker: threat.pokemon,
     defender: userState.pokemon,
     move,
-    attackerState: threatState(threat),
+    attackerState: threatState(threat, move),
     defenderState: { ...userState, currentHpFraction: 1 },
     field,
   });
 }
 
-function threatState(threat) {
+/**
+ * The ladder spread group a bulk point assumes for the attacker: the most used group for the
+ * stat `move` attacks with, or null when the threat has none (no ladder spreads, or the user
+ * edited its build).
+ */
+export function bulkAttackerSpread(threat, move) {
+  const attackStat = move?.overrideOffensiveStat ?? (move?.category === "Physical" ? "atk" : "spa");
+  return threat?.usageSpreads?.[attackStat] ?? null;
+}
+
+function threatState(threat, move) {
+  const group = bulkAttackerSpread(threat, move);
   return {
     pokemon: threat.pokemon,
-    nature: threat.nature ?? "Hardy",
-    sp: {
+    nature: group?.nature ?? threat.nature ?? "Hardy",
+    sp: group ? { ...group.sp } : {
       hp: 0,
       atk: threat.spPresets?.offense?.atk ?? 32,
       def: 0,

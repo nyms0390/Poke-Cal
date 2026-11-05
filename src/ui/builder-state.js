@@ -78,7 +78,9 @@ export function applyGlobalThreatStatus(threats = [], value = "") {
 
 export function applyThreatControl(threat, { kind, stat, index, value }) {
   if (!threat) return threat;
-  if (kind === "nature") return { ...threat, nature: value };
+  // An edited nature or SP is the build the user expects: it replaces the per-move ladder
+  // spread groups (`usageSpreads`) for every move.
+  if (kind === "nature") return { ...threat, nature: value, usageSpreads: null };
   if (kind === "ability") return { ...threat, ability: value };
   if (kind === "item") return { ...threat, item: value };
   if (kind === "status") {
@@ -93,6 +95,7 @@ export function applyThreatControl(threat, { kind, stat, index, value }) {
     const sp = Number.isFinite(number) ? Math.max(0, Math.min(32, Math.trunc(number))) : 0;
     return {
       ...threat,
+      usageSpreads: null,
       spPresets: {
         ...threat.spPresets,
         [group]: { ...threat.spPresets?.[group], [stat]: sp },
@@ -240,7 +243,8 @@ export function breakAnalysisContextSignature(user, field) {
 // Only the threat fields each analysis feeds into calculateDamage: bulk uses the first two
 // moves and offensive SP; break uses the defensive SP preset and none of the threat's moves.
 export function threatAnalysisSignature(threat, analysis) {
-  const { pokemon, nature, ability, item, teraType, status, soaked, moves, spPresets } = threat ?? {};
+  const { pokemon, nature, ability, item, teraType, status, soaked, moves, spPresets, usageSpreads } = threat ?? {};
+  const groupNames = (keys) => keys.map((key) => usageSpreads?.[key]?.spreadName ?? "");
   return analysisSignature({
     pokemon,
     nature,
@@ -250,8 +254,8 @@ export function threatAnalysisSignature(threat, analysis) {
     status,
     soaked,
     ...(analysis === "bulk"
-      ? { moves: (moves ?? []).slice(0, 2), offense: spPresets?.offense }
-      : { bulk: spPresets?.bulk }),
+      ? { moves: (moves ?? []).slice(0, 2), offense: spPresets?.offense, groups: groupNames(["atk", "spa", "def"]) }
+      : { bulk: spPresets?.bulk, groups: groupNames(["def", "spd"]) }),
   });
 }
 
