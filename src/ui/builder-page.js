@@ -21,6 +21,7 @@ import {
   bulkCoverage,
   bulkCoverageTable,
   bulkPointMatchups,
+  coverageRespread,
   generalBulkRecommendation,
   koHitCount,
   rankBulkCoverageGroups,
@@ -668,7 +669,9 @@ function bulkThreatResult(inputs, threat, threatKey) {
       scenarioKey(matchup.scenario),
       () => bulkCoverageTable(user, matchup),
     ));
-    return { matchups, coverage: bulkCoverage(user, matchups, { budget, tables }) };
+    const coverage = bulkCoverage(user, matchups, { budget, tables });
+    const respread = coverageRespread(user, matchups, coverage, { budget, tables });
+    return { matchups, coverage, respread };
   });
 }
 
@@ -957,17 +960,56 @@ function threatFamilies(threats) {
 }
 
 function bulkThreatCards(forms) {
-  return forms.map(({ threat, matchups: formMatchups, relatedForms }) => {
+  return forms.map(({ threat, matchups: formMatchups, relatedForms, respread }) => {
     const threatId = normalizeId(threat.pokemon.id);
     const cardKey = `bulk:${threatId}`;
     return analysisCard({
       threat,
       renderMovePanels: () => formMatchups.map((matchup) =>
         bulkMovePanel(matchup, bulkPanelKey(matchup))),
+      lead: respread ? bulkRespread(respread) : null,
       relatedForms,
       analysis: "bulk",
     }, cardKey);
   });
+}
+
+// A "possible" card that only a re-spread reaches: adding SP gives every move panel no threshold,
+// so the card says which defensive SP to move and applies it.
+function bulkRespread(respread) {
+  const current = state.user.sp;
+  const lead = document.createElement("div");
+  lead.className = "builder-respread";
+  lead.append(
+    textSpan(t("builder.respreadNote", {
+      stats: respread.movedFrom
+        .map((stat) => localizedTerm("stat", STAT_LABELS[stat]))
+        .join(" / "),
+    }), "builder-respread-note"),
+    spreadChoice({
+      label: t("builder.totalSp", { count: respread.totalSp }),
+      stats: ["hp", "def", "spd"].map((stat) => [
+        localizedTerm("stat", STAT_LABELS[stat]),
+        Number(current?.[stat] ?? 0) === respread.sp[stat]
+          ? respread.sp[stat]
+          : `${Number(current?.[stat] ?? 0)} → ${respread.sp[stat]}`,
+      ]),
+      fromKoText: respread.fromKoText,
+      toKoText: respread.koText,
+      damageText: t("builder.maxDamage", { value: respread.maxPct }),
+      canApply: true,
+      onSelect: () => {
+        resetUserSetupDraft();
+        updatePage(() => {
+          state = {
+            ...state,
+            user: { ...state.user, sp: { ...state.user.sp, ...respread.sp } },
+          };
+        }, { refreshMoves: true });
+      },
+    }),
+  );
+  return lead;
 }
 
 function bulkPanelKey({ scenario }) {
@@ -1260,7 +1302,7 @@ function breakMovePanel({ move, damage, points, attackStat }, threat, panelKey) 
   });
 }
 
-function analysisCard({ threat, renderMovePanels, relatedForms, analysis }, cardKey) {
+function analysisCard({ threat, renderMovePanels, lead = null, relatedForms, analysis }, cardKey) {
   const movePanels = renderMovePanels();
   const expanded = expandedCards.has(cardKey);
   const card = document.createElement("article");
@@ -1298,9 +1340,15 @@ function analysisCard({ threat, renderMovePanels, relatedForms, analysis }, card
     card.classList.toggle("build-open", nextExpanded);
     heading.setAttribute("aria-expanded", String(nextExpanded));
     card.querySelector(":scope > .builder-threat-build")?.remove();
-    if (nextExpanded) moves.before(threatBuildEditor(threat, cardKey));
+    if (nextExpanded) (lead ?? moves).before(threatBuildEditor(threat, cardKey));
   });
-  card.append(heading, ...(formLinks ? [formLinks] : []), ...(editor ? [editor] : []), moves);
+  card.append(
+    heading,
+    ...(formLinks ? [formLinks] : []),
+    ...(editor ? [editor] : []),
+    ...(lead ? [lead] : []),
+    moves,
+  );
   return card;
 }
 

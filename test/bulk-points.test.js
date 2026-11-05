@@ -6,6 +6,7 @@ import {
   bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
+  coverageRespread,
   generalBulkRecommendation,
   koHitCount,
   rankBulkCoverageGroups,
@@ -339,6 +340,29 @@ test("distinguishes independent thresholds from one legal joint allocation", () 
     currentHits: 2,
     requiredSp: 46,
   });
+});
+
+test("offers a re-spread when only moving defensive SP reaches the next tier", () => {
+  const specialImpact = { ...ohkoMove, id: "special-impact", name: "Special Impact", category: "Special" };
+  const state = withDefensiveSp(userState(), { hp: 0, def: 32, spd: 0 });
+  const matchups = bulkPointMatchups(state, [{ ...threat, moves: [specialImpact] }], { budget: 46 });
+  const coverage = bulkCoverage(state, matchups, { budget: 46 });
+  assert.equal(coverage.status, "possible");
+  assert.deepEqual(matchups[0].points, []);
+
+  const respread = coverageRespread(state, matchups, coverage, { budget: 46 });
+  assert.ok(respread);
+  assert.deepEqual(respread.movedFrom, ["def"]);
+  assert.ok(respread.totalSp <= 46);
+  const moved = withDefensiveSp(userState(), respread.sp);
+  assert.ok(koHitCount(threatDamage(moved, matchups[0].scenario).koText) >= coverage.targetHits);
+  assert.equal(respread.koText, threatDamage(moved, matchups[0].scenario).koText);
+
+  const addOnly = withDefensiveSp(userState(), { hp: 0, def: 0, spd: 0 });
+  const addMatchups = bulkPointMatchups(addOnly, [{ ...threat, moves: [specialImpact] }], { budget: 46 });
+  const addCoverage = bulkCoverage(addOnly, addMatchups, { budget: 46 });
+  assert.equal(addCoverage.status, "possible");
+  assert.equal(coverageRespread(addOnly, addMatchups, addCoverage, { budget: 46 }), null);
 });
 
 test("matches a brute-force reference minimum over legal joint defensive spreads", () => {
