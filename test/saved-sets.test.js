@@ -1,11 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import {
-  createSavedSetStore,
-  createStorageStore,
-  SAVED_SETS_STORAGE_KEY,
-} from "../src/data/saved-sets.js";
+import { createSavedSetStore, SAVED_SETS_STORAGE_KEY } from "../src/data/saved-sets.js";
+import { createStorageStore } from "../src/data/storage-store.js";
 
 const pokemon = { id: "miraidon", name: "Miraidon" };
 const ability = { id: "hadronengine", name: "Hadron Engine" };

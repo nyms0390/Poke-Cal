@@ -1,5 +1,6 @@
 import { normalizeId } from "./catalog.js";
 import { normalizeSearch } from "./pokemon.js";
+import { normalizeSp } from "../engine/stats.js";
 
 const STAT_LABELS = {
   hp: "HP",
@@ -200,7 +201,7 @@ function parseSpreadLine(value, { evs, warnings }) {
     }
     const raw = Number(match[1]);
     const value = evs ? Math.round(raw / 8) : raw;
-    sp[stat] = clampSp(value);
+    sp[stat] = normalizeSp(value);
   }
   return sp;
 }
@@ -214,9 +215,4 @@ export function formatSpLine(sp = {}) {
 
 function neutralSp() {
   return { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-}
-
-function clampSp(value) {
-  if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.min(32, Math.trunc(value)));
 }

@@ -232,11 +232,3 @@ export function sortUncommonRows(rows = []) {
   return [...rows].sort((a, b) => Number(Boolean(b.usualBeats)) - Number(Boolean(a.usualBeats)) ||
     a.changes.length - b.changes.length || b.usagePercent - a.usagePercent || a.rank - b.rank);
 }
-
-/** Synchronous convenience over uncommonCandidates / uncommonSetRow / sortUncommonRows. */
-export function uncommonSetThreats({ ours, opponents = [], lookups = {}, field = {}, maxChanges, minTeams } = {}) {
-  const rows = uncommonCandidates(opponents, { minTeams })
-    .map((opponent) => uncommonSetRow(opponent, ours, lookups, { field, maxChanges }))
-    .filter(Boolean);
-  return sortUncommonRows(rows);
-}

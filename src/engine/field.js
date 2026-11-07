@@ -65,6 +65,17 @@ export function createField(overrides = {}) {
   });
 }
 
+/** True when the side's ability is `abilityId` (a normalized id such as "levitate"). */
+export function hasAbility(state, abilityId) {
+  return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
+}
+
+/** Sun for weather-boosted effects: Sunny Day or Desolate Land. */
+export function isSun(weather) {
+  const weatherId = normalizeId(weather);
+  return weatherId === "sunnyday" || weatherId === "desolateland";
+}
+
 export function isGrounded(pokemon, state = {}, field = {}) {
   if (field.gravity) return true;
   if (typeof state.grounded === "boolean") return state.grounded;

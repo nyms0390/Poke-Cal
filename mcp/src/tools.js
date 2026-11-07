@@ -53,13 +53,6 @@ const STATUS_ALIASES = {
 export const POKEMON_TYPES = Object.keys(TYPE_EFFECTIVENESS);
 const TYPE_ALIASES = Object.fromEntries(POKEMON_TYPES.map((type) => [type, [type.toLowerCase()]]));
 
-export const CANONICAL_VALUES = {
-  weather: Object.keys(WEATHER_ALIASES),
-  terrain: Object.keys(TERRAIN_ALIASES),
-  status: Object.keys(STATUS_ALIASES),
-  type: POKEMON_TYPES,
-};
-
 export function truncateForMessage(value, max = ECHO_LIMIT) {
   const text = String(value ?? "");
   return text.length > max ? `${text.slice(0, max)}…` : text;

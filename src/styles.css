@@ -414,12 +414,6 @@ footer:has(> [data-quiet]) {
   font-variant-numeric: tabular-nums;
 }
 
-.teams-note {
-  margin: -4px 0 18px;
-  color: var(--muted);
-  font-size: var(--text-sm);
-}
-
 .teams-archive,
 .teams-top-cut,
 .teams-pokemon-grid {
@@ -2576,12 +2570,6 @@ button:disabled {
 }
 
 /* ---------- Responsive ---------- */
-
-@media (max-width: 900px) {
-  .damage-controls {
-    grid-template-columns: 1fr;
-  }
-}
 
 @media (max-width: 720px) {
   main {
@@ -5731,14 +5719,6 @@ textarea:focus-visible {
   margin-top: 10px;
 }
 
-.matchups-auto-note {
-  margin: 0;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: var(--text-sm);
-}
-
 /* ----- Tabs and toolbar ----- */
 
 .matchups-tabs {
@@ -7206,12 +7186,6 @@ main > .compare-editor {
   box-shadow: 0 12px 32px rgb(16 24 40 / 14%);
 }
 
-.compare-shared-note {
-  margin: 0 0 0 auto;
-  color: var(--muted);
-  font-size: var(--text-sm);
-}
-
 .compare-notice {
   margin: 0;
   padding: 10px 12px;
@@ -7907,11 +7881,6 @@ main > .compare-editor {
     box-shadow: none;
   }
 
-  .compare-shared-note {
-    grid-column: 1 / -1;
-    margin: 0;
-  }
-
   .compare-variant-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -8380,11 +8349,6 @@ html:has(dialog.set-sheet[open]) {
   }
 
   .sheet-summary-host:empty {
-    display: none;
-  }
-
-  /* Once every editor panel has moved into its sheet, drop the empty panel grid. */
-  .damage-controls:not(:has(> section)) {
     display: none;
   }
 }

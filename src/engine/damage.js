@@ -1,8 +1,8 @@
 import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
-import { STAT_KEYS } from "./constants.js";
-import { createField, isGrounded, normalizeField } from "./field.js";
+import { LEVEL, STAT_KEYS } from "./constants.js";
+import { createField, hasAbility, isGrounded, normalizeField } from "./field.js";
 import {
   moveEffect,
   abilityTypeConversion,
@@ -908,7 +908,7 @@ function fixedDamageValue(ctx) {
   const { move } = ctx;
   const kind = fixedDamageKind(move);
   if (kind === "numeric") return move.damage;
-  if (kind === "level") return 50;
+  if (kind === "level") return LEVEL;
   if (kind === "registry") return moveEffect(normalizeId(move.id ?? move.name)).fixedDamage(ctx);
   return null;
 }
@@ -934,7 +934,7 @@ function applyPowerModifiers(power, powerChain) {
 
 function baseDamageForPower(power, attack, defense) {
   return Math.floor(
-    Math.floor(Math.floor(Math.floor((2 * 50) / 5 + 2) * power * attack) / defense) / 50,
+    Math.floor(Math.floor(Math.floor((2 * LEVEL) / 5 + 2) * power * attack) / defense) / 50,
   ) + 2;
 }
 
@@ -971,10 +971,6 @@ function typeChangeForMove({ pokemon, state, moveType, suppressAbility }) {
 
 function effectiveMovePower(ctx) {
   return moveEffect(normalizeId(ctx.move.id ?? ctx.move.name)).basePower?.(ctx);
-}
-
-function hasAbility(state, abilityId) {
-  return normalizeId(state.ability?.id ?? state.ability?.name) === abilityId;
 }
 
 function hasAnyAbility(state, abilityIds) {

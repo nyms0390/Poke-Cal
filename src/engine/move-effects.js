@@ -547,10 +547,6 @@ export function moveEffect(moveId) {
   return MOVE_EFFECTS[moveId] ?? {};
 }
 
-export function isOrderConditionalMove(move) {
-  return Boolean(moveEffect(normalizeId(move?.id ?? move?.name)).orderCondition);
-}
-
 export function moveCondition(move) {
   return moveEffect(normalizeId(move?.id ?? move?.name)).condition ?? null;
 }

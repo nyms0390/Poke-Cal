@@ -1,6 +1,6 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
-import { calculateStat } from "../engine/stats.js";
+import { calculateStat, normalizeSp } from "../engine/stats.js";
 import { normalizeId } from "../identifiers.js";
 
 export function compareKoTiers(left, right) {
@@ -34,9 +34,9 @@ export function generalBulkRecommendation(userState, { budget = 66, hpMatches = 
   if (!userState?.pokemon) return null;
 
   const currentSp = {
-    hp: clampSp(userState.sp?.hp),
-    def: clampSp(userState.sp?.def),
-    spd: clampSp(userState.sp?.spd),
+    hp: normalizeSp(userState.sp?.hp),
+    def: normalizeSp(userState.sp?.def),
+    spd: normalizeSp(userState.sp?.spd),
   };
   const currentTotal = currentSp.hp + currentSp.def + currentSp.spd;
   const targetTotal = Math.max(
@@ -233,13 +233,13 @@ export function bulkPoints(userState, scenario, { budget = 66 } = {}) {
 
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
   const otherDefenseStat = defenseStat === "def" ? "spd" : "def";
-  const otherDefenseSp = clampSp(userState.sp?.[otherDefenseStat]);
+  const otherDefenseSp = normalizeSp(userState.sp?.[otherDefenseStat]);
   const maximumBudget = Math.max(0, Math.min(
     64,
     Math.trunc(Number(budget) || 0) - otherDefenseSp,
   ));
-  const currentHpSp = clampSp(userState.sp?.hp);
-  const currentDefSp = clampSp(userState.sp?.[defenseStat]);
+  const currentHpSp = normalizeSp(userState.sp?.hp);
+  const currentDefSp = normalizeSp(userState.sp?.[defenseStat]);
   const currentTotalSp = currentHpSp + currentDefSp;
   if (currentTotalSp >= maximumBudget) return [];
   const allocations = new Map();
@@ -315,12 +315,6 @@ function bestAllocationAtCost(
     a.hpSp - b.hpSp)[0];
 }
 
-function clampSp(value) {
-  const sp = Number(value);
-  if (!Number.isFinite(sp)) return 0;
-  return Math.max(0, Math.min(32, Math.trunc(sp)));
-}
-
 function defensiveStats(userState, sp) {
   return Object.fromEntries(["hp", "def", "spd"].map((stat) => [
     stat,
@@ -371,18 +365,22 @@ export function bulkAttackerSpread(threat, move) {
 }
 
 function threatState(threat, move) {
-  const group = bulkAttackerSpread(threat, move);
+  return threatSideState(threat, bulkAttackerSpread(threat, move), {
+    atk: threat.spPresets?.offense?.atk ?? 32,
+    spa: threat.spPresets?.offense?.spa ?? 32,
+  });
+}
+
+/**
+ * Battle state for an opposing threat at full HP with no stages. `group` is the Smogon spread
+ * group picked for the move (its nature and SP win); without one, `fallbackSp` fills the SP
+ * the calculation reads (offense for Bulk points, bulk for Break points) and the rest stay 0.
+ */
+export function threatSideState(threat, group, fallbackSp = {}) {
   return {
     pokemon: threat.pokemon,
     nature: group?.nature ?? threat.nature ?? "Hardy",
-    sp: group ? { ...group.sp } : {
-      hp: 0,
-      atk: threat.spPresets?.offense?.atk ?? 32,
-      def: 0,
-      spa: threat.spPresets?.offense?.spa ?? 32,
-      spd: 0,
-      spe: 0,
-    },
+    sp: group ? { ...group.sp } : { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...fallbackSp },
     stages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
     ability: threat.ability ?? null,
     item: threat.item ?? null,
@@ -483,7 +481,7 @@ function reachableByAdding(tables, targetHits, budget, current) {
 }
 
 function currentDefensiveSp(userState) {
-  return Object.fromEntries(DEFENSIVE_STATS.map((stat) => [stat, clampSp(userState.sp?.[stat])]));
+  return Object.fromEntries(DEFENSIVE_STATS.map((stat) => [stat, normalizeSp(userState.sp?.[stat])]));
 }
 
 function coversAll(tables, targetHits, hpSp, defSp, spdSp) {

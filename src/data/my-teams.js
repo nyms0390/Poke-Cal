@@ -1,5 +1,5 @@
 import { normalizeId } from "./catalog.js";
-import { createStorageStore } from "./saved-sets.js";
+import { createStorageStore } from "./storage-store.js";
 import { parseSetPaste } from "./set-paste.js";
 
 // The user's own teams (docs/DECISIONS.md "My teams"): kept in this browser only, each member

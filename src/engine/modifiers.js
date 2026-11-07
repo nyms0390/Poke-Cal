@@ -23,7 +23,7 @@
 
 import { normalizeId } from "../identifiers.js";
 import { abilityTypeConversion, weatherBlockedByUmbrella } from "./move-effects.js";
-import { isGrounded } from "./field.js";
+import { hasAbility, isGrounded, isSun } from "./field.js";
 import { paradoxBoost } from "./speed.js";
 
 export function applyHitCountOverride(range, value) {
@@ -626,17 +626,8 @@ function hasSecondaryEffect(move) {
   return Boolean(move.secondary && Object.keys(move.secondary).length > 0);
 }
 
-function hasAbility(state, abilityId) {
-  return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
-}
-
 function hasActiveAbility(state, abilityId, suppressed) {
   return !suppressed && hasAbility(state, abilityId);
-}
-
-function isSun(weather) {
-  const weatherId = normalizeId(weather);
-  return weatherId === "sunnyday" || weatherId === "desolateland";
 }
 
 export function collectModifiers(ctx) {

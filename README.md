@@ -51,6 +51,7 @@ PokéCal/
 │   │   ├── ncp-data.js          # NCP curated Champions set parsing/merging
 │   │   ├── active-set.js        # Cross-page active-set persistence
 │   │   ├── saved-sets.js        # Named saved-set persistence
+│   │   ├── storage-store.js     # Versioned localStorage store shared by every persisted setting
 │   │   ├── set-paste.js         # PokéCal/Showdown set import and export
 │   │   ├── usage-defaults.js    # Default move/item/ability seeding from usage
 │   │   ├── threats.js           # Usage-backed threat sets and SP presets

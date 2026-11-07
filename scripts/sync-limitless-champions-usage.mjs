@@ -129,11 +129,6 @@ function dateValue(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-export async function downloadLimitlessChampionsUsage(options = {}) {
-  const { usage } = await downloadLimitlessChampionsData(options);
-  return usage;
-}
-
 // Fails closed: when the fresh usage/team archive fails the Limitless checks in
 // src/data/catalog-validation.js (e.g. Limitless returned no tournaments), nothing is written.
 export async function updatePublicData({

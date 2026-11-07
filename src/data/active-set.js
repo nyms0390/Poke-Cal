@@ -1,5 +1,6 @@
 import { normalizeId } from "./catalog.js";
-import { createStorageStore } from "./saved-sets.js";
+import { createStorageStore } from "./storage-store.js";
+import { normalizeSp } from "../engine/stats.js";
 
 export const ACTIVE_SET_STORAGE_KEY = "pokecal.active-set.v1";
 
@@ -17,12 +18,6 @@ function blobRevision(blob) {
   return Number.isInteger(revision) && revision >= 0 ? revision : 0;
 }
 
-function clampSp(value) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return 0;
-  return Math.max(0, Math.min(32, Math.trunc(number)));
-}
-
 function normalizeActiveSet(value) {
   const pokemonId = normalizeId(value?.pokemonId);
   if (!pokemonId) return null;
@@ -36,7 +31,7 @@ function normalizeActiveSet(value) {
   return {
     pokemonId,
     nature: String(value?.nature ?? ""),
-    sp: Object.fromEntries(STAT_KEYS.map((stat) => [stat, clampSp(value?.sp?.[stat])])),
+    sp: Object.fromEntries(STAT_KEYS.map((stat) => [stat, normalizeSp(value?.sp?.[stat])])),
     abilityId: normalizeId(value?.abilityId),
     itemId: normalizeId(value?.itemId),
     teraType: "",
