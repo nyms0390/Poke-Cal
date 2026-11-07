@@ -2,6 +2,7 @@ import { NATURES } from "../engine/natures.js";
 import { finalSpeedInField } from "../engine/speed.js";
 import { normalizeId } from "./catalog.js";
 import { megaFamily, pokemonSpriteId } from "./pokemon.js";
+import { speedGroupForNature } from "./spread-groups.js";
 import { parseUsageSpread, topUsageEntry } from "./usage-defaults.js";
 
 const PRESETS = [
@@ -344,12 +345,16 @@ function selectedProfiles(profiles) {
   return selected;
 }
 
+// A profile's Speed SP comes from the most used Smogon Speed group its nature can reach (groups
+// pool every nature by final Speed, like the break and bulk point groups), then from the top
+// spread of that nature, then from an assumed 32 (0 for a -Spe nature).
 function profileRow(pokemon, profile, likely) {
-  const matchingSpread = topUsageEntry(
+  const speedGroup = speedGroupForNature(pokemon, profile.nature);
+  const matchingSpread = speedGroup ? null : topUsageEntry(
     (pokemon?.champions?.usage?.spreads ?? [])
       .filter(({ name }) => parseUsageSpread(name)?.nature === profile.nature),
   );
-  const spreadSp = parseUsageSpread(matchingSpread?.name)?.sp.spe;
+  const spreadSp = speedGroup?.sp ?? parseUsageSpread(matchingSpread?.name)?.sp.spe;
   const sp = spreadSp ?? (natureSpeedClass(profile.nature) === "negative" ? 0 : 32);
   return {
     label: `${profile.nature} · ${entityName(profile.item)} · ${entityName(profile.ability)}`,

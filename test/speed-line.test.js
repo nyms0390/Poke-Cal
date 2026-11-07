@@ -472,6 +472,35 @@ test("estimates a Limitless profile's Speed SP from the top same-nature Smogon s
   assert.equal(entry.likely, true);
 });
 
+test("a Limitless profile takes the most used Speed group its nature reaches, pooled across natures", () => {
+  // Base 50: Jolly 23 SP and Adamant 32 SP both land on 102 (18% together); Jolly 32 SP is 112
+  // (12%). The top Jolly spread alone would say 32 SP; the pooled 102 group says 23.
+  const opponent = {
+    pokemon: {
+      ...pokemon("kingambit", "Kingambit", 50),
+      champions: { usage: {
+        speedProfiles: [{
+          nature: "Jolly",
+          ability: { id: "defiant", name: "Defiant" },
+          item: { id: "lifeorb", name: "Life Orb" },
+          usageCount: 50,
+        }],
+        spreads: [
+          { name: "Jolly:32/32/0/0/0/32", usagePercent: 12 },
+          { name: "Jolly:0/32/0/0/2/23", usagePercent: 10 },
+          { name: "Adamant:0/32/0/0/2/32", usagePercent: 8 },
+        ],
+      } },
+    },
+  };
+  const entry = speedTiers(user, [opponent], { mode: "battle", presetFilter: [] })
+    .flatMap(({ entries }) => entries)
+    .find(({ source }) => source === "Limitless");
+
+  assert.equal(entry.sp, 23);
+  assert.equal(entry.spSource, "Smogon");
+});
+
 test("canonicalizes valid profile natures and drops invalid profile rows", () => {
   const opponent = {
     pokemon: {
