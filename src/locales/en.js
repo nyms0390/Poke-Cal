@@ -117,8 +117,8 @@ export const EN_MESSAGES = {
   "field.psychic": "Psychic",
   "field.gravity": "Gravity",
   "builder.environmentAssumption": "All matchups use this environment. Opponent abilities do not change it automatically.",
-  "builder.bulkAssumption": "Threats start with usage-backed items and abilities and the selected environment. Each move attacks with the threat's most common Smogon ladder spread for that move's attacking stat (max offense when it has none). Each form is classified independently from its two analyzed damaging moves.",
-  "builder.breakAssumption": "Threats start with usage-backed items and abilities and the selected environment. Each move hits the threat's most common Smogon ladder spread for its HP and the defense that move hits (2 HP SP and no defensive SP when it has none). Covered requires a selected move to guarantee an OHKO with your current spread. Possible uses only unassigned SP to reach a guaranteed KO in fewer hits or make a chance OHKO guaranteed, keeping other assigned SP. Otherwise, it is Unreachable.",
+  "builder.bulkAssumption": "Threats start with usage-backed items and abilities and the selected environment. Each move attacks with the threat's most common Smogon ladder spread for that move's attacking stat (max offense when it has none). Editing a threat's nature or SP uses that build for every move. Each form is classified independently from its two analyzed damaging moves.",
+  "builder.breakAssumption": "Threats start with usage-backed items and abilities and the selected environment. Each move hits the threat's most common Smogon ladder spread for its HP and the defense that move hits (2 HP SP and no defensive SP when it has none). Editing a threat's nature or SP uses that build for every move. Covered requires a selected move to guarantee an OHKO with your current spread. Possible uses only unassigned SP to reach a guaranteed KO in fewer hits or make a chance OHKO guaranteed, keeping other assigned SP. Otherwise, it is Unreachable.",
   "battle.saveName": "Save set name",
   "battle.deleteConfirm": ({ name }) => `Delete saved set \"${name}\"?`,
   "battle.ready": "Ready",
@@ -209,7 +209,6 @@ export const EN_MESSAGES = {
     `Target: ${nature}, ${sp} SP · ${share}% of Smogon ladder spreads${count > 1 ? ` across ${count} spreads` : ""}`,
   "builder.attackerSpread": ({ nature, sp, share, count }) =>
     `Attacker: ${nature}, ${sp} SP · ${share}% of Smogon ladder spreads${count > 1 ? ` across ${count} spreads` : ""}`,
-  "builder.spreadGroupHint": "Each move uses the most common Smogon ladder spread for the stats it uses. Editing nature or SP uses this build for every move.",
   "builder.noHigherKo": "No higher KO tier is reachable from the current spread.",
   "builder.damage": ({ min, max }) => `${min}–${max}% damage`,
   "builder.moveCount": ({ count }) => `${count} ${count === 1 ? "move" : "moves"}`,
