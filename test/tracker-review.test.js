@@ -1,7 +1,7 @@
 // The battle tracker's review step: turn-log readings checked against listed opponent sets.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatReview, loadContext, opponentCandidates, reviewLog } from '../tracker/review.mjs';
+import { formatReview, loadContext, opponentCandidates, reviewLog, splitMatches } from '../tracker/review.mjs';
 
 const ctx = loadContext();
 const POLITOED = 'Politoed @ Sitrus Berry\nAbility: Drizzle\nSPs: 32 HP / 12 Def / 22 SpA\nModest Nature\n- Protect\n';
@@ -82,4 +82,9 @@ test('the live match with the real team narrows Kingambit to fast sets and rules
   const garchomp = review.verdicts.find((v) => v.species === 'Garchomp');
   assert.equal(garchomp.fitting[0].item, 'Choice Scarf');
   assert.ok(garchomp.ruledOut.some((c) => c.item === 'Life Orb'));
+});
+
+test("a session log is reviewed one match at a time", () => {
+  const events = [{ type: "match", game: 1 }, { type: "turn", n: 1 }, { type: "end" }, { type: "match", game: 2 }, { type: "turn", n: 1 }];
+  assert.deepEqual(splitMatches(events).map((g) => g.length), [3, 2]);
 });

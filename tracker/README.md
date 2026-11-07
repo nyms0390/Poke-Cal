@@ -23,7 +23,7 @@ node parse.mjs fixtures/ipad-ladder-1/ocr.jsonl /tmp/ipad.jsonl && node compare.
 ## Review a match
 
 ```sh
-node review.mjs fixtures/live-1/turn-log.jsonl review.md --team fixtures/live-1/team.txt   # --json review.json for the raw checks
+node review.mjs fixtures/live-1/turn-log.jsonl review.md --team fixtures/live-1/team.txt   # --json review.json for the raw checks; a multi-match log gets one review per match
 ```
 
 `review.mjs` replays the turn log with PokéCal's engine and, for each opposing Pokémon, tests every listed Smogon spread and NCP set × every item with at least 2% use (or the revealed item) against:
