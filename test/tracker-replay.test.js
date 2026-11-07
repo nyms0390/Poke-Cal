@@ -47,4 +47,7 @@ test("a live session splits into one log per match, ending on forfeits", () => {
   assert.ok(!log.some((e) => e.species === 'Arcanine' || e.in === 'Arcanine'));
   assert.ok(log.some((e) => e.type === 'hp' && e.species === 'Gholdengo' && e.cause === 'item' && e.item === 'Life Orb'));
   assert.ok(log.some((e) => e.type === 'hp' && e.species === 'Salamence-Mega' && e.cause === 'recoil'));
+  // Malamar set Trick Room on turn 1, so turns 2-4 run under it with 4, 3 and 2 turns left.
+  const game2Turns = log.filter((e) => e.type === 'turn').slice(1);
+  assert.deepEqual(game2Turns.map((e) => [e.n, e.field.trickRoom ?? false, e.field.trickRoomTurns]), [[1, false, undefined], [2, true, 4], [3, true, 3], [4, true, 2]]);
 });
