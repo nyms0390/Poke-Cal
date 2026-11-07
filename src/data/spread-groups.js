@@ -9,15 +9,20 @@ import { parseUsageSpread } from "./usage-defaults.js";
  * See docs/DECISIONS.md "Threat spreads are grouped by the stats each calculation reads".
  *
  * Keyed by the stat a move hits or attacks with: break points read the target's HP and the
- * defense the move hits, bulk points read the attacker's offensive stat.
+ * defense the move hits, bulk points read the attacker's offensive stat. Speed tiers read the
+ * final Speed (`spe`), so a Timid 0 SP and a neutral 13 SP build count as one Speed.
  */
 export const SPREAD_GROUP_STATS = Object.freeze({
   def: Object.freeze(["hp", "def"]),
   spd: Object.freeze(["hp", "spd"]),
   atk: Object.freeze(["atk"]),
   spa: Object.freeze(["spa"]),
+  spe: Object.freeze(["spe"]),
 });
 export const SPREAD_GROUP_LIMIT = 3;
+// Speed keeps more groups: each Limitless nature profile looks for the most used Speed it can
+// reach, and a less common nature's Speed is rarely in the top three.
+const SPREAD_GROUP_LIMITS = Object.freeze({ spe: 6 });
 
 /**
  * Groups for one stat key, most used first: `{ spread, share, spreadCount }`, where `spread` is
@@ -50,10 +55,13 @@ export function spreadGroupsFor(pokemon, spreads, key, { limit = SPREAD_GROUP_LI
 }
 
 /** Every stat key's groups for one Pokémon, as stored in `champions.usage.spreadGroups`. */
-export function buildSpreadGroups(pokemon, spreads, options) {
+export function buildSpreadGroups(pokemon, spreads, options = {}) {
   const result = {};
   for (const key of Object.keys(SPREAD_GROUP_STATS)) {
-    const groups = spreadGroupsFor(pokemon, spreads, key, options);
+    const groups = spreadGroupsFor(pokemon, spreads, key, {
+      ...options,
+      limit: options.limit ?? SPREAD_GROUP_LIMITS[key] ?? SPREAD_GROUP_LIMIT,
+    });
     if (groups.length > 0) result[key] = groups;
   }
   return Object.keys(result).length > 0 ? result : null;
@@ -89,6 +97,38 @@ export function topSpreadGroups(pokemon) {
     if (group) result[key] = group;
   }
   return Object.keys(result).length > 0 ? result : null;
+}
+
+/**
+ * The most used Speed group a set with `nature` can reach, as `{ speed, sp, share, spreadCount,
+ * spreadName }` with the least SP that gives that Speed under `nature`; null when no group fits.
+ * Groups pool every nature, so a nature's Speed counts the builds of other natures that land on
+ * the same Speed.
+ */
+export function speedGroupForNature(pokemon, nature) {
+  const base = pokemon?.baseStats?.spe;
+  if (!Number.isInteger(base) || base < 1 || !nature) return null;
+  const usage = pokemon?.champions?.usage;
+  const stored = usage?.spreadGroups?.spe;
+  const groups = stored?.length
+    ? stored
+    : spreadGroupsFor(pokemon, usage?.spreads, "spe", { limit: Infinity });
+  for (const group of groups) {
+    const parsed = parseUsageSpread(group?.spread);
+    if (!parsed) continue;
+    const speed = statValue(pokemon, "spe", parsed);
+    for (let sp = 0; sp <= 32; sp += 1) {
+      if (calculateStat({ base, stat: "spe", sp, nature }) !== speed) continue;
+      return {
+        speed,
+        sp,
+        share: group.share,
+        spreadCount: group.spreadCount ?? 1,
+        spreadName: group.spread,
+      };
+    }
+  }
+  return null;
 }
 
 function statValue(pokemon, stat, { nature, sp }) {

@@ -19,7 +19,7 @@ const UNUSED_METADATA_KEYS = ["num", "contestType", "isNonstandard", "zMove", "m
 // labels/URLs, spread and NCP metadata, and overlay descriptions are browser-only.
 const CHAMPIONS_KEYS = ["legal", "tier", "usageCount", "usagePercent"];
 // Per-Pokémon usage lists keep the entries get_sets returns (topUsageList); defaults only read
-// the top one. Smogon spreads stay whole because speed_tiers matches them by nature, and Speed
+// the top one. Smogon spreads and Speed groups stay whole because speed_tiers matches them by nature, and Speed
 // profiles keep only those speed_tiers can show (speedProfilesInUse).
 const CAPPED_USAGE_KEYS = USAGE_LIST_KEYS.filter((key) => key !== "spreads");
 const USAGE_ENTRY_KEYS = ["id", "name", "usagePercent"];
@@ -86,6 +86,8 @@ function slimUsage(champions) {
     ));
   }
   if (usage.spreads?.length) result.spreads = usage.spreads.map(({ name, usagePercent }) => ({ name, usagePercent }));
+  // speed_tiers estimates each Speed profile's SP from the Speed groups (speedGroupForNature).
+  if (usage.spreadGroups?.spe?.length) result.spreadGroups = { spe: usage.spreadGroups.spe };
   const profiles = speedProfilesInUse({ champions });
   if (profiles.length) result.speedProfiles = profiles;
   return result;

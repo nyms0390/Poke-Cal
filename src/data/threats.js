@@ -61,8 +61,20 @@ function formAbility(pokemon, abilityLookup) {
   return abilityLookup?.get(normalizeId(name)) ?? { id: normalizeId(name), name };
 }
 
-export function speedPresets({ baseSpe, nature = "Hardy" }) {
-  const likelyLabel = likelySpeedLabel(nature);
+// The ring marks the preset that equals the most used Smogon Speed group; without one it follows
+// the nature (+Spe max, -Spe min, otherwise neutral max). `likely: false` marks none.
+export function speedPresets({ baseSpe, nature = "Hardy", speed = null, likely = true }) {
+  const presets = [
+    ["max (+spe 32)", 32, "Timid"],
+    ["max (neutral 32)", 32, "Hardy"],
+    ["uninvested", 0, "Hardy"],
+    ["min (-spe 0)", 0, "Brave"],
+  ];
+  const groupLabel = Number.isFinite(speed)
+    ? presets.find(([, sp, presetNature]) =>
+      calculateStat({ base: baseSpe, stat: "spe", sp, nature: presetNature }) === speed)?.[0]
+    : undefined;
+  const likelyLabel = !likely ? "" : groupLabel ?? likelySpeedLabel(nature);
   return [
     speedPreset("max (+spe 32)", { baseSpe, sp: 32, nature: "Timid" }, likelyLabel),
     speedPreset("max (neutral 32)", { baseSpe, sp: 32, nature: "Hardy" }, likelyLabel),
@@ -147,6 +159,10 @@ export function threatForPokemon(
       speed: speedPresets({
         baseSpe: pokemon.baseStats?.spe ?? pokemon.baseSpeed,
         nature,
+        speed: usageSpreads?.spe?.stats.spe ?? null,
+        // Limitless counts the species but saw no set of this form (every player held the Mega
+        // Stone), so its few ladder spreads say nothing about the Speed it is likely to have.
+        likely: !(Number.isFinite(pokemon?.champions?.usagePercent) && usage && !usage.natures?.length),
       }),
     },
   };

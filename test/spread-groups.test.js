@@ -7,6 +7,7 @@ import { mergeLimitlessUsage } from "../src/data/limitless-data.js";
 import { buildSmogonSpreads, mergeSmogonSpreads } from "../src/data/smogon-data.js";
 import {
   buildSpreadGroups,
+  speedGroupForNature,
   spreadGroupsFor,
   topSpreadGroup,
   topSpreadGroups,
@@ -64,7 +65,12 @@ test("groups spreads by the final stats each key reads, not by SP or nature", ()
     { spread: "Bold:32/0/1/1/32/0", share: 27, spreadCount: 4 },
     { spread: "Modest:32/0/8/1/25/0", share: 4, spreadCount: 1 },
   ]);
-  assert.equal(spreadGroupsFor(pokemon, spreads, "spe").length, 0, "unknown keys have no groups");
+  // Bold, Calm and Modest all leave Speed neutral, so every 0 Spe spread is one Speed (105).
+  assert.deepEqual(spreadGroupsFor(pokemon, spreads, "spe"), [
+    { spread: "Bold:32/0/1/1/32/0", share: 28, spreadCount: 4 },
+    { spread: "Calm:32/0/8/1/20/5", share: 3, spreadCount: 1 },
+  ]);
+  assert.equal(spreadGroupsFor(pokemon, spreads, "hp").length, 0, "unknown keys have no groups");
 });
 
 test("a group of small spreads outranks a single larger spread", () => {
@@ -234,4 +240,41 @@ test("editing a threat's nature or SP replaces the groups for every move", () =>
   const reentered = applyThreatControl(threat, { kind: "sp", stat: "def", value: String(threat.spPresets.bulk.def) });
   assert.notEqual(threatAnalysisSignature(reentered, "break"), threatAnalysisSignature(threat, "break"));
   assert.notEqual(threatAnalysisSignature(reentered, "bulk"), threatAnalysisSignature(threat, "bulk"));
+});
+
+test("Speed groups pool natures by final Speed and each nature takes the most used one it reaches", () => {
+  // Base 85 Speed: Timid 0 SP = floor(105 * 1.1) = 115; neutral 10 SP = 115 too; Timid 32 = 150.
+  const spreads = [
+    { name: "Timid:32/0/2/32/0/32", usagePercent: 20 },
+    { name: "Timid:32/0/2/32/0/0", usagePercent: 12 },
+    { name: "Modest:32/0/2/22/0/10", usagePercent: 11 },
+    { name: "Quiet:32/0/2/32/0/0", usagePercent: 6 },
+  ];
+  const pokemon = pokemonWith(spreads);
+
+  assert.deepEqual(spreadGroupsFor(pokemon, spreads, "spe").slice(0, 2), [
+    { spread: "Timid:32/0/2/32/0/0", share: 23, spreadCount: 2 },
+    { spread: "Timid:32/0/2/32/0/32", share: 20, spreadCount: 1 },
+  ]);
+  assert.deepEqual(speedGroupForNature(pokemon, "Modest"), {
+    speed: 115, sp: 10, share: 23, spreadCount: 2, spreadName: "Timid:32/0/2/32/0/0",
+  });
+  assert.equal(speedGroupForNature(pokemon, "Timid").sp, 0);
+  // Quiet tops out at floor(137 * 0.9) = 123, so it cannot reach 150; 115 needs
+  // floor((105 + sp) * 0.9) = 115, i.e. 23 SP.
+  assert.equal(speedGroupForNature(pokemon, "Quiet").sp, 23);
+  assert.equal(buildSpreadGroups(pokemon, spreads).spe.length, 3, "Speed keeps up to six groups");
+});
+
+test("the likely Speed preset follows the top Speed group, and a Mega Stone base form has none", () => {
+  const bold = pokemonWith([{ name: "Bold:32/0/10/17/7/0", usagePercent: 30 }]);
+  assert.equal(
+    threatForPokemon(bold).spPresets.speed.find(({ likely }) => likely)?.label,
+    "uninvested",
+    "Bold 0 Spe is the uninvested preset, not the neutral 32 the nature rule assumes",
+  );
+
+  const megaBase = pokemonWith([{ name: "Quiet:32/0/2/32/0/0", usagePercent: 44 }]);
+  megaBase.champions.usage.natures = [];
+  assert.equal(threatForPokemon(megaBase).spPresets.speed.some(({ likely }) => likely), false);
 });
