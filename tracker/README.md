@@ -10,7 +10,7 @@ Imported from the prototype folder in `~/Documents/PokéCal-review-trial/prototy
   - `live-1/`: the real live match (AirPlay display capture), plus `turn-log.before-fixes.jsonl`.
   - `ipad-ladder-1/`: `run-fast.sh` on the iPad recording 1030_2005.mov (scored against the built-in ladder-1 truth; `compare.md`).
   - `floette-window2/`: `run-fast.sh` on the broadcast window2.ts (scored against `truth/floette-g2.json` and `-g3.json`; `compare.md`).
-  - `live-2/`: a live ladder session over the iPad cable (QuickTime movie-recording preview, `run-live.sh --window QuickTime`), two matches, both ended by a forfeit; `turn-log.before-fixes.jsonl` is what the reader wrote on the day, `notes.md` what the owner confirmed.
+  - `live-2/`: a live ladder session over the iPad cable (QuickTime movie-recording preview, `run-live.sh --window QuickTime`), two matches, both ended by a forfeit; `turn-log.before-fixes.jsonl` is what the reader wrote on the day, `notes.md` what the owner confirmed, `team.txt` the owner's team for `review.mjs --team`.
 
 A live session can hold several matches: `parse.mjs` starts a new match after each win/lose line (a forfeit line alone only marks it), numbering them with `game`. `run-live.sh` stops after the first match ends; `--matches N` stops after N, `--matches 0` runs until Ctrl-C.
 

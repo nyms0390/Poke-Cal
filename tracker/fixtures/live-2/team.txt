@@ -1,0 +1,53 @@
+Grapploct @ Life Orb
+Ability: Technician
+SPs: 24 HP / 16 Atk / 8 Def / 18 SpD
+Adamant Nature
+- Storm Throw
+- Ice Punch
+- Octolock
+- Detect
+
+Malamar @ Malamarite
+Ability: Contrary
+SPs: 30 HP / 18 Atk / 18 Def
+Adamant Nature
+- Superpower
+- Knock Off
+- Trick Room
+- Protect
+
+Whimsicott @ Occa Berry
+Ability: Prankster
+SPs: 30 HP / 32 SpD / 4 Spe
+Timid Nature
+- Tailwind
+- Moonblast
+- Charm
+- Fake Tears
+
+Staraptor @ Choice Scarf
+Ability: Intimidate
+SPs: 32 HP / 13 Atk / 21 Spe
+Jolly Nature
+- Brave Bird
+- U-turn
+- Close Combat
+- Final Gambit
+
+Volcarona @ Charti Berry
+Ability: Flame Body
+SPs: 19 HP / 13 Def / 5 SpA / 1 SpD / 28 Spe
+Modest Nature
+- Fiery Dance
+- Giga Drain
+- Quiver Dance
+- Protect
+
+Clefable @ Leftovers
+Ability: Unaware
+SPs: 32 HP / 17 Def / 17 SpD
+Calm Nature
+- Moonblast
+- Follow Me
+- Life Dew
+- Psych Up

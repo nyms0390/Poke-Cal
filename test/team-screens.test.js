@@ -8,6 +8,7 @@ import { decodePng } from "../scripts/png.mjs";
 import { nameFontCharacters } from "../scripts/build-name-font.mjs";
 import {
   PANELS,
+  alignScreen,
   detectScreen,
   formatMember,
   iconType,
@@ -16,11 +17,12 @@ import {
   matchText,
   readStatsScreen,
   readTeamScreens,
+  screenOffset,
   speciesFromStats,
 } from "../src/data/team-screens.js";
 import { parseSetPaste } from "../src/data/set-paste.js";
 
-const TEAMS = ["rotom", "charizard", "raichu", "scovillain", "absol", "scrafty", "espathra", "hatterene"].map((name) => {
+const TEAMS = ["rotom", "charizard", "raichu", "scovillain", "absol", "scrafty", "espathra", "hatterene", "grapploct"].map((name) => {
   const dir = new URL(`./fixtures/team-screens/${name}/`, import.meta.url);
   return {
     name,
@@ -66,7 +68,8 @@ test("one misread number still finds the species, flagged as a mismatch", () => 
 test("reads each move's type from its icon", () => {
   const moveType = new Map(catalogs.moves.map((m) => [m.name, m.type]));
   const rows = [38, 96, 150, 205];
-  for (const { abilities, truth } of TEAMS) PANELS.forEach(({ x, y }, slot) => {
+  for (const { abilities: screen, truth } of TEAMS) PANELS.forEach(({ x, y }, slot) => {
+    const abilities = alignScreen(screen);
     truth[slot].moves.forEach((move, row) => {
       assert.equal(iconType(abilities, x + 580, y + rows[row])[0].type, moveType.get(move), `${truth[slot].species} ${move}`);
     });
@@ -91,6 +94,15 @@ test("says how many Pokémon could not be identified instead of dropping them si
   const result = readTeamScreens([stats], without, null);
   assert.equal(result.members.length, 5);
   assert.deepEqual(result.warnings.find((w) => w?.unidentified), { unidentified: 1 });
+});
+
+test("finds the screens when the game draws them lower than usual", () => {
+  const { stats: lower, abilities: lowerAbilities } = TEAMS.find((t) => t.name === "grapploct");
+  assert.equal(screenOffset(lower), 46);
+  assert.equal(screenOffset(lowerAbilities), 46);
+  assert.equal(screenOffset(stats), 0);
+  assert.equal(detectScreen(lower), "stats");
+  assert.equal(detectScreen(lowerAbilities), "abilities");
 });
 
 test("asks for the stats screen when only the abilities screen is given", () => {

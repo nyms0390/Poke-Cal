@@ -1,0 +1,204 @@
+# game 1
+  18.3  withdraw-you  Sneasler, come back!
+  21.5  sendout-you   Go! Incineroar the Great Friend!
+  27.3  status        Incineroar was poisoned!
+  30.3  stat          The opposing Glimmora and the opposing Whimsicott's Attack fell!
+  32.3  move          The opposing Whimsicott used Encore!
+  34.0  effect        It doesn't affect Incineroar.
+  36.3  move          The opposing Glimmora used Sludge Bomb!
+  39.5  effect        It's super effective on Floette!
+  43.5  status        Floette was poisoned!
+  48.0  recoil        The opposing Glimmora lost some of its HP!
+  50.0  move          Floette used Calm Mind!
+  57.0  stat          Floette's Sp.Atk and Sp.Def rose!
+  58.8  recoil        Floette was hurt by its poisoning!
+  61.0  recoil        Incineroar was hurt by its poisoning!
+  63.3  ?             Floette ended its encore!
+ 100.5  withdraw-you  Incineroar, come back!
+ 104.0  sendout-you   Go! Rillaboom!
+ 109.8  status        Rillaboom was poisoned!
+ 113.0  terrain       Grass grew to cover the battlefield!
+ 115.0  move          The opposing Whimsicott used Protect!
+ 118.5  protected     The opposing Whimsicott protected itself!
+ 120.5  move          The opposing Glimmora used Sludge Bomb!
+ 124.0  effect        It's super effective on Floette!
+ 128.0  recoil        The opposing Glimmora lost some of its HP!
+ 130.5  move          Floette used Draining Kiss!
+ 133.0  protected     The opposing Whimsicott protected itself!
+ 136.5  heal          The opposing Glimmora had its HP restored.
+ 140.3  heal          Floette had its HP restored.
+ 142.0  recoil        Floette was hurt by its poisoning!
+ 144.3  recoil        Rillaboom was hurt by its poisoning!
+ 188.3  move          Rillaboom used Fake Out!
+ 191.3  effect        It's not very effective on the opposing Glimmora.
+ 193.8  ?             Toxic spikes were scattered on the ground all around your side!
+ 196.3  move          The opposing Whimsicott used Moonblast!
+ 202.8  faint         Floette fainted!
+ 206.5  flinch        The opposing Glimmora flinched and couldn't move!
+ 210.3  heal          The opposing Glimmora had its HP restored:!
+ 213.8  heal          Rillaboom had its HP restored.
+ 215.5  recoil        Rillaboom was hurt by its poisoning!
+ 217.8  tailwind-end  The opposing side's tailwind petered out!
+ 220.0  forfeit       The battle has ended due to a forfeit.
+# game 2
+ 460.8  leads         Liam sent out Floette the Champion-Tiered and Whimsicott the Champion-Tiered!
+ 464.8  leads         Go! Floette and Incineroar the Great Friend!
+ 469.3  stat          The opposing Floette's Attack fell!
+ 473.5  ?             The opposing Whimsicott surrounded itself with a veil of petals!
+ 487.5  withdraw-opp  Liam withdrew Floette!
+ 490.8  sendout-opp   Liam sent out Glimmora the Great Friend!
+ 494.5  mega-trigger  Flotte's Floettite is reacting to 7**'s m Ring!
+ 504.0  mega          Floette has Mega Evolved into Mega Floette!
+ 506.3  ?             Floette is radiating a fairy aura!
+ 508.5  move          Incineroar used Fake Out!
+ 511.5  effect        It's not very effective on the opposing Glimmora.
+ 514.0  ?             Toxic spikes were scattered on the ground all around your side!
+ 517.0  move          The opposing Whimsicott used Tailwind!
+ 520.8  tailwind      A tailwind started blowing on the opposing side!
+ 523.0  move          Floette used Calm Mind!
+ 529.8  stat          Floette's Sp.Atk and Sp.Def rose!
+ 562.3  move          The opposing Whimsicott used Moonblast!
+ 568.8  stat          Incineroar's Sp.Atk fell!
+ 571.8  move          The opposing Glimmora used Power Gem!
+ 575.3  effect        It's super effective on Incineroar!
+ 577.3  faint         Incineroar fainted!
+ 583.0  recoil        The opposing Glimmora lost some of its HP!
+ 585.3  move          Floette used Dazzling Gleam!
+ 589.8  effect        It's not very effective on the opposing Glimmora.
+ 598.5  sendout-you   Go! Sneasler!
+ 602.3  ?             The toxic spikes disappeared from the ground around your side!
+ 636.8  withdraw-opp  Liam withdrew Whimsicott!
+ 640.0  sendout-opp   Liam sent out Indeedee!
+ 644.3  terrain       The battlefield got weird!
+ 646.0  move          Sneasler used Fake Out!
+ 648.0  ?             The opposing Glimmora is protected by the Psychic Terrain!
+ 650.0  move          The opposing Glimmora used Sludge Bomb!
+ 653.5  effect        It's super effective on Floette!
+ 657.8  status        Floette was poisoned!
+ 662.3  recoil        The opposing Glimmora lost some of its HP!
+ 664.0  move          Floette used Dazzling Gleam!
+ 668.5  effect        It's not very effective on the opposing Glimmora.
+ 670.5  faint         The opposing Glimmora fainted!
+ 674.3  recoil        Floette was hurt by its poisoning!
+ 683.0  sendout-opp   Liam sent out Floette the Champion-Tiered!
+ 724.0  withdraw-you  Sneasler, come back!
+ 727.3  sendout-you   Go! Rillaboom!
+ 731.8  terrain       Grass grew to cover the battlefield!
+ 733.5  mega-trigger  The opposing Floette's Floettite is reacting to Liam's Omni Ring!
+ 742.8  mega          The opposing Floette has Mega Evolved into Mega Floette!
+ 745.0  ?             The opposing Floette is radiating a fairy aura!
+ 747.3  move          The opposing Indeedee used Hyper Voice!
+ 751.5  move          The opposing Floette used Dazzling Gleam!
+ 756.0  faint         Floette fainted!
+ 761.5  heal          The opposing Indeedee had its HP restored.
+ 765.0  heal          Rillaboom had its HP restored.
+ 767.0  tailwind-end  The opposing side's tailwind petered out!
+ 774.3  sendout-you   Go! Sneasler!
+ 798.0  move          The opposing Floette used Protect!
+ 801.3  protected     The opposing Floette protected itself!
+ 803.0  move          Rillaboom used Fake Out!
+ 805.5  protected     The opposing Floette protected itself!
+ 807.8  move          Sneasler used Dire Claw!
+ 810.8  faint         The opposing Indeedee fainted!
+ 816.3  heal          Rillaboom had its HP restored.
+ 822.0  sendout-opp   Liam sent out Whimsicott the Champion-Tiered!
+ 853.0  move          The opposing Whimsicott used Encore!
+ 858.5  ?             Rillaboom must do an encore!
+ 860.3  move          Rillaboom used Fake Out!
+ 862.0  fail          But it failed!
+ 864.0  move          Sneasler used Dire Claw!
+ 867.3  effect        It's super effective on the opposing Floette!
+ 869.3  faint         The opposing Floette fainted!
+ 874.8  heal          The opposing Whimsicott had its HP restored.
+ 878.3  heal          Rillaboom had its HP restored.
+ 890.5  move          Sneasler used Dire Claw!
+ 893.8  effect        It's extremely effective on the opposing Whimsicott!
+ 895.8  faint         The opposing Whimsicott fainted!
+ 899.8  lost          Liam lost!
+# game 3
+ 971.3  leads         Liam sent out Floette the Champion-Tiered and Whimsicott the Champion-Tiered!
+ 975.5  leads         Go! Sneasler and Incineroar the Great Friend!
+ 979.5  stat          The opposing Floette's Attack fell!
+ 983.8  ?             The opposing Whimsicott surrounded itself with a veil of petals!
+1012.3  move          The opposing Whimsicott used Protect!
+1015.8  protected     The opposing Whimsicott protected itself!
+1017.5  move          The opposing Floette used Protect!
+1021.0  protected     The opposing Floette protected itself!
+1023.0  move          Sneasler used Dire Claw!
+1025.5  protected     The opposing Whimsicott protected itself!
+1027.3  move          Incineroar used Parting Shot!
+1029.8  protected     The opposing Floette protected itself!
+1061.5  mega-trigger  The opposing Floette's Floettite is reacting to Liam's Omni Ring!
+1070.8  mega          The opposing Floette has Mega Evolved into Mega Floette!
+1073.0  ?             The opposing Floette is radiating a fairy aura!
+1075.3  move          The opposing Whimsicott used Tailwind!
+1079.3  tailwind      A tailwind started blowing on the opposing side!
+1081.3  move          The opposing Floette used Dazzling Gleam!
+1086.8  move          Sneasler used Dire Claw!
+1090.0  effect        It's super effective on the opposing Floette!
+1092.3  faint         The opposing Floette fainted!
+1096.3  move          Incineroar used Parting Shot!
+1099.8  stat          The opposing Whimsicott's Attack and Sp.Atk fell!
+1113.8  sendout-you   Go! Rillaboom!
+1118.8  terrain       Grass grew to cover the battlefield!
+1122.3  heal          Sneasler had its HP restored.
+1139.0  sendout-opp   Liam sent out Indeedee!
+1143.3  terrain       The battlefield got weird!
+1168.0  withdraw-opp  Liam withdrew Whimsicott!
+1171.3  sendout-opp   Liam sent out Glimmora the Great Friend!
+1175.0  withdraw-you  Sneasler, come back!
+1178.3  sendout-you   Go! Incineroar the Great Friend!
+1182.3  stat          The opposing Indeedee and the opposing Glimmora's Attack fell!
+1184.5  move          The opposing Indeedee used Expanding Force!
+1186.3  effect        It doesn't affect Incineroar.
+1194.5  move          Rillaboom used High Horsepower!
+1198.5  effect        It's extremely effective on the opposing Glimmora!
+1201.0  ?             Toxic spikes were scattered on the ground all around your side!
+1203.0  faint         The opposing Glimmora fainted!
+1212.0  sendout-opp   Liam sent out Whimsicott the Champion-Tiered!
+1228.8  withdraw-you  Rillaboom, come back!
+1232.0  sendout-you   Go! Sneasler!
+1235.5  ?             The toxic spikes disappeared from the ground around your side!
+1237.8  move          The opposing Whimsicott used Moonblast!
+1247.5  move          The opposing Indeedee used Expanding Force!
+1249.3  effect        It doesn't affect Incineroar.
+1256.5  effect        It's extremely effective on Sneasler!
+1258.5  faint         Sneasler fainted!
+1262.5  move          Incineroar used Flare Blitz!
+1268.0  recoil        Incineroar was damaged by the recoil!
+1274.5  sendout-you   Go! Rillaboom!
+1279.0  terrain       Grass grew to cover the battlefield!
+1292.0  move          Rillaboom used Grassy Glide!
+1295.5  faint         The opposing Indeedee fainted!
+1299.3  move          The opposing Whimsicott used Moonblast!
+1306.8  move          Incineroar used Flare Blitz!
+1315.3  effect        It's super effective on the opposing Whimsicott!
+1317.0  item-reveal   The opposing Whimsicott's Occa Berry lessened the damage it took!
+1319.0  recoil        Incineroar was damaged by the recoil!
+1323.3  heal          The opposing Whimsicott had its HP restored.
+1326.8  heal          Rillaboom had its HP restored.
+1330.5  heal          Incineroar had its HP restored.
+1332.3  tailwind-end  The opposing side's tailwind petered out!
+1342.0  move          The opposing Whimsicott used Moonblast!
+1348.5  faint         Rillaboom fainted!
+1352.5  move          Incineroar used Flare Blitz!
+1357.8  effect        It's super effective on the opposing Whimsicott!
+1359.8  faint         The opposing Whimsicott fainted!
+1474.8  move          Sneasler used Fake Out!
+1476.5  ?             Toxic spikes were scattered on the ground all around your side!
+1478.0  move          The opposing Whimsicott used Moonblast!
+1482.3  move          The opposing Glimmora used Power Gem!
+1484.3  faint         Incineroar fainted!
+1485.8  move          Floette used Dazzling Gleam!
+1488.0  faint         The opposing Glimmora fainted!
+1489.8  move          The opposing Floette used Dazzling Gleam!
+1492.0  faint         Floette fainted!
+1493.8  move          Sneasler used Dire Claw!
+1495.5  faint         The opposing Indeedee fainted!
+1496.8  move          Sneasler used Dire Claw!
+1502.5  move          Sneasler used Dire Claw!
+1505.3  withdraw-opp  Liam withdrew Whimsicott!
+1507.8  sendout-opp   • Liam sent out Glimmora the Great Friend!
+1509.5  move          Rillaboom used High Horsepower!
+1515.8  move          Rillaboom used Grassy Glide!
+1520.3  move          Incineroar used Flare Blitz!

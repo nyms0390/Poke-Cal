@@ -34,4 +34,6 @@ Not messages: two other channels.
 
 Unmatched (3): `勻碗眠廣角鏡Marg！` (team-preview noise at 30 s) and the leads `蚊香蛙皇！` / `具甲武者！` at 100 s, whose `上吧！` was read as a separate faded line.
 
+Trick Room (`X扭曲了時空！`, live-2) sets `field.trickRoom` on the next four turns; its end (`扭曲的時空復原了`) is written but not seen yet.
+
 Written into `templates.mjs` but not seen in this video, so unverified: immune (`對X好像沒有效果`), other terrains and weathers, weather end, `無法再提高了`, `顯著` (+3), loss (`輸給了P！`).

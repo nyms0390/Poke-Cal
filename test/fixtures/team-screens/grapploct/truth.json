@@ -1,0 +1,10 @@
+{
+  "team": [
+    { "species": "Grapploct", "nature": "Adamant", "stats": [179, 169, 118, 81, 118, 62], "sp": [24, 16, 8, 0, 18, 0], "ability": "Technician", "item": "Life Orb", "moves": ["Storm Throw", "Ice Punch", "Octolock", "Detect"] },
+    { "species": "Malamar", "nature": "Adamant", "stats": [191, 143, 126, 79, 95, 93], "sp": [30, 18, 18, 0, 0, 0], "ability": "Contrary", "item": "Malamarite", "moves": ["Superpower", "Knock Off", "Trick Room", "Protect"] },
+    { "species": "Whimsicott", "nature": "Timid", "stats": [165, 78, 105, 97, 127, 154], "sp": [30, 0, 0, 0, 32, 4], "ability": "Prankster", "item": "Occa Berry", "moves": ["Tailwind", "Moonblast", "Charm", "Fake Tears"] },
+    { "species": "Staraptor", "nature": "Jolly", "stats": [192, 153, 90, 63, 80, 155], "sp": [32, 13, 0, 0, 0, 21], "ability": "Intimidate", "item": "Choice Scarf", "moves": ["Brave Bird", "U-turn", "Close Combat", "Final Gambit"] },
+    { "species": "Volcarona", "nature": "Modest", "stats": [179, 72, 98, 176, 126, 148], "sp": [19, 0, 13, 5, 1, 28], "ability": "Flame Body", "item": "Charti Berry", "moves": ["Fiery Dance", "Giga Drain", "Quiver Dance", "Protect"] },
+    { "species": "Clefable", "nature": "Calm", "stats": [202, 81, 110, 115, 139, 80], "sp": [32, 0, 17, 0, 17, 0], "ability": "Unaware", "item": "Leftovers", "moves": ["Moonblast", "Follow Me", "Life Dew", "Psych Up"] }
+  ]
+}

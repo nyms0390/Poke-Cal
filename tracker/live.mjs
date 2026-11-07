@@ -55,7 +55,7 @@ function describe(e) {
       const a = e.active ?? {};
       const team = (s) => ['left', 'right'].map((k) => a[s]?.[k] && `${a[s][k].species} ${hpOf(a[s][k].hp)}`).filter(Boolean).join(', ');
       const f = e.field ?? {};
-      const field = [f.weather && `${f.weather}${f.weatherTurns ? ` ${f.weatherTurns}` : ''}`, f.terrain && `${f.terrain}${f.terrainTurns ? ` ${f.terrainTurns}` : ''}`].filter(Boolean).join(', ');
+      const field = [f.weather && `${f.weather}${f.weatherTurns ? ` ${f.weatherTurns}` : ''}`, f.terrain && `${f.terrain}${f.terrainTurns ? ` ${f.terrainTurns}` : ''}`, f.trickRoom && `Trick Room${f.trickRoomTurns ? ` ${f.trickRoomTurns}` : ''}`].filter(Boolean).join(', ');
       return `begins: you ${team('you')} | opp ${team('opp')}${field ? ` | ${field}` : ''}`;
     }
     case 'move': return `${side(e)} ${e.species} used ${e.move}${e.targets?.length ? ` → ${e.targets.join(', ')}` : ''}`;

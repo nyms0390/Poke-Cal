@@ -31,6 +31,9 @@ export const TEMPLATES = [
   { kind: 'terrain', terrain: 'electric', re: /^腳下電光飛閃[！!]/, resolves: true },
   { kind: 'terrain', terrain: 'misty', re: /^腳下霧氣繚繞[！!]/, resolves: true },
   { kind: 'terrain-end', re: /^腳下的(?:草|霧|電|奇妙).*(?:消失|恢復)/, resolves: true },
+  // Trick Room: "烏賊王扭曲了時空！" when set, "扭曲的時空復原了！" when it ends (seen in live-2).
+  { kind: 'trick-room', re: new RegExp(`^${W}扭曲了時空[！!]`), resolves: true },
+  { kind: 'trick-room-end', re: /^扭曲的時空復原了/, resolves: true },
   { kind: 'weather', weather: 'rain', re: /^開始下雨了[！!]/, resolves: false },
   { kind: 'weather', weather: 'sun', re: /^日照變強了[！!]/, resolves: false },
   { kind: 'weather', weather: 'sand', re: /^開始刮沙暴了[！!]/, resolves: false },

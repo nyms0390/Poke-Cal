@@ -88,3 +88,18 @@ test("a session log is reviewed one match at a time", () => {
   const events = [{ type: "match", game: 1 }, { type: "turn", n: 1 }, { type: "end" }, { type: "match", game: 2 }, { type: "turn", n: 1 }];
   assert.deepEqual(splitMatches(events).map((g) => g.length), [3, 2]);
 });
+
+test('live-2 with the real team: Trick Room flips the Speed checks, and an unread earlier hit skips the KO check', async () => {
+  const { readFileSync } = await import('node:fs');
+  const dir = new URL('../tracker/fixtures/live-2/', import.meta.url);
+  const events = readFileSync(new URL('turn-log.jsonl', dir), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  const teamPaste = readFileSync(new URL('team.txt', dir), 'utf8');
+  const [first, second] = splitMatches(events).map((match) => reviewLog(ctx, match, { teamPaste }));
+  // Match 1: Double-Edge (target not read) then Shadow Ball KO'd Malamar, so 191 is not Shadow Ball's damage.
+  assert.equal(first.verdicts.length, 0);
+  assert.ok([...first.turnNotes.values()].flat().some((n) => /not checked/.test(n)));
+  // Match 2: under Trick Room Arcanine-Hisui moving after Grapploct (Speed 62) means it is faster.
+  const arcanine = second.verdicts.find((v) => v.species === 'Arcanine-Hisui');
+  assert.ok(arcanine.fitting.length > 0);
+  assert.ok(arcanine.fitting.every((c) => c.state.nature === 'Jolly'));
+});

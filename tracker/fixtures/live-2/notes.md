@@ -6,4 +6,6 @@ Two ladder matches captured live on 2026-11-07 from a QuickTime movie-recording 
 - Match 2 won vs Sannoke.
 - The owner confirmed the final Knock Off took Gholdengo from 100% to 0.
 
-`turn-log.jsonl` is the reader's output before parser fixes: it merges both matches into one log.
+`turn-log.before-fixes.jsonl` is the reader's output on the day: it merges both matches into one log. `turn-log.jsonl` is the current parser's output.
+
+`team.txt` is the owner's team (隊伍6) as the screenshot reader read it from the team screens (test/fixtures/team-screens/grapploct). The owner changed two moves after these matches; every move the log shows is still on it.

@@ -286,6 +286,9 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
   const megaOf = {}; // "side:species" -> form
   const curName = (side, sp) => megaOf[`${side}:${sp}`] ?? sp;
   let terrain = null;
+  // Trick Room lasts five turns counting the one it was set in: the last turn it covers.
+  let trickRoomUntil = null;
+  let turnNumber = 0;
   let weather = null; // from weather messages; the field banner wins when it shows one
   let lastMove = null;
   const stages = {}; // "side:species" -> {atk: -1, …}, reset on switch-in (for White Herb)
@@ -330,8 +333,11 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         }
       }
       ev.tu.snapshot = snap;
+      turnNumber = ev.tu.n;
+      if (trickRoomUntil != null && turnNumber > trickRoomUntil) trickRoomUntil = null;
+      const trickRoom = trickRoomUntil != null ? { trickRoom: true, trickRoomTurns: trickRoomUntil - turnNumber + 1 } : {};
       emit({ type: 'turn', n: ev.tu.n, t: ev.t, src: 'ocr', conf: 'likely', raw: `${field.raw ?? ''} | ${snap.raw}`,
-        field: { ...(field.weather ? { weather: field.weather, weatherTurns: field.weatherTurns } : weather ? { weather } : {}), ...(terrain ? { terrain } : {}) },
+        field: { ...(field.weather ? { weather: field.weather, weatherTurns: field.weatherTurns } : weather ? { weather } : {}), ...(terrain ? { terrain } : {}), ...trickRoom },
         active: snap.active });
       continue;
     }
@@ -573,6 +579,12 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         }
         case 'terrain-end':
           terrain = null;
+          break;
+        case 'trick-room':
+          trickRoomUntil = turnNumber + 4;
+          break;
+        case 'trick-room-end':
+          trickRoomUntil = null;
           break;
         case 'weather':
           weather = tp.weather;
