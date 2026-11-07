@@ -11,6 +11,7 @@
 //        node live.mjs --replay <ocr.jsonl> <outdir> [--speed 10]   feeds a saved ocr.jsonl at its own timing
 //        (× speed) instead of capturing, to check the console and the auto-stop offline
 //        --quiet (or POKECAL_QUIET=1): no sound at the end, for replays and tests
+//        --matches N: stop 3 s after the Nth match ends (default 1); --matches 0 runs until Ctrl-C
 import { spawn, spawnSync } from 'node:child_process';
 import { createWriteStream, existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -18,7 +19,10 @@ import { fileURLToPath } from 'node:url';
 const argv = process.argv.slice(2);
 const replay = argv[0] === '--replay';
 const quiet = argv.includes('--quiet') || !!process.env.POKECAL_QUIET;
-const [bin, out, ...rest] = (replay ? argv.slice(1) : argv).filter((a) => a !== '--quiet');
+// --matches N: stop after N matches end (default 1); 0 keeps going until Ctrl-C, for a ladder session.
+const mi = argv.indexOf('--matches');
+const matchLimit = mi >= 0 ? Number(argv[mi + 1]) : 1;
+const [bin, out, ...rest] = (replay ? argv.slice(1) : argv).filter((a, i, all) => a !== '--quiet' && a !== '--matches' && all[i - 1] !== '--matches');
 const here = fileURLToPath(new URL('.', import.meta.url));
 // Replay feeder: prints the saved lines at t / speed s, then keeps running like a capture until stopped (gives up 30 s on).
 const FEED = `const [p, k] = process.argv.slice(1), rows = require('fs').readFileSync(p, 'utf8').trim().split('\\n');
@@ -37,7 +41,7 @@ const child = replay
   : spawn(bin, ['--live', '--profiles', `${here}profiles`, '--content-png', `${out}/content.png`, ...rest], { stdio: ['ignore', 'pipe', 'inherit'] });
 child.stdout.pipe(ocr);
 
-let liveStart = null, lastSize = 0, ended = false, stopping = false, userStop = false;
+let liveStart = null, lastSize = 0, ended = false, stopping = false, userStop = false, endsSeen = 0;
 const printed = new Map(); // event key -> printed line
 const latency = {}; // type -> [seconds]
 
@@ -61,7 +65,7 @@ function describe(e) {
     case 'hp': return `${side(e) || '?'} ${e.species ?? '?'} HP ${unit(e, e.from)} → ${unit(e, e.to)}${e.crit ? ' (crit)' : ''}${e.effect ? ` (${e.effect})` : ''}${e.cause && e.cause !== 'move' ? ` [${e.cause}${e.item ? ` ${e.item}` : ''}]` : ''}`;
     case 'faint': return `${side(e)} ${e.species} fainted`;
     case 'stat': return `${side(e)} ${e.species} ${Object.entries(e.stages ?? {}).map(([k, v]) => `${k} ${v > 0 ? '+' : ''}${v}`).join(', ')}`;
-    case 'end': return `game over: ${e.winner === 'you' ? 'you won' : 'you lost'}`;
+    case 'end': return `game over: ${e.winner === 'you' ? 'you won' : e.winner === 'opp' ? 'you lost' : 'result unknown'}${e.forfeit ? ' (forfeit)' : ''}`;
     default: return `${side(e)} ${e.type} ${JSON.stringify(Object.fromEntries(Object.entries(e).filter(([k]) => !['t', 'src', 'conf', 'raw', 'type', 'side', 'slot'].includes(k))))}`;
   }
 }
@@ -81,10 +85,11 @@ function update() {
   if (liveStart == null) liveStart = JSON.parse(text.split('\n')[0] || '{}').liveStart ?? null;
   if (text.split('\n').length < 3) return;
   const now = Date.now() / 1000;
-  let turn = 0;
+  let turn = 0, game = 1;
   for (const e of parse()) {
     if (e.type === 'turn') turn = e.n;
-    const key = e.type === 'match' ? 'match' : `${e.type}|${e.t}|${e.side ?? ''}|${e.slot ?? ''}|${e.n ?? ''}`;
+    if (e.type === 'match') game = e.game ?? 1;
+    const key = e.type === 'match' ? `match|${game}` : `${e.type}|${e.t}|${e.side ?? ''}|${e.slot ?? ''}|${game}|${e.n ?? ''}`;
     const line = `${e.type === 'match' ? '' : `T${turn} `}${describe(e)}`;
     const old = printed.get(key);
     if (old === line) continue;
@@ -93,7 +98,7 @@ function update() {
     const lat = liveStart != null && e.type !== 'match' ? now - (liveStart + e.t) : null;
     if (lat != null) (latency[e.type] ??= []).push(+lat.toFixed(2));
     console.log(`${line}${lat != null ? `   (+${lat.toFixed(1)} s)` : ''}`);
-    if (e.type === 'end' && !ended) {
+    if (e.type === 'end' && !ended && matchLimit > 0 && ++endsSeen >= matchLimit) {
       ended = true;
       setTimeout(stop, 3000);
     }
