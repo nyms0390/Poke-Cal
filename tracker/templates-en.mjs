@@ -31,6 +31,8 @@ export const TEMPLATES = [
   { kind: 'terrain', terrain: 'electric', re: /^An electric current (?:ran|runs) across the battlefield!/, resolves: true },
   { kind: 'terrain', terrain: 'misty', re: /^Mist swirled (?:about|around) the battlefield!/, resolves: true },
   { kind: 'terrain-end', re: /^The (?:grass|mist|electricity|weirdness) disappeared from the battlefield/, resolves: true },
+  { kind: 'trick-room', re: new RegExp(`^${W} twisted the dimensions!`), resolves: true },
+  { kind: 'trick-room-end', re: /^The twisted dimensions returned to normal!/, resolves: true },
   { kind: 'weather', weather: 'rain', re: /^It started to rain!/, resolves: false },
   { kind: 'weather', weather: 'sun', re: /^The sunlight turned harsh!/, resolves: false },
   { kind: 'weather', weather: 'sand', re: /^A sandstorm kicked up!/, resolves: false },

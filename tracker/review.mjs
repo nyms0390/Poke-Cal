@@ -237,12 +237,14 @@ export function reviewLog(ctx, events, { teamPaste = '' } = {}) {
   });
   const fieldFor = () => createField({ format: 'doubles', weather: field.weather ?? '', terrain: field.terrain ?? '', trickRoom: Boolean(field.trickRoom) });
   let lastMove = null;
+  let turnMoves = []; // every move this turn, for hits whose damage was never read
 
   for (const e of events) {
     if (e.type === 'turn') {
       turn = e.n;
       field = e.field ?? {};
       moves = [];
+      turnMoves = [];
       lastMove = null;
       active.clear();
       for (const side of ['you', 'opp']) {
@@ -279,6 +281,7 @@ export function reviewLog(ctx, events, { teamPaste = '' } = {}) {
       const move = ctx.moveLookup.get(normalizeId(e.move));
       const m = { ...e, moveEntry: move, priority: move?.priority ?? 0 };
       lastMove = m;
+      turnMoves.push(m);
       if (turn > 0) {
         for (const earlier of moves) checkOrder(earlier, m);
         moves.push(m);
@@ -286,6 +289,7 @@ export function reviewLog(ctx, events, { teamPaste = '' } = {}) {
       continue;
     }
     if (e.type === 'hp' && e.cause === 'move' && lastMove && lastMove.side !== e.side) {
+      lastMove.read = true;
       checkHit(lastMove, e);
       continue;
     }
@@ -340,6 +344,13 @@ export function reviewLog(ctx, events, { teamPaste = '' } = {}) {
       hitsReceived.set(id, (hitsReceived.get(id) ?? 0) + 1);
     }
     if (hp.from == null || hp.to == null) return;
+    // A KO after an earlier attack this turn that may have hit the same Pokémon, with no HP read
+    // for it, did less than the HP the log starts it from: no damage check (live-2, Double-Edge
+    // then Shadow Ball on Malamar).
+    if (hp.to === 0 && unreadHitBefore(m, hp)) {
+      addNote(`${m.side === 'opp' ? '' : 'your '}${m.species}'s ${m.move} KO'd ${hp.side === 'you' ? 'your ' : ''}${hp.species}: not checked, an earlier hit this turn had no HP reading`);
+      return;
+    }
     const targets = (m.targets ?? []).length;
     const moveOptions = targets <= 1 ? { singleTarget: true } : {};
     const f = fieldFor();
@@ -381,6 +392,13 @@ export function reviewLog(ctx, events, { teamPaste = '' } = {}) {
       addNote(`${text}: ${summarizeFits(t, fits)}${assumed ? ASSUMED_NOTE : ''}`);
       oppPct.set(baseId(hp.species), hp.to);
     }
+  }
+
+  function unreadHitBefore(m, hp) {
+    const target = `${hp.side}.${hp.slot}`;
+    return turnMoves.some((x) => x !== m && x.side === m.side && !x.read
+      && x.moveEntry && x.moveEntry.category !== 'Status'
+      && (!(x.targets ?? []).length || x.targets.includes(target)));
   }
 
   function hitFit({ attacker, defender, move, f, moveOptions, observed, ko, unit, from, id, crit: wasCrit }) {
@@ -479,6 +497,16 @@ export function formatReview(review) {
   return lines.join('\n');
 }
 
+// A live session's log holds one match … end run per match: review each on its own.
+export function splitMatches(events) {
+  const games = [];
+  for (const e of events) {
+    if (e.type === 'match' || !games.length) games.push([]);
+    games.at(-1).push(e);
+  }
+  return games;
+}
+
 // ---------- CLI ----------
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
@@ -496,13 +524,18 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const events = readFileSync(logPath, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
   const teamPath = opt('--team');
   const ctx = loadContext();
-  const review = reviewLog(ctx, events, { teamPaste: teamPath ? readFileSync(teamPath, 'utf8') : '' });
-  const md = formatReview(review);
+  const teamPaste = teamPath ? readFileSync(teamPath, 'utf8') : '';
+  const games = splitMatches(events);
+  const reviews = games.map((g) => reviewLog(ctx, g, { teamPaste }));
+  const md = reviews.map((r, i) => {
+    const text = formatReview(r);
+    return games.length > 1 ? text.replace(/^# Match review/, `# Match ${i + 1} review`) : text;
+  }).join('\n');
   if (outPath) writeFileSync(outPath, md);
   else process.stdout.write(md);
   const jsonPath = opt('--json');
   if (jsonPath) {
-    const slim = { ...review, turnNotes: Object.fromEntries(review.turnNotes), own: review.own.map(({ state, ...o }) => o), verdicts: review.verdicts.map((v) => ({ ...v, fitting: v.fitting.map(({ state, ...c }) => c), best: v.best.map(({ state, ...c }) => c), ruledOut: v.ruledOut.map(({ state, ...c }) => c) })) };
-    writeFileSync(jsonPath, JSON.stringify(slim, null, 1));
+    const slim = (review) => ({ ...review, turnNotes: Object.fromEntries(review.turnNotes), own: review.own.map(({ state, ...o }) => o), verdicts: review.verdicts.map((v) => ({ ...v, fitting: v.fitting.map(({ state, ...c }) => c), best: v.best.map(({ state, ...c }) => c), ruledOut: v.ruledOut.map(({ state, ...c }) => c) })) });
+    writeFileSync(jsonPath, JSON.stringify(reviews.length > 1 ? reviews.map(slim) : slim(reviews[0]), null, 1));
   }
 }

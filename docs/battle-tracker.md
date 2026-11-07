@@ -58,7 +58,7 @@ Every event has `type`, and, when it came from a frame, `t` (seconds into the vi
 | `type` | Fields | Notes |
 | --- | --- | --- |
 | `match` | `schema`, `source`, `language`, `video`, `players`, `yourTeam` (Showdown paste), `oppPreview` (species), `oppSheet` (paste, when open sheets are shown) | First line |
-| `turn` | `n`, `field` (`weather`, `weatherTurns`, `terrain`, `trickRoom`, `tailwind`, `screens`), `active` (per side and slot: `species`, `mega`, `hp`, `status`) | From the choose screen; `hp` is `{cur, max}` for you and `{pct}` for the opponent |
+| `turn` | `n`, `field` (`weather`, `weatherTurns`, `terrain`, `trickRoom`, `trickRoomTurns`, `tailwind`, `screens`), `active` (per side and slot: `species`, `mega`, `hp`, `status`) | From the choose screen; `hp` is `{cur, max}` for you and `{pct}` for the opponent |
 | `move` | `side`, `slot`, `species`, `move`, `targets` | In resolution order; failed and protected moves included |
 | `hp` | `side`, `slot`, `species`, `from`, `to`, `unit` (`hp` or `pct`), `cause` (`move`, `weather`, `item`, `ability`, `recoil`, …), `crit`, `effect` (`super`, `resisted`, `immune`) | Damage and healing |
 | `faint` | `side`, `slot`, `species` | |
@@ -66,7 +66,7 @@ Every event has `type`, and, when it came from a frame, `t` (seconds into the vi
 | `mega` | `side`, `slot`, `species`, `form` | |
 | `reveal` | `side`, `species`, `item` or `ability` | First time it shows |
 | `stat` | `side`, `slot`, `species`, `stages` (`{atk: 1, def: 1}`) | From messages |
-| `end` | `winner` | Last line |
+| `end` | `winner` (`you`, `opp`, or null when only a forfeit was seen), `forfeit` (true when a side forfeited) | Last line of each match; a live session holds one `match` … `end` run per match, with `game` numbering them |
 
 Example, turn 2 of the iPad trial:
 

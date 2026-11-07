@@ -160,8 +160,11 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
   // A new turn starts at the first choose frame after at least one battle message since the last choose frame.
   const turns = [];
   {
+    // Turn 1 comes after the leads are sent out: a choose-like screen before that (team select) isn't a turn.
+    const sendOut = sentences.find((s) => /派出了/.test(s.text) || TEMPLATES.some((tp) => ['leads', 'sendout-you', 'sendout-opp'].includes(tp.kind) && tp.re.test(s.text)));
     let lastChoose = -Infinity;
     for (const f of chooseFrames) {
+      if (!profile.splitGames && sendOut && f.t < sendOut.t) continue;
       const msgsBetween = sentences.filter((s) => s.t > lastChoose && s.t < f.t && TEMPLATES.some((tp) => tp.re.test(s.text) && tp.resolves));
       if (!turns.length || msgsBetween.length) turns.push({ n: turns.length + 1, t: f.t, frames: [] });
       turns.at(-1).frames.push(f);
@@ -283,6 +286,9 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
   const megaOf = {}; // "side:species" -> form
   const curName = (side, sp) => megaOf[`${side}:${sp}`] ?? sp;
   let terrain = null;
+  // Trick Room lasts five turns counting the one it was set in: the last turn it covers.
+  let trickRoomUntil = null;
+  let turnNumber = 0;
   let weather = null; // from weather messages; the field banner wins when it shows one
   let lastMove = null;
   const stages = {}; // "side:species" -> {atk: -1, …}, reset on switch-in (for White Herb)
@@ -298,6 +304,7 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
   ].sort((a, b) => a.t - b.t || (a.kind === 'turn' ? -1 : 1));
 
   const playerNames = { you: preview.players.you };
+  let ended = false, forfeitAt = null;
   const nameSide = (who) => {
     // "對手的X" -> opp. Player names: own from preview, opponent learned from 派出/換下 with a non-own name.
     if (who.startsWith('對手的')) return { side: 'opp', name: who.slice(3) };
@@ -326,8 +333,11 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         }
       }
       ev.tu.snapshot = snap;
+      turnNumber = ev.tu.n;
+      if (trickRoomUntil != null && turnNumber > trickRoomUntil) trickRoomUntil = null;
+      const trickRoom = trickRoomUntil != null ? { trickRoom: true, trickRoomTurns: trickRoomUntil - turnNumber + 1 } : {};
       emit({ type: 'turn', n: ev.tu.n, t: ev.t, src: 'ocr', conf: 'likely', raw: `${field.raw ?? ''} | ${snap.raw}`,
-        field: { ...(field.weather ? { weather: field.weather, weatherTurns: field.weatherTurns } : weather ? { weather } : {}), ...(terrain ? { terrain } : {}) },
+        field: { ...(field.weather ? { weather: field.weather, weatherTurns: field.weatherTurns } : weather ? { weather } : {}), ...(terrain ? { terrain } : {}), ...trickRoom },
         active: snap.active });
       continue;
     }
@@ -434,6 +444,11 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         case 'mega-trigger': {
           const { side, name } = nameSide(g.who);
           const sp = species(side, name);
+          // "…和<trainer>的全一環產生了反應": the trainer of that side. Battle text beats the team-preview name box.
+          if (!EN && tp.kind === 'mega-trigger' && g.player && !GENERIC_PLAYER.test(g.player.trim())) {
+            if (side === 'you') playerNames.you = g.player.trim();
+            else if (side === 'opp') playerNames.opp ??= g.player.trim();
+          }
           const im = match(lex.items, g.item);
           if (sp && im) {
             const key = `${side}:${sp.name}:${im.name}`;
@@ -476,6 +491,21 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
           if (sp) addTarget(side, slot);
           emit({ ...base, type: 'hp', conf: sp ? conf(sp) : 'unsure', side, slot, species: sp ? curName(side, sp.name) : null, from: null, to: null,
             unit: side ? unitOf(side) : null, cause: 'move', crit: true, attacker: lastMove ? `${lastMove.side}.${lastMove.slot}` : null });
+          break;
+        }
+        case 'life-orb': {
+          // zh-TW only: Life Orb's self-damage line names no item, but nothing else uses it.
+          const { side, name } = nameSide(g.who);
+          const sp = species(side, name);
+          emit({ ...base, type: 'hp', conf: conf(sp), side, slot: sp ? slotOf(side, sp.name) : null, species: sp ? curName(side, sp.name) : name,
+            from: null, to: null, unit: unitOf(side), cause: 'item', item: 'Life Orb' });
+          if (sp) {
+            const key = `${side}:${sp.name}:Life Orb`;
+            if (!seenItemReveal.has(key)) {
+              seenItemReveal.add(key);
+              emit({ ...base, type: 'reveal', conf: 'likely', side, species: sp.name, item: 'Life Orb' });
+            }
+          }
           break;
         }
         case 'recoil': {
@@ -550,6 +580,12 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         case 'terrain-end':
           terrain = null;
           break;
+        case 'trick-room':
+          trickRoomUntil = turnNumber + 4;
+          break;
+        case 'trick-room-end':
+          trickRoomUntil = null;
+          break;
         case 'weather':
           weather = tp.weather;
           break;
@@ -573,13 +609,18 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
         case 'lose':
           // "成功戰勝了<opponent>！": the opponent's name, unless it is the generic title.
           if (g.player && !GENERIC_PLAYER.test(g.player.trim())) playerNames.opp ??= g.player.trim();
-          emit({ ...base, type: 'end', conf: 'likely', winner: tp.kind === 'win' ? 'you' : 'opp' });
+          if (ended) break;
+          ended = true;
+          emit({ ...base, type: 'end', conf: 'likely', winner: tp.kind === 'win' ? 'you' : 'opp', ...(forfeitAt != null ? { forfeit: true } : {}) });
           break;
         case 'lost':
-          emit({ ...base, type: 'end', conf: 'likely', winner: playerNames.opp && levenshtein(g.player, playerNames.opp) <= 1 ? 'you' : 'opp' });
+          if (ended) break;
+          ended = true;
+          emit({ ...base, type: 'end', conf: 'likely', winner: playerNames.opp && levenshtein(g.player, playerNames.opp) <= 1 ? 'you' : 'opp', ...(forfeitAt != null ? { forfeit: true } : {}) });
           break;
         case 'forfeit':
-          emit({ ...base, type: 'end', conf: 'unsure', winner: null, forfeit: true });
+          // The win/lose line that follows carries the result; an end without one is written after the loop.
+          forfeitAt ??= { ...base };
           break;
         default:
           break;
@@ -819,15 +860,55 @@ function parseGame(frames, game, { sentencesOnly = false } = {}) {
       players: { you: preview.players.you ?? null, opp: null }, yourTeam: paste, oppPreview: [], t: preview.t ?? (game ? frames[0].t : 0), src: 'ocr',
       conf: preview.you.length === 6 ? 'likely' : 'unsure', raw: preview.you.map((p) => p.raw).join(' | ') });
   }
+  if (forfeitAt && !ended) emit({ ...forfeitAt, type: 'end', conf: 'unsure', winner: null, forfeit: true });
+  fixForms(events);
+  events[0].players.you = playerNames.you ?? null;
   events[0].players.opp = playerNames.opp ?? null;
   return { events, sentences, turns };
+}
+
+// ---------- regional forms ----------
+// Forms share a zh-TW name (風速狗 is Arcanine and Arcanine-Hisui), so the name alone picks one. A move the picked
+// form can't learn but exactly one sibling form can (Head Smash) settles it: relabel that side's species everywhere.
+const moveId = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+function fixForms(events) {
+  const byName = new Map(lex.allPokemon.map((p) => [p.name, p]));
+  const used = new Map(); // "side|species" -> Set of move ids
+  for (const e of events) if (e.type === 'move' && e.side && e.species) {
+    const k = `${e.side}|${e.species}`;
+    if (!used.has(k)) used.set(k, new Set());
+    used.get(k).add(moveId(e.move));
+  }
+  const rename = new Map(); // "side|species" -> form
+  for (const [k, moves] of used) {
+    const [side, name] = k.split('|');
+    const p = byName.get(name);
+    if (!p?.moves || [...moves].every((m) => p.moves.includes(m))) continue;
+    const base = p.baseSpecies ?? p.name;
+    const fits = lex.allPokemon.filter((q) => q.name !== name && (q.baseSpecies ?? q.name) === base && !/^Mega/.test(q.forme ?? '')
+      && q.moves && [...moves].every((m) => q.moves.includes(m)));
+    if (fits.length === 1) rename.set(`${side}|${name}`, fits[0].name);
+  }
+  if (!rename.size) return;
+  const to = (side, n) => rename.get(`${side}|${n}`) ?? n;
+  for (const e of events) {
+    if (e.side) for (const f of ['species', 'in', 'out']) if (typeof e[f] === 'string') e[f] = to(e.side, e[f]);
+    if (e.type === 'turn') for (const side of ['you', 'opp']) for (const a of Object.values(e.active?.[side] ?? {})) if (a?.species) a.species = to(side, a.species);
+  }
 }
 
 // ---------- games ----------
 // A broadcast holds several games with desk segments between them. A game starts at a lead send-out
 // ("X sent out A and B!" / "派出了A和B") with no choose screen in the 60 s before it.
 function gameStarts(frames) {
-  if (!profile.splitGames) return [frames[0].t];
+  if (!profile.splitGames) {
+    // A play session (iPad) holds matches back to back: each win/lose line ends one, and the next starts after it.
+    const { sentences } = parseGame(frames, 0, { sentencesOnly: true });
+    const ends = sentences.filter((s) => TEMPLATES.some((tp) => ['win', 'lose', 'lost'].includes(tp.kind) && tp.re.test(s.text))).map((s) => s.t);
+    const starts = [frames[0].t];
+    for (const t of ends) if (t + 1 - starts.at(-1) > 60) starts.push(t + 1);
+    return starts;
+  }
   const { sentences } = parseGame(frames, 0, { sentencesOnly: true });
   const chooseTs = frames.filter((f) => f.choose).map((f) => f.t);
   const starts = [];
@@ -841,13 +922,18 @@ function gameStarts(frames) {
 }
 const starts = gameStarts(allFrames);
 // Frames before the first start are the tail of a game already in progress: kept as a partial game if they hold choose screens.
-const bounds = [-Infinity, ...starts.map((t) => t - 5), Infinity];
+const bounds = profile.splitGames ? [-Infinity, ...starts.map((t) => t - 5), Infinity] : [-Infinity, ...starts.slice(1), Infinity];
 const games = [];
 for (let i = 0; i + 1 < bounds.length; i++) {
   const fs = allFrames.filter((f) => f.t >= bounds[i] && f.t < bounds[i + 1]);
-  if (fs.length && (!profile.splitGames || fs.some((f) => f.choose))) games.push({ frames: fs, partial: profile.splitGames && i === 0 });
+  // After a session's last match, the result and menu screens hold no battle: no game unless a choose screen shows.
+  // A later match in a session must send out Pokémon too (the result screen can look like a choose screen).
+  const sentOut = (f) => /派出了|上吧|就決定是你了|sent out|^Go!/.test(text(f, 'msg'));
+  const keep = profile.splitGames ? fs.some((f) => f.choose) : i === 0 || (fs.some((f) => f.choose) && fs.some(sentOut));
+  if (fs.length && keep) games.push({ frames: fs, partial: profile.splitGames && i === 0 });
 }
-const results = games.map((g, i) => parseGame(g.frames, profile.splitGames ? { n: i + 1, partial: g.partial } : null));
+const numbered = profile.splitGames || games.length > 1;
+const results = games.map((g, i) => parseGame(g.frames, numbered ? { n: i + 1, partial: g.partial } : null));
 const events = results.flatMap((r) => r.events);
 writeFileSync(outPath, events.map((e) => JSON.stringify(e)).join('\n') + '\n');
 writeFileSync(outPath.replace(/\.jsonl$/, '.sentences.txt'), results.map((r, i) => (results.length > 1 ? `# game ${i + 1}\n` : '')

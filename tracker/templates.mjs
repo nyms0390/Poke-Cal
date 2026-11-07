@@ -19,7 +19,9 @@ export const TEMPLATES = [
   { kind: 'effect', effect: 'immune', re: new RegExp(`^對${W}(?:好像)?沒有效果`), resolves: true },
   { kind: 'crit', re: new RegExp(`^擊中了${W}的要害[！!]`), resolves: true },
   { kind: 'crit', re: /擊中了要害[！!]/, resolves: true },
-  { kind: 'recoil', re: new RegExp(`^${W}的生命被削減了`), resolves: true },
+  // "X的生命被削減了一些！" is Life Orb's self-damage in zh-TW; recoil moves say "受到了反作用力造成的傷害".
+  { kind: 'life-orb', re: new RegExp(`^${W}的生命被削減了`), resolves: true },
+  { kind: 'recoil', re: new RegExp(`^${W}受到了反作用力造成的傷害`), resolves: true },
   { kind: 'protected', re: new RegExp(`^${W}在攻擊中守護住了自己`), resolves: true },
   { kind: 'protect-up', re: new RegExp(`^${W}擺出了防守的架勢`), resolves: true },
   { kind: 'follow-me', re: new RegExp(`^${W}變得萬眾矚目了`), resolves: true },
@@ -29,6 +31,9 @@ export const TEMPLATES = [
   { kind: 'terrain', terrain: 'electric', re: /^腳下電光飛閃[！!]/, resolves: true },
   { kind: 'terrain', terrain: 'misty', re: /^腳下霧氣繚繞[！!]/, resolves: true },
   { kind: 'terrain-end', re: /^腳下的(?:草|霧|電|奇妙).*(?:消失|恢復)/, resolves: true },
+  // Trick Room: "烏賊王扭曲了時空！" when set, "扭曲的時空復原了！" when it ends (seen in live-2).
+  { kind: 'trick-room', re: new RegExp(`^${W}扭曲了時空[！!]`), resolves: true },
+  { kind: 'trick-room-end', re: /^扭曲的時空復原了/, resolves: true },
   { kind: 'weather', weather: 'rain', re: /^開始下雨了[！!]/, resolves: false },
   { kind: 'weather', weather: 'sun', re: /^日照變強了[！!]/, resolves: false },
   { kind: 'weather', weather: 'sand', re: /^開始刮沙暴了[！!]/, resolves: false },
@@ -39,6 +44,10 @@ export const TEMPLATES = [
   { kind: 'heal', re: new RegExp(`^${W}的體力回復了`), resolves: true },
   { kind: 'win', re: /^成功戰勝了(?<player>.+?)[！!]/, resolves: true },
   { kind: 'lose', re: /^(?:輸給了|敗給了)(?<player>.+?)[！!]/, resolves: true },
+  // A loss can also read "打敗了！" (seen after a forfeit, live-2).
+  { kind: 'lose', re: /打敗了[！!]$/, resolves: true },
+  // "有一方選擇了投降。": followed by the win or loss line, which carries the result.
+  { kind: 'forfeit', re: /^有一方選擇了投降/, resolves: true },
   { kind: 'wait', re: /^正在等待/, resolves: false },
 ];
 

@@ -91,7 +91,8 @@ export function textMask(image, [x0, y0, x1, y1]) {
       data[j * width + i] = textWeight(pixel(image, left + i, top + j));
     }
   }
-  return trimMask(mainColumns(trimMask({ width, height, data })));
+  const trimmed = trimMask({ width, height, data });
+  return trimmed && trimMask(mainColumns(trimmed));
 }
 
 // Keeps the densest group of columns, where a group allows gaps up to 1.6 line heights: the
@@ -204,11 +205,51 @@ function blurVector(v, gw, gh) {
 
 // ---------- screen detection ----------
 
+// Top of the yellow-green lit tab in the reference screens. The game can draw the whole screen
+// lower (a team opened from another menu sits about 46 reference pixels down), so every reader
+// first finds the tab and moves the image to match.
+const TAB_TOP = 356;
+const TAB_SEARCH = [250, 650];
+
+function isLit([r, g, b]) {
+  return g > 200 && r > 150 && b < 90;
+}
+
+// Reference-pixel rows the screen is drawn below the reference, from the first row where the lit
+// tab fills enough of the tab bar. 0 when no tab is found.
+export function screenOffset(image) {
+  const s = scaleOf(image);
+  for (let y = TAB_SEARCH[0]; y <= TAB_SEARCH[1]; y++) {
+    let count = 0;
+    for (let x = 600; x < 1800; x += 4) if (isLit(pixel(image, x * s, y * s))) count++;
+    if (count > 40) return y - TAB_TOP;
+  }
+  return 0;
+}
+
+// The image moved up or down so its tab sits where the reference screens have it. A screen
+// already in place comes back as it is.
+export function alignScreen(image) {
+  if (image.aligned) return image;
+  const dy = Math.round(screenOffset(image) * scaleOf(image));
+  const row = image.width * 4;
+  let data = image.data;
+  if (dy > 0) {
+    data = new Uint8ClampedArray(image.data.length);
+    data.set(image.data.subarray(dy * row));
+  } else if (dy < 0) {
+    data = new Uint8ClampedArray(image.data.length);
+    data.set(image.data.subarray(0, image.data.length + dy * row), -dy * row);
+  }
+  return { width: image.width, height: image.height, data, aligned: true };
+}
+
 // Which tab is lit: 能力 (abilities) on the left, 狀態 (stats) on the right. The lit tab is
 // yellow-green.
 export function detectScreen(image) {
   const ratio = image.width / image.height;
   if (Math.abs(ratio - REFERENCE_WIDTH / REFERENCE_HEIGHT) > 0.03) return null;
+  image = alignScreen(image);
   const lit = (x0, x1) => {
     const s = scaleOf(image);
     let count = 0;
@@ -347,6 +388,7 @@ export function statCellBoxes({ x, y }) {
 }
 
 export function readStatsScreen(image) {
+  image = alignScreen(image);
   return PANELS.map(({ x, y }) => {
     const stats = {};
     const sp = {};
@@ -427,6 +469,7 @@ export function matchText(mask, candidates, renderText) {
       return { name: c.name, zh: c.zh, shape, score: shape + USAGE_PRIOR * Math.sqrt(Math.min(100, c.usage ?? 0) / 100) };
     })
     .sort((a, b) => b.score - a.score);
+  rankByCharacters(mask, ranked, renderText);
   const tail = rankByTail(mask, ranked, renderText);
   const [first, second] = tail?.ranked ?? ranked;
   return {
@@ -435,6 +478,30 @@ export function matchText(mask, candidates, renderText) {
     score: first.score,
     alternatives: ranked.slice(1, 4).map((r) => r.name),
   };
+}
+
+// The whole-name shape favours names as dense as the read text, so a name of busy characters
+// (霹霹果) can beat the right one (草蠶果). The close candidates are scored again character by
+// character, each against its share of the text's width, and that score is averaged with the
+// whole-name one. Only names of CJK characters, which the game draws at one width.
+const CHARACTER_GROUP = 0.1;
+function rankByCharacters(mask, ranked, renderText) {
+  const top = ranked[0]?.score ?? 0;
+  const close = ranked.filter((r) => r.score >= top - CHARACTER_GROUP && /^[㐀-鿿]{2,}$/.test(r.zh ?? ""));
+  if (close.length < 2) return;
+  for (const r of close) {
+    const chars = [...r.zh];
+    let sum = 0;
+    for (const [k, c] of chars.entries()) {
+      const part = sliceColumns(mask, k / chars.length, (k + 1) / chars.length);
+      const drawn = renderText(c);
+      sum += part && drawn ? shapeScore(part, drawn) : 0;
+    }
+    const perCharacter = sum / chars.length;
+    r.score += (perCharacter - r.shape) / 2;
+    r.shape = (r.shape + perCharacter) / 2;
+  }
+  ranked.sort((a, b) => b.score - a.score);
 }
 
 // Names that differ only in their last character or two (Charizardite X and Y) draw almost the
@@ -468,10 +535,21 @@ function rankByTail(mask, ranked, renderText) {
       confidence: Math.abs(spread - XY_SPREAD),
     };
   }
+  // CJK tails are compared a character at a time, each against its share of the width: as a
+  // whole the denser tail wins (頭帶 over 披帶 for 氣勢披帶).
   const scored = close
     .map((r, i) => {
-      const drawn = renderText(latin ? tails[i] : chars[i].slice(prefix).join(""));
-      return { ...r, tail: drawn ? shapeScore(tailMask, drawn) : 0 };
+      if (latin) {
+        const drawn = renderText(tails[i]);
+        return { ...r, tail: drawn ? shapeScore(tailMask, drawn) : 0 };
+      }
+      let sum = 0;
+      for (let k = prefix; k < length; k++) {
+        const part = sliceColumns(mask, k / length, (k + 1) / length);
+        const drawn = renderText(chars[i][k]);
+        sum += part && drawn ? shapeScore(part, drawn) : 0;
+      }
+      return { ...r, tail: sum / (length - prefix) };
     })
     .sort((a, b) => b.tail - a.tail);
   const names = new Set(scored.map((r) => r.name));
@@ -521,9 +599,9 @@ export function lastRun(mask) {
   return sliceColumns(mask, start / mask.width);
 }
 
-function sliceColumns(mask, fromFraction) {
+function sliceColumns(mask, fromFraction, toFraction = 1) {
   const start = Math.floor(mask.width * fromFraction);
-  const width = mask.width - start;
+  const width = Math.floor(mask.width * toFraction) - start;
   if (width < 2) return null;
   const data = new Uint8Array(width * mask.height);
   for (let j = 0; j < mask.height; j++) for (let i = 0; i < width; i++) data[j * width + i] = mask.data[j * mask.width + start + i];
@@ -531,6 +609,7 @@ function sliceColumns(mask, fromFraction) {
 }
 
 export function readAbilitiesScreen(image, members, catalogs, renderText) {
+  image = alignScreen(image);
   const moveById = new Map(catalogs.moves.map((m) => [m.id, m]));
   const abilityByName = new Map(catalogs.abilities.map((a) => [normalizeId(a.name), a]));
   return PANELS.map(({ x, y }, slot) => {
@@ -585,7 +664,7 @@ export function readTeamScreens(images, catalogs, renderText) {
   const byScreen = {};
   for (const image of images) {
     const screen = detectScreen(image);
-    if (screen) byScreen[screen] = image;
+    if (screen) byScreen[screen] = alignScreen(image);
   }
   if (!byScreen.stats) {
     return { members: [], paste: "", warnings: ["noStats"], screens: Object.keys(byScreen) };

@@ -5,7 +5,8 @@
 #   ./run-live.sh --display [N] [outdir] [options]   whole display N (default the main one): start this first, then
 #       mirror the iPad full screen with AirPlay and play; it waits for the game picture and stops after the win/lose message
 #   ./run-live.sh --window "<app or title substring>" [--profile auto|ipad-zh|broadcast-en] [outdir] [fasttrack options, e.g. --fps 4 --duration 600]
-#   defaults: outdir ./out-live, --profile auto (by the aspect ratio of the picture inside the window)
+#   defaults: outdir ./out-live, --profile auto (by the aspect ratio of the picture inside the window); --matches N stops after
+#       the Nth match ends (default 1), --matches 0 keeps going through a ladder session until Ctrl-C
 # Prints one line per turn-log event as it happens; Ctrl-C (or a win/lose message) stops it and writes
 # <outdir>/ocr.jsonl, turn-log.jsonl, turn-log.sentences.txt, live-stats.json and content.png (the cropped picture,
 # to check the crop). Needs Screen Recording permission for the app you run it from.
@@ -18,7 +19,7 @@ out=$here/out-live
 rest=()
 while (( $# )); do
   case $1 in
-    --window|--window-id|--profile|--fps|--duration|--stable|--msg-force|--plate-reads|--jobs) rest+=($1 $2); shift 2 ;;
+    --window|--window-id|--profile|--fps|--duration|--stable|--msg-force|--plate-reads|--jobs|--matches) rest+=($1 $2); shift 2 ;;
     --display) if [[ $2 == <-> ]]; then rest+=($1 $2); shift 2; else rest+=($1); shift; fi ;;
     --*) rest+=($1); shift ;;
     *) out=$1; shift ;;

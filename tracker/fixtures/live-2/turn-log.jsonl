@@ -1,0 +1,68 @@
+{"type":"match","schema":1,"source":"ocr-prototype","language":"zh-TW","video":null,"profile":"ipad-zh","game":1,"players":{"you":"nyms","opp":null},"yourTeam":"","oppPreview":[],"t":85.01,"src":"ocr","conf":"unsure","raw":""}
+{"t":659.02,"src":"ocr","raw":"八爪武師的攻擊降低了！","type":"stat","conf":"sure","side":"you","slot":"left","species":"Grapploct","stages":{"atk":-1}}
+{"t":661.27,"src":"ocr","raw":"烏賊王的攻擊提高了！","type":"stat","conf":"sure","side":"you","slot":"right","species":"Malamar","stages":{"atk":1}}
+{"type":"turn","n":1,"t":665.77,"src":"ocr","conf":"likely","raw":" | you.left: 八川武師 179 7179 | you.right: 烏賊王 1917191 | you.right: 烏賊王 1912191 | you.right: 烏賊王 191/191 | opp.left: 賽富京 ~100%* | opp.left: 賽富京 ~100% | opp.right: 绿飛龍 100% | opp.right: 暴飛龍 100%","field":{},"active":{"you":{"left":{"species":"Grapploct","hp":{"cur":179,"max":179}},"right":{"species":"Malamar","hp":{"cur":191,"max":191}}},"opp":{"left":{"species":"Gholdengo","hp":{"pct":100}},"right":{"species":"Salamence","hp":{"pct":100}}}}}
+{"t":702.27,"src":"ocr","raw":"對手的暴飛龍超級進化成了超級暴飛龍！","type":"mega","conf":"sure","side":"opp","slot":"right","species":"Salamence","form":"Salamence-Mega"}
+{"t":704.02,"src":"ocr","raw":"烏賊王的烏賊王進化石和nyms的全一環產生了反應！","type":"reveal","conf":"sure","side":"you","species":"Malamar","item":"Malamarite"}
+{"t":713.27,"src":"ocr","raw":"烏賊王超級進化成了超級烏賊王！","type":"mega","conf":"sure","side":"you","slot":"right","species":"Malamar","form":"Malamar-Mega"}
+{"t":715.52,"src":"ocr","raw":"八爪武師使出了看穿！","type":"move","conf":"sure","side":"you","slot":"left","species":"Grapploct","move":"Detect","targets":[]}
+{"t":721.02,"src":"ocr","raw":"對手的暴飛龍使出了捨身衝撞！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Salamence-Mega","move":"Double-Edge","targets":[]}
+{"t":724.77,"src":"ocr","raw":"對手的暴飛龍受到了反作用力造成的傷害！","type":"hp","conf":"sure","side":"opp","slot":"right","species":"Salamence-Mega","from":100,"to":null,"unit":"pct","cause":"recoil"}
+{"t":728.02,"src":"ocr","raw":"對手的賽富豪使出了暗影球！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Gholdengo","move":"Shadow Ball","targets":["you.right"]}
+{"t":733.02,"src":"ocr","raw":"烏賊王倒下了！","type":"hp","conf":"likely","side":"you","slot":"right","species":"Malamar-Mega","from":191,"to":0,"unit":"hp","cause":"move"}
+{"t":733.02,"src":"ocr","raw":"烏賊王倒下了！","type":"faint","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega"}
+{"t":739.02,"src":"ocr","raw":"對手的賽富豪的生命被削減了一些！","type":"hp","conf":"sure","side":"opp","slot":"left","species":"Gholdengo","from":100,"to":null,"unit":"pct","cause":"item","item":"Life Orb"}
+{"t":739.02,"src":"ocr","raw":"對手的賽富豪的生命被削減了一些！","type":"reveal","conf":"likely","side":"opp","species":"Gholdengo","item":"Life Orb"}
+{"t":765.02,"src":"ocr","raw":"打敗了！","type":"end","conf":"likely","winner":"opp","forfeit":true}
+{"type":"match","schema":1,"source":"ocr-prototype","language":"zh-TW","video":null,"profile":"ipad-zh","game":2,"players":{"you":"nyms","opp":"Sannoke"},"yourTeam":"","oppPreview":[],"t":767.02,"src":"ocr","conf":"unsure","raw":""}
+{"type":"reveal","t":841.52,"src":"ocr","conf":"sure","raw":"姆克鷹的 / 威嚇","side":"you","species":"Staraptor","ability":"Intimidate"}
+{"t":842.77,"src":"ocr","raw":"對手的雷丘和對手的賽富豪的攻擊降低了！","type":"stat","conf":"sure","side":"opp","slot":"right","species":"Raichu","stages":{"atk":-1}}
+{"t":842.77,"src":"ocr","raw":"對手的雷丘和對手的賽富豪的攻擊降低了！","type":"stat","conf":"sure","side":"opp","slot":"left","species":"Gholdengo","stages":{"atk":-1}}
+{"type":"turn","n":1,"t":846.02,"src":"ocr","conf":"likely","raw":" | you.left: 姆克鷹 1927192 | you.right: 烏賊王 1917191 | opp.left: 賽富京 100%* | opp.left: 賽富京 100% | opp.right: 雷丘 100% | opp.right: 雷丘 100%*","field":{},"active":{"you":{"left":{"species":"Staraptor","hp":{"cur":192,"max":192}},"right":{"species":"Malamar","hp":{"cur":191,"max":191}}},"opp":{"left":{"species":"Gholdengo","hp":{"pct":100}},"right":{"species":"Raichu","hp":{"pct":100}}}}}
+{"t":885.52,"src":"ocr","raw":"Sannoke派出了轟擂金剛猩！","type":"switch","conf":"sure","side":"opp","slot":"left","out":"Gholdengo","in":"Rillaboom"}
+{"t":892.02,"src":"ocr","raw":"對手的雷丘的雷丘進化石Y和Sannoke的全一環產生了反應！","type":"reveal","conf":"sure","side":"opp","species":"Raichu","item":"Raichunite Y"}
+{"t":901.52,"src":"ocr","raw":"對手的雷丘超級進化成了超級雷丘！","type":"mega","conf":"sure","side":"opp","slot":"right","species":"Raichu","form":"Raichu-Mega"}
+{"t":903.27,"src":"ocr","raw":"烏賊王的烏賊王進化石和nyms的全一環產生了反應！","type":"reveal","conf":"sure","side":"you","species":"Malamar","item":"Malamarite"}
+{"t":912.52,"src":"ocr","raw":"烏賊王超級進化成了超級烏賊王！","type":"mega","conf":"sure","side":"you","slot":"right","species":"Malamar","form":"Malamar-Mega"}
+{"t":915.02,"src":"ocr","raw":"姆克鷹使出了搏命！","type":"move","conf":"sure","side":"you","slot":"left","species":"Staraptor","move":"Final Gambit","targets":["opp.right"]}
+{"t":922.02,"src":"ocr","raw":"姆克鷹倒下了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Staraptor","from":192,"to":0,"unit":"hp","cause":"move"}
+{"t":922.02,"src":"ocr","raw":"姆克鷹倒下了！","type":"faint","conf":"sure","side":"you","slot":"left","species":"Staraptor"}
+{"t":926.27,"src":"ocr","raw":"對手的雷丘倒下了","type":"hp","conf":"likely","side":"opp","slot":"right","species":"Raichu-Mega","from":100,"to":0,"unit":"pct","cause":"move"}
+{"t":926.27,"src":"ocr","raw":"對手的雷丘倒下了","type":"faint","conf":"likely","side":"opp","slot":"right","species":"Raichu-Mega"}
+{"t":930.27,"src":"ocr","raw":"烏賊王使出了戲法空間！","type":"move","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","move":"Trick Room","targets":[]}
+{"t":950.27,"src":"ocr","raw":"Sannoke派出了風速狗！","type":"switch","conf":"likely","side":"opp","slot":"right","out":null,"in":"Arcanine-Hisui"}
+{"t":953.77,"src":"ocr","raw":"上吧！八爪武師！","type":"switch","conf":"likely","side":"you","slot":"left","out":null,"in":"Grapploct"}
+{"type":"turn","n":2,"t":958.52,"src":"ocr","conf":"likely","raw":" | you.left: 八川武師 179 7179 | you.right: 烏賊王 1917191 | opp.left: 壽擂金剛猩 100% | opp.left: 壽擂金刷猩 100% | opp.right: 風速狗 100%","field":{"terrain":"grassy","trickRoom":true,"trickRoomTurns":4},"active":{"you":{"left":{"species":"Grapploct","hp":{"cur":179,"max":179}},"right":{"species":"Malamar","hp":{"cur":191,"max":191},"mega":true}},"opp":{"left":{"species":"Rillaboom","hp":{"pct":100}},"right":{"species":"Arcanine-Hisui","hp":{"pct":100}}}}}
+{"t":977.77,"src":"ocr","raw":"對手的轟擂金剛猩使出了擊掌奇襲！","type":"move","conf":"sure","side":"opp","slot":"left","species":"Rillaboom","move":"Fake Out","targets":[]}
+{"t":983.52,"src":"ocr","raw":"烏賊王使出了蠻力！","type":"move","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","move":"Superpower","targets":["opp.left"]}
+{"type":"hp","t":983.53,"src":"inferred","conf":"unsure","raw":"choose-screen diff after Superpower","side":"opp","slot":"left","species":"Rillaboom","from":100,"to":62,"unit":"pct","cause":"move"}
+{"t":988.77,"src":"ocr","raw":"烏賊王的攻擊、防禦提高了！","type":"stat","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","stages":{"atk":1,"def":1}}
+{"t":991.77,"src":"ocr","raw":"對手的風速狗使出了雙刃頭錘！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Arcanine-Hisui","move":"Head Smash","targets":[]}
+{"type":"hp","t":999.51,"src":"ocr","conf":"unsure","raw":"choose-screen diff","side":"you","slot":"left","species":"Grapploct","from":179,"to":152,"unit":"hp","cause":"unknown"}
+{"t":999.52,"src":"ocr","raw":"八爪武師的體力回復了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Grapploct","from":152,"to":163,"unit":"hp","cause":"terrain"}
+{"type":"hp","t":1003.26,"src":"ocr","conf":"unsure","raw":"choose-screen diff","side":"you","slot":"right","species":"Malamar-Mega","from":191,"to":101,"unit":"hp","cause":"unknown"}
+{"t":1003.27,"src":"ocr","raw":"烏賊王的體力回復了！","type":"hp","conf":"likely","side":"you","slot":"right","species":"Malamar-Mega","from":101,"to":112,"unit":"hp","cause":"terrain"}
+{"t":1006.77,"src":"ocr","raw":"對手的轟擂金剛猩的體力回復了！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Rillaboom","from":62,"to":68,"unit":"pct","cause":"terrain"}
+{"type":"turn","n":3,"t":1009.77,"src":"ocr","conf":"likely","raw":" | you.left: 八川武師 1637179 | you.left: 八川武師 163 7179 | you.left: 八川武師 163779 | you.right: 烏賊王 112 /191 | you.right: 烏賊王 112/191 | opp.left: 壽擂金刷猩 68% | opp.left: 壽擂金刷猩 68%: | opp.left: 壽擂金刷猩 68%*","field":{"terrain":"grassy","trickRoom":true,"trickRoomTurns":3},"active":{"you":{"left":{"species":"Grapploct","hp":{"cur":163,"max":179}},"right":{"species":"Malamar","hp":{"cur":112,"max":191},"mega":true}},"opp":{"left":{"species":"Rillaboom","hp":{"pct":68}},"right":{"species":"Arcanine-Hisui","hp":{"pct":100}}}}}
+{"t":1049.77,"src":"ocr","raw":"八爪武師使出了冰凍拳！","type":"move","conf":"sure","side":"you","slot":"left","species":"Grapploct","move":"Ice Punch","targets":["opp.left"]}
+{"t":1053.02,"src":"ocr","raw":"對對手的轟擂金剛猩效果絕佳！","type":"hp","conf":"sure","side":"opp","slot":"left","species":"Rillaboom","from":68,"to":null,"unit":"pct","cause":"move","effect":"super"}
+{"type":"reveal","t":1054.77,"src":"ocr","conf":"sure","raw":"八爪武師使用了 / 生命寶珠！","side":"you","species":"Grapploct","item":"Life Orb"}
+{"t":1056.77,"src":"ocr","raw":"八爪武師的生命被削減了一些！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Grapploct","from":60,"to":43,"unit":"hp","cause":"item","item":"Life Orb"}
+{"t":1059.52,"src":"ocr","raw":"烏賊王使出了蠻力！","type":"move","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","move":"Superpower","targets":["opp.left"]}
+{"t":1064.7,"src":"ocr","raw":"烏賊王的攻擊、防禦提高了","type":"stat","conf":"likely","side":"you","slot":"right","species":"Malamar-Mega","stages":{"atk":1,"def":1}}
+{"t":1066.45,"src":"ocr","raw":"對手的轟擂金剛猩倒下了！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Rillaboom","from":null,"to":0,"unit":"pct","cause":"move"}
+{"t":1066.45,"src":"ocr","raw":"對手的轟擂金剛猩倒下了！","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Rillaboom"}
+{"t":1070.7,"src":"ocr","raw":"對手的風速狗使出了閃焰衝鋒！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Arcanine-Hisui","move":"Flare Blitz","targets":["you.left"]}
+{"type":"hp","t":1070.71,"src":"inferred","conf":"unsure","raw":"choose-screen diff after Flare Blitz","side":"you","slot":"left","species":"Grapploct","from":163,"to":60,"unit":"hp","cause":"move"}
+{"t":1078.95,"src":"ocr","raw":"八爪武師的體力回復了！","type":"hp","conf":"likely","side":"you","slot":"left","species":"Grapploct","from":43,"to":54,"unit":"hp","cause":"terrain"}
+{"t":1082.45,"src":"ocr","raw":"烏賊王的體力回復了！","type":"hp","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","from":112,"to":123,"unit":"hp","cause":"terrain"}
+{"t":1089.45,"src":"ocr","raw":"Sannoke派出了賽富豪！","type":"switch","conf":"likely","side":"opp","slot":"left","out":null,"in":"Gholdengo"}
+{"type":"turn","n":4,"t":1093.45,"src":"ocr","conf":"likely","raw":" | you.left: 八川武師 54/179 | you.right: 烏賊王 123 /191 | you.right: 烏賊王 123/191 | opp.left: 賽富京 -100% | opp.right: 風速狗 100%* | opp.right: 風速狗 100%'","field":{"terrain":"grassy","trickRoom":true,"trickRoomTurns":2},"active":{"you":{"left":{"species":"Grapploct","hp":{"cur":54,"max":179}},"right":{"species":"Malamar","hp":{"cur":123,"max":191},"mega":true}},"opp":{"left":{"species":"Gholdengo","hp":{"pct":100}},"right":{"species":"Arcanine-Hisui","hp":{"pct":100}}}}}
+{"t":1100.2,"src":"ocr","raw":"對手的風速狗使出了守住！","type":"move","conf":"sure","side":"opp","slot":"right","species":"Arcanine-Hisui","move":"Protect","targets":[]}
+{"t":1105.45,"src":"ocr","raw":"八爪武師使出了山嵐摔！","type":"move","conf":"sure","side":"you","slot":"left","species":"Grapploct","move":"Storm Throw","targets":["opp.right"]}
+{"t":1110.45,"src":"ocr","raw":"烏賊王使出了拍落！","type":"move","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","move":"Knock Off","targets":["opp.left"]}
+{"t":1113.7,"src":"ocr","raw":"對對手的賽富豪效果絕佳！","type":"hp","conf":"likely","side":"opp","slot":"left","species":"Gholdengo","from":100,"to":0,"unit":"pct","cause":"move","effect":"super"}
+{"t":1115.95,"src":"ocr","raw":"對手的賽富豪倒下了！","type":"faint","conf":"sure","side":"opp","slot":"left","species":"Gholdengo"}
+{"t":1123.2,"src":"ocr","raw":"八爪武師的體力回復了！","type":"hp","conf":"sure","side":"you","slot":"left","species":"Grapploct","from":54,"to":null,"unit":"hp","cause":"terrain"}
+{"t":1126.7,"src":"ocr","raw":"烏賊王的體力回復了！","type":"hp","conf":"sure","side":"you","slot":"right","species":"Malamar-Mega","from":123,"to":null,"unit":"hp","cause":"terrain"}
+{"t":1131.7,"src":"ocr","raw":"成功戰勝了Sannoke！","type":"end","conf":"likely","winner":"you","forfeit":true}
