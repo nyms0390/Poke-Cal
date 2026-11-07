@@ -1,7 +1,7 @@
 import { normalizeId } from "../identifiers.js";
 import { applyModifier, chainModifiers } from "./modifiers.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
-import { normalizeField } from "./field.js";
+import { isSun, normalizeField } from "./field.js";
 
 const PARADOX_STATS = ["atk", "def", "spa", "spd", "spe"];
 const PARADOX_STAT_LABELS = {
@@ -134,11 +134,6 @@ export function speedModifiers(state, field = {}, options = {}) {
   return modifiers;
 }
 
-/** True when the side's ability currently changes its Speed (for UI labels). */
-export function speedAbilityActive(state, field = {}, options = {}) {
-  return speedModifiers(state, field, options).some(({ source }) => source === "ability");
-}
-
 export function finalSpeedInField(state, field = {}, options = {}) {
   return speedBreakdown(state, field, options)?.speed ?? 0;
 }
@@ -245,8 +240,4 @@ function itemIdOf(state) {
 
 function hasItem(state, itemId) {
   return itemIdOf(state) === itemId;
-}
-
-function isSun(weather) {
-  return SUN.has(normalizeId(weather));
 }

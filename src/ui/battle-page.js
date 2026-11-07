@@ -21,7 +21,8 @@ import {
   isActiveSetUnconsumed,
 } from "../data/active-set.js";
 import { ncpSetPaste } from "../data/ncp-data.js";
-import { createSavedSetStore, createStorageStore } from "../data/saved-sets.js";
+import { createSavedSetStore } from "../data/saved-sets.js";
+import { createStorageStore } from "../data/storage-store.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
 import { sameBuild, teamMemberSets } from "../data/team-sets.js";
 import { finalSpeed } from "../engine/speed.js";

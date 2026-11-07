@@ -34,6 +34,12 @@ const NATURE_STAT_LABELS = {
   spe: "Spe",
 };
 
+/** The catalog spelling of a nature name in any case ("jolly" -> "Jolly"), or null. */
+export function canonicalNature(value) {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
+}
+
 export function natureMultiplier(natureName, stat) {
   const nature = NATURES[natureName] ?? NATURES.Hardy;
   if (nature.up === stat) return 1.1;

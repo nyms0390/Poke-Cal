@@ -3,7 +3,6 @@ import { buildSpreadGroups } from "./spread-groups.js";
 import { parseUsageSpread } from "./usage-defaults.js";
 
 export const SMOGON_STATS_URL = "https://www.smogon.com/stats/";
-export const SMOGON_CHAMPIONS_FORMAT_PATTERN = /gen9champions(vgc\d+reg[a-z]+?)(bo3)?/;
 
 export function latestStatsMonth(indexHtml) {
   return statsMonths(indexHtml)[0] ?? null;

@@ -1,4 +1,4 @@
-import { NATURES } from "../engine/natures.js";
+import { canonicalNature, NATURES } from "../engine/natures.js";
 import { finalSpeedInField } from "../engine/speed.js";
 import { normalizeId } from "./catalog.js";
 import { megaFamily, pokemonSpriteId } from "./pokemon.js";
@@ -409,11 +409,6 @@ function profileKey(profile) {
 function natureSpeedClass(nature) {
   const value = NATURES[nature] ?? NATURES.Hardy;
   return value.down === "spe" ? "negative" : value.up === "spe" ? "positive" : "neutral";
-}
-
-function canonicalNature(value) {
-  const normalized = String(value ?? "").trim().toLowerCase();
-  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
 }
 
 export function speedItemMultiplier(item) {

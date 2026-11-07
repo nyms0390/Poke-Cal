@@ -1,4 +1,4 @@
-import { createStorageStore } from "./saved-sets.js";
+import { createStorageStore } from "./storage-store.js";
 
 export const THREAT_PREFERENCES_STORAGE_KEY = "pokecal.threat-preferences.v1";
 export const THREAT_COUNT_OPTIONS = [10, 20, 30, 40, 50];

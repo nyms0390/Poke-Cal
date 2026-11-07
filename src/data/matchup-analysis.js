@@ -1,6 +1,6 @@
 import { normalizeId } from "../identifiers.js";
 import { matchup, observedMatchupSet, resolveSpeedOutcome, trickRoomChanceFor } from "./matchups.js";
-import { createStorageStore } from "./saved-sets.js";
+import { createStorageStore } from "./storage-store.js";
 
 /*
  * Page-level analysis for the matchups page: run the KO race (matchups.js) against the most-used

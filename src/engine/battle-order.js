@@ -1,5 +1,5 @@
 import { normalizeId } from "../identifiers.js";
-import { isGrounded, normalizeTerrain } from "./field.js";
+import { hasAbility, isGrounded, normalizeTerrain } from "./field.js";
 import { finalSpeed } from "./speed.js";
 
 export function formatMovePriority(priority) {
@@ -91,10 +91,6 @@ export function compareMoveOrder({ attacker, defender, attackerMove, defenderMov
       ? `${sideName(firstSide)} moves first in Trick Room (${Math.min(attackerSpeed, defenderSpeed)} Speed).`
       : `${sideName(firstSide)} moves first by Speed (${Math.max(attackerSpeed, defenderSpeed)} Speed).`,
   };
-}
-
-function hasAbility(state, abilityId) {
-  return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
 }
 
 function hasWeatherSuppressingAbility(state) {

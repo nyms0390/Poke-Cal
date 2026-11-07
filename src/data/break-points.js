@@ -1,7 +1,7 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { NATURES } from "../engine/natures.js";
-import { compareKoTiers, koHitCount } from "./bulk-points.js";
+import { compareKoTiers, koHitCount, threatSideState } from "./bulk-points.js";
 
 export function rankBreakPointPokemonGroups(groups) {
   return groups.map((group) => ({
@@ -118,27 +118,11 @@ export function breakTargetSpread(threat, move) {
 }
 
 function threatState(threat, move) {
-  const group = breakTargetSpread(threat, move);
-  return {
-    pokemon: threat.pokemon,
-    nature: group?.nature ?? threat.nature ?? "Hardy",
-    sp: group ? { ...group.sp } : {
-      hp: threat.spPresets?.bulk?.hp ?? 0,
-      atk: 0,
-      def: threat.spPresets?.bulk?.def ?? 0,
-      spa: 0,
-      spd: threat.spPresets?.bulk?.spd ?? 0,
-      spe: 0,
-    },
-    stages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-    ability: threat.ability ?? null,
-    item: threat.item ?? null,
-    teraType: threat.teraType ?? "",
-    status: threat.status ?? "",
-    soaked: threat.soaked ?? false,
-    currentHpFraction: 1,
-    iceFaceIntact: true,
-  };
+  return threatSideState(threat, breakTargetSpread(threat, move), {
+    hp: threat.spPresets?.bulk?.hp ?? 0,
+    def: threat.spPresets?.bulk?.def ?? 0,
+    spd: threat.spPresets?.bulk?.spd ?? 0,
+  });
 }
 
 function plusNatureFor(stat, currentNature) {

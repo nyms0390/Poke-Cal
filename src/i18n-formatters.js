@@ -131,10 +131,6 @@ export function formatSetWarning(warning, locale = "en") {
   return warning;
 }
 
-export function localizedType(type, locale = "en") {
-  return localizedTerm("type", type, locale);
-}
-
 export function formatResultDescription(args, locale = "en") {
   if (locale !== "zh-TW") return resultDescription(args);
   const { attackerState, defenderState, move, field = {}, result } = args;

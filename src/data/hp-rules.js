@@ -1,4 +1,4 @@
-import { calculateStat } from "../engine/stats.js";
+import { calculateStat, normalizeSp } from "../engine/stats.js";
 import { normalizeId } from "../identifiers.js";
 
 // HP number rules: HP values that take less fixed-fraction chip or get more fixed-fraction
@@ -95,7 +95,7 @@ export function hpNumberPlan(user, { moves = [], effects = [], unassignedSp = 0 
   const base = user.pokemon.baseStats.hp;
   const hpAt = (sp) => calculateStat({ base, stat: "hp", sp });
   const values = Array.from({ length: 33 }, (_, sp) => ({ sp, hp: hpAt(sp) }));
-  const currentSp = clampSp(user.sp?.hp);
+  const currentSp = normalizeSp(user.sp?.hp);
   const current = values[currentSp];
   const rules = [];
   const dropped = [];
@@ -165,10 +165,4 @@ function entryId(entry) {
   if (!entry) return "";
   if (typeof entry === "string") return normalizeId(entry);
   return normalizeId(entry.id ?? entry.name);
-}
-
-function clampSp(value) {
-  const sp = Number(value);
-  if (!Number.isFinite(sp)) return 0;
-  return Math.max(0, Math.min(32, Math.trunc(sp)));
 }

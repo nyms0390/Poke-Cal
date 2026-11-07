@@ -6,7 +6,7 @@ import {
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
 import { calculateDamage, survivalChance as damageSurvivalChance } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
-import { NATURES } from "../engine/natures.js";
+import { canonicalNature } from "../engine/natures.js";
 import { finalSpeed } from "../engine/speed.js";
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import { normalizeId } from "../identifiers.js";
@@ -305,11 +305,6 @@ function parsePastedSet(context, text) {
     sp: parsed.hasSpread ? parsed.sp : undefined,
     warnings,
   };
-}
-
-function canonicalNature(value) {
-  const normalized = String(value).trim().toLowerCase();
-  return Object.keys(NATURES).find((nature) => nature.toLowerCase() === normalized) ?? null;
 }
 
 function resolveFirstAbility(context, pokemon) {

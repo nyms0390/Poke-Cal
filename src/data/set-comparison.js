@@ -6,7 +6,7 @@
 // Pokémon, so picking another Pokémon elsewhere starts (or restores) that Pokémon's comparison
 // instead of mixing species in one table.
 import { normalizeId } from "./catalog.js";
-import { createStorageStore } from "./saved-sets.js";
+import { createStorageStore } from "./storage-store.js";
 import { RACE_OUTCOMES, summarizeMatchups } from "./matchup-analysis.js";
 
 export const COMPARISON_STORAGE_KEY = "pokecal.compare-sets.v1";
