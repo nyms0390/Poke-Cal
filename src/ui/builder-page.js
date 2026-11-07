@@ -1494,10 +1494,7 @@ function threatBuildEditor(threat, cardKey) {
   }));
 
   apply.addEventListener("click", () => draft.apply());
-  const hint = threat.usageSpreads
-    ? textSpan(t("builder.spreadGroupHint"), "builder-spread-assumption")
-    : null;
-  editor.append(picks, spread, ...(hint ? [hint] : []), moves, apply);
+  editor.append(picks, spread, moves, apply);
   return editor;
 }
 

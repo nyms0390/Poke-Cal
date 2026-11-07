@@ -120,8 +120,8 @@ export const ZH_TW_MESSAGES = {
   "field.psychic": "精神",
   "field.gravity": "重力",
   "builder.environmentAssumption": "所有對位計算均使用此環境；對手特性不會自動改變設定。",
-  "builder.bulkAssumption": "威脅預設採用使用率資料中的道具與特性，並使用所選環境。每個招式以該威脅在該招式攻擊能力值上最常見的 Smogon 天梯分配出招（沒有天梯分配時為滿攻擊投資）。每個形態會依其兩個已分析攻擊招式獨立分類。",
-  "builder.breakAssumption": "威脅預設採用使用率資料中的道具與特性，並使用所選環境。每個招式以該威脅在 HP 與該招式所打防禦能力值上最常見的 Smogon 天梯分配計算（沒有天梯分配時為 HP 2 SP、不投資防禦）。已涵蓋表示以目前的能力分配，所選招式中至少有一招能保證一擊擊倒。可達成表示保留其他已分配 SP，只用未分配 SP 即可用更少的攻擊次數保證擊倒，或將機率一擊擊倒提升為保證一擊擊倒；其餘為無法達成。",
+  "builder.bulkAssumption": "威脅預設採用使用率資料中的道具與特性，並使用所選環境。每個招式以該威脅在該招式攻擊能力值上最常見的 Smogon 天梯分配出招（沒有天梯分配時為滿攻擊投資）。修改威脅的性格或 SP 後，所有招式都改用這組配置。每個形態會依其兩個已分析攻擊招式獨立分類。",
+  "builder.breakAssumption": "威脅預設採用使用率資料中的道具與特性，並使用所選環境。每個招式以該威脅在 HP 與該招式所打防禦能力值上最常見的 Smogon 天梯分配計算（沒有天梯分配時為 HP 2 SP、不投資防禦）。修改威脅的性格或 SP 後，所有招式都改用這組配置。已涵蓋表示以目前的能力分配，所選招式中至少有一招能保證一擊擊倒。可達成表示保留其他已分配 SP，只用未分配 SP 即可用更少的攻擊次數保證擊倒，或將機率一擊擊倒提升為保證一擊擊倒；其餘為無法達成。",
   "battle.saveName": "配置名稱",
   "battle.deleteConfirm": ({ name }) => `要刪除已儲存的配置「${name}」嗎？`,
   "battle.ready": "就緒",
@@ -212,7 +212,6 @@ export const ZH_TW_MESSAGES = {
     `對手：${nature}性格，${sp} SP · 佔 Smogon 天梯分配 ${share}%${count > 1 ? `（共 ${count} 種分配）` : ""}`,
   "builder.attackerSpread": ({ nature, sp, share, count }) =>
     `攻擊方：${nature}性格，${sp} SP · 佔 Smogon 天梯分配 ${share}%${count > 1 ? `（共 ${count} 種分配）` : ""}`,
-  "builder.spreadGroupHint": "每個招式使用與其相關能力值最常見的 Smogon 天梯分配。修改性格或 SP 後，所有招式都改用這組配置。",
   "builder.noHigherKo": "以目前的能力分配無法達到更高的擊倒等級。",
   "builder.damage": ({ min, max }) => `${min}–${max}% 傷害`,
   "builder.moveCount": ({ count }) => `${count} 個招式`,
