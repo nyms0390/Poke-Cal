@@ -116,6 +116,8 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatDamageNote("+1 SpA from the charge turn", "zh-TW"), "蓄力回合特攻 +1");
   assert.equal(formatDamageNote("Protean changed type to Fighting", "zh-TW"), "Protean將屬性變為格鬥");
   assert.equal(formatSetWarning("Unknown move: Missing Move", "zh-TW"), "未知招式：Missing Move");
+  assert.equal(formatSetWarning("Unknown nature: Modset", "en"), "Unknown nature: Modset");
+  assert.equal(formatSetWarning("Unknown nature: Modset", "zh-TW"), "未知性格：Modset");
 });
 
 // Minimal attribute-only DOM stand-in: enough for applyDocumentTranslations' selectors.

@@ -11,7 +11,7 @@ const context = createStrategyContext({
   ],
   abilities: [{ id: "static", name: "Static" }, { id: "waterabsorb", name: "Water Absorb" }],
   items: [{ id: "leftovers", name: "Leftovers" }],
-  moves: [{ id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90, accuracy: 100, priority: 0, target: "normal", shortDesc: "A strong electric attack.", champions: { legal: true } }],
+  moves: [{ id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90, accuracy: 100, priority: 0, target: "normal", shortDesc: "A strong electric attack.", champions: { legal: true } }, { id: "ironhead", name: "Iron Head", type: "Steel", category: "Physical", basePower: 80, accuracy: 100, priority: 0, target: "normal", shortDesc: "30% chance to make the target flinch.", champions: { legal: true, shortDesc: "20% chance to make the target flinch." } }],
 });
 
 test("MCP tools expose lookup, speed, damage, and survival results", async () => {
@@ -20,6 +20,10 @@ test("MCP tools expose lookup, speed, damage, and survival results", async () =>
   assert.equal(pokemon[0].name, "Alpha");
   const move = await callTool(server, "lookup_move", { query: "Thunderbolt" });
   assert.equal(move[0].type, "Electric");
+  const ironHead = await callTool(server, "lookup_move", { query: "Iron Head" });
+  assert.equal(ironHead[0].shortDesc, "20% chance to make the target flinch.");
+  assert.equal((await callTool(server, "lookup_move", { query: "20% chance" }))[0].id, "ironhead");
+  await assert.rejects(() => callTool(server, "lookup_move", { query: "30% chance" }), /Unknown move/);
   const speed = await callTool(server, "compare_speed", { left: "Alpha", right: "Beta" });
   assert.equal(speed.left.name, "Alpha");
   const damage = await callTool(server, "calculate_damage", { attacker: "Alpha", defender: "Beta", move: "Thunderbolt" });

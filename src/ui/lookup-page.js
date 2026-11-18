@@ -2,6 +2,7 @@ import {
   formatMoveAccuracy,
   formatMovePower,
   formatUsagePercent,
+  entryShortText,
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
@@ -614,7 +615,7 @@ function renderAbilities(abilities) {
       heading.append(usage);
 
       const description = document.createElement("p");
-      description.textContent = ability.shortDesc || ability.desc || "—";
+      description.textContent = entryShortText(ability) || "—";
       description.lang = "en";
 
       card.append(heading, description);
@@ -648,7 +649,7 @@ function renderItems(items) {
       heading.append(name, usage);
 
       const description = document.createElement("p");
-      description.textContent = item.shortDesc || item.desc || "—";
+      description.textContent = entryShortText(item) || "—";
       description.lang = "en";
 
       card.append(heading, description);

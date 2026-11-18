@@ -6,7 +6,6 @@ import {
 import { championsDefaultsForPokemon, parseUsageSpread } from "./usage-defaults.js";
 import { calculateDamage, survivalChance as damageSurvivalChance } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
-import { canonicalNature } from "../engine/natures.js";
 import { finalSpeed } from "../engine/speed.js";
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import { normalizeId } from "../identifiers.js";
@@ -289,8 +288,8 @@ export function sideState(context, pokemonName, overrides = {}) {
 function parsePastedSet(context, text) {
   const parsed = parseSetPaste(text, context);
   const warnings = parsed.warnings.filter((warning) => !warning.startsWith("Unknown move"));
-  let nature = parsed.nature ? canonicalNature(parsed.nature) : null;
-  if (parsed.nature && !nature) warnings.push(`Unknown nature: ${parsed.nature}`);
+  // parseSetPaste already canonicalizes the nature and warns on an unknown one.
+  let nature = parsed.nature || null;
   if (!nature && parsed.hasSpread) nature = "Hardy";
   const teraType = parsed.teraType
     ? Object.keys(TYPE_EFFECTIVENESS).find((type) => type.toLowerCase() === parsed.teraType.toLowerCase()) ?? null
