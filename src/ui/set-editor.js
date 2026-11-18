@@ -37,6 +37,7 @@ import {
   searchResultButton,
   singleTargetToggleButton,
 } from "./components.js";
+import { attachEntryTooltip } from "./entry-tooltip.js";
 import { moveConditionDescriptors, moveConditionValue } from "./move-conditions.js";
 
 // Champions caps a Pokémon's SP at 66 in total (see SP_TOTAL_LIMIT in the damage engine).
@@ -158,6 +159,8 @@ export function mountSetEditor(host, { prefix, getCatalogs, getSetup, onPokemonS
   };
   let spriteId = "";
   let moveCleanups = [];
+  attachEntryTooltip(elements.ability, () => getCatalogs()?.abilityLookup.get(normalizeId(elements.ability.value)) ?? null);
+  attachEntryTooltip(elements.item, () => getCatalogs()?.itemLookup.get(normalizeId(elements.item.value)) ?? null);
 
   attachCombobox({
     input: elements.pokemonSearch,

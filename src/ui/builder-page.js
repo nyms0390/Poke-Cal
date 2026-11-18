@@ -87,6 +87,7 @@ import {
   searchResultButton,
   STAT_LABELS,
 } from "./components.js";
+import { attachEntryTooltip } from "./entry-tooltip.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { applyAmbientFieldControl } from "./field-state.js";
@@ -1437,7 +1438,7 @@ function threatBuildEditor(threat, cardKey) {
         kind: "ability",
         value: catalogs.abilityLookup.get(normalizeId(value)) ?? null,
       },
-    )),
+    ), catalogs.abilityLookup),
     threatSelect(t("label.item"), [
       { value: "", label: t("builder.noItem") },
       ...rankByUsage(catalogs.items, threat.pokemon.champions?.usage?.items)
@@ -1447,7 +1448,7 @@ function threatBuildEditor(threat, cardKey) {
         kind: "item",
         value: catalogs.itemLookup.get(normalizeId(value)) ?? null,
       },
-    )),
+    ), catalogs.itemLookup),
   );
 
   const spread = document.createElement("fieldset");
@@ -1498,7 +1499,8 @@ function threatBuildEditor(threat, cardKey) {
   return editor;
 }
 
-function threatSelect(labelText, options, selectedValue, onChange) {
+// With `lookup` (abilities or items), the select shows the chosen entry's details on hover.
+function threatSelect(labelText, options, selectedValue, onChange, lookup = null) {
   const label = document.createElement("label");
   label.textContent = labelText;
   const select = document.createElement("select");
@@ -1506,6 +1508,7 @@ function threatSelect(labelText, options, selectedValue, onChange) {
     optionElement(value, optionLabel)));
   select.value = selectedValue;
   select.addEventListener("input", () => onChange(select.value));
+  if (lookup) attachEntryTooltip(select, () => lookup.get(normalizeId(select.value)) ?? null);
   label.append(select);
   return label;
 }

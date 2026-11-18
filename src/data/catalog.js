@@ -206,3 +206,13 @@ export function formatUsagePercent(usagePercent) {
 export function moveEffect(move) {
   return move.shortDesc || move.desc || "—";
 }
+
+// The full effect text of an ability or item, as the hover details show it. Champions changes
+// some effects (Healer's 50% chance, Unseen Fist's 1/4 damage), and its text replaces the
+// Showdown text as a whole: a Champions entry with only a short description still wins over a
+// longer Showdown description that no longer applies. Empty when the catalog has no text.
+export function entryDescription(entry) {
+  const champions = entry?.champions;
+  if (champions?.desc || champions?.shortDesc) return champions.desc || champions.shortDesc;
+  return entry?.desc || entry?.shortDesc || "";
+}

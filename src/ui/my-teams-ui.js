@@ -2,7 +2,8 @@
 // the sprite previews.
 import { STAT_KEYS } from "../engine/constants.js";
 import { localizedName, localizedTerm, t } from "../i18n.js";
-import { itemLabel, moveChip, natureLabel, pokemonSpriteElements, setRow, STAT_LABELS } from "./components.js";
+import { moveChip, natureLabel, pokemonSpriteElements, setRow, STAT_LABELS } from "./components.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
 
 // A member's sprite (or "?" for a paste whose Pokémon is unknown), named for assistive tech.
 export function teamMemberSprite(pokemon, { size = 40 } = {}) {
@@ -47,9 +48,9 @@ export function memberSetRow({ text, parsed }, catalogs) {
   media.setAttribute("aria-hidden", "true");
   const unset = t("myTeams.notSet");
   const facts = [
-    [t("label.ability"), parsed.ability ? localizedName(parsed.ability) : unset],
+    [t("label.ability"), parsed.ability ? abilityTerm(parsed.ability) : unset],
     [t("label.nature"), parsed.nature ? natureLabel(parsed.nature) : unset],
-    [t("label.item"), parsed.item ? itemLabel(parsed.item) : unset],
+    [t("label.item"), parsed.item ? itemTerm(parsed.item) : unset],
     [t("myTeams.spread"), spreadText(parsed)],
   ];
   const moves = parsed.selectedMoveIds
