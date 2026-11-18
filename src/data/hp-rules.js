@@ -1,4 +1,5 @@
 import { calculateStat, normalizeSp } from "../engine/stats.js";
+import { LEVITATE_ABILITIES } from "../engine/field.js";
 import { normalizeId } from "../identifiers.js";
 
 // HP number rules: HP values that take less fixed-fraction chip or get more fixed-fraction
@@ -158,7 +159,7 @@ export function hpRuleTarget({ modulus, remainder }) {
 }
 
 function isGrounded(user) {
-  return !(user.pokemon.types ?? []).includes("Flying") && entryId(user.ability) !== "levitate";
+  return !(user.pokemon.types ?? []).includes("Flying") && !LEVITATE_ABILITIES.has(entryId(user.ability));
 }
 
 function entryId(entry) {

@@ -233,15 +233,10 @@ It runs one opponent at a time in the background and restarts when the set or fi
 ### Mechanics not modeled yet
 
 The calculator, Builder, Matchups and the MCP tools share one engine, so these gaps show up in
-all of them. Treat results that involve them with care; an entry is removed when its fix lands.
+all of them. An entry is removed when its fix lands.
 
-- **Aegislash Stance Change**: automated analyses attack with Shield Forme stats.
-- **Eelevate**'s Ground immunity, **Disguise**, and **Infiltrator** ignoring screens.
-- **Smack Down** into Flying types is treated as neutral, and **Parental Bond** adds its second hit
-  to spread moves.
-- **Future Sight** never lands in a Matchups race.
-- Rarely relevant: Normal Gem, terrain seeds, Light Metal, Long Reach against Fluffy, Poltergeist
-  into an itemless target, and Tera Shell on neutral hits.
+These rarely matter in practice: Normal Gem, terrain seeds, Light Metal, Long Reach against
+Fluffy, Poltergeist into an itemless target, and Tera Shell on neutral hits.
 
 ## Data Sources
 

@@ -1,7 +1,7 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { NATURES } from "../engine/natures.js";
-import { compareKoTiers, koHitCount, threatSideState, withoutFocusSash } from "./bulk-points.js";
+import { compareKoTiers, firstKo, koHitCount, koIsGuaranteed, threatSideState, withoutFocusSash } from "./bulk-points.js";
 
 export function rankBreakPointPokemonGroups(groups) {
   return groups.map((group) => ({
@@ -26,6 +26,7 @@ export function yourDamageAnalysis(userState, move, scenario) {
         minPct: null,
         maxPct: null,
         koText: result.reason ?? "Unsupported",
+        ko: null,
       },
     };
   }
@@ -35,6 +36,7 @@ export function yourDamageAnalysis(userState, move, scenario) {
       minPct: result.minPercent,
       maxPct: result.maxPercent,
       koText: result.ko.text,
+      ko: firstKo(result.ko),
     },
   };
 }
@@ -50,7 +52,7 @@ export function breakPoints(userState, move, scenario) {
 
   for (let sp = currentSp + 1; sp <= 32; sp += 1) {
     const damage = yourDamage(withOffense(userState, attackStat, sp), move, scenario);
-    if (compareKoTiers(damage.koText, best.koText) <= 0) continue;
+    if (compareKoTiers(damage, best) <= 0) continue;
     points.push(point(sp, damage, false));
     best = damage;
   }
@@ -59,8 +61,9 @@ export function breakPoints(userState, move, scenario) {
   const plusNature = plusNatureFor(attackStat, userState.nature);
   if (plusNature) {
     let exceedsMaximum = false;
-    let bestGuaranteedHits = koHitCount(initialResult.ko.text);
-    if (bestGuaranteedHits === 1 && !/guaranteed/i.test(initialResult.ko.text)) {
+    const initialKo = firstKo(initialResult.ko);
+    let bestGuaranteedHits = koHitCount({ ko: initialKo });
+    if (bestGuaranteedHits === 1 && !koIsGuaranteed({ ko: initialKo })) {
       bestGuaranteedHits = 2;
     }
     for (let sp = currentSp; sp <= 32; sp += 1) {
@@ -70,9 +73,9 @@ export function breakPoints(userState, move, scenario) {
       };
       const damage = yourDamage(plusState, move, scenario);
       const firstBeyondMaximum = !exceedsMaximum &&
-        compareKoTiers(damage.koText, maximumCurrentNature.koText) > 0;
-      const hits = koHitCount(damage.koText);
-      const improvesGuaranteedHits = /guaranteed/i.test(damage.koText) &&
+        compareKoTiers(damage, maximumCurrentNature) > 0;
+      const hits = koHitCount(damage);
+      const improvesGuaranteedHits = koIsGuaranteed(damage) &&
         hits > 0 && hits < bestGuaranteedHits;
       if (!firstBeyondMaximum && !improvesGuaranteedHits) continue;
       points.push(point(sp, damage, true));
@@ -88,6 +91,7 @@ function point(sp, damage, requiresPlusNature) {
   return {
     sp,
     achieves: damage.koText,
+    ko: damage.ko,
     minPct: damage.minPct,
     maxPct: damage.maxPct,
     ...(requiresPlusNature ? { requiresPlusNature: true } : {}),
@@ -144,11 +148,11 @@ function breakPointPokemonRank(group) {
 }
 
 function breakPointAnalysisRank(analysis) {
-  const currentHits = koHitCount(analysis?.damage?.koText);
+  const currentHits = koHitCount(analysis?.damage);
   if (currentHits < 1) return [Infinity, Infinity];
   const targetHits = Math.max(1, currentHits - 1);
   const targetSp = Math.min(...(analysis?.points ?? [])
-    .filter(({ achieves }) => /guaranteed/i.test(achieves) && koHitCount(achieves) <= targetHits)
+    .filter((point) => koIsGuaranteed(point) && koHitCount(point) <= targetHits)
     .map(({ sp }) => Number(sp))
     .filter(Number.isFinite));
   return Number.isFinite(targetSp) ? [currentHits, targetSp] : [Infinity, Infinity];

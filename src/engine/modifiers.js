@@ -365,8 +365,11 @@ export const ABILITY_MODIFIERS = {
     !ctx.attackerPerspective && ctx.moveType === "Fire"
       ? { kind: "power", value: 1.25, label: "Dry Skin" }
       : null,
+  // Showdown skips multi-hit, charge, future and noparentalbond moves, and any move that hits
+  // more than one target (spreadHit); a spread move that hits only one target gets the child hit.
   parentalbond: (ctx) =>
-    ctx.attackerPerspective && ctx.hitCountRange?.min === 1 && ctx.hitCountRange?.max === 1
+    ctx.attackerPerspective && ctx.hitCountRange?.min === 1 && ctx.hitCountRange?.max === 1 &&
+      !ctx.spreadHit && !ctx.move.flags?.charge && !ctx.move.flags?.futuremove && !ctx.move.flags?.noparentalbond
       ? { kind: "hitDamageModifiers", value: [4096, 1024], label: "Parental Bond" }
       : null,
 };
@@ -503,7 +506,8 @@ function defenderSideConditionModifiers(ctx) {
   const side = ctx.field?.defenderSide;
   if (!side) return [];
   const modifiers = [];
-  if (!ctx.critical) {
+  const infiltrator = hasActiveAbility(ctx.attackerState, "infiltrator", ctx.suppressAttackerAbility);
+  if (!ctx.critical && !infiltrator) {
     const doubles = ctx.field?.format === "doubles";
     const screen = { kind: "damage", value: doubles ? 2732 / 4096 : 0.5, value4096: doubles ? 2732 : 2048, order: 10 };
     if (side.auroraVeil) {
@@ -521,7 +525,19 @@ function defenderSideConditionModifiers(ctx) {
   return modifiers;
 }
 
+// Knock Off: ×1.5 base power (chained, 6144) when the target holds an item it can lose; a
+// Mega Stone on the Pokémon that uses it cannot be knocked off.
+function knockOffModifier(ctx) {
+  if (normalizeId(ctx.move.id ?? ctx.move.name) !== "knockoff") return null;
+  const item = ctx.defenderState.item;
+  if (!item) return null;
+  const defenderSpecies = normalizeId(ctx.defender.baseSpecies ?? ctx.defender.name ?? ctx.defender.id);
+  if (item.megaStone && item.itemUser?.some((name) => normalizeId(name) === defenderSpecies)) return null;
+  return { kind: "power", value: 1.5, label: "Knock Off (target holds an item)" };
+}
+
 const GENERIC_ATTACKER_MODIFIERS = [
+  knockOffModifier,
   weatherModifier,
   plateModifier,
   superEffectiveMoveModifier,
@@ -621,9 +637,11 @@ function flowerGiftModifier(ctx) {
   return null;
 }
 
+// Showdown builds `secondaries` from any truthy `secondary`, so an empty object (Stone Axe,
+// Ceaseless Edge, whose effect lives elsewhere) still counts for Sheer Force.
 function hasSecondaryEffect(move) {
   if (Array.isArray(move.secondaries) && move.secondaries.length > 0) return true;
-  return Boolean(move.secondary && Object.keys(move.secondary).length > 0);
+  return Boolean(move.secondary && typeof move.secondary === "object") || Boolean(move.hasSheerForce);
 }
 
 function hasActiveAbility(state, abilityId, suppressed) {

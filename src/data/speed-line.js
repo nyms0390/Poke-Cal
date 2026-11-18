@@ -239,7 +239,6 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
       ability: row.ability,
       item: row.item,
       abilityActive: row.abilityActive,
-      itemSpeedMultiplier: row.itemSpeedMultiplier,
     },
     trickRoom,
   });
@@ -257,7 +256,6 @@ function opponentSpeedEntry(pokemon, row, opponentMods, trickRoom) {
       sp: row.sp,
       spSource: row.spSource,
       item: row.item,
-      itemSpeedMultiplier: row.itemSpeedMultiplier,
       ability: row.ability,
       source: row.source,
       sourceLabel: row.sourceLabel,
@@ -283,7 +281,6 @@ function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
       : false,
     abilityActive: false,
     itemConsumed: false,
-    itemSpeedMultiplier: speedItemMultiplier(row.item),
   };
   const rows = [opponentSpeedEntry(pokemon, inactive, opponentMods, trickRoom)];
   const abilityId = normalizeEntityId(row.ability);
@@ -297,7 +294,6 @@ function opponentVariants(pokemon, row, opponentMods, trickRoom, options) {
     abilityActive: true,
     itemConsumed: abilityId === "unburden",
     choiceScarf: abilityId === "unburden" ? false : inactive.choiceScarf,
-    itemSpeedMultiplier: abilityId === "unburden" ? 1 : inactive.itemSpeedMultiplier,
   };
   rows[0].likely = row.likely ? false : row.likely;
   rows.push(opponentSpeedEntry(pokemon, active, opponentMods, trickRoom));
@@ -411,11 +407,6 @@ function natureSpeedClass(nature) {
   return value.down === "spe" ? "negative" : value.up === "spe" ? "positive" : "neutral";
 }
 
-export function speedItemMultiplier(item) {
-  const itemId = normalizeEntityId(item);
-  return itemId === "choicescarf" ? 1.5 : itemId === "ironball" ? 0.5 : 1;
-}
-
 export function speedItemIdForSet(item) {
   const itemId = normalizeEntityId(item);
   return SPEED_ITEM_IDS.includes(itemId) ? itemId : "";
@@ -490,9 +481,6 @@ function normalizedMods(mods = {}) {
     item: mods.item ?? null,
     abilityActive: Boolean(mods.abilityActive),
     speedItem: speedItemIdForSet(mods.speedItem),
-    itemSpeedMultiplier: mods.itemSpeedMultiplier === undefined
-      ? speedItemMultiplier(mods.speedItem)
-      : Number.isFinite(Number(mods.itemSpeedMultiplier)) ? Number(mods.itemSpeedMultiplier) : 1,
   };
 }
 

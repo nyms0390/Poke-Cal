@@ -197,7 +197,11 @@ export const DAMAGE_NOTE_ZH = Object.freeze({
   "Assumes Magnitude 7 (70 BP)": "假設震級 7（威力 70）",
   "Assumes the 80 BP outcome": "假設威力 80 的結果",
   "Assumes the level-50 average (50 damage)": "假設等級 50 的平均值（50 傷害）",
-  "Salt Cure residual: 1/8 max HP (1/4 vs Water/Steel) per turn": "鹽醃每回合造成最大 HP 的 1/8 傷害（對水／鋼為 1/4）",
+  "Salt Cure residual: 1/16 max HP (1/8 vs Water/Steel) per turn": "鹽醃每回合造成最大 HP 的 1/16 傷害（對水／鋼為 1/8）",
+  "Disguise intact (first hit deals 1/8 max HP)": "畫皮完好（第一次攻擊改為造成最大 HP 的 1/8 傷害）",
+  "Future Sight lands two turns after it is used": "預知未來在使用兩回合後命中",
+  "Stance Change: attacks in Blade Forme": "戰鬥切換：以刀劍形態攻擊",
+  "Knock Off (target holds an item)": "拍落（目標攜帶道具）",
   "-1 Def / +1 Spe after use": "使用後防禦 -1／速度 +1",
 });
 

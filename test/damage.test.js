@@ -3970,6 +3970,7 @@ test("applies move-specific type effectiveness overrides", () => {
   assert.equal(arrowsFlying.typeMultiplier, 1);
   assert.equal(arrowsFlying.minDamage > 0, true);
   assert.deepEqual([earthquakeFlying.minDamage, earthquakeFlying.maxDamage], [0, 0]);
+  // An airborne Flying type takes neutral damage from Thousand Arrows whatever its other type.
   assert.equal(arrowsFireFlying.typeMultiplier, 1);
 });
 
@@ -4486,7 +4487,6 @@ test("reports precise reasons for P2-04 moves that require stored battle history
     ["mirrorcoat", "last damage received"],
     ["metalburst", "last damage received"],
     ["comeuppance", "last damage received"],
-    ["futuresight", "delayed"],
     ["bide", "stored damage"],
   ]) {
     assert.match(unsupportedMoveReason({ id, name: id, type: "Normal", category: "Physical", basePower: 0 }), new RegExp(text, "i"), id);
@@ -4549,7 +4549,8 @@ test("covers the remaining P2-04 registry assumptions and HP thresholds", () => 
     defenderState: neutralState,
     field: singles,
   });
-  assert.equal(smackDown.typeMultiplier, 1);
+  // Smack Down is an ordinary Rock move: super effective on Flying types before it grounds them.
+  assert.equal(smackDown.typeMultiplier, 2);
 
   const hiddenPower = result(move("hiddenpower", "Hidden Power", "Normal", "Special", 60));
   const hiddenPowerFire = result({ ...move("hiddenpower", "Hidden Power", "Normal", "Special", 60), hiddenPowerType: "Fire" });

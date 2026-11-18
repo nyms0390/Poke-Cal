@@ -161,6 +161,38 @@ const GROUPS = {
   },
 };
 
+// Hand-picked scenarios for mechanics the random groups do not reach. Kept after the random
+// groups so adding one does not shift the seeded cases above.
+const FIXED_SCENARIOS = {
+  "type effectiveness overrides": [
+    // Smack Down is plain Rock: super effective on Flying before it grounds the target.
+    { format: "singles", attacker: { species: "Garchomp" }, defender: { species: "Talonflame" }, move: "Smack Down" },
+    { format: "singles", attacker: { species: "Garchomp" }, defender: { species: "Dragonite" }, move: "Smack Down" },
+    // Thousand Arrows: the Flying type is neutral, the other type still counts.
+    { format: "singles", attacker: { species: "Garchomp" }, defender: { species: "Talonflame" }, move: "Thousand Arrows" },
+    { format: "singles", attacker: { species: "Garchomp" }, defender: { species: "Corviknight" }, move: "Thousand Arrows" },
+  ],
+  "Parental Bond targeting": [
+    // A spread move that hits both targets gets no child hit; a single-target move does.
+    { attacker: { species: "Kangaskhan-Mega", ability: "Parental Bond", nature: "Adamant", sp: { atk: 32 } }, defender: { species: "Garchomp" }, move: "Rock Slide" },
+    { attacker: { species: "Kangaskhan-Mega", ability: "Parental Bond", nature: "Adamant", sp: { atk: 32 } }, defender: { species: "Garchomp" }, move: "Earthquake" },
+    { attacker: { species: "Kangaskhan-Mega", ability: "Parental Bond", nature: "Adamant", sp: { atk: 32 } }, defender: { species: "Garchomp" }, move: "Double-Edge" },
+    { format: "singles", attacker: { species: "Kangaskhan-Mega", ability: "Parental Bond" }, defender: { species: "Incineroar" }, move: "Rock Slide" },
+  ],
+  "move and ability modifiers": [
+    // Knock Off's ×1.5 is a chained base-power modifier (97.5 BP), not base power 97.
+    { format: "singles", attacker: { species: "Incineroar", nature: "Adamant", sp: { atk: 32 } }, defender: { species: "Garchomp", item: "Leftovers" }, move: "Knock Off" },
+    { attackerSide: { helpingHand: true }, attacker: { species: "Incineroar", item: "Life Orb" }, defender: { species: "Hatterene", item: "Sitrus Berry" }, move: "Knock Off" },
+    // Infiltrator ignores Reflect and Light Screen.
+    { format: "singles", defenderSide: { reflect: true }, attacker: { species: "Dragapult", ability: "Infiltrator" }, defender: { species: "Garchomp" }, move: "Dragon Claw" },
+    { defenderSide: { reflect: true, lightScreen: true }, attacker: { species: "Dragapult", ability: "Infiltrator" }, defender: { species: "Garchomp" }, move: "Shadow Ball" },
+    // Sheer Force boosts moves whose secondary is an empty object.
+    { format: "singles", attacker: { species: "Kleavor", ability: "Sheer Force" }, defender: { species: "Garchomp" }, move: "Stone Axe" },
+    // Future Sight is calculated as an ordinary 120 BP Psychic move.
+    { format: "singles", attacker: { species: "Hatterene", nature: "Modest", sp: { spa: 32 } }, defender: { species: "Garchomp" }, move: "Future Sight" },
+  ],
+};
+
 function smogonPokemon(side) {
   const species = speciesByName(side.species);
   return new smogon.Pokemon(gen, side.species, {
@@ -239,6 +271,24 @@ for (const [group, make] of Object.entries(GROUPS)) {
       rolls,
     });
     made += 1;
+  }
+}
+
+for (const [group, scenarios] of Object.entries(FIXED_SCENARIOS)) {
+  for (const scenario of scenarios) {
+    cases.push({
+      group,
+      format: scenario.format ?? "doubles",
+      weather: scenario.weather ?? "",
+      terrain: scenario.terrain ?? "",
+      attackerSide: scenario.attackerSide ?? {},
+      defenderSide: scenario.defenderSide ?? {},
+      critical: Boolean(scenario.crit),
+      attacker: caseSide(scenario.attacker),
+      defender: caseSide(scenario.defender),
+      move: caseMove(scenario.move),
+      rolls: referenceRolls(scenario),
+    });
   }
 }
 

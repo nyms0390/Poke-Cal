@@ -20,9 +20,8 @@ const side = (pokemon, ability) => ({
   teraType: "",
 });
 
-// Lookup's note must not promise an immunity the calculator does not apply.
-const ENGINE_GAPS = { eelevate: "engine does not apply Eelevate's Ground immunity yet" };
 
+// Lookup's note must not promise an immunity the calculator does not apply.
 test("abilityTypeImmunity reads ids, names and catalog entries", () => {
   assert.equal(abilityTypeImmunity("Levitate"), "Ground");
   assert.equal(abilityTypeImmunity({ id: "waterabsorb", name: "Water Absorb" }), "Water");
@@ -32,7 +31,7 @@ test("abilityTypeImmunity reads ids, names and catalog entries", () => {
 });
 
 for (const [abilityId, type] of Object.entries(ABILITY_TYPE_IMMUNITIES)) {
-  test(`the damage engine makes ${abilityId} immune to ${type} moves`, { todo: ENGINE_GAPS[abilityId] }, () => {
+  test(`the damage engine makes ${abilityId} immune to ${type} moves`, () => {
     const move = { id: "testmove", name: "Test Move", type, category: "Special", basePower: 80, accuracy: 100, target: "normal", flags: {} };
     const ability = { id: abilityId, name: abilityId };
     const result = calculateDamage({
