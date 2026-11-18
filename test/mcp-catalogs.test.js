@@ -83,6 +83,8 @@ test("MCP derivation drops only fields the Worker never reads", () => {
     moves: [
       { id: "ember", name: "Ember", num: 52, desc: "Long.", shortDesc: "Short.", contestType: "Cute", gen4: { desc: "old" }, flags: { protect: 1 }, champions: { legal: true, tier: "OU", sourceUrl: "x", desc: "Champions long." } },
       { id: "oddmove", name: "Odd Move", desc: "Only a long description." },
+      { id: "ironhead", name: "Iron Head", desc: "Long 30%.", shortDesc: "30% flinch.", champions: { legal: true, desc: "Long 20%.", shortDesc: "20% flinch." } },
+      { id: "longonly", name: "Long Only", desc: "Base long.", champions: { legal: true, desc: "Champions long." } },
     ],
     abilities: [{ id: "blaze", name: "Blaze", desc: "Long.", shortDesc: "Short.", aliases: ["猛火"], rating: 2, gen3: {}, champions: { legal: true, usageCount: 4, source: "Limitless" } }],
     items: [{ id: "a", name: "A Item", desc: "Long.", shortDesc: "Short.", spritenum: 1, fling: { basePower: 30 }, champions: { legal: false } }],
@@ -120,6 +122,8 @@ test("MCP derivation drops only fields the Worker never reads", () => {
   assert.deepEqual(derived.moves, [
     { id: "ember", name: "Ember", shortDesc: "Short.", flags: { protect: 1 }, champions: { legal: true, tier: "OU" } },
     { id: "oddmove", name: "Odd Move", desc: "Only a long description." },
+    { id: "ironhead", name: "Iron Head", shortDesc: "30% flinch.", champions: { legal: true, shortDesc: "20% flinch." } },
+    { id: "longonly", name: "Long Only", champions: { legal: true, desc: "Champions long." } },
   ]);
   assert.deepEqual(derived.abilities, [{ id: "blaze", name: "Blaze", champions: { legal: true, usageCount: 4 } }]);
   assert.deepEqual(derived.items, [{ id: "a", name: "A Item", fling: { basePower: 30 }, champions: { legal: false } }]);

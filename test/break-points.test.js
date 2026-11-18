@@ -471,3 +471,13 @@ function withOffense(state, stat, sp) {
 function breakAnalysis(koText, points, maxPct) {
   return { damage: { koText, maxPct }, points };
 }
+
+test("break points target raw damage, ignoring the threat's Focus Sash", () => {
+  const sash = { id: "focussash", name: "Focus Sash" };
+  const state = userState();
+  const hardHit = { ...physicalMove, id: "hardhit", name: "Hard Hit", basePower: 250 };
+  const raw = breakPoints(state, hardHit, { threat: threat() });
+  assert.ok(raw.some((point) => /OHKO/.test(point.achieves)), "an OHKO break point exists without the sash");
+  assert.deepEqual(yourDamage(state, hardHit, { threat: threat(sash) }), yourDamage(state, hardHit, { threat: threat() }));
+  assert.deepEqual(breakPoints(state, hardHit, { threat: threat(sash) }), raw);
+});

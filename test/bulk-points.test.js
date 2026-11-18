@@ -861,3 +861,14 @@ test("Sturdy surviving at full HP counts as the following hit, as the engine's c
   }), { hits: 2, chance: 1 });
   assert.deepEqual(firstKo({ chances: [{ hits: 1, chance: 0 }] }), { hits: null, chance: 0 });
 });
+
+test("bulk points size SP against raw damage, ignoring the user's Focus Sash", () => {
+  const sash = { id: "focussash", name: "Focus Sash" };
+  const raw = threatDamage(userState(), { threat, move: ohkoMove });
+  assert.match(raw.koText, /OHKO/);
+  assert.deepEqual(threatDamage(userState(sash), { threat, move: ohkoMove }), raw);
+  assert.deepEqual(
+    bulkPoints(userState(sash), { threat, move: ohkoMove }),
+    bulkPoints(userState(), { threat, move: ohkoMove }),
+  );
+});

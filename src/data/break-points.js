@@ -1,7 +1,7 @@
 import { calculateDamage } from "../engine/damage.js";
 import { createField } from "../engine/field.js";
 import { NATURES } from "../engine/natures.js";
-import { compareKoTiers, firstKo, koHitCount, koIsGuaranteed, threatSideState } from "./bulk-points.js";
+import { compareKoTiers, firstKo, koHitCount, koIsGuaranteed, threatSideState, withoutFocusSash } from "./bulk-points.js";
 
 export function rankBreakPointPokemonGroups(groups) {
   return groups.map((group) => ({
@@ -104,7 +104,7 @@ function damageResult(userState, move, { threat, field = createField(), critical
     defender: threat.pokemon,
     move,
     attackerState: { ...userState, currentHpFraction: 1 },
-    defenderState: threatState(threat, move),
+    defenderState: withoutFocusSash(threatState(threat, move)),
     field,
     critical,
     moveOptions,

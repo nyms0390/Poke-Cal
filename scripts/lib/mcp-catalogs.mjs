@@ -16,7 +16,8 @@ export const MCP_CATALOG_DIRECTORY = "mcp-catalogs";
 const UNUSED_METADATA_KEYS = ["num", "contestType", "isNonstandard", "zMove", "maxMove", "spritenum", "rating"];
 // The Worker reads Champions legality, tier, and aggregate usage (for search ranking and the
 // lookup summaries), and get_sets/speed_tiers read per-Pokémon usage and NCP sets; source
-// labels/URLs, spread and NCP metadata, and overlay descriptions are browser-only.
+// labels/URLs, spread and NCP metadata, and ability/item overlay descriptions are browser-only
+// (slimMove keeps the move text lookup_move shows).
 const CHAMPIONS_KEYS = ["legal", "tier", "usageCount", "usagePercent"];
 // Per-Pokémon usage lists keep the entries get_sets returns (topUsageList); defaults only read
 // the top one. Smogon spreads and Speed groups stay whole because speed_tiers matches them by nature, and Speed
@@ -45,15 +46,21 @@ function slimPokemon(entry) {
   return result;
 }
 
-// lookup_move returns and searches `shortDesc ?? desc`, so the long `desc` is only kept when
-// there is no short description.
+// lookup_move returns and searches `entryShortText` (catalog.js): the Champions short text, then
+// the base short text, then the Champions long text, then the base long text. Only the field it
+// picks, plus the base `shortDesc`, is kept.
 function slimMove(entry) {
   const { champions, ...rest } = stripGenerationHistory(entry);
-  const dropped = rest.shortDesc === undefined || rest.shortDesc === null
-    ? UNUSED_METADATA_KEYS
-    : [...UNUSED_METADATA_KEYS, "desc"];
+  const hasShortText = Boolean(rest.shortDesc || champions?.shortDesc);
+  const dropped = hasShortText || champions?.desc
+    ? [...UNUSED_METADATA_KEYS, "desc"]
+    : UNUSED_METADATA_KEYS;
   const result = withoutKeys(rest, dropped);
-  if (champions !== undefined) result.champions = slimChampions(champions);
+  if (champions !== undefined) {
+    result.champions = slimChampions(champions);
+    if (champions?.shortDesc) result.champions.shortDesc = champions.shortDesc;
+    else if (champions?.desc && !hasShortText) result.champions.desc = champions.desc;
+  }
   return result;
 }
 

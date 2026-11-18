@@ -11,7 +11,7 @@ const context = createStrategyContext({
   ],
   abilities: [{ id: "static", name: "Static" }, { id: "waterabsorb", name: "Water Absorb" }],
   items: [{ id: "leftovers", name: "Leftovers" }],
-  moves: [{ id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90, accuracy: 100, priority: 0, target: "normal", shortDesc: "A strong electric attack.", champions: { legal: true } }],
+  moves: [{ id: "thunderbolt", name: "Thunderbolt", type: "Electric", category: "Special", basePower: 90, accuracy: 100, priority: 0, target: "normal", shortDesc: "A strong electric attack.", champions: { legal: true } }, { id: "ironhead", name: "Iron Head", type: "Steel", category: "Physical", basePower: 80, accuracy: 100, priority: 0, target: "normal", shortDesc: "30% chance to make the target flinch.", champions: { legal: true, shortDesc: "20% chance to make the target flinch." } }],
 });
 
 test("MCP tools expose lookup, speed, damage, and survival results", async () => {
@@ -20,6 +20,10 @@ test("MCP tools expose lookup, speed, damage, and survival results", async () =>
   assert.equal(pokemon[0].name, "Alpha");
   const move = await callTool(server, "lookup_move", { query: "Thunderbolt" });
   assert.equal(move[0].type, "Electric");
+  const ironHead = await callTool(server, "lookup_move", { query: "Iron Head" });
+  assert.equal(ironHead[0].shortDesc, "20% chance to make the target flinch.");
+  assert.equal((await callTool(server, "lookup_move", { query: "20% chance" }))[0].id, "ironhead");
+  await assert.rejects(() => callTool(server, "lookup_move", { query: "30% chance" }), /Unknown move/);
   const speed = await callTool(server, "compare_speed", { left: "Alpha", right: "Beta" });
   assert.equal(speed.left.name, "Alpha");
   const damage = await callTool(server, "calculate_damage", { attacker: "Alpha", defender: "Beta", move: "Thunderbolt" });
@@ -147,4 +151,34 @@ test("MCP flags results for Pokémon or moves that are not Champions-legal", asy
   const speed = await callTool(server, "compare_speed", { left: "Mewtwo", right: "Beta" });
   assert.equal(speed.legal, false);
   assert.match(speed.warnings[0], /Mewtwo/);
+});
+
+test("MCP check_survival trusts Focus Sash only against a single hit", async () => {
+  const sashContext = createStrategyContext({
+    pokemon: [
+      { id: "hitter", name: "Hitter", types: ["Grass"], baseStats: { hp: 100, atk: 150, def: 100, spa: 100, spd: 100, spe: 100 }, abilities: ["Torrent"], champions: { legal: true } },
+      { id: "frail", name: "Frail", types: ["Water"], baseStats: { hp: 40, atk: 50, def: 40, spa: 50, spd: 50, spe: 50 }, abilities: ["Torrent"], champions: { legal: true } },
+    ],
+    abilities: [{ id: "parentalbond", name: "Parental Bond" }, { id: "torrent", name: "Torrent" }],
+    items: [{ id: "focussash", name: "Focus Sash" }],
+    moves: [
+      { id: "woodhammer", name: "Wood Hammer", type: "Grass", category: "Physical", basePower: 120, accuracy: 100, priority: 0, target: "normal", flags: { contact: 1 }, champions: { legal: true } },
+      { id: "doublehammer", name: "Double Hammer", type: "Grass", category: "Physical", basePower: 120, accuracy: 100, priority: 0, target: "normal", multihit: 2, flags: { contact: 1 }, champions: { legal: true } },
+    ],
+  });
+  const server = createToolServer(sashContext);
+  const base = { attacker: "Hitter", defender: "Frail", defenderItem: "Focus Sash", attackerSpread: "Adamant:0/32/0/0/0/0" };
+
+  const single = await callTool(server, "check_survival", { ...base, move: "Wood Hammer" });
+  assert.equal(single.survives, true);
+  assert.match(single.summary, /^YES — Frail survives with Focus Sash/);
+  assert.deepEqual(single.remainingHp, { min: 1, max: 1 });
+
+  const multiHit = await callTool(server, "check_survival", { ...base, move: "Double Hammer" });
+  assert.equal(multiHit.survives, false);
+  assert.match(multiHit.summary, /^NO — /);
+
+  const parentalBond = await callTool(server, "check_survival", { ...base, attackerAbility: "Parental Bond", move: "Wood Hammer" });
+  assert.equal(parentalBond.survives, false);
+  assert.match(parentalBond.summary, /^NO — /);
 });

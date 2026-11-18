@@ -253,3 +253,16 @@ test("Quick mode CLI honours explicit false boolean values", () => {
   assert.equal(invalid.status, 1);
   assert.match(invalid.stderr, /trickRoom must be true or false/);
 });
+
+test("Quick mode reports a priority move blocked by Psychic Terrain", () => {
+  const result = checkSurvival(context, {
+    attacker: "dragonite",
+    defender: "incineroar",
+    move: "extremespeed",
+    terrain: "Psychic Terrain",
+  });
+
+  assert.equal(result.verdict, "YES");
+  assert.equal(result.reason, "Psychic Terrain");
+  assert.equal(result.summary, "YES — Psychic Terrain blocks the priority move.");
+});

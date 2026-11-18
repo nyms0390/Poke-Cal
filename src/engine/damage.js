@@ -15,6 +15,7 @@ import {
 import { applyHitCountOverride, applyModifier, chainModifiers, chainValue, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 import { isGuaranteedCritical } from "./critical.js";
+import { effectivePriority } from "./battle-order.js";
 
 const SP_TOTAL_LIMIT = 66;
 const STAT_LABELS = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
@@ -254,6 +255,39 @@ function calculateDamageUnchecked({
   ctx.typeMultiplier = typeMultiplier;
   const effectiveCritical = (critical || alwaysCritical) &&
     (suppressDefenderAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
+  const priorityBlock = abilityImmunity || itemImmunity ? null : priorityBlockResult({
+    move,
+    attacker,
+    attackerState,
+    defender,
+    defenderState,
+    field: effectiveField,
+    suppressAttackerAbility,
+    suppressDefenderAbility,
+  });
+  if (priorityBlock) {
+    const rolls = DAMAGE_ROLLS.map(() => 0);
+    return {
+      supported: true,
+      rolls,
+      minDamage: 0,
+      maxDamage: 0,
+      minPercent: 0,
+      maxPercent: 0,
+      defenderHp: defenderMaxHp,
+      defenderCurrentHp,
+      distribution: [{ damage: 0, chance: 1 }],
+      typeMultiplier,
+      critical: effectiveCritical,
+      priorityBlock,
+      ko: koSummaryForRolls(rolls, defenderCurrentHp),
+      notes: [
+        `Priority move blocked by ${priorityBlock.label}`,
+        ...fieldNotes(effectiveField, attackerState, defenderState),
+        ...teraNotes(attackerState, defenderState),
+      ].filter(Boolean),
+    };
+  }
   if (typeMultiplier === 0) {
     const rolls = DAMAGE_ROLLS.map(() => 0);
     return {
@@ -282,7 +316,9 @@ function calculateDamageUnchecked({
 
   const iceFaceActive = !suppressDefenderAbility && move.category === "Physical" &&
     hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false;
-  const sturdyActive = isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
+  // Sturdy and Focus Sash leave 1 HP from full; the first hit of a use is capped, later hits are not.
+  const endureSource = firstHitEndureSource(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
+  const endureActive = endureSource !== null;
 
   const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
@@ -291,11 +327,11 @@ function calculateDamageUnchecked({
     const rolls = DAMAGE_ROLLS.map(() => damage);
     const baseDistribution = [{ damage: rawDamage, chance: 1 }];
     const firstDistribution = [{
-      damage: iceFaceActive ? 0 : sturdyActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
+      damage: iceFaceActive ? 0 : endureActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
       chance: 1,
     }];
-    const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
-      ? sturdySurvivalKo()
+    const endureText = endureActive && !iceFaceActive && rawDamage >= defenderMaxHp
+      ? endureSurvivalKo(endureSource)
       : null;
     const recalculatedKo = moveEffect(moveId).recalculatesFixedDamage
       ? koSummaryForRecalculatedFixedDamage(ctx, firstDistribution[0].damage)
@@ -312,7 +348,7 @@ function calculateDamageUnchecked({
       defenderCurrentHp,
       typeMultiplier,
       critical: effectiveCritical,
-      ko: sturdyText ?? recalculatedKo ??
+      ko: endureText ?? recalculatedKo ??
         koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
       notes: [
         "Fixed damage",
@@ -535,10 +571,10 @@ function calculateDamageUnchecked({
     distribution: fullMoveDistribution(successiveHits ? hitPowers.slice(0, hits) : hitPowers, hits, damageForHit, options),
   })));
   const baseRollDistribution = moveDistribution({ firstUse: false });
-  const firstRollDistribution = iceFaceActive || sturdyActive || firstHitDiffers
+  const firstRollDistribution = iceFaceActive || endureActive || firstHitDiffers
     ? moveDistribution({
       negateFirstHit: iceFaceActive,
-      firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
+      firstHitCap: endureActive ? defenderMaxHp - 1 : null,
       firstUse: true,
     })
     : baseRollDistribution;
@@ -548,17 +584,17 @@ function calculateDamageUnchecked({
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
   const maxActualHitCount = successiveHits ? hitCounts.max : hitPowers.length > 1 ? hitPowers.length : hitCounts.max;
-  const sturdyAffectsKo = sturdyActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
-  const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
-    ? sturdySurvivalKo()
+  const endureAffectsKo = endureActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
+  const endureText = endureAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
+    ? endureSurvivalKo(endureSource)
     : null;
-  const recovery = sturdyText
+  const recovery = endureText
     ? null
     : defenderRecovery({ defender, defenderState, defenderTypes, defenderMaxHp, defenderCurrentHp, field: effectiveField, suppressDefenderAbility, attackerState, suppressAttackerAbility });
-  let ko = sturdyText ??
+  let ko = endureText ??
     koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution, recovery);
-  if (sturdyAffectsKo && !sturdyText) {
-    ko = { ...ko, text: `${ko.text} (Sturdy)` };
+  if (endureAffectsKo && !endureText) {
+    ko = { ...ko, text: `${ko.text} (${endureSource})` };
   }
   if (recovery && ko.hits !== 1) {
     ko = { ...ko, text: `${ko.text} after ${recovery.labels.join(" and ")} recovery` };
@@ -640,6 +676,29 @@ function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defen
   return null;
 }
 
+// Moves with raised priority (after Prankster, Gale Wings, Triage and Grassy Glide) fail against
+// a grounded target in Psychic Terrain and against a Dazzling, Queenly Majesty or Armor Tail
+// holder (Mold Breaker bypasses the abilities). Showdown checks the priority the move actually
+// has, and a target's Levitate does not keep it airborne while Mold Breaker is active.
+const PRIORITY_BLOCKING_ABILITIES = new Set(["dazzling", "queenlymajesty", "armortail"]);
+
+function priorityBlockResult({ move, attacker, attackerState, defender, defenderState, field, suppressAttackerAbility, suppressDefenderAbility }) {
+  if (move?.target === "self") return null;
+  const priority = effectivePriority(move, { ...attackerState, pokemon: attackerState.pokemon ?? attacker }, field, {
+    suppressAbility: suppressAttackerAbility,
+  });
+  if (!(priority > 0)) return null;
+  const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
+  if (!suppressDefenderAbility && PRIORITY_BLOCKING_ABILITIES.has(abilityId)) {
+    return { kind: "ability", label: defenderState.ability?.name ?? defenderState.ability?.id };
+  }
+  const groundState = suppressDefenderAbility ? { ...defenderState, ability: null } : defenderState;
+  if (normalizeId(field.terrain) === "psychicterrain" && isGrounded(defender, groundState, field)) {
+    return { kind: "terrain", label: "Psychic Terrain" };
+  }
+  return null;
+}
+
 // Item immunities are not ability effects, so Mold Breaker and Neutralizing Gas do not bypass them.
 function itemImmunityResult({ moveType, move, defenderState, groundedTarget }) {
   const itemId = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
@@ -683,16 +742,22 @@ function teraShellTypeMultiplier(typeMultiplier, defenderState, suppressDefender
   return 0.5;
 }
 
-function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
-  return !suppressDefenderAbility && hasAbility(defenderState, "sturdy") && defenderCurrentHp === defenderMaxHp;
+// "Sturdy" or "Focus Sash" when the defender is at full HP and one would leave it at 1 HP.
+// Mold Breaker skips Sturdy but not Focus Sash; a consumed item is gone.
+function firstHitEndureSource(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
+  if (defenderCurrentHp !== defenderMaxHp) return null;
+  if (!suppressDefenderAbility && hasAbility(defenderState, "sturdy")) return "Sturdy";
+  const itemId = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
+  if (itemId === "focussash" && !defenderState.itemConsumed) return "Focus Sash";
+  return null;
 }
 
-// Every roll would OHKO, Sturdy leaves 1 HP, and the next hit KOs.
-function sturdySurvivalKo() {
+// Every roll would OHKO, Sturdy or Focus Sash leaves 1 HP, and the next hit KOs.
+function endureSurvivalKo(source = "Sturdy") {
   return {
     hits: null,
     chance: 0,
-    text: "survives with Sturdy at full HP",
+    text: `survives with ${source} at full HP`,
     chances: [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }],
   };
 }

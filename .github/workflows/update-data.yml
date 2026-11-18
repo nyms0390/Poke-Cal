@@ -70,15 +70,20 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
-  # Runs only first-party code on the artifact: re-validates it, commits public/ only, pushes,
-  # and triggers the Pages deploy (pushes made with GITHUB_TOKEN do not trigger workflows).
+  # Runs only first-party code on the artifact: re-validates it, commits public/ only to the data
+  # branch, merges it through a pull request once CI passes, and triggers the Pages deploy
+  # (merges and pushes made with GITHUB_TOKEN do not trigger workflows).
   commit:
     needs: sync
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 40
     permissions:
       contents: write
+      pull-requests: write
       actions: write
+    env:
+      BRANCH: bot/update-data
+      TITLE: Update generated catalogs (Showdown/Champions, Limitless usage/teams, Smogon SP spreads, NCP sets)
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -103,8 +108,14 @@ jobs:
           rsync -a --delete --include='*/' --include='*.json' --include='*.png' --exclude='*'
           "$RUNNER_TEMP/synced/" public/
 
-      - name: Commit and push changes
+      # main is protected (pull request + passing `Tests` check, no bypass), so the bot can't push
+      # there. It force-pushes a fixed branch, keeps one open PR for it, dispatches CI on it
+      # (GITHUB_TOKEN pushes don't trigger workflows), waits for the check and merges the PR itself.
+      # If CI fails, the job fails and the PR stays open for review.
+      - name: Commit to the data branch and open or update its pull request
         id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -114,18 +125,44 @@ jobs:
             echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git commit -m "Update generated catalogs (Showdown/Champions, Limitless usage/teams, Smogon SP spreads, NCP sets)"
-          for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then
-              echo "committed=true" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            echo "Push rejected (attempt $attempt); rebasing onto origin/main."
-            sleep $((attempt * 5))
-            git pull --rebase origin main
+          git switch -C "$BRANCH"
+          git commit -m "$TITLE"
+          git push --force origin "$BRANCH"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+          number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            echo "Updated pull request #$number."
+          else
+            gh pr create --base main --head "$BRANCH" --title "$TITLE" \
+              --body "Weekly catalog sync from the Update Data workflow ($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID). The workflow merges this PR itself once the Tests check passes."
+          fi
+
+      - name: Run CI on the data branch and wait for it
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          gh workflow run ci.yml --ref "$BRANCH"
+          run_id=""
+          for attempt in $(seq 1 30); do
+            run_id=$(gh run list --workflow ci.yml --event workflow_dispatch --commit "$SHA" --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+            [ -n "$run_id" ] && break
+            sleep 10
           done
-          echo "Failed to push after 5 attempts." >&2
-          exit 1
+          if [ -z "$run_id" ]; then
+            echo "CI run for $SHA did not start." >&2
+            exit 1
+          fi
+          gh run watch "$run_id" --exit-status --interval 30
+
+      - name: Merge the data pull request
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.commit.outputs.sha }}
+        run: gh pr merge "$BRANCH" --squash --delete-branch --match-head-commit "$SHA" --subject "$TITLE"
 
       - name: Deploy Pages
         if: steps.commit.outputs.committed == 'true'

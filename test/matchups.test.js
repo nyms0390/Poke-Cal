@@ -420,6 +420,16 @@ test("race moves carry the cumulative KO chance per hit count", () => {
 
 });
 
+test("a Focus Sash at full HP turns an OHKO into a 2HKO in the race", () => {
+  const ours = rillaboom({ moves: [move("High Horsepower")] });
+  const plain = matchup({ ours, theirs: sneasler() });
+  const sashed = matchup({ ours, theirs: { ...sneasler(), item: item("Focus Sash") } });
+  assert.equal(plain.ourHits, 1);
+  assert.equal(plain.ours.best.koText, "guaranteed OHKO");
+  assert.equal(sashed.ourHits, 2);
+  assert.equal(sashed.ours.best.koText, "survives with Focus Sash at full HP");
+});
+
 test("Leek Sirfetch'd races with guaranteed-crit Leaf Blade", () => {
   const sirfetchd = (heldItem) => ({
     pokemon: species("Sirfetch’d"),
@@ -477,4 +487,29 @@ test("when neither side KOs within three turns, the race is a no KO", () => {
   const mirror = matchup({ ours: wall("Snorlax", "Thick Fat"), theirs: wall("Snorlax", "Thick Fat") });
   assert.equal(mirror.ourHits, 4);
   assert.equal(mirror.outcome, "stalemate", "equal 4+ turns are no KO, not a move-order race");
+});
+
+test("Armor Tail and Psychic Terrain keep blocked priority moves out of the KO race", () => {
+  const farigiraf = {
+    pokemon: species("Farigiraf"),
+    nature: "Sassy",
+    sp: { hp: 32, def: 2, spd: 32 },
+    ability: ability("Armor Tail"),
+    item: item("Sitrus Berry"),
+    moves: [move("Psychic")],
+  };
+  const armorTail = matchup({ ours: rillaboom(), theirs: farigiraf });
+  const grassyGlide = armorTail.ours.moves.find((entry) => entry.move.name === "Grassy Glide");
+  assert.equal(grassyGlide.included, true);
+  assert.equal(grassyGlide.maxPercent, 0);
+  assert.equal(grassyGlide.hits, Infinity);
+  assert.equal(grassyGlide.notes.includes("Priority move blocked by Armor Tail"), true);
+  assert.notEqual(armorTail.ours.best.move.name, "Grassy Glide");
+  assert.notEqual(armorTail.ours.best.move.name, "Fake Out");
+
+  // Psychic Terrain (set here instead of Grassy Surge's terrain) blocks Fake Out against a grounded target.
+  const psychic = matchup({ ours: rillaboom({ ability: ability("Overgrow") }), theirs: incineroar(), field: { terrain: "Psychic Terrain" } });
+  const fakeOut = psychic.ours.moves.find((entry) => entry.move.name === "Fake Out");
+  assert.equal(fakeOut.maxPercent, 0);
+  assert.equal(fakeOut.notes.includes("Priority move blocked by Psychic Terrain"), true);
 });
