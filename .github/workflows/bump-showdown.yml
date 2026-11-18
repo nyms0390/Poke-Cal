@@ -2,9 +2,11 @@ name: Bump Showdown Pin
 
 on:
   schedule:
-    # Same weekly slot as update-data.yml (Mondays 06:00 UTC). That sync keeps using the pinned
-    # commit; this only proposes moving the pin, so Showdown catalog changes land after review.
-    - cron: "0 6 * * 1"
+    # Thursdays 06:00 UTC, mid-week before update-data.yml (Mondays 06:00 UTC). That sync keeps
+    # using the pinned commit; this only proposes moving the pin, so Showdown catalog changes land
+    # after review, and a bump merged before Monday reaches that Monday's sync instead of waiting
+    # a further week.
+    - cron: "0 6 * * 4"
   workflow_dispatch:
 
 permissions: {}

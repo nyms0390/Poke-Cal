@@ -1,8 +1,12 @@
 # PokéCal Roadmap
 
-Status: Completed (2026-07-27)
+Status: Completed (2026-07-27). Historical record.
 
-This document records the completed plan for PokéCal's four-page competitive toolkit.
+This document records the completed plan for PokéCal's original four-page competitive toolkit.
+The app has since grown to nine pages (Moves, Matchups, Compare sets, Teams and My teams were
+added later), so page counts, test counts and the file tree below describe July 2026. For the
+current layout see README.md "Project Structure" and AGENTS.md "Architecture"; owner decisions
+live in [DECISIONS.md](DECISIONS.md).
 
 ## Completion record
 
@@ -95,7 +99,8 @@ conflict with the no-dependency constraint or don't serve the calculator-first p
 
 ## Target code structure
 
-Phase 0 migrated the code to this layout. All paths below are canonical:
+Phase 0 migrated the code to this layout. The layering (engine, data, ui) still holds; later
+files are not listed here:
 
 ```
 PokéCal/

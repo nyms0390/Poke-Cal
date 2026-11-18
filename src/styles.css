@@ -3899,7 +3899,7 @@ details.builder-analysis-move > .builder-spread-grid {
   max-width: 330px;
   overflow: hidden;
   color: var(--muted);
-  font-size: 0.9em;
+  font-size: var(--type-caption);
   text-overflow: ellipsis;
 }
 
@@ -3913,7 +3913,6 @@ details.builder-analysis-move > .builder-spread-grid {
 .speed-axis-entry.expandable::after {
   color: var(--subtle);
   content: "▸";
-  font-size: 0.9em;
 }
 
 .speed-axis-entry.expandable[aria-expanded="true"]::after {
@@ -4774,7 +4773,7 @@ textarea:focus-visible {
 
   .lookup-page .base-stat span,
   .lookup-page .base-stat-total span {
-    font-size: 0.65rem;
+    font-size: var(--type-caption);
   }
 
   .lookup-page .base-stat strong,
@@ -5964,7 +5963,7 @@ textarea:focus-visible {
   border-radius: 50%;
   background: var(--subtle);
   color: white;
-  font-size: 0.65rem;
+  font-size: var(--type-caption);
   font-style: italic;
   font-weight: 700;
 }
@@ -8521,6 +8520,10 @@ html:has(dialog.set-sheet[open]) {
   display: none;
 }
 
+.my-teams-undo {
+  margin-left: 8px;
+}
+
 .my-teams-members {
   display: grid;
   gap: 10px;
@@ -9240,4 +9243,47 @@ main > .my-teams-editor {
 
 .team-panel-edited-mark[hidden] {
   display: none;
+}
+
+/* ---------- App dialogs ----------
+   src/ui/app-dialog.js: styled, translated confirm and name prompts in place of the browser's
+   own boxes. Same surface as the team switch dialog. */
+.app-dialog {
+  width: min(420px, calc(100% - 32px));
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 16px 48px rgb(16 24 40 / 20%);
+}
+
+.app-dialog::backdrop {
+  background: rgb(24 39 43 / 40%);
+}
+
+.app-dialog-form {
+  display: grid;
+  gap: 12px;
+}
+
+.app-dialog-text {
+  margin: 0;
+  font-size: var(--type-supporting);
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.app-dialog-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.app-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
 }

@@ -19,6 +19,7 @@ import {
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { initI18n, localizedName, localizedTerm, onLocaleChange, t } from "../i18n.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { confirmDialog } from "./app-dialog.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, showStatus } from "./bootstrap.js";
 import { browserStorage, itemLabel, natureLabel, pokemonSpriteElements, typeBadge } from "./components.js";
@@ -271,10 +272,14 @@ function add() {
   render();
 }
 
-function remove(id) {
+async function remove(id) {
   const variant = findVariant(comparison, id);
   if (!variant || id === comparison.pinnedId) return;
-  if (!globalThis.confirm(t("compare.confirmRemove", { title: titleOf(variant) }))) return;
+  const confirmed = await confirmDialog(t("compare.confirmRemove", { title: titleOf(variant) }), {
+    confirmLabel: t("dialog.remove"),
+    danger: true,
+  });
+  if (!confirmed || !findVariant(comparison, id) || id === comparison.pinnedId) return;
   comparison = removeVariant(comparison, id);
   analysisCache.delete(id);
   renaming = false;

@@ -149,46 +149,53 @@ export function formatResultDescription(args, locale = "en") {
     : "";
   const clauses = localizedFieldClauses({ attackerState, defenderState, field, result });
   const matchup = `${attackerPrefix} ${item}${localizedName(attackerState.pokemon, locale)}的${localizedName(move, locale)} 對 ${defenderPrefix} ${localizedName(defenderState.pokemon, locale)}${clauses}`;
-  return `${matchup}：${result.minDamage}-${result.maxDamage} (${result.minPercent} - ${result.maxPercent}%) -- ${formatKoResult(result.ko, locale)}`;
+  return `${matchup}：${result.minDamage}-${result.maxDamage} (${result.minPercent} - ${result.maxPercent}%) – ${formatKoResult(result.ko, locale)}`;
 }
+
+// zh-TW for the fixed English notes the damage engine emits, keyed by the exact sentence.
+// test/i18n.test.js pins every key to a string literal in src/engine/, so rewording a note
+// in the engine fails a test instead of quietly dropping the zh-TW line back to English.
+export const DAMAGE_NOTE_ZH = Object.freeze({
+  "Immune": "免疫",
+  "Fixed damage": "固定傷害",
+  "Doubles spread move": "雙打範圍招式",
+  "Pledge combo STAB": "誓約組合的屬性一致加成",
+  "Ice Face intact (first hit negated)": "結凍頭完好（抵銷第一次攻擊）",
+  "Cloud Nine/Air Lock suppresses weather": "無關天氣/氣閘屏蔽天氣",
+  "Primordial Sea treated as Rain": "始源之海視為下雨",
+  "Mega Sol treats this move as Sunny Day": "超級太陽將此招式視為大晴天",
+  "Sandstorm Rock SpD boost": "沙暴提升岩石屬性特防",
+  "Immune (ability)": "因特性免疫",
+  "Immune (item)": "因道具免疫",
+  "Snow Ice Def boost": "下雪提升冰屬性防禦",
+  "Sun": "大晴天",
+  "Rain": "下雨",
+  "Sand": "沙暴",
+  "Snow": "下雪",
+  "Reflect": "反射壁",
+  "Light Screen": "光牆",
+  "Aurora Veil": "極光幕",
+  "Friend Guard": "友情防守",
+  "Helping Hand": "幫助",
+  "Assumes maximum friendship (102 BP)": "假設親密度最高（威力 102）",
+  "Assumes minimum friendship (102 BP)": "假設親密度最低（威力 102）",
+  "Assumes 5+ PP remaining (40 BP)": "假設剩餘 5 以上 PP（威力 40）",
+  "×2 on switch not modeled": "未計算換上時的 ×2 修正",
+  "Normal outcome (80 BP); 30% chance of 160 BP": "一般結果（威力 80）；有 30% 機率為威力 160",
+  "All-out attack (160 BP)": "全力攻擊（威力 160）",
+  "Beat Up estimates ally hits with the user's base Attack; exact damage requires each eligible ally's base Attack": "圍攻以使用者的基礎攻擊估算同伴的攻擊；精確傷害需要每隻可參與同伴的基礎攻擊",
+  "Assumes Magnitude 7 (70 BP)": "假設震級 7（威力 70）",
+  "Assumes the 80 BP outcome": "假設威力 80 的結果",
+  "Assumes the level-50 average (50 damage)": "假設等級 50 的平均值（50 傷害）",
+  "Salt Cure residual: 1/8 max HP (1/4 vs Water/Steel) per turn": "鹽醃每回合造成最大 HP 的 1/8 傷害（對水／鋼為 1/4）",
+  "-1 Def / +1 Spe after use": "使用後防禦 -1／速度 +1",
+});
 
 export function formatDamageNote(note, locale = "en", { move, entities = [] } = {}) {
   if (locale !== "zh-TW") return note;
-  const exact = {
-    "Immune": "免疫",
-    "Fixed damage": "固定傷害",
-    "Doubles spread move": "雙打範圍招式",
-    "Pledge combo STAB": "誓約組合的屬性一致加成",
-    "Ice Face intact (first hit negated)": "結凍頭完好（抵銷第一次攻擊）",
-    "Cloud Nine/Air Lock suppresses weather": "無關天氣/氣閘屏蔽天氣",
-    "Primordial Sea treated as Rain": "始源之海視為下雨",
-    "Mega Sol treats this move as Sunny Day": "超級太陽將此招式視為大晴天",
-    "Sandstorm Rock SpD boost": "沙暴提升岩石屬性特防",
-    "Immune (ability)": "因特性免疫",
-    "Immune (item)": "因道具免疫",
-    "Snow Ice Def boost": "下雪提升冰屬性防禦",
-    "Sun": "大晴天",
-    "Rain": "下雨",
-    "Sand": "沙暴",
-    "Snow": "下雪",
-    "Reflect": "反射壁",
-    "Light Screen": "光牆",
-    "Aurora Veil": "極光幕",
-    "Friend Guard": "友情防守",
-    "Helping Hand": "幫助",
-    "Assumes maximum friendship (102 BP)": "假設親密度最高（威力 102）",
-    "Assumes minimum friendship (102 BP)": "假設親密度最低（威力 102）",
-    "Assumes 3 Stockpile uses (300 BP)": "假設已使用蓄力 3 次（威力 300）",
-    "Assumes 5+ PP remaining (40 BP)": "假設剩餘 5 以上 PP（威力 40）",
-    "×2 on switch not modeled": "未計算換上時的 ×2 修正",
-    "Assumes the 80 BP outcome; 30% chance of 140 BP": "假設威力 80 的結果；有 30% 機率為威力 140",
-    "Assumes Magnitude 7 (70 BP)": "假設震級 7（威力 70）",
-    "Assumes the 80 BP outcome": "假設威力 80 的結果",
-    "Assumes the level-50 average (50 damage)": "假設等級 50 的平均值（50 傷害）",
-    "Salt Cure residual: 1/8 max HP (1/4 vs Water/Steel) per turn": "鹽醃每回合造成最大 HP 的 1/8 傷害（對水／鋼為 1/4）",
-    "-1 Def / +1 Spe after use": "使用後防禦 -1／速度 +1",
-  };
-  if (exact[note]) return exact[note];
+  if (Object.hasOwn(DAMAGE_NOTE_ZH, note)) return DAMAGE_NOTE_ZH[note];
+  const stockpile = /^Assumes (\d+) Stockpile uses$/.exec(note);
+  if (stockpile) return `假設已使用蓄力 ${stockpile[1]} 次`;
   const changedType = /^(.+) changed type to (.+)$/.exec(note);
   if (changedType) return `${localizedName(entities.find((entity) => entity?.name === changedType[1]) ?? { name: changedType[1] }, locale)}將屬性變為${localizedTerm("type", changedType[2], locale)}`;
   for (const entity of entities.filter(Boolean)) {

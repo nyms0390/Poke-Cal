@@ -72,7 +72,7 @@ test("formats a plain NCP-style result sentence", () => {
       defenderState,
       field: createField(),
     }),
-    "32 SpA Choice Specs Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice: 106-126 (51.2 - 60.8%) -- guaranteed 2HKO",
+    "32 SpA Choice Specs Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice: 106-126 (51.2 - 60.8%) – guaranteed 2HKO",
   );
 });
 
@@ -91,7 +91,7 @@ test("includes critical-hit, Tera, weather, and terrain clauses", () => {
       }),
       critical: true,
     }),
-    "32 SpA Choice Specs Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice on a critical hit in Electric Terrain in Sun Tera Electric: 274-324 (132.3 - 156.5%) -- guaranteed OHKO",
+    "32 SpA Choice Specs Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice on a critical hit in Electric Terrain in Sun Tera Electric: 274-324 (132.3 - 156.5%) – guaranteed OHKO",
   );
 });
 
@@ -112,7 +112,7 @@ test("prints non-zero stage prefixes and the actual offensive stat", () => {
       defenderState: { ...defenderState, stages: { ...neutralStages, def: -1 } },
       field: createField({ defenderSide: { reflect: true } }),
     }),
-    "+2 32 Def Miraidon Body Press vs. -1 32 HP / 0 Def Calyrex-Ice through Reflect: 54-64 (26 - 30.9%) -- guaranteed 4HKO",
+    "+2 32 Def Miraidon Body Press vs. -1 32 HP / 0 Def Calyrex-Ice through Reflect: 54-64 (26 - 30.9%) – guaranteed 4HKO",
   );
 });
 
@@ -126,7 +126,7 @@ test("omits attacker items that did not modify this damage", () => {
       defenderState,
       field: createField(),
     }),
-    "32 SpA Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice: 70-84 (33.8 - 40.5%) -- guaranteed 3HKO",
+    "32 SpA Miraidon Electro Drift vs. 32 HP / 0 SpD Calyrex-Ice: 70-84 (33.8 - 40.5%) – guaranteed 3HKO",
   );
 });
 

@@ -48,7 +48,7 @@ Each entry is the decision, the date it was made (as far as the history shows), 
 ## Data sources and sync
 
 - **Source labels are precise:** Limitless = Champions tournament usage; Smogon ladder stats = SP spreads; NCP = curated Champions sets; Pokémon Showdown = mechanics and catalog seed incl. the Champions mod; PokeAPI = Traditional Chinese aliases and the HOME renders in large sprite slots. (2026-10)
-- **Showdown is pinned to a full commit SHA, never a branch;** usage sources are fetched live. Pin bumps arrive as the weekly "Bump Showdown pin" PR. (2026-10-04) Enforced: `test/showdown-pin.test.js`, `showdownDataBaseUrl` refusing non-SHA pins.
+- **Showdown is pinned to a full commit SHA, never a branch;** usage sources are fetched live. Pin bumps arrive as the weekly "Bump Showdown pin" PR, opened on Thursdays so a reviewed bump reaches the Monday data sync (moved off the Monday slot 2026-11-18). (2026-10-04) Enforced: `test/showdown-pin.test.js`, `showdownDataBaseUrl` refusing non-SHA pins.
 - **Syncs fail closed:** absolute minimums plus at most 25% shrink, otherwise nothing is written (`--allow-shrink` skips only the shrink check). (2026-10-02) Enforced: `src/data/catalog-validation.js`, `test/sync-fail-closed.test.js`.
 - **Showdown `.ts` sources run only in a permission-model child process.** (2026-10-02) Enforced: `test/showdown-data.test.js`.
 - **Browsers load slim Champions-only catalogs** from `public/web/`; the MCP Worker loads `public/mcp-catalogs/`. (2026-10-02)

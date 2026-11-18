@@ -15,6 +15,7 @@ import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor } from "../data/
 import { SAVED_SETS_STORAGE_KEY, createSavedSetStore } from "../data/saved-sets.js";
 import { pasteFromSet, sameBuild, setFromPaste, teamMemberSets, teamSetStatus } from "../data/team-sets.js";
 import { getLocale, localizedName, t, translateSubtree } from "../i18n.js";
+import { confirmDialog, promptSetName } from "./app-dialog.js";
 import { browserStorage } from "./components.js";
 import { teamMemberSprite } from "./my-teams-ui.js";
 
@@ -22,7 +23,7 @@ export const TEAM_ROW_STORAGE_KEY = "pokecal.team-row.v1";
 
 export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHost = null, getCatalogs, readSet, loadSet }) {
   const storage = browserStorage();
-  const teamStore = createMyTeamStore(storage);
+  const teamStore = createMyTeamStore(storage, { defaultName: (number) => t("myTeams.defaultName", { number }) });
   const savedSetStore = createSavedSetStore(storage);
   let message = "";
   let signature = "";
@@ -175,11 +176,12 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
     render({ force: true });
   }
 
-  function saveSet() {
+  async function saveSet() {
+    const pokemonId = context()?.set?.pokemonId;
+    if (!pokemonId) return;
+    const name = await promptSetName(savedSetStore, pokemonId, setName(context()));
     const ctx = context();
-    if (!ctx?.set) return;
-    const name = globalThis.prompt?.(t("battle.saveName"), setName(ctx));
-    if (!name?.trim()) return;
+    if (!name || ctx?.set?.pokemonId !== pokemonId) return;
     const { pokemon, ability, item, moves } = setParts(ctx.set, ctx.catalogs);
     const saved = savedSetStore.saveSet(ctx.set.pokemonId, name, {
       pokemon, nature: ctx.set.nature, sp: ctx.set.sp, ability, item, moves,
@@ -187,11 +189,15 @@ export function mountTeamPanel({ prefix, toggleHost, menuHost, rowHost, phoneHos
     if (saved) say(t("teamPanel.setSaved", { name: saved.name }));
   }
 
-  function deleteSavedSet(name) {
-    const ctx = context();
-    if (!ctx?.set || !name) return;
-    if (!globalThis.confirm?.(t("teamPanel.deleteSetConfirm", { name }))) return;
-    savedSetStore.deleteSet(ctx.set.pokemonId, name);
+  async function deleteSavedSet(name) {
+    const pokemonId = context()?.set?.pokemonId;
+    if (!pokemonId || !name) return;
+    const confirmed = await confirmDialog(t("teamPanel.deleteSetConfirm", { name }), {
+      confirmLabel: t("dialog.delete"),
+      danger: true,
+    });
+    if (!confirmed) return;
+    savedSetStore.deleteSet(pokemonId, name);
     say(t("teamPanel.setDeleted", { name }));
   }
 

@@ -8,6 +8,7 @@ import {
   sortMoves,
   normalizeId,
 } from "../data/catalog.js";
+import { abilityTypeImmunity } from "../data/ability-immunities.js";
 import { activeSetFromState, createActiveSetStore } from "../data/active-set.js";
 import { commonTeammates, megaFamily } from "../data/pokemon.js";
 import { championsDefaultsForPokemon, topUsageEntry } from "../data/usage-defaults.js";
@@ -448,10 +449,15 @@ function renderDefensiveMatchups() {
       .map(([bucket, entries]) => matchupRow(labels[bucket], entries)),
   );
 
-  const hasLevitate = resolvePokemonAbilities(selectedPokemon, abilityLookup)
-    .some(({ name }) => name === "Levitate");
-  elements.typeMatchupNote.textContent = hasLevitate ? t("lookup.levitate") : "";
-  elements.typeMatchupNote.hidden = !hasLevitate;
+  const immunities = resolvePokemonAbilities(selectedPokemon, abilityLookup)
+    .map((ability) => ({ ability, type: abilityTypeImmunity(ability) }))
+    .filter(({ type }) => type)
+    .map(({ ability, type }) => t("lookup.abilityImmunity", {
+      ability: localizedName(ability),
+      type: localizedTerm("type", type),
+    }));
+  elements.typeMatchupNote.textContent = immunities.join(" · ");
+  elements.typeMatchupNote.hidden = immunities.length === 0;
   elements.typeMatchupCard.hidden = false;
 }
 

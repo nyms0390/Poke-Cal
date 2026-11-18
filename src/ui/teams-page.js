@@ -29,7 +29,7 @@ const elements = {
   reset: document.querySelector("#teams-reset"),
 };
 
-const myTeamStore = createMyTeamStore(browserStorage());
+const myTeamStore = createMyTeamStore(browserStorage(), { defaultName: (number) => t("myTeams.defaultName", { number }) });
 let catalogs = null;
 let archive = null;
 let selectedFormat = null;
