@@ -1,5 +1,7 @@
 # Keeps the SHA-pinned GitHub Actions in .github/workflows current: Dependabot understands the
 # `uses: owner/action@<sha> # vX.Y.Z` form and updates the SHA and the version comment together.
+# Also keeps the MCP Worker's npm dependencies (mcp/) current. The app itself has no npm
+# dependencies, so the repository root has no npm entry.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -13,3 +15,17 @@ updates:
           - "*"
     commit-message:
       prefix: ci
+
+  # mcp/ is a public Worker that auto-deploys on merge to main, so updates come as reviewable PRs.
+  # One group: `agents` pins an exact `@modelcontextprotocol/server` peer, so they must move together.
+  - package-ecosystem: npm
+    directory: /mcp
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      mcp:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: deps
