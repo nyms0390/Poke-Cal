@@ -152,3 +152,33 @@ test("MCP flags results for Pokémon or moves that are not Champions-legal", asy
   assert.equal(speed.legal, false);
   assert.match(speed.warnings[0], /Mewtwo/);
 });
+
+test("MCP check_survival trusts Focus Sash only against a single hit", async () => {
+  const sashContext = createStrategyContext({
+    pokemon: [
+      { id: "hitter", name: "Hitter", types: ["Grass"], baseStats: { hp: 100, atk: 150, def: 100, spa: 100, spd: 100, spe: 100 }, abilities: ["Torrent"], champions: { legal: true } },
+      { id: "frail", name: "Frail", types: ["Water"], baseStats: { hp: 40, atk: 50, def: 40, spa: 50, spd: 50, spe: 50 }, abilities: ["Torrent"], champions: { legal: true } },
+    ],
+    abilities: [{ id: "parentalbond", name: "Parental Bond" }, { id: "torrent", name: "Torrent" }],
+    items: [{ id: "focussash", name: "Focus Sash" }],
+    moves: [
+      { id: "woodhammer", name: "Wood Hammer", type: "Grass", category: "Physical", basePower: 120, accuracy: 100, priority: 0, target: "normal", flags: { contact: 1 }, champions: { legal: true } },
+      { id: "doublehammer", name: "Double Hammer", type: "Grass", category: "Physical", basePower: 120, accuracy: 100, priority: 0, target: "normal", multihit: 2, flags: { contact: 1 }, champions: { legal: true } },
+    ],
+  });
+  const server = createToolServer(sashContext);
+  const base = { attacker: "Hitter", defender: "Frail", defenderItem: "Focus Sash", attackerSpread: "Adamant:0/32/0/0/0/0" };
+
+  const single = await callTool(server, "check_survival", { ...base, move: "Wood Hammer" });
+  assert.equal(single.survives, true);
+  assert.match(single.summary, /^YES — Frail survives with Focus Sash/);
+  assert.deepEqual(single.remainingHp, { min: 1, max: 1 });
+
+  const multiHit = await callTool(server, "check_survival", { ...base, move: "Double Hammer" });
+  assert.equal(multiHit.survives, false);
+  assert.match(multiHit.summary, /^NO — /);
+
+  const parentalBond = await callTool(server, "check_survival", { ...base, attackerAbility: "Parental Bond", move: "Wood Hammer" });
+  assert.equal(parentalBond.survives, false);
+  assert.match(parentalBond.summary, /^NO — /);
+});

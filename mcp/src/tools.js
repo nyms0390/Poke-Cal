@@ -6,6 +6,7 @@ import {
   compareSpeed,
   resolveMove,
   resolvePokemon,
+  survivalEndureSource,
 } from "../../src/data/strategy-tools.js";
 import {
   DEFAULT_SPEED_OPPONENT_COUNT,
@@ -333,22 +334,22 @@ function survivalResult(result) {
   const survival = checkSurvivalFromResult(result);
   const protectedAtOneHp = survival.reason === "Focus Sash" || survival.reason === "Sturdy";
   const minRemaining = protectedAtOneHp ? 1 : Math.max(0, result.defenderCurrentHp - result.maxDamage);
-  const maxRemaining = protectedAtOneHp ? 1 : Math.max(0, result.defenderCurrentHp - result.minDamage);
+  const maxRemaining = Math.max(protectedAtOneHp ? 1 : 0, result.defenderCurrentHp - result.minDamage);
   return { legal: damage.legal, warnings: damage.warnings, ...pasteWarnings(result), damage, survives: survival.verdict !== "NO", remainingHp: { min: minRemaining, max: maxRemaining }, summary: survival.summary };
 }
 
 function checkSurvivalFromResult(result) {
   const fullHp = result.defenderState.currentHpFraction === 1;
-  const focusSash = fullHp && normalize(result.defenderState.item?.id) === "focussash";
-  const sturdy = fullHp && result.ko?.text?.includes("Sturdy");
+  // Sturdy and Focus Sash are modeled by the engine: they cap only the first hit, so the
+  // weighted distribution already shows multi-hit moves and Parental Bond breaking through.
+  const endure = survivalEndureSource(result);
   const immune = result.maxDamage === 0;
-  const guaranteed = focusSash || sturdy || immune || result.maxDamage < result.defenderCurrentHp;
+  const guaranteed = immune || result.maxDamage < result.defenderCurrentHp || survivalChance(result) === 1;
   const possible = guaranteed || result.minDamage < result.defenderCurrentHp;
   const chance = guaranteed ? 1 : survivalChance(result);
   const name = result.defender.name;
   const range = `${result.minPercent}–${result.maxPercent}%`;
-  if (focusSash) return { verdict: "YES", reason: "Focus Sash", summary: `YES — ${name} survives with Focus Sash (${range}).` };
-  if (sturdy) return { verdict: "YES", reason: "Sturdy", summary: `YES — ${name} survives with Sturdy (${range}).` };
+  if (endure && guaranteed) return { verdict: "YES", reason: endure, summary: `YES — ${name} survives with ${endure} (${range}).` };
   if (immune) return { verdict: "YES", summary: `YES — ${name} is immune.` };
   if (guaranteed) {
     const hp = fullHp ? "full HP" : `${Number((result.defenderState.currentHpFraction * 100).toFixed(1))}% HP`;
