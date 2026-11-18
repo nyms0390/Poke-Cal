@@ -142,8 +142,9 @@ export function matchupField({ field = {}, ours, theirs, abilityField = true } =
 
 /**
  * Stage changes the two abilities cause on entry: Intimidate (blocked by Clear Body and
- * similar; Guard Dog raises Attack instead; Defiant and Competitive react to the drop) and
- * Intrepid Sword. Returned as additions to each side's own stages.
+ * similar; Guard Dog raises Attack instead; Contrary turns the drop into a raise and Simple
+ * doubles it; Mirror Armor sends it back to the Intimidate user; Defiant and Competitive react
+ * to the drop) and Intrepid Sword. Returned as additions to each side's own stages.
  */
 export function entryStageChanges(ownAbility, opposingAbility) {
   const own = normalizeId(ownAbility?.id ?? ownAbility?.name ?? ownAbility);
@@ -152,13 +153,16 @@ export function entryStageChanges(ownAbility, opposingAbility) {
   const add = (stat, value) => { changes[stat] = (changes[stat] ?? 0) + value; };
   if (own === "intrepidsword") add("atk", 1);
   if (opposing === "intimidate") {
-    if (own === "guarddog") add("atk", 1);
-    else if (!INTIMIDATE_BLOCKERS.has(own)) {
+    if (own === "guarddog" || own === "contrary") add("atk", 1);
+    else if (own === "simple") add("atk", -2);
+    else if (own !== "mirrorarmor" && !INTIMIDATE_BLOCKERS.has(own)) {
       add("atk", -1);
       if (own === "defiant") add("atk", 2);
       if (own === "competitive") add("spa", 2);
     }
   }
+  // Mirror Armor reflects the opposing Intimidate back onto its user.
+  if (own === "intimidate" && opposing === "mirrorarmor") add("atk", -1);
   return changes;
 }
 
