@@ -220,12 +220,15 @@ export function checkSurvival(context, options = {}) {
     ? 1
     : damageSurvivalChance(result);
   const verdict = guaranteed ? "YES" : possible ? "ROLL" : "NO";
-  const reason = endure && guaranteed ? endure : immune ? "Immune" : "";
+  const blockedBy = result.priorityBlock?.label ?? "";
+  const reason = endure && guaranteed ? endure : blockedBy ? blockedBy : immune ? "Immune" : "";
   const name = result.defenderState.pokemon.name;
   const range = `${result.minPercent}–${result.maxPercent}%`;
   let summary;
   if (reason === "Focus Sash" || reason === "Sturdy") {
     summary = `YES — ${name} survives with ${reason} (${range}).`;
+  } else if (blockedBy) {
+    summary = `YES — ${blockedBy} blocks the priority move.`;
   } else if (immune) {
     summary = `YES — ${name} is immune.`;
   } else if (guaranteed) {
