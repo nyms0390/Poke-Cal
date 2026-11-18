@@ -21,7 +21,8 @@ import { initI18n, localizedName, localizedTerm, onLocaleChange, t } from "../i1
 import { watchActiveSet } from "./active-set-sync.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, showStatus } from "./bootstrap.js";
-import { browserStorage, itemLabel, natureLabel, pokemonSpriteElements, typeBadge } from "./components.js";
+import { browserStorage, natureLabel, pokemonSpriteElements, typeBadge } from "./components.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { applyAmbientFieldControl, createAmbientFieldState } from "./field-state.js";
 import { moveOptionsForSlot } from "./move-conditions.js";
@@ -503,8 +504,8 @@ function renderSelected() {
   const chips = element("div", "compare-chips");
   for (const value of [
     variant.side.nature ? natureLabel(variant.side.nature) : "",
-    variant.side.ability ? localizedName(variant.side.ability) : "",
-    variant.side.item ? itemLabel(variant.side.item) : "",
+    variant.side.ability ? abilityTerm(variant.side.ability) : "",
+    variant.side.item ? itemTerm(variant.side.item) : "",
   ].filter(Boolean)) {
     const chip = element("span", "compare-chip");
     chip.append(value);

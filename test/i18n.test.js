@@ -119,6 +119,9 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatDamageNote("Assumes target already moved", "zh-TW"), "假設目標已行動");
   assert.equal(formatDamageNote("+1 SpA from the charge turn", "zh-TW"), "蓄力回合特攻 +1");
   assert.equal(formatDamageNote("Protean changed type to Fighting", "zh-TW"), "Protean將屬性變為格鬥");
+  assert.equal(formatDamageNote("Priority move blocked by Psychic Terrain", "zh-TW"), "優先度提高的招式被精神場地擋下");
+  assert.equal(formatDamageNote("Priority move blocked by Armor Tail", "zh-TW", { entities: [{ name: "Armor Tail", aliases: ["尾甲"] }] }), "優先度提高的招式被尾甲擋下");
+  assert.equal(formatDamageNote("Priority move blocked by Armor Tail", "en"), "Priority move blocked by Armor Tail");
   assert.equal(formatSetWarning("Unknown move: Missing Move", "zh-TW"), "未知招式：Missing Move");
   assert.equal(formatSetWarning("Unknown nature: Modset", "en"), "Unknown nature: Modset");
   assert.equal(formatSetWarning("Unknown nature: Modset", "zh-TW"), "未知性格：Modset");

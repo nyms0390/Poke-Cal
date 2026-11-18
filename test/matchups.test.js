@@ -511,3 +511,28 @@ test("Future Sight races as a delayed move instead of being excluded", () => {
   assert.equal(futureSight.hits, turnsForUses("delayed", futureSight.uses));
   assert.ok(Number.isFinite(futureSight.hits));
 });
+
+test("Armor Tail and Psychic Terrain keep blocked priority moves out of the KO race", () => {
+  const farigiraf = {
+    pokemon: species("Farigiraf"),
+    nature: "Sassy",
+    sp: { hp: 32, def: 2, spd: 32 },
+    ability: ability("Armor Tail"),
+    item: item("Sitrus Berry"),
+    moves: [move("Psychic")],
+  };
+  const armorTail = matchup({ ours: rillaboom(), theirs: farigiraf });
+  const grassyGlide = armorTail.ours.moves.find((entry) => entry.move.name === "Grassy Glide");
+  assert.equal(grassyGlide.included, true);
+  assert.equal(grassyGlide.maxPercent, 0);
+  assert.equal(grassyGlide.hits, Infinity);
+  assert.equal(grassyGlide.notes.includes("Priority move blocked by Armor Tail"), true);
+  assert.notEqual(armorTail.ours.best.move.name, "Grassy Glide");
+  assert.notEqual(armorTail.ours.best.move.name, "Fake Out");
+
+  // Psychic Terrain (set here instead of Grassy Surge's terrain) blocks Fake Out against a grounded target.
+  const psychic = matchup({ ours: rillaboom({ ability: ability("Overgrow") }), theirs: incineroar(), field: { terrain: "Psychic Terrain" } });
+  const fakeOut = psychic.ours.moves.find((entry) => entry.move.name === "Fake Out");
+  assert.equal(fakeOut.maxPercent, 0);
+  assert.equal(fakeOut.notes.includes("Priority move blocked by Psychic Terrain"), true);
+});

@@ -44,7 +44,8 @@ import {
   textCell,
   typeBadge,
 } from "./components.js";
-import { lookupBrowseEntries } from "./lookup-browse.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
+import { lookupBrowseEntries, lookupQueryAfterSelect } from "./lookup-browse.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
@@ -140,8 +141,9 @@ async function initialize() {
 elements.form.addEventListener("input", () => {
   const form = selectedFamily.find(({ id }) => id === elements.form.value);
   if (form) {
-    elements.search.value = "";
-    selectForm(form);
+    selectForm(form, { syncBrowse: false });
+    keepSearchIfSelectedMatches();
+    renderBrowseList();
   }
 });
 
@@ -160,8 +162,16 @@ function selectPokemon(entry, options = {}) {
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
   selectForm(entry, { ...options, syncBrowse: false });
-  elements.search.value = "";
+  keepSearchIfSelectedMatches();
   renderBrowseList();
+}
+
+function keepSearchIfSelectedMatches() {
+  elements.search.value = lookupQueryAfterSelect(pokemon, selectedPokemon, elements.search.value, {
+    abilityLookup,
+    moveLookup,
+    itemLookup,
+  });
 }
 
 function renderFormOptions() {
@@ -393,9 +403,9 @@ function commonBuildFact(labelText, entry) {
   const value = document.createElement("strong");
   const rawName = entry?.name;
   if (!entry) value.textContent = "—";
-  else if (labelText === t("label.item")) value.append(itemLabel(entry));
+  else if (labelText === t("label.item")) value.append(itemTerm(entry));
   else if (labelText === t("label.nature")) value.append(rawName ? natureLabel(rawName) : "—");
-  else value.textContent = localizedName(entry);
+  else value.append(abilityTerm(entry));
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");
     usage.textContent = formatUsagePercent(entry.usagePercent);
@@ -573,13 +583,14 @@ function renderUsageSpreadRow(spread) {
 // setdex leaves blank (often the ability) are left out rather than shown as a dash.
 function renderNcpSetCard(set) {
   const itemEntry = set.item ? itemLookup.get(normalizeId(set.item)) : null;
+  const abilityEntry = set.ability ? abilityLookup.get(normalizeId(set.ability)) : null;
   return setRow({
     className: "ncp-set-row",
     title: set.name,
     facts: [
-      [t("label.ability"), localizedCatalogValue(set.ability, abilityLookup)],
+      [t("label.ability"), abilityEntry ? abilityTerm(abilityEntry) : localizedCatalogValue(set.ability, abilityLookup)],
       [t("label.nature"), set.nature ? natureLabel(set.nature) : ""],
-      [t("label.item"), itemEntry ? itemLabel(itemEntry) : localizedCatalogValue(set.item, itemLookup)],
+      [t("label.item"), itemEntry ? itemTerm(itemEntry) : localizedCatalogValue(set.item, itemLookup)],
       // The spread name repeats the nature ("Quiet:32/0/2/32/0/0"); the Nature row already has it.
       [t("matchups.spread"), String(set.spreadName ?? "").split(":").pop()],
     ].filter(([, value]) => value),

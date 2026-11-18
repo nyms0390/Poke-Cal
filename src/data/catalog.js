@@ -225,3 +225,10 @@ export function entryLongText(entry) {
 export function moveEffect(move) {
   return entryShortText(move) || "—";
 }
+
+// The full effect text of an ability or item, as the hover details show it: the long text when
+// it still applies, else the short one, by the same Champions rule as entryLongText/entryShortText
+// (docs/DECISIONS.md "Effect text follows the Champions mod"). Empty when the catalog has none.
+export function entryDescription(entry) {
+  return entryLongText(entry) || entryShortText(entry);
+}
