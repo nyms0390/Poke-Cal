@@ -65,6 +65,9 @@ export function createField(overrides = {}) {
   });
 }
 
+/** Abilities that make the holder ungrounded and immune to Ground moves (Mega Eelektross's Eelevate is Levitate plus a KO boost). */
+export const LEVITATE_ABILITIES = new Set(["levitate", "eelevate"]);
+
 /** True when the side's ability is `abilityId` (a normalized id such as "levitate"). */
 export function hasAbility(state, abilityId) {
   return normalizeId(state?.ability?.id ?? state?.ability?.name) === abilityId;
@@ -82,7 +85,7 @@ export function isGrounded(pokemon, state = {}, field = {}) {
 
   const abilityId = normalizeId(state.ability?.id ?? state.ability?.name);
   const itemId = normalizeId(state.item?.id ?? state.item?.name);
-  if (abilityId === "levitate" || itemId === "airballoon") return false;
+  if (LEVITATE_ABILITIES.has(abilityId) || itemId === "airballoon") return false;
 
   const types = state.teraType ? [state.teraType] : pokemon?.types ?? [];
   return !types.includes("Flying");

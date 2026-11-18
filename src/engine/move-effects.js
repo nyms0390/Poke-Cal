@@ -313,15 +313,7 @@ export const MOVE_EFFECTS = {
     condition: { label: "No item" },
     basePower: (ctx) => conditionMet(ctx, () => !ctx.attackerState.item) ? ctx.move.basePower * 2 : undefined,
   },
-  knockoff: {
-    basePower: (ctx) => {
-      const item = ctx.defenderState.item;
-      if (!item) return undefined;
-      const defenderSpecies = normalizeId(ctx.defender.baseSpecies ?? ctx.defender.name ?? ctx.defender.id);
-      const matchingMegaStone = item.megaStone && item.itemUser?.some((name) => normalizeId(name) === defenderSpecies);
-      return matchingMegaStone ? undefined : Math.floor(ctx.move.basePower * 1.5);
-    },
-  },
+  // Knock Off's ×1.5 is a chained base-power modifier (modifiers.js knockOffModifier).
   fling: { basePower: (ctx) => ctx.attackerState.item?.fling?.basePower ?? null },
   return: { basePower: () => 102, note: () => "Assumes maximum friendship (102 BP)" },
   frustration: { basePower: () => 102, note: () => "Assumes minimum friendship (102 BP)" },
@@ -341,7 +333,8 @@ export const MOVE_EFFECTS = {
   magnitude: { basePower: () => 70, note: () => "Assumes Magnitude 7 (70 BP)" },
   present: { basePower: () => 80, note: () => "Assumes the 80 BP outcome" },
   psywave: { fixedDamage: () => 50, note: () => "Assumes the level-50 average (50 damage)" },
-  saltcure: { note: () => "Salt Cure residual: 1/8 max HP (1/4 vs Water/Steel) per turn" },
+  saltcure: { note: () => "Salt Cure residual: 1/16 max HP (1/8 vs Water/Steel) per turn" },
+  futuresight: { note: () => "Future Sight lands two turns after it is used" },
   endeavor: { fixedDamage: (ctx) => Math.max(0, ctx.defenderHp - ctx.attackerHp) },
 
   // -- target-weight-scaled power ------------------------------------------

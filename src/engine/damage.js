@@ -2,7 +2,7 @@ import { normalizeId } from "../identifiers.js";
 import { TYPE_EFFECTIVENESS } from "./type-chart.js";
 import { calculateStat, normalizeSp, normalizeStage } from "./stats.js";
 import { LEVEL, STAT_KEYS } from "./constants.js";
-import { createField, hasAbility, isGrounded, normalizeField } from "./field.js";
+import { createField, hasAbility, isGrounded, LEVITATE_ABILITIES, normalizeField } from "./field.js";
 import {
   moveEffect,
   abilityTypeConversion,
@@ -40,13 +40,10 @@ const UNAVAILABLE_CONTEXT_BASE_POWER_MOVE_IDS = new Set([
 const TYPE_CHANGE_ABILITIES = new Set(["libero", "protean"]);
 
 const UNSUPPORTED_MOVE_IDS = new Set([
-  "seismictoss",
-  "nightshade",
   "counter",
   "mirrorcoat",
   "metalburst",
   "comeuppance",
-  "futuresight",
   "bide",
 ]);
 const UNSUPPORTED_MOVE_REASONS = {
@@ -54,7 +51,6 @@ const UNSUPPORTED_MOVE_REASONS = {
   mirrorcoat: "Requires the last damage received this turn.",
   metalburst: "Requires the last damage received this turn.",
   comeuppance: "Requires the last damage received this turn.",
-  futuresight: "Requires delayed damage resolution and stored user state.",
   bide: "Requires stored damage taken over prior turns.",
 };
 
@@ -83,8 +79,11 @@ function singleTypeEffectiveness(moveType, defenderTypes, move, defenderState, a
       return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
     }, 1);
   }
-  if (["smackdown", "thousandarrows"].includes(moveId) && defenderTypes.includes("Flying")) {
-    if (defenderState.grounded !== true) return 1;
+  // Thousand Arrows hits an airborne Flying type neutrally (Showdown onEffectiveness returns 0
+  // for every type); once the target is grounded only the Flying immunity is dropped. Smack
+  // Down is a plain Rock move and keeps its usual effectiveness.
+  if (moveId === "thousandarrows" && defenderTypes.includes("Flying")) {
+    if (defenderState.grounded !== true && !options.groundedTarget) return 1;
     return defenderTypes.reduce((multiplier, defenderType) => {
       if (defenderType === "Flying") return multiplier;
       return multiplier * (TYPE_EFFECTIVENESS[moveType]?.[defenderType] ?? 1);
@@ -177,6 +176,8 @@ function calculateDamageUnchecked({
   }
   attackerState = attackerState ?? {};
   defenderState = defenderState ?? {};
+  const stanceChange = stanceChangeAttacker(attacker, attackerState);
+  attacker = stanceChange.attacker;
   field = createField(field ?? {});
   moveOptions = moveOptions ?? {};
   const neutralizingGasActive = hasAnyAbility(attackerState, ["neutralizinggas"]) ||
@@ -282,19 +283,25 @@ function calculateDamageUnchecked({
 
   const iceFaceActive = !suppressDefenderAbility && move.category === "Physical" &&
     hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false;
+  const disguiseActive = !iceFaceActive && isDisguiseActive(defender, defenderState, abilityBroken);
+  // Ice Face takes no damage from the first hit; Disguise takes 1/8 of its max HP instead.
+  const firstHitOverride = iceFaceActive ? 0 : disguiseActive ? Math.max(1, Math.floor(defenderMaxHp / 8)) : null;
+  const firstHitNote = iceFaceActive
+    ? "Ice Face intact (first hit negated)"
+    : disguiseActive ? "Disguise intact (first hit deals 1/8 max HP)" : null;
   const sturdyActive = isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
 
   const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
     const rawDamage = Math.max(0, fixedDamage);
-    const damage = iceFaceActive ? 0 : rawDamage;
+    const damage = firstHitOverride ?? rawDamage;
     const rolls = DAMAGE_ROLLS.map(() => damage);
     const baseDistribution = [{ damage: rawDamage, chance: 1 }];
     const firstDistribution = [{
-      damage: iceFaceActive ? 0 : sturdyActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
+      damage: firstHitOverride ?? (sturdyActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage),
       chance: 1,
     }];
-    const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
+    const sturdyText = sturdyActive && firstHitOverride === null && rawDamage >= defenderMaxHp
       ? sturdySurvivalKo()
       : null;
     const recalculatedKo = moveEffect(moveId).recalculatesFixedDamage
@@ -316,7 +323,8 @@ function calculateDamageUnchecked({
         koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
       notes: [
         "Fixed damage",
-        iceFaceActive ? "Ice Face intact (first hit negated)" : null,
+        firstHitNote,
+        stanceChange.note,
         megaSolActive ? "Mega Sol treats this move as Sunny Day" : null,
         ...fieldNotes(effectiveField, attackerState, defenderState),
         moveEffect(moveId).note?.(ctx),
@@ -382,7 +390,8 @@ function calculateDamageUnchecked({
     attackerTypeChange.note,
   ];
   if (chargeBoost.note) notes.push(chargeBoost.note);
-  if (iceFaceActive) notes.push("Ice Face intact (first hit negated)");
+  if (firstHitNote) notes.push(firstHitNote);
+  if (stanceChange.note) notes.push(stanceChange.note);
   if (megaSolActive) notes.push("Mega Sol treats this move as Sunny Day");
   if (teraShell !== null) notes.push("Tera Shell");
   if (abilityBroken && attackerAbilitySuppressesDefenderAbility(attackerState, suppressAttackerAbility)) notes.push(attackerState.ability.name);
@@ -419,6 +428,9 @@ function calculateDamageUnchecked({
 
   let hitCounts = hitCountRange(ctx);
   ctx.hitCountRange = hitCounts;
+  const moveTarget = moveEffect(moveId).target?.(ctx) ?? move.target;
+  const spreadHit =
+    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(moveTarget) && !moveOptions.singleTarget;
   const hasExplicitHitCount = moveOptions.hitCount !== null && moveOptions.hitCount !== undefined;
   const selectedHitCount = Number(moveOptions.hitCount);
   const modifiers = collectModifiers({
@@ -429,6 +441,7 @@ function calculateDamageUnchecked({
     defenseStat,
     isPhysical,
     critical: effectiveCritical,
+    spreadHit,
   });
   for (const modifier of modifiers) {
     if (modifier.kind === "hits" && hasExplicitHitCount && Number.isFinite(selectedHitCount)) continue;
@@ -474,9 +487,6 @@ function calculateDamageUnchecked({
   const burned =
     attackerState.status === "burn" && isPhysical &&
       (suppressAttackerAbility || !hasAbility(attackerState, "guts")) && !moveEffect(moveId).ignoreBurn;
-  const moveTarget = moveEffect(moveId).target?.(ctx) ?? move.target;
-  const spreadHit =
-    battleFormat === "doubles" && SPREAD_MOVE_TARGETS.has(moveTarget) && !moveOptions.singleTarget;
   const sourceDamageMultiplier = moveEffect(moveId).sourceDamageMultiplier?.(ctx) ?? 1;
   if (sourceDamageMultiplier !== 1) {
     notes.push(`${move.name} target-state damage ×${sourceDamageMultiplier}`);
@@ -515,15 +525,15 @@ function calculateDamageUnchecked({
     hitDamage = applyModifier(hitDamage, firstUse && hitIndex === 0 ? firstHitFinalChain : laterHitFinalChain);
     return Math.max(1, hitDamage);
   };
-  const damageForRollCount = (roll, hitCount, negateFirstHit = false) => {
+  const damageForRollCount = (roll, hitCount, firstHitDamage = null) => {
     const powers = successiveHits
       ? hitPowers.slice(0, hitCount)
       : hitPowers.length > 1 ? hitPowers : Array.from({ length: hitCount }, () => hitPowers[0]);
     return powers.reduce((total, hitPower, index) =>
-      total + (negateFirstHit && index === 0 ? 0 : damageForHit(hitPower, roll, index)), 0);
+      total + (firstHitDamage !== null && index === 0 ? firstHitDamage : damageForHit(hitPower, roll, index)), 0);
   };
-  const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, iceFaceActive));
-  const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, iceFaceActive));
+  const minHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.min, firstHitOverride));
+  const maxHitRolls = DAMAGE_ROLLS.map((roll) => damageForRollCount(roll, hitCounts.max, firstHitOverride));
   // One use of the move: a weighted mixture over hit counts, each hit an independent roll.
   const hitWeights = hitCountWeights(move, ctx.hitCountRange, hitCounts);
   const accuracyChained = hitWeights.length > 1 && hitCountsAreAccuracyChained(move, hitCounts);
@@ -535,9 +545,9 @@ function calculateDamageUnchecked({
     distribution: fullMoveDistribution(successiveHits ? hitPowers.slice(0, hits) : hitPowers, hits, damageForHit, options),
   })));
   const baseRollDistribution = moveDistribution({ firstUse: false });
-  const firstRollDistribution = iceFaceActive || sturdyActive || firstHitDiffers
+  const firstRollDistribution = firstHitOverride !== null || sturdyActive || firstHitDiffers
     ? moveDistribution({
-      negateFirstHit: iceFaceActive,
+      firstHitDamage: firstHitOverride,
       firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
       firstUse: true,
     })
@@ -612,13 +622,39 @@ export function survivalChance(result, targetHp = result?.defenderCurrentHp) {
   return chance >= 1 - Number.EPSILON ? 1 : chance;
 }
 
+// Stance Change puts Aegislash in Blade Forme before every attack, and the ability cannot be
+// suppressed. Blade Forme mirrors Shield Forme's stats (Atk/SpA and Def/SpD swap), so the
+// attacker's offensive stats come from Blade Forme even when the set names Shield Forme.
+function stanceChangeAttacker(attacker, attackerState) {
+  if (!hasAbility(attackerState, "stancechange") || normalizeId(attacker.id ?? attacker.name) !== "aegislash") {
+    return { attacker, note: null };
+  }
+  const { hp, atk, def, spa, spd, spe } = attacker.baseStats;
+  return {
+    attacker: {
+      ...attacker,
+      id: "aegislashblade",
+      name: "Aegislash-Blade",
+      baseStats: { hp, atk: def, def: atk, spa: spd, spd: spa, spe },
+    },
+    note: "Stance Change: attacks in Blade Forme",
+  };
+}
+
+// Disguise (Mimikyu only, not Busted Form) blocks the first hit and costs 1/8 max HP instead.
+// It cannot be suppressed by Neutralizing Gas, but Mold Breaker-style effects bypass it.
+function isDisguiseActive(defender, defenderState, abilityBroken) {
+  return !abilityBroken && hasAbility(defenderState, "disguise") &&
+    normalizeId(defender.id ?? defender.name) === "mimikyu" && defenderState.disguiseIntact !== false;
+}
+
 function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defenderTypes, defenderState, suppressDefenderAbility, groundedTarget = false }) {
   if (suppressDefenderAbility) return null;
   const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
   const abilityName = defenderState.ability?.name ?? defenderState.ability?.id;
   const moveId = normalizeId(move?.id ?? move?.name);
   const types = defenderTypes ?? (defenderState.teraType ? [defenderState.teraType] : defender?.types ?? []);
-  if (abilityId === "levitate" && moveType === "Ground" && !groundedTarget && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
+  if (LEVITATE_ABILITIES.has(abilityId) && moveType === "Ground" && !groundedTarget && !types.includes("Flying") && !["smackdown", "thousandarrows"].includes(moveId)) {
     return { label: abilityName };
   }
   if (abilityId === "flashfire" && moveType === "Fire") return { label: abilityName };
@@ -778,13 +814,13 @@ function mixHitCountDistributions(weighted) {
   return [...totals].map(([damage, chance]) => ({ damage, chance }));
 }
 
-function fullMoveDistribution(hitPowers, hitCount, damageForHit, { negateFirstHit = false, firstHitCap = null, firstUse = true } = {}) {
+function fullMoveDistribution(hitPowers, hitCount, damageForHit, { firstHitDamage = null, firstHitCap = null, firstUse = true } = {}) {
   const powers = hitPowers.length > 1
     ? hitPowers
     : Array.from({ length: hitCount }, () => hitPowers[0]);
   return convolveDistributions(powers.map((power, index) => DAMAGE_ROLLS.map((roll) => ({
-    damage: negateFirstHit && index === 0
-      ? 0
+    damage: firstHitDamage !== null && index === 0
+      ? firstHitDamage
       : index === 0 && Number.isFinite(firstHitCap)
         ? Math.min(damageForHit(power, roll, index, firstUse), firstHitCap)
         : damageForHit(power, roll, index, firstUse),

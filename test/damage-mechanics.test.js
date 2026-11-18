@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { calculateDamage, survivalChance } from "../src/engine/damage.js";
-import { createField } from "../src/engine/field.js";
+import { calculateDamage, survivalChance, unsupportedMoveReason } from "../src/engine/damage.js";
+import { createField, isGrounded } from "../src/engine/field.js";
 
 const garchomp = { id: "garchomp", name: "Garchomp", types: ["Dragon", "Ground"], baseStats: { hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102 } };
 const dragonite = { id: "dragonite", name: "Dragonite", types: ["Dragon", "Flying"], baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 } };
@@ -270,4 +270,121 @@ test("Electro Shot and Meteor Beam raise the user's SpA by 1 before hitting", ()
 
   const beam = calc({ ...meteorBeam }, modest());
   assert.deepEqual(beam.rolls, calc({ ...meteorBeam, id: "powergem", name: "Power Gem", flags: {} }, modest({ stages: { spa: 1 } })).rolls);
+});
+
+const flameThrowerMove = { id: "flamethrower", name: "Flamethrower", type: "Fire", category: "Special", basePower: 90, target: "normal", flags: {} };
+const eelektrossMega = { id: "eelektrossmega", name: "Eelektross-Mega", types: ["Electric"], baseStats: { hp: 85, atk: 145, def: 80, spa: 135, spd: 90, spe: 80 } };
+
+test("Eelevate gives Levitate's Ground immunity unless the holder is grounded", () => {
+  const eelevate = bulky({ ability: { id: "eelevate", name: "Eelevate", flags: { breakable: 1 } } });
+  const blocked = calculateDamage({ attacker: garchomp, defender: eelektrossMega, move: earthquake, attackerState: jollyGarchomp, defenderState: eelevate, field: singles });
+  const gravity = calculateDamage({ attacker: garchomp, defender: eelektrossMega, move: earthquake, attackerState: jollyGarchomp, defenderState: eelevate, field: createField({ format: "singles", gravity: true }) });
+  const moldBreaker = calculateDamage({
+    attacker: garchomp,
+    defender: eelektrossMega,
+    move: earthquake,
+    attackerState: { ...jollyGarchomp, ability: { id: "moldbreaker", name: "Mold Breaker" } },
+    defenderState: eelevate,
+    field: singles,
+  });
+
+  assert.equal(blocked.maxDamage, 0);
+  assert.equal(blocked.notes.includes("Eelevate"), true);
+  assert.equal(gravity.typeMultiplier, 2);
+  assert.ok(gravity.maxDamage > 0);
+  assert.ok(moldBreaker.maxDamage > 0);
+  assert.equal(isGrounded(eelektrossMega, eelevate), false);
+});
+
+const aegislash = { id: "aegislash", name: "Aegislash", baseSpecies: "Aegislash", types: ["Steel", "Ghost"], baseStats: { hp: 60, atk: 50, def: 140, spa: 50, spd: 140, spe: 60 } };
+const aegislashBlade = { id: "aegislashblade", name: "Aegislash-Blade", baseSpecies: "Aegislash", types: ["Steel", "Ghost"], baseStats: { hp: 60, atk: 140, def: 50, spa: 140, spd: 50, spe: 60 } };
+const shadowBall = { id: "shadowball", name: "Shadow Ball", type: "Ghost", category: "Special", basePower: 80, target: "normal", flags: { bullet: 1 } };
+
+test("Stance Change makes Shield Forme Aegislash attack with Blade Forme stats", () => {
+  const stance = { nature: "Modest", sp: { spa: 32 }, stages: {}, ability: { id: "stancechange", name: "Stance Change" }, item: null };
+  const shield = calculateDamage({ attacker: aegislash, defender: garchomp, move: shadowBall, attackerState: stance, defenderState: bulky(), field: singles });
+  const blade = calculateDamage({ attacker: aegislashBlade, defender: garchomp, move: shadowBall, attackerState: stance, defenderState: bulky(), field: singles });
+  // Neutralizing Gas cannot suppress Stance Change.
+  const gas = calculateDamage({ attacker: aegislash, defender: garchomp, move: shadowBall, attackerState: stance, defenderState: bulky({ ability: { id: "neutralizinggas", name: "Neutralizing Gas" } }), field: singles });
+  const noAbility = calculateDamage({ attacker: aegislash, defender: garchomp, move: shadowBall, attackerState: { ...stance, ability: null }, defenderState: bulky(), field: singles });
+
+  assert.deepEqual(shield.rolls, blade.rolls);
+  assert.deepEqual(gas.rolls, blade.rolls);
+  assert.equal(shield.notes.includes("Stance Change: attacks in Blade Forme"), true);
+  assert.ok(noAbility.maxDamage < blade.minDamage);
+
+  // Defending, Aegislash keeps the forme the set names.
+  const intoShield = calculateDamage({ attacker: garchomp, defender: aegislash, move: earthquake, attackerState: jollyGarchomp, defenderState: bulky({ ability: { id: "stancechange", name: "Stance Change" } }), field: singles });
+  const intoBlade = calculateDamage({ attacker: garchomp, defender: aegislashBlade, move: earthquake, attackerState: jollyGarchomp, defenderState: bulky({ ability: { id: "stancechange", name: "Stance Change" } }), field: singles });
+  assert.ok(intoShield.maxDamage < intoBlade.minDamage);
+});
+
+const mimikyu = { id: "mimikyu", name: "Mimikyu", types: ["Ghost", "Fairy"], baseStats: { hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96 } };
+const mimikyuBusted = { ...mimikyu, id: "mimikyubusted", name: "Mimikyu-Busted" };
+const disguise = { id: "disguise", name: "Disguise", flags: { breakable: 1 } };
+const ironHead = { id: "ironhead", name: "Iron Head", type: "Steel", category: "Physical", basePower: 80, target: "normal", flags: { contact: 1 } };
+const dualWingbeat = { id: "dualwingbeat", name: "Dual Wingbeat", type: "Flying", category: "Physical", basePower: 40, target: "normal", flags: { contact: 1 }, multihit: 2 };
+
+test("Disguise turns Mimikyu's first hit into 1/8 max HP", () => {
+  const state = bulky({ ability: disguise });
+  const maxHp = calculateDamage({ attacker: garchomp, defender: mimikyu, move: ironHead, attackerState: jollyGarchomp, defenderState: state, field: singles }).defenderHp;
+  const chip = Math.floor(maxHp / 8);
+  const intact = calculateDamage({ attacker: garchomp, defender: mimikyu, move: ironHead, attackerState: jollyGarchomp, defenderState: state, field: singles });
+  const broken = calculateDamage({ attacker: garchomp, defender: mimikyu, move: ironHead, attackerState: jollyGarchomp, defenderState: { ...state, disguiseIntact: false }, field: singles });
+  const busted = calculateDamage({ attacker: garchomp, defender: mimikyuBusted, move: ironHead, attackerState: jollyGarchomp, defenderState: state, field: singles });
+  const moldBreaker = calculateDamage({ attacker: garchomp, defender: mimikyu, move: ironHead, attackerState: { ...jollyGarchomp, ability: { id: "moldbreaker", name: "Mold Breaker" } }, defenderState: state, field: singles });
+  const special = calculateDamage({ attacker: garchomp, defender: mimikyu, move: flameThrowerMove, attackerState: jollyGarchomp, defenderState: state, field: singles });
+
+  assert.deepEqual([intact.minDamage, intact.maxDamage], [chip, chip]);
+  assert.equal(intact.notes.includes("Disguise intact (first hit deals 1/8 max HP)"), true);
+  // Only the first use is blocked, so the KO takes one more use than without Disguise.
+  assert.ok(broken.minDamage > chip);
+  assert.equal(intact.ko.hits, broken.ko.hits + 1);
+  assert.deepEqual(busted.rolls, broken.rolls);
+  assert.deepEqual(moldBreaker.rolls, broken.rolls);
+  assert.deepEqual([special.minDamage, special.maxDamage], [chip, chip]);
+
+  // A multi-hit move breaks the disguise with its first hit; the second hit lands in full.
+  const wingbeat = calculateDamage({ attacker: garchomp, defender: mimikyu, move: dualWingbeat, attackerState: jollyGarchomp, defenderState: bulky({ ability: disguise }), field: singles });
+  const wingbeatBroken = calculateDamage({ attacker: garchomp, defender: mimikyu, move: dualWingbeat, attackerState: jollyGarchomp, defenderState: bulky({ ability: disguise, disguiseIntact: false }), field: singles });
+  const perHit = wingbeatBroken.distribution.reduce((sum, { damage, chance }) => sum + damage * chance, 0) / 2;
+  const expected = chip + perHit;
+  const actual = wingbeat.distribution.reduce((sum, { damage, chance }) => sum + damage * chance, 0);
+  assert.ok(Math.abs(actual - expected) < 1e-9);
+});
+
+test("Parental Bond adds the child hit to a spread move only when it hits one target", () => {
+  const kangaskhan = { id: "kangaskhanmega", name: "Kangaskhan-Mega", types: ["Normal"], baseStats: { hp: 105, atk: 125, def: 100, spa: 60, spd: 100, spe: 100 } };
+  const rockSlide = { id: "rockslide", name: "Rock Slide", type: "Rock", category: "Physical", basePower: 75, target: "allAdjacentFoes", flags: {} };
+  const state = { nature: "Adamant", sp: { atk: 32 }, stages: {}, ability: { id: "parentalbond", name: "Parental Bond" }, item: null };
+  const doubles = createField({ format: "doubles" });
+  const spread = calculateDamage({ attacker: kangaskhan, defender: arcanine, move: rockSlide, attackerState: state, defenderState: bulky(), field: doubles });
+  const oneTarget = calculateDamage({ attacker: kangaskhan, defender: arcanine, move: rockSlide, attackerState: state, defenderState: bulky(), field: doubles, moveOptions: { singleTarget: true } });
+
+  assert.equal(spread.notes.includes("Parental Bond"), false);
+  assert.equal(spread.notes.includes("Doubles spread move"), true);
+  assert.equal(oneTarget.notes.includes("Parental Bond"), true);
+  assert.ok(oneTarget.minDamage > spread.maxDamage);
+});
+
+test("Future Sight, Seismic Toss and Night Shade are supported", () => {
+  const hatterene = { id: "hatterene", name: "Hatterene", types: ["Psychic", "Fairy"], baseStats: { hp: 57, atk: 90, def: 95, spa: 136, spd: 103, spe: 29 } };
+  const futureSight = { id: "futuresight", name: "Future Sight", type: "Psychic", category: "Special", basePower: 120, target: "normal", flags: { futuremove: 1 } };
+  const seismicToss = { id: "seismictoss", name: "Seismic Toss", type: "Fighting", category: "Physical", basePower: 0, damage: "level", target: "normal", flags: {} };
+  const nightShade = { id: "nightshade", name: "Night Shade", type: "Ghost", category: "Special", basePower: 0, damage: "level", target: "normal", flags: {} };
+  const future = calculateDamage({ attacker: hatterene, defender: garchomp, move: futureSight, attackerState: bulky(), defenderState: bulky(), field: singles });
+
+  assert.equal(future.supported, true);
+  assert.equal(future.notes.includes("Future Sight lands two turns after it is used"), true);
+  for (const move of [seismicToss, nightShade]) {
+    const result = calculateDamage({ attacker: hatterene, defender: kingambit, move, attackerState: bulky(), defenderState: bulky(), field: singles });
+    assert.equal(unsupportedMoveReason(move), "", move.id);
+    assert.deepEqual([result.minDamage, result.maxDamage], [50, 50], move.id);
+  }
+});
+
+test("Salt Cure's note gives the Champions residual damage", () => {
+  const saltCure = { id: "saltcure", name: "Salt Cure", type: "Rock", category: "Physical", basePower: 40, target: "normal", flags: {} };
+  const result = calculateDamage({ attacker: garchomp, defender: kingambit, move: saltCure, attackerState: jollyGarchomp, defenderState: bulky(), field: singles });
+  assert.equal(result.notes.includes("Salt Cure residual: 1/16 max HP (1/8 vs Water/Steel) per turn"), true);
 });

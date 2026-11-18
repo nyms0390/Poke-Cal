@@ -303,6 +303,11 @@ test("entryStageChanges covers Intimidate reactions and Intrepid Sword", () => {
   assert.deepEqual(entryStageChanges(ability("Competitive"), ability("Intimidate")), { atk: -1, spa: 2 });
   assert.deepEqual(entryStageChanges(ability("Guard Dog"), ability("Intimidate")), { atk: 1 });
   assert.deepEqual(entryStageChanges("intrepidsword", "pressure"), { atk: 1 });
+  assert.deepEqual(entryStageChanges("contrary", "intimidate"), { atk: 1 });
+  assert.deepEqual(entryStageChanges("simple", "intimidate"), { atk: -2 });
+  // Mirror Armor sends the drop back: the holder keeps its Attack and the Intimidate user loses one.
+  assert.deepEqual(entryStageChanges("mirrorarmor", "intimidate"), {});
+  assert.deepEqual(entryStageChanges("intimidate", "mirrorarmor"), { atk: -1 });
   const noEntry = matchup({ ours: rillaboom(), theirs: incineroar(), entryStages: false });
   assert.equal(noEntry.ours.state.stages.atk, 0);
 });
@@ -477,4 +482,22 @@ test("when neither side KOs within three turns, the race is a no KO", () => {
   const mirror = matchup({ ours: wall("Snorlax", "Thick Fat"), theirs: wall("Snorlax", "Thick Fat") });
   assert.equal(mirror.ourHits, 4);
   assert.equal(mirror.outcome, "stalemate", "equal 4+ turns are no KO, not a move-order race");
+});
+
+test("Future Sight races as a delayed move instead of being excluded", () => {
+  const hatterene = {
+    pokemon: species("Hatterene"),
+    nature: "Modest",
+    sp: { hp: 32, spa: 32, spd: 2 },
+    ability: ability("Magic Bounce"),
+    item: item("Life Orb"),
+    moves: [move("Future Sight")],
+  };
+  const result = matchup({ ours: hatterene, theirs: sneasler() });
+  const futureSight = result.ours.moves.find((entry) => entry.move.name === "Future Sight");
+
+  assert.equal(futureSight.included, true);
+  assert.equal(futureSight.plan.kind, "delayed");
+  assert.equal(futureSight.hits, turnsForUses("delayed", futureSight.uses));
+  assert.ok(Number.isFinite(futureSight.hits));
 });
