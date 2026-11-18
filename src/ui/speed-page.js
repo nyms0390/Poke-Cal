@@ -35,6 +35,7 @@ import {
   pokemonSpriteElements,
   searchResultButton,
 } from "./components.js";
+import { attachEntryTooltip } from "./entry-tooltip.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import { createLiveUpdater } from "./live-update.js";
 import { watchActiveSet } from "./active-set-sync.js";
@@ -132,6 +133,8 @@ async function initialize() {
     },
   });
   if (!catalogs) return;
+  attachEntryTooltip(elements.ability, () => catalogs.abilityLookup.get(normalizeId(elements.ability.value)) ?? null);
+  attachEntryTooltip(elements.speedItem, () => catalogs.itemLookup.get(normalizeId(elements.speedItem.value)) ?? null);
 
   elements.popularCount.value = String(threatPreferencesStore.readThreatCount());
   renderNatureOptions();

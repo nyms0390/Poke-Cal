@@ -9241,3 +9241,78 @@ main > .my-teams-editor {
 .team-panel-edited-mark[hidden] {
   display: none;
 }
+
+/* ---------- Ability and item details (src/ui/entry-tooltip.js) ---------- */
+
+/* The name stays text in its row; a dotted underline marks that it has details. */
+.entry-term {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: underline dotted var(--subtle);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+/* The item label is an inline-flex box, which an outer underline does not reach. */
+.entry-term .item-label-text {
+  text-decoration: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--subtle);
+  text-underline-offset: 3px;
+}
+
+.entry-term:hover,
+.entry-term[aria-describedby] {
+  color: var(--accent-dark);
+}
+
+.entry-term:hover .item-label-text,
+.entry-term[aria-describedby] .item-label-text,
+.entry-term:hover,
+.entry-term[aria-describedby] {
+  text-decoration-color: var(--accent);
+}
+
+.entry-term:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.entry-tooltip {
+  position: fixed;
+  inset: auto;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(24 39 43 / 14%);
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.entry-tooltip:popover-open {
+  display: grid;
+  gap: 4px;
+}
+
+.entry-tooltip-title {
+  font-size: var(--type-label);
+  font-weight: 600;
+}
+
+.entry-tooltip-text {
+  margin: 0;
+  font-size: var(--type-supporting);
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
