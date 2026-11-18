@@ -425,6 +425,16 @@ test("race moves carry the cumulative KO chance per hit count", () => {
 
 });
 
+test("a Focus Sash at full HP turns an OHKO into a 2HKO in the race", () => {
+  const ours = rillaboom({ moves: [move("High Horsepower")] });
+  const plain = matchup({ ours, theirs: sneasler() });
+  const sashed = matchup({ ours, theirs: { ...sneasler(), item: item("Focus Sash") } });
+  assert.equal(plain.ourHits, 1);
+  assert.equal(plain.ours.best.koText, "guaranteed OHKO");
+  assert.equal(sashed.ourHits, 2);
+  assert.equal(sashed.ours.best.koText, "survives with Focus Sash at full HP");
+});
+
 test("Leek Sirfetch'd races with guaranteed-crit Leaf Blade", () => {
   const sirfetchd = (heldItem) => ({
     pokemon: species("Sirfetch’d"),

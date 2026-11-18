@@ -42,6 +42,7 @@ export const EN_MESSAGES = {
   "paste.unknownAbility": ({ value }) => `Unknown ability: ${value}`,
   "paste.unknownPokemon": ({ value }) => `Unknown Pokémon: ${value}`,
   "paste.unknownItem": ({ value }) => `Unknown item: ${value}`,
+  "paste.unknownNature": ({ value }) => `Unknown nature: ${value}`,
   "paste.unknownStat": ({ value }) => `Unknown stat: ${value}`,
   "paste.unparsedSpread": ({ value }) => `Could not parse spread part: ${value}`,
   "paste.mappedEvs": "Mapped EVs to Champions SPs.",

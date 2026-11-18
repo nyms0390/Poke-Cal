@@ -1,5 +1,6 @@
 import { normalizeId } from "./catalog.js";
 import { normalizeSearch } from "./pokemon.js";
+import { canonicalNature } from "../engine/natures.js";
 import { normalizeSp } from "../engine/stats.js";
 
 const STAT_LABELS = {
@@ -86,7 +87,10 @@ export function parseSetPaste(text, catalogs = {}) {
 
     const natureMatch = NATURE_PATTERN.exec(line);
     if (natureMatch) {
-      parsed.nature = natureMatch[1].trim();
+      const natureName = natureMatch[1].trim();
+      const nature = canonicalNature(natureName);
+      if (nature) parsed.nature = nature;
+      else warnings.push(`Unknown nature: ${natureName}`);
       continue;
     }
 
