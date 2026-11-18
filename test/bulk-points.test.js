@@ -3,16 +3,20 @@ import assert from "node:assert/strict";
 
 import {
   bulkCoverage,
+  bulkCoverageTable,
   bulkPointMatchups,
   bulkPoints,
   compareKoTiers,
   coverageRespread,
+  firstKo,
   generalBulkRecommendation,
   koHitCount,
+  koIsGuaranteed,
   rankBulkCoverageGroups,
   threatDamage,
   zeroBulkState,
 } from "../src/data/bulk-points.js";
+import { calculateDamage } from "../src/engine/damage.js";
 import { createField } from "../src/engine/field.js";
 import { createSideState } from "../src/ui/battle-state.js";
 import { availableBulkSpBudget, canApplySpTargets } from "../src/ui/builder-state.js";
@@ -514,6 +518,7 @@ test("shows the cheapest spread that changes an OHKO into guaranteed survival", 
     fromKoText: "guaranteed OHKO",
     achieves: "survives 1 hit (guaranteed) · guaranteed 2HKO",
     koText: "guaranteed 2HKO",
+    ko: { hits: 2, chance: 1 },
     maxPct: 99.4,
   }]);
 
@@ -702,6 +707,160 @@ function bruteForceRequiredSp(state, matchups, targetHits, budget) {
   }
   return Infinity;
 }
+
+const fightingMove = {
+  id: "brickbreak",
+  name: "Brick Break",
+  type: "Fighting",
+  category: "Physical",
+  basePower: 75,
+  target: "normal",
+};
+const doubleFightingMove = {
+  id: "doublekick",
+  name: "Double Kick",
+  type: "Fighting",
+  category: "Physical",
+  basePower: 30,
+  multihit: 2,
+  target: "normal",
+};
+const chopleBerry = { id: "chopleberry", name: "Chople Berry" };
+const multiscale = { id: "multiscale", name: "Multiscale" };
+
+function attackerSide() {
+  return createSideState(attacker, {
+    nature: "Hardy",
+    sp: { hp: 0, atk: 32, def: 0, spa: 32, spd: 0, spe: 0 },
+    ability: null,
+    item: null,
+    moves: [],
+  });
+}
+
+// Every HP x defence cell of the coverage table, asked of the engine one cell at a time.
+function engineCoverageTiers(state, scenario, defenseStat) {
+  const baseline = zeroBulkState(state);
+  return Array.from({ length: 33 }, (_, hpSp) => Array.from({ length: 33 }, (_, defSp) =>
+    koHitCount(threatDamage(withBulk(baseline, hpSp, defSp, defenseStat), scenario))));
+}
+
+function tableRows(table) {
+  return table.tiers.map((row) => [...row]);
+}
+
+for (const { name, state, scenario } of [
+  { name: "no first-hit effect", state: userState(), scenario: { threat, move: fightingMove } },
+  { name: "a resist berry", state: userState(chopleBerry), scenario: { threat, move: fightingMove } },
+  {
+    name: "a resist berry with Ripen",
+    state: { ...userState(chopleBerry), ability: { id: "ripen", name: "Ripen" } },
+    scenario: { threat, move: fightingMove },
+  },
+  { name: "Multiscale", state: { ...userState(), ability: multiscale }, scenario: { threat, move: physicalMove } },
+  {
+    name: "Multiscale against a two-hit move",
+    state: { ...userState(), ability: multiscale },
+    scenario: { threat, move: doubleFightingMove },
+  },
+  {
+    name: "Sitrus Berry recovery",
+    state: userState({ id: "sitrusberry", name: "Sitrus Berry" }),
+    scenario: { threat, move: physicalMove },
+  },
+  {
+    name: "Leftovers recovery",
+    state: userState({ id: "leftovers", name: "Leftovers" }),
+    scenario: { threat, move: specialMove },
+  },
+  {
+    name: "Grassy Terrain recovery",
+    state: userState(),
+    scenario: { threat, move: physicalMove, field: createField({ terrain: "grassy" }) },
+  },
+]) {
+  test(`coverage table matches the engine in every cell with ${name}`, () => {
+    const table = bulkCoverageTable(state, { scenario });
+    assert.deepEqual(tableRows(table), engineCoverageTiers(state, scenario, table.defenseStat));
+  });
+}
+
+test("resist berry coverage counts the berry on the first hit only", () => {
+  const state = userState(chopleBerry);
+  const scenario = { threat, move: fightingMove };
+  const table = bulkCoverageTable(state, { scenario });
+  const unberried = bulkCoverageTable(userState(), { scenario });
+  const first = calculateDamage({
+    attacker: attacker,
+    defender: defender,
+    move: fightingMove,
+    attackerState: attackerSide(),
+    defenderState: { ...zeroBulkState(state), currentHpFraction: 1 },
+    field: createField(),
+  });
+  assert.equal(first.distribution.at(-1).damage < first.repeatDistribution.at(-1).damage, true);
+  // Halving every hit would at least double the hits; the berry only buys one hit at most.
+  for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
+    for (let defSp = 0; defSp <= 32; defSp += 1) {
+      assert.equal(table.tiers[hpSp][defSp] - unberried.tiers[hpSp][defSp] <= 1, true);
+    }
+  }
+});
+
+test("coverage SP with a resist berry matches a brute-force engine search", () => {
+  const state = userState(chopleBerry);
+  const budget = 40;
+  const matchups = bulkPointMatchups(state, [{ ...threat, moves: [fightingMove, specialMove] }], { budget });
+  const coverage = bulkCoverage(state, matchups, { budget });
+  assert.equal(
+    coverage.requiredSp,
+    bruteForceRequiredSp(state, matchups, coverage.targetHits, budget),
+  );
+});
+
+test("the engine reports later uses without first-hit effects and whether it heals between them", () => {
+  const input = (defenderState) => ({
+    attacker,
+    defender,
+    move: physicalMove,
+    attackerState: attackerSide(),
+    defenderState: { ...defenderState, currentHpFraction: 1 },
+    field: createField(),
+  });
+  const plain = calculateDamage(input(userState()));
+  assert.deepEqual(plain.repeatDistribution, plain.distribution);
+  assert.equal(plain.recovers, false);
+
+  const scaled = calculateDamage(input({ ...userState(), ability: multiscale }));
+  assert.equal(scaled.distribution.at(-1).damage < scaled.repeatDistribution.at(-1).damage, true);
+  assert.deepEqual(scaled.repeatDistribution, plain.distribution);
+
+  assert.equal(calculateDamage(input(userState({ id: "leftovers", name: "Leftovers" }))).recovers, true);
+});
+
+test("KO helpers read the structured KO chances before the English text", () => {
+  const damage = {
+    koText: "guaranteed OHKO",
+    ko: { hits: 3, chance: 0.25 },
+  };
+  assert.equal(koHitCount(damage), 3);
+  assert.equal(koIsGuaranteed(damage), false);
+  assert.equal(koHitCount({ koText: "no structured value", ko: { hits: null, chance: 0 } }), 6);
+  assert.equal(koHitCount({ koText: "Unsupported", ko: null }), 0);
+  assert.equal(compareKoTiers({ ko: { hits: 2, chance: 1 } }, { ko: { hits: 2, chance: 0.5 } }) > 0, true);
+  assert.equal(compareKoTiers({ ko: { hits: 2, chance: 0.12341 } }, { ko: { hits: 2, chance: 0.12339 } }), 0);
+  // Text-only summaries keep working.
+  assert.equal(koHitCount({ koText: "12.5% chance to 3HKO" }), 3);
+  assert.equal(koIsGuaranteed("guaranteed 2HKO"), true);
+});
+
+test("Sturdy surviving at full HP counts as the following hit, as the engine's chances say", () => {
+  assert.deepEqual(firstKo({
+    text: "survives with Sturdy at full HP",
+    chances: [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }],
+  }), { hits: 2, chance: 1 });
+  assert.deepEqual(firstKo({ chances: [{ hits: 1, chance: 0 }] }), { hits: null, chance: 0 });
+});
 
 test("bulk points size SP against raw damage, ignoring the user's Focus Sash", () => {
   const sash = { id: "focussash", name: "Focus Sash" };

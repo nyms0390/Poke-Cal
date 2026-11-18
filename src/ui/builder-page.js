@@ -1113,9 +1113,9 @@ function bulkMoveContext({ baselineDamage, baselinePoints, damage, defenseStat, 
   );
   context.append(comparison);
 
-  const currentHits = koHitCount(damage.koText);
+  const currentHits = koHitCount(damage);
   const coveredPoint = baselinePoints.find((point) =>
-    koHitCount(point.koText) <= currentHits);
+    koHitCount(point) <= currentHits);
   if (coveredPoint) {
     const frontier = document.createElement("div");
     frontier.className = "builder-covered-frontier";

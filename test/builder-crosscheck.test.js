@@ -241,13 +241,16 @@ function directThreatBulkState(threat) {
 function directSummary(input) {
   const result = calculateDamage(input);
   assert.equal(result.supported, true);
+  const chances = koChance({
+    rolls: result.rolls,
+    targetHp: result.defenderCurrentHp,
+  });
+  const first = chances.find(({ chance }) => chance > 0);
   return {
     minPct: result.minPercent,
     maxPct: result.maxPercent,
-    koText: koText(koChance({
-      rolls: result.rolls,
-      targetHp: result.defenderCurrentHp,
-    })),
+    koText: koText(chances),
+    ko: first ? { hits: first.hits, chance: first.chance } : { hits: null, chance: 0 },
   };
 }
 
