@@ -90,6 +90,10 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatKoResult({ hits: 1, chance: 1, text: "guaranteed OHKO" }, "zh-TW"), "必定一擊倒下");
   assert.equal(formatKoResult({ hits: 2, chance: 0.5, text: "50.0% chance to 2HKO" }, "zh-TW"), "50.0% 機率兩擊倒下");
   assert.equal(formatKoText("guaranteed 2HKO (Sturdy)", "zh-TW"), "必定兩擊倒下（結實）");
+  assert.equal(formatKoText("guaranteed 2HKO (Focus Sash)", "zh-TW"), "必定兩擊倒下（氣勢披帶）");
+  assert.equal(formatKoText("survives with Focus Sash at full HP", "zh-TW"), "滿 HP 時靠氣勢披帶存活");
+  assert.equal(formatKoText("survives with Sturdy at full HP", "zh-TW"), "滿 HP 時靠結實存活");
+  assert.equal(formatKoResult({ hits: null, chance: 0, text: "survives with Focus Sash at full HP" }, "zh-TW"), "滿 HP 時靠氣勢披帶存活");
   assert.equal(formatKoText("guaranteed 2HKO after Leftovers recovery", "zh-TW"), "必定兩擊倒下（計入吃剩的東西回復）");
   assert.equal(
     formatKoResult({ hits: 4, chance: 1, text: "guaranteed 4HKO after Sitrus Berry and Grassy Terrain recovery" }, "zh-TW"),

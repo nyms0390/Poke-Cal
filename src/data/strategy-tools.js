@@ -197,25 +197,35 @@ export function damageField(options = {}) {
   });
 }
 
+/**
+ * "Focus Sash" or "Sturdy" when the engine let the defender live at 1 HP through a hit that
+ * would KO it. Only a single-hit move can be saved outright: a sash or Sturdy caps the first
+ * hit, so later hits of a multi-hit move or Parental Bond still land (the engine's KO text
+ * then carries no endure note and the damage distribution decides).
+ */
+export function survivalEndureSource(result) {
+  const match = /survives with (Sturdy|Focus Sash) at full HP|\((Sturdy|Focus Sash)\)/.exec(result?.ko?.text ?? "");
+  return match ? match[1] ?? match[2] : "";
+}
+
 export function checkSurvival(context, options = {}) {
   const result = calculateDamageMatchup(context, options);
   if (!result.supported) throw new Error(result.reason ?? "Damage calculation is unsupported.");
 
   const fullHp = result.defenderState.currentHpFraction === 1;
-  const focusSash = fullHp && normalizeId(result.defenderState.item?.id ?? result.defenderState.item?.name) === "focussash";
-  const sturdy = fullHp && result.ko?.text?.includes("Sturdy");
+  const endure = survivalEndureSource(result);
   const immune = result.maxDamage === 0;
-  const guaranteed = focusSash || sturdy || immune || result.maxDamage < result.defenderCurrentHp;
+  const guaranteed = immune || result.maxDamage < result.defenderCurrentHp || damageSurvivalChance(result) === 1;
   const possible = guaranteed || result.minDamage < result.defenderCurrentHp;
   const survivalChance = guaranteed
     ? 1
     : damageSurvivalChance(result);
   const verdict = guaranteed ? "YES" : possible ? "ROLL" : "NO";
-  const reason = focusSash ? "Focus Sash" : sturdy ? "Sturdy" : immune ? "Immune" : "";
+  const reason = endure && guaranteed ? endure : immune ? "Immune" : "";
   const name = result.defenderState.pokemon.name;
   const range = `${result.minPercent}–${result.maxPercent}%`;
   let summary;
-  if (focusSash || sturdy) {
+  if (reason === "Focus Sash" || reason === "Sturdy") {
     summary = `YES — ${name} survives with ${reason} (${range}).`;
   } else if (immune) {
     summary = `YES — ${name} is immune.`;
