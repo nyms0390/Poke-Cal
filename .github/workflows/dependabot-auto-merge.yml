@@ -1,0 +1,34 @@
+name: Dependabot auto-merge
+
+# Turns on GitHub auto-merge for Dependabot's GitHub Actions updates when every bump in the PR is
+# a patch or minor version, so it merges by itself once the required `Tests` check passes.
+# Major bumps and the mcp/ npm updates stay manual: mcp/ is the public Worker that deploys on
+# merge, and a merge made through GITHUB_TOKEN does not trigger the deploy workflow.
+on: pull_request
+
+permissions: {}
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'nyms0390/Poke-Cal'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Read Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # update-type is the largest bump in a grouped PR; it is empty when Dependabot can't tell,
+      # which leaves the PR for review.
+      - name: Enable auto-merge for patch and minor Actions updates
+        if: >-
+          steps.metadata.outputs.package-ecosystem == 'github_actions' &&
+          (steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+           steps.metadata.outputs.update-type == 'version-update:semver-minor')
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge --auto --squash "$PR_URL"
