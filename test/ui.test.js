@@ -1583,3 +1583,24 @@ test("battle lists NCP curated entries as whole sets in the Set picker, not as s
   assert.match(source, /t\("battle\.ncpSpreadGroup"\),\s*ncpSets\.map\(\(set, index\)/);
   assert.match(source, /ncpSetPaste\(pokemonEntry, set\)/);
 });
+
+test("pages use the styled app dialogs instead of the browser's own prompt and confirm boxes", async () => {
+  const { readdirSync } = await import("node:fs");
+  const uiDir = new URL("../src/ui/", import.meta.url);
+  for (const name of readdirSync(uiDir).filter((file) => file.endsWith(".js"))) {
+    const source = readFileSync(new URL(name, uiDir), "utf8");
+    assert.doesNotMatch(source, /\b(?:window|globalThis)\.(?:prompt|confirm|alert)\s*(?:\?\.)?\(/, name);
+  }
+});
+
+test("My teams' member editor ids do not collide with the page's own ids", () => {
+  const html = readFileSync(new URL("../my-teams.html", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/ui/my-teams-page.js", import.meta.url), "utf8");
+  const editor = readFileSync(new URL("../src/ui/set-editor.js", import.meta.url), "utf8");
+  const prefix = /mountSetEditor\([\s\S]*?prefix: "([^"]+)"/.exec(source)?.[1];
+  assert.ok(prefix);
+  const editorIds = [...editor.matchAll(/id\("([^"]+)"\)/g)].map((match) => `${prefix}-${match[1]}`);
+  const pageIds = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));
+  assert.ok(editorIds.length > 5);
+  assert.deepEqual(editorIds.filter((id) => pageIds.has(id)), []);
+});

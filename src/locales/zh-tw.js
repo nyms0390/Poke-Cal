@@ -69,7 +69,7 @@ export const ZH_TW_MESSAGES = {
   "lookup.noItems": "沒有可用的 Champions 道具資料。",
   "lookup.noMoveMatches": "沒有符合目前篩選條件的招式。",
   "lookup.rating": ({ value }) => `評分 ${value}`,
-  "lookup.levitate": "飄浮：免疫地面屬性招式",
+  "lookup.abilityImmunity": ({ ability, type }) => `${ability}：免疫${type}屬性招式`,
   "lookup.teammatesMeta": ({ teams }) => `佔其 ${teams} 支 Limitless 隊伍`,
   "lookup.teammateTeams": ({ count }) => `${count} 支隊伍`,
   "label.ability": "特性",
@@ -646,6 +646,9 @@ export const ZH_TW_MESSAGES = {
   "myTeams.removeMember": "移除",
   "myTeams.removeMemberLabel": ({ name }) => `從這支隊伍移除${name}`,
   "myTeams.removed": ({ name }) => `已移除${name}。`,
+  "myTeams.undo": "復原",
+  "myTeams.undoLabel": ({ name }) => `復原移除的${name}`,
+  "myTeams.restored": ({ name }) => `已復原${name}。`,
   "myTeams.defaultName": ({ number }) => `隊伍 ${number}`,
   "myTeams.parseEmpty": "尚未貼上寶可夢。",
   "myTeams.parseFound": ({ count, names }) => `找到 ${count} 隻寶可夢：${names}`,
@@ -697,6 +700,13 @@ export const ZH_TW_MESSAGES = {
   "myTeams.memberMissing": "找不到這位隊伍成員。",
   "myTeams.saveTournamentTeam": "存到我的隊伍",
   "myTeams.savedTournamentTeam": ({ name }) => `已在「我的隊伍」存成「${name}」。`,
+  "dialog.cancel": "取消",
+  "dialog.confirm": "確定",
+  "dialog.save": "儲存",
+  "dialog.delete": "刪除",
+  "dialog.remove": "移除",
+  "dialog.replace": "取代",
+  "savedSets.replaceConfirm": ({ name }) => `已有名為「${name}」的已存配置，要取代嗎？`,
 };
 
 // Exact document-shell copy. Runtime sentences with values are formatted through message keys.

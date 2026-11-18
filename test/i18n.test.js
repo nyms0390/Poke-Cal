@@ -226,3 +226,34 @@ test("zh-TW polish: official terrain names, Mega-Z forms, presets, and classifie
   assert.equal(tFor("zh-TW", "matchups.showing", { count: 2, total: 5, filter: "threats" }), "顯示 5 個威脅中的 2 個");
   assert.equal(STATIC_ZH_TW["PokéCal — Move catalog"], "PokéCal — 招式圖鑑");
 });
+
+test("every fixed damage note with a zh-TW line is still emitted word for word by the engine", async () => {
+  const { readdirSync, readFileSync } = await import("node:fs");
+  const { DAMAGE_NOTE_ZH } = await import("../src/i18n-formatters.js");
+  const engineDir = new URL("../src/engine/", import.meta.url);
+  const source = readdirSync(engineDir)
+    .filter((name) => name.endsWith(".js"))
+    .map((name) => readFileSync(new URL(name, engineDir), "utf8"))
+    .join("\n");
+  const missing = Object.keys(DAMAGE_NOTE_ZH).filter((note) => {
+    const quoted = [`"${note}"`, `'${note}'`, `\`${note}\``];
+    return !quoted.some((literal) => source.includes(literal));
+  });
+  assert.deepEqual(missing, [], "reword the zh-TW key in DAMAGE_NOTE_ZH together with the engine note");
+});
+
+test("Fickle Beam, Spit Up and Beat Up notes have zh-TW lines", async () => {
+  const { formatDamageNote } = await import("../src/i18n-formatters.js");
+  const { moveEffect } = await import("../src/engine/move-effects.js");
+  const notes = [
+    moveEffect("ficklebeam").note({ moveOptions: {} }),
+    moveEffect("ficklebeam").note({ moveOptions: { allOut: true } }),
+    moveEffect("spitup").note({ moveOptions: { stockpileCount: 2 } }),
+    moveEffect("beatup").note({}),
+  ];
+  for (const note of notes) {
+    assert.notEqual(formatDamageNote(note, "zh-TW"), note, note);
+    assert.doesNotMatch(formatDamageNote(note, "zh-TW"), /[A-Za-z]{3,}/, note);
+  }
+  assert.equal(formatDamageNote(notes[2], "zh-TW"), "假設已使用蓄力 2 次");
+});

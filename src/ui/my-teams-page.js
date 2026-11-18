@@ -11,6 +11,7 @@ import { readTeamScreens } from "../data/team-screens.js";
 import { championsDefaultsForPokemon } from "../data/usage-defaults.js";
 import { formatSetWarning } from "../i18n-formatters.js";
 import { getLocale, initI18n, localizedName, onLocaleChange, t, translateSubtree } from "../i18n.js";
+import { confirmDialog } from "./app-dialog.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { catalogLoadedStatus, loadCatalogs, showStatus } from "./bootstrap.js";
 import { browserStorage } from "./components.js";
@@ -47,7 +48,7 @@ const elements = {
   screensStatus: document.querySelector("#my-teams-screens-status"),
 };
 
-const store = createMyTeamStore(browserStorage());
+const store = createMyTeamStore(browserStorage(), { defaultName: defaultTeamName });
 let catalogs = null;
 // The team the dialog edits, or null while it creates a new team.
 let editingId = null;
@@ -57,7 +58,7 @@ let member = null;
 let saveMemberOnClose = false;
 
 const setEditor = mountSetEditor(document.querySelector("#my-teams-set-editor"), {
-  prefix: "my-teams",
+  prefix: "my-teams-member",
   getCatalogs: () => catalogs,
   getSetup: () => member?.side,
   onPokemonSelect: (pokemon) => {
@@ -134,6 +135,10 @@ async function initialize() {
   render();
 }
 
+function defaultTeamName(number) {
+  return t("myTeams.defaultName", { number });
+}
+
 function render() {
   const teams = store.listTeams();
   const selected = store.selectedTeam();
@@ -208,9 +213,16 @@ function memberRow(team, member, index) {
   remove.textContent = t("myTeams.removeMember");
   remove.setAttribute("aria-label", t("myTeams.removeMemberLabel", { name: pokemonName }));
   remove.addEventListener("click", () => {
-    store.removeMember(team.id, index);
-    elements.teamStatus.textContent = t("myTeams.removed", { name: pokemonName });
+    const before = team.members;
+    if (!store.removeMember(team.id, index)) return;
+    showUndo(t("myTeams.removed", { name: pokemonName }), t("myTeams.undoLabel", { name: pokemonName }), () => {
+      if (!store.getTeam(team.id)) return;
+      store.updateTeam(team.id, { members: before });
+      elements.teamStatus.textContent = t("myTeams.restored", { name: pokemonName });
+      render();
+    });
     render();
+    elements.teamStatus.querySelector(".my-teams-undo")?.focus();
   });
   actions.append(remove);
   row.append(actions);
@@ -372,13 +384,28 @@ async function copySelectedTeam() {
   }
 }
 
-function deleteSelectedTeam() {
+async function deleteSelectedTeam() {
   const team = store.selectedTeam();
   if (!team) return;
-  if (!window.confirm(t("myTeams.deleteConfirm", { name: team.name }))) return;
+  const confirmed = await confirmDialog(t("myTeams.deleteConfirm", { name: team.name }), {
+    confirmLabel: t("dialog.delete"),
+    danger: true,
+  });
+  if (!confirmed || !store.getTeam(team.id)) return;
   store.deleteTeam(team.id);
   elements.teamStatus.textContent = t("myTeams.deleted", { name: team.name });
   render();
+}
+
+// The status line with an Undo button; any later status text replaces it.
+function showUndo(text, label, undo) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "team-action my-teams-undo";
+  button.textContent = t("myTeams.undo");
+  button.setAttribute("aria-label", label);
+  button.addEventListener("click", undo, { once: true });
+  elements.teamStatus.replaceChildren(document.createTextNode(text), button);
 }
 
 function emptyMessage(text) {

@@ -18,6 +18,7 @@ PokéCal/
 ├── compare.html               # Set comparison (loads src/ui/compare-page.js)
 ├── speed.html                 # Speed tiers (loads src/ui/speed-page.js)
 ├── teams.html                 # Tournament teams (loads src/ui/teams-page.js)
+├── my-teams.html              # Your saved teams (loads src/ui/my-teams-page.js)
 ├── src/
 │   ├── identifiers.js          # Shared Showdown-style identifier normalization
 │   ├── i18n.js                 # Locale state and translation helpers
@@ -104,7 +105,7 @@ PokéCal/
 ├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
 ├── .github/workflows/audit.yml # npm audit gate for mcp/ (dependency changes + weekly)
 ├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions and mcp/ npm deps
-└── docs/                       # DECISIONS.md (owner decisions), ui-quality-workflow.md, ROADMAP.md (completed roadmap), move-conditions.md
+└── docs/                       # DECISIONS.md (owner decisions), ui-quality-workflow.md, ROADMAP.md (historical July 2026 plan), move-conditions.md
 ```
 
 ## Requirements
@@ -127,7 +128,7 @@ npm run bump-showdown          # move scripts/showdown-pin.json to the latest Sh
 
 Generated catalogs are committed, so syncing is only needed to refresh data.
 
-Showdown is pinned: `sync-data` fetches the Showdown base data, text, and Champions mod from the commit in `scripts/showdown-pin.json` (`{"repo": "smogon/pokemon-showdown", "commit": "<40-hex SHA>"}`), never from `master`, so stats, moves, and legality only change after a reviewed bump. `.github/workflows/bump-showdown.yml` runs `npm run bump-showdown` weekly (and on demand) and, when master has moved, opens or updates a single "Bump Showdown pin" pull request from `bot/showdown-pin` with the upstream compare link; merging it pulls those catalog changes into the next weekly sync. The usage sources (Limitless, Smogon stats, NCP) and PokeAPI are not pinned and keep updating weekly.
+Showdown is pinned: `sync-data` fetches the Showdown base data, text, and Champions mod from the commit in `scripts/showdown-pin.json` (`{"repo": "smogon/pokemon-showdown", "commit": "<40-hex SHA>"}`), never from `master`, so stats, moves, and legality only change after a reviewed bump. `.github/workflows/bump-showdown.yml` runs `npm run bump-showdown` weekly on Thursdays (and on demand) and, when master has moved, opens or updates a single "Bump Showdown pin" pull request from `bot/showdown-pin` with the upstream compare link; merging it before Monday pulls those catalog changes into that Monday's sync. The usage sources (Limitless, Smogon stats, NCP) and PokeAPI are not pinned and keep updating weekly.
 
 Syncs fail closed: each script validates its own freshly built output (`src/data/catalog-validation.js`: absolute minimums such as at least 150 Champions-legal Pokémon with Limitless usage, 100 with Smogon spreads, 40 with NCP sets, 1000 Pokémon with Traditional Chinese aliases, 3 archived tournaments; and no metric may shrink by more than 25% versus the files being replaced) and exits non-zero without writing anything when a check fails. Pass `--allow-shrink` (e.g. `npm run sync-ncp-spreads -- --allow-shrink`) only when a large drop is a legitimate upstream change; minimums still apply. Upstream requests use a shared helper with timeouts, bounded retries with backoff for network errors/429/5xx, and rejection of HTML error pages. Showdown `.ts` files are evaluated in a child Node process started with the permission model (no file, child-process, or worker access and an empty environment).
 
@@ -228,6 +229,14 @@ Sitrus, Focus Sash, resist berries, observed items) and the strongest viable mov
   already covers are listed; the rest are folded by type.
 
 It runs one opponent at a time in the background and restarts when the set or field changes.
+
+### Mechanics not modeled yet
+
+The calculator, Builder, Matchups and the MCP tools share one engine, so these gaps show up in
+all of them. An entry is removed when its fix lands.
+
+These rarely matter in practice: Normal Gem, terrain seeds, Light Metal, Long Reach against
+Fluffy, Poltergeist into an itemless target, and Tera Shell on neutral hits.
 
 ## Data Sources
 

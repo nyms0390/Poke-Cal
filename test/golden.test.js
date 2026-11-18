@@ -83,7 +83,7 @@ const GOLDEN_CASES = [
       min: 104,
       max: 126,
       koText: "guaranteed 2HKO",
-      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash: 104-126 (62.2 - 75.4%) -- guaranteed 2HKO",
+      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash: 104-126 (62.2 - 75.4%) – guaranteed 2HKO",
     },
   },
   {
@@ -131,7 +131,7 @@ const GOLDEN_CASES = [
       min: 69,
       max: 84,
       koText: "0.4% chance to 2HKO",
-      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash through Reflect: 69-84 (41.3 - 50.2%) -- 0.4% chance to 2HKO",
+      description: "32 Atk Spell Tag Aegislash Poltergeist vs. 32 HP / 0 Def Aegislash through Reflect: 69-84 (41.3 - 50.2%) – 0.4% chance to 2HKO",
     },
   },
   {

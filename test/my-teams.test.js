@@ -120,3 +120,10 @@ test("reads a corrupt or foreign blob as no teams", () => {
   assert.deepEqual(createMyTeamStore(storage).listTeams(), []);
   assert.deepEqual(createMyTeamStore(null).listTeams(), []);
 });
+
+test("a team saved without a name takes the page's translated default name", () => {
+  const store = createMyTeamStore(memoryStorage(), { defaultName: (number) => `隊伍 ${number}` });
+  assert.equal(store.createTeam({ members: [PELIPPER] }).name, "隊伍 1");
+  assert.equal(store.createTeam({ name: "  ", members: [] }).name, "隊伍 2");
+  assert.equal(createMyTeamStore(memoryStorage()).createTeam({}).name, "Team 1");
+});

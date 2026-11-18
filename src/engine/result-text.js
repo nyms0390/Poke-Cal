@@ -41,7 +41,7 @@ export function resultDescription({ attackerState, defenderState, move, field = 
       defenderState.pokemon?.name ?? "Defender",
       ...clauses,
     ].filter(Boolean).join(" "),
-    `${result.minDamage}-${result.maxDamage} (${result.minPercent} - ${result.maxPercent}%) -- ${result.ko.text}`,
+    `${result.minDamage}-${result.maxDamage} (${result.minPercent} - ${result.maxPercent}%) – ${result.ko.text}`,
   ].join(": ");
 }
 

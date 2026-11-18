@@ -163,3 +163,23 @@ test("every Champions-legal catalog Pokémon survives export and re-import", asy
     assert.equal(parseSetPaste(text, realCatalogs).pokemon?.id, entry.id, entry.name);
   }
 });
+
+test("Battle's paste example is a Champions-legal set that imports without warnings", async () => {
+  const { readFileSync } = await import("node:fs");
+  const read = (path) => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"));
+  const html = readFileSync(new URL("../battle.html", import.meta.url), "utf8");
+  const placeholder = /<textarea[^>]+id="set-paste"[\s\S]*?placeholder="([^"]+)"/.exec(html)?.[1];
+  assert.ok(placeholder, "battle.html set-paste placeholder");
+  const text = placeholder.replaceAll("&#10;", "\n");
+  const webCatalogs = {
+    pokemon: read("public/web/pokemon.json"),
+    abilities: read("public/web/abilities.json"),
+    items: read("public/web/items.json"),
+    moves: read("public/web/moves.json"),
+  };
+  const parsed = parseSetPaste(text, webCatalogs);
+  assert.deepEqual(parsed.warnings, []);
+  assert.equal(parsed.pokemon?.champions?.legal, true, `${parsed.pokemon?.name} is Champions-legal`);
+  assert.ok(Object.values(parsed.sp).reduce((sum, value) => sum + value, 0) <= 66, "SP total fits 66");
+  assert.equal(parsed.selectedMoveIds.length, 1);
+});

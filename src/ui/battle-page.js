@@ -22,6 +22,7 @@ import {
 } from "../data/active-set.js";
 import { ncpSetPaste } from "../data/ncp-data.js";
 import { createSavedSetStore } from "../data/saved-sets.js";
+import { confirmDialog, promptSetName } from "./app-dialog.js";
 import { createStorageStore } from "../data/storage-store.js";
 import { MY_TEAMS_STORAGE_KEY, createMyTeamStore, memberSlotFor, parseTeamMembers } from "../data/my-teams.js";
 import { sameBuild, teamMemberSets } from "../data/team-sets.js";
@@ -195,7 +196,7 @@ const savedSetStore = createSavedSetStore(browserStorage());
 const activeSetStore = createActiveSetStore(browserStorage());
 // The user's own saved teams (My teams), shown in the team strip above the set cards. Battle's
 // six working slots per side (`teamStore` below) stay its own calc state.
-const myTeamStore = createMyTeamStore(browserStorage());
+const myTeamStore = createMyTeamStore(browserStorage(), { defaultName: (number) => t("myTeams.defaultName", { number }) });
 const TEAM_STORAGE_KEY = "pokecal.teams.v1";
 const teamStore = createStorageStore(browserStorage(), {
   key: TEAM_STORAGE_KEY,
@@ -958,11 +959,12 @@ function ncpSetText(side, value) {
   return set ? ncpSetPaste(pokemonEntry, set) : "";
 }
 
-function saveCurrentSet(side) {
+async function saveCurrentSet(side) {
+  const pokemonId = damageState[side]?.pokemon?.id;
+  if (!pokemonId) return;
+  const name = await promptSetName(savedSetStore, pokemonId, localizedName(damageState[side].pokemon));
   const state = damageState[side];
-  if (!state?.pokemon) return;
-  const name = window.prompt(t("battle.saveName"), localizedName(state.pokemon));
-  if (!name?.trim()) return;
+  if (!name || state?.pokemon?.id !== pokemonId) return;
 
   const stateForPaste = {
     ...state,
@@ -975,11 +977,15 @@ function saveCurrentSet(side) {
   setSetPasteStatus([]);
 }
 
-function deleteCurrentSet(side) {
+async function deleteCurrentSet(side) {
   const selectedName = elements[`${side}SavedSet`].value;
   const pokemonId = damageState[side]?.pokemon?.id;
   if (!pokemonId || !selectedName || selectedSetSource(side) === "ncp") return;
-  if (!window.confirm(t("battle.deleteConfirm", { name: selectedName }))) return;
+  const confirmed = await confirmDialog(t("battle.deleteConfirm", { name: selectedName }), {
+    confirmLabel: t("dialog.delete"),
+    danger: true,
+  });
+  if (!confirmed) return;
 
   savedSetStore.deleteSet(pokemonId, selectedName);
   renderSavedSetSelect(side);

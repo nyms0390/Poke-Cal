@@ -57,7 +57,7 @@ jobs:
         with:
           node-version: 22
 
-      # Publish only the browser site: the six pages, src/, public/icons/, and the slim
+      # Publish only the browser site: the nine pages, src/, public/icons/, and the slim
       # public/web/ catalogs (not tests, docs, MCP, scripts, agent skills, or full catalogs).
       - name: Stage site
         run: npm run stage-site

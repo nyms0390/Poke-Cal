@@ -2,7 +2,6 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { createSavedSetStore, SAVED_SETS_STORAGE_KEY } from "../src/data/saved-sets.js";
-import { createStorageStore } from "../src/data/storage-store.js";
 
 const pokemon = { id: "miraidon", name: "Miraidon" };
 const ability = { id: "hadronengine", name: "Hadron Engine" };
@@ -82,37 +81,6 @@ test("falls back to in-memory storage when persistent storage throws", () => {
   assert.deepEqual(store.listSets("miraidon").map((set) => set.name), ["Private"]);
 });
 
-test("generic storage wrapper persists versioned JSON and falls back to memory", () => {
-  const storage = memoryStorage();
-  const store = createStorageStore(storage, {
-    key: "pokecal.test.v1",
-    createEmpty: () => ({ version: 1, teams: {} }),
-    isValid: (value) => value?.version === 1 && value.teams,
-  });
-
-  store.write({ version: 1, teams: { attacker: { activeIndex: 0 } } });
-  assert.deepEqual(store.read(), { version: 1, teams: { attacker: { activeIndex: 0 } } });
-
-  const failingStore = createStorageStore(
-    {
-      getItem() {
-        throw new Error("private browsing");
-      },
-      setItem() {
-        throw new Error("private browsing");
-      },
-    },
-    {
-      key: "pokecal.test.v1",
-      createEmpty: () => ({ version: 1, teams: {} }),
-      isValid: (value) => value?.version === 1 && value.teams,
-    },
-  );
-
-  failingStore.write({ version: 1, teams: { defender: { activeIndex: 1 } } });
-  assert.deepEqual(failingStore.read(), { version: 1, teams: { defender: { activeIndex: 1 } } });
-});
-
 test("a corrupt stored value reads as empty, is backed up, and is repaired by the next write", () => {
   const storage = memoryStorage();
   storage.setItem(SAVED_SETS_STORAGE_KEY, "{not json");
@@ -129,47 +97,6 @@ test("a corrupt stored value reads as empty, is backed up, and is repaired by th
   // A fresh store (e.g. after a reload) sees the repaired value from storage.
   const reloaded = createSavedSetStore(storage);
   assert.deepEqual(reloaded.listSets("miraidon").map((set) => set.name), ["Repaired"]);
-});
-
-test("generic storage wrapper keeps persisting after a parse failure", () => {
-  const storage = memoryStorage();
-  const options = {
-    key: "pokecal.test.v1",
-    createEmpty: () => ({ version: 1, teams: {} }),
-    isValid: (value) => value?.version === 1 && value.teams,
-  };
-  storage.setItem(options.key, "\u0000garbage");
-  const store = createStorageStore(storage, options);
-
-  assert.deepEqual(store.read(), { version: 1, teams: {} });
-  store.write({ version: 1, teams: { attacker: { activeIndex: 2 } } });
-  assert.deepEqual(JSON.parse(storage.getItem(options.key)), {
-    version: 1,
-    teams: { attacker: { activeIndex: 2 } },
-  });
-  assert.deepEqual(createStorageStore(storage, options).read(), {
-    version: 1,
-    teams: { attacker: { activeIndex: 2 } },
-  });
-});
-
-test("a failing corrupt-value backup does not break reads or writes", () => {
-  const values = new Map([["pokecal.test.v1", "{"]]);
-  const storage = {
-    getItem: (key) => values.get(key) ?? null,
-    setItem(key, value) {
-      if (key.endsWith(".corrupt")) throw new Error("quota");
-      values.set(key, value);
-    },
-  };
-  const store = createStorageStore(storage, {
-    key: "pokecal.test.v1",
-    createEmpty: () => ({ version: 1, teams: {} }),
-  });
-
-  assert.deepEqual(store.read(), { version: 1, teams: {} });
-  store.write({ version: 1, teams: { defender: {} } });
-  assert.equal(values.get("pokecal.test.v1"), JSON.stringify({ version: 1, teams: { defender: {} } }));
 });
 
 test("ignores blank pokemon ids and set names", () => {

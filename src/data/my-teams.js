@@ -123,7 +123,13 @@ export function memberSlotFor(memberPokemonIds, pokemonId) {
   return { outcome: "full", index: -1 };
 }
 
-export function createMyTeamStore(storage = null, { now = () => new Date().toISOString(), createId = defaultCreateId } = {}) {
+// `defaultName(number)` names a team saved without a name; pages pass the translated
+// "Team N" so the store itself stays free of UI text.
+export function createMyTeamStore(storage = null, {
+  now = () => new Date().toISOString(),
+  createId = defaultCreateId,
+  defaultName = defaultTeamName,
+} = {}) {
   const storageStore = createStorageStore(storage, {
     key: MY_TEAMS_STORAGE_KEY,
     createEmpty: emptyBlob,
@@ -174,7 +180,7 @@ export function createMyTeamStore(storage = null, { now = () => new Date().toISO
     while (existing.has(id)) id = createId();
     const team = writeTeam({
       id,
-      name: String(name).trim() || defaultTeamName(existing.size + 1),
+      name: String(name).trim() || defaultName(existing.size + 1),
       members: cleanMembers(members),
       updatedAt: now(),
     });
