@@ -226,12 +226,9 @@ export function moveEffect(move) {
   return entryShortText(move) || "—";
 }
 
-// The full effect text of an ability or item, as the hover details show it. Champions changes
-// some effects (Healer's 50% chance, Unseen Fist's 1/4 damage), and its text replaces the
-// Showdown text as a whole: a Champions entry with only a short description still wins over a
-// longer Showdown description that no longer applies. Empty when the catalog has no text.
+// The full effect text of an ability or item, as the hover details show it: the long text when
+// it still applies, else the short one, by the same Champions rule as entryLongText/entryShortText
+// (docs/DECISIONS.md "Effect text follows the Champions mod"). Empty when the catalog has none.
 export function entryDescription(entry) {
-  const champions = entry?.champions;
-  if (champions?.desc || champions?.shortDesc) return champions.desc || champions.shortDesc;
-  return entry?.desc || entry?.shortDesc || "";
+  return entryLongText(entry) || entryShortText(entry);
 }
