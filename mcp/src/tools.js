@@ -16,6 +16,7 @@ import {
   speedTierTable,
 } from "../../src/data/strategy-analysis.js";
 
+import { entryShortText } from "../../src/data/catalog.js";
 import { TYPE_EFFECTIVENESS } from "../../src/engine/type-chart.js";
 import { survivalChance } from "../../src/engine/damage.js";
 
@@ -294,7 +295,7 @@ function searchMoves(context, value, count) {
   const matches = rankMatches(context.moves, needle, { includeDescription: true });
   if (!matches.length) throw new Error(`Unknown move query: ${truncateForMessage(value)}`);
   return matches.slice(0, count).map((entry) => ({
-    id: entry.id, name: entry.name, type: entry.type, category: entry.category, basePower: entry.basePower ?? null, accuracy: entry.accuracy ?? null, priority: entry.priority ?? 0, target: entry.target ?? null, shortDesc: entry.shortDesc ?? entry.desc ?? "", champions: { legal: entry.champions?.legal ?? false, tier: entry.champions?.tier ?? null },
+    id: entry.id, name: entry.name, type: entry.type, category: entry.category, basePower: entry.basePower ?? null, accuracy: entry.accuracy ?? null, priority: entry.priority ?? 0, target: entry.target ?? null, shortDesc: entryShortText(entry), champions: { legal: entry.champions?.legal ?? false, tier: entry.champions?.tier ?? null },
   }));
 }
 
@@ -375,7 +376,7 @@ function relevanceRank(entry, needle, includeDescription) {
   if (keys.some((key) => key === needle)) return 0;
   if (keys.some((key) => key.startsWith(needle))) return 1;
   if (keys.some((key) => key.includes(needle))) return 2;
-  if (includeDescription && normalize(entry.shortDesc ?? entry.desc).includes(needle)) return 3;
+  if (includeDescription && normalize(entryShortText(entry)).includes(needle)) return 3;
   return null;
 }
 

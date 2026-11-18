@@ -120,6 +120,7 @@ export function formatSetWarning(warning, locale = "en") {
     [/^Unknown ability: (.+)$/, "paste.unknownAbility"],
     [/^Unknown Pokémon: (.+)$/, "paste.unknownPokemon"],
     [/^Unknown item: (.+)$/, "paste.unknownItem"],
+    [/^Unknown nature: (.+)$/, "paste.unknownNature"],
     [/^Unknown stat: (.+)$/, "paste.unknownStat"],
     [/^Could not parse spread part: (.+)$/, "paste.unparsedSpread"],
   ];
