@@ -90,6 +90,10 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatKoResult({ hits: 1, chance: 1, text: "guaranteed OHKO" }, "zh-TW"), "必定一擊倒下");
   assert.equal(formatKoResult({ hits: 2, chance: 0.5, text: "50.0% chance to 2HKO" }, "zh-TW"), "50.0% 機率兩擊倒下");
   assert.equal(formatKoText("guaranteed 2HKO (Sturdy)", "zh-TW"), "必定兩擊倒下（結實）");
+  assert.equal(formatKoText("guaranteed 2HKO (Focus Sash)", "zh-TW"), "必定兩擊倒下（氣勢披帶）");
+  assert.equal(formatKoText("survives with Focus Sash at full HP", "zh-TW"), "滿 HP 時靠氣勢披帶存活");
+  assert.equal(formatKoText("survives with Sturdy at full HP", "zh-TW"), "滿 HP 時靠結實存活");
+  assert.equal(formatKoResult({ hits: null, chance: 0, text: "survives with Focus Sash at full HP" }, "zh-TW"), "滿 HP 時靠氣勢披帶存活");
   assert.equal(formatKoText("guaranteed 2HKO after Leftovers recovery", "zh-TW"), "必定兩擊倒下（計入吃剩的東西回復）");
   assert.equal(
     formatKoResult({ hits: 4, chance: 1, text: "guaranteed 4HKO after Sitrus Berry and Grassy Terrain recovery" }, "zh-TW"),
@@ -115,7 +119,12 @@ test("formats usage, KO, order, damage reasons, and paste warnings in zh-TW", ()
   assert.equal(formatDamageNote("Assumes target already moved", "zh-TW"), "假設目標已行動");
   assert.equal(formatDamageNote("+1 SpA from the charge turn", "zh-TW"), "蓄力回合特攻 +1");
   assert.equal(formatDamageNote("Protean changed type to Fighting", "zh-TW"), "Protean將屬性變為格鬥");
+  assert.equal(formatDamageNote("Priority move blocked by Psychic Terrain", "zh-TW"), "優先度提高的招式被精神場地擋下");
+  assert.equal(formatDamageNote("Priority move blocked by Armor Tail", "zh-TW", { entities: [{ name: "Armor Tail", aliases: ["尾甲"] }] }), "優先度提高的招式被尾甲擋下");
+  assert.equal(formatDamageNote("Priority move blocked by Armor Tail", "en"), "Priority move blocked by Armor Tail");
   assert.equal(formatSetWarning("Unknown move: Missing Move", "zh-TW"), "未知招式：Missing Move");
+  assert.equal(formatSetWarning("Unknown nature: Modset", "en"), "Unknown nature: Modset");
+  assert.equal(formatSetWarning("Unknown nature: Modset", "zh-TW"), "未知性格：Modset");
 });
 
 // Minimal attribute-only DOM stand-in: enough for applyDocumentTranslations' selectors.

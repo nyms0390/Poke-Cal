@@ -29,7 +29,8 @@ import {
 import { formatDamageReason, formatKoText } from "../i18n-formatters.js";
 import { applyControl, createSideState } from "./battle-state.js";
 import { loadCatalogs, requestedPokemonStatus, showStatus } from "./bootstrap.js";
-import { browserStorage, consumeQueryParam, itemLabel, moveChip, moveNameLabel, natureLabel, optionElement, pokemonMiniSprite, setRow } from "./components.js";
+import { browserStorage, consumeQueryParam, moveChip, moveNameLabel, natureLabel, optionElement, pokemonMiniSprite, setRow } from "./components.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
 import { watchActiveSet } from "./active-set-sync.js";
 import { mountTeamPanel } from "./team-panel.js";
 import { mountAmbientFieldControls } from "./field-controls.js";
@@ -919,9 +920,9 @@ function matchupDetail(row, ours, extraFacts = []) {
       title: localizedName(set.pokemon),
       types: set.pokemon?.types ?? [],
       facts: [
-        [t("label.ability"), set.ability ? localizedName(set.ability) : t("builder.noAbility")],
+        [t("label.ability"), set.ability ? abilityTerm(set.ability) : t("builder.noAbility")],
         [t("label.nature"), natureLabel(set.nature)],
-        [t("label.item"), set.item ? itemLabel(set.item) : t("builder.noItem")],
+        [t("label.item"), set.item ? itemTerm(set.item) : t("builder.noItem")],
       ],
       moves: set.moves.map((move) => moveChip(move)),
     })),

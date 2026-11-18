@@ -2,6 +2,7 @@ import {
   formatMoveAccuracy,
   formatMovePower,
   formatUsagePercent,
+  entryShortText,
   moveEffect,
   resolvePokemonAbilities,
   resolveChampionsPokemonMoves,
@@ -43,6 +44,7 @@ import {
   textCell,
   typeBadge,
 } from "./components.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
 import { lookupBrowseEntries, lookupQueryAfterSelect } from "./lookup-browse.js";
 
 const elements = {
@@ -401,9 +403,9 @@ function commonBuildFact(labelText, entry) {
   const value = document.createElement("strong");
   const rawName = entry?.name;
   if (!entry) value.textContent = "—";
-  else if (labelText === t("label.item")) value.append(itemLabel(entry));
+  else if (labelText === t("label.item")) value.append(itemTerm(entry));
   else if (labelText === t("label.nature")) value.append(rawName ? natureLabel(rawName) : "—");
-  else value.textContent = localizedName(entry);
+  else value.append(abilityTerm(entry));
   if (Number.isFinite(entry?.usagePercent)) {
     const usage = document.createElement("small");
     usage.textContent = formatUsagePercent(entry.usagePercent);
@@ -581,13 +583,14 @@ function renderUsageSpreadRow(spread) {
 // setdex leaves blank (often the ability) are left out rather than shown as a dash.
 function renderNcpSetCard(set) {
   const itemEntry = set.item ? itemLookup.get(normalizeId(set.item)) : null;
+  const abilityEntry = set.ability ? abilityLookup.get(normalizeId(set.ability)) : null;
   return setRow({
     className: "ncp-set-row",
     title: set.name,
     facts: [
-      [t("label.ability"), localizedCatalogValue(set.ability, abilityLookup)],
+      [t("label.ability"), abilityEntry ? abilityTerm(abilityEntry) : localizedCatalogValue(set.ability, abilityLookup)],
       [t("label.nature"), set.nature ? natureLabel(set.nature) : ""],
-      [t("label.item"), itemEntry ? itemLabel(itemEntry) : localizedCatalogValue(set.item, itemLookup)],
+      [t("label.item"), itemEntry ? itemTerm(itemEntry) : localizedCatalogValue(set.item, itemLookup)],
       // The spread name repeats the nature ("Quiet:32/0/2/32/0/0"); the Nature row already has it.
       [t("matchups.spread"), String(set.spreadName ?? "").split(":").pop()],
     ].filter(([, value]) => value),
@@ -623,7 +626,7 @@ function renderAbilities(abilities) {
       heading.append(usage);
 
       const description = document.createElement("p");
-      description.textContent = ability.shortDesc || ability.desc || "—";
+      description.textContent = entryShortText(ability) || "—";
       description.lang = "en";
 
       card.append(heading, description);
@@ -657,7 +660,7 @@ function renderItems(items) {
       heading.append(name, usage);
 
       const description = document.createElement("p");
-      description.textContent = item.shortDesc || item.desc || "—";
+      description.textContent = entryShortText(item) || "—";
       description.lang = "en";
 
       card.append(heading, description);

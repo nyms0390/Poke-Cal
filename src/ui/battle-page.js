@@ -81,12 +81,12 @@ import {
   statEditorRow,
   STAT_LABELS,
   typeBadge,
-  itemLabel,
   moveChip,
   moveTypeIcon,
   natureLabel,
 } from "./components.js";
 import { watchActiveSet } from "./active-set-sync.js";
+import { abilityTerm, attachEntryTooltip, itemTerm } from "./entry-tooltip.js";
 import { ambientFieldLabels, mountAmbientFieldControls } from "./field-controls.js";
 import { mountSetSheet, mountSheetBar } from "./set-sheet.js";
 import {
@@ -329,6 +329,10 @@ async function initialize() {
   moveLookup = data.moveLookup;
   items = data.items;
   moves = data.moves;
+  for (const side of ["attacker", "defender"]) {
+    attachEntryTooltip(elements[`${side}Ability`], () => selectedOptionEntry(elements[`${side}Ability`], abilityLookup));
+    attachEntryTooltip(elements[`${side}Item`], () => selectedOptionEntry(elements[`${side}Item`], itemLookup));
+  }
   const storedTeams = loadStoredTeams();
   teams = storedTeams ? restoreTeams(storedTeams) : createTeamsState();
   const requestedLeftId = new URLSearchParams(globalThis.location?.search ?? "").get("left");
@@ -1647,8 +1651,9 @@ function renderSetPreview(side) {
   preview.types.replaceChildren(...state.pokemon.types.map(typeBadge));
   preview.nature.replaceChildren(natureLabel(state.nature));
   preview.spread.textContent = `${SP_STATS.map((stat) => state.sp[stat] ?? 0).join("/")} SP`;
-  preview.ability.textContent = state.ability ? localizedName(state.ability) : t("builder.noAbility");
-  if (state.item) preview.item.replaceChildren(itemLabel(state.item));
+  if (state.ability) preview.ability.replaceChildren(abilityTerm(state.ability));
+  else preview.ability.textContent = t("builder.noAbility");
+  if (state.item) preview.item.replaceChildren(itemTerm(state.item));
   else preview.item.textContent = t("builder.noItem");
   const speedContext = finalSpeedContext();
   const speed = finalSpeed({

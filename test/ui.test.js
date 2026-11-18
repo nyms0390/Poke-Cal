@@ -1507,8 +1507,8 @@ test("Battle set cards, Teams and the shared set editor mark moves with the same
   assert.match(read("src/ui/battle-page.js"), /selectedMoves\.map\(\(\{ move \}\) => moveChip\(move\)\)/);
   // Teams lists each submitted move with the same chip, keeping the raw name for unknown moves.
   assert.match(read("src/ui/teams-page.js"), /return moveChip\(entry, \{ label: entry \? localizedName\(entry\) : move \}\)/);
-  // Its item shows the same sprite label as Lookup, in the summary and the Item fact.
-  assert.match(read("src/ui/teams-page.js"), /return entry \? itemLabel\(entry\) : value;/);
+  // Its item shows the same sprite label as Lookup in the Item fact, with the details popup.
+  assert.match(read("src/ui/teams-page.js"), /return entry \? itemTerm\(entry\) : value;/);
   assert.match(read("src/ui/teams-page.js"), /\[t\("label\.item"\), itemValue\(submitted\.item\)\]/);
   assert.match(read("src/ui/set-editor.js"), /const icon = moveTypeIcon\(selected\)/);
   // Game-style set previews: Battle's set card lists the four moves as rows beside the facts,

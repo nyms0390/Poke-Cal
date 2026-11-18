@@ -102,7 +102,8 @@ PokéCal/
 ├── .github/workflows/pages.yml # Tests, deploys _site/ to GitHub Pages and mcp/ to Cloudflare
 ├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
 ├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
-├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions
+├── .github/workflows/audit.yml # npm audit gate for mcp/ (dependency changes + weekly)
+├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions and mcp/ npm deps
 └── docs/                       # DECISIONS.md (owner decisions), ui-quality-workflow.md, ROADMAP.md (completed roadmap), move-conditions.md
 ```
 
