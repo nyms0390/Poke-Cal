@@ -43,7 +43,7 @@ import {
   textCell,
   typeBadge,
 } from "./components.js";
-import { lookupBrowseEntries } from "./lookup-browse.js";
+import { lookupBrowseEntries, lookupQueryAfterSelect } from "./lookup-browse.js";
 
 const elements = {
   search: document.querySelector("#pokemon-search"),
@@ -139,8 +139,9 @@ async function initialize() {
 elements.form.addEventListener("input", () => {
   const form = selectedFamily.find(({ id }) => id === elements.form.value);
   if (form) {
-    elements.search.value = "";
-    selectForm(form);
+    selectForm(form, { syncBrowse: false });
+    keepSearchIfSelectedMatches();
+    renderBrowseList();
   }
 });
 
@@ -159,8 +160,16 @@ function selectPokemon(entry, options = {}) {
   selectedFamily = megaFamily(pokemon, entry);
   renderFormOptions();
   selectForm(entry, { ...options, syncBrowse: false });
-  elements.search.value = "";
+  keepSearchIfSelectedMatches();
   renderBrowseList();
+}
+
+function keepSearchIfSelectedMatches() {
+  elements.search.value = lookupQueryAfterSelect(pokemon, selectedPokemon, elements.search.value, {
+    abilityLookup,
+    moveLookup,
+    itemLookup,
+  });
 }
 
 function renderFormOptions() {
