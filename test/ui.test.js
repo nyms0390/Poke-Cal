@@ -959,10 +959,17 @@ test("battle page shows each Pokémon name and icon together in the side heading
   );
 });
 
-test("lookup selection clears a search query and restores the persistent catalog list", () => {
+test("lookup selection keeps the search results instead of resetting the list", () => {
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+  const selectPokemon = source.match(/function selectPokemon\(entry, options = \{\}\) \{([\s\S]*?)\n\}/)?.[1] ?? "";
+  const formInput = source.match(/elements\.form\.addEventListener\("input", \(\) => \{([\s\S]*?)\n\}\);/)?.[1] ?? "";
 
-  assert.match(source, /elements\.search\.value = "";\s*renderBrowseList\(\);/);
+  for (const [name, body] of [["selectPokemon", selectPokemon], ["form input", formInput]]) {
+    assert.ok(body, name);
+    assert.match(body, /keepSearchIfSelectedMatches\(\);\s*renderBrowseList\(\);/, name);
+    assert.doesNotMatch(body, /elements\.search\.value = ""/, name);
+  }
+  assert.match(source, /elements\.search\.value = lookupQueryAfterSelect\(/);
   assert.match(source, /button\.setAttribute\("aria-selected", String\(selected\)\)/);
 });
 

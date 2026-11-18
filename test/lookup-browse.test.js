@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { DEFAULT_BROWSE_LIMIT, lookupBrowseEntries } from "../src/ui/lookup-browse.js";
+import { DEFAULT_BROWSE_LIMIT, lookupBrowseEntries, lookupQueryAfterSelect } from "../src/ui/lookup-browse.js";
 
 const pokemon = [
   { id: "bulbasaur", name: "Bulbasaur", aliases: ["妙蛙種子"], types: ["Grass"] },
@@ -44,4 +44,20 @@ test("lookup browse searches names and Traditional Chinese aliases without pinni
     ["pikachu"],
   );
   assert.deepEqual(lookupBrowseEntries(pokemon, pokemon[1], "no match"), []);
+});
+
+test("picking a search result keeps the query so the results stay listed", () => {
+  const query = "Electric";
+  const before = lookupBrowseEntries(pokemon, pokemon[0], query).map(({ id }) => id);
+  assert.deepEqual(before, ["pikachu", "raichu"]);
+  const kept = lookupQueryAfterSelect(pokemon, pokemon[2], query);
+  assert.equal(kept, query);
+  assert.deepEqual(lookupBrowseEntries(pokemon, pokemon[2], kept).map(({ id }) => id), before);
+  assert.equal(lookupQueryAfterSelect(pokemon, pokemon[1], "皮卡丘"), "皮卡丘");
+});
+
+test("a selection outside the current results clears the query so it stays visible", () => {
+  assert.equal(lookupQueryAfterSelect(pokemon, pokemon[0], "Electric"), "");
+  assert.equal(lookupQueryAfterSelect(pokemon, pokemon[1], "   "), "");
+  assert.equal(lookupQueryAfterSelect(pokemon, null, "Electric"), "");
 });
