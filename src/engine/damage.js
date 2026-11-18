@@ -316,7 +316,9 @@ function calculateDamageUnchecked({
 
   const iceFaceActive = !suppressDefenderAbility && move.category === "Physical" &&
     hasAbility(defenderState, "iceface") && defenderState.iceFaceIntact !== false;
-  const sturdyActive = isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
+  // Sturdy and Focus Sash leave 1 HP from full; the first hit of a use is capped, later hits are not.
+  const endureSource = firstHitEndureSource(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility);
+  const endureActive = endureSource !== null;
 
   const fixedDamage = fixedDamageValue(ctx);
   if (fixedDamage !== null) {
@@ -325,11 +327,11 @@ function calculateDamageUnchecked({
     const rolls = DAMAGE_ROLLS.map(() => damage);
     const baseDistribution = [{ damage: rawDamage, chance: 1 }];
     const firstDistribution = [{
-      damage: iceFaceActive ? 0 : sturdyActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
+      damage: iceFaceActive ? 0 : endureActive ? Math.min(rawDamage, defenderMaxHp - 1) : rawDamage,
       chance: 1,
     }];
-    const sturdyText = sturdyActive && !iceFaceActive && rawDamage >= defenderMaxHp
-      ? sturdySurvivalKo()
+    const endureText = endureActive && !iceFaceActive && rawDamage >= defenderMaxHp
+      ? endureSurvivalKo(endureSource)
       : null;
     const recalculatedKo = moveEffect(moveId).recalculatesFixedDamage
       ? koSummaryForRecalculatedFixedDamage(ctx, firstDistribution[0].damage)
@@ -346,7 +348,7 @@ function calculateDamageUnchecked({
       defenderCurrentHp,
       typeMultiplier,
       critical: effectiveCritical,
-      ko: sturdyText ?? recalculatedKo ??
+      ko: endureText ?? recalculatedKo ??
         koSummaryForRolls(rolls, defenderCurrentHp, baseDistribution, firstDistribution),
       notes: [
         "Fixed damage",
@@ -569,10 +571,10 @@ function calculateDamageUnchecked({
     distribution: fullMoveDistribution(successiveHits ? hitPowers.slice(0, hits) : hitPowers, hits, damageForHit, options),
   })));
   const baseRollDistribution = moveDistribution({ firstUse: false });
-  const firstRollDistribution = iceFaceActive || sturdyActive || firstHitDiffers
+  const firstRollDistribution = iceFaceActive || endureActive || firstHitDiffers
     ? moveDistribution({
       negateFirstHit: iceFaceActive,
-      firstHitCap: sturdyActive ? defenderMaxHp - 1 : null,
+      firstHitCap: endureActive ? defenderMaxHp - 1 : null,
       firstUse: true,
     })
     : baseRollDistribution;
@@ -582,17 +584,17 @@ function calculateDamageUnchecked({
       ? minHitRolls
       : [minHitRolls[0], ...maxHitRolls.slice(1)];
   const maxActualHitCount = successiveHits ? hitCounts.max : hitPowers.length > 1 ? hitPowers.length : hitCounts.max;
-  const sturdyAffectsKo = sturdyActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
-  const sturdyText = sturdyAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
-    ? sturdySurvivalKo()
+  const endureAffectsKo = endureActive && maxActualHitCount === 1 && Math.max(...minHitRolls) >= defenderMaxHp;
+  const endureText = endureAffectsKo && Math.min(...minHitRolls) >= defenderMaxHp
+    ? endureSurvivalKo(endureSource)
     : null;
-  const recovery = sturdyText
+  const recovery = endureText
     ? null
     : defenderRecovery({ defender, defenderState, defenderTypes, defenderMaxHp, defenderCurrentHp, field: effectiveField, suppressDefenderAbility, attackerState, suppressAttackerAbility });
-  let ko = sturdyText ??
+  let ko = endureText ??
     koSummaryForRolls(rolls, defenderCurrentHp, baseRollDistribution, firstRollDistribution, recovery);
-  if (sturdyAffectsKo && !sturdyText) {
-    ko = { ...ko, text: `${ko.text} (Sturdy)` };
+  if (endureAffectsKo && !endureText) {
+    ko = { ...ko, text: `${ko.text} (${endureSource})` };
   }
   if (recovery && ko.hits !== 1) {
     ko = { ...ko, text: `${ko.text} after ${recovery.labels.join(" and ")} recovery` };
@@ -738,16 +740,22 @@ function teraShellTypeMultiplier(typeMultiplier, defenderState, suppressDefender
   return 0.5;
 }
 
-function isSturdyActive(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
-  return !suppressDefenderAbility && hasAbility(defenderState, "sturdy") && defenderCurrentHp === defenderMaxHp;
+// "Sturdy" or "Focus Sash" when the defender is at full HP and one would leave it at 1 HP.
+// Mold Breaker skips Sturdy but not Focus Sash; a consumed item is gone.
+function firstHitEndureSource(defenderCurrentHp, defenderMaxHp, defenderState, suppressDefenderAbility) {
+  if (defenderCurrentHp !== defenderMaxHp) return null;
+  if (!suppressDefenderAbility && hasAbility(defenderState, "sturdy")) return "Sturdy";
+  const itemId = normalizeId(defenderState.item?.id ?? defenderState.item?.name);
+  if (itemId === "focussash" && !defenderState.itemConsumed) return "Focus Sash";
+  return null;
 }
 
-// Every roll would OHKO, Sturdy leaves 1 HP, and the next hit KOs.
-function sturdySurvivalKo() {
+// Every roll would OHKO, Sturdy or Focus Sash leaves 1 HP, and the next hit KOs.
+function endureSurvivalKo(source = "Sturdy") {
   return {
     hits: null,
     chance: 0,
-    text: "survives with Sturdy at full HP",
+    text: `survives with ${source} at full HP`,
     chances: [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }],
   };
 }

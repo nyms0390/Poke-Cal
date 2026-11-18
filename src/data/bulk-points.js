@@ -349,9 +349,17 @@ function damageResult(userState, { threat, move, field = createField() }) {
     defender: userState.pokemon,
     move,
     attackerState: threatState(threat, move),
-    defenderState: { ...userState, currentHpFraction: 1 },
+    defenderState: withoutFocusSash({ ...userState, currentHpFraction: 1 }),
     field,
   });
+}
+
+/**
+ * Bulk and Break points size SP against raw damage, so a held Focus Sash is left out: at full HP
+ * it would turn every OHKO into a survival regardless of SP (docs/DECISIONS.md, 2026-11-18).
+ */
+export function withoutFocusSash(state) {
+  return normalizeId(state?.item?.id ?? state?.item?.name) === "focussash" ? { ...state, item: null } : state;
 }
 
 /**

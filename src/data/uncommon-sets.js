@@ -1,5 +1,6 @@
 import { TYPE_EFFECTIVENESS } from "../engine/type-chart.js";
 import { normalizeId } from "../identifiers.js";
+import { entryShortText } from "./catalog.js";
 import {
   COMMON_SHARE_PERCENT,
   matchup,
@@ -36,7 +37,7 @@ export function itemRoles(items = []) {
   const resistBerry = {};
   for (const item of items) {
     if (item?.champions && !item.champions.legal) continue;
-    const description = item?.shortDesc ?? "";
+    const description = entryShortText(item);
     const boost = !item?.isBerry && /Holder's (\w+)-type attacks/.exec(description);
     if (boost) typeBoost[boost[1]] = item;
     const resist = item?.isBerry && /damage taken from a supereffective (\w+)-type/i.exec(description);

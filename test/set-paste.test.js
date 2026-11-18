@@ -91,6 +91,16 @@ test("accepts aliases and keeps warnings for unknown fields", () => {
   assert.match(parsed.warnings.join("\n"), /Unknown move: Unknown Move/);
 });
 
+test("canonicalizes a pasted nature's case and warns on an unknown nature", () => {
+  const lowercase = parseSetPaste(["Miraidon", "modest Nature"].join("\n"), catalogs);
+  assert.equal(lowercase.nature, "Modest");
+  assert.deepEqual(lowercase.warnings, []);
+
+  const misspelled = parseSetPaste(["Miraidon", "Modset Nature"].join("\n"), catalogs);
+  assert.equal(misspelled.nature, "");
+  assert.deepEqual(misspelled.warnings, ["Unknown nature: Modset"]);
+});
+
 test("prefers the exact species over forms that share its base species", () => {
   const formCatalogs = {
     ...catalogs,
