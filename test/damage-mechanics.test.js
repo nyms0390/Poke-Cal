@@ -239,6 +239,50 @@ test("Sturdy survival reports a guaranteed 2HKO in ko.chances", () => {
   assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
 });
 
+const sashHitter = { id: "hitter", name: "Hitter", types: ["Grass"], baseStats: { hp: 100, atk: 150, def: 100, spa: 100, spd: 100, spe: 100 } };
+const sashTarget = { id: "sash-target", name: "Sash Target", types: ["Water"], baseStats: { hp: 40, atk: 50, def: 40, spa: 50, spd: 50, spe: 50 } };
+const sashWoodHammer = { id: "woodhammer", name: "Wood Hammer", type: "Grass", category: "Physical", basePower: 120, target: "normal", flags: { contact: 1 } };
+const focusSash = { id: "focussash", name: "Focus Sash" };
+const sashHit = ({ move = sashWoodHammer, attacker = {}, defender = {} } = {}) => calculateDamage({
+  attacker: sashHitter, defender: sashTarget, move,
+  attackerState: { pokemon: sashHitter, nature: "Adamant", sp: { atk: 32 }, stages: {}, ability: null, item: null, ...attacker },
+  defenderState: { pokemon: sashTarget, ...bulky({ sp: {}, item: focusSash, ...defender }) },
+  field: singles,
+});
+
+test("Focus Sash at full HP survives a hit that would OHKO", () => {
+  const result = sashHit();
+  assert.ok(result.minDamage >= result.defenderHp, "every roll would OHKO without the sash");
+  assert.equal(result.ko.text, "survives with Focus Sash at full HP");
+  assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
+  assert.equal(survivalChance(result), 1);
+  // Mold Breaker skips Sturdy, not a held item.
+  assert.equal(sashHit({ attacker: { ability: { id: "moldbreaker", name: "Mold Breaker" } } }).ko.text, "survives with Focus Sash at full HP");
+});
+
+test("Focus Sash does nothing below full HP or once consumed", () => {
+  assert.equal(sashHit({ defender: { currentHpFraction: 0.99 } }).ko.text, "guaranteed OHKO");
+  assert.equal(sashHit({ defender: { itemConsumed: true } }).ko.text, "guaranteed OHKO");
+});
+
+test("Focus Sash only removes the OHKO rolls of a partial OHKO", () => {
+  const partial = sashHit({ move: { ...sashWoodHammer, basePower: 25 } });
+  const unprotected = sashHit({ move: { ...sashWoodHammer, basePower: 25 }, defender: { item: null } });
+  assert.ok(unprotected.ko.hits === 1 && unprotected.ko.chance > 0 && unprotected.ko.chance < 1, unprotected.ko.text);
+  assert.equal(partial.ko.text, "guaranteed 2HKO (Focus Sash)");
+  assert.equal(survivalChance(partial), 1);
+});
+
+test("Focus Sash caps only the first hit of multi-hit moves and Parental Bond", () => {
+  const doubleHit = sashHit({ move: { ...sashWoodHammer, id: "doublehammer", name: "Double Hammer", multihit: 2 } });
+  assert.equal(doubleHit.ko.text, "guaranteed OHKO");
+  assert.equal(survivalChance(doubleHit), 0);
+
+  const parentalBond = sashHit({ attacker: { ability: { id: "parentalbond", name: "Parental Bond" } } });
+  assert.equal(parentalBond.ko.text, "guaranteed OHKO");
+  assert.equal(survivalChance(parentalBond), 0);
+});
+
 test("Electro Shot and Meteor Beam raise the user's SpA by 1 before hitting", () => {
   const archaludon = { id: "archaludon", name: "Archaludon", types: ["Steel", "Dragon"], baseStats: { hp: 90, atk: 105, def: 130, spa: 125, spd: 65, spe: 85 } };
   const electroShot = { id: "electroshot", name: "Electro Shot", type: "Electric", category: "Special", basePower: 130, target: "normal", flags: { charge: 1 } };

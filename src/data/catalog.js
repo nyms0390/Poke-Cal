@@ -139,8 +139,8 @@ export function filterMoves(moves, { query = "", type = "", category = "", flag 
       ...(move.aliases ?? []),
       move.type,
       move.category,
-      move.shortDesc,
-      move.desc,
+      entryShortText(move),
+      entryLongText(move),
     ]
       .map(normalizeSearchValue)
       .some((candidate) => candidate.includes(normalizedQuery));
@@ -203,8 +203,27 @@ export function formatUsagePercent(usagePercent) {
   return Number.isFinite(usagePercent) ? `${usagePercent.toFixed(1)}%` : "—";
 }
 
+// Champions balance changes override Showdown's text field by field (the Champions mod's
+// text inherits whatever it does not restate), so `champions.shortDesc`/`champions.desc` win
+// over the base-game `shortDesc`/`desc` (Iron Head: 20% flinch, not 30%). See docs/DECISIONS.md
+// "Effect text follows the Champions mod".
+/** The short effect text a move, ability or item has in Champions, or "". */
+export function entryShortText(entry) {
+  const champions = entry?.champions ?? {};
+  return champions.shortDesc || entry?.shortDesc || champions.desc || entry?.desc || "";
+}
+
+/** The long effect text in Champions, or "" when only a short Champions text replaces it. */
+export function entryLongText(entry) {
+  const champions = entry?.champions ?? {};
+  if (champions.desc) return champions.desc;
+  // A Champions-only short text means the base-game long text is out of date.
+  if (champions.shortDesc) return "";
+  return entry?.desc || "";
+}
+
 export function moveEffect(move) {
-  return move.shortDesc || move.desc || "—";
+  return entryShortText(move) || "—";
 }
 
 // The full effect text of an ability or item, as the hover details show it. Champions changes
