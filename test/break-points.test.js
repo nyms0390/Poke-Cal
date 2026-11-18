@@ -102,6 +102,7 @@ test("calculates current damage and offensive breakpoints as critical hits when 
     {
       sp: 12,
       achieves: "guaranteed 2HKO",
+      ko: { hits: 2, chance: 1 },
       minPct: 50.2,
       maxPct: 60,
     },
@@ -421,7 +422,7 @@ for (const { hp, defenseSp, guaranteedSp, neutralMaximum, attackSp = 0, currentK
     const guaranteedPoint = points.find(({ achieves, requiresPlusNature }) =>
       requiresPlusNature && achieves === "guaranteed OHKO");
     assert.deepEqual(guaranteedPoint, {
-      sp: guaranteedSp, achieves: plusDamage.koText,
+      sp: guaranteedSp, achieves: plusDamage.koText, ko: { hits: 1, chance: 1 },
       minPct: plusDamage.minPct, maxPct: plusDamage.maxPct, requiresPlusNature: true,
     });
     assert.equal(canApplySpTargets(state.sp, { atk: guaranteedPoint.sp }), true);

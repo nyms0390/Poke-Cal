@@ -584,12 +584,14 @@ function calculateDamageUnchecked({
     critical: effectiveCritical,
     ko,
     notes,
-    // For moves that raise the user's stats first (Electro Shot): the stages this hit used,
-    // and the damage of a later use, without first-hit effects such as Multiscale or Sturdy.
-    ...(chargeBoost.applies ? {
-      attackerStages: attackerState.stages,
-      repeatDistribution: sortedDistribution(baseRollDistribution),
-    } : {}),
+    // Weighted damage of a later use at the same stages, without first-hit effects such as
+    // resist berries, Multiscale, Sturdy or Ice Face (equal to `distribution` when none apply).
+    repeatDistribution: sortedDistribution(baseRollDistribution),
+    // Whether the KO chances include healing between uses (Leftovers, Black Sludge, Grassy
+    // Terrain, Sitrus Berry), so later uses do not simply add up.
+    recovers: Boolean(recovery),
+    // For moves that raise the user's stats first (Electro Shot): the stages this hit used.
+    ...(chargeBoost.applies ? { attackerStages: attackerState.stages } : {}),
   };
 }
 

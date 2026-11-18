@@ -79,13 +79,24 @@ export function generalBulkRecommendation(userState, { budget = 66, hpMatches = 
 export function threatDamage(userState, scenario) {
   const result = damageResult(userState, scenario);
   if (!result.supported) {
-    return { minPct: null, maxPct: null, koText: result.reason ?? "Unsupported" };
+    return { minPct: null, maxPct: null, koText: result.reason ?? "Unsupported", ko: null };
   }
   return {
     minPct: result.minPercent,
     maxPct: result.maxPercent,
     koText: result.ko.text,
+    ko: firstKo(result.ko),
   };
+}
+
+/**
+ * The first hit count with a KO chance, read from the engine's cumulative `ko.chances`:
+ * `{ hits, chance }`, or `{ hits: null, chance: 0 }` when nothing KOs within the modeled hits.
+ * Sturdy's "survives at full HP" counts as the hit that follows, since `chances` models it.
+ */
+export function firstKo(ko) {
+  const first = (ko?.chances ?? []).find(({ chance }) => chance > 0);
+  return first ? { hits: first.hits, chance: first.chance } : { hits: null, chance: 0 };
 }
 
 // Zero-bulk reference for one scenario. It ignores the user's HP/Def/SpD SP, so callers may
@@ -114,7 +125,7 @@ export function bulkPointMatchups(userState, threats, options) {
         baselinePoints,
         damage,
         points,
-        covered: koHitCount(damage.koText) > koHitCount(baselineDamage.koText),
+        covered: koHitCount(damage) > koHitCount(baselineDamage),
       };
     })
     .filter(Boolean)
@@ -125,10 +136,10 @@ export function bulkPointMatchups(userState, threats, options) {
 
 export function bulkCoverage(userState, matchups, { budget, tables } = {}) {
   const originHits = Math.min(...matchups.map(({ baselineDamage }) =>
-    koHitCount(baselineDamage.koText)));
+    koHitCount(baselineDamage)));
   const targetHits = Math.min(6, originHits + 1);
   const currentHits = Math.min(...matchups.map(({ damage }) =>
-    koHitCount(damage.koText)));
+    koHitCount(damage)));
 
   if (originHits === 6) {
     return { status: "covered", originHits, targetHits, currentHits, requiredSp: 0 };
@@ -183,14 +194,14 @@ export function coverageRespread(userState, matchups, coverage, { budget, tables
     sp,
     totalSp: DEFENSIVE_STATS.reduce((total, stat) => total + sp[stat], 0),
     movedFrom: DEFENSIVE_STATS.filter((stat) => sp[stat] < current[stat]),
-    fromKoText: worstKoText(matchups.map(({ damage }) => damage.koText)),
-    koText: worstKoText(damages.map(({ koText }) => koText)),
+    fromKoText: worstDamage(matchups.map(({ damage }) => damage)).koText,
+    koText: worstDamage(damages).koText,
     maxPct: Math.max(...damages.map(({ maxPct }) => maxPct)),
   };
 }
 
-function worstKoText(texts) {
-  return texts.reduce((left, right) => compareKoTiers(left, right) >= 0 ? left : right);
+function worstDamage(damages) {
+  return damages.reduce((left, right) => compareKoTiers(left, right) >= 0 ? left : right);
 }
 
 export function bulkCoverageTable(userState, { scenario }) {
@@ -198,7 +209,7 @@ export function bulkCoverageTable(userState, { scenario }) {
   const initial = damageResult(baselineState, scenario);
   const defenseStat = initial.defenseStat ?? defenseStatForMove(scenario.move);
   const tiers = Array.from({ length: 33 }, () => new Uint8Array(33));
-  if (requiresFullCoverageGrid(baselineState, scenario)) {
+  if (requiresFullCoverageGrid(baselineState, scenario, initial)) {
     fillFullCoverageGrid(tiers, baselineState, scenario, defenseStat);
     return { defenseStat, tiers };
   }
@@ -212,16 +223,32 @@ export function bulkCoverageTable(userState, { scenario }) {
   for (let defSp = 0; defSp <= 32; defSp += 1) {
     const state = withAllocation(baselineState, 0, defSp, defenseStat);
     const result = damageResult(state, scenario);
-    const baselineHits = koHitCount(result.ko?.text);
+    // Damage does not depend on the defender's HP here, so one calculation per defence value
+    // serves the whole HP column. The first use can differ from later ones (resist berries,
+    // Multiscale): a KO within n hits is possible exactly when the strongest first use plus
+    // n - 1 strongest later uses reach the HP, which is when the engine's KO chance turns positive.
+    const firstMax = result.supported ? maximumDamage(result.distribution) : 0;
+    const repeatMax = result.supported
+      ? maximumDamage(result.repeatDistribution ?? result.distribution)
+      : 0;
     for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
-      tiers[hpSp][defSp] = baselineHits === 0
-        ? 0
-        : result.maxDamage > 0
-          ? Math.min(6, Math.ceil(hpValues[hpSp] / result.maxDamage))
-          : 6;
+      tiers[hpSp][defSp] = result.supported
+        ? hitsToKo(hpValues[hpSp], firstMax, repeatMax)
+        : 0;
     }
   }
   return { defenseStat, tiers };
+}
+
+function maximumDamage(distribution = []) {
+  return distribution.reduce((maximum, { damage }) => Math.max(maximum, damage), 0);
+}
+
+// Fewest uses that can KO `hp` (1-5), or 6 when five uses cannot, matching koHitCount.
+function hitsToKo(hp, firstMax, repeatMax) {
+  if (firstMax >= hp) return 1;
+  if (repeatMax <= 0) return 6;
+  return Math.min(6, 1 + Math.ceil((hp - firstMax) / repeatMax));
 }
 
 // `budget` is the SP still available for HP + Def + SpD together (the builder passes
@@ -259,11 +286,11 @@ export function bulkPoints(userState, scenario, { budget = 66 } = {}) {
   let previousTier = allocationAtCost(currentTotalSp)?.damage;
   const maximum = allocationAtCost(maximumBudget);
   if (!previousTier || !maximum ||
-      koHitCount(maximum.damage.koText) <= koHitCount(previousTier.koText)) return [];
+      koHitCount(maximum.damage) <= koHitCount(previousTier)) return [];
 
   const frontier = [];
-  const maximumHits = koHitCount(maximum.damage.koText);
-  let targetHits = koHitCount(previousTier.koText) + 1;
+  const maximumHits = koHitCount(maximum.damage);
+  let targetHits = koHitCount(previousTier) + 1;
 
   while (targetHits <= maximumHits) {
     let lowerCost = currentTotalSp + 1;
@@ -271,7 +298,7 @@ export function bulkPoints(userState, scenario, { budget = 66 } = {}) {
     while (lowerCost < upperCost) {
       const middleCost = Math.floor((lowerCost + upperCost) / 2);
       const middle = allocationAtCost(middleCost);
-      if (middle && koHitCount(middle.damage.koText) >= targetHits) upperCost = middleCost;
+      if (middle && koHitCount(middle.damage) >= targetHits) upperCost = middleCost;
       else lowerCost = middleCost + 1;
     }
     const bestAtCost = allocationAtCost(lowerCost);
@@ -282,12 +309,13 @@ export function bulkPoints(userState, scenario, { budget = 66 } = {}) {
       defSp: bestAtCost.defSp,
       totalSp: lowerCost,
       fromKoText: previousTier.koText,
-      achieves: survivalText(bestAtCost.damage.koText),
+      achieves: survivalText(bestAtCost.damage),
       koText: bestAtCost.damage.koText,
+      ko: bestAtCost.damage.ko,
       maxPct: bestAtCost.damage.maxPct,
     });
     previousTier = bestAtCost.damage;
-    targetHits = koHitCount(previousTier.koText) + 1;
+    targetHits = koHitCount(previousTier) + 1;
   }
 
   return frontier;
@@ -310,7 +338,7 @@ function bestAllocationAtCost(
     candidates.push({ hpSp, defSp, totalSp, damage });
   }
   return candidates.sort((a, b) =>
-    compareKoTiers(a.damage.koText, b.damage.koText) ||
+    compareKoTiers(a.damage, b.damage) ||
     a.damage.maxPct - b.damage.maxPct ||
     a.hpSp - b.hpSp)[0];
 }
@@ -403,8 +431,32 @@ function defenseStatForMove(move) {
   return move.overrideDefensiveStat ?? (move.category === "Physical" ? "def" : "spd");
 }
 
-function koTierValue(text) {
-  const value = String(text ?? "");
+// KO helpers take a damage summary (`{ ko, koText }` from threatDamage, yourDamage or a bulk point)
+// and read its structured `ko`; plain English KO text (or a summary without `ko`) falls back to
+// parsing the text.
+function structuredKo(value) {
+  return value && typeof value === "object" && "ko" in value ? value.ko : undefined;
+}
+
+function koTextOf(value) {
+  return value && typeof value === "object" ? value.koText ?? value.achieves : value;
+}
+
+/** Whether the first KO the summary reaches is guaranteed (a guaranteed OHKO … 5HKO). */
+export function koIsGuaranteed(input) {
+  const ko = structuredKo(input);
+  if (ko !== undefined) return Boolean(ko?.hits) && ko.chance >= 1;
+  return /guaranteed/i.test(String(koTextOf(input) ?? ""));
+}
+
+function koTierValue(input) {
+  const ko = structuredKo(input);
+  if (ko !== undefined) {
+    if (!ko?.hits) return 0;
+    // Chances compare at the 0.1% the KO text shows, so a tier never "improves" invisibly.
+    return (6 - ko.hits) * 2 + (ko.chance >= 1 ? 1 : Math.max(0, Math.round(ko.chance * 1000) / 1000));
+  }
+  const value = String(koTextOf(input) ?? "");
   if (/not a KO|survives with/i.test(value)) return 0;
 
   const label = /(OHKO|([2-5])HKO)/i.exec(value);
@@ -416,8 +468,10 @@ function koTierValue(text) {
   return tierBase + Math.max(0, Math.min(100, chance)) / 100;
 }
 
-export function koHitCount(text) {
-  const value = String(text ?? "");
+export function koHitCount(input) {
+  const ko = structuredKo(input);
+  if (ko !== undefined) return ko === null ? 0 : ko.hits ?? 6;
+  const value = String(koTextOf(input) ?? "");
   if (/not a KO|survives with/i.test(value)) return 6;
 
   const label = /(OHKO|([2-5])HKO)/i.exec(value);
@@ -493,16 +547,26 @@ function fillFullCoverageGrid(tiers, userState, scenario, defenseStat) {
   for (let hpSp = 0; hpSp <= 32; hpSp += 1) {
     for (let defSp = 0; defSp <= 32; defSp += 1) {
       const state = withAllocation(userState, hpSp, defSp, defenseStat);
-      tiers[hpSp][defSp] = koHitCount(threatDamage(state, scenario).koText);
+      tiers[hpSp][defSp] = koHitCount(threatDamage(state, scenario));
     }
   }
 }
 
-function requiresFullCoverageGrid(userState, { move }) {
+// The fast table assumes every use deals the same damage after the first. Sturdy, Ice Face,
+// HP-based moves and recovery between hits (Leftovers, Sitrus Berry, Grassy Terrain) break that,
+// so those scenarios ask the engine for every cell instead.
+function requiresFullCoverageGrid(userState, scenario, result) {
   const abilityId = normalizeId(userState.ability?.id ?? userState.ability?.name);
-  const moveId = normalizeId(move.id ?? move.name);
+  const moveId = normalizeId(scenario.move.id ?? scenario.move.name);
   return ["sturdy", "iceface"].includes(abilityId) ||
-    ["endeavor", "superfang", "ruination", "naturesmadness"].includes(moveId);
+    ["endeavor", "superfang", "ruination", "naturesmadness"].includes(moveId) ||
+    hasRecovery(result);
+}
+
+// Healing depends on item, ability, field and the attacker (Unnerve), never on SP, so the
+// zero-bulk calculation answers for the whole grid.
+function hasRecovery(result) {
+  return Boolean(result?.supported && result.recovers);
 }
 
 function bulkCoverageRank({ coverage }) {
@@ -516,12 +580,10 @@ function compareRanks([leftTier, leftSp], [rightTier, rightSp]) {
   return leftTier - rightTier || leftSp - rightSp;
 }
 
-function survivalText(koText) {
-  if (/not a KO/i.test(koText)) return "not KO'd within 5 hits";
-  if (/guaranteed OHKO/i.test(koText)) return "cannot survive 1 hit";
-  const ohkoChance = Number(/([\d.]+)% chance to OHKO/i.exec(koText)?.[1]);
-  if (Number.isFinite(ohkoChance)) {
-    return `survives 1 hit (${(100 - ohkoChance).toFixed(1)}% chance)`;
-  }
-  return `survives 1 hit (guaranteed) · ${koText}`;
+function survivalText(damage) {
+  const hits = koHitCount(damage);
+  if (hits === 6) return "not KO'd within 5 hits";
+  if (hits === 1 && damage.ko.chance >= 1) return "cannot survive 1 hit";
+  if (hits === 1) return `survives 1 hit (${((1 - damage.ko.chance) * 100).toFixed(1)}% chance)`;
+  return `survives 1 hit (guaranteed) · ${damage.koText}`;
 }

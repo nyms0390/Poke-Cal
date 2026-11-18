@@ -1,4 +1,4 @@
-import { koHitCount } from "../data/bulk-points.js";
+import { koHitCount, koIsGuaranteed } from "../data/bulk-points.js";
 import { STAT_KEYS } from "../engine/constants.js";
 import { calculateStat } from "../engine/stats.js";
 import { normalizeId } from "../identifiers.js";
@@ -143,20 +143,19 @@ export function availableBulkSpBudget(sp) {
 
 export function breakCoverage(userState, analyses) {
   const supported = analyses.filter(({ damage }) => Number.isFinite(damage?.maxPct));
-  if (supported.some(({ damage }) =>
-    /guaranteed/i.test(damage.koText) && koHitCount(damage.koText) === 1)) {
+  if (supported.some(({ damage }) => koIsGuaranteed(damage) && koHitCount(damage) === 1)) {
     return { status: "covered" };
   }
 
   const possible = supported.some(({ move, damage, points, attackStat }) => {
-    const currentHits = koHitCount(damage.koText);
+    const currentHits = koHitCount(damage);
     if (currentHits < 1) return false;
     attackStat ??= move.overrideOffensiveStat ?? (move.category === "Physical" ? "atk" : "spa");
-    return points.some(({ sp, achieves }) =>
-      /guaranteed/i.test(achieves) &&
-      koHitCount(achieves) > 0 &&
-      koHitCount(achieves) <= Math.max(1, currentHits - 1) &&
-      canApplySpTargets(userState.sp, { [attackStat]: sp }));
+    return points.some((point) =>
+      koIsGuaranteed(point) &&
+      koHitCount(point) > 0 &&
+      koHitCount(point) <= Math.max(1, currentHits - 1) &&
+      canApplySpTargets(userState.sp, { [attackStat]: point.sp }));
   });
   return { status: possible ? "possible" : "unreachable" };
 }
