@@ -5,7 +5,7 @@ Status: Completed (2026-07-27). Historical record.
 This document records the completed plan for PokéCal's original four-page competitive toolkit.
 The app has since grown to nine pages (Moves, Matchups, Compare sets, Teams and My teams were
 added later), so page counts, test counts and the file tree below describe July 2026. For the
-current layout see README.md "Project Structure" and AGENTS.md "Architecture"; owner decisions
+current layout see docs/project-structure.md and AGENTS.md "Architecture"; owner decisions
 live in [DECISIONS.md](DECISIONS.md).
 
 ## Completion record
