@@ -15,6 +15,7 @@ import {
 import { applyHitCountOverride, applyModifier, chainModifiers, chainValue, collectModifiers } from "./modifiers.js";
 import { convolveDistributions, koChance, koText } from "./ko-chance.js";
 import { isGuaranteedCritical } from "./critical.js";
+import { effectivePriority } from "./battle-order.js";
 
 const SP_TOTAL_LIMIT = 66;
 const STAT_LABELS = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
@@ -254,6 +255,39 @@ function calculateDamageUnchecked({
   ctx.typeMultiplier = typeMultiplier;
   const effectiveCritical = (critical || alwaysCritical) &&
     (suppressDefenderAbility || !hasAnyAbility(defenderState, ["battlearmor", "shellarmor"]));
+  const priorityBlock = abilityImmunity || itemImmunity ? null : priorityBlockResult({
+    move,
+    attacker,
+    attackerState,
+    defender,
+    defenderState,
+    field: effectiveField,
+    suppressAttackerAbility,
+    suppressDefenderAbility,
+  });
+  if (priorityBlock) {
+    const rolls = DAMAGE_ROLLS.map(() => 0);
+    return {
+      supported: true,
+      rolls,
+      minDamage: 0,
+      maxDamage: 0,
+      minPercent: 0,
+      maxPercent: 0,
+      defenderHp: defenderMaxHp,
+      defenderCurrentHp,
+      distribution: [{ damage: 0, chance: 1 }],
+      typeMultiplier,
+      critical: effectiveCritical,
+      priorityBlock,
+      ko: koSummaryForRolls(rolls, defenderCurrentHp),
+      notes: [
+        `Priority move blocked by ${priorityBlock.label}`,
+        ...fieldNotes(effectiveField, attackerState, defenderState),
+        ...teraNotes(attackerState, defenderState),
+      ].filter(Boolean),
+    };
+  }
   if (typeMultiplier === 0) {
     const rolls = DAMAGE_ROLLS.map(() => 0);
     return {
@@ -635,6 +669,29 @@ function abilityImmunityResult({ moveType, typeMultiplier, move, defender, defen
   if (abilityId === "sapsipper" && moveType === "Grass") return { label: abilityName };
   if (abilityId === "wellbakedbody" && moveType === "Fire") return { label: abilityName };
   if (abilityId === "wonderguard" && typeMultiplier <= 1) return { label: abilityName };
+  return null;
+}
+
+// Moves with raised priority (after Prankster, Gale Wings, Triage and Grassy Glide) fail against
+// a grounded target in Psychic Terrain and against a Dazzling, Queenly Majesty or Armor Tail
+// holder (Mold Breaker bypasses the abilities). Showdown checks the priority the move actually
+// has, and a target's Levitate does not keep it airborne while Mold Breaker is active.
+const PRIORITY_BLOCKING_ABILITIES = new Set(["dazzling", "queenlymajesty", "armortail"]);
+
+function priorityBlockResult({ move, attacker, attackerState, defender, defenderState, field, suppressAttackerAbility, suppressDefenderAbility }) {
+  if (move?.target === "self") return null;
+  const priority = effectivePriority(move, { ...attackerState, pokemon: attackerState.pokemon ?? attacker }, field, {
+    suppressAbility: suppressAttackerAbility,
+  });
+  if (!(priority > 0)) return null;
+  const abilityId = normalizeId(defenderState.ability?.id ?? defenderState.ability?.name);
+  if (!suppressDefenderAbility && PRIORITY_BLOCKING_ABILITIES.has(abilityId)) {
+    return { kind: "ability", label: defenderState.ability?.name ?? defenderState.ability?.id };
+  }
+  const groundState = suppressDefenderAbility ? { ...defenderState, ability: null } : defenderState;
+  if (normalizeId(field.terrain) === "psychicterrain" && isGrounded(defender, groundState, field)) {
+    return { kind: "terrain", label: "Psychic Terrain" };
+  }
   return null;
 }
 

@@ -221,6 +221,13 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     const changes = chargeBoost[1].split(" / ").map((change) => change.replace(/ (\w+)$/, (_, stat) => ` ${statLabels[stat] ?? stat}`).replace(/^([+-]\d+) (.+)$/, "$2 $1"));
     return `蓄力回合${changes.join("／")}`;
   }
+  const priorityBlocked = /^Priority move blocked by (.+)$/.exec(note);
+  if (priorityBlocked) {
+    const blocker = priorityBlocked[1] === "Psychic Terrain"
+      ? TERRAIN_ZH.Psychic
+      : localizedName(entities.find((entity) => entity?.name === priorityBlocked[1]) ?? { name: priorityBlocked[1] }, locale);
+    return `優先度提高的招式被${blocker}擋下`;
+  }
   const spTotal = /^(Attacker|Defender) SP total (\d+) exceeds (\d+)$/.exec(note);
   if (spTotal) return `${spTotal[1] === "Attacker" ? "攻擊方" : "防守方"} SP 總和 ${spTotal[2]} 超過 ${spTotal[3]}`;
   const teraFloor = /^Tera (.+) raises (.+) to 60 power$/.exec(note);
