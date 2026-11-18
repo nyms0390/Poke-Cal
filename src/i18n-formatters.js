@@ -28,10 +28,18 @@ function recoverySuffix(text, locale) {
   return tFor(locale, "ko.afterRecovery", { sources: label });
 }
 
+const ENDURE_SOURCE_ZH = { sturdy: "結實", "focus sash": "氣勢披帶" };
+
+function endureSurvivalText(text) {
+  const match = /survives with (Sturdy|Focus Sash) at full HP/i.exec(text ?? "");
+  return match ? `滿 HP 時靠${ENDURE_SOURCE_ZH[match[1].toLowerCase()]}存活` : null;
+}
+
 export function formatKoResult(ko, locale = "en", maxHits = 5) {
   const suffix = recoverySuffix(ko?.text, locale);
   if (!ko || !Number.isFinite(ko.chance) || !ko.hits) {
-    if (locale === "zh-TW" && /Sturdy/i.test(ko?.text ?? "")) return "滿 HP 時靠結實存活";
+    const endure = locale === "zh-TW" ? endureSurvivalText(ko?.text) : null;
+    if (endure) return endure;
     return locale === "en" && ko?.text ? ko.text : `${tFor(locale, "ko.notWithin", { hits: maxHits })}${suffix}`;
   }
   const label = ko.hits === 1 ? tFor(locale, "ko.ohko") : tFor(locale, "ko.hko", { hits: ko.hits });
@@ -45,11 +53,11 @@ export function formatKoText(text, locale = "en") {
   if (locale !== "zh-TW") return text;
   const recovery = RECOVERY_PATTERN.exec(text ?? "");
   if (recovery) return `${formatKoText(text.slice(0, recovery.index), locale)}${recoverySuffix(text, locale)}`;
-  const guaranteed = /^guaranteed (OHKO|([2-5])HKO)( \(Sturdy\))?$/i.exec(text);
+  const guaranteed = /^guaranteed (OHKO|([2-5])HKO)(?: \((Sturdy|Focus Sash)\))?$/i.exec(text);
   if (guaranteed) {
     const hits = guaranteed[1].toUpperCase() === "OHKO" ? 1 : Number(guaranteed[2]);
     const label = formatKoResult({ hits, chance: 1, text }, locale);
-    return guaranteed[3] ? `${label}（結實）` : label;
+    return guaranteed[3] ? `${label}（${ENDURE_SOURCE_ZH[guaranteed[3].toLowerCase()]}）` : label;
   }
   const chance = /^([\d.]+)% chance to (OHKO|([2-5])HKO)$/i.exec(text);
   if (chance) {
@@ -62,7 +70,8 @@ export function formatKoText(text, locale = "en") {
   const surviveChance = /survives 1 hit \(([\d.]+)% chance\)/i.exec(text);
   if (surviveChance) return `${surviveChance[1]}% 機率擋下一擊`;
   if (/survives 1 hit \(guaranteed\)/i.test(text)) return "必定擋下一擊";
-  if (/survives with Sturdy at full HP/i.test(text)) return "滿 HP 時靠結實存活";
+  const endure = endureSurvivalText(text);
+  if (endure) return endure;
   return formatDamageReason(text, locale);
 }
 
@@ -120,6 +129,7 @@ export function formatSetWarning(warning, locale = "en") {
     [/^Unknown ability: (.+)$/, "paste.unknownAbility"],
     [/^Unknown Pokémon: (.+)$/, "paste.unknownPokemon"],
     [/^Unknown item: (.+)$/, "paste.unknownItem"],
+    [/^Unknown nature: (.+)$/, "paste.unknownNature"],
     [/^Unknown stat: (.+)$/, "paste.unknownStat"],
     [/^Could not parse spread part: (.+)$/, "paste.unparsedSpread"],
   ];
@@ -227,6 +237,13 @@ export function formatDamageNote(note, locale = "en", { move, entities = [] } = 
     const statLabels = { Atk: "攻擊", Def: "防禦", SpA: "特攻", SpD: "特防", Spe: "速度" };
     const changes = chargeBoost[1].split(" / ").map((change) => change.replace(/ (\w+)$/, (_, stat) => ` ${statLabels[stat] ?? stat}`).replace(/^([+-]\d+) (.+)$/, "$2 $1"));
     return `蓄力回合${changes.join("／")}`;
+  }
+  const priorityBlocked = /^Priority move blocked by (.+)$/.exec(note);
+  if (priorityBlocked) {
+    const blocker = priorityBlocked[1] === "Psychic Terrain"
+      ? TERRAIN_ZH.Psychic
+      : localizedName(entities.find((entity) => entity?.name === priorityBlocked[1]) ?? { name: priorityBlocked[1] }, locale);
+    return `優先度提高的招式被${blocker}擋下`;
   }
   const spTotal = /^(Attacker|Defender) SP total (\d+) exceeds (\d+)$/.exec(note);
   if (spTotal) return `${spTotal[1] === "Attacker" ? "攻擊方" : "防守方"} SP 總和 ${spTotal[2]} 超過 ${spTotal[3]}`;

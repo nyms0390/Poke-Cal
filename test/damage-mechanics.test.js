@@ -239,6 +239,50 @@ test("Sturdy survival reports a guaranteed 2HKO in ko.chances", () => {
   assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
 });
 
+const sashHitter = { id: "hitter", name: "Hitter", types: ["Grass"], baseStats: { hp: 100, atk: 150, def: 100, spa: 100, spd: 100, spe: 100 } };
+const sashTarget = { id: "sash-target", name: "Sash Target", types: ["Water"], baseStats: { hp: 40, atk: 50, def: 40, spa: 50, spd: 50, spe: 50 } };
+const sashWoodHammer = { id: "woodhammer", name: "Wood Hammer", type: "Grass", category: "Physical", basePower: 120, target: "normal", flags: { contact: 1 } };
+const focusSash = { id: "focussash", name: "Focus Sash" };
+const sashHit = ({ move = sashWoodHammer, attacker = {}, defender = {} } = {}) => calculateDamage({
+  attacker: sashHitter, defender: sashTarget, move,
+  attackerState: { pokemon: sashHitter, nature: "Adamant", sp: { atk: 32 }, stages: {}, ability: null, item: null, ...attacker },
+  defenderState: { pokemon: sashTarget, ...bulky({ sp: {}, item: focusSash, ...defender }) },
+  field: singles,
+});
+
+test("Focus Sash at full HP survives a hit that would OHKO", () => {
+  const result = sashHit();
+  assert.ok(result.minDamage >= result.defenderHp, "every roll would OHKO without the sash");
+  assert.equal(result.ko.text, "survives with Focus Sash at full HP");
+  assert.deepEqual(result.ko.chances, [{ hits: 1, chance: 0 }, { hits: 2, chance: 1 }]);
+  assert.equal(survivalChance(result), 1);
+  // Mold Breaker skips Sturdy, not a held item.
+  assert.equal(sashHit({ attacker: { ability: { id: "moldbreaker", name: "Mold Breaker" } } }).ko.text, "survives with Focus Sash at full HP");
+});
+
+test("Focus Sash does nothing below full HP or once consumed", () => {
+  assert.equal(sashHit({ defender: { currentHpFraction: 0.99 } }).ko.text, "guaranteed OHKO");
+  assert.equal(sashHit({ defender: { itemConsumed: true } }).ko.text, "guaranteed OHKO");
+});
+
+test("Focus Sash only removes the OHKO rolls of a partial OHKO", () => {
+  const partial = sashHit({ move: { ...sashWoodHammer, basePower: 25 } });
+  const unprotected = sashHit({ move: { ...sashWoodHammer, basePower: 25 }, defender: { item: null } });
+  assert.ok(unprotected.ko.hits === 1 && unprotected.ko.chance > 0 && unprotected.ko.chance < 1, unprotected.ko.text);
+  assert.equal(partial.ko.text, "guaranteed 2HKO (Focus Sash)");
+  assert.equal(survivalChance(partial), 1);
+});
+
+test("Focus Sash caps only the first hit of multi-hit moves and Parental Bond", () => {
+  const doubleHit = sashHit({ move: { ...sashWoodHammer, id: "doublehammer", name: "Double Hammer", multihit: 2 } });
+  assert.equal(doubleHit.ko.text, "guaranteed OHKO");
+  assert.equal(survivalChance(doubleHit), 0);
+
+  const parentalBond = sashHit({ attacker: { ability: { id: "parentalbond", name: "Parental Bond" } } });
+  assert.equal(parentalBond.ko.text, "guaranteed OHKO");
+  assert.equal(survivalChance(parentalBond), 0);
+});
+
 test("Electro Shot and Meteor Beam raise the user's SpA by 1 before hitting", () => {
   const archaludon = { id: "archaludon", name: "Archaludon", types: ["Steel", "Dragon"], baseStats: { hp: 90, atk: 105, def: 130, spa: 125, spd: 65, spe: 85 } };
   const electroShot = { id: "electroshot", name: "Electro Shot", type: "Electric", category: "Special", basePower: 130, target: "normal", flags: { charge: 1 } };
@@ -270,4 +314,61 @@ test("Electro Shot and Meteor Beam raise the user's SpA by 1 before hitting", ()
 
   const beam = calc({ ...meteorBeam }, modest());
   assert.deepEqual(beam.rolls, calc({ ...meteorBeam, id: "powergem", name: "Power Gem", flags: {} }, modest({ stages: { spa: 1 } })).rolls);
+});
+
+const extremeSpeed = { id: "extremespeed", name: "Extreme Speed", type: "Normal", category: "Physical", basePower: 80, priority: 2, target: "normal", flags: { contact: 1 } };
+const braveBird = { id: "bravebird", name: "Brave Bird", type: "Flying", category: "Physical", basePower: 120, priority: 0, target: "any", flags: { contact: 1 } };
+const psychicTerrain = createField({ format: "doubles", terrain: "psychic" });
+
+test("Psychic Terrain blocks priority moves only against grounded targets", () => {
+  const grounded = calculateDamage({ attacker: dragonite, defender: kingambit, move: extremeSpeed, attackerState: jollyGarchomp, defenderState: bulky(), field: psychicTerrain });
+  const airborne = calculateDamage({ attacker: dragonite, defender: corviknight, move: extremeSpeed, attackerState: jollyGarchomp, defenderState: bulky(), field: psychicTerrain });
+  const noTerrain = calculateDamage({ attacker: dragonite, defender: kingambit, move: extremeSpeed, attackerState: jollyGarchomp, defenderState: bulky(), field: createField({ format: "doubles" }) });
+  const levitate = calculateDamage({ attacker: dragonite, defender: kingambit, move: extremeSpeed, attackerState: jollyGarchomp, defenderState: bulky({ ability: { id: "levitate", name: "Levitate", flags: { breakable: 1 } } }), field: psychicTerrain });
+  const moldBreakerVsLevitate = calculateDamage({
+    attacker: dragonite,
+    defender: kingambit,
+    move: extremeSpeed,
+    attackerState: { ...jollyGarchomp, ability: { id: "moldbreaker", name: "Mold Breaker" } },
+    defenderState: bulky({ ability: { id: "levitate", name: "Levitate", flags: { breakable: 1 } } }),
+    field: psychicTerrain,
+  });
+
+  assert.equal(grounded.maxDamage, 0);
+  assert.deepEqual(grounded.priorityBlock, { kind: "terrain", label: "Psychic Terrain" });
+  assert.equal(grounded.notes.includes("Priority move blocked by Psychic Terrain"), true);
+  assert.equal(grounded.ko.hits, null);
+  // The move is not type-immune, so effectiveness is reported as usual.
+  assert.equal(grounded.typeMultiplier, 0.5);
+  assert.ok(airborne.maxDamage > 0);
+  assert.ok(noTerrain.maxDamage > 0);
+  assert.ok(levitate.maxDamage > 0);
+  // Mold Breaker ignores Levitate, so the target counts as grounded.
+  assert.equal(moldBreakerVsLevitate.maxDamage, 0);
+});
+
+test("Psychic Terrain checks the move's final priority (Gale Wings, Grassy Glide does not apply)", () => {
+  const galeWings = { ...jollyGarchomp, ability: { id: "galewings", name: "Gale Wings" }, currentHpFraction: 1 };
+  const boosted = calculateDamage({ attacker: dragonite, defender: incineroar, move: braveBird, attackerState: galeWings, defenderState: bulky(), field: psychicTerrain });
+  const damaged = calculateDamage({ attacker: dragonite, defender: incineroar, move: braveBird, attackerState: { ...galeWings, currentHpFraction: 0.5 }, defenderState: bulky(), field: psychicTerrain });
+  const neutralizingGas = calculateDamage({ attacker: dragonite, defender: incineroar, move: braveBird, attackerState: galeWings, defenderState: bulky({ ability: { id: "neutralizinggas", name: "Neutralizing Gas" } }), field: psychicTerrain });
+
+  assert.equal(boosted.maxDamage, 0);
+  assert.ok(damaged.maxDamage > 0);
+  assert.ok(neutralizingGas.maxDamage > 0);
+});
+
+test("Dazzling, Queenly Majesty and Armor Tail block priority moves unless Mold Breaker ignores them", () => {
+  for (const [id, name] of [["dazzling", "Dazzling"], ["queenlymajesty", "Queenly Majesty"], ["armortail", "Armor Tail"]]) {
+    const ability = { id, name, flags: { breakable: 1 } };
+    const blocked = calculateDamage({ attacker: dragonite, defender: kingambit, move: extremeSpeed, attackerState: jollyGarchomp, defenderState: bulky({ ability }), field: singles });
+    const normalPriority = calculateDamage({ attacker: dragonite, defender: kingambit, move: dragonClaw, attackerState: jollyGarchomp, defenderState: bulky({ ability }), field: singles });
+    const moldBreaker = calculateDamage({ attacker: dragonite, defender: kingambit, move: extremeSpeed, attackerState: { ...jollyGarchomp, ability: { id: "moldbreaker", name: "Mold Breaker" } }, defenderState: bulky({ ability }), field: singles });
+
+    assert.equal(blocked.maxDamage, 0, name);
+    assert.deepEqual(blocked.priorityBlock, { kind: "ability", label: name });
+    assert.equal(blocked.notes.includes(`Priority move blocked by ${name}`), true, name);
+    assert.ok(normalPriority.maxDamage > 0, name);
+    assert.ok(moldBreaker.maxDamage > 0, name);
+  }
 });

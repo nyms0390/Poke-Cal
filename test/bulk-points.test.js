@@ -702,3 +702,14 @@ function bruteForceRequiredSp(state, matchups, targetHits, budget) {
   }
   return Infinity;
 }
+
+test("bulk points size SP against raw damage, ignoring the user's Focus Sash", () => {
+  const sash = { id: "focussash", name: "Focus Sash" };
+  const raw = threatDamage(userState(), { threat, move: ohkoMove });
+  assert.match(raw.koText, /OHKO/);
+  assert.deepEqual(threatDamage(userState(sash), { threat, move: ohkoMove }), raw);
+  assert.deepEqual(
+    bulkPoints(userState(sash), { threat, move: ohkoMove }),
+    bulkPoints(userState(), { threat, move: ohkoMove }),
+  );
+});

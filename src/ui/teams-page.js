@@ -3,7 +3,8 @@ import { createMyTeamStore, formatMemberPaste } from "../data/my-teams.js";
 import { archiveRegulations, completeTeamQuery, searchTeamArchive, teamPokemonSuggestions } from "../data/team-search.js";
 import { normalizeId } from "../identifiers.js";
 import { catalogLoadedStatus, loadCatalogs, loadWithRecovery, showStatus } from "./bootstrap.js";
-import { attachCombobox, browserStorage, itemLabel, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
+import { attachCombobox, browserStorage, moveChip, natureLabel, optionElement, POKEMON_RESULT_LIMIT, pokemonSpriteElements, searchResultButton, setRow } from "./components.js";
+import { abilityTerm, itemTerm } from "./entry-tooltip.js";
 import {
   getLocale,
   initI18n,
@@ -357,7 +358,7 @@ function renderPokemon(submitted) {
   media.removeAttribute("aria-label");
   media.setAttribute("aria-hidden", "true");
   const facts = [
-    [t("label.ability"), displayCatalogValue(submitted.ability, catalogs.abilityLookup)],
+    [t("label.ability"), abilityValue(submitted.ability)],
     [t("label.nature"), submitted.nature ? natureLabel(submitted.nature) : ""],
     [t("label.item"), itemValue(submitted.item)],
     ...(submitted.tera ? [[t("teams.tera"), localizedTerm("type", submitted.tera)]] : []),
@@ -472,13 +473,14 @@ function resolvePokemon(submitted) {
 function itemValue(value) {
   if (!value) return "";
   const entry = catalogs.itemLookup.get(normalizeId(value));
-  return entry ? itemLabel(entry) : value;
+  return entry ? itemTerm(entry) : value;
 }
 
-function displayCatalogValue(value, lookup) {
+// The submitted ability as a details term; unknown abilities keep their submitted text.
+function abilityValue(value) {
   if (!value) return "";
-  const entry = lookup.get(normalizeId(value));
-  return entry ? localizedName(entry) : value;
+  const entry = catalogs.abilityLookup.get(normalizeId(value));
+  return entry ? abilityTerm(entry) : value;
 }
 
 function summaryText(title, meta) {

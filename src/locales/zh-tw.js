@@ -45,6 +45,7 @@ export const ZH_TW_MESSAGES = {
   "paste.unknownAbility": ({ value }) => `未知特性：${value}`,
   "paste.unknownPokemon": ({ value }) => `未知寶可夢：${value}`,
   "paste.unknownItem": ({ value }) => `未知道具：${value}`,
+  "paste.unknownNature": ({ value }) => `未知性格：${value}`,
   "paste.unknownStat": ({ value }) => `未知能力：${value}`,
   "paste.unparsedSpread": ({ value }) => `無法解析能力分配：${value}`,
   "paste.mappedEvs": "已將 EV 換算為 Champions SP。",

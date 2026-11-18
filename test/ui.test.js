@@ -959,10 +959,17 @@ test("battle page shows each Pokémon name and icon together in the side heading
   );
 });
 
-test("lookup selection clears a search query and restores the persistent catalog list", () => {
+test("lookup selection keeps the search results instead of resetting the list", () => {
   const source = readFileSync(new URL("../src/ui/lookup-page.js", import.meta.url), "utf8");
+  const selectPokemon = source.match(/function selectPokemon\(entry, options = \{\}\) \{([\s\S]*?)\n\}/)?.[1] ?? "";
+  const formInput = source.match(/elements\.form\.addEventListener\("input", \(\) => \{([\s\S]*?)\n\}\);/)?.[1] ?? "";
 
-  assert.match(source, /elements\.search\.value = "";\s*renderBrowseList\(\);/);
+  for (const [name, body] of [["selectPokemon", selectPokemon], ["form input", formInput]]) {
+    assert.ok(body, name);
+    assert.match(body, /keepSearchIfSelectedMatches\(\);\s*renderBrowseList\(\);/, name);
+    assert.doesNotMatch(body, /elements\.search\.value = ""/, name);
+  }
+  assert.match(source, /elements\.search\.value = lookupQueryAfterSelect\(/);
   assert.match(source, /button\.setAttribute\("aria-selected", String\(selected\)\)/);
 });
 
@@ -1500,8 +1507,8 @@ test("Battle set cards, Teams and the shared set editor mark moves with the same
   assert.match(read("src/ui/battle-page.js"), /selectedMoves\.map\(\(\{ move \}\) => moveChip\(move\)\)/);
   // Teams lists each submitted move with the same chip, keeping the raw name for unknown moves.
   assert.match(read("src/ui/teams-page.js"), /return moveChip\(entry, \{ label: entry \? localizedName\(entry\) : move \}\)/);
-  // Its item shows the same sprite label as Lookup, in the summary and the Item fact.
-  assert.match(read("src/ui/teams-page.js"), /return entry \? itemLabel\(entry\) : value;/);
+  // Its item shows the same sprite label as Lookup in the Item fact, with the details popup.
+  assert.match(read("src/ui/teams-page.js"), /return entry \? itemTerm\(entry\) : value;/);
   assert.match(read("src/ui/teams-page.js"), /\[t\("label\.item"\), itemValue\(submitted\.item\)\]/);
   assert.match(read("src/ui/set-editor.js"), /const icon = moveTypeIcon\(selected\)/);
   // Game-style set previews: Battle's set card lists the four moves as rows beside the facts,

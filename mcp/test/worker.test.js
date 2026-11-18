@@ -25,7 +25,7 @@ test("Worker serves health and JSON 404", async () => {
 });
 
 test("Worker serves stateless MCP initialize, tools/list, and tools/call", async () => {
-  const request = (body, id) => new Request("https://example.test/mcp", { method: "POST", headers: { "content-type": "application/json", accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id, ...body }) });
+  const request = (body, id) => new Request("https://example.test/mcp", { method: "POST", headers: { "cf-connecting-ip": "203.0.113.5", "content-type": "application/json", accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id, ...body }) });
   const app = createWorker(env);
   const initialized = await app.fetch(request({ method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } } }, 1), env);
   assert.equal(initialized.status, 200);
@@ -55,6 +55,21 @@ test("Worker rate-limits non-OPTIONS MCP requests by CF-Connecting-IP", async ()
   await app.fetch(request, { ...env, MCP_RATE_LIMITER: limiter });
 
   assert.deepEqual(calls, [{ key: "203.0.113.7" }]);
+});
+
+test("Worker refuses non-OPTIONS MCP requests without CF-Connecting-IP instead of sharing one bucket", async () => {
+  let limited = false;
+  const limiter = { limit: async () => { limited = true; return { success: true }; } };
+  const app = createWorker({ ...env, MCP_RATE_LIMITER: limiter });
+  const response = await app.fetch(new Request("https://example.test/mcp", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: {} }),
+  }), { ...env, MCP_RATE_LIMITER: limiter });
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "Missing client address" });
+  assert.equal(limited, false);
 });
 
 test("Worker returns a CORS-readable 429 without loading catalogs or invoking MCP", async () => {

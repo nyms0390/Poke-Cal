@@ -25,6 +25,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
     env:
       BRANCH: bot/showdown-pin
       TITLE: Bump Showdown pin
@@ -62,6 +63,9 @@ jobs:
           else
             gh pr create --base main --head "$BRANCH" --title "$TITLE" --body-file "$RUNNER_TEMP/pr-body.md"
           fi
+          # GITHUB_TOKEN pushes don't trigger workflows, so run the required Tests check (ci.yml)
+          # on the branch explicitly; the PR still waits for the owner to merge it.
+          gh workflow run ci.yml --ref "$BRANCH"
 
       - name: Close a superseded pull request
         if: steps.bump.outputs.changed == 'false'

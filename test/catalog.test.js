@@ -10,6 +10,8 @@ import {
   formatUsagePercent,
   formatMoveAccuracy,
   formatMovePower,
+  entryLongText,
+  entryShortText,
   moveEffect,
   normalizeId,
   resolveChampionsPokemonMoves,
@@ -256,6 +258,39 @@ test("formats move display values", () => {
   assert.equal(moveEffect({ shortDesc: "Short.", desc: "Long." }), "Short.");
   assert.equal(moveEffect({ desc: "Long." }), "Long.");
   assert.equal(moveEffect({}), "—");
+});
+
+test("shows Champions effect text over the base-game text, field by field", () => {
+  const ironHead = {
+    id: "ironhead",
+    name: "Iron Head",
+    shortDesc: "30% chance to make the target flinch.",
+    desc: "Has a 30% chance to make the target flinch.",
+    champions: { shortDesc: "20% chance to make the target flinch.", desc: "Has a 20% chance to make the target flinch." },
+  };
+  // The Champions mod restates only the long text: the base short text still applies.
+  const covet = { shortDesc: "Steals the target's item.", desc: "Base long.", champions: { desc: "Champions long." } };
+  const unseenFist = { shortDesc: "Old short.", desc: "Old long.", champions: { shortDesc: "New short." } };
+
+  assert.equal(moveEffect(ironHead), "20% chance to make the target flinch.");
+  assert.equal(entryShortText(covet), "Steals the target's item.");
+  assert.equal(entryLongText(covet), "Champions long.");
+  assert.equal(entryShortText(unseenFist), "New short.");
+  assert.equal(entryLongText(unseenFist), "");
+  assert.equal(entryShortText({ champions: { desc: "Only Champions long." } }), "Only Champions long.");
+  assert.equal(entryShortText(null), "");
+
+  assert.deepEqual(filterMoves([ironHead], { query: "20% chance" }).map(({ id }) => id), ["ironhead"]);
+  assert.deepEqual(filterMoves([ironHead], { query: "30% chance" }), []);
+});
+
+test("committed catalogs show Champions text for Iron Head, Healer, and Slowbronite", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const load = async (name) => JSON.parse(await readFile(new URL(`../public/web/${name}.json`, import.meta.url), "utf8"));
+  const [moves, abilities, items] = await Promise.all([load("moves"), load("abilities"), load("items")]);
+  assert.match(moveEffect(moves.find(({ id }) => id === "ironhead")), /^20% chance/);
+  assert.match(entryShortText(abilities.find(({ id }) => id === "healer")), /^50% chance/);
+  assert.match(entryShortText(items.find(({ id }) => id === "slowbronite")), /not Galarian Slowbro/);
 });
 
 test("sorts moves by every catalog column without mutating or losing stable order", () => {

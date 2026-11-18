@@ -18,9 +18,14 @@ export function createWorker(env, { catalogLoader = loadCatalogs } = {}) {
       }
       if (url.pathname === "/mcp") {
         if (request.method !== "OPTIONS") {
-          const { success } = await runtimeEnv.MCP_RATE_LIMITER.limit({
-            key: request.headers.get("cf-connecting-ip") ?? "unknown",
-          });
+          // Cloudflare sets CF-Connecting-IP on every request from the internet (wrangler dev
+          // sets it too). Refuse rather than pool header-less callers into one shared bucket,
+          // where one client could use up everyone else's limit.
+          const clientIp = request.headers.get("cf-connecting-ip");
+          if (!clientIp) {
+            return Response.json({ error: "Missing client address" }, { status: 400, headers: JSON_HEADERS });
+          }
+          const { success } = await runtimeEnv.MCP_RATE_LIMITER.limit({ key: clientIp });
           if (!success) {
             return Response.json(
               { error: "Rate limit exceeded" },

@@ -103,7 +103,8 @@ PokéCal/
 ├── .github/workflows/pages.yml # Tests, deploys _site/ to GitHub Pages and mcp/ to Cloudflare
 ├── .github/workflows/update-data.yml # Weekly sync (read-only job) + commit/deploy job
 ├── .github/workflows/bump-showdown.yml # Weekly "Bump Showdown pin" pull request
-├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions
+├── .github/workflows/audit.yml # npm audit gate for mcp/ (dependency changes + weekly)
+├── .github/dependabot.yml      # Weekly updates for the SHA-pinned GitHub Actions and mcp/ npm deps
 └── docs/                       # DECISIONS.md (owner decisions), ui-quality-workflow.md, ROADMAP.md (historical July 2026 plan), move-conditions.md
 ```
 
@@ -234,10 +235,6 @@ It runs one opponent at a time in the background and restarts when the set or fi
 The calculator, Builder, Matchups and the MCP tools share one engine, so these gaps show up in
 all of them. Treat results that involve them with care; an entry is removed when its fix lands.
 
-- **Focus Sash** in KO text and Matchups races (a guaranteed OHKO into a sash holder is not one).
-  Only the MCP survival check knows it.
-- **Priority blocking**: Psychic Terrain against grounded targets, Armor Tail, Queenly Majesty and
-  Dazzling. Blocked priority moves still deal damage and still decide move order.
 - **Aegislash Stance Change**: automated analyses attack with Shield Forme stats.
 - **Eelevate**'s Ground immunity, **Disguise**, and **Infiltrator** ignoring screens.
 - **Smack Down** into Flying types is treated as neutral, and **Parental Bond** adds its second hit
